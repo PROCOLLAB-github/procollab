@@ -1,0 +1,825 @@
+{
+  "kind": "Synthetic HTML prototype only; no backend or Angular verification",
+  "started": "2026-10-25T17:58:47.690Z",
+  "checks": [
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "solutions",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "solutions",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "solutions",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "solutions",
+      "width": 1440
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "evaluation",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "evaluation",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "evaluation",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "evaluation",
+      "width": 1440
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "results",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "results",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "results",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "results",
+      "width": 1440
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "analytics",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "analytics",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "analytics",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "kch",
+      "screen": "analytics",
+      "width": 1440
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "solutions",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "solutions",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "solutions",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "solutions",
+      "width": 1440
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "evaluation",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "evaluation",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "evaluation",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "evaluation",
+      "width": 1440
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "results",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "results",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "results",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "results",
+      "width": 1440
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "analytics",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "analytics",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "analytics",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "hack",
+      "screen": "analytics",
+      "width": 1440
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "solutions",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "solutions",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "solutions",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "solutions",
+      "width": 1440
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "evaluation",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "evaluation",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "evaluation",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "evaluation",
+      "width": 1440
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "results",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "results",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "results",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "results",
+      "width": 1440
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "analytics",
+      "width": 320
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "analytics",
+      "width": 390
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "analytics",
+      "width": 768
+    },
+    {
+      "name": "Existing four-section layout",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "screen": "analytics",
+      "width": 1440
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "ready-draft",
+      "width": 320
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "ready-draft",
+      "width": 390
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "ready-draft",
+      "width": 768
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "ready-draft",
+      "width": 1440
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "loading",
+      "width": 320
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "loading",
+      "width": 390
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "loading",
+      "width": 768
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "loading",
+      "width": 1440
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "empty",
+      "width": 320
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "empty",
+      "width": 390
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "empty",
+      "width": 768
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "empty",
+      "width": 1440
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "no-results",
+      "width": 320
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "no-results",
+      "width": 390
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "no-results",
+      "width": 768
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "no-results",
+      "width": 1440
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "error",
+      "width": 320
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "error",
+      "width": 390
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "error",
+      "width": 768
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "error",
+      "width": 1440
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "no-access",
+      "width": 320
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "no-access",
+      "width": 390
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "no-access",
+      "width": 768
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "no-access",
+      "width": 1440
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "long",
+      "width": 320
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "long",
+      "width": 390
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "long",
+      "width": 768
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "long",
+      "width": 1440
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "open-mode",
+      "width": 320
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "open-mode",
+      "width": 390
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "open-mode",
+      "width": 768
+    },
+    {
+      "name": "Existing page state",
+      "status": "PASS",
+      "state": "open-mode",
+      "width": 1440
+    },
+    {
+      "name": "Case change preserves materials/zero/false; before and after",
+      "status": "PASS",
+      "format": "kch",
+      "width": 390
+    },
+    {
+      "name": "Accepted member removal; captain protected; original roster retained",
+      "status": "PASS",
+      "format": "kch",
+      "width": 390
+    },
+    {
+      "name": "Archive readonly; materials/team retained, ratings preservation explained; active list excludes it",
+      "status": "PASS",
+      "format": "kch",
+      "width": 390
+    },
+    {
+      "name": "Bulk registration removal: captain/member/pending/unaffiliated, independent audit",
+      "status": "PASS",
+      "format": "kch",
+      "width": 390
+    },
+    {
+      "name": "Case change preserves materials/zero/false; before and after",
+      "status": "PASS",
+      "format": "kch",
+      "width": 1440
+    },
+    {
+      "name": "Accepted member removal; captain protected; original roster retained",
+      "status": "PASS",
+      "format": "kch",
+      "width": 1440
+    },
+    {
+      "name": "Archive readonly; materials/team retained, ratings preservation explained; active list excludes it",
+      "status": "PASS",
+      "format": "kch",
+      "width": 1440
+    },
+    {
+      "name": "Bulk registration removal: captain/member/pending/unaffiliated, independent audit",
+      "status": "PASS",
+      "format": "kch",
+      "width": 1440
+    },
+    {
+      "name": "Case change preserves materials/zero/false; before and after",
+      "status": "PASS",
+      "format": "hack",
+      "width": 390
+    },
+    {
+      "name": "Accepted member removal; captain protected; original roster retained",
+      "status": "PASS",
+      "format": "hack",
+      "width": 390
+    },
+    {
+      "name": "Archive readonly; materials/team retained, ratings preservation explained; active list excludes it",
+      "status": "PASS",
+      "format": "hack",
+      "width": 390
+    },
+    {
+      "name": "Bulk registration removal: captain/member/pending/unaffiliated, independent audit",
+      "status": "PASS",
+      "format": "hack",
+      "width": 390
+    },
+    {
+      "name": "Case change preserves materials/zero/false; before and after",
+      "status": "PASS",
+      "format": "hack",
+      "width": 1440
+    },
+    {
+      "name": "Accepted member removal; captain protected; original roster retained",
+      "status": "PASS",
+      "format": "hack",
+      "width": 1440
+    },
+    {
+      "name": "Archive readonly; materials/team retained, ratings preservation explained; active list excludes it",
+      "status": "PASS",
+      "format": "hack",
+      "width": 1440
+    },
+    {
+      "name": "Bulk registration removal: captain/member/pending/unaffiliated, independent audit",
+      "status": "PASS",
+      "format": "hack",
+      "width": 1440
+    },
+    {
+      "name": "Case change preserves materials/zero/false; before and after",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "width": 390
+    },
+    {
+      "name": "Accepted member removal; captain protected; original roster retained",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "width": 390
+    },
+    {
+      "name": "Archive readonly; materials/team retained, ratings preservation explained; active list excludes it",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "width": 390
+    },
+    {
+      "name": "Bulk registration removal: captain/member/pending/unaffiliated, independent audit",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "width": 390
+    },
+    {
+      "name": "Case change preserves materials/zero/false; before and after",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "width": 1440
+    },
+    {
+      "name": "Accepted member removal; captain protected; original roster retained",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "width": 1440
+    },
+    {
+      "name": "Archive readonly; materials/team retained, ratings preservation explained; active list excludes it",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "width": 1440
+    },
+    {
+      "name": "Bulk registration removal: captain/member/pending/unaffiliated, independent audit",
+      "status": "PASS",
+      "format": "noncompetitive",
+      "width": 1440
+    },
+    {
+      "name": "Pending-only/no-solution independent audit",
+      "status": "PASS",
+      "ids": [9]
+    },
+    {
+      "name": "Pending-only/no-solution independent audit",
+      "status": "PASS",
+      "ids": [10]
+    },
+    {
+      "name": "Removing registration after archive keeps its roster and earlier history",
+      "status": "PASS"
+    },
+    {
+      "name": "Action failure is recoverable and requires fresh confirmation",
+      "status": "PASS",
+      "mode": "stale"
+    },
+    {
+      "name": "Action failure is recoverable and requires fresh confirmation",
+      "status": "PASS",
+      "mode": "error"
+    },
+    {
+      "name": "Action failure is recoverable and requires fresh confirmation",
+      "status": "PASS",
+      "mode": "no-access"
+    },
+    {
+      "name": "Mixed Project conflict blocks entire command, selection retained",
+      "status": "PASS"
+    },
+    {
+      "name": "Preview loading can be dismissed without mutation",
+      "status": "PASS"
+    },
+    {
+      "name": "Keyboard tabs, focus containment, Escape, return focus",
+      "status": "PASS"
+    },
+    {
+      "name": "Apply blocks repeat/close while busy; completed state stays visible",
+      "status": "PASS"
+    },
+    {
+      "name": "Existing field filters preserve zero, false, not-applicable",
+      "status": "PASS"
+    },
+    {
+      "name": "Existing analytics drilldown / team / back",
+      "status": "PASS"
+    },
+    {
+      "name": "Existing allocation preview and apply",
+      "status": "PASS"
+    },
+    {
+      "name": "Existing reminder preview",
+      "status": "PASS"
+    },
+    {
+      "name": "Existing completed zero/false score",
+      "status": "PASS"
+    },
+    {
+      "name": "Manager first submission: ready draft, no second-submit control",
+      "status": "PASS",
+      "format": "kch",
+      "width": 390
+    },
+    {
+      "name": "Incomplete first submission is blocked with field names",
+      "status": "PASS",
+      "format": "kch",
+      "width": 390
+    },
+    {
+      "name": "Manager first submission: ready draft, no second-submit control",
+      "status": "PASS",
+      "format": "kch",
+      "width": 1440
+    },
+    {
+      "name": "Incomplete first submission is blocked with field names",
+      "status": "PASS",
+      "format": "kch",
+      "width": 1440
+    },
+    {
+      "name": "Manager first submission: ready draft, no second-submit control",
+      "status": "PASS",
+      "format": "hack",
+      "width": 390
+    },
+    {
+      "name": "Incomplete first submission is blocked with field names",
+      "status": "PASS",
+      "format": "hack",
+      "width": 390
+    },
+    {
+      "name": "Manager first submission: ready draft, no second-submit control",
+      "status": "PASS",
+      "format": "hack",
+      "width": 1440
+    },
+    {
+      "name": "Incomplete first submission is blocked with field names",
+      "status": "PASS",
+      "format": "hack",
+      "width": 1440
+    },
+    {
+      "name": "Noncompetitive format has no artificial submit action",
+      "status": "PASS"
+    },
+    {
+      "name": "Changing review format resets local mutations and team counters",
+      "status": "PASS"
+    },
+    {
+      "name": "Archive uses separate supported search without active-only fields/export",
+      "status": "PASS"
+    }
+  ],
+  "screenshots": [
+    "admin-case-preview-390.png",
+    "admin-archive-preview-390.png",
+    "admin-archived-team-mobile.png",
+    "admin-registration-preview-390.png",
+    "admin-case-preview-1440.png",
+    "admin-case-history-desktop.png",
+    "admin-archive-preview-1440.png",
+    "admin-registration-preview-1440.png",
+    "admin-stale-mobile.png",
+    "admin-legacy-conflict-mobile.png",
+    "admin-submit-preview-mobile.png"
+  ],
+  "pageErrors": [],
+  "failedRequests": [],
+  "nonStaticRequests": [],
+  "externalBlocked": {
+    "gc.kis.v2.scr.kaspersky-labs.com:GET": 130
+  },
+  "finished": "2026-10-25T17:59:41.934Z",
+  "status": "PASS",
+  "count": 130
+}

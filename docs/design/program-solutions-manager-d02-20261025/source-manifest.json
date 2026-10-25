@@ -1,0 +1,50 @@
+{
+  "kind": "D02 synthetic prototype review bundle; no runtime product changes",
+  "beProduct": "394bf1666825ea87e7985b88c401a4e3c9f8d316",
+  "feProduct": "b4191a8b082e41b318c67c7605fa2764b647c46c",
+  "contract": "1.20.1",
+  "designApproval": "PENDING; existing D02 question",
+  "runtimeSources": {
+    "index.html": "444cf18af00a8e7448e46abc76380147ed7c96437a172beca4b6d8a8a5269420",
+    "app.js": "73eb3cdd678174e7151afbfb7869ba62a7c0a37f4f652b2287d3c9aca1a07343",
+    "admin.js": "73ab1ab7846cde895b1336c8dd35be114aa707bd0de56789c61e49bf358c4bbc",
+    "styles.css": "1d32f0bb7e80462359a864cd27f747684726ab9dd09b117f07d760cd5ce37418",
+    "icons.js": "7bb1132b94391e3ab52123e6e528d38057d222722d4ec675711ba398dc12662f",
+    "global-reference.css": "ac2b519c5e7d05310332298736f9e5fd19b634d21d2766b00bb8361c74e76138",
+    "analytics-reference.css": "5c22d9d89a5f7998e4db3331834906ead8b35e5c23d9a992e235ca7c91c0320e",
+    "drilldown-reference.css": "6fdaf18d7cf3a7d0f95f61ed5498361634d86605e668547ffd8d2ab5a19cb868",
+    "results-reference.css": "a92e429596fc8ddd9c382f2c38ea2d486ad2c90aa84e8f9ce294a8214419e4f2"
+  },
+  "baseline": {
+    "app.js": "e6951de710596c6edf80f4a2349bd25875db280dfe31e911db81a6aa33a84f84",
+    "styles.css": "1bbd65322ab8fff199f3160035a51e4b6631ec97d58cf9c6e8f6c9e302853d74",
+    "index.html": "4d9f412ba6f882c31c3f89fc3869f02b3ecc1993ac1bdfa1f15850ff0acf9f11",
+    "design-handoff.md": "46ca528ee4e93527d3b7616d0b246dfb71429865d33ad66ec49b6542cfac6ab0"
+  },
+  "originalAC26": "unchanged",
+  "fullRelease": "incomplete; AC18/19 OPEN, AC21 BE10 separate",
+  "unverified": [
+    "Angular manager UI",
+    "server API in prototype browser run",
+    "delivery",
+    "XLSX",
+    "production",
+    "real-program migration"
+  ],
+  "attempts": [
+    {
+      "name": "attempt1",
+      "result": "FAIL after78 checks",
+      "cause": "QA helper expected1 locator; row has2 solution links. Original report retained outside Git."
+    },
+    {
+      "name": "attempt2",
+      "result": "FAIL after111 checks",
+      "cause": "QA helper searched main instead of dialog. Original report retained outside Git."
+    },
+    {
+      "name": "intermediate",
+      "result": "115/128/129 PASS, later superseded by source changes and final130 run"
+    }
+  ]
+}

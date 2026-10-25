@@ -1,0 +1,89 @@
+<!-- @format -->
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Решения программы — интерфейс организатора</title>
+    <link rel="stylesheet" href="global-reference.css" />
+    <link rel="stylesheet" href="analytics-reference.css" />
+    <link rel="stylesheet" href="drilldown-reference.css" />
+    <link rel="stylesheet" href="results-reference.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="prototype-bar" aria-label="Настройки просмотра макета">
+      <span>Макет организатора / вымышленные данные</span>
+      <div class="prototype-controls">
+        <label
+          >Программа<select id="program-format">
+            <option value="kch">Кейс-чемпионат</option>
+            <option value="hack">Хакатон</option>
+            <option value="noncompetitive">Неконкурсная программа</option>
+          </select></label
+        >
+        <label
+          >Состояние<select id="scenario">
+            <option value="ready">Обычный вид</option>
+            <option value="ready-draft">Готовый черновик</option>
+            <option value="open-mode">Открытое оценивание</option>
+            <option value="loading">Загрузка</option>
+            <option value="empty">Нет решений</option>
+            <option value="no-results">Поиск без результатов</option>
+            <option value="error">Ошибка загрузки</option>
+            <option value="no-access">Нет доступа</option>
+            <option value="long">Длинные названия</option>
+          </select></label
+        >
+        <label
+          >Ответ на действие<select id="action-response">
+            <option value="ready">Успешный ответ</option>
+            <option value="loading">Загрузка предпросмотра</option>
+            <option value="stale">Данные изменились</option>
+            <option value="error">Ошибка подтверждения</option>
+            <option value="no-access">Права изменились</option>
+            <option value="legacy">Связь с проектом</option>
+          </select></label
+        >
+        <button class="quiet" type="button" onclick="location.reload()">Сбросить макет</button>
+      </div>
+    </div>
+    <div class="office">
+      <aside class="sidebar">
+        <img class="logo" src="../assets/logo.svg" alt="PROCOLLAB" />
+        <nav aria-label="Основное меню">
+          <span>Мой профиль</span><span>Новости</span><span>Проекты</span><span>Участники</span
+          ><span class="active">Программы</span>
+        </nav>
+      </aside>
+      <div class="workspace">
+        <header class="mobile-header">
+          <img src="../assets/logo.svg" alt="PROCOLLAB" /><span>Управление программой</span>
+        </header>
+        <header class="program-header">
+          <p class="muted">Управление программой</p>
+          <h1 id="program-name">Кейс-чемпионат PROCOLLAB</h1>
+        </header>
+        <nav class="section-tabs" aria-label="Разделы управления программой">
+          <button type="button" data-screen="solutions">Решения</button>
+          <button type="button" data-screen="evaluation">Оценивание</button>
+          <button type="button" data-screen="results">Результаты</button>
+          <button type="button" data-screen="analytics">Аналитика</button>
+        </nav>
+        <main id="manager-main" tabindex="-1"></main>
+      </div>
+    </div>
+    <div class="prototype-drilldown">
+      <dialog
+        id="manager-dialog"
+        class="modal__body analytics-drilldown-body"
+        aria-labelledby="dialog-title"
+      ></dialog>
+    </div>
+    <div id="notice" class="notice" role="status" hidden></div>
+    <script src="icons.js"></script>
+    <script src="admin.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
