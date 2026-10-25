@@ -1,0 +1,303 @@
+{
+  "status": "PASS",
+  "prefix": "qa01e-20261025-after-d445c996",
+  "programs": [
+    {
+      "id": 23,
+      "template": "case_championship",
+      "distributed": true,
+      "deadline": "2026-11-01T07:36:13.753456+00:00",
+      "solutions": [
+        {
+          "id": 34,
+          "name": "Ревизия 1 case_championship",
+          "snapshotSha256": "0e5a462bdfa751c7ecff0de3413d6df777d1b6373b884fb34ecd3405a3a4d95c"
+        },
+        {
+          "id": 35,
+          "name": "Ревизия 2 case_championship",
+          "snapshotSha256": "97fb73720c0ccdf0f0e5def8ace44385b62a80f0d44e5e03269cadd8f0755c53"
+        }
+      ],
+      "criteria": [
+        {
+          "id": 39,
+          "name": "Качество",
+          "description": "Обоснованность решения",
+          "type": "int",
+          "min_value": 0.0,
+          "max_value": 10.0
+        },
+        {
+          "id": 40,
+          "name": "Реализуемость",
+          "description": "Возможность реализации",
+          "type": "bool",
+          "min_value": null,
+          "max_value": null
+        },
+        {
+          "id": 41,
+          "name": "Комментарий",
+          "description": "Пояснение эксперта",
+          "type": "str",
+          "min_value": null,
+          "max_value": null
+        }
+      ],
+      "criteriaRevision": "aba9ef880aa8befe896bce5095d974f141c88b24e19341fbbf360880bd3f2504",
+      "expertModelId": 5,
+      "initialRatingRevision": "aba9ef880aa8befe896bce5095d974f141c88b24e19341fbbf360880bd3f2504"
+    },
+    {
+      "id": 24,
+      "template": "hackathon",
+      "distributed": false,
+      "deadline": "2026-11-01T07:36:13.763572+00:00",
+      "solutions": [
+        {
+          "id": 36,
+          "name": "Ревизия 1 hackathon",
+          "snapshotSha256": "381a1e4fbf2dde9fa69970a4d139d21a37851029aa0e832422f8054f291b350c"
+        },
+        {
+          "id": 37,
+          "name": "Ревизия 2 hackathon",
+          "snapshotSha256": "a2e179330bad9a75f57b858a986daf97933d138e7103e9b8f4cdb7ad8b91a0fb"
+        }
+      ],
+      "criteria": [
+        {
+          "id": 42,
+          "name": "Качество",
+          "description": "Обоснованность решения",
+          "type": "int",
+          "min_value": 0.0,
+          "max_value": 10.0
+        },
+        {
+          "id": 43,
+          "name": "Реализуемость",
+          "description": "Возможность реализации",
+          "type": "bool",
+          "min_value": null,
+          "max_value": null
+        },
+        {
+          "id": 44,
+          "name": "Комментарий",
+          "description": "Пояснение эксперта",
+          "type": "str",
+          "min_value": null,
+          "max_value": null
+        }
+      ],
+      "criteriaRevision": "bac8dbc8fc339fe27740ab7590cd9035711f8a42ea94dbe89281367862b8c358",
+      "expertModelId": 5,
+      "initialRatingRevision": "bac8dbc8fc339fe27740ab7590cd9035711f8a42ea94dbe89281367862b8c358"
+    }
+  ],
+  "events": [
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/23/management/solution-form/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "a36890322a8a67974b19c838649405f82e5752f18d71ac1d533586efe9c47d30"
+    },
+    {
+      "role": "manager",
+      "method": "PUT",
+      "path": "/programs/23/management/solution-form/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "025668bb5956313b9c345aa12e26b72fb50a23fe217302b529c85df7df023a78"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/23/solutions/",
+      "status": 201,
+      "contract": "C00",
+      "responseSha256": "d66df4dc6e1a1efc047c0d81e30e70cbcbde0effeb73f096b8112c6b47318915"
+    },
+    {
+      "role": "captain",
+      "method": "PATCH",
+      "path": "/programs/23/solutions/34/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "925b8e58978f81dc9c9d4c10116a2c98fea92db8d07df7ce3a72acc8fa0281e9"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/23/solutions/34/submit/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "63739278543ec91cd0a6e4cd91b586bb79675acbc9051173d5678e367e39e19f"
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/programs/23/solutions/",
+      "status": 201,
+      "contract": "C00",
+      "responseSha256": "3f6731b40cdee9e6ea8c9f261ba2cce9fc50ae678e07e6ac7e9e2852aac46813"
+    },
+    {
+      "role": "pending_a",
+      "method": "PATCH",
+      "path": "/programs/23/solutions/35/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "464e4233e4e0511f7c12b5bf88f281ead50e158e92df3d4cf0444afeed7e9764"
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/programs/23/solutions/35/submit/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "216834a3a6d33de7a3364d581dbad267c78d43c016e89215a461806b2ed27d7a"
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/23/management/criteria/",
+      "status": 200,
+      "contract": "existing management criteria",
+      "responseSha256": "f27585fd993fd702edd38d590ef2ea635d7b4af8311d08655acbfd6464cc34c4"
+    },
+    {
+      "role": "manager",
+      "method": "PUT",
+      "path": "/programs/23/management/criteria/",
+      "status": 200,
+      "contract": "existing management criteria",
+      "responseSha256": "8cf5a76d1a599871f4bd9974e63628b2ac3ad5a5088b038b63c8eb89cc321ea5"
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/programs/23/solutions/34/evaluation/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "8644d1501f804c531bd0b336064babbcbd638fa03074334e9ed585936564efba"
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/24/management/solution-form/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "3f620b55d9d6e6abca4cb8e3d0c68735cfe4f8b8cb62afa0a64c7b553c26be37"
+    },
+    {
+      "role": "manager",
+      "method": "PUT",
+      "path": "/programs/24/management/solution-form/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "6c5c852983ff6e5efa7f44b506ca91d8fcfde351e5df5f7f244c41da492cb66f"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/24/solutions/",
+      "status": 201,
+      "contract": "C00",
+      "responseSha256": "d874d44f525faca28fb7f4baa386b7f5d0ff9ecb2b755f20594f386b7765c62b"
+    },
+    {
+      "role": "captain",
+      "method": "PATCH",
+      "path": "/programs/24/solutions/36/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "5e33249d9ddc6ff4a65f9a4b75c8f569ad1b2c3922a600bd66582b8c0b448cbf"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/24/solutions/36/submit/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "b540b11b3e86ddc2f9b0b749c4a3507a998926178715a1b22a88cad7bd4b218a"
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/programs/24/solutions/",
+      "status": 201,
+      "contract": "C00",
+      "responseSha256": "0454ea1b9faab27bc76eb34f50f73666ba81a5a99a37ea449b366fa010006129"
+    },
+    {
+      "role": "pending_a",
+      "method": "PATCH",
+      "path": "/programs/24/solutions/37/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "fb0c8572c6def1b415013913d6f02639d2309a92b5c9f689a11b0490bfc5459f"
+    },
+    {
+      "role": "pending_a",
+      "method": "POST",
+      "path": "/programs/24/solutions/37/submit/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "851bddf8a2188f1c2b0955ad809669c403678806b4e979c74249067ac037be02"
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/24/management/criteria/",
+      "status": 200,
+      "contract": "existing management criteria",
+      "responseSha256": "2f21b5b853aa1209196d24b7d213cff75a56b55babce64661ecf97e607436b14"
+    },
+    {
+      "role": "manager",
+      "method": "PUT",
+      "path": "/programs/24/management/criteria/",
+      "status": 200,
+      "contract": "existing management criteria",
+      "responseSha256": "19974c0db43c3eb427f10352dea5d073ecb263f1bcd50088a6172f813e6004e1"
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/programs/24/solutions/36/evaluation/",
+      "status": 200,
+      "contract": "C00",
+      "responseSha256": "50b2d4468b42b853236f43dbab3460965473a28f6b1afb279563c2839dad6bf9"
+    }
+  ],
+  "preexistingDomainUnchanged": true,
+  "baselineModels": [
+    "partner_programs.PartnerProgram",
+    "partner_programs.PartnerProgramField",
+    "partner_programs.PartnerProgramUserProfile",
+    "partner_programs.ProgramSolution",
+    "partner_programs.ProgramSolutionAnswer",
+    "partner_programs.ProgramSolutionMember",
+    "partner_programs.SolutionInvitation",
+    "project_rates.SolutionScore",
+    "project_rates.SolutionExpertAssignment",
+    "project_rates.Criteria",
+    "users.Expert",
+    "files.UserFile",
+    "projects.Project",
+    "users.Expert_programs",
+    "partner_programs.PartnerProgram_managers"
+  ],
+  "projectCountUnchanged": true,
+  "notes": [
+    "Only fresh synthetic programs/accounts changed",
+    "Expert deliberately also manages these fixtures, so revoked expert membership yields actual not_program_expert instead of a hidden404",
+    "Assignments are fixture setup through guarded model FK; management criteria/solution writers are real HTTP",
+    "Verified owned PDF is reused; binary upload/CDN delivery is not repeated"
+  ]
+}

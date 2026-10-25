@@ -1,0 +1,130 @@
+{
+  "status": "PASS",
+  "c00": "1.14.0",
+  "productFailureArtifact": "browser-before-attempt-1792913652078.json",
+  "beforeProductFailureObserved": true,
+  "afterUniqueBrowserChecks": 16,
+  "afterEarlierAttemptJavascriptErrors": [
+    {
+      "role": "second",
+      "message": "Failed to fetch dynamically imported module: http://127.0.0.1:8881/chunk-VHK7KRDQ.js"
+    }
+  ],
+  "finalActorJavascriptErrors": [],
+  "validation": {
+    "c00Responses": 52,
+    "c00Requests": 11,
+    "existingCriteriaResponses": 6
+  },
+  "verificationGetRequests": 8,
+  "verificationEvents": [
+    {
+      "role": "expert",
+      "path": "/programs/23/solutions/34/evaluation/",
+      "status": 200,
+      "responseSha256": "7075cb8753c12ab4c96923b319ae84b033c4ec61470f5638ab7922ea81809bc2"
+    },
+    {
+      "role": "second",
+      "path": "/programs/23/solutions/34/evaluation/",
+      "status": 200,
+      "responseSha256": "4b9eccbaac99626b9334623071ab43bacaeaf22a3f2257eff8441cc13d2263ec"
+    },
+    {
+      "role": "captain",
+      "path": "/programs/23/solutions/34/evaluation/",
+      "status": 403,
+      "responseSha256": "592c35e77c85ef4a7c4ae3ce75b5ed1bc27ad4fc8e05addc305486fdacfdf731"
+    },
+    {
+      "role": "expert",
+      "path": "/programs/23/solution-evaluation/?search=%D0%A0%D0%B5%D0%B2%D0%B8%D0%B7%D0%B8%D1%8F&case_scope=selected&case_name=%D0%93%D0%BE%D1%80%D0%BE%D0%B4&status=completed&limit=20&offset=0",
+      "status": 200,
+      "responseSha256": "16789bf874cf198391805ed9f41ba34a3d7a1ba0993d8420e12cab20b23f178b"
+    },
+    {
+      "role": "expert",
+      "path": "/programs/24/solutions/36/evaluation/",
+      "status": 200,
+      "responseSha256": "a7e71a9177e981c267485484768fbda1b855834eeb515ba3a451577e5a66e1db"
+    },
+    {
+      "role": "second",
+      "path": "/programs/24/solutions/36/evaluation/",
+      "status": 200,
+      "responseSha256": "b03e31061171d04219087feb8d73c6dfb2fef904d1bef9cd40accbb07b8e7d31"
+    },
+    {
+      "role": "captain",
+      "path": "/programs/24/solutions/36/evaluation/",
+      "status": 403,
+      "responseSha256": "592c35e77c85ef4a7c4ae3ce75b5ed1bc27ad4fc8e05addc305486fdacfdf731"
+    },
+    {
+      "role": "expert",
+      "path": "/programs/24/solution-evaluation/?search=%D0%A0%D0%B5%D0%B2%D0%B8%D0%B7%D0%B8%D1%8F&case_scope=selected&case_name=%D0%93%D0%BE%D1%80%D0%BE%D0%B4&status=completed&limit=20&offset=0",
+      "status": 200,
+      "responseSha256": "86962ba2b8783f287f1c5e0d0dd5f21b22103eb851db82128787d853911a7aad"
+    }
+  ],
+  "programs": [
+    {
+      "program": 23,
+      "template": "case_championship",
+      "distributed": true,
+      "solution": 34,
+      "expertUserId": 15,
+      "expertModelId": 5,
+      "criterionIds": [39, 40, 45, 46],
+      "scores": 4,
+      "zeroFalseAnd1000Preserved": true,
+      "secondOwnValuesNull": true,
+      "captainDenied": true,
+      "deadlineClosed": true,
+      "snapshotsUnchanged": true,
+      "creationFlagOff": true
+    },
+    {
+      "program": 24,
+      "template": "hackathon",
+      "distributed": false,
+      "solution": 36,
+      "expertUserId": 15,
+      "expertModelId": 5,
+      "criterionIds": [42, 43, 47, 48],
+      "scores": 4,
+      "zeroFalseAnd1000Preserved": true,
+      "secondOwnValuesNull": true,
+      "captainDenied": true,
+      "deadlineClosed": true,
+      "snapshotsUnchanged": true,
+      "creationFlagOff": true
+    }
+  ],
+  "preexistingSelectedDomainUnchanged": true,
+  "baselineModels": [
+    "partner_programs.PartnerProgram",
+    "partner_programs.PartnerProgramField",
+    "partner_programs.PartnerProgramUserProfile",
+    "partner_programs.ProgramSolution",
+    "partner_programs.ProgramSolutionAnswer",
+    "partner_programs.ProgramSolutionMember",
+    "partner_programs.SolutionInvitation",
+    "project_rates.SolutionScore",
+    "project_rates.SolutionExpertAssignment",
+    "project_rates.Criteria",
+    "users.Expert",
+    "files.UserFile",
+    "projects.Project",
+    "users.Expert_programs",
+    "partner_programs.PartnerProgram_managers"
+  ],
+  "verificationDomainMutations": 0,
+  "projectCountUnchanged": true,
+  "limits": [
+    "Core expert checks completed in two explicit runs; final actor checks were read-only and used real login with returnUrl.",
+    "An earlier actor chunk import failed despite HTTP200; cause is not established. Earlier artifact is retained, not reported as a clean run.",
+    "Role membership and deadline were changed only by guarded fixture controls; manager criteria changes, score writes and readbacks were actual HTTP.",
+    "No new manager/public UI, production, comprehensive a11y or zoom checks."
+  ]
+}

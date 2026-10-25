@@ -282,6 +282,7 @@ export class SolutionEvaluationComponent {
               "not_found",
               "forbidden",
               "not_assigned",
+              "not_program_expert",
               "permission_denied",
               "unauthorized",
               "authentication_required",

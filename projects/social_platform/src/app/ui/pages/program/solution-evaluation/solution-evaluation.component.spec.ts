@@ -184,28 +184,31 @@ describe("Solution evaluation using the shared criterion form", () => {
     page.prepare();
     expect(page.confirmation()).toBe(true);
   });
-  it("shows saved and closed results read-only and clears private data when access is lost", async () => {
-    const { page, fixture, rate, get, data } = await setup(true);
-    expect(page.editing()).toBe(false);
-    page.edit();
-    fixture.detectChanges();
-    await fixture.whenStable();
-    rate.execute.mockReturnValue(of(fail(problem("not_found"))) as never);
-    page.prepare();
-    page.confirm();
-    fixture.detectChanges();
-    expect(page.frame()).toBeNull();
-    expect(page.form.value).toEqual({});
-    const closed = structuredClone(data);
-    closed.canRate = false;
-    closed.blockedReason = "Срок оценивания завершен.";
-    get.execute.mockReturnValue(of(ok(closed)));
-    page.reload();
-    fixture.detectChanges();
-    expect(page.editing()).toBe(false);
-    page.edit();
-    expect(page.editing()).toBe(false);
-  });
+  it.each(["not_found", "not_program_expert"])(
+    "shows saved/closed results read-only and clears a revoked evaluation frame: %s",
+    async code => {
+      const { page, fixture, rate, get, data } = await setup(true);
+      expect(page.editing()).toBe(false);
+      page.edit();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      rate.execute.mockReturnValue(of(fail(problem(code))) as never);
+      page.prepare();
+      page.confirm();
+      fixture.detectChanges();
+      expect(page.frame()).toBeNull();
+      expect(page.form.value).toEqual({});
+      const closed = structuredClone(data);
+      closed.canRate = false;
+      closed.blockedReason = "Срок оценивания завершен.";
+      get.execute.mockReturnValue(of(ok(closed)));
+      page.reload();
+      fixture.detectChanges();
+      expect(page.editing()).toBe(false);
+      page.edit();
+      expect(page.editing()).toBe(false);
+    },
+  );
   it("protects local input on leave, cancel, and ignores a previous context's late save", async () => {
     const { page, fixture, rate, params, data, fill } = await setup();
     await fill();

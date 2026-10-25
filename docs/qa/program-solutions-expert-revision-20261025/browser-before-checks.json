@@ -1,0 +1,43 @@
+{
+  "status": "FAIL",
+  "phase": "before",
+  "prefix": "qa01e-20261025-before-1c1271f7",
+  "checks": [
+    {
+      "program": 21,
+      "check": "reconciled responsive",
+      "widths": [320, 390, 768, 1440]
+    },
+    {
+      "program": 21,
+      "check": "saved responsive",
+      "widths": [320, 390, 768, 1440]
+    },
+    {
+      "program": 21,
+      "check": "real manager criteria PUT / stale409 / rebase IDs-types / copy old1000 / new required focus / confirmed onePOST / saved0-False-0-1000",
+      "newRevision": "7714b944936fee9d47bf4ec2ce92f0338a83279232b4d701f80fe5615b2d0cc7",
+      "savedCriterionIds": [29, 30, 35, 36]
+    },
+    {
+      "program": 21,
+      "check": "return URL restores q/case/status and actual own counts1/1"
+    },
+    {
+      "program": 21,
+      "check": "actual revoked expert role with manager retained clears expert frame",
+      "serverStatus": 403,
+      "serverCode": "not_program_expert",
+      "cleared": false,
+      "materialHeadingCount": 1,
+      "criterionControls": 3
+    }
+  ],
+  "error": "AssertionError [ERR_ASSERTION]: Actual403/not_program_expert retained the old expert frame after its role was revoked\n    at C:\\Users\\evsee\\AppData\\Local\\Temp\\procollab-expert-revision-browser.cjs:53:548",
+  "javascriptErrors": [],
+  "earlierAttemptJavaScriptErrors": [],
+  "sourceArtifact": "browser-before-attempt-1792913652078.json",
+  "sourceRawSha256": "5f93fd2ac4eba20e51068d45fe5d9fa981cde5df0095f32490a588e22081d084",
+  "capturedResponses": 11,
+  "provenance": "Baseline invocation; startup attempts stored separately."
+}

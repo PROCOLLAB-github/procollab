@@ -1,0 +1,107 @@
+{
+  "status": "PASS",
+  "phase": "after",
+  "prefix": "qa01e-20261025-after-d445c996",
+  "checks": [
+    {
+      "program": 23,
+      "check": "reconciled responsive",
+      "widths": [320, 390, 768, 1440]
+    },
+    {
+      "program": 23,
+      "check": "saved responsive",
+      "widths": [320, 390, 768, 1440]
+    },
+    {
+      "program": 23,
+      "check": "real manager criteria PUT / stale409 / rebase IDs-types / copy old1000 / new required focus / confirmed onePOST / saved0-False-0-1000",
+      "newRevision": "701bea49c2a29ed504f9d699d04dc35cb000411c5d433d4578f2076a82fb116a",
+      "savedCriterionIds": [39, 40, 45, 46]
+    },
+    {
+      "program": 23,
+      "check": "return URL restores q/case/status and actual own counts1/1"
+    },
+    {
+      "program": 23,
+      "check": "actual revoked expert role with manager retained clears expert frame",
+      "serverStatus": 403,
+      "serverCode": "not_program_expert",
+      "cleared": true,
+      "materialHeadingCount": 0,
+      "criterionControls": 0
+    },
+    {
+      "program": 23,
+      "check": "revoked responsive",
+      "widths": [320, 390, 768, 1440]
+    },
+    {
+      "program": 23,
+      "check": "real deadline closes during confirmation; saved0 remains and unsaved2 available for copy"
+    },
+    {
+      "program": 23,
+      "check": "second expert sees only empty own scores; captain cannot open expert frame",
+      "actualSecondValues": [null, null, null, null],
+      "captainHeading": "Решение недоступно"
+    },
+    {
+      "program": 24,
+      "check": "reconciled responsive",
+      "widths": [320, 390, 768, 1440]
+    },
+    {
+      "program": 24,
+      "check": "saved responsive",
+      "widths": [320, 390, 768, 1440]
+    },
+    {
+      "program": 24,
+      "check": "real manager criteria PUT / stale409 / rebase IDs-types / copy old1000 / new required focus / confirmed onePOST / saved0-False-0-1000",
+      "newRevision": "7dd87f314b0e3494d680efa04bc27ba72edc1c0dfc8d9bf182f911647769d940",
+      "savedCriterionIds": [42, 43, 47, 48]
+    },
+    {
+      "program": 24,
+      "check": "return URL restores q/case/status and actual own counts1/1"
+    },
+    {
+      "program": 24,
+      "check": "actual revoked expert role with manager retained clears expert frame",
+      "serverStatus": 403,
+      "serverCode": "not_program_expert",
+      "cleared": true,
+      "materialHeadingCount": 0,
+      "criterionControls": 0
+    },
+    {
+      "program": 24,
+      "check": "revoked responsive",
+      "widths": [320, 390, 768, 1440]
+    },
+    {
+      "program": 24,
+      "check": "real deadline closes during confirmation; saved0 remains and unsaved2 available for copy"
+    },
+    {
+      "program": 24,
+      "check": "second expert sees only empty own scores; captain cannot open expert frame",
+      "actualSecondValues": [null, null, null, null],
+      "captainHeading": "Решение недоступно"
+    }
+  ],
+  "error": null,
+  "javascriptErrors": [],
+  "earlierAttemptJavaScriptErrors": [
+    {
+      "role": "second",
+      "message": "Failed to fetch dynamically imported module: http://127.0.0.1:8881/chunk-VHK7KRDQ.js"
+    }
+  ],
+  "sourceArtifact": "browser-after-evidence.json",
+  "sourceRawSha256": "d42c4e107cc9ecd68c64b3486bd98f272f34016fa2ac016090d002c005becd8a",
+  "capturedResponses": 39,
+  "provenance": "Core scenarios completed in two preserved runs. The first harness switched to the captain page for the second program; the second completed its core checks but a secondary actor hit a dynamic chunk import failure despite HTTP200 (cause not established). This final read-only actor check uses real login with returnUrl and completes both programs without resetting data. Earlier errors are preserved separately."
+}

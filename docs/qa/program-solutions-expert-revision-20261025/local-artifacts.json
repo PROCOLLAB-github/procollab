@@ -1,0 +1,224 @@
+{
+  "sourceDirectory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-expert-revision",
+  "backendSource": "30c0d3ec1ac8e1236dd669205b97b4a2b4463fda",
+  "frontendBase": "091d1ee11b64f5c1037a1a3213d66029355a05c1",
+  "finalComponentRawSha256": "c830f64f1916666228f613fe8daa328cf5fa1ad1a325030299801cafe4e85fbc",
+  "rawArtifacts": [
+    {
+      "file": "actor-tail-error.png",
+      "bytes": 43255,
+      "sha256": "bcb01e7661118278f965fa53fccebf2b025a4f6fbd980d8285bbb592db5c28cf"
+    },
+    {
+      "file": "after-case_championship-captain-denied-390.png",
+      "bytes": 17543,
+      "sha256": "c2274976a8bcf755c28051c9906acc92785f28626679edb3390d057d4e05fd55"
+    },
+    {
+      "file": "after-case_championship-reconciled-1440.png",
+      "bytes": 113651,
+      "sha256": "adf06a84967680ca5b786db6ed347ad11310bee26e989df932feedd5f2312a48"
+    },
+    {
+      "file": "after-case_championship-reconciled-390.png",
+      "bytes": 43743,
+      "sha256": "e0cc0c8d0096d3c4227c3f56bf70d4ede5a1749948e434d524cd7a106b60302f"
+    },
+    {
+      "file": "after-case_championship-revoked-1440.png",
+      "bytes": 53574,
+      "sha256": "ee705c273e5bf2c6581709c522650d2b4c3ae4733be6f64cd91e5dd866d9333c"
+    },
+    {
+      "file": "after-case_championship-revoked-390.png",
+      "bytes": 18171,
+      "sha256": "b15608ac0d4bf0de686b044a566558b7d5d0e5c89bb4d147b176e1d49d2a8220"
+    },
+    {
+      "file": "after-case_championship-saved-1440.png",
+      "bytes": 114279,
+      "sha256": "fc61ebb3487a0d0b9953d3bfc10d38057220ac5b283a3d9328fe8f0142eb2c51"
+    },
+    {
+      "file": "after-case_championship-saved-390.png",
+      "bytes": 22643,
+      "sha256": "ecf25f81056e451982b41e605c8f97ae06be18cff8e24416427656c80e483623"
+    },
+    {
+      "file": "after-error.png",
+      "bytes": 15364,
+      "sha256": "e2d214d6fbdb67bd85fd3f05616620fba9573afcf16ce83f0f5db0810becff21"
+    },
+    {
+      "file": "after-hackathon-captain-denied-390.png",
+      "bytes": 17543,
+      "sha256": "c2274976a8bcf755c28051c9906acc92785f28626679edb3390d057d4e05fd55"
+    },
+    {
+      "file": "after-hackathon-reconciled-1440.png",
+      "bytes": 134639,
+      "sha256": "11726fc0bfacb9b216e1887f1953479e7eec85ef4c588930d439595d5366f210"
+    },
+    {
+      "file": "after-hackathon-reconciled-390.png",
+      "bytes": 43678,
+      "sha256": "f9b82e6ef4c9387eb85150a31cef46fdf0ecc4e7f01ae3a2d58f2e3a91c92257"
+    },
+    {
+      "file": "after-hackathon-revoked-1440.png",
+      "bytes": 53574,
+      "sha256": "ee705c273e5bf2c6581709c522650d2b4c3ae4733be6f64cd91e5dd866d9333c"
+    },
+    {
+      "file": "after-hackathon-revoked-390.png",
+      "bytes": 18171,
+      "sha256": "b15608ac0d4bf0de686b044a566558b7d5d0e5c89bb4d147b176e1d49d2a8220"
+    },
+    {
+      "file": "after-hackathon-saved-1440.png",
+      "bytes": 109137,
+      "sha256": "b74d909fa8f4ada84e203e9a7e57254d486ff77a97468495f2dbed88e5579d94"
+    },
+    {
+      "file": "after-hackathon-saved-390.png",
+      "bytes": 22643,
+      "sha256": "ecf25f81056e451982b41e605c8f97ae06be18cff8e24416427656c80e483623"
+    },
+    {
+      "file": "before-case_championship-reconciled-1440.png",
+      "bytes": 113561,
+      "sha256": "722d2952cafad834dfeb871c861e1f71418d86a5aaaba63bd37c625f1127e7a3"
+    },
+    {
+      "file": "before-case_championship-reconciled-390.png",
+      "bytes": 43622,
+      "sha256": "4024a2824dae0d70ba69d37223de333ca32865e662b915149464cf7f3ecc3074"
+    },
+    {
+      "file": "before-case_championship-revoked-390.png",
+      "bytes": 39543,
+      "sha256": "ec348c3d60c26f08b8888189060db57de63d76827749cd3cd9d6e2387690a5de"
+    },
+    {
+      "file": "before-case_championship-saved-1440.png",
+      "bytes": 113828,
+      "sha256": "31d65a562336c80981ea16da4813b4fc7d24280c58de1648702795c50ee22c91"
+    },
+    {
+      "file": "before-case_championship-saved-390.png",
+      "bytes": 22643,
+      "sha256": "ecf25f81056e451982b41e605c8f97ae06be18cff8e24416427656c80e483623"
+    },
+    {
+      "file": "before-error.png",
+      "bytes": 38791,
+      "sha256": "5ff34502b18072adf8e60470ebe49d6ca009ada5da3865be1e475c853cedb84b"
+    },
+    {
+      "file": "browser-after-attempt-1792913954144.json",
+      "bytes": 93770,
+      "sha256": "e806e70b4da62b5042ca822f20e2d8078d68bae26b6adf8104cb9e9a2a52650d"
+    },
+    {
+      "file": "browser-after-attempt-1792914129851.json",
+      "bytes": 193701,
+      "sha256": "dc705d0d583473633114ca7da20d3eff8976864fc62d65e05e4abb7e8e62c4ac"
+    },
+    {
+      "file": "browser-after-evidence.json",
+      "bytes": 246691,
+      "sha256": "d42c4e107cc9ecd68c64b3486bd98f272f34016fa2ac016090d002c005becd8a"
+    },
+    {
+      "file": "browser-before-attempt-1792913652078.json",
+      "bytes": 57146,
+      "sha256": "5f93fd2ac4eba20e51068d45fe5d9fa981cde5df0095f32490a588e22081d084"
+    },
+    {
+      "file": "browser-before-failure.json",
+      "bytes": 2446,
+      "sha256": "8f7a333e33f43e830082cc84989dfc1a662b8dac1ed39df59dc516f7ec0345fd"
+    },
+    {
+      "file": "domain-and-contract-evidence.json",
+      "bytes": 4824,
+      "sha256": "780413ad889191ee8ddf8fc64fe7b95740d7c8e69e3cec04fdccb406fb697186"
+    },
+    {
+      "file": "seed-after-evidence.json",
+      "bytes": 10045,
+      "sha256": "f86097b10bfa08b0c091962fe07721bbe32dbe4403dddd18d2dafbc2b4a361af"
+    },
+    {
+      "file": "seed-before-evidence.json",
+      "bytes": 10046,
+      "sha256": "4603262eb0b8c6ddde1bb6f6d1b3892f19f7bb09343aef66947449079aa69ea2"
+    }
+  ],
+  "helpers": [
+    {
+      "file": "procollab-expert-revision-seed.py",
+      "sha256": "f5fefe00a8e6d497888c3a24bd2c41cdc5f0eb3e38752576da076714e61246da"
+    },
+    {
+      "file": "procollab-expert-revision-browser.cjs",
+      "sha256": "2e7a0cb322050cf671e4c77b6ae5d2ba2f532254ad96ad3a4ef7d86b09d47517"
+    },
+    {
+      "file": "procollab-expert-revision-actors.cjs",
+      "sha256": "46f789bfdcceef2e9a9cf4098f309921ecfb008e624888764df4d8cb7fc79555"
+    },
+    {
+      "file": "procollab-expert-revision-control.py",
+      "sha256": "cd7b6735f60436bbe988f896387cc095fa6a9bb240c3b7c054f21ed264bb92be"
+    },
+    {
+      "file": "procollab-expert-revision-verify.py",
+      "sha256": "99b111fd9dcff0f5a931de713b01a895be92b7105d9248c6cbf98314d2af99ba"
+    }
+  ],
+  "logs": [
+    {
+      "file": "procollab-expert-revision-unit-before.log",
+      "sha256": "bc5c10b83b98cb774dc7dc17d9e7c3faa209848c0626eeacefbf403b996e5d19"
+    },
+    {
+      "file": "procollab-expert-revision-unit-after.log",
+      "sha256": "d05e1fd584fb211945a5661db9b063a1b0e273d0662f5ea9b94099b0018dc0e2"
+    },
+    {
+      "file": "procollab-expert-revision-test-all.log",
+      "sha256": "613c4ba4bde235973695378d02529a2e4ea1a6fdcc59d2ceef65e5b8f1359a75"
+    },
+    {
+      "file": "procollab-expert-revision-build-after.log",
+      "sha256": "4ff919f12400432191ca776f67001d7054a78576ceaca1323e682e1f5a6b18cd"
+    },
+    {
+      "file": "procollab-expert-revision-actors.log",
+      "sha256": "11242b35dd8c11f75e412110507da4748df06850ed61cf4fb3ca333f7c4d0702"
+    },
+    {
+      "file": "procollab-expert-revision-actors-final.log",
+      "sha256": "f839029226d32443ed2a9fd46af30393c93cf073e624278cd0ca290faecfeeed"
+    },
+    {
+      "file": "procollab-ci-30c0d3e-pg.log",
+      "sha256": "6191dc732f1a837b767d4ac5b9acb99b30ee607f4bdd7a7d67f6595a3c27c72e"
+    },
+    {
+      "file": "procollab-ci-30c0d3e-general.log",
+      "sha256": "f5d321bda53a8fd85330d94b5abd92c40d11b063a92b49e46777917ab77d4531"
+    }
+  ],
+  "credentialsIncluded": false,
+  "ci": {
+    "pgRun": 40171399920,
+    "generalRun": 40171395732,
+    "status": "SUCCESS",
+    "postgresFullTests": 1686,
+    "postgresLockingTests": 39,
+    "generalTests": 1686,
+    "generalSkipped": 56
+  }
+}
