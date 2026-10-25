@@ -1,0 +1,10 @@
+{
+  "attempt1": {
+    "status": "FAIL",
+    "cause": "Autonomous bundle omitted existing global-reference.css media dependencies and assets/search.svg; local-only route denied missing assets",
+    "externalOrDomainRequestsCompleted": 0,
+    "productSourceChanges": false,
+    "outputPreservedOutsideGit": "procollab-d02-scope-bundle-clean-20261025"
+  },
+  "correction": "Copy exact existing assets from served artifact root; update source manifest; no font substitution or changes to live source"
+}

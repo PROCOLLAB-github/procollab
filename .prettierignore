@@ -6,3 +6,6 @@
 
 # Frozen C00 source documents are copied byte-for-byte from the backend contract package.
 /docs/contracts/program-solutions-v1/*.json
+
+# Frozen synthetic design sources preserve the exact bytes checked by browser QA.
+/docs/design/program-solutions-scope-20261025/prototype/**

@@ -1,0 +1,116 @@
+{
+  "status": "PASS",
+  "scope": "D02 navigation restoration only; no Angular/runtime or backend changes",
+  "tabs": [
+    "Участники",
+    "Заявки",
+    "Эксперты",
+    "Результаты",
+    "Аналитика",
+    "Настройки",
+    "Сертификаты"
+  ],
+  "currentAngularNavArrayUnchanged": true,
+  "checks": [
+    {
+      "format": "kch",
+      "screen": "solutions",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    },
+    {
+      "format": "kch",
+      "screen": "evaluation",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    },
+    {
+      "format": "kch",
+      "screen": "results",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    },
+    {
+      "format": "kch",
+      "screen": "analytics",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    },
+    {
+      "format": "hack",
+      "screen": "solutions",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    },
+    {
+      "format": "hack",
+      "screen": "evaluation",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    },
+    {
+      "format": "hack",
+      "screen": "results",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    },
+    {
+      "format": "hack",
+      "screen": "analytics",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    },
+    {
+      "format": "noncompetitive",
+      "screen": "solutions",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    },
+    {
+      "format": "noncompetitive",
+      "screen": "evaluation",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    },
+    {
+      "format": "noncompetitive",
+      "screen": "results",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    },
+    {
+      "format": "noncompetitive",
+      "screen": "analytics",
+      "widths": [320, 390, 768, 1440],
+      "productBodyIdentical": true
+    }
+  ],
+  "layoutChecks": 48,
+  "unchangedSectionClicks": 12,
+  "productBodiesCompared": 12,
+  "evaluationInsideApplicationTab": true,
+  "errors": [],
+  "domainRequests": [],
+  "failedAssets": [],
+  "browser": "headless Edge via bundled Playwright; cua kernel unavailable after reset",
+  "approval": "DESIGN APPROVAL REQUIRED remains pending",
+  "old130EvidencePreserved": true,
+  "sources": {
+    "index.html": {
+      "before": "444cf18af00a8e7448e46abc76380147ed7c96437a172beca4b6d8a8a5269420",
+      "after": "bb28ce87f3c982df53d593c9d7507d946bbc0d74dad2c47568af18dec9c81d20"
+    },
+    "app.js": {
+      "before": "73eb3cdd678174e7151afbfb7869ba62a7c0a37f4f652b2287d3c9aca1a07343",
+      "after": "33d8d4b3c36ea2004a1b9dee2f4dde24f70c86cee06cee09a0b4636401cf7d8b"
+    },
+    "styles.css": {
+      "before": "1d32f0bb7e80462359a864cd27f747684726ab9dd09b117f07d760cd5ce37418",
+      "after": "1d32f0bb7e80462359a864cd27f747684726ab9dd09b117f07d760cd5ce37418"
+    },
+    "design-handoff.md": {
+      "before": "e2b61d799a2483da68aea0c79bb8023ffc591db1cf01f859f7ec3003005f1054",
+      "after": "a460d187f0a70b95775acd08f0ef550e463c1fef24a28894944e95f4536afb88"
+    }
+  }
+}

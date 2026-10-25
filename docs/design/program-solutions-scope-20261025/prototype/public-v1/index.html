@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Решения программы — PROCOLLAB</title>
+  <link rel="stylesheet" href="../manager-v1/global-reference.css">
+  <link rel="stylesheet" href="source-reference.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#content">К содержимому</a>
+  <aside class="prototype-bar" aria-label="Настройки просмотра макета">
+    <p>Публичные решения / макет с вымышленными данными</p>
+    <div class="prototype-controls">
+      <label>Формат<select id="format"><option value="noncompetitive">Неконкурсная программа</option><option value="kch">Кейс-чемпионат</option><option value="hack">Хакатон</option></select></label>
+      <label>Состояние<select id="scenario"><option value="ready">Обычный вид</option><option value="loading">Загрузка</option><option value="empty">Нет публикаций</option><option value="no-results">Поиск без результатов</option><option value="error">Ошибка списка</option><option value="not-found">Решение недоступно</option><option value="detail-error">Ошибка материалов</option><option value="partial">Частичные материалы</option><option value="long">Длинный контент</option></select></label>
+    </div>
+    <p id="scope-note">Публичный API сохраненных неконкурсных решений готов. Подключение этого экрана ожидает согласования дизайна.</p>
+  </aside>
+  <div class="public-shell">
+    <header class="brand-header"><img src="../assets/logo.svg" alt="PROCOLLAB" width="120" height="30"><span>Программа</span></header>
+    <section class="program-heading" aria-labelledby="program-name"><p id="program-format" class="muted"></p><h1 id="program-name"></h1></section>
+    <main id="content" tabindex="-1"></main>
+    <p id="demo-notice" class="demo-notice" role="status" hidden>Это демонстрационная ссылка. В приложении здесь откроется материал команды в новой вкладке.</p>
+    <footer class="public-footer">PROCOLLAB</footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
