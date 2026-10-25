@@ -28,6 +28,9 @@ import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapt
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  caseAnalytics(programId: number) {
+    return this.http.caseAnalytics(programId);
+  }
   cabinetApplications(query?: SolutionCabinetQuery) {
     return this.http.cabinetApplications(query);
   }

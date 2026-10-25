@@ -1,6 +1,6 @@
 /** @format */
 
-// Сгенерировано tools/generate-solution-contract.py из C00 1.7.0.
+// Сгенерировано tools/generate-solution-contract.py из C00 1.8.0.
 // camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.
 
 export type SolutionUser = {
@@ -701,4 +701,27 @@ export type SolutionRoleWidget = SolutionWidget | SolutionLegacyWidget;
 
 export type SolutionWidgetError = {
   detail: string;
+};
+
+export type SolutionCaseSolutionMetrics = {
+  participantsTotal: number;
+  solutionsTotal: number;
+  notSubmitted: number | null;
+  submitted: number | null;
+};
+
+export type SolutionCaseSolutionItem = {
+  name: string;
+  participantsTotal: number;
+  solutionsTotal: number;
+  notSubmitted: number | null;
+  submitted: number | null;
+};
+
+export type SolutionCaseSolutionAnalytics = {
+  programId: number;
+  configured: boolean;
+  submissionApplicable: boolean;
+  items: Array<SolutionCaseSolutionItem>;
+  withoutCase: SolutionCaseSolutionMetrics;
 };

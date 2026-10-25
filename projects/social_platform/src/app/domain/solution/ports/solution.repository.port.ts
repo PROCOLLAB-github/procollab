@@ -34,9 +34,11 @@ import {
   SolutionQuotaWrite,
   SolutionResults,
   SolutionCabinetApplications,
+  SolutionCaseSolutionAnalytics,
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract caseAnalytics(programId: number): Observable<SolutionCaseSolutionAnalytics>;
   abstract cabinetApplications(
     query?: SolutionCabinetQuery,
   ): Observable<SolutionCabinetApplications>;

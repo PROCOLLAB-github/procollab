@@ -36,6 +36,7 @@ import {
   SolutionQuotaWrite,
   SolutionResults,
   SolutionCabinetApplications,
+  SolutionCaseSolutionAnalytics,
 } from "@domain/solution/solution-contract.model";
 import {
   SolutionListQuery,
@@ -49,6 +50,12 @@ import {
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  caseAnalytics(programId: number) {
+    this.path(programId);
+    return this.api.get<SolutionCaseSolutionAnalytics>(
+      `/programs/${programId}/management/solution-cases/`,
+    );
+  }
   cabinetApplications(query: SolutionCabinetQuery = {}) {
     return this.api.get<SolutionCabinetApplications>(
       "/evaluation/applications/",
