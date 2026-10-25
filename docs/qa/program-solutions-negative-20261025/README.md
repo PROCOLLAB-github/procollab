@@ -58,6 +58,8 @@ Backend runtime 2ad4743; 6db9050 меняет только лимит CI. Fronte
 
 PostgreSQL run 40164049519 для 2ad4743 отменен по аннотации GitHub «The job has exceeded the maximum execution time of 30m0s»: 39 locking tests прошли, полный набор нашел 1669 tests, но итоговый Ran/OK не получен. Это не PASS. В 6db9050 timeout поднят до 60 минут; YAML diff проверен: triggers/permissions/jobs/полный набор tests сохранены. Новые runs: PostgreSQL 40166190670 и General 40166187673; их terminal verdict проверяется отдельно, старые результаты его не заменяют.
 
+Обновление 25.10.2026: PostgreSQL 40166190670 для текущего 6db9050 завершен SUCCESS; лог подтверждает 39 locking/vacancy tests и полный набор 1669 tests, оба Ran/OK. General 40166187673 пока выполняется. Прямой last-slot race с разными получателями и invitation UI edges проверены следующим [checkpoint](../program-solutions-invitations-20261025/README.md); это закрывает названный выше частный пробел evidence, сохраняя общий QA01 открытым.
+
 [General CI 2ad4743](https://github.com/PROCOLLAB-github/api/actions/runs/40164045725) SUCCESS: Ran 1669 tests, OK (skipped=54), Tests/Lint, лог проверен. Этот non-PostgreSQL прогон не подменяет locking/full PostgreSQL gate; runtime 6db9050 совпадает с 2ad4743, изменен только CI timeout.
 
 Впереди полные organizer/expert/public/legacy/noncompetitive пути, полный desktop, invitation role bounds/edit/unavailable, прямое evidence last-slot race и оставшиеся исходные AC. D02/D03 и административная политика сданных заявок/конкурсная eligibility ожидают уже заданных решений. Эта проверка их не согласует и не реализует. PR остается draft, merge/deploy не выполнялись.

@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "prefix": "qa01i-20261025-7ed1e705",
+  "browserCapturedResponses": 120,
+  "browserCapturedRequestsValidated": 18,
+  "raceHttpChecks": 20,
+  "c00": "1.13.0",
+  "programs": [
+    {
+      "program_id": 15,
+      "solution_id": 20,
+      "template": "case_championship",
+      "version": 18,
+      "accepted_count": 1,
+      "pending_count": 0,
+      "answers": 0,
+      "submitted": false,
+      "published": false,
+      "retainedAcceptedInvitationHistory": true
+    },
+    {
+      "program_id": 16,
+      "solution_id": 21,
+      "template": "hackathon",
+      "version": 12,
+      "accepted_count": 1,
+      "pending_count": 0,
+      "answers": 0,
+      "submitted": false,
+      "published": false,
+      "retainedAcceptedInvitationHistory": true
+    }
+  ],
+  "previousSelectedDomainSha256": "c3eaf24667d4655e8b91918ad7167ba9d7777050e9006a9107fe6c141e87363c",
+  "previousSelectedDomainUnchanged": true,
+  "previousModels": [
+    "partner_programs.PartnerProgram",
+    "partner_programs.PartnerProgramField",
+    "partner_programs.ProgramSolution",
+    "partner_programs.ProgramSolutionAnswer",
+    "partner_programs.ProgramSolutionMember",
+    "partner_programs.SolutionInvitation",
+    "project_rates.SolutionScore",
+    "project_rates.SolutionExpertAssignment",
+    "files.UserFile",
+    "projects.Project"
+  ],
+  "projectCountUnchanged": true,
+  "verificationDomainMutations": 0,
+  "provenance": [
+    "Race had three insufficient harness observations; their pending invitations were revoked through ordinary API and the same solution was preserved. The successful probe observes transitive pg_blocking_pids paths for two independent local API processes.",
+    "Browser report accumulates completed checkpoints from preserved failed harness attempts. Initial member-removal assertion incorrectly expected204 instead of C00 200; later attempts corrected focus/DOM wait handling. These are not product fixes.",
+    "All final browser checks run against existing frontend0415dddd/backend6db9050(runtime2ad4743); no product code changed for this checkpoint.",
+    "The race checkpoint accepted2/pending0 precedes browser removal. Final fixtures are captain-only drafts; no submit or publication occurred."
+  ]
+}

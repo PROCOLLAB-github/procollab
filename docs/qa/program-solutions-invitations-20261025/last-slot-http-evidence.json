@@ -1,0 +1,288 @@
+{
+  "status": "PASS",
+  "prefix": "qa01i-20261025-7ed1e705",
+  "programs": [
+    {
+      "id": 15,
+      "template": "case_championship",
+      "solutionId": 20,
+      "raceComplete": true,
+      "winnerRole": "member",
+      "loserRole": "pending_a",
+      "winnerInvitationId": 37,
+      "blockedWorkers": [
+        {
+          "pid": 7336,
+          "blockers": [38424],
+          "pathToController": [7336, 38424]
+        },
+        {
+          "pid": 21196,
+          "blockers": [7336],
+          "pathToController": [21196, 7336, 38424]
+        }
+      ],
+      "controllerPid": 38424,
+      "raceStatuses": [201, 409],
+      "workerOrigins": ["http://127.0.0.1:8871", "http://127.0.0.1:8877"],
+      "loserRetryCode": "team_max_size",
+      "finalTeam": {
+        "members": [
+          {
+            "user": {
+              "id": 9,
+              "first_name": "Илья",
+              "last_name": "Сквозной",
+              "avatar_url": null
+            },
+            "role": null,
+            "specialization": null,
+            "joined_at": "2026-10-25T05:56:48.633623Z",
+            "is_captain": true
+          },
+          {
+            "user": {
+              "id": 10,
+              "first_name": "Мария",
+              "last_name": "Сквозная",
+              "avatar_url": null
+            },
+            "role": "Участник гонки",
+            "specialization": null,
+            "joined_at": "2026-10-25T06:08:18.562916Z",
+            "is_captain": false
+          }
+        ],
+        "accepted_count": 2,
+        "pending_count": 0,
+        "reserved_count": 2,
+        "min_size": 2,
+        "max_size": 2,
+        "is_frozen": false
+      }
+    },
+    {
+      "id": 16,
+      "template": "hackathon",
+      "solutionId": 21,
+      "raceComplete": true,
+      "winnerRole": "member",
+      "loserRole": "pending_a",
+      "winnerInvitationId": 38,
+      "blockedWorkers": [
+        {
+          "pid": 17932,
+          "blockers": [33548],
+          "pathToController": [17932, 33548, 38424]
+        },
+        {
+          "pid": 33548,
+          "blockers": [38424],
+          "pathToController": [33548, 38424]
+        }
+      ],
+      "controllerPid": 38424,
+      "raceStatuses": [201, 409],
+      "workerOrigins": ["http://127.0.0.1:8871", "http://127.0.0.1:8877"],
+      "loserRetryCode": "team_max_size",
+      "finalTeam": {
+        "members": [
+          {
+            "user": {
+              "id": 9,
+              "first_name": "Илья",
+              "last_name": "Сквозной",
+              "avatar_url": null
+            },
+            "role": null,
+            "specialization": null,
+            "joined_at": "2026-10-25T06:08:18.730001Z",
+            "is_captain": true
+          },
+          {
+            "user": {
+              "id": 10,
+              "first_name": "Мария",
+              "last_name": "Сквозная",
+              "avatar_url": null
+            },
+            "role": "Участник гонки",
+            "specialization": null,
+            "joined_at": "2026-10-25T06:08:19.062546Z",
+            "is_captain": false
+          }
+        ],
+        "accepted_count": 2,
+        "pending_count": 0,
+        "reserved_count": 2,
+        "min_size": 2,
+        "max_size": 2,
+        "is_frozen": false
+      }
+    }
+  ],
+  "events": [
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/15/solutions/",
+      "status": 201,
+      "code": null
+    },
+    {
+      "role": "captain",
+      "method": "DELETE",
+      "path": "/solution-invitations/34/?expected_version=1&expected_solution_version=2",
+      "status": 204,
+      "code": null
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/15/solutions/",
+      "status": 200,
+      "code": null
+    },
+    {
+      "role": "captain",
+      "method": "DELETE",
+      "path": "/solution-invitations/35/?expected_version=1&expected_solution_version=4",
+      "status": 204,
+      "code": null
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/15/solutions/",
+      "status": 200,
+      "code": null,
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "captain",
+      "method": "DELETE",
+      "path": "/solution-invitations/36/?expected_version=1&expected_solution_version=6",
+      "status": 204,
+      "code": null
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/15/solutions/",
+      "status": 200,
+      "code": null,
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/15/solutions/20/invitations/",
+      "status": 201,
+      "code": null,
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/15/solutions/20/invitations/",
+      "status": 409,
+      "code": "version_conflict",
+      "origin": "http://127.0.0.1:8877"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/15/solutions/20/",
+      "status": 200,
+      "code": null,
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/15/solutions/20/invitations/",
+      "status": 409,
+      "code": "team_max_size",
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "member",
+      "method": "POST",
+      "path": "/solution-invitations/37/accept/",
+      "status": 200,
+      "code": null,
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/15/solutions/20/",
+      "status": 200,
+      "code": null,
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/16/solutions/",
+      "status": 201,
+      "code": null,
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/16/solutions/21/invitations/",
+      "status": 201,
+      "code": null,
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/16/solutions/21/invitations/",
+      "status": 409,
+      "code": "version_conflict",
+      "origin": "http://127.0.0.1:8877"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/16/solutions/21/",
+      "status": 200,
+      "code": null,
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/16/solutions/21/invitations/",
+      "status": 409,
+      "code": "team_max_size",
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "member",
+      "method": "POST",
+      "path": "/solution-invitations/38/accept/",
+      "status": 200,
+      "code": null,
+      "origin": "http://127.0.0.1:8871"
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/16/solutions/21/",
+      "status": 200,
+      "code": null,
+      "origin": "http://127.0.0.1:8871"
+    }
+  ],
+  "preexistingDomainUnchanged": true,
+  "projectCountUnchanged": true,
+  "limitations": [
+    "Real concurrent HTTP requests intentionally mutate only fresh synthetic fixtures",
+    "Controller holds a real program row lock until both API workers are observed blocked via pg_blocking_pids",
+    "Role UI will reuse the draft fixtures; this is a captured race checkpoint, not their permanent final state"
+  ]
+}

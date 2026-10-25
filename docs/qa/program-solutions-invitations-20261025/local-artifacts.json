@@ -1,0 +1,172 @@
+{
+  "sourceDirectory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-invitations",
+  "backendSource": "6db9050c2d1eb7313006a285566501a104dbc415",
+  "backendRuntime": "2ad47438e666963819665222253d9b0672df074f",
+  "frontendSource": "0415ddddc21f465d547835b20d98e7facc7d5a4f",
+  "json": [
+    {
+      "file": "baseline-evidence.json",
+      "copied": true,
+      "sourceRawSha256": "e7f80ffdc397438bc1b5d5971d4630a4d067fbf3c9854984dc35ecf2d5375bdb",
+      "semanticSha256": "0f516a5146e953cfdee865cdf04d2ba1cfdd85952dba5cc0c02205fb4e51139e"
+    },
+    {
+      "file": "browser-attempt-1792908609335.json",
+      "copied": false,
+      "sourceRawSha256": "f64caa0e15d3f43f92fe0b4221edd4f311d79a501d783f759983a3de50af7a7a",
+      "semanticSha256": "920552fadedc08ad1381a6880fd8a92a58b3fa7ae2e22993f6fe15388bba08ca"
+    },
+    {
+      "file": "browser-attempt-1792908651112.json",
+      "copied": false,
+      "sourceRawSha256": "a83349de2118d0d0f5e3a3f6e3b3dec352ad2fba81c7cda3fcb3329a370d4cb9",
+      "semanticSha256": "2017bc00fed5646a057c016470694f4c4a245707accdd78a416bacbb33947369"
+    },
+    {
+      "file": "browser-attempt-1792908689761.json",
+      "copied": false,
+      "sourceRawSha256": "68c59271bf3d1b11c25c924277d41e94dd9589caf3f17436a2b9fc2b69e97ea4",
+      "semanticSha256": "2d6ced90818b5b1fd9ea21de25c62288078e3eb2d1bb17e489d89635a52cbca9"
+    },
+    {
+      "file": "browser-attempt-1792908708554.json",
+      "copied": false,
+      "sourceRawSha256": "2c7f3c84457f8a2b4cb79a2b80bc2187ec7b92ab38ee44b615855dc36426a30b",
+      "semanticSha256": "af83b93bf07c0f85c1c13d3602f37fa95d5de59755d8e1a8b84812f7a332a911"
+    },
+    {
+      "file": "browser-attempt-1792908741122.json",
+      "copied": false,
+      "sourceRawSha256": "9ac61768d8d0f99e166a57b91b12c0ee46f046a585090627e30f04765cb405a3",
+      "semanticSha256": "9bfaecaabf9ce850c7d1995bc6e9df83c1377f2d2178f845f3953fa6098241fc"
+    },
+    {
+      "file": "browser-evidence-before-stable-layout.json",
+      "copied": false,
+      "sourceRawSha256": "67a97b906fde3918a5a011595ff2cd026d7643327618992f4201e9a65df2e71e",
+      "semanticSha256": "d5d51a47430d79f51667771ba66bbe45ca0a937c2c8474f7ffe41e6f945e5588"
+    },
+    {
+      "file": "browser-evidence.json",
+      "copied": false,
+      "sourceRawSha256": "cd7cf6d47476be4db2021f35e02b851e8c792bcc40eccf396b02556dbe9cc153",
+      "semanticSha256": "45cea53878e3036cfa511cc5ce9f6909cafb06e1511c9b49e9f7e2013a86c72a"
+    },
+    {
+      "file": "domain-and-contract-evidence.json",
+      "copied": true,
+      "sourceRawSha256": "476a98247ac2a3c3d6dbd5e37ac81fbdbc6a8e8eb49127f2a0c1add749566fa8",
+      "semanticSha256": "154ae22bc97aaf37516871849b48d301ccdded14e6384c507850418f4aa24dc5"
+    },
+    {
+      "file": "last-slot-http-evidence.json",
+      "copied": true,
+      "sourceRawSha256": "9d360c5e5417d851d9438beddb39c173727986a425a86efe1948d02e573b3a76",
+      "semanticSha256": "387ee9709a83e53f3f04f8a0bc7f97a2e2e3c1bfb12719d69ecfe50f390b655e"
+    },
+    {
+      "file": "monitor-recovery-second.json",
+      "copied": true,
+      "sourceRawSha256": "bda41d038a80d2d3dee9aab96edd05aedff1d8253784e044426dd5e494608560",
+      "semanticSha256": "2c8ad956d64d85cb24530b241e803dabfd4e281c2835292633678ab792aa609d"
+    },
+    {
+      "file": "monitor-recovery-third.json",
+      "copied": true,
+      "sourceRawSha256": "e4ae46664e01b5870bd271069c8185204bea45821ceab88f08e962008998fc0e",
+      "semanticSha256": "ec08ac3565da35f20f155c6be14e2e0b53ee0107cfc4d7166bd742bf6eb8e331"
+    },
+    {
+      "file": "monitor-recovery.json",
+      "copied": true,
+      "sourceRawSha256": "8e76f038a8dfbe2814e939a240ed5152acd5fb41721f9eb5759f0c2aaa17cb46",
+      "semanticSha256": "f734c8e0d90d2ab19df812d8aaf51407169b131cf252afb99eb20f2e17b4955b"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "browser-error.png",
+      "sha256": "bb558d5ef553760ba35b11a9bb7783f0b6731fc1374fba8e05536c9408509268",
+      "bytes": 44123
+    },
+    {
+      "file": "case_championship-final-team-1440.png",
+      "sha256": "91f1e4092f495332a84360b6b6ece26dbce0769cd042030dbb2379ff1bbfc6e7",
+      "bytes": 90871
+    },
+    {
+      "file": "case_championship-final-team-390.png",
+      "sha256": "07128d805a87a6453e3529517494637d88a11d8aaee903e125c6f55b02b62c1f",
+      "bytes": 54617
+    },
+    {
+      "file": "case_championship-long-role-1440.png",
+      "sha256": "12e03f669820a31697bc26969dedb523e03478f0c51b371bfd3e69124c744500",
+      "bytes": 99139
+    },
+    {
+      "file": "case_championship-long-role-390.png",
+      "sha256": "fde0422c9ad497d5ceba387f279078a97566d06b53ec81fb8db38c28133914b3",
+      "bytes": 62091
+    },
+    {
+      "file": "hackathon-final-team-1440.png",
+      "sha256": "e8097352a6b5df0fb49179a6b4a92c2fc7b5c8deb0bdd89e72c73ef5539d03e1",
+      "bytes": 89863
+    },
+    {
+      "file": "hackathon-final-team-390.png",
+      "sha256": "007c749d682d4af411b2392aeec5c74a588fd609c0b7ea940675bff04da66d96",
+      "bytes": 53080
+    },
+    {
+      "file": "hackathon-long-role-1440.png",
+      "sha256": "968169730d8cffd351d397a6abb603e73a03cc6ec510b661aa5eb0f5de94c1b0",
+      "bytes": 98009
+    },
+    {
+      "file": "hackathon-long-role-390.png",
+      "sha256": "9a3991d65164c63cb46c32b853533c9fea099c31310cba1a0d6552d6435d211a",
+      "bytes": 60490
+    },
+    {
+      "file": "transient-case_championship-long-role-1440.png",
+      "sha256": "55ebf7075603adabc794e1a77a5e2e8cb7cdabd78754f586693cb0c81df6ecad",
+      "bytes": 99121
+    },
+    {
+      "file": "transient-case_championship-long-role-390.png",
+      "sha256": "c964f4edee3a3afb2b37fd71ce25945a9a0f6378c0fd0587fe2c2ffbe6ddb941",
+      "bytes": 54689
+    },
+    {
+      "file": "transient-hackathon-long-role-1440.png",
+      "sha256": "a555248593cb01a5349fe62bd4449f7a0602e2beb96afe6a3aad96e08a5c7b68",
+      "bytes": 91757
+    },
+    {
+      "file": "transient-hackathon-long-role-390.png",
+      "sha256": "71e4599481e79db11437f01c16bd10932e6880d44798a336ead79b8d864bde59",
+      "bytes": 55116
+    }
+  ],
+  "helpers": [
+    {
+      "file": "procollab-qa01-invitations-race.py",
+      "sha256": "180384db4b3c7010afd79f294fd34a1bc8b3d04c27f0fec3e513f9d62b801449"
+    },
+    {
+      "file": "procollab-qa01-invitations-browser.cjs",
+      "sha256": "e6bebdbfd9416ceed32dc167b81c62f9c359caa67edb35653c7ead44f547ef14"
+    },
+    {
+      "file": "procollab-qa01-invitations-verify.py",
+      "sha256": "9c1e0999c3dd626c7d48157bf40815c229445e395332d664418c3a3226e87617"
+    },
+    {
+      "file": "procollab-qa01-invitations-worker.py",
+      "sha256": "f3a64a1939c5719343abe58552910bc82ca5717b99e27bfe322c048aa4bfc0b3"
+    }
+  ],
+  "credentialsIncluded": false
+}

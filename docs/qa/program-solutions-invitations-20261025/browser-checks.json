@@ -1,0 +1,189 @@
+{
+  "status": "PASS",
+  "prefix": "qa01i-20261025-7ed1e705",
+  "checks": [
+    {
+      "program": 15,
+      "check": "captain and accepted member unavailable with reasons"
+    },
+    {
+      "program": 15,
+      "check": "full team error preserves recipient and role without mutation"
+    },
+    {
+      "program": 15,
+      "check": "selection clear; blank/whitespace/1/128/129 role; keyboard suggestion and free role; create201 reserves one slot"
+    },
+    {
+      "program": 15,
+      "check": "long-role",
+      "fits": [
+        {
+          "width": 320,
+          "page": true,
+          "rows": true,
+          "pendingRoles": [128]
+        },
+        {
+          "width": 390,
+          "page": true,
+          "rows": true,
+          "pendingRoles": [128]
+        },
+        {
+          "width": 768,
+          "page": true,
+          "rows": true,
+          "pendingRoles": [128]
+        },
+        {
+          "width": 1440,
+          "page": true,
+          "rows": true,
+          "pendingRoles": [128]
+        }
+      ]
+    },
+    {
+      "program": 15,
+      "check": "pending recipient unavailable"
+    },
+    {
+      "program": 15,
+      "check": "edit bounds; genuine version conflict retains local role; explicit retry200 normalizes whitespace"
+    },
+    {
+      "program": 15,
+      "check": "native revoke confirmation DELETE204; captain-only draft; no submit"
+    },
+    {
+      "program": 15,
+      "check": "final-team",
+      "fits": [
+        {
+          "width": 320,
+          "page": true,
+          "rows": true,
+          "pendingRoles": []
+        },
+        {
+          "width": 390,
+          "page": true,
+          "rows": true,
+          "pendingRoles": []
+        },
+        {
+          "width": 768,
+          "page": true,
+          "rows": true,
+          "pendingRoles": []
+        },
+        {
+          "width": 1440,
+          "page": true,
+          "rows": true,
+          "pendingRoles": []
+        }
+      ]
+    },
+    {
+      "program": 16,
+      "check": "captain and accepted member unavailable with reasons"
+    },
+    {
+      "program": 16,
+      "check": "full team error preserves recipient and role without mutation"
+    },
+    {
+      "program": 16,
+      "check": "selection clear; blank/whitespace/1/128/129 role; keyboard suggestion and free role; create201 reserves one slot"
+    },
+    {
+      "program": 16,
+      "check": "long-role",
+      "fits": [
+        {
+          "width": 320,
+          "page": true,
+          "rows": true,
+          "pendingRoles": [128]
+        },
+        {
+          "width": 390,
+          "page": true,
+          "rows": true,
+          "pendingRoles": [128]
+        },
+        {
+          "width": 768,
+          "page": true,
+          "rows": true,
+          "pendingRoles": [128]
+        },
+        {
+          "width": 1440,
+          "page": true,
+          "rows": true,
+          "pendingRoles": [128]
+        }
+      ]
+    },
+    {
+      "program": 16,
+      "check": "pending recipient unavailable"
+    },
+    {
+      "program": 16,
+      "check": "edit bounds; genuine version conflict retains local role; explicit retry200 normalizes whitespace"
+    },
+    {
+      "program": 16,
+      "check": "native revoke confirmation DELETE204; captain-only draft; no submit"
+    },
+    {
+      "program": 16,
+      "check": "final-team",
+      "fits": [
+        {
+          "width": 320,
+          "page": true,
+          "rows": true,
+          "pendingRoles": []
+        },
+        {
+          "width": 390,
+          "page": true,
+          "rows": true,
+          "pendingRoles": []
+        },
+        {
+          "width": 768,
+          "page": true,
+          "rows": true,
+          "pendingRoles": []
+        },
+        {
+          "width": 1440,
+          "page": true,
+          "rows": true,
+          "pendingRoles": []
+        }
+      ]
+    }
+  ],
+  "javascriptErrors": [],
+  "capturedResponses": 120,
+  "responseCounts": {
+    "GET 200": 97,
+    "POST 409": 2,
+    "POST 201": 4,
+    "PATCH 200": 8,
+    "PATCH 409": 4,
+    "DELETE 204": 4,
+    "DELETE 200": 1
+  },
+  "provenance": "Completed functional checkpoints retain earlier actual responses. Initial long-role screenshots caught transient refresh; final run waits for the actual 128-character pending row at every width. Superseded report/screenshots preserved.",
+  "rawFile": "browser-evidence.json",
+  "rawSha256": "cd7cf6d47476be4db2021f35e02b851e8c792bcc40eccf396b02556dbe9cc153",
+  "rawArtifacts": "Full captured wire and partial harness reports remain in sourceDirectory; this file is the reviewable check summary, not their replacement."
+}
