@@ -5,6 +5,8 @@ import {
   SolutionCaseChangePreviewRequest,
   SolutionCaseChangeApplyRequest,
   SolutionCaseChangePreview,
+  SolutionAdminChangePage,
+  SolutionAdminChangeDetail,
   SolutionActionPreviewRequest,
   SolutionActionApplyRequest,
   SolutionActionPreview,
@@ -54,6 +56,16 @@ import {
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract listAdministrativeChanges(
+    programId: number,
+    solutionId: number,
+    query?: SolutionHistoryQuery,
+  ): Observable<SolutionAdminChangePage>;
+  abstract readAdministrativeChange(
+    programId: number,
+    solutionId: number,
+    changeId: number,
+  ): Observable<SolutionAdminChangeDetail>;
   abstract previewCaseChange(
     programId: number,
     solutionId: number,
@@ -202,6 +214,8 @@ export abstract class SolutionRepositoryPort {
     expectedVersion: number,
   ): Observable<SolutionInvitationActionResult>;
 }
+
+export type SolutionHistoryQuery = Partial<Pick<SolutionAdminChangePage, "offset" | "limit">>;
 
 export type SolutionInvitationQuery = {
   status?: "pending" | "accepted" | "declined";

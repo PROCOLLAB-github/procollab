@@ -80,7 +80,7 @@ def convert(obj):
 fixtures = APP / "domain/solution/solution-contract.fixture.ts"
 fixtures.parent.mkdir(parents=True, exist_ok=True)
 fixtures.write_text("// Независимые сценарии C00; не последовательность запросов и не production mock provider.\n"
-                    "export type SolutionContractScenario = { name: string; operationId: string; status: number; request?: unknown; response?: unknown };\n"
+                    "export type SolutionContractScenario = { name: string; operationId: string; status: number; request?: unknown; query?: unknown; response?: unknown };\n"
                     "export const solutionContractScenarios: SolutionContractScenario[] = "
                     + json.dumps(convert(examples["scenarios"]), ensure_ascii=False, indent=2) + ";\n", encoding="utf-8")
 print(f"Generated {len(spec['components']['schemas'])} types and {len(examples['scenarios'])} scenarios")

@@ -13,6 +13,7 @@ import {
   SolutionManagerSolutionsQuery,
   SolutionAnalyticsExportQuery,
   SolutionPublishedQuery,
+  SolutionHistoryQuery,
 } from "@domain/solution/ports/solution.repository.port";
 import {
   SolutionCaseChangePreviewRequest,
@@ -37,6 +38,12 @@ import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapt
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  listAdministrativeChanges(programId: number, solutionId: number, query?: SolutionHistoryQuery) {
+    return this.http.listAdministrativeChanges(programId, solutionId, query);
+  }
+  readAdministrativeChange(programId: number, solutionId: number, changeId: number) {
+    return this.http.readAdministrativeChange(programId, solutionId, changeId);
+  }
   previewCaseChange(
     programId: number,
     solutionId: number,

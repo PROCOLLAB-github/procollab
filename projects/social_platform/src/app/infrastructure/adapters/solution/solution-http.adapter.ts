@@ -7,6 +7,8 @@ import {
   SolutionCaseChangePreviewRequest,
   SolutionCaseChangeApplyRequest,
   SolutionCaseChangePreview,
+  SolutionAdminChangePage,
+  SolutionAdminChangeDetail,
   SolutionActionPreviewRequest,
   SolutionActionApplyRequest,
   SolutionActionPreview,
@@ -65,15 +67,35 @@ import {
   SolutionManagerSolutionsQuery,
   SolutionAnalyticsExportQuery,
   SolutionPublishedQuery,
+  SolutionHistoryQuery,
   validSolutionId,
 } from "@domain/solution/ports/solution.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
-  private caseActionPath(programId: number, solutionId: number) {
+  private managementPath(programId: number, solutionId: number) {
     this.path(programId);
     if (!validSolutionId(solutionId)) throw new RangeError("Invalid solution ID");
-    return `/programs/${programId}/management/solutions/${solutionId}/case/`;
+    return `/programs/${programId}/management/solutions/${solutionId}`;
+  }
+  private caseActionPath(programId: number, solutionId: number) {
+    return `${this.managementPath(programId, solutionId)}/case/`;
+  }
+  listAdministrativeChanges(
+    programId: number,
+    solutionId: number,
+    query: SolutionHistoryQuery = {},
+  ) {
+    return this.api.get<SolutionAdminChangePage>(
+      `${this.managementPath(programId, solutionId)}/history/`,
+      this.evaluationQuery(query),
+    );
+  }
+  readAdministrativeChange(programId: number, solutionId: number, changeId: number) {
+    if (!validSolutionId(changeId)) throw new RangeError("Invalid change ID");
+    return this.api.get<SolutionAdminChangeDetail>(
+      `${this.managementPath(programId, solutionId)}/history/${changeId}/`,
+    );
   }
   previewCaseChange(
     programId: number,
@@ -241,7 +263,8 @@ export class SolutionHttpAdapter {
       | SolutionCabinetQuery
       | SolutionManagerAssignmentQuery
       | SolutionManagerSolutionsQuery
-      | SolutionAnalyticsExportQuery,
+      | SolutionAnalyticsExportQuery
+      | SolutionHistoryQuery,
   ) {
     let params = new HttpParams();
     const wireKeys: Record<string, string> = {

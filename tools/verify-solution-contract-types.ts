@@ -3,6 +3,10 @@
 import type {
   SolutionCaseChangePreviewRequest,
   SolutionCaseChangeApplyRequest,
+  SolutionCaseChangePreview,
+  SolutionAdminChange,
+  SolutionAdminChangeDetail,
+  SolutionSubmissionSnapshot,
   SolutionActionPreviewRequest,
   SolutionActionApplyRequest,
   SolutionUpdateInvitation,
@@ -261,3 +265,21 @@ void [
   wrongWidgetProjection,
   solutionOrganizer,
 ];
+
+declare const administrativeHistory: SolutionAdminChangeDetail;
+declare const casePreview: SolutionCaseChangePreview;
+const preservedSubmission: SolutionSubmissionSnapshot | null = administrativeHistory.beforeSnapshot;
+const confirmedEffects: {
+  isSubmitted: boolean;
+  removedAssignmentsCount: number;
+  scoreCount: number;
+} = casePreview;
+const wrongHistoryReference: SolutionAdminChange["application"] = {
+  kind: "solution",
+  programId: 12,
+  solutionId: 301,
+  name: "Решение",
+  // @ts-expect-error История решения не принимает идентификатор Project.
+  projectId: 301,
+};
+void [preservedSubmission, confirmedEffects, wrongHistoryReference];
