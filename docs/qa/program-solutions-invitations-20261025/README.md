@@ -29,6 +29,6 @@ Backend source: `6db9050` (runtime `2ad4743`, разница только в CI 
 
 ## CI
 
-[PostgreSQL CI текущего backend 6db9050](https://github.com/PROCOLLAB-github/api/actions/runs/40166190670) — SUCCESS: 39 locking/vacancy tests и полный набор 1669 tests, оба итоговых Ran/OK проверены по логу. [General CI того же commit](https://github.com/PROCOLLAB-github/api/actions/runs/40166187673) на момент фиксации выполняется (Lint SUCCESS, Tests in progress). Это заменяет прежний pending статус PostgreSQL; старый отмененный 30-минутный run не считается PASS. Backend повторно не менялся и не отправлялся в CI.
+[PostgreSQL CI текущего backend 6db9050](https://github.com/PROCOLLAB-github/api/actions/runs/40166190670) — SUCCESS: 39 locking/vacancy tests и полный набор 1669 tests, оба итоговых Ran/OK проверены по логу. [General CI того же commit](https://github.com/PROCOLLAB-github/api/actions/runs/40166187673) — SUCCESS, Tests/Lint; лог подтверждает Ran 1669, OK (skipped=54). Это заменяет прежние pending статусы; старый отмененный 30-минутный run не считается PASS. Backend повторно не менялся и не отправлялся в CI.
 
 Merge/deploy и переключение реальных программ не выполнялись. D02/D03, административная политика после сдачи и конкурсная публикация остаются открытыми; новые ответы пользователя по ним не подставлялись.
