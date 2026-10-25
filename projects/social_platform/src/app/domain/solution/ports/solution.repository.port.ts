@@ -2,6 +2,10 @@
 
 import { Observable } from "rxjs";
 import {
+  SolutionArchivePreviewRequest,
+  SolutionArchiveApplyRequest,
+  SolutionArchivePreview,
+  SolutionArchiveReceipt,
   SolutionMemberRemovalPreviewRequest,
   SolutionMemberRemovalApplyRequest,
   SolutionMemberRemovalPreview,
@@ -59,6 +63,14 @@ import {
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract previewArchive(
+    programId: number,
+    command: SolutionArchivePreviewRequest,
+  ): Observable<SolutionArchivePreview>;
+  abstract applyArchive(
+    programId: number,
+    command: SolutionArchiveApplyRequest,
+  ): Observable<SolutionArchiveReceipt>;
   abstract previewMemberRemoval(
     programId: number,
     solutionId: number,
@@ -237,6 +249,7 @@ export type SolutionInvitationQuery = {
 };
 
 export type SolutionListQuery = {
+  participation?: "active" | "archived" | "all";
   search?: string;
   submission?: "all" | "submitted" | "not_submitted";
   limit?: number;

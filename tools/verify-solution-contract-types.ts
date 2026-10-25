@@ -1,6 +1,10 @@
 /** @format */
 
 import type {
+  SolutionArchiveApplyRequest,
+  SolutionArchivePreviewRequest,
+  SolutionArchiveAdminChange,
+  SolutionArchiveSnapshot,
   SolutionMemberRemovalApplyRequest,
   SolutionMemberRemovalPreviewRequest,
   SolutionMemberAdminChange,
@@ -305,3 +309,30 @@ if (historyEvent.action === "remove_member") {
   void [affectedUser, unrelatedCase];
 }
 void [memberRemoval, confirmedMemberRemoval, unsignedMemberRemoval, projectMemberRemoval];
+
+const archiveSelection: SolutionArchivePreviewRequest = { ids: [301] };
+const archiveConfirmation: SolutionArchiveApplyRequest = { ids: [301], previewToken: "opaque" };
+// @ts-expect-error Снятие заявки требует подтвержденный token.
+const unsignedArchive: SolutionArchiveApplyRequest = { ids: [301] };
+// @ts-expect-error Archive API принимает IDs решений без Project ID.
+const projectArchive: SolutionArchivePreviewRequest = { ids: [301], projectId: 301 };
+declare const archiveEvent: SolutionAdminChange;
+if (archiveEvent.action === "archive") {
+  const archive: SolutionArchiveAdminChange = archiveEvent;
+  const stamp: string = archive.archivedAt;
+  // @ts-expect-error Архивирование не является сменой кейса.
+  const caseName: string = archive.caseName;
+  void [stamp, caseName];
+}
+declare const draftArchive: SolutionArchiveSnapshot;
+const capturedAt: string = draftArchive.capturedAt;
+// @ts-expect-error Архивный снимок не означает искусственную сдачу.
+const artificialSubmission: string = draftArchive.submittedAt;
+void [
+  archiveSelection,
+  archiveConfirmation,
+  unsignedArchive,
+  projectArchive,
+  capturedAt,
+  artificialSubmission,
+];

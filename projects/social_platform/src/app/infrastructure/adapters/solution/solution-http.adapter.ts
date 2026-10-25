@@ -4,6 +4,10 @@ import { inject, Injectable } from "@angular/core";
 import { HttpParams } from "@angular/common/http";
 import { ApiService } from "@corelib";
 import {
+  SolutionArchivePreviewRequest,
+  SolutionArchiveApplyRequest,
+  SolutionArchivePreview,
+  SolutionArchiveReceipt,
   SolutionMemberRemovalPreviewRequest,
   SolutionMemberRemovalApplyRequest,
   SolutionMemberRemovalPreview,
@@ -76,6 +80,30 @@ import {
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  private archivePath(programId: number, ids: number[]) {
+    this.path(programId);
+    if (
+      !Array.isArray(ids) ||
+      ids.length === 0 ||
+      ids.length > 10000 ||
+      !ids.every(validSolutionId) ||
+      new Set(ids).size !== ids.length
+    )
+      throw new RangeError("Выберите корректные решения без повторов.");
+    return `/programs/${programId}/management/solutions/archive/`;
+  }
+  previewArchive(programId: number, command: SolutionArchivePreviewRequest) {
+    return this.api.post<SolutionArchivePreview>(
+      `${this.archivePath(programId, command.ids)}preview/`,
+      command,
+    );
+  }
+  applyArchive(programId: number, command: SolutionArchiveApplyRequest) {
+    return this.api.post<SolutionArchiveReceipt>(
+      `${this.archivePath(programId, command.ids)}apply/`,
+      command,
+    );
+  }
   previewMemberRemoval(
     programId: number,
     solutionId: number,

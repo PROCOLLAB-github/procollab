@@ -1,6 +1,6 @@
 /** @format */
 
-// Сгенерировано tools/generate-solution-contract.py из C00 1.18.0.
+// Сгенерировано tools/generate-solution-contract.py из C00 1.19.0.
 // camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.
 
 export type SolutionUser = {
@@ -222,6 +222,7 @@ export type ProgramSolution = {
   submission: SolutionSubmission;
   permissions: SolutionPermissions;
   readiness: SolutionReadiness | null;
+  participation?: SolutionParticipation;
 };
 
 export type SolutionSummary = {
@@ -233,6 +234,7 @@ export type SolutionSummary = {
   caseValue: string | null;
   status: "draft" | "submitted";
   submittedAt: string | null;
+  participation?: SolutionParticipation;
 };
 
 export type CreateSolutionCommand = {
@@ -1061,7 +1063,10 @@ export type SolutionCaseChangePreview = {
   scoreCount: number;
 };
 
-export type SolutionAdminChange = SolutionCaseAdminChange | SolutionMemberAdminChange;
+export type SolutionAdminChange =
+  | SolutionCaseAdminChange
+  | SolutionMemberAdminChange
+  | SolutionArchiveAdminChange;
 
 export type SolutionAdminChangePage = {
   count: number;
@@ -1074,6 +1079,7 @@ export type SolutionAdminChangeDetail = {
   change: SolutionAdminChange;
   beforeSnapshot: SolutionSubmissionSnapshot | null;
   afterSnapshot: SolutionSubmissionSnapshot | null;
+  archiveSnapshot?: SolutionArchiveSnapshot;
 };
 
 export type SolutionMemberRemovalPreviewRequest = {
@@ -1128,5 +1134,77 @@ export type SolutionMemberAdminChange = {
   scoreCount: number;
   wasSubmitted: boolean;
   removedMember: SolutionMember;
+  revokedInvitationCount: number;
+};
+
+export type SolutionParticipation = {
+  status: "active" | "archived";
+  archivedAt: string | null;
+  reason: "detached" | "registration_removed" | null;
+};
+
+export type SolutionArchiveSnapshot = {
+  name: string;
+  captainId: number;
+  members: Array<SolutionMember>;
+  form: SolutionForm;
+  answers: Array<SolutionAnswer>;
+  capturedAt: string;
+};
+
+export type SolutionArchivePreviewRequest = {
+  ids: Array<number>;
+};
+
+export type SolutionArchiveApplyRequest = {
+  ids: Array<number>;
+  previewToken: string;
+};
+
+export type SolutionArchivePreviewItem = {
+  application: SolutionRef;
+  solutionVersion: number;
+  isSubmitted: boolean;
+  isArchived: boolean;
+  scoreCount: number;
+  removedAssignmentsCount: number;
+  revokedInvitationCount: number;
+  errors: Array<SolutionIssue>;
+};
+
+export type SolutionArchivePreview = {
+  items: Array<SolutionArchivePreviewItem>;
+  scoreCount: number;
+  removedAssignmentsCount: number;
+  revokedInvitationCount: number;
+  canApply: boolean;
+  previewToken: string | null;
+};
+
+export type SolutionArchiveResult = {
+  application: SolutionRef;
+  solutionVersion: number;
+  archivedAt: string;
+};
+
+export type SolutionArchiveReceipt = {
+  changedCount: number;
+  items: Array<SolutionArchiveResult>;
+};
+
+export type SolutionArchiveAdminChange = {
+  id: number;
+  application: SolutionRef;
+  action: "archive";
+  actor: SolutionUser | null;
+  actorName: string;
+  createdAt: string;
+  beforeVersion: number;
+  afterVersion: number;
+  removedAssignmentsCount: number;
+  scoreCount: number;
+  wasSubmitted: boolean;
+  archivedAt: string;
+  reason: "detached" | "registration_removed";
   revokedInvitationCount: number;
 };
