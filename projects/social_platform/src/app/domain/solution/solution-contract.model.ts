@@ -1,6 +1,6 @@
 /** @format */
 
-// Сгенерировано tools/generate-solution-contract.py из C00 1.8.0.
+// Сгенерировано tools/generate-solution-contract.py из C00 1.9.0.
 // camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.
 
 export type SolutionUser = {
@@ -724,4 +724,212 @@ export type SolutionCaseSolutionAnalytics = {
   submissionApplicable: boolean;
   items: Array<SolutionCaseSolutionItem>;
   withoutCase: SolutionCaseSolutionMetrics;
+};
+
+export type SolutionManagerTotal = {
+  total: number;
+};
+
+export type SolutionManagerRegion = {
+  name: string;
+  count: number;
+};
+
+export type SolutionManagerRegions = {
+  total: number;
+  items: Array<SolutionManagerRegion>;
+};
+
+export type SolutionManagerSummary = {
+  participants: SolutionManagerTotal;
+  solutions: SolutionManagerTotal;
+  experts: SolutionManagerTotal;
+  participantRegions: SolutionManagerRegions;
+};
+
+export type SolutionManagerParticipantFunnel = {
+  registrations: number;
+  uniqueParticipants: number;
+  visitedParticipants: number;
+  onboardedParticipants: number;
+  withTeam: number;
+  captains: number;
+  submittedCaptains: number | null;
+};
+
+export type SolutionManagerSolutionFunnel = {
+  created: number;
+  submissionApplicable: boolean;
+  notSubmitted: number | null;
+  submitted: number | null;
+  evaluated: number | null;
+};
+
+export type SolutionManagerEvaluationCounters = {
+  total: number;
+  pending: number;
+  evaluated: number;
+};
+
+export type SolutionManagerEvaluationSolutions = {
+  submitted: number;
+  awaitingEvaluation: number;
+  partiallyEvaluated: number;
+  evaluated: number;
+};
+
+export type SolutionManagerEvaluationStatus = {
+  applicable: boolean;
+  mode: "open" | "distributed";
+  requiredEvaluators: number | null;
+  maxEvaluationsPerSolution: number | null;
+  assignments: SolutionManagerEvaluationCounters | null;
+  solutions: SolutionManagerEvaluationSolutions | null;
+};
+
+export type SolutionManagerExpert = {
+  expertId: number;
+  userId: number;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  avatar: string | null;
+};
+
+export type SolutionManagerAssignment = {
+  assignmentId: number;
+  expert: SolutionManagerExpert;
+  application: SolutionRef;
+  status: "not_ready" | "pending" | "in_progress" | "completed";
+  assignedAt: string;
+  submitted: boolean;
+  submittedAt: string | null;
+  waitingSince: string | null;
+  waitingSeconds: number | null;
+};
+
+export type SolutionManagerAssignmentCriterion = {
+  name: string;
+  description: string | null;
+  type: "int" | "float" | "bool" | "str";
+  minValue: number | null;
+  maxValue: number | null;
+  value: string | null;
+  criterionId: number;
+  isScored: boolean;
+};
+
+export type SolutionManagerAssignmentDetail = {
+  assignmentId: number;
+  expert: SolutionManagerExpert;
+  application: SolutionRef;
+  status: "not_ready" | "pending" | "in_progress" | "completed";
+  assignedAt: string;
+  submitted: boolean;
+  submittedAt: string | null;
+  waitingSince: string | null;
+  waitingSeconds: number | null;
+  scores: Array<SolutionManagerAssignmentCriterion>;
+};
+
+export type SolutionManagerAssignments = {
+  applicable: boolean;
+  mode: "open" | "distributed";
+  results: Array<SolutionManagerAssignment>;
+};
+
+export type SolutionManagerDelayedExpert = {
+  expertId: number;
+  userId: number;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  avatar: string | null;
+  assignmentsTotal: number;
+  completed: number;
+  pending: number;
+  overdue_24h: number;
+  overdue_48h: number;
+  oldestWaitingSince: string | null;
+  oldestWaitingSeconds: number | null;
+  severity: "critical" | "warning";
+};
+
+export type SolutionManagerDelayedExperts = {
+  total: number;
+  items: Array<SolutionManagerDelayedExpert>;
+};
+
+export type SolutionManagerAttention = {
+  participantsWithoutVisit: number;
+  participantsWithoutOnboarding: number;
+  participantsWithoutTeam: number;
+  solutionsAwaitingEvaluation: number | null;
+  solutionsNotSubmitted: number | null;
+  delayedExperts: SolutionManagerDelayedExperts;
+};
+
+export type SolutionManagerActivity = {
+  date: string;
+  registrations: number;
+  submittedSolutions: number | null;
+};
+
+export type SolutionManagerFieldCoverage = {
+  fieldId: number;
+  label: string;
+  type: SolutionFieldType;
+  purpose: SolutionPurpose;
+  applicable: number;
+  answered: number;
+  requiredApplicable: number;
+  requiredUnanswered: number;
+};
+
+export type SolutionManagerAnalytics = {
+  programId: number;
+  summary: SolutionManagerSummary;
+  participantFunnel: SolutionManagerParticipantFunnel;
+  solutionFunnel: SolutionManagerSolutionFunnel;
+  evaluationStatus: SolutionManagerEvaluationStatus;
+  attention: SolutionManagerAttention;
+  activity: Array<SolutionManagerActivity>;
+  cases: SolutionCaseSolutionAnalytics;
+  fieldCoverage: Array<SolutionManagerFieldCoverage>;
+};
+
+export type SolutionManagerSolutionRow = {
+  application: SolutionRef;
+  captain: {
+    userId: number;
+    fullName: string;
+    avatar: string | null;
+  };
+  caseName: string | null;
+  submissionStatus: "draft" | "submitted";
+  evaluationStatus:
+    | "not_applicable"
+    | "not_submitted"
+    | "awaiting_evaluation"
+    | "partially_evaluated"
+    | "evaluated";
+  createdAt: string;
+  submittedAt: string | null;
+  assignmentsTotal: number | null;
+  assignmentsCompleted: number | null;
+  waitingReason:
+    | null
+    | "no_assignments"
+    | "no_completed_evaluations"
+    | "partially_evaluated"
+    | "awaiting_first_evaluation";
+};
+
+export type SolutionManagerSolutions = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  submissionApplicable: boolean;
+  mode: "open" | "distributed";
+  results: Array<SolutionManagerSolutionRow>;
 };

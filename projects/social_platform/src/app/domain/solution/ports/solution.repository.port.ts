@@ -35,9 +35,30 @@ import {
   SolutionResults,
   SolutionCabinetApplications,
   SolutionCaseSolutionAnalytics,
+  SolutionManagerAnalytics,
+  SolutionManagerAssignments,
+  SolutionManagerAssignmentDetail,
+  SolutionManagerSolutions,
 } from "../solution-contract.model";
 
 export abstract class SolutionRepositoryPort {
+  abstract managerAnalytics(programId: number): Observable<SolutionManagerAnalytics>;
+  abstract managerAssignments(
+    programId: number,
+    query?: SolutionManagerAssignmentQuery,
+  ): Observable<SolutionManagerAssignments>;
+  abstract managerAssignment(
+    programId: number,
+    assignmentId: number,
+  ): Observable<SolutionManagerAssignmentDetail>;
+  abstract managerSolutions(
+    programId: number,
+    query?: SolutionManagerSolutionsQuery,
+  ): Observable<SolutionManagerSolutions>;
+  abstract exportAnalytics(
+    programId: number,
+    query?: SolutionAnalyticsExportQuery,
+  ): Observable<Blob>;
   abstract caseAnalytics(programId: number): Observable<SolutionCaseSolutionAnalytics>;
   abstract cabinetApplications(
     query?: SolutionCabinetQuery,
@@ -177,6 +198,24 @@ export type SolutionCabinetQuery = {
   programId?: number;
   limit?: number;
   offset?: number;
+};
+
+export type SolutionManagerAssignmentQuery = {
+  scope?: "all" | "completed" | "pending";
+};
+
+export type SolutionManagerSolutionsQuery = {
+  limit?: number;
+  offset?: number;
+  search?: string;
+  scope?: "all" | "not_submitted" | "awaiting_evaluation";
+  submission?: "all" | "submitted" | "not_submitted";
+  caseScope?: "all" | "selected" | "without_case";
+  caseName?: string;
+};
+
+export type SolutionAnalyticsExportQuery = {
+  kind?: "program" | "solutions" | "submitted" | "scores";
 };
 
 export function validSolutionId(value: unknown): value is number {

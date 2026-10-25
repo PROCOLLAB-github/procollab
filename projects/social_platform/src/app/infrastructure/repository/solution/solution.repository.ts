@@ -9,6 +9,9 @@ import {
   SolutionResultsQuery,
   SolutionResultsExportQuery,
   SolutionCabinetQuery,
+  SolutionManagerAssignmentQuery,
+  SolutionManagerSolutionsQuery,
+  SolutionAnalyticsExportQuery,
 } from "@domain/solution/ports/solution.repository.port";
 import {
   CreateSolutionCommand,
@@ -28,6 +31,21 @@ import { SolutionHttpAdapter } from "../../adapters/solution/solution-http.adapt
 
 @Injectable({ providedIn: "root" })
 export class SolutionRepository implements SolutionRepositoryPort {
+  managerAnalytics(programId: number) {
+    return this.http.managerAnalytics(programId);
+  }
+  managerAssignments(programId: number, query?: SolutionManagerAssignmentQuery) {
+    return this.http.managerAssignments(programId, query);
+  }
+  managerAssignment(programId: number, assignmentId: number) {
+    return this.http.managerAssignment(programId, assignmentId);
+  }
+  managerSolutions(programId: number, query?: SolutionManagerSolutionsQuery) {
+    return this.http.managerSolutions(programId, query);
+  }
+  exportAnalytics(programId: number, query?: SolutionAnalyticsExportQuery) {
+    return this.http.exportAnalytics(programId, query);
+  }
   caseAnalytics(programId: number) {
     return this.http.caseAnalytics(programId);
   }

@@ -37,6 +37,10 @@ import {
   SolutionResults,
   SolutionCabinetApplications,
   SolutionCaseSolutionAnalytics,
+  SolutionManagerAnalytics,
+  SolutionManagerAssignments,
+  SolutionManagerAssignmentDetail,
+  SolutionManagerSolutions,
 } from "@domain/solution/solution-contract.model";
 import {
   SolutionListQuery,
@@ -45,11 +49,42 @@ import {
   SolutionResultsQuery,
   SolutionResultsExportQuery,
   SolutionCabinetQuery,
+  SolutionManagerAssignmentQuery,
+  SolutionManagerSolutionsQuery,
+  SolutionAnalyticsExportQuery,
   validSolutionId,
 } from "@domain/solution/ports/solution.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class SolutionHttpAdapter {
+  private analyticsPath(programId: number) {
+    this.path(programId);
+    return `/programs/${programId}/management/solution-analytics/`;
+  }
+  managerAnalytics(programId: number) {
+    return this.api.get<SolutionManagerAnalytics>(this.analyticsPath(programId));
+  }
+  managerAssignments(programId: number, query: SolutionManagerAssignmentQuery = {}) {
+    return this.api.get<SolutionManagerAssignments>(
+      `${this.analyticsPath(programId)}assignments/`,
+      this.evaluationQuery(query),
+    );
+  }
+  managerAssignment(programId: number, assignmentId: number) {
+    if (!validSolutionId(assignmentId)) throw new RangeError("Invalid assignment ID");
+    return this.api.get<SolutionManagerAssignmentDetail>(
+      `${this.analyticsPath(programId)}assignments/${assignmentId}/`,
+    );
+  }
+  managerSolutions(programId: number, query: SolutionManagerSolutionsQuery = {}) {
+    return this.api.get<SolutionManagerSolutions>(
+      `${this.analyticsPath(programId)}solutions/`,
+      this.evaluationQuery(query),
+    );
+  }
+  exportAnalytics(programId: number, query: SolutionAnalyticsExportQuery = {}) {
+    return this.api.getFile(`${this.analyticsPath(programId)}export/`, this.evaluationQuery(query));
+  }
   caseAnalytics(programId: number) {
     this.path(programId);
     return this.api.get<SolutionCaseSolutionAnalytics>(
@@ -105,7 +140,13 @@ export class SolutionHttpAdapter {
     );
   }
   private evaluationQuery(
-    query: SolutionRatingQuery | SolutionResultsQuery | SolutionCabinetQuery,
+    query:
+      | SolutionRatingQuery
+      | SolutionResultsQuery
+      | SolutionCabinetQuery
+      | SolutionManagerAssignmentQuery
+      | SolutionManagerSolutionsQuery
+      | SolutionAnalyticsExportQuery,
   ) {
     let params = new HttpParams();
     const wireKeys: Record<string, string> = {

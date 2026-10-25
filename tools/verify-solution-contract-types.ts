@@ -8,8 +8,13 @@ import type {
   SolutionQuotaWrite,
   SolutionWidgetParticipant,
   SolutionWidgetOrganizer,
+  SolutionManagerAssignment,
+  SolutionManagerSolutionFunnel,
 } from "../projects/social_platform/src/app/domain/solution/solution-contract.model";
-import type { SolutionResultsExportQuery } from "../projects/social_platform/src/app/domain/solution/ports/solution.repository.port";
+import type {
+  SolutionResultsExportQuery,
+  SolutionAnalyticsExportQuery,
+} from "../projects/social_platform/src/app/domain/solution/ports/solution.repository.port";
 
 const validResultsExport = {
   scope: "all",
@@ -111,7 +116,34 @@ const solutionOrganizer: SolutionWidgetOrganizer = {
   participantsWithoutSolution: 1,
 };
 
+const noncompetitiveFunnel: SolutionManagerSolutionFunnel = {
+  created: 1,
+  submissionApplicable: false,
+  submitted: null,
+  notSubmitted: null,
+  evaluated: null,
+};
+const assignmentReference: SolutionManagerAssignment["application"] = {
+  kind: "solution",
+  programId: 12,
+  solutionId: 301,
+  name: "Решение",
+};
+const wrongAssignmentReference: SolutionManagerAssignment["application"] = {
+  kind: "solution",
+  programId: 12,
+  name: "Решение",
+  // @ts-expect-error Назначение решения не принимает projectId.
+  projectId: 301,
+};
+// @ts-expect-error Выгрузка решения не принимает legacy kind проектов.
+const wrongAnalyticsExport: SolutionAnalyticsExportQuery = { kind: "projects" };
+
 void [
+  noncompetitiveFunnel,
+  assignmentReference,
+  wrongAssignmentReference,
+  wrongAnalyticsExport,
   validResultsExport,
   invalidResultsExport,
   role,
