@@ -1,6 +1,6 @@
 /** @format */
 
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, DeferBlockBehavior, TestBed } from "@angular/core/testing";
 import { ProjectEditComponent } from "./edit.component";
 import { provideRouter } from "@angular/router";
 import { ReactiveFormsModule, FormBuilder } from "@angular/forms";
@@ -22,6 +22,7 @@ import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 import { ProjectStepService } from "@api/project/project-step.service";
 import { ProjectCoverResetService } from "@api/project/facades/edit/project-cover-reset.service";
+import { ProjectAdditionalStepComponent } from "./components/project-additional-step/project-additional-step.component";
 
 describe("ProjectEditComponent", () => {
   let component: ProjectEditComponent;
@@ -80,6 +81,7 @@ describe("ProjectEditComponent", () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, ProjectEditComponent],
       providers: [provideNgxMask(), provideRouter([])],
+      deferBlockBehavior: DeferBlockBehavior.Playthrough,
     })
       .overrideComponent(ProjectEditComponent, {
         remove: {
@@ -129,13 +131,22 @@ describe("ProjectEditComponent", () => {
             { provide: ProjectVacancyService, useValue: emptySpy },
             { provide: ProjectTeamService, useValue: emptySpy },
             { provide: ProjectTeamUIService, useValue: emptySpy },
-            { provide: ProjectAdditionalService, useValue: emptySpy },
+            {
+              provide: ProjectAdditionalService,
+              useValue: { getAdditionalForm: () => projectsEditInfoServiceSpy.additionalForm },
+            },
             { provide: ProjectAchievementsService, useValue: emptySpy },
             { provide: ProjectPartnerService, useValue: emptySpy },
             { provide: ProjectResourceService, useValue: emptySpy },
             { provide: TooltipInfoService, useValue: emptySpy },
             { provide: ToggleFieldsInfoService, useValue: emptySpy },
           ],
+        },
+      })
+      .overrideComponent(ProjectAdditionalStepComponent, {
+        set: {
+          template: '<p data-testid="contest-fields">Дополнительные сведения</p>',
+          imports: [],
         },
       })
       .compileComponents();
@@ -149,6 +160,29 @@ describe("ProjectEditComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("opens the selected contest fields while the browser has no idle time", async () => {
+    vi.stubGlobal(
+      "requestIdleCallback",
+      vi.fn(() => 1),
+    );
+    vi.stubGlobal("cancelIdleCallback", vi.fn());
+    try {
+      fixture.debugElement.injector.get(ProjectStepService).currentStep.set("additional");
+      fixture.detectChanges();
+      await expect
+        .poll(
+          () => {
+            fixture.detectChanges();
+            return fixture.nativeElement.querySelector('[data-testid="contest-fields"]');
+          },
+          { timeout: 1000 },
+        )
+        .not.toBeNull();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it("на любом шаге блокирует сохранение старой обложки во время reset", () => {
