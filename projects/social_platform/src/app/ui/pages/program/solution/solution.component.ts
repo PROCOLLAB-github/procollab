@@ -13,8 +13,22 @@ import {
 } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { combineLatest, EMPTY, finalize, map, startWith, Subject, switchMap } from "rxjs";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
+import {
+  combineLatest,
+  distinctUntilChanged,
+  EMPTY,
+  finalize,
+  map,
+  pairwise,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+} from "rxjs";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { EventBus } from "@domain/shared/event-bus";
+import { User } from "@domain/auth/user.model";
 import {
   GetSolutionContextUseCase,
   CreateSolutionUseCase,
@@ -64,6 +78,8 @@ export class ProgramSolutionComponent {
   private readonly get = inject(GetSolutionUseCase);
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly injector = inject(Injector);
+  private readonly profile = inject(ProfileInfoService).profile;
+  private readonly events = inject(EventBus);
   readonly draft = inject(SolutionDraftFacade);
   readonly solution = signal<ProgramSolution | null>(null);
   readonly loading = signal(true);
@@ -80,6 +96,9 @@ export class ProgramSolutionComponent {
   submissionTrigger: HTMLElement | null = null;
   private readonly retry = new Subject<void>();
   private readonly teamRefresh = new Subject<{ programId: number; solutionId: number } | null>();
+  private readonly accountChanged = new Subject<void>();
+  private loggedOutProfile: User | null | undefined;
+  private identityRequired = false;
   private reconcileDraft = false;
 
   canLeave(): boolean {
@@ -274,7 +293,54 @@ export class ProgramSolutionComponent {
     void this.router.navigate([AppRoutes.program.detail(this.programId())]);
   }
 
+  private clearApplication(): void {
+    this.teamRefresh.next(null);
+    this.refreshingTeam.set(false);
+    this.teamRefreshError.set("");
+    this.reconcileDraft = false;
+    this.confirmation.set(null);
+    this.submissionTrigger = null;
+    this.submissionIssues.set([]);
+    this.submissionAttempted.set(false);
+    this.draft.clear();
+    this.solution.set(null);
+    this.error.set(null);
+  }
+
+  private showAccountError(): void {
+    this.showError({
+      code: "unauthorized",
+      detail: "Аккаунт изменился. Повторите вход и откройте заявку заново.",
+      errors: [],
+      meta: {},
+    });
+  }
+
+  private invalidateAccount(): void {
+    this.identityRequired = true;
+    this.accountChanged.next();
+    this.clearApplication();
+    this.showAccountError();
+  }
+
   constructor() {
+    this.events
+      .on("LoggedOut")
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        this.loggedOutProfile = this.profile();
+        this.invalidateAccount();
+      });
+    toObservable(this.profile)
+      .pipe(
+        map(profile => profile?.id ?? null),
+        distinctUntilChanged(),
+        pairwise(),
+        takeUntilDestroyed(),
+      )
+      .subscribe(([previous, current]) => {
+        if (previous !== null && previous !== current) this.invalidateAccount();
+      });
     this.teamRefresh
       .pipe(
         switchMap(context => {
@@ -335,18 +401,16 @@ export class ProgramSolutionComponent {
           solutionId: params.find(p => p.has("solutionId"))?.get("solutionId"),
         })),
         switchMap(({ programId, solutionId }) => {
-          this.teamRefresh.next(null);
-          this.refreshingTeam.set(false);
-          this.teamRefreshError.set("");
-          this.reconcileDraft = false;
-          this.confirmation.set(null);
-          this.submissionIssues.set([]);
-          this.submissionAttempted.set(false);
-          this.draft.clear();
-          this.solution.set(null);
-          this.error.set(null);
+          this.clearApplication();
           this.loading.set(true);
           this.programId.set(programId);
+          if (
+            (this.identityRequired && !this.profile()?.id) ||
+            this.profile() === this.loggedOutProfile
+          ) {
+            this.showAccountError();
+            return EMPTY;
+          }
           if (
             !validSolutionId(programId) ||
             (solutionId !== undefined && !validSolutionId(Number(solutionId)))
@@ -359,7 +423,10 @@ export class ProgramSolutionComponent {
             });
             return EMPTY;
           }
-          if (solutionId !== undefined) return this.get.execute(programId, Number(solutionId));
+          if (solutionId !== undefined)
+            return this.get
+              .execute(programId, Number(solutionId))
+              .pipe(takeUntil(this.accountChanged));
           return this.context.execute(programId).pipe(
             switchMap(result => {
               if (!result.ok) {
@@ -389,6 +456,7 @@ export class ProgramSolutionComponent {
               }
               return EMPTY;
             }),
+            takeUntil(this.accountChanged),
           );
         }),
         takeUntilDestroyed(),

@@ -1,0 +1,216 @@
+{
+  "status": "PASS",
+  "scope": "AC06 only; overall QA01 remains open",
+  "backendRuntime": "d4709651e45b7d3411e19001ee4eada516afea48",
+  "frontendBase": "8a2dc896ca400db7b339ee643e1ea1d9789e19d8",
+  "frontendSources": {
+    "projects/social_platform/src/app/ui/pages/program/solution/solution.component.ts": "00357e0a65d86761170ddc889e9567cbe53573cbb0766d5cabeb3890cb727d5c",
+    "projects/social_platform/src/app/ui/pages/program/solution/solution.component.spec.ts": "fb1cb0c98611cc726ebe5a99e5db7bf8298307006ee8f3bf422b1c0960cd4f90"
+  },
+  "backendTestSource": "6386411f23de7b6c715941732791d6813e3225900792046cabf7077abae29e33",
+  "c00": "1.15.0",
+  "contractChanged": false,
+  "backendTests": 42,
+  "frontendTests": 2837,
+  "frontendTestFiles": 480,
+  "routeTests": 28,
+  "newRouteTests": 10,
+  "beforeRouteFailed": 7,
+  "beforeRoutePassed": 21,
+  "afterRoutePassed": 28,
+  "wireResponses": 41,
+  "roleResponses": 36,
+  "validCommandRequests": 20,
+  "browserResponses": 5,
+  "browserChecks": [
+    {
+      "program": 30,
+      "key": "case_championship",
+      "result": "PASS",
+      "ordinaryLogoutAlreadySafe": true,
+      "privateViewRemoved": true,
+      "dialogs": 0
+    },
+    {
+      "program": 30,
+      "key": "case_championship",
+      "result": "PASS",
+      "logoutReachedLogin": true,
+      "dialogs": 0,
+      "foreignAccountRead": 404,
+      "privateViewRemoved": true
+    },
+    {
+      "program": 31,
+      "key": "hackathon",
+      "result": "PASS",
+      "logoutReachedLogin": true,
+      "dialogs": 0,
+      "foreignAccountRead": 404,
+      "privateViewRemoved": true
+    }
+  ],
+  "roleChecks": [
+    {
+      "program": 7,
+      "solution": 6,
+      "kind": "submitted-member",
+      "deniedMember": 403,
+      "deniedOutsider": 404,
+      "anonymous": 401
+    },
+    {
+      "program": 8,
+      "solution": 7,
+      "kind": "submitted-member",
+      "deniedMember": 403,
+      "deniedOutsider": 404,
+      "anonymous": 401
+    },
+    {
+      "program": 23,
+      "solution": 34,
+      "kind": "submitted-expert",
+      "deniedExpert": 403
+    },
+    {
+      "program": 24,
+      "solution": 36,
+      "kind": "submitted-expert",
+      "deniedExpert": 403
+    },
+    {
+      "program": 30,
+      "solution": 45,
+      "kind": "draft",
+      "hiddenFromExpertAndOutsider": true
+    },
+    {
+      "program": 31,
+      "solution": 47,
+      "kind": "draft",
+      "hiddenFromExpertAndOutsider": true
+    }
+  ],
+  "ordinaryLogoutAlreadySafeInBaseline": true,
+  "baselineBrowserCaveat": "Office outer profile condition already destroys the private view. Isolated component cleanup failures do not demonstrate an ordinary logout exposure.",
+  "attempts": [
+    {
+      "file": "before-browser-attempt1.json",
+      "reason": "Harness expected logout200; actual correct endpoint status205."
+    },
+    {
+      "file": "before-browser-attempt2.json",
+      "reason": "Harness expected a blocked route/confirm, but actual Office container already removed the view. Corrected baseline is PASS."
+    }
+  ],
+  "domainBefore": "f15e4e8a179c7a4e3e046a89d4b244973da0aa7f024c789b4b0964eb41423d9b",
+  "domainAfter": "f15e4e8a179c7a4e3e046a89d4b244973da0aa7f024c789b4b0964eb41423d9b",
+  "domainModels": [
+    "partner_programs.PartnerProgram",
+    "partner_programs.PartnerProgramField",
+    "partner_programs.PartnerProgramUserProfile",
+    "partner_programs.ProgramSolution",
+    "partner_programs.ProgramSolutionAnswer",
+    "partner_programs.ProgramSolutionMember",
+    "partner_programs.SolutionInvitation",
+    "project_rates.SolutionScore",
+    "project_rates.SolutionExpertAssignment",
+    "project_rates.Criteria",
+    "users.Expert",
+    "files.UserFile",
+    "projects.Project",
+    "users.Expert_programs",
+    "partner_programs.PartnerProgram_managers"
+  ],
+  "domainMutations": 0,
+  "browserSolutionWrites": 0,
+  "browserProgramWrites": 0,
+  "newFixtures": 0,
+  "projectCount": 2,
+  "buildBefore": {
+    "source": "8a2dc896ca400db7b339ee643e1ea1d9789e19d8",
+    "target": "C:\\Users\\evsee\\AppData\\Local\\Temp\\procollab-access-angular-before",
+    "changes": [
+      {
+        "name": "chunk-CHX6T2XY.js",
+        "before": "4707c125db5485fa8b5eeb9e30e23c6f90759d9f2daf86b56a5a0b332da287dd",
+        "after": "d8252699c1d7f5986df9684f6f5b9be81943d068050e6537958be0680cac6380"
+      }
+    ]
+  },
+  "buildAfter": {
+    "base": "8a2dc896ca400db7b339ee643e1ea1d9789e19d8",
+    "sources": {
+      "solution.component.ts": "00357e0a65d86761170ddc889e9567cbe53573cbb0766d5cabeb3890cb727d5c",
+      "solution.component.spec.ts": "fb1cb0c98611cc726ebe5a99e5db7bf8298307006ee8f3bf422b1c0960cd4f90"
+    },
+    "target": "C:\\Users\\evsee\\AppData\\Local\\Temp\\procollab-access-angular-after",
+    "changes": [
+      {
+        "name": "chunk-HYHMJF3H.js",
+        "before": "4f800d7385e186870ceaa53d2c933b989bbc4ea2b9cab02c69d94ba8bb221eb8",
+        "after": "5b11f6d62c68f4bfb450ce7e1e054996865dafa61bd84756b141c067977919f2"
+      }
+    ]
+  },
+  "rawArtifactLocation": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-access",
+  "artifacts": [
+    {
+      "name": "after-browser.json",
+      "bytes": 15930,
+      "sha256": "6113fa915e2d6a57dac33f6114462c84cacd6b1e0db2938b7fc87e66dac551b1"
+    },
+    {
+      "name": "after-case_championship-logout.png",
+      "bytes": 54300,
+      "sha256": "e9cdc0d09b2901138ca884daf0d9a18d4bf982567d7699bc21c566259ea20bbd"
+    },
+    {
+      "name": "after-case_championship-other-account.png",
+      "bytes": 51220,
+      "sha256": "7ee7706ca6876980e9f561c4149c8b0d24bf4ee532670d21c45d56988ba2986b"
+    },
+    {
+      "name": "after-hackathon-logout.png",
+      "bytes": 54302,
+      "sha256": "6ff65a38431d43f03cc15c25606d2cf078e48b726d0758bab8e20ff6af00fc6d"
+    },
+    {
+      "name": "after-hackathon-other-account.png",
+      "bytes": 51215,
+      "sha256": "fefa5eebecfeb2bce08f13c70ec62b0a4e90775a18f84080c73d6a70db12cfe1"
+    },
+    {
+      "name": "before-browser-attempt1.json",
+      "bytes": 136,
+      "sha256": "432361e07ce876913fd3473c0f96ed164c610f8c8ad49bc5451ca845207eb2ce"
+    },
+    {
+      "name": "before-browser-attempt2.json",
+      "bytes": 136,
+      "sha256": "432361e07ce876913fd3473c0f96ed164c610f8c8ad49bc5451ca845207eb2ce"
+    },
+    {
+      "name": "before-browser.json",
+      "bytes": 6595,
+      "sha256": "0dcab9e5bd88f849642d2266fb27c6b2c34312519e037347b9788d4f15126cc4"
+    },
+    {
+      "name": "before-case_championship-logout.png",
+      "bytes": 54863,
+      "sha256": "410c8f969774c18b52ab43d6b597058716c70aee9235b0ad0dfbb51a7844c8bc"
+    },
+    {
+      "name": "http-evidence.json",
+      "bytes": 1841,
+      "sha256": "0587059e5da872d8285326a2687a228a2f4ddf463af8db4e48f771f1518d20a8"
+    },
+    {
+      "name": "http-wire.json",
+      "bytes": 76266,
+      "sha256": "a96f1815f3ab23cdb4c236e28a490f1f839fd1eca9a2a1b0d0501f70068a47d4"
+    }
+  ],
+  "domainAfterBrowser": "f15e4e8a179c7a4e3e046a89d4b244973da0aa7f024c789b4b0964eb41423d9b"
+}

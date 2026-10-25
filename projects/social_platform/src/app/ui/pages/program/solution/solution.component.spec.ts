@@ -21,6 +21,8 @@ import {
   SubmitSolutionUseCase,
 } from "@api/solution/use-cases/solution-draft.use-cases";
 import { canLeaveSolution } from "@ui/routes/program/solution-leave.guard";
+import { EventBus } from "@domain/shared/event-bus";
+import { loggedOut } from "@domain/auth/events/logged-out.event";
 
 const solution = solutionContractScenarios.find(s => s.name === "created_solo")!
   .response as ProgramSolution;
@@ -42,7 +44,9 @@ describe("Solution route foundation", () => {
   const getContext = { execute: vi.fn() };
   const update = { execute: vi.fn() };
   const submit = { execute: vi.fn() };
+  const profile = signal<{ id: number } | null>({ id: 7 });
   beforeEach(() => {
+    profile.set({ id: 7 });
     get.execute.mockReset().mockReturnValue(of(ok(solution)));
     create.execute.mockReset().mockReturnValue(of(ok(solution)));
     getContext.execute.mockReset().mockReturnValue(of(ok(context)));
@@ -73,7 +77,7 @@ describe("Solution route foundation", () => {
         { provide: GetSolutionContextUseCase, useValue: getContext },
         { provide: UpdateSolutionUseCase, useValue: update },
         { provide: SubmitSolutionUseCase, useValue: submit },
-        { provide: ProfileInfoService, useValue: { profile: signal({ id: 7 }) } },
+        { provide: ProfileInfoService, useValue: { profile } },
         {
           provide: SolutionRepositoryPort,
           useValue: {
@@ -84,6 +88,166 @@ describe("Solution route foundation", () => {
         },
       ],
     });
+  });
+
+  it("clears private draft, team and submission confirmation immediately on logout", async () => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88/edit?tab=team",
+      ProgramSolutionComponent,
+    );
+    component.draft.name.setValue("Личное несохраненное название");
+    component.draft.group().get("1002")!.setValue("Личный ответ");
+    component.confirmation.set(solution);
+    const confirmation = vi.spyOn(window, "confirm").mockReturnValue(false);
+
+    TestBed.inject(EventBus).emit(loggedOut());
+    expect(component.solution()).toBeNull();
+    expect(component.draft.source()).toBeNull();
+    expect(component.draft.name.value).toBe("");
+    expect(component.draft.group().controls).toEqual({});
+    expect(component.confirmation()).toBeNull();
+    expect(component.canLeave()).toBe(true);
+    expect(confirmation).not.toHaveBeenCalled();
+    harness.detectChanges();
+    expect(harness.routeNativeElement?.querySelector("app-solution-team")).toBeNull();
+    expect(harness.routeNativeElement?.textContent).not.toContain(solution.name);
+    expect(harness.routeNativeElement?.textContent).not.toContain("Личный ответ");
+    confirmation.mockRestore();
+  });
+
+  it("cancels a pending read on logout and cannot reload with the previous profile", async () => {
+    const response = new Subject<ReturnType<typeof ok<ProgramSolution>>>();
+    get.execute.mockReturnValue(response);
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88",
+      ProgramSolutionComponent,
+    );
+    expect(response.observed).toBe(true);
+    TestBed.inject(EventBus).emit(loggedOut());
+    expect(response.observed).toBe(false);
+    component.reload();
+    expect(get.execute).toHaveBeenCalledTimes(1);
+    response.next(ok(solution));
+    expect(component.solution()).toBeNull();
+    expect(component.error()?.code).toBe("unauthorized");
+  });
+
+  it("cancels a pending creation context on logout without creating from its late response", async () => {
+    const response = new Subject<ReturnType<typeof ok<SolutionContext>>>();
+    getContext.execute.mockReturnValue(response);
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/new",
+      ProgramSolutionComponent,
+    );
+    TestBed.inject(EventBus).emit(loggedOut());
+    expect(response.observed).toBe(false);
+    response.next(ok(context));
+    expect(create.execute).not.toHaveBeenCalled();
+    expect(component.solution()).toBeNull();
+  });
+
+  it.each(["save", "submit"] as const)(
+    "cancels a pending %s on logout without restoring private data from a late response",
+    async action => {
+      const response = new Subject<ReturnType<typeof ok<ProgramSolution>>>();
+      const harness = await RouterTestingHarness.create();
+      const component = await harness.navigateByUrl(
+        "/office/program/12/solutions/88",
+        ProgramSolutionComponent,
+      );
+      if (action === "save") {
+        component.draft.name.setValue("Несохраненное название");
+        update.execute.mockReturnValue(response);
+        component.saveDraft();
+      } else {
+        component.confirmation.set(solution);
+        submit.execute.mockReturnValue(response);
+        component.confirmSubmission();
+      }
+      expect(response.observed).toBe(true);
+      TestBed.inject(EventBus).emit(loggedOut());
+      expect(response.observed).toBe(false);
+      response.next(ok({ ...solution, version: 2 }));
+      expect(component.solution()).toBeNull();
+      expect(component.draft.source()).toBeNull();
+      expect(component.draft.busy()).toBe(false);
+      expect(component.confirmation()).toBeNull();
+      expect(get.execute).toHaveBeenCalledTimes(1);
+    },
+  );
+
+  it.each([null, { id: 8 }])("clears an open draft when the profile becomes %j", async next => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88/edit",
+      ProgramSolutionComponent,
+    );
+    component.draft.name.setValue("Правка прежнего аккаунта");
+    profile.set(next);
+    await harness.fixture.whenStable();
+    expect(component.solution()).toBeNull();
+    expect(component.draft.name.value).toBe("");
+    expect(component.canLeave()).toBe(true);
+    expect(update.execute).not.toHaveBeenCalled();
+    expect(create.execute).not.toHaveBeenCalled();
+    expect(get.execute).toHaveBeenCalledTimes(1);
+  });
+
+  it("a new account retries a fresh permission check without the previous local edits", async () => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88/edit",
+      ProgramSolutionComponent,
+    );
+    component.draft.name.setValue("Правка капитана");
+    TestBed.inject(EventBus).emit(loggedOut());
+    profile.set({ id: 8 });
+    await harness.fixture.whenStable();
+    const memberView: ProgramSolution = {
+      ...solution,
+      permissions: { canEdit: false, canSubmit: false, canManageTeam: false, canInvite: false },
+    };
+    get.execute.mockReturnValue(of(ok(memberView)));
+    component.reload();
+    harness.detectChanges();
+    expect(get.execute).toHaveBeenCalledTimes(2);
+    expect(component.draft.name.value).toBe(solution.name);
+    expect(component.draft.canEdit()).toBe(false);
+    expect(harness.routeNativeElement?.querySelector("#solution-name")).toBeNull();
+    expect(update.execute).not.toHaveBeenCalled();
+  });
+
+  it("a refreshed profile for the same user preserves unsaved edits", async () => {
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88/edit",
+      ProgramSolutionComponent,
+    );
+    component.draft.name.setValue("Сохранить локальную правку");
+    profile.set({ id: 7 });
+    await harness.fixture.whenStable();
+    expect(component.solution()).toEqual(solution);
+    expect(component.draft.name.value).toBe("Сохранить локальную правку");
+    expect(component.draft.dirty()).toBe(true);
+    expect(get.execute).toHaveBeenCalledTimes(1);
+  });
+
+  it("initial profile loading does not discard a solution opened in the same session", async () => {
+    profile.set(null);
+    const harness = await RouterTestingHarness.create();
+    const component = await harness.navigateByUrl(
+      "/office/program/12/solutions/88/edit",
+      ProgramSolutionComponent,
+    );
+    component.draft.name.setValue("Правка во время загрузки профиля");
+    profile.set({ id: 7 });
+    await harness.fixture.whenStable();
+    expect(component.solution()).toEqual(solution);
+    expect(component.draft.name.value).toBe("Правка во время загрузки профиля");
+    expect(get.execute).toHaveBeenCalledTimes(1);
   });
 
   it("loads the exact program/solution and switches tabs without a second request", async () => {
