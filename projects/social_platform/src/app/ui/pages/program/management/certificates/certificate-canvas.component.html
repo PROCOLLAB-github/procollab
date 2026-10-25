@@ -1,5 +1,18 @@
 <!-- @format -->
 <div class="canvas__selection-tools" aria-label="Инструменты выбранного элемента">
+  <label class="canvas__family">
+    <span>Шрифт</span>
+    <select
+      appField
+      [ngModel]="font(selected()).key"
+      [disabled]="selected() === 'signature' || preview() || disabled() || fontLoadError()"
+      (ngModelChange)="familyChanged($event)"
+    >
+      @for (font of fonts; track font.key) {
+        <option [value]="font.key">{{ font.label }}</option>
+      }
+    </select>
+  </label>
   <label class="canvas__font"
     >Размер текста
     <input
@@ -32,6 +45,9 @@
     </button>
   }
 </div>
+@if (fontLoadError()) {
+  <p class="canvas__font-error" role="alert">Не удалось загрузить шрифты. Обновите страницу.</p>
+}
 <div class="canvas__viewport" #viewport>
   <div
     class="canvas"
@@ -71,7 +87,8 @@
           [tabindex]="preview() ? -1 : 0"
           [attr.aria-label]="labels[key] + ': переместить стрелками'"
           [class.canvas__element--selected]="selected() === key"
-          [class.canvas__element--bold]="key === 'name' || key === 'title'"
+          [style.font-family]="font(key).family"
+          [style.font-weight]="fontWeight(key)"
           [style.left.%]="draft().layout[key].x"
           [style.top.%]="draft().layout[key].y"
           [style.width.%]="draft().layout[key].width"

@@ -37,6 +37,15 @@ export interface CertificateBox {
   width: number;
   height: number;
   fontSize: number;
+  fontFamily?: "mont" | "pt-serif" | "lobster";
+}
+export const CERTIFICATE_FONTS = [
+  { key: "mont", label: "Mont", family: "Mont", boldWeight: 600 },
+  { key: "pt-serif", label: "PT Serif", family: "Certificate PT Serif", boldWeight: 700 },
+  { key: "lobster", label: "Lobster", family: "Certificate Lobster", boldWeight: 400 },
+] as const;
+export function certificateFont(key: CertificateBox["fontFamily"]) {
+  return CERTIFICATE_FONTS.find(font => font.key === key) ?? CERTIFICATE_FONTS[0];
 }
 export interface CertificateAsset {
   id: number;
