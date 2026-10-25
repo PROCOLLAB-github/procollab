@@ -175,33 +175,40 @@ describe("Program certificates", () => {
     expect(component.error()).toBe("Дождитесь завершения обработки.");
     fixture.destroy();
   });
-  it("distinguishes a failed PDF generation from a mail failure", async () => {
-    const { fixture, component } = await setup();
-    component.step.set(3);
-    component.journal.set({
-      count: 1,
-      summary: { total: 1, ready: 0, sent: 0, failed: 1 },
-      results: [
-        {
-          id: "failed-id",
-          name: "Тестовый участник",
-          email: "test@example.test",
-          status: "failed",
-          pdfReady: false,
-          error: "Не удалось создать PDF или отправить письмо.",
-          sentAt: null,
-        },
-      ],
-    });
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('td[data-label="Письмо"]').textContent).toContain(
-      "Не отправлено",
-    );
-    const pdf = fixture.nativeElement.querySelector('td[data-label="Сертификат"]').textContent;
-    expect(pdf).toContain("PDF не создан");
-    expect(pdf).not.toContain("Готовится");
-    fixture.destroy();
-  });
+  it.each([
+    { pdfReady: false, label: "PDF не создан" },
+    { pdfReady: true, label: "PDF не обновлен" },
+  ])(
+    "distinguishes a failed PDF generation/update from a mail failure ($pdfReady)",
+    async ({ pdfReady, label }) => {
+      const { fixture, component } = await setup();
+      component.step.set(3);
+      component.journal.set({
+        count: 1,
+        summary: { total: 1, ready: Number(pdfReady), sent: 0, failed: 1 },
+        results: [
+          {
+            id: "failed-id",
+            name: "Тестовый участник",
+            email: "test@example.test",
+            status: "failed",
+            pdfReady,
+            pdfError: true,
+            error: "Не удалось создать PDF или отправить письмо.",
+            sentAt: null,
+          },
+        ],
+      });
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('td[data-label="Письмо"]').textContent).toContain(
+        "Не отправлено",
+      );
+      const pdf = fixture.nativeElement.querySelector('td[data-label="Сертификат"]').textContent;
+      expect(pdf).toContain(label);
+      expect(pdf).not.toContain("Готовится");
+      fixture.destroy();
+    },
+  );
   it("changes only the selected element font with history, saves it and keeps geometry", async () => {
     const { fixture, component, repository } = await setup();
     const initial = structuredClone(component.draft()!.layout);

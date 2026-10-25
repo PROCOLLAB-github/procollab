@@ -536,25 +536,39 @@
                   ><small>{{ row.email }}</small>
                 </td>
                 <td data-label="Письмо">
-                  <span [class.certificates__error]="row.status === 'failed' && row.pdfReady">{{
-                    row.status === "failed" && !row.pdfReady ? "Не отправлено" : labels[row.status]
-                  }}</span>
-                  @if (row.pdfReady && (row.error || row.sentAt)) {
+                  <span
+                    [class.certificates__error]="
+                      row.status === 'failed' && row.pdfReady && !row.pdfError
+                    "
+                    >{{
+                      row.status === "failed" && (!row.pdfReady || row.pdfError)
+                        ? "Не отправлено"
+                        : labels[row.status]
+                    }}</span
+                  >
+                  @if (row.pdfReady && !row.pdfError && (row.error || row.sentAt)) {
                     <small>{{
                       row.error || (row.sentAt | date: "dd.MM.yyyy, HH:mm" : "+0300")
                     }}</small>
                   }
                 </td>
                 <td data-label="Сертификат">
-                  <span [class.certificates__error]="row.status === 'failed' && !row.pdfReady">{{
-                    row.status === "failed" && !row.pdfReady
-                      ? "PDF не создан"
-                      : row.outdated
-                        ? "Шаблон изменен"
-                        : row.pdfReady
-                          ? "PDF готов"
-                          : "Готовится"
-                  }}</span>
+                  <span
+                    [class.certificates__error]="
+                      row.status === 'failed' && (!row.pdfReady || row.pdfError)
+                    "
+                    >{{
+                      row.status === "failed" && (!row.pdfReady || row.pdfError)
+                        ? row.pdfReady
+                          ? "PDF не обновлен"
+                          : "PDF не создан"
+                        : row.outdated
+                          ? "Шаблон изменен"
+                          : row.pdfReady
+                            ? "PDF готов"
+                            : "Готовится"
+                    }}</span
+                  >
                 </td>
                 <td>
                   @if (row.status === "failed") {

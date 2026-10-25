@@ -25,10 +25,11 @@ recipient selection and responsive editor access.
 
 ## Verified locally
 
-- 44 Angular component/layout/participant tests, build and targeted ESLint/Stylelint/Prettier.
-- Paired API: 44 certificate tests, 41 passed and 3 PostgreSQL concurrency tests
-  skipped on SQLite. The full PostgreSQL CI, including the concurrent manager/
-  worker test, passed for API commit `04008df927b75c1fa0b4de6a1c29c09f54db251c`.
+- 45 Angular component/layout/participant tests, build and targeted ESLint/Stylelint/Prettier.
+- Paired API: 47 certificate tests, 44 passed and 3 PostgreSQL concurrency tests
+  skipped on SQLite. The earlier full PostgreSQL CI passed for base API commit
+  `04008df927b75c1fa0b4de6a1c29c09f54db251c`; the provenance migration follow-up
+  requires its own PostgreSQL CI before deployment.
 - Actual Angular build and Django API on disposable local program 1: size 16 to
   48 applies immediately; no zoom control; long-name PDF contains the exact name.
 - Updated an old personal PDF from the journal: current portrait background and
@@ -42,6 +43,9 @@ recipient selection and responsive editor access.
 - A platform-only generation failure was retried through the actual browser/API,
   then processed by the service: a PDF was created, the status became `ready`,
   and no mail was produced. The UI distinguishes “PDF не создан” from a mail error.
+- A regeneration failure now retains the previous PDF and secret link. API tests
+  cover access while queued/failed, successful replacement, provenance backfill
+  without file/token/mail changes and program deletion with both batch references.
 - Native browser widths 390 and 320: the expanded editor computes the remaining
   height below the tools and above the sticky footer; the whole page and PDF
   button are visible. The mobile journal uses stacked rows with mail/PDF labels,
@@ -52,7 +56,8 @@ Local services use synthetic accounts and do not connect to the real dev databas
 
 ## Release gates still to verify
 
-- Paired API/frontend deployment and acceptance on dev program 6.
+- Provenance follow-up PostgreSQL CI, migration/API/worker deployment, then frontend
+  and acceptance on dev program 6.
 - Actual external email delivery has not been invoked. Local email checks use
   a capture backend, with the application generation and delivery code.
 

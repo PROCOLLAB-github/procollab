@@ -90,6 +90,7 @@ export interface CertificateDelivery {
   email: string;
   status: "pending" | "generating" | "sending" | "sent" | "failed" | "ready";
   pdfReady: boolean;
+  pdfError?: boolean;
   error: string;
   sentAt: string | null;
   outdated?: boolean;
