@@ -13,6 +13,12 @@
 .ui-button.ui-button {
   @include ui-foundation.button;
   @include program-management-controls.compact-action;
+
+  &.ui-button--secondary:focus-visible {
+    color: var(--black);
+    background: var(--accent-light);
+    outline-offset: -2px;
+  }
 }
 
 .ui-field {
@@ -105,18 +111,6 @@ button {
     margin: 12px 0;
   }
 
-  &__template {
-    display: grid;
-    grid-template-columns: 225px minmax(0, 1fr);
-    gap: 24px;
-  }
-
-  &__settings {
-    min-width: 0;
-    padding-right: 20px;
-    border-right: 1px solid var(--medium-grey-for-outline);
-  }
-
   &__muted {
     margin-top: 6px;
     font-size: 11px;
@@ -145,13 +139,19 @@ button {
     gap: 8px;
     margin-top: 18px;
 
+    .ui-field {
+      font-size: 12px;
+    }
+
     small {
       color: var(--grey-for-text);
     }
 
     textarea {
-      min-height: 120px;
+      min-height: 112px;
+      padding: 12px 16px;
       resize: vertical;
+      border-radius: 12px;
     }
   }
 
@@ -235,6 +235,10 @@ button {
       display: block;
     }
 
+    strong {
+      font-weight: 600;
+    }
+
     small {
       margin-top: 6px;
       font-size: 11px;
@@ -294,10 +298,18 @@ button {
   &__search {
     display: block;
     margin-bottom: 16px;
+
+    .ui-field {
+      font-size: 12px;
+    }
   }
 
   &__filters {
     margin-bottom: 8px;
+
+    button {
+      min-width: 0;
+    }
   }
 
   &__table {
@@ -388,38 +400,6 @@ button {
     margin-top: 16px;
   }
 
-  &__save {
-    flex-wrap: wrap;
-    margin: 20px 0;
-    font-size: 11px;
-    color: var(--grey-for-text);
-
-    small {
-      display: block;
-    }
-  }
-
-  &__editor {
-    min-width: 0;
-    padding: 24px;
-
-    .certificates__row {
-      align-items: flex-start;
-      margin-bottom: 28px;
-    }
-
-    .ui-button {
-      flex-shrink: 0;
-      min-width: 88px;
-      white-space: nowrap;
-    }
-
-    p {
-      margin-top: 8px;
-      color: var(--grey-for-text);
-    }
-  }
-
   &__confirmation {
     padding: 24px;
 
@@ -436,6 +416,224 @@ button {
       margin-top: 24px;
     }
   }
+
+  &__editor-heading {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--medium-grey-for-outline);
+
+    > .certificates__actions {
+      margin-top: 0;
+    }
+  }
+
+  &__template {
+    display: grid;
+    grid-template-columns: 224px minmax(0, 1fr);
+    gap: 24px;
+    min-width: 0;
+    padding: 20px 0 0;
+    margin: 0;
+    border: 0;
+  }
+
+  &__workspace {
+    grid-row: 1;
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  &__settings {
+    grid-row: 1;
+    grid-column: 1;
+    min-width: 0;
+    padding-right: 20px;
+    border-right: 1px solid var(--medium-grey-for-outline);
+  }
+
+  &__filename {
+    margin: 8px 0;
+    font-size: 11px;
+    color: var(--grey-for-text);
+    overflow-wrap: anywhere;
+  }
+
+  &__layers-section {
+    padding-top: 20px;
+    margin: 24px 0;
+    border-top: 1px solid var(--medium-grey-for-outline);
+  }
+
+  &__layers {
+    display: grid;
+    gap: 4px;
+    margin-top: 12px;
+  }
+
+  &__layer {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    min-height: 40px;
+    padding: 2px 4px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    &--selected {
+      background: var(--accent-light);
+      border-color: var(--accent);
+    }
+
+    img {
+      width: 14px;
+      height: 14px;
+    }
+
+    .ui-button--icon {
+      flex-shrink: 0;
+    }
+  }
+
+  &__layer-select {
+    flex: 1;
+    min-width: 0;
+    min-height: 32px;
+    padding: 4px;
+    color: var(--black);
+    text-align: left;
+    overflow-wrap: anywhere;
+    background: transparent;
+    border: 0;
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 2px;
+    }
+  }
+
+  &__required {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    font-size: 11px;
+    color: var(--grey-for-text);
+
+    img {
+      width: 11px;
+      height: 11px;
+    }
+  }
+
+  &__add {
+    position: relative;
+    margin-top: 8px;
+
+    summary {
+      padding: 8px 4px;
+      color: var(--accent);
+      list-style: none;
+      cursor: pointer;
+
+      &:focus-visible {
+        outline: 2px solid var(--accent-dark);
+      }
+    }
+
+    > div {
+      position: absolute;
+      z-index: 5;
+      width: 100%;
+      padding: 4px;
+      background: white;
+      border: 1px solid var(--gray);
+      border-radius: 8px;
+      box-shadow: var(--ui-panel-shadow);
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      color: var(--black);
+      text-align: left;
+      background: white;
+      border: 0;
+
+      &:hover,
+      &:focus-visible {
+        background: var(--accent-light);
+      }
+    }
+  }
+
+  &__element-settings {
+    padding-top: 20px;
+    border-top: 1px solid var(--medium-grey-for-outline);
+  }
+
+  &__pdf-actions {
+    margin-top: 12px;
+  }
+
+  &__launch-problem {
+    margin-top: 12px;
+    color: var(--ui-error-text);
+  }
+
+  &__save {
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+    flex-wrap: wrap;
+    padding: 16px 0;
+    margin: 8px 0 0;
+    font-size: 11px;
+    color: var(--black);
+    background: var(--white);
+    border-top: 1px solid var(--medium-grey-for-outline);
+
+    small {
+      display: block;
+      margin-top: 4px;
+      color: var(--grey-for-text);
+    }
+
+    > .certificates__actions {
+      margin-top: 0;
+    }
+  }
+
+  &__editor {
+    --certificate-dialog-padding: 24px;
+
+    align-self: flex-start;
+    width: min(1400px, calc(100vw - 96px));
+    max-width: 100%;
+    padding: 0;
+    font:
+      400 12px/1.5 Mont,
+      sans-serif;
+    color: var(--black);
+
+    .ui-button {
+      flex-shrink: 1;
+      min-width: 0;
+      white-space: normal;
+    }
+
+    h2 {
+      font-size: 18px;
+    }
+
+    .certificates__save {
+      bottom: calc(-1 * var(--certificate-dialog-padding));
+      padding-bottom: calc(16px + var(--certificate-dialog-padding));
+    }
+  }
 }
 
 .sr-only {
@@ -450,6 +648,88 @@ button {
   .certificates__template {
     grid-template-columns: 200px minmax(0, 1fr);
     gap: 16px;
+  }
+}
+
+@media (width <= 999px) {
+  .certificates__editor {
+    --certificate-dialog-padding: var(--ui-dialog-padding);
+  }
+}
+
+@media (width <= 749px) {
+  .certificates {
+    &__template {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    &__settings {
+      padding-right: 0;
+      border-right: 0;
+    }
+
+    &__editor-heading {
+      gap: 12px;
+      align-items: flex-start;
+
+      > .certificates__actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        width: 100%;
+
+        .ui-button {
+          padding-inline: 8px;
+        }
+      }
+    }
+
+    &__layers-section {
+      margin-block: 20px;
+    }
+
+    &__layer-select {
+      min-height: 44px;
+    }
+
+    &__layer .ui-button--icon {
+      min-width: 40px;
+      min-height: 40px;
+    }
+
+    &__add > div {
+      position: static;
+      box-shadow: none;
+    }
+
+    &__save {
+      gap: 8px;
+      padding-block: 12px;
+
+      > .certificates__actions {
+        flex-wrap: nowrap;
+        width: 100%;
+      }
+
+      .ui-button {
+        padding-inline: 8px;
+      }
+    }
+
+    &__editor {
+      width: 100%;
+      padding: 0;
+
+      h2 {
+        font-size: 18px;
+      }
+
+      .certificates__save {
+        padding-bottom: calc(12px + var(--certificate-dialog-padding));
+      }
+    }
   }
 }
 
@@ -476,7 +756,7 @@ button {
       button {
         flex: 1;
         min-width: 0;
-        padding: 8px;
+        padding: 6px 8px;
       }
     }
 
@@ -494,18 +774,9 @@ button {
       font-size: 22px;
     }
 
-    &__editor {
-      padding: 12px;
-
-      h2 {
-        font-size: 20px;
-      }
-    }
-
     &__filters button {
-      padding: 8px 4px;
-      font-size: 10px;
-      white-space: nowrap;
+      flex: 0 1 auto;
+      padding-inline: 12px;
     }
 
     &__table {
