@@ -25,7 +25,15 @@ import {
   SolutionPublishedSolutionPage,
 } from "@domain/solution/solution-contract.model";
 import { validSolutionId } from "@domain/solution/ports/solution.repository.port";
-import { ButtonDirective, FieldDirective, PaginationComponent } from "@uilib";
+import {
+  ButtonDirective,
+  CardDirective,
+  PaginationComponent,
+  TabsComponent,
+  StateComponent,
+} from "@uilib";
+import { SearchComponent } from "@ui/primitives/search/search.component";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { SolutionFieldsComponent } from "@ui/widgets/solution-fields/solution-fields.component";
 
 @Component({
@@ -35,7 +43,11 @@ import { SolutionFieldsComponent } from "@ui/widgets/solution-fields/solution-fi
     RouterLink,
     ReactiveFormsModule,
     ButtonDirective,
-    FieldDirective,
+    CardDirective,
+    TabsComponent,
+    StateComponent,
+    SearchComponent,
+    AvatarComponent,
     PaginationComponent,
     SolutionFieldsComponent,
   ],
@@ -61,6 +73,10 @@ export class PublishedSolutionsComponent {
   readonly offset = signal(0);
   readonly teamTab = signal(false);
   readonly limit = 20;
+  readonly sectionTabs = [
+    { id: "materials", linkText: "Решение", iconName: "box" },
+    { id: "team", linkText: "Команда", iconName: "team" },
+  ];
 
   constructor() {
     this.search.valueChanges

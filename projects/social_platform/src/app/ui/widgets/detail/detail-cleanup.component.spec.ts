@@ -25,9 +25,15 @@ describe("Detail cleanup actions", () => {
   const copyLink = vi.fn();
   const create = vi.fn();
   const profile = signal<any>({ id: 7 });
+  const manager = signal(false),
+    expert = signal(false),
+    member = signal(true);
 
   beforeEach(async () => {
     type.set("program");
+    manager.set(false);
+    expert.set(false);
+    member.set(true);
     info.set(Program.default());
     submitted.set(false);
     pending.set(false);
@@ -59,9 +65,9 @@ describe("Detail cleanup actions", () => {
                 info,
                 listType: type,
                 userType: signal(1),
-                isUserMember: signal(true),
-                isUserManager: signal(false),
-                isUserExpert: signal(false),
+                isUserMember: member,
+                isUserManager: manager,
+                isUserExpert: expert,
                 isInProject: signal(true),
                 isProjectAssigned: submitted,
                 isContactsModalOpen: signal(false),
@@ -77,12 +83,14 @@ describe("Detail cleanup actions", () => {
                 isMembersPage: signal(false),
                 isProjectsRatingPage: signal(false),
                 isAnalyticsPage: signal(false),
+                isPublishedSolutionsPage: signal(false),
                 isAssignProjectToProgramModalOpen: signal(false),
                 isProgramEndedModalOpen: signal(false),
                 isProgramSubmissionProjectsEndedModalOpen: signal(false),
                 applicationLabel: label,
                 applicationPending: pending,
                 addNewProject: create,
+                getRegistrationLink: (program: Program) => program.registrationLink,
               },
             },
             { provide: DetailProjectInfoService, useValue: closed },
@@ -124,6 +132,51 @@ describe("Detail cleanup actions", () => {
     label.set("вы подали проект");
     fixture.detectChanges();
     expect(button().disabled).toBe(true);
+  });
+  it("organizer has management without a duplicate public-solutions action", () => {
+    manager.set(true);
+    info.set({ ...Program.default(), solutionStorageMode: "solution" });
+    const fixture = TestBed.createComponent(DeatilComponent);
+    fixture.detectChanges();
+    const actions = fixture.nativeElement.querySelector(".info__actions");
+    expect(actions.textContent).toContain("управление программой");
+    expect(actions.querySelector('a[href*="published-solutions"]')).toBeNull();
+  });
+  it("participant has one public action replacing the disabled more placeholder", () => {
+    member.set(false);
+    info.set({
+      ...Program.default(),
+      solutionStorageMode: "solution",
+      registrationLink: "https://example.org/register",
+    });
+    const fixture = TestBed.createComponent(DeatilComponent);
+    fixture.detectChanges();
+    const actions = fixture.nativeElement.querySelector(".info__actions");
+    expect(actions.textContent).toContain("зарегистрироваться");
+    expect(actions.textContent).not.toContain("узнать подробнее");
+    expect(actions.querySelectorAll('a[href*="published-solutions"]')).toHaveLength(1);
+  });
+  it("missing registration settings show an explained disabled action", () => {
+    member.set(false);
+    const fixture = TestBed.createComponent(DeatilComponent);
+    fixture.detectChanges();
+    const control = fixture.nativeElement.querySelector(
+      '[aria-describedby="registration-unavailable"]',
+    );
+    expect(control.querySelector("button").disabled).toBe(true);
+    expect(control.textContent).toContain("Организатор еще не открыл регистрацию.");
+  });
+  it("expert can open published legacy projects without enabling private participants", () => {
+    expert.set(true);
+    info.set({ ...Program.default(), publishedProjectsAvailable: true });
+    const fixture = TestBed.createComponent(DeatilComponent);
+    fixture.detectChanges();
+    const links = [...fixture.nativeElement.querySelectorAll("a")] as HTMLAnchorElement[];
+    const projects = links.find(a => a.textContent?.includes("проекты-участники"))!;
+    expect(projects.querySelector("button")!.disabled).toBe(false);
+    expect(projects.getAttribute("href")).toContain("/projects");
+    const participants = links.find(a => a.textContent?.trim() === "участники")!;
+    expect(participants.querySelector("button")!.disabled).toBe(true);
   });
 
   it.each([7, 8])("shares the viewed profile using the existing copy-link flow (id=%s)", id => {

@@ -5,18 +5,20 @@
       >К решениям программы</a
     >
   }
-  <h2 id="published-title">{{ solution()?.application?.name || "Решения программы" }}</h2>
+  <h2 id="published-title" class="text-heading-1">
+    {{ solution()?.application?.name || "Решения программы" }}
+  </h2>
   @if (solutionId() === null) {
-    <label class="published__search"
-      >Поиск решений<input
-        appField
-        type="search"
-        [formControl]="search"
-        placeholder="Поиск по названию решения"
-    /></label>
+    <app-search
+      class="published__search"
+      [openable]="false"
+      [formControl]="search"
+      placeholder="Поиск по названию решения"
+      aria-label="Поиск решений"
+    />
   }
   @if (loading()) {
-    <p role="status">Загружаем опубликованные решения…</p>
+    <app-state kind="loading" title="Загружаем опубликованные решения…" />
   } @else if (error(); as problem) {
     <p role="alert">
       {{
@@ -28,34 +30,31 @@
     <button appButton="secondary" type="button" (click)="reload()">Повторить</button>
   } @else if (solution(); as item) {
     <p class="published__muted">Опубликовано {{ item.publishedAt | date: "dd.MM.yyyy" }}</p>
-    <nav class="published__tabs" aria-label="Разделы решения">
-      <a
-        appButton="secondary"
-        [routerLink]="[]"
-        [queryParams]="{ tab: null }"
-        queryParamsHandling="merge"
-        [attr.aria-current]="!teamTab() ? 'page' : null"
-        >Решение</a
-      >
-      <a
-        appButton="secondary"
-        [routerLink]="[]"
-        [queryParams]="{ tab: 'team' }"
-        queryParamsHandling="merge"
-        [attr.aria-current]="teamTab() ? 'page' : null"
-        >Команда</a
-      >
-    </nav>
+    <app-tabs
+      appearance="steps"
+      label="Разделы решения"
+      [items]="sectionTabs"
+      [active]="teamTab() ? 'team' : 'materials'"
+      (selected)="navigate({ tab: $event === 'team' ? 'team' : null })"
+    />
     @if (teamTab()) {
-      <h3>Команда · {{ item.team.acceptedCount }}</h3>
+      <h3 class="text-heading-2">Команда · {{ item.team.acceptedCount }}</h3>
       <ul class="published__team">
         @for (member of item.team.members; track member.user.id) {
           <li>
-            <span>{{ member.user.firstName }} {{ member.user.lastName }}</span
-            ><small
-              >{{ member.role || member.specialization || "Участник"
-              }}{{ member.isCaptain ? " · Капитан" : "" }}</small
-            >
+            <app-avatar [url]="member.user.avatarUrl || ''" [size]="40" />
+            <div>
+              <span>{{ member.user.firstName }} {{ member.user.lastName }}</span
+              ><small
+                >{{ member.role || member.specialization || "Участник"
+                }}{{
+                  member.isCaptain &&
+                  (member.role || member.specialization || "").trim().toLowerCase() !== "капитан"
+                    ? " · Капитан"
+                    : ""
+                }}</small
+              >
+            </div>
           </li>
         }
       </ul>
@@ -85,16 +84,22 @@
         @for (card of list.results; track card.application.solutionId) {
           <li>
             <a
+              appCard
+              [interactive]="true"
+              class="published__card"
               [routerLink]="
                 paths.program.publishedSolution(programId(), card.application.solutionId)
               "
               [queryParams]="listQuery()"
-              >{{ card.application.name }}</a
-            >
-            <p>{{ card.captain.firstName }} {{ card.captain.lastName }}</p>
-            <small
-              >В команде: {{ card.acceptedCount }} ·
-              {{ card.publishedAt | date: "dd.MM.yyyy" }}</small
+              ><h3 class="text-heading-2">{{ card.application.name }}</h3>
+              <div class="published__captain">
+                <app-avatar [url]="card.captain.avatarUrl || ''" [size]="32" />
+                <p>{{ card.captain.firstName }} {{ card.captain.lastName }}</p>
+              </div>
+              <small
+                >В команде: {{ card.acceptedCount }} ·
+                {{ card.publishedAt | date: "dd.MM.yyyy" }}</small
+              ></a
             >
           </li>
         }

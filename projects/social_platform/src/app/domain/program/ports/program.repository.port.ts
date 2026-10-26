@@ -126,6 +126,11 @@ export abstract class ProgramRepositoryPort {
     params?: HttpParams,
   ): Observable<ApiPagination<Project>>;
 
+  abstract getPublishedProjects(
+    programId: number,
+    params?: HttpParams,
+  ): Observable<ApiPagination<Project>>;
+
   abstract getAllMembers(
     programId: number,
     skip: number,

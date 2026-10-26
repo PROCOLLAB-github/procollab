@@ -1,0 +1,19 @@
+/** @format */
+@use "ui-foundation";
+@use "typography";
+@use "program-management-controls";
+
+// Solution consumers share the existing product controls and desktop density.
+@mixin controls {
+  .ui-field {
+    @include ui-foundation.control;
+    @include typography.body-12;
+
+    width: 100%;
+  }
+
+  .ui-button.ui-button {
+    @include ui-foundation.button;
+    @include program-management-controls.compact-action;
+  }
+}

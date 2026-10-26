@@ -151,6 +151,10 @@ export class DetailInfoService {
    */
   private updatePageStates(url?: string): void {
     const currentUrl = url || this.router.url;
+    this.detailProgramInfoService.applyUpdateStage(
+      "published-solutions",
+      currentUrl.includes("/published-solutions"),
+    );
 
     this.detailProgramInfoService.applyUpdateStage(
       "projects",

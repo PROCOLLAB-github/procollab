@@ -1,15 +1,8 @@
 /** @format */
+@use "styles/typography";
 @use "styles/ui-foundation";
-
-.ui-field {
-  @include ui-foundation.control;
-
-  font-size: 12px;
-}
-
-.ui-button.ui-button {
-  @include ui-foundation.button;
-}
+@use "styles/solution-ui";
+@include solution-ui.controls;
 
 :host {
   display: block;
@@ -17,25 +10,28 @@
 }
 
 .published {
-  padding: 24px;
-  font-family: Mont, sans-serif;
-  background: var(--white);
-  border-radius: 15px;
+  @include typography.body-12;
+
+  min-width: 0;
+  padding-block: 12px 40px;
 
   h2 {
-    margin: 16px 0;
-    font-size: 20px;
-    line-height: 28px;
+    @include typography.heading-1;
+
+    margin-bottom: 20px;
     overflow-wrap: anywhere;
   }
 
   h3 {
-    font-size: 16px;
+    @include typography.heading-2;
+
+    overflow-wrap: anywhere;
   }
 
-  a {
+  > a {
+    display: inline-block;
+    margin-bottom: 20px;
     color: var(--accent);
-    overflow-wrap: anywhere;
   }
 
   &__muted,
@@ -43,45 +39,58 @@
     color: var(--grey-for-text);
   }
 
-  &__tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 20px 0;
-  }
-
   &__search {
-    display: grid;
-    gap: 8px;
-    margin: 20px 0;
+    display: block;
+    margin-bottom: 20px;
   }
 
   &__list,
   &__team {
-    display: grid;
-    gap: 16px;
     padding: 0;
     list-style: none;
   }
 
   &__list {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+    gap: 20px;
+    margin-block: 20px;
   }
 
-  &__list li {
-    padding: 20px;
-    border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+  &__card {
+    @include ui-foundation.card;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+    height: 100%;
+    color: var(--black);
+    text-decoration: none;
+
+    h3 {
+      color: var(--accent);
+    }
+  }
+
+  &__captain,
+  &__team li {
+    display: flex;
+    gap: 12px;
+    align-items: center;
   }
 
   &__team li {
-    display: grid;
-    gap: 4px;
-    padding: 16px 0;
+    padding-block: 16px;
     border-bottom: 1px solid var(--medium-grey-for-outline);
   }
 
-  @media (max-width: 600px) {
-    padding: 16px;
+  &__team small {
+    display: block;
+    margin-top: 4px;
+  }
+
+  @media (max-width: 999px) {
+    padding-inline: 10px;
   }
 }
