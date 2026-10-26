@@ -53,7 +53,7 @@
     color: var(--grey-for-text);
   }
 
-  a {
+  a:not(.ui-button) {
     color: var(--accent);
     text-decoration: none;
   }
