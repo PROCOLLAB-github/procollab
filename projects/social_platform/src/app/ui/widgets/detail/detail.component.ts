@@ -29,6 +29,7 @@ import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.c
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileProjectInviteModalComponent } from "@ui/widgets/project-invite/profile-project-invite-modal.component";
 import { PROGRAM_DEFAULT_COVER, PROGRAM_LOGO_SIZES } from "@utils/program-branding";
+import { ProgramPreviewToolbarComponent } from "@ui/pages/program/launch/preview-toolbar.component";
 
 /** Виджет детального просмотра сущности. */
 @Component({
@@ -47,6 +48,7 @@ import { PROGRAM_DEFAULT_COVER, PROGRAM_LOGO_SIZES } from "@utils/program-brandi
     ApproveSkillComponent,
     ProgramLinksComponent,
     ProfileProjectInviteModalComponent,
+    ProgramPreviewToolbarComponent,
   ],
   providers: [
     ProfileDetailUIInfoService,

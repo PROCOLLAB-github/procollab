@@ -1,4 +1,8 @@
+/** @format */
+
 @use "styles/responsive";
+@use "styles/ui-foundation";
+@use "styles/program-management-controls";
 
 .page {
   display: flex;
@@ -24,5 +28,49 @@
         display: block;
       }
     }
+  }
+}
+
+.ui-button.ui-button {
+  @include ui-foundation.button;
+  @include program-management-controls.compact-action;
+}
+
+.program-heading {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  > a {
+    flex-shrink: 0;
+  }
+}
+
+.program-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  &__active.ui-button {
+    color: var(--white);
+    background: var(--accent);
+  }
+}
+
+@media (max-width: 650px) {
+  .program-heading {
+    flex-wrap: wrap;
+    gap: 12px;
+
+    > a {
+      margin-block: 6px;
+    }
+  }
+
+  .program-navigation > a {
+    margin-block: 6px;
   }
 }

@@ -1187,6 +1187,15 @@ export class ProgramManagementComponent implements OnInit {
       datetimeEvaluationEnds: toMoscowInput(p.datetimeEvaluationEnds),
       datetimeFinished: toMoscowInput(p.datetimeFinished),
     });
+    for (const name of [
+      "datetimeStarted",
+      "datetimeRegistrationEnds",
+      "datetimeFinished",
+    ] as const) {
+      const control = this.datesForm.controls[name];
+      control.setValidators(p.draft ? [] : [Validators.required]);
+      control.updateValueAndValidity({ emitEvent: false });
+    }
   }
   save(confirmReopen = false): void {
     const p = this.state.program(),

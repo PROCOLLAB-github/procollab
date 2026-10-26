@@ -69,6 +69,7 @@ export class DetailProgramInfoService {
   );
 
   addNewProject(programId: number): void {
+    if (this.programDetailMainUIInfoService.program()?.preview) return;
     if (this.applicationPending()) return;
     const solutionMode =
       this.programDetailMainUIInfoService.program()?.solutionStorageMode === "solution";

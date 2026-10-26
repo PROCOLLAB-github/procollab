@@ -15,6 +15,7 @@ export interface RegistrationSchema {
   fields: RegistrationField[];
 }
 export interface RegistrationSettings {
+  programDraft?: boolean;
   draft: RegistrationSchema;
   published: RegistrationSchema | null;
   revision: number;

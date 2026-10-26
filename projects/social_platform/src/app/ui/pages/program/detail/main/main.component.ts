@@ -32,6 +32,8 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { finalize } from "rxjs";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 import { MyCertificateComponent } from "./my-certificate.component";
+import { AlertDirective } from "@uilib";
+import { solutionCreationBlockedMessage } from "@api/solution/solution-navigation";
 
 /** Страница основной вкладки программы с описанием, ссылками и новостями. */
 @Component({
@@ -53,6 +55,7 @@ import { MyCertificateComponent } from "./my-certificate.component";
     NewsCardComponent,
     ProgramLinksComponent,
     MyCertificateComponent,
+    AlertDirective,
   ],
   providers: [ProgramDetailMainService, ExpandService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -83,6 +86,12 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   protected readonly news = this.newsInfoService.news;
 
   protected readonly newsPending = signal(false);
+  readonly applicationBlockedMessage = computed(() => {
+    const program = this.program();
+    return program?.solutionActionAvailable === false
+      ? solutionCreationBlockedMessage(program.solutionActionBlockedReason ?? null)
+      : null;
+  });
 
   protected readonly AppRoutes = AppRoutes;
 

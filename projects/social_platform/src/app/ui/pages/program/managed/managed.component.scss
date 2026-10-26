@@ -1,0 +1,80 @@
+/** @format */
+@use "styles/ui-foundation";
+@use "styles/program-management-controls";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.ui-button.ui-button {
+  @include ui-foundation.button;
+  @include program-management-controls.compact-action;
+}
+
+.managed {
+  font-size: 12px;
+  color: var(--black);
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    overflow-wrap: anywhere;
+  }
+
+  p {
+    margin: 8px 0 0;
+    line-height: 1.5;
+    color: var(--grey-for-text);
+  }
+
+  &__search {
+    display: grid;
+    gap: 8px;
+    max-width: 480px;
+    margin-bottom: 24px;
+  }
+
+  &__list {
+    display: grid;
+    gap: 24px;
+    padding: 20px;
+    background: var(--light-white);
+    border-radius: 15px;
+  }
+
+  &__row {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+
+    > div {
+      min-width: 0;
+    }
+
+    > a {
+      flex-shrink: 0;
+    }
+  }
+}
+
+@media (max-width: 999px) {
+  .managed {
+    &__list {
+      padding: 16px;
+    }
+
+    &__row {
+      display: grid;
+      gap: 12px;
+
+      > a {
+        justify-self: start;
+        margin-block: 6px;
+      }
+    }
+  }
+}

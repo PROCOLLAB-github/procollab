@@ -2,6 +2,13 @@
 
 @use "styles/responsive";
 @use "styles/typography";
+@use "styles/program-management-controls";
+
+.program__launch-notice.ui-alert {
+  @include program-management-controls.status-notice;
+
+  margin-bottom: 16px;
+}
 
 .program {
   padding-bottom: 100px;

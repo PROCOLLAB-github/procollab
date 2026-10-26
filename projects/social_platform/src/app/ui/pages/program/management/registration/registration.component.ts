@@ -31,10 +31,8 @@ import {
   RegistrationSchema,
   RegistrationSettings,
 } from "@domain/program/program-registration.model";
-import {
-  registrationControls,
-  RegistrationFieldsComponent,
-} from "@ui/widgets/registration-fields/registration-fields.component";
+import { registrationControls } from "@ui/widgets/registration-fields/registration-fields.component";
+import { RegistrationPreviewContentComponent } from "@ui/widgets/registration-fields/registration-preview-content.component";
 import { evaluationError } from "@utils/evaluation-workspace";
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 
@@ -49,7 +47,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     AlertDirective,
     IconComponent,
     ModalComponent,
-    RegistrationFieldsComponent,
+    RegistrationPreviewContentComponent,
   ],
   providers: [
     ProgramRegistrationUseCase,
@@ -87,7 +85,6 @@ export class ManagementRegistrationComponent {
   readonly dialogError = signal<string | null>(null);
   readonly editing = signal<RegistrationField | null>(null);
   readonly importResult = signal<RegistrationImport | null>(null);
-  readonly previewMobile = signal(false);
   previewGroup = registrationControls([]);
   private trigger: HTMLElement | null = null;
   readonly editor = this.fb.group({
@@ -255,9 +252,11 @@ export class ManagementRegistrationComponent {
         next: data => {
           this.apply(data);
           this.message.set(
-            publish
-              ? "Форма опубликована. Ссылку можно отправлять участникам."
-              : "Черновик сохранен.",
+            publish && data.programDraft
+              ? "Анкета сохранена и проверена. Регистрация откроется вместе с программой."
+              : publish
+                ? "Форма опубликована. Ссылку можно отправлять участникам."
+                : "Черновик сохранен.",
           );
         },
         error: e => this.error.set(evaluationError(e)),
