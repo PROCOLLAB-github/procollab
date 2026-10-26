@@ -79,7 +79,10 @@ export class ProgramLaunchComponent {
         ),
         takeUntilDestroyed(this.destroy),
       )
-      .subscribe(state => this.state.set(state));
+      .subscribe(state => {
+        this.state.set(state);
+        if (!state.program.draft) this.publishError.set(null);
+      });
     if (this.route.snapshot.queryParamMap.has("previewError"))
       this.publishError.set(
         "Предпросмотр недоступен. Проверьте доступ к программе и обновите данные.",
