@@ -1,0 +1,334 @@
+<!-- @format -->
+
+<div class="project-form">
+  @if (loading()) {
+    <p role="status">Загружаем форму решения…</p>
+  }
+  @if (error()) {
+    <div appAlert="error" role="alert">
+      {{ error() }}
+      <button appButton="text" type="button" [disabled]="saving() || loading()" (click)="reload()">
+        Обновить данные
+      </button>
+    </div>
+  }
+  @if (notice()) {
+    <p role="status">{{ notice() }}</p>
+  }
+  @if (snapshot(); as current) {
+    <header class="project-form__heading">
+      <div>
+        <h2>Форма решения</h2>
+        <p>
+          Настройте общие поля для всех команд программы. Команда и название заявки остаются
+          системными данными.
+        </p>
+      </div>
+      <button appButton="secondary" type="button" [disabled]="saving()" (click)="openPreview()">
+        Предпросмотр формы
+      </button>
+    </header>
+    <section class="project-form__card">
+      <h3>Формат программы</h3>
+      @if (templateError()) {
+        <div appAlert="error" role="alert">
+          {{ templateError() }}
+          <button
+            appButton="text"
+            type="button"
+            [disabled]="templateLoading()"
+            (click)="loadTemplates()"
+          >
+            Повторить загрузку шаблонов
+          </button>
+        </div>
+      }
+      <div class="project-form__actions template-choice">
+        <label for="solution-template"
+          >Начальный шаблон<select appField id="solution-template" [formControl]="templateChoice">
+            <option [ngValue]="null">Выберите формат</option>
+            @if (!templates().length && current.form.template) {
+              <option [ngValue]="current.form.template">
+                {{ current.form.template === "hackathon" ? "Хакатон" : "Кейс-чемпионат" }}
+              </option>
+            }
+            @for (item of templates(); track item.key) {
+              <option [ngValue]="item.key">{{ item.label }}</option>
+            }
+          </select></label
+        >
+        <button
+          appButton="secondary"
+          type="button"
+          [disabled]="
+            saving() ||
+            loading() ||
+            current.hasAnswers ||
+            !templateChoice.value ||
+            !templates().length
+          "
+          (click)="applyTemplate()"
+        >
+          Применить шаблон
+        </button>
+      </div>
+      @if (current.hasAnswers) {
+        <p>
+          Шаблон нельзя менять после появления ответов. Подписи, порядок и требования полей можно
+          настроить.
+        </p>
+      } @else {
+        <p>
+          Шаблон копируется в эту программу. Добавьте названия кейсов или задач и сохраните форму.
+        </p>
+      }
+    </section>
+    <section class="project-form__card" aria-labelledby="solution-definition-title">
+      <div class="project-form__section-heading">
+        <h3 id="solution-definition-title">Поля решения</h3>
+        <button appButton="secondary" type="button" [disabled]="saving()" (click)="edit()">
+          Добавить поле
+        </button>
+      </div>
+      @for (field of fields(); track field.clientKey; let index = $index) {
+        <article class="project-form__row">
+          <div>
+            <h4>{{ field.label }}{{ field.required ? " *" : "" }}</h4>
+            <p>
+              {{ typeLabels[field.type] }} / {{ purposeLabels[field.purpose] }}
+              @if (usage(field); as use) {
+                / Ответов: {{ use.answersCount }}
+              }
+            </p>
+            @if (missingIds().includes(field.id ?? 0)) {
+              <p appAlert="warning">
+                Поле удалено другим организатором. Локальные данные сохранены; уберите поле или
+                добавьте его заново.
+              </p>
+            }
+          </div>
+          <div class="project-form__actions">
+            <button
+              appButton="text"
+              type="button"
+              [disabled]="saving() || index === 0"
+              (click)="move(index, -1)"
+              [attr.aria-label]="'Выше: ' + field.label"
+            >
+              Выше</button
+            ><button
+              appButton="text"
+              type="button"
+              [disabled]="saving() || index === fields().length - 1"
+              (click)="move(index, 1)"
+              [attr.aria-label]="'Ниже: ' + field.label"
+            >
+              Ниже</button
+            ><button appButton="text" type="button" [disabled]="saving()" (click)="edit(field)">
+              Изменить</button
+            ><button
+              appButton="text"
+              type="button"
+              [disabled]="saving() || !canDelete(field)"
+              (click)="remove(field)"
+            >
+              Удалить
+            </button>
+          </div>
+        </article>
+      } @empty {
+        <p>Выберите начальный шаблон, чтобы добавить поля решения.</p>
+      }
+      <p>
+        Поля с ответами нельзя удалить или изменить их тип. Использованные варианты выбора защищены
+        от удаления. Новые обязательные поля действуют только для черновиков.
+      </p>
+    </section>
+    <footer class="project-form__footer">
+      <p>
+        Черновиков, которым не хватает обязательных ответов: {{ current.affectedDraftCount }}.
+        Сданные решения сохраняют свою форму.
+      </p>
+      <div class="project-form__actions">
+        <button
+          appButton="primary"
+          type="button"
+          [appButtonLoading]="saving()"
+          [disabled]="
+            !dirty() ||
+            saving() ||
+            loading() ||
+            !template() ||
+            editing() !== null ||
+            !!missingIds().length
+          "
+          (click)="save()"
+        >
+          Сохранить изменения</button
+        ><button
+          appButton="secondary"
+          type="button"
+          [disabled]="!dirty() || saving()"
+          (click)="cancel()"
+        >
+          Отменить
+        </button>
+      </div>
+    </footer>
+  }
+</div>
+<app-modal
+  [open]="editing() !== null"
+  labelledBy="solution-editor-title"
+  (openChange)="closeEditor()"
+>
+  <form class="project-form__dialog" [formGroup]="editor" (ngSubmit)="applyField()">
+    <header class="project-form__dialog-heading">
+      <h2 id="solution-editor-title">Настройка поля</h2>
+      <button
+        appButton="icon"
+        type="button"
+        aria-label="Закрыть настройку поля"
+        (click)="closeEditor()"
+      >
+        <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+      </button>
+    </header>
+    <label for="solution-field-label"
+      >Подпись *<input appField id="solution-field-label" formControlName="label" maxlength="256"
+    /></label>
+    <label for="solution-field-purpose"
+      >Назначение<select appField id="solution-field-purpose" formControlName="purpose">
+        @for (purpose of purposes; track purpose) {
+          <option [value]="purpose">{{ purposeLabels[purpose] }}</option>
+        }
+      </select></label
+    >
+    <label for="solution-field-type"
+      >Тип поля<select appField id="solution-field-type" formControlName="type">
+        @for (type of types; track type) {
+          <option [value]="type">{{ typeLabels[type] }}</option>
+        }
+        @if (editor.controls.type.value === "radio") {
+          <option value="radio">{{ typeLabels.radio }}</option>
+        }
+      </select></label
+    >
+    @if (editor.controls.type.disabled) {
+      <p>Тип закреплен назначением поля или сохраненными ответами.</p>
+    }
+    <label for="solution-field-help"
+      >Подсказка<textarea
+        appField
+        id="solution-field-help"
+        formControlName="helpText"
+        rows="3"
+        maxlength="4000"
+      ></textarea>
+    </label>
+    <label class="project-form__checkbox"
+      ><input appChoice type="checkbox" formControlName="required" />Обязательно перед сдачей</label
+    >
+    @if (editor.controls.type.value === "select" || editor.controls.type.value === "radio") {
+      <fieldset class="project-form__options">
+        <legend>Варианты выбора *</legend>
+        <div formArrayName="options">
+          @for (option of editor.controls.options.controls; track option; let index = $index) {
+            <div class="project-form__option">
+              <input
+                appField
+                [formControlName]="index"
+                [attr.aria-label]="'Вариант ' + (index + 1)"
+                maxlength="1000"
+              /><button appButton="text" type="button" (click)="removeOption(index)">Убрать</button>
+            </div>
+          }
+        </div>
+        <button appButton="secondary" type="button" (click)="addOption()">Добавить вариант</button>
+      </fieldset>
+    }
+    @if (["text", "textarea", "url"].includes(editor.controls.type.value)) {
+      <div class="constraints">
+        <label
+          >Минимум символов<input
+            appField
+            type="number"
+            formControlName="minLength"
+            min="0"
+            step="1" /></label
+        ><label
+          >Максимум символов<input
+            appField
+            type="number"
+            formControlName="maxLength"
+            min="0"
+            step="1"
+        /></label>
+      </div>
+    }
+    @if (editor.controls.type.value === "number") {
+      <div class="constraints">
+        <label
+          >Минимальное число<input
+            appField
+            type="number"
+            formControlName="minimum"
+            step="any" /></label
+        ><label
+          >Максимальное число<input appField type="number" formControlName="maximum" step="any"
+        /></label>
+      </div>
+    }
+    @if (editor.controls.type.value === "file") {
+      <label
+        >Разрешенные расширения через запятую<input
+          appField
+          formControlName="extensions"
+          placeholder="pdf, zip" /></label
+      ><label
+        >Максимальный размер файла, МиБ<input
+          appField
+          type="number"
+          formControlName="maxFileSizeMiB"
+          min="0.000001"
+          max="100"
+          step="any"
+      /></label>
+      <p>
+        Один файл на поле, не более 100 МиБ. Пустой список расширений сохраняет общий список
+        разрешенных типов загрузки.
+      </p>
+    }
+    @if (editorError()) {
+      <p appAlert="error" role="alert">{{ editorError() }}</p>
+    }
+    @if (editor.invalid && editor.touched) {
+      <p appAlert="error" role="alert">Проверьте обязательные поля и ограничения.</p>
+    }
+    <div class="project-form__actions">
+      <button appButton="primary" type="submit">Применить</button
+      ><button appButton="secondary" type="button" (click)="closeEditor()">Отмена</button>
+    </div>
+  </form>
+</app-modal>
+<app-modal
+  [open]="previewOpen()"
+  labelledBy="solution-form-preview-title"
+  size="large"
+  (openChange)="previewOpen.set(false)"
+>
+  <div class="project-form__dialog">
+    <header class="project-form__dialog-heading">
+      <h2 id="solution-form-preview-title">Предпросмотр решения</h2>
+      <button
+        appButton="icon"
+        type="button"
+        aria-label="Закрыть предпросмотр"
+        (click)="previewOpen.set(false)"
+      >
+        <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+      </button>
+    </header>
+    <app-solution-fields [fields]="previewFields()" [group]="previewGroup()" [preview]="true" />
+  </div>
+</app-modal>

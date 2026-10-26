@@ -1,0 +1,913 @@
+{
+  "checks": [
+    "actual-manager-assignment-case_championship-competitive",
+    "actual-expert-reminder-case_championship-competitive",
+    "actual-expert-score-case_championship-competitive",
+    "expert-case_championship-competitive:320",
+    "expert-case_championship-competitive:390",
+    "expert-case_championship-competitive:768",
+    "expert-case_championship-competitive:1440",
+    "results-case_championship-competitive:320",
+    "results-case_championship-competitive:390",
+    "results-case_championship-competitive:768",
+    "results-case_championship-competitive:1440",
+    "expert-to-organizer-results-case_championship-competitive",
+    "actual-manager-assignment-hackathon-competitive",
+    "actual-expert-reminder-hackathon-competitive",
+    "actual-expert-score-hackathon-competitive",
+    "expert-hackathon-competitive:320",
+    "expert-hackathon-competitive:390",
+    "expert-hackathon-competitive:768",
+    "expert-hackathon-competitive:1440",
+    "results-hackathon-competitive:320",
+    "results-hackathon-competitive:390",
+    "results-hackathon-competitive:768",
+    "results-hackathon-competitive:1440",
+    "expert-to-organizer-results-hackathon-competitive"
+  ],
+  "wire": [
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-analytics/assignments/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/experts/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-analytics/solutions/?submission=submitted&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-evaluation/experts/13/assignments/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "PUT",
+      "path": "/programs/52/management/solution-evaluation/experts/13/assignments/",
+      "status": 200,
+      "request": {
+        "revision": "f6cbd03c36307a3351a5755edc649c9ea937ac28bd58829dd9d5d7f444a5e13a",
+        "solution_ids": [72]
+      }
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-analytics/assignments/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/experts/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-analytics/solutions/?submission=submitted&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-analytics/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-analytics/solutions/?scope=awaiting_evaluation&search=&limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/52/management/solution-analytics/attention/solutions-awaiting-evaluation/reminder-preview/",
+      "status": 200,
+      "request": {
+        "search": "",
+        "selection": {
+          "mode": "all",
+          "ids": [],
+          "excluded_ids": []
+        }
+      }
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/52/management/solution-analytics/attention/solutions-awaiting-evaluation/reminders/",
+      "status": 200,
+      "request": {
+        "token": "[redacted]"
+      }
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/programs/52/solutions/72/evaluation/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "POST",
+      "path": "/auth/users/current/acknowledge-verification-notice/",
+      "status": 200,
+      "request": {}
+    },
+    {
+      "role": "expert",
+      "method": "POST",
+      "path": "/programs/52/solutions/72/evaluation/",
+      "status": 200,
+      "request": {
+        "expected_criteria_revision": "4d1aadf56089f600861ed74e0fabc7be271e115cea7282c4cbf21ee1385fa658",
+        "scores": [
+          {
+            "criterion_id": 102,
+            "value": "Проверка решения 52"
+          },
+          {
+            "criterion_id": 103,
+            "value": "0"
+          },
+          {
+            "criterion_id": 104,
+            "value": "False"
+          },
+          {
+            "criterion_id": 105,
+            "value": ""
+          }
+        ]
+      }
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-results/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-results/export/?search=&case_scope=all&order=desc&scope=current&status=all",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/solution-analytics/assignments/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/experts/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/solution-analytics/solutions/?submission=submitted&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/experts/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/53/management/solution-evaluation/allocation/",
+      "status": 200,
+      "request": {
+        "revision": "3d1efde1520983e9f29685656fdb662b92fcc466d299865e9849e6abf26176b6",
+        "expert_ids": [13],
+        "solution_ids": [74]
+      }
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/53/management/solution-evaluation/allocation/apply/",
+      "status": 200,
+      "request": {
+        "plan_token": "[redacted]"
+      }
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/solution-analytics/assignments/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/experts/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/solution-analytics/solutions/?submission=submitted&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/solution-analytics/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/solution-analytics/solutions/?scope=awaiting_evaluation&search=&limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/53/management/solution-analytics/attention/solutions-awaiting-evaluation/reminder-preview/",
+      "status": 200,
+      "request": {
+        "search": "",
+        "selection": {
+          "mode": "all",
+          "ids": [],
+          "excluded_ids": []
+        }
+      }
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/53/management/solution-analytics/attention/solutions-awaiting-evaluation/reminders/",
+      "status": 200,
+      "request": {
+        "token": "[redacted]"
+      }
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "GET",
+      "path": "/programs/53/solutions/74/evaluation/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "expert",
+      "method": "POST",
+      "path": "/programs/53/solutions/74/evaluation/",
+      "status": 200,
+      "request": {
+        "expected_criteria_revision": "1a24ae348ae3c7146e40edeefceda0d05a98b29dbeb192499eda9586d3914ad1",
+        "scores": [
+          {
+            "criterion_id": 106,
+            "value": "Проверка решения 53"
+          },
+          {
+            "criterion_id": 107,
+            "value": "0"
+          },
+          {
+            "criterion_id": 108,
+            "value": "False"
+          },
+          {
+            "criterion_id": 109,
+            "value": ""
+          }
+        ]
+      }
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/solution-results/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/solution-results/export/?search=&case_scope=all&order=desc&scope=current&status=all",
+      "status": 200,
+      "request": null
+    }
+  ],
+  "pageErrors": [],
+  "deniedExternal": [
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif"
+  ],
+  "completed": true
+}

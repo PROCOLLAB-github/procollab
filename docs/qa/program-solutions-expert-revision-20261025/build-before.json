@@ -1,0 +1,28 @@
+{
+  "phase": "before",
+  "source": "Z:\\Документы\\PROCOLLAB-dev\\procollab-dev-program-solutions-fe01-20261024\\dist\\social_platform",
+  "target": "C:\\Users\\evsee\\AppData\\Local\\Temp\\procollab-expert-revision-angular-before",
+  "frontendHead": "091d1ee11b64f5c1037a1a3213d66029355a05c1",
+  "modifiedGeneratedFiles": [
+    {
+      "file": "chunk-CHX6T2XY.js",
+      "before": "4707c125db5485fa8b5eeb9e30e23c6f90759d9f2daf86b56a5a0b332da287dd",
+      "after": "d8252699c1d7f5986df9684f6f5b9be81943d068050e6537958be0680cac6380"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "file": "projects/social_platform/src/app/ui/pages/program/solution-evaluation/solution-evaluation.component.ts",
+      "sha256": "99a15748ee90b0af888cbdbc66d52b23726724bf8ef40491da90e11cbd664471"
+    },
+    {
+      "file": "projects/social_platform/src/app/ui/pages/program/solution-evaluation/solution-evaluation.component.html",
+      "sha256": "f9400085e4299ac705c93f455586a2e4973be31634f3a2cb286c748b95f5f326"
+    },
+    {
+      "file": "projects/social_platform/src/app/ui/pages/program/solution-evaluation/solution-evaluation-list.component.ts",
+      "sha256": "8f59ea76b5ce19fb5cef7a40945f5dfd513b960c70ae679c6a964106247ae29f"
+    }
+  ],
+  "productEnvironmentUnchanged": true
+}

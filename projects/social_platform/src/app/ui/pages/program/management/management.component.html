@@ -25,7 +25,11 @@
               ? 'page'
               : null
           "
-          >{{ tab.label }}</a
+          >{{
+            tab.id === "projects" && program.solutionStorageMode === "solution"
+              ? "Заявки"
+              : tab.label
+          }}</a
         >
       }
     </nav>
@@ -54,16 +58,37 @@
       />
     }
     @if (section() === "results") {
-      <app-management-results [programId]="program.id" />
-    }
-    @if (section() === "experts") {
-      <app-management-experts
+      <app-management-results
         [programId]="program.id"
-        [confirmDiscard]="confirmProjectFormDiscard"
-        (statusChange)="expertsStatus.set($event)"
+        [solutionMode]="program.solutionStorageMode === 'solution'"
+        [submissionApplicable]="program.isCompetitive"
       />
     }
-    @if (section() === "participants" || section() === "projects") {
+    @if (section() === "experts") {
+      @if (program.solutionStorageMode === "solution") {
+        <app-solution-experts
+          [programId]="program.id"
+          [confirmDiscard]="confirmProjectFormDiscard"
+          (statusChange)="expertsStatus.set($event)"
+        />
+      } @else {
+        <app-management-experts
+          [programId]="program.id"
+          [confirmDiscard]="confirmProjectFormDiscard"
+          (statusChange)="expertsStatus.set($event)"
+        />
+      }
+    }
+    @if (section() === "projects" && program.solutionStorageMode === "solution") {
+      <app-solution-applications
+        [program]="program"
+        (busyChange)="solutionActionBusy.set($event)"
+      />
+    }
+    @if (
+      section() === "participants" ||
+      (section() === "projects" && program.solutionStorageMode !== "solution")
+    ) {
       <section class="management__card" [attr.aria-busy]="state.pending()">
         <div class="management__list-heading">
           <div>
@@ -644,13 +669,21 @@
         >
       }
       @if (settingsTab() === "project-form") {
-        <app-management-project-form
-          [programId]="program.id"
-          [confirmDiscard]="confirmProjectFormDiscard"
-          (statusChange)="projectFormStatus.set($event)"
-          (savedAt)="projectFormSaved($event)"
-          (materials)="changeQuery({ tab: 'materials' })"
-        />
+        @if (program.solutionStorageMode === "solution") {
+          <app-management-solution-form
+            [programId]="program.id"
+            [confirmDiscard]="confirmProjectFormDiscard"
+            (statusChange)="projectFormStatus.set($event)"
+          />
+        } @else {
+          <app-management-project-form
+            [programId]="program.id"
+            [confirmDiscard]="confirmProjectFormDiscard"
+            (statusChange)="projectFormStatus.set($event)"
+            (savedAt)="projectFormSaved($event)"
+            (materials)="changeQuery({ tab: 'materials' })"
+          />
+        }
       } @else if (settingsTab() === "criteria") {
         <app-management-criteria
           [programId]="program.id"
@@ -1070,6 +1103,14 @@
     </section>
   }
 </app-modal>
+@if (solutionRemovalRequest()) {
+  <app-solution-registration-removal
+    [request]="solutionRemovalRequest()"
+    (closed)="solutionRemovalRequest.set(null)"
+    (busyChange)="solutionActionBusy.set($event)"
+    (completed)="solutionRegistrationsRemoved($event)"
+  />
+}
 <app-management-project-actions
   [request]="projectActionRequest()"
   [caseOptions]="state.projects()?.caseOptions ?? []"

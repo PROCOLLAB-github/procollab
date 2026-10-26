@@ -8,6 +8,7 @@
   [disabled]="disabled()"
   [cdkMenuTriggerFor]="menu"
   [cdkMenuPosition]="positions"
+  (cdkMenuOpened)="opened.emit()"
   (click)="$event.stopPropagation()"
 >
   <i appIcon icon="dots" appSquare="16" aria-hidden="true"></i>

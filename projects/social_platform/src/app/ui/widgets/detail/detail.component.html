@@ -92,7 +92,7 @@
           }
 
           <ng-template #programTpl>
-            @if (userType() !== undefined) {
+            @if (userType() !== undefined || publicationsOnly()) {
               @if (
                 (isProjectsPage() ||
                   isProjectsRatingPage() ||
@@ -170,12 +170,16 @@
                     <app-button
                       [size]="appWidth >= 1000 ? 'medium' : 'big'"
                       [disabled]="
-                        !!submissionProjectDateExpired ||
-                        isProjectAssigned() ||
+                        (info().solutionStorageMode !== 'solution' &&
+                          (!!submissionProjectDateExpired || isProjectAssigned())) ||
                         applicationPending()
                       "
                       [appearance]="isProjectAssigned() ? 'outline' : 'inline'"
-                      (click)="isProjectAssigned() ? null : addNewProject(info().id)"
+                      (click)="
+                        info().solutionStorageMode === 'solution' || !isProjectAssigned()
+                          ? addNewProject(info().id)
+                          : null
+                      "
                       customTypographyClass="text-body-12 bar__add-project"
                     >
                       <span>{{ applicationLabel() }}</span>
@@ -195,7 +199,9 @@
                     >
                   }
                   @if (isUserExpert()) {
-                    <a [routerLink]="AppRoutes.program.projectsRating(info().id)">
+                    <a
+                      [routerLink]="AppRoutes.program.rating(info().id, info().solutionStorageMode)"
+                    >
                       <app-button
                         [appearance]="
                           isProjectsRatingPage() || appWidth < 1000 ? 'inline' : 'outline'
@@ -203,7 +209,11 @@
                         [size]="appWidth >= 1000 ? 'medium' : 'big'"
                         customTypographyClass="text-body-12"
                       >
-                        оценка проектов
+                        {{
+                          info().solutionStorageMode === "solution"
+                            ? "оценка решений"
+                            : "оценка проектов"
+                        }}
                       </app-button>
                     </a>
                   }
@@ -261,7 +271,21 @@
                     </app-button>
                   }
                 }
-                @if (!isUserManager() && isUserExpert() && appWidth >= 1000) {
+                @if (info().solutionStorageMode === "solution") {
+                  <a
+                    [routerLink]="AppRoutes.program.publishedSolutions(info().id)"
+                    routerLinkActive
+                    #publishedLink="routerLinkActive"
+                    [attr.aria-current]="publishedLink.isActive ? 'page' : null"
+                  >
+                    <app-button
+                      [appearance]="publishedLink.isActive ? 'inline' : 'outline'"
+                      [size]="appWidth >= 1000 ? 'medium' : 'small'"
+                      customTypographyClass="text-body-12"
+                      >решения</app-button
+                    >
+                  </a>
+                } @else if (!isUserManager() && isUserExpert() && appWidth >= 1000) {
                   <a [routerLink]="AppRoutes.program.projects(info().id)">
                     <app-button
                       [appearance]="isProjectsPage() ? 'inline' : 'outline'"
@@ -343,11 +367,15 @@
                           class="cancel__cross"
                         ></i>
                         <p class="cancel__title text-body-14">
-                          произошла ошибка при редактировании!
+                          {{
+                            info().solutionStorageMode === "solution"
+                              ? "не удалось открыть решение"
+                              : "произошла ошибка при редактировании!"
+                          }}
                         </p>
                       </div>
                       <p class="text-body-12 cancel__text">
-                        {{ assignProjectToProgramModalMessage() }}.
+                        {{ assignProjectToProgramModalMessage() }}
                       </p>
                     </div>
                   </app-modal>

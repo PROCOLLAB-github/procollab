@@ -18,7 +18,10 @@ import { AppRoutes } from "@api/paths/app-routes";
 import { PROGRAM_CASE_FIELD_NAME } from "@domain/program/program-case-field.const";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { GetSolutionContextUseCase } from "@api/solution/use-cases/solution.use-cases";
-import { solutionApplicationRoute } from "@api/solution/solution-navigation";
+import {
+  solutionApplicationRoute,
+  solutionCreationBlockedMessage,
+} from "@api/solution/solution-navigation";
 
 @Injectable()
 export class DetailProgramInfoService {
@@ -56,17 +59,22 @@ export class DetailProgramInfoService {
   );
   readonly applicationPending = signal(false);
   readonly applicationLabel = computed(() =>
-    this.application()?.submitted
-      ? "вы подали проект"
-      : this.application()
-        ? "перейти в заявку"
-        : "создать заявку",
+    this.programDetailMainUIInfoService.program()?.solutionStorageMode === "solution"
+      ? "мое решение"
+      : this.application()?.submitted
+        ? "вы подали проект"
+        : this.application()
+          ? "перейти в заявку"
+          : "создать заявку",
   );
 
   addNewProject(programId: number): void {
-    if (this.applicationPending() || this.application()?.submitted) return;
+    if (this.applicationPending()) return;
+    const solutionMode =
+      this.programDetailMainUIInfoService.program()?.solutionStorageMode === "solution";
+    if (!solutionMode && this.application()?.submitted) return;
     // Existing legacy references already carry the exact project and program-link IDs.
-    if (this.application()) {
+    if (!solutionMode && this.application()) {
       this.openApplication();
       return;
     }
@@ -92,7 +100,7 @@ export class DetailProgramInfoService {
           void this.router.navigate([AppRoutes.program.solutionCreate(programId)]);
         } else {
           this.assignProjectToProgramModalMessage.set(
-            "Создание заявки сейчас недоступно. Проверьте регистрацию и сроки программы.",
+            solutionCreationBlockedMessage(context.blockedReason),
           );
           this.isAssignProjectToProgramModalOpen.set(true);
         }

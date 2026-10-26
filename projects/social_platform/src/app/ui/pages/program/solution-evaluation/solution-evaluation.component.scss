@@ -1,0 +1,42 @@
+@use "../rating/rating-workspace.component";
+@use "../detail/list/rating-card/rating-card.component";
+
+[hidden] {
+  display: none !important;
+}
+
+.solution-evaluation-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.solution-evaluation-sections {
+  display: flex;
+  gap: 4px;
+  width: min(100%, 432px);
+  padding: 4px;
+  background: var(--medium-grey-for-outline);
+  border-radius: 24px;
+}
+
+.solution-evaluation-sections .ui-button {
+  flex: 1;
+  min-height: 40px;
+  color: var(--black);
+  background: transparent;
+  border-color: transparent;
+}
+
+.solution-evaluation-sections [aria-current="page"] {
+  color: var(--accent);
+  background: var(--white, #fff);
+}
+
+.scoring__materials {
+  overflow-wrap: anywhere;
+}
+
+.rating-list__rows li.rating-list__empty {
+  grid-template-columns: minmax(0, 1fr);
+}

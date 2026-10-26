@@ -1,0 +1,25 @@
+/** @format */
+
+@use "../project-form/project-form.component";
+
+.constraints {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.template-choice {
+  align-items: end;
+  margin-top: 16px;
+}
+
+.template-choice label {
+  flex: 1;
+  min-width: 180px;
+}
+
+@media (max-width: 600px) {
+  .constraints {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

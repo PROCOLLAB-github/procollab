@@ -1,84 +1,442 @@
 <!-- @format -->
 
-<main class="analytics" aria-labelledby="program-analytics-title">
-  <header class="analytics__header">
-    <div class="analytics__title-row">
-      <h1 id="program-analytics-title" class="analytics__title text-heading-3">Аналитика</h1>
-      @if (data()) {
-        <button
-          appButton="icon"
-          type="button"
-          class="regions__export analytics__export-trigger"
-          [cdkMenuTriggerFor]="analyticsExports"
-          [disabled]="loadingExports()"
-          [attr.aria-busy]="loadingExports()"
-          aria-label="Выгрузить данные программы"
-          title="Выгрузить данные программы"
-        >
-          <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
-        </button>
-        <ng-template #analyticsExports>
-          <div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
-            <button cdkMenuItem type="button" (click)="downloadProgram()">Вся программа</button>
-            <button cdkMenuItem type="button" (click)="downloadProjects()">Все проекты</button>
-            <button cdkMenuItem type="button" (click)="downloadSubmittedProjects()">
-              Сданные проекты
-            </button>
-            <button cdkMenuItem type="button" (click)="downloadRates()">Оценки проектов</button>
-          </div>
-        </ng-template>
-      }
-    </div>
-    @if (loadingExports()) {
-      <p class="text-body-10" role="status">Подготавливаем Excel…</p>
-    }
-    @if (exportFailed()) {
-      <app-state
-        class="exports__error text-body-10"
-        [compact]="true"
-        kind="error"
-        title="Не удалось подготовить выгрузку. Повторите попытку."
-      />
-    }
-  </header>
-
-  @if (pending()) {
-    <section class="analytics__loading" aria-live="polite" data-testid="analytics-loading">
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      <p class="text-body-10">Загружаем аналитику программы…</p>
-      <div class="summary summary--loading" aria-hidden="true">
-        @for (_ of [1, 2, 3, 4]; track $index) {
-          <div class="summary-card summary-card--skeleton"></div>
+@if (solutionMode()) {
+  @if (programId(); as id) {
+    <app-solution-analytics [programId]="id" [dates]="scheduleDates()" />
+  }
+} @else {
+  <main class="analytics" aria-labelledby="program-analytics-title">
+    <header class="analytics__header">
+      <div class="analytics__title-row">
+        <h1 id="program-analytics-title" class="analytics__title text-heading-3">Аналитика</h1>
+        @if (data()) {
+          <button
+            appButton="icon"
+            type="button"
+            class="regions__export analytics__export-trigger"
+            [cdkMenuTriggerFor]="analyticsExports"
+            [disabled]="loadingExports()"
+            [attr.aria-busy]="loadingExports()"
+            aria-label="Выгрузить данные программы"
+            title="Выгрузить данные программы"
+          >
+            <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+          </button>
+          <ng-template #analyticsExports>
+            <div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
+              <button cdkMenuItem type="button" (click)="downloadProgram()">Вся программа</button>
+              <button cdkMenuItem type="button" (click)="downloadProjects()">Все проекты</button>
+              <button cdkMenuItem type="button" (click)="downloadSubmittedProjects()">
+                Сданные проекты
+              </button>
+              <button cdkMenuItem type="button" (click)="downloadRates()">Оценки проектов</button>
+            </div>
+          </ng-template>
         }
       </div>
-    </section>
-  } @else if (failed()) {
-    <section class="analytics-state" role="alert" data-testid="analytics-error">
-      <i appIcon icon="accent-error" appSquare="40"></i>
-      <h2 class="text-body-14">Аналитика недоступна</h2>
-      <p class="text-body-10">{{ errorMessage() }}</p>
-      @if (error()?.kind === "network") {
-        <app-button size="medium" customTypographyClass="text-body-10" (click)="retry()">
-          Повторить
-        </app-button>
+      @if (loadingExports()) {
+        <p class="text-body-10" role="status">Подготавливаем Excel…</p>
       }
-    </section>
-  } @else if (data(); as overview) {
-    <section class="summary" aria-label="Основные показатели">
-      @for (card of summary(); track card.key) {
+      @if (exportFailed()) {
+        <app-state
+          class="exports__error text-body-10"
+          [compact]="true"
+          kind="error"
+          title="Не удалось подготовить выгрузку. Повторите попытку."
+        />
+      }
+    </header>
+
+    @if (pending()) {
+      <section class="analytics__loading" aria-live="polite" data-testid="analytics-loading">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <p class="text-body-10">Загружаем аналитику программы…</p>
+        <div class="summary summary--loading" aria-hidden="true">
+          @for (_ of [1, 2, 3, 4]; track $index) {
+            <div class="summary-card summary-card--skeleton"></div>
+          }
+        </div>
+      </section>
+    } @else if (failed()) {
+      <section class="analytics-state" role="alert" data-testid="analytics-error">
+        <i appIcon icon="accent-error" appSquare="40"></i>
+        <h2 class="text-body-14">Аналитика недоступна</h2>
+        <p class="text-body-10">{{ errorMessage() }}</p>
+        @if (error()?.kind === "network") {
+          <app-button size="medium" customTypographyClass="text-body-10" (click)="retry()">
+            Повторить
+          </app-button>
+        }
+      </section>
+    } @else if (data(); as overview) {
+      <section class="summary" aria-label="Основные показатели">
+        @for (card of summary(); track card.key) {
+          <article
+            class="summary-card"
+            [attr.data-metric]="card.key"
+            [attr.data-testid]="'summary-' + card.key"
+          >
+            <div class="summary-card__icon">
+              <i appIcon [icon]="card.icon!" appSquare="24" aria-hidden="true"></i>
+            </div>
+            <div class="summary-card__content">
+              <div class="analytics__heading-row">
+                <h2 class="summary-card__label text-body-10">{{ card.label }}</h2>
+                <app-tooltip
+                  data-testid="metric-tooltip"
+                  [text]="card.tooltip"
+                  [isVisible]="isTooltipVisible(card.key)"
+                  [useOverlay]="true"
+                  (click)="toggleTooltip(card.key)"
+                  (show)="showTooltip(card.key)"
+                  (hide)="hideTooltip(card.key)"
+                ></app-tooltip>
+              </div>
+              <strong class="summary-card__value">{{ card.value }}</strong>
+            </div>
+          </article>
+        }
+      </section>
+
+      <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
         <article
-          class="summary-card"
-          [attr.data-metric]="card.key"
-          [attr.data-testid]="'summary-' + card.key"
+          class="attention"
+          [class.attention--empty]="!hasValues(attention())"
+          data-testid="attention-block"
         >
-          <div class="summary-card__icon">
-            <i appIcon [icon]="card.icon!" appSquare="24" aria-hidden="true"></i>
+          <div class="analytics__heading-row">
+            <h2 class="text-body-12">Требует внимания</h2>
+            <app-tooltip
+              text="Показатели, которые могут потребовать действия организатора."
+              [isVisible]="isTooltipVisible('attention')"
+              [useOverlay]="true"
+              (click)="toggleTooltip('attention')"
+              (show)="showTooltip('attention')"
+              (hide)="hideTooltip('attention')"
+            ></app-tooltip>
           </div>
-          <div class="summary-card__content">
+          @if (hasValues(attention()) || data()?.attention?.projectsNotSubmitted?.applicable) {
+            <ul class="attention__list">
+              @for (item of attention(); track item.key) {
+                <li
+                  [class.attention__row--disabled]="item.value === 0"
+                  [attr.data-attention-kind]="item.key"
+                >
+                  <button
+                    appButton="primary"
+                    #attentionTrigger
+                    type="button"
+                    class="attention__action"
+                    [disabled]="item.value === 0"
+                    (click)="
+                      drilldown.openAttention(
+                        item.key === 'without-visit'
+                          ? 'participants-without-visit'
+                          : item.key === 'without-team'
+                            ? 'participants-without-team'
+                            : 'projects-awaiting-evaluation',
+                        attentionTrigger
+                      )
+                    "
+                  >
+                    <span class="attention__icon"
+                      ><i
+                        appIcon
+                        [icon]="
+                          item.key === 'without-visit'
+                            ? 'person'
+                            : item.key === 'without-team'
+                              ? 'analytics-team'
+                              : 'pen'
+                        "
+                        appSquare="20"
+                        aria-hidden="true"
+                      ></i
+                    ></span>
+                    <span class="text-body-10">{{ item.label }}</span
+                    ><strong>{{ item.value }}</strong>
+                  </button>
+                  <app-tooltip
+                    [text]="item.tooltip"
+                    role="button"
+                    tabindex="0"
+                    [attr.aria-label]="item.tooltip"
+                    [attr.aria-expanded]="isTooltipVisible(item.key)"
+                    [isVisible]="isTooltipVisible(item.key)"
+                    [useOverlay]="true"
+                    position="left"
+                    (click)="toggleTooltip(item.key)"
+                    (keydown.enter)="toggleTooltip(item.key); $event.preventDefault()"
+                    (keydown.space)="toggleTooltip(item.key); $event.preventDefault()"
+                    (keydown.escape)="closeTooltip(item.key)"
+                    (focus)="showTooltip(item.key)"
+                    (blur)="closeTooltip(item.key)"
+                    (show)="showTooltip(item.key)"
+                    (hide)="hideTooltip(item.key)"
+                  ></app-tooltip>
+                </li>
+              }
+            </ul>
+          }
+          @if (!hasValues(attention())) {
+            <p class="analytics-empty-state attention__empty text-body-10">
+              Ничего не требует внимания
+            </p>
+          }
+        </article>
+        <article class="analytics-card program-deadlines" data-testid="program-deadlines">
+          <div class="analytics__heading-row">
+            <h2 class="analytics-card__title">Сроки программы</h2>
+            <app-tooltip
+              text="Текущий этап выделен. Даты из настроек программы, по времени вашего устройства. Если отдельный срок приема решений не задан, действует срок регистрации."
+              [isVisible]="isTooltipVisible('program-deadlines')"
+              [useOverlay]="true"
+              (click)="toggleTooltip('program-deadlines')"
+              (show)="showTooltip('program-deadlines')"
+              (hide)="hideTooltip('program-deadlines')"
+            ></app-tooltip>
+          </div>
+          @if (deadlines().length) {
+            <ul class="program-deadlines__list">
+              @for (deadline of deadlines(); track deadline.key) {
+                <li
+                  class="program-deadlines__row"
+                  [class.program-deadlines__row--active]="deadline.active"
+                  [class.program-deadlines__row--ended]="deadline.ended"
+                  [attr.data-deadline]="deadline.key"
+                >
+                  <div class="program-deadlines__content">
+                    <h3 class="program-deadlines__label">{{ deadline.label }}</h3>
+                    <time class="program-deadlines__date" [attr.datetime]="deadline.datetime">
+                      {{ deadline.dateLabel }}
+                    </time>
+                    @if (deadline.usesRegistrationDeadline) {
+                      <span class="program-deadlines__hint">По сроку регистрации</span>
+                    }
+                  </div>
+                  <span class="program-deadlines__status">{{ deadline.status }}</span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="analytics-empty-state text-body-10">Сроки программы пока не заданы</p>
+          }
+        </article>
+      </section>
+
+      <section class="analytics-grid" aria-label="Воронки программы">
+        <article class="analytics-card" data-testid="participant-funnel">
+          <div class="analytics__heading-row">
+            <h2 class="text-body-12">Воронка участников</h2>
+            <app-tooltip
+              text="Регистрация в программе → зафиксированное посещение платформы → участие в команде. Показано текущее состояние участников; посещение учитывается и до регистрации в этой программе."
+              [isVisible]="isTooltipVisible('participant-funnel')"
+              [useOverlay]="true"
+              (click)="toggleTooltip('participant-funnel')"
+              (show)="showTooltip('participant-funnel')"
+              (hide)="hideTooltip('participant-funnel')"
+            ></app-tooltip>
+          </div>
+          @if (hasValues(participantFunnel())) {
+            <app-analytics-funnel-chart
+              [items]="participantFunnel()"
+              label="Воронка участников"
+              kind="participants"
+            ></app-analytics-funnel-chart>
+          } @else {
+            <p class="analytics-empty-state text-body-10">Пока нет данных по участникам</p>
+          }
+        </article>
+
+        <article class="analytics-card" data-testid="solution-funnel">
+          <div class="analytics__heading-row">
+            <h2 class="text-body-12">Воронка проектов</h2>
+            <app-tooltip
+              text="Путь проектов программы от создания до оценки."
+              [isVisible]="isTooltipVisible('solution-funnel')"
+              [useOverlay]="true"
+              (click)="toggleTooltip('solution-funnel')"
+              (show)="showTooltip('solution-funnel')"
+              (hide)="hideTooltip('solution-funnel')"
+            ></app-tooltip>
+          </div>
+          @if (hasValues(solutionFunnel())) {
+            <app-analytics-funnel-chart
+              [items]="solutionFunnel()"
+              label="Воронка проектов"
+              kind="projects"
+            ></app-analytics-funnel-chart>
+          } @else {
+            <p class="analytics-empty-state text-body-10">Нет решений для отображения</p>
+          }
+        </article>
+      </section>
+
+      <section class="analytics-grid analytics-grid--evaluation" aria-label="Ход оценивания">
+        <article class="analytics-card evaluation" data-testid="evaluation-statuses">
+          <div class="analytics__heading-row">
+            <div>
+              <h2 class="analytics-card__title">Ход оценивания</h2>
+              <p class="evaluation__mode analytics-card__subtitle">{{ evaluationModeLabel() }}</p>
+            </div>
+            <app-tooltip
+              text="Доля выполненных назначений экспертов. Назначение выполнено, когда эксперт заполнил все критерии сданного проекта."
+              [isVisible]="isTooltipVisible('evaluation-status')"
+              [useOverlay]="true"
+              (click)="toggleTooltip('evaluation-status')"
+              (show)="showTooltip('evaluation-status')"
+              (hide)="hideTooltip('evaluation-status')"
+            ></app-tooltip>
+          </div>
+          <app-analytics-evaluation-progress
+            [programId]="programId()"
+            [status]="overview.evaluationStatus"
+            (openAssignments)="drilldown.openAssignments($event.scope, $event.trigger)"
+          />
+        </article>
+      </section>
+
+      <section class="analytics-bottom" aria-label="Кейсы и динамика">
+        <article class="analytics-card cases-card" data-testid="cases-card">
+          <div class="analytics__heading-row">
+            <h2 class="cases-card__title" id="analytics-cases-title">Кейсы</h2>
+            <app-tooltip
+              text="Распределение проектов и участников по кейсам программы. Один участник может учитываться в нескольких кейсах."
+              [isVisible]="isTooltipVisible('cases')"
+              [useOverlay]="true"
+              (click)="toggleTooltip('cases')"
+              (show)="showTooltip('cases')"
+              (hide)="hideTooltip('cases')"
+            ></app-tooltip>
+          </div>
+          @if (caseEmptyMessage(); as message) {
+            <p class="analytics-empty-state text-body-10">{{ message }}</p>
+          }
+          @if (caseRows().length) {
+            <div
+              class="cases-card__columns"
+              aria-hidden="true"
+              [class.cases-card__columns--without-submission]="!overview.cases.submissionApplicable"
+            >
+              <span>Кейс</span><span>Проекты</span>
+              @if (overview.cases.submissionApplicable) {
+                <span>Сдано</span>
+              }
+              <span>Участники</span>
+            </div>
+            <ul
+              class="cases-card__list"
+              id="analytics-cases-list"
+              aria-labelledby="analytics-cases-title"
+            >
+              @for (row of casesExpanded() ? caseRows() : caseRows().slice(0, 8); track row.key) {
+                <li>
+                  <button
+                    type="button"
+                    #caseTrigger
+                    class="case-row"
+                    [class.case-row--without-case]="row.isWithoutCase"
+                    [class.case-row--without-submission]="!overview.cases.submissionApplicable"
+                    [attr.aria-label]="row.description + '. Открыть проекты кейса'"
+                    aria-haspopup="dialog"
+                    (click)="
+                      drilldown.openCase(
+                        caseSelection(row),
+                        row,
+                        overview.cases.submissionApplicable,
+                        caseTrigger
+                      )
+                    "
+                  >
+                    <span class="case-row__name">{{ row.name }}</span>
+                    <span class="case-row__projects">
+                      <strong>{{ row.projectsTotal }}</strong>
+                      <span class="case-row__mobile-label">{{ row.totalLabel }}</span>
+                      <span class="case-row__bar" aria-hidden="true">
+                        <span class="case-row__volume" [style.width.%]="row.totalPercent"></span>
+                      </span>
+                    </span>
+                    @if (overview.cases.submissionApplicable) {
+                      <span class="case-row__metric"
+                        ><span class="case-row__mobile-label">Сдано</span
+                        ><strong>{{ row.submitted }}</strong></span
+                      >
+                    }
+                    <span class="case-row__metric"
+                      ><span class="case-row__mobile-label">Участники</span
+                      ><strong>{{ row.participantsTotal }}</strong></span
+                    >
+                  </button>
+                </li>
+              }
+            </ul>
+            @if (caseRows().length > 8) {
+              <button
+                appButton="secondary"
+                type="button"
+                class="cases-card__expand"
+                aria-controls="analytics-cases-list"
+                [attr.aria-expanded]="casesExpanded()"
+                (click)="casesExpanded.set(!casesExpanded())"
+              >
+                {{
+                  casesExpanded() ? "Свернуть" : "Показать все кейсы (" + caseRows().length + ")"
+                }}
+              </button>
+            }
+          }
+        </article>
+
+        <article class="activity" data-testid="activity-dynamics">
+          <div class="analytics__heading-row">
+            <div>
+              <h2 class="analytics-card__title">Динамика активности</h2>
+              @if (hasActivity()) {
+                <p class="activity__note analytics-card__subtitle">Последние 30 дней</p>
+              }
+            </div>
+            <app-tooltip
+              text="Ежедневные новые регистрации и отправленные решения за последние 30 дней."
+              [isVisible]="isTooltipVisible('activity')"
+              [useOverlay]="true"
+              position="left"
+              (click)="toggleTooltip('activity')"
+              (show)="showTooltip('activity')"
+              (hide)="hideTooltip('activity')"
+            ></app-tooltip>
+          </div>
+          @if (hasActivity()) {
+            <app-analytics-activity-chart [points]="overview.activity" />
+          } @else {
+            <p class="analytics-empty-state text-body-12">
+              За последние 30 дней активности не было
+            </p>
+          }
+        </article>
+      </section>
+
+      <section class="regions-grid" aria-label="География программы">
+        @for (card of regionCards(); track card.key) {
+          <article
+            class="regions"
+            [attr.aria-labelledby]="card.key + '-title'"
+            [attr.data-testid]="card.key"
+          >
             <div class="analytics__heading-row">
-              <h2 class="summary-card__label text-body-10">{{ card.label }}</h2>
+              <h2 [id]="card.key + '-title'" class="text-body-12">{{ card.title }}</h2>
+              <button
+                appButton="icon"
+                type="button"
+                class="regions__export"
+                [attr.aria-label]="'Выгрузить ' + card.title.toLowerCase() + ' в Excel'"
+                [attr.title]="card.items.length ? 'Скачать XLSX' : 'Нет данных для выгрузки'"
+                [disabled]="!card.items.length || regionExportState()[card.key].pending"
+                [attr.aria-busy]="regionExportState()[card.key].pending"
+                (click)="downloadRegions(card.key)"
+              >
+                <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+              </button>
               <app-tooltip
-                data-testid="metric-tooltip"
                 [text]="card.tooltip"
                 [isVisible]="isTooltipVisible(card.key)"
                 [useOverlay]="true"
@@ -87,389 +445,41 @@
                 (hide)="hideTooltip(card.key)"
               ></app-tooltip>
             </div>
-            <strong class="summary-card__value">{{ card.value }}</strong>
-          </div>
-        </article>
-      }
-    </section>
-
-    <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
-      <article
-        class="attention"
-        [class.attention--empty]="!hasValues(attention())"
-        data-testid="attention-block"
-      >
-        <div class="analytics__heading-row">
-          <h2 class="text-body-12">Требует внимания</h2>
-          <app-tooltip
-            text="Показатели, которые могут потребовать действия организатора."
-            [isVisible]="isTooltipVisible('attention')"
-            [useOverlay]="true"
-            (click)="toggleTooltip('attention')"
-            (show)="showTooltip('attention')"
-            (hide)="hideTooltip('attention')"
-          ></app-tooltip>
-        </div>
-        @if (hasValues(attention()) || data()?.attention?.projectsNotSubmitted?.applicable) {
-          <ul class="attention__list">
-            @for (item of attention(); track item.key) {
-              <li
-                [class.attention__row--disabled]="item.value === 0"
-                [attr.data-attention-kind]="item.key"
-              >
-                <button
-                  appButton="primary"
-                  #attentionTrigger
-                  type="button"
-                  class="attention__action"
-                  [disabled]="item.value === 0"
-                  (click)="
-                    drilldown.openAttention(
-                      item.key === 'without-visit'
-                        ? 'participants-without-visit'
-                        : item.key === 'without-team'
-                          ? 'participants-without-team'
-                          : 'projects-awaiting-evaluation',
-                      attentionTrigger
-                    )
-                  "
-                >
-                  <span class="attention__icon"
-                    ><i
-                      appIcon
-                      [icon]="
-                        item.key === 'without-visit'
-                          ? 'person'
-                          : item.key === 'without-team'
-                            ? 'analytics-team'
-                            : 'pen'
-                      "
-                      appSquare="20"
-                      aria-hidden="true"
-                    ></i
-                  ></span>
-                  <span class="text-body-10">{{ item.label }}</span
-                  ><strong>{{ item.value }}</strong>
-                </button>
-                <app-tooltip
-                  [text]="item.tooltip"
-                  role="button"
-                  tabindex="0"
-                  [attr.aria-label]="item.tooltip"
-                  [attr.aria-expanded]="isTooltipVisible(item.key)"
-                  [isVisible]="isTooltipVisible(item.key)"
-                  [useOverlay]="true"
-                  position="left"
-                  (click)="toggleTooltip(item.key)"
-                  (keydown.enter)="toggleTooltip(item.key); $event.preventDefault()"
-                  (keydown.space)="toggleTooltip(item.key); $event.preventDefault()"
-                  (keydown.escape)="closeTooltip(item.key)"
-                  (focus)="showTooltip(item.key)"
-                  (blur)="closeTooltip(item.key)"
-                  (show)="showTooltip(item.key)"
-                  (hide)="hideTooltip(item.key)"
-                ></app-tooltip>
-              </li>
+            @if (regionExportState()[card.key].pending) {
+              <app-state
+                class="regions__export-message"
+                [compact]="true"
+                kind="loading"
+                title="Подготавливаем Excel…"
+              />
             }
-          </ul>
-        }
-        @if (!hasValues(attention())) {
-          <p class="analytics-empty-state attention__empty text-body-10">
-            Ничего не требует внимания
-          </p>
-        }
-      </article>
-      <article class="analytics-card program-deadlines" data-testid="program-deadlines">
-        <div class="analytics__heading-row">
-          <h2 class="analytics-card__title">Сроки программы</h2>
-          <app-tooltip
-            text="Текущий этап выделен. Даты из настроек программы, по времени вашего устройства. Если отдельный срок приема решений не задан, действует срок регистрации."
-            [isVisible]="isTooltipVisible('program-deadlines')"
-            [useOverlay]="true"
-            (click)="toggleTooltip('program-deadlines')"
-            (show)="showTooltip('program-deadlines')"
-            (hide)="hideTooltip('program-deadlines')"
-          ></app-tooltip>
-        </div>
-        @if (deadlines().length) {
-          <ul class="program-deadlines__list">
-            @for (deadline of deadlines(); track deadline.key) {
-              <li
-                class="program-deadlines__row"
-                [class.program-deadlines__row--active]="deadline.active"
-                [class.program-deadlines__row--ended]="deadline.ended"
-                [attr.data-deadline]="deadline.key"
-              >
-                <div class="program-deadlines__content">
-                  <h3 class="program-deadlines__label">{{ deadline.label }}</h3>
-                  <time class="program-deadlines__date" [attr.datetime]="deadline.datetime">
-                    {{ deadline.dateLabel }}
-                  </time>
-                  @if (deadline.usesRegistrationDeadline) {
-                    <span class="program-deadlines__hint">По сроку регистрации</span>
-                  }
-                </div>
-                <span class="program-deadlines__status">{{ deadline.status }}</span>
-              </li>
+            @if (regionExportState()[card.key].failed) {
+              <app-state
+                class="regions__export-message exports__error"
+                [compact]="true"
+                kind="error"
+                title="Не удалось создать Excel. Попробуйте еще раз."
+              />
             }
-          </ul>
-        } @else {
-          <p class="analytics-empty-state text-body-10">Сроки программы пока не заданы</p>
-        }
-      </article>
-    </section>
-
-    <section class="analytics-grid" aria-label="Воронки программы">
-      <article class="analytics-card" data-testid="participant-funnel">
-        <div class="analytics__heading-row">
-          <h2 class="text-body-12">Воронка участников</h2>
-          <app-tooltip
-            text="Регистрация в программе → зафиксированное посещение платформы → участие в команде. Показано текущее состояние участников; посещение учитывается и до регистрации в этой программе."
-            [isVisible]="isTooltipVisible('participant-funnel')"
-            [useOverlay]="true"
-            (click)="toggleTooltip('participant-funnel')"
-            (show)="showTooltip('participant-funnel')"
-            (hide)="hideTooltip('participant-funnel')"
-          ></app-tooltip>
-        </div>
-        @if (hasValues(participantFunnel())) {
-          <app-analytics-funnel-chart
-            [items]="participantFunnel()"
-            label="Воронка участников"
-            kind="participants"
-          ></app-analytics-funnel-chart>
-        } @else {
-          <p class="analytics-empty-state text-body-10">Пока нет данных по участникам</p>
-        }
-      </article>
-
-      <article class="analytics-card" data-testid="solution-funnel">
-        <div class="analytics__heading-row">
-          <h2 class="text-body-12">Воронка проектов</h2>
-          <app-tooltip
-            text="Путь проектов программы от создания до оценки."
-            [isVisible]="isTooltipVisible('solution-funnel')"
-            [useOverlay]="true"
-            (click)="toggleTooltip('solution-funnel')"
-            (show)="showTooltip('solution-funnel')"
-            (hide)="hideTooltip('solution-funnel')"
-          ></app-tooltip>
-        </div>
-        @if (hasValues(solutionFunnel())) {
-          <app-analytics-funnel-chart
-            [items]="solutionFunnel()"
-            label="Воронка проектов"
-            kind="projects"
-          ></app-analytics-funnel-chart>
-        } @else {
-          <p class="analytics-empty-state text-body-10">Нет решений для отображения</p>
-        }
-      </article>
-    </section>
-
-    <section class="analytics-grid analytics-grid--evaluation" aria-label="Ход оценивания">
-      <article class="analytics-card evaluation" data-testid="evaluation-statuses">
-        <div class="analytics__heading-row">
-          <div>
-            <h2 class="analytics-card__title">Ход оценивания</h2>
-            <p class="evaluation__mode analytics-card__subtitle">{{ evaluationModeLabel() }}</p>
-          </div>
-          <app-tooltip
-            text="Доля выполненных назначений экспертов. Назначение выполнено, когда эксперт заполнил все критерии сданного проекта."
-            [isVisible]="isTooltipVisible('evaluation-status')"
-            [useOverlay]="true"
-            (click)="toggleTooltip('evaluation-status')"
-            (show)="showTooltip('evaluation-status')"
-            (hide)="hideTooltip('evaluation-status')"
-          ></app-tooltip>
-        </div>
-        <app-analytics-evaluation-progress
-          [programId]="programId()"
-          [status]="overview.evaluationStatus"
-          (openAssignments)="drilldown.openAssignments($event.scope, $event.trigger)"
-        />
-      </article>
-    </section>
-
-    <section class="analytics-bottom" aria-label="Кейсы и динамика">
-      <article class="analytics-card cases-card" data-testid="cases-card">
-        <div class="analytics__heading-row">
-          <h2 class="cases-card__title" id="analytics-cases-title">Кейсы</h2>
-          <app-tooltip
-            text="Распределение проектов и участников по кейсам программы. Один участник может учитываться в нескольких кейсах."
-            [isVisible]="isTooltipVisible('cases')"
-            [useOverlay]="true"
-            (click)="toggleTooltip('cases')"
-            (show)="showTooltip('cases')"
-            (hide)="hideTooltip('cases')"
-          ></app-tooltip>
-        </div>
-        @if (caseEmptyMessage(); as message) {
-          <p class="analytics-empty-state text-body-10">{{ message }}</p>
-        }
-        @if (caseRows().length) {
-          <div
-            class="cases-card__columns"
-            aria-hidden="true"
-            [class.cases-card__columns--without-submission]="!overview.cases.submissionApplicable"
-          >
-            <span>Кейс</span><span>Проекты</span>
-            @if (overview.cases.submissionApplicable) {
-              <span>Сдано</span>
+            @if (card.items.length > 0) {
+              <app-analytics-region-chart
+                [items]="card.items"
+                [label]="card.title"
+                [kind]="card.key === 'project-regions' ? 'projects' : 'participants'"
+              />
+            } @else {
+              <p class="analytics-empty-state text-body-10">{{ card.emptyMessage }}</p>
             }
-            <span>Участники</span>
-          </div>
-          <ul
-            class="cases-card__list"
-            id="analytics-cases-list"
-            aria-labelledby="analytics-cases-title"
-          >
-            @for (row of casesExpanded() ? caseRows() : caseRows().slice(0, 8); track row.key) {
-              <li>
-                <button
-                  type="button"
-                  #caseTrigger
-                  class="case-row"
-                  [class.case-row--without-case]="row.isWithoutCase"
-                  [class.case-row--without-submission]="!overview.cases.submissionApplicable"
-                  [attr.aria-label]="row.description + '. Открыть проекты кейса'"
-                  aria-haspopup="dialog"
-                  (click)="
-                    drilldown.openCase(
-                      caseSelection(row),
-                      row,
-                      overview.cases.submissionApplicable,
-                      caseTrigger
-                    )
-                  "
-                >
-                  <span class="case-row__name">{{ row.name }}</span>
-                  <span class="case-row__projects">
-                    <strong>{{ row.projectsTotal }}</strong>
-                    <span class="case-row__mobile-label">{{ row.totalLabel }}</span>
-                    <span class="case-row__bar" aria-hidden="true">
-                      <span class="case-row__volume" [style.width.%]="row.totalPercent"></span>
-                    </span>
-                  </span>
-                  @if (overview.cases.submissionApplicable) {
-                    <span class="case-row__metric"
-                      ><span class="case-row__mobile-label">Сдано</span
-                      ><strong>{{ row.submitted }}</strong></span
-                    >
-                  }
-                  <span class="case-row__metric"
-                    ><span class="case-row__mobile-label">Участники</span
-                    ><strong>{{ row.participantsTotal }}</strong></span
-                  >
-                </button>
-              </li>
-            }
-          </ul>
-          @if (caseRows().length > 8) {
-            <button
-              appButton="secondary"
-              type="button"
-              class="cases-card__expand"
-              aria-controls="analytics-cases-list"
-              [attr.aria-expanded]="casesExpanded()"
-              (click)="casesExpanded.set(!casesExpanded())"
-            >
-              {{ casesExpanded() ? "Свернуть" : "Показать все кейсы (" + caseRows().length + ")" }}
-            </button>
-          }
+          </article>
         }
-      </article>
-
-      <article class="activity" data-testid="activity-dynamics">
-        <div class="analytics__heading-row">
-          <div>
-            <h2 class="analytics-card__title">Динамика активности</h2>
-            @if (hasActivity()) {
-              <p class="activity__note analytics-card__subtitle">Последние 30 дней</p>
-            }
-          </div>
-          <app-tooltip
-            text="Ежедневные новые регистрации и отправленные решения за последние 30 дней."
-            [isVisible]="isTooltipVisible('activity')"
-            [useOverlay]="true"
-            position="left"
-            (click)="toggleTooltip('activity')"
-            (show)="showTooltip('activity')"
-            (hide)="hideTooltip('activity')"
-          ></app-tooltip>
-        </div>
-        @if (hasActivity()) {
-          <app-analytics-activity-chart [points]="overview.activity" />
-        } @else {
-          <p class="analytics-empty-state text-body-12">За последние 30 дней активности не было</p>
-        }
-      </article>
-    </section>
-
-    <section class="regions-grid" aria-label="География программы">
-      @for (card of regionCards(); track card.key) {
-        <article
-          class="regions"
-          [attr.aria-labelledby]="card.key + '-title'"
-          [attr.data-testid]="card.key"
-        >
-          <div class="analytics__heading-row">
-            <h2 [id]="card.key + '-title'" class="text-body-12">{{ card.title }}</h2>
-            <button
-              appButton="icon"
-              type="button"
-              class="regions__export"
-              [attr.aria-label]="'Выгрузить ' + card.title.toLowerCase() + ' в Excel'"
-              [attr.title]="card.items.length ? 'Скачать XLSX' : 'Нет данных для выгрузки'"
-              [disabled]="!card.items.length || regionExportState()[card.key].pending"
-              [attr.aria-busy]="regionExportState()[card.key].pending"
-              (click)="downloadRegions(card.key)"
-            >
-              <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
-            </button>
-            <app-tooltip
-              [text]="card.tooltip"
-              [isVisible]="isTooltipVisible(card.key)"
-              [useOverlay]="true"
-              (click)="toggleTooltip(card.key)"
-              (show)="showTooltip(card.key)"
-              (hide)="hideTooltip(card.key)"
-            ></app-tooltip>
-          </div>
-          @if (regionExportState()[card.key].pending) {
-            <app-state
-              class="regions__export-message"
-              [compact]="true"
-              kind="loading"
-              title="Подготавливаем Excel…"
-            />
-          }
-          @if (regionExportState()[card.key].failed) {
-            <app-state
-              class="regions__export-message exports__error"
-              [compact]="true"
-              kind="error"
-              title="Не удалось создать Excel. Попробуйте еще раз."
-            />
-          }
-          @if (card.items.length > 0) {
-            <app-analytics-region-chart
-              [items]="card.items"
-              [label]="card.title"
-              [kind]="card.key === 'project-regions' ? 'projects' : 'participants'"
-            />
-          } @else {
-            <p class="analytics-empty-state text-body-10">{{ card.emptyMessage }}</p>
-          }
-        </article>
-      }
-    </section>
-  }
-</main>
-<app-analytics-drilldown
-  #drilldown
-  [programId]="programId()"
-  [programName]="programName()"
-  [notSubmittedApplicable]="data()?.attention?.projectsNotSubmitted?.applicable ?? false"
-  [delayedExperts]="data()?.attention?.delayedExperts ?? { total: 0, items: [] }"
-/>
+      </section>
+    }
+  </main>
+  <app-analytics-drilldown
+    #drilldown
+    [programId]="programId()"
+    [programName]="programName()"
+    [notSubmittedApplicable]="data()?.attention?.projectsNotSubmitted?.applicable ?? false"
+    [delayedExperts]="data()?.attention?.delayedExperts ?? { total: 0, items: [] }"
+  />
+}

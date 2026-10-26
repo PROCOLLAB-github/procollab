@@ -7,7 +7,13 @@
   <header class="results__heading">
     <h2>
       {{
-        snapshot() && !snapshot()?.hasNumericCriteria ? "Результаты проектов" : "Рейтинг проектов"
+        snapshot() && !snapshot()?.hasNumericCriteria
+          ? solutionMode()
+            ? "Результаты решений"
+            : "Результаты проектов"
+          : solutionMode()
+            ? "Рейтинг решений"
+            : "Рейтинг проектов"
       }}
     </h2>
     <div class="results__heading-actions">
@@ -50,12 +56,14 @@
   @if (snapshot(); as data) {
     <div class="results__toolbar">
       <label class="results__search"
-        ><span class="results__sr">Поиск по названию проекта</span
+        ><span class="results__sr">{{
+          solutionMode() ? "Поиск по названию решения" : "Поиск по названию проекта"
+        }}</span
         ><input
           appField
           type="search"
           [formControl]="search"
-          placeholder="Поиск по названию проекта"
+          [placeholder]="solutionMode() ? 'Поиск по названию решения' : 'Поиск по названию проекта'"
           maxlength="200"
       /></label>
       <div class="results__toolbar-actions">
@@ -86,7 +94,13 @@
     <div class="results__summary" aria-live="polite">
       <span
         >Оценено {{ readyCount() }} из {{ matchingCount() }}
-        {{ matchingCount() | pluralize: ["проекта", "проектов", "проектов"] }}</span
+        {{
+          matchingCount()
+            | pluralize
+              : (solutionMode()
+                  ? ["решения", "решений", "решений"]
+                  : ["проекта", "проектов", "проектов"])
+        }}</span
       >
       @if (updatedTime(); as time) {
         <time [attr.datetime]="data.generatedAt">Обновлено {{ time }}</time>
@@ -114,8 +128,22 @@
     }
     @if (!data.groups.length) {
       <div class="results__empty">
-        <h3>Сданных проектов пока нет</h3>
-        <p>Результаты появятся после сдачи решений.</p>
+        <h3>
+          {{
+            solutionMode() && !submissionApplicable()
+              ? "Оценивание не требуется"
+              : solutionMode()
+                ? "Сданных решений пока нет"
+                : "Сданных проектов пока нет"
+          }}
+        </h3>
+        <p>
+          {{
+            solutionMode() && !submissionApplicable()
+              ? "В этой программе материалы сохраняются без сдачи решения."
+              : "Результаты появятся после сдачи решений."
+          }}
+        </p>
       </div>
     } @else if (!projectCount()) {
       <div class="results__empty">
@@ -137,7 +165,8 @@
           @if (data.hasNumericCriteria) {
             <span>Место</span>
           }
-          <span>Проект</span><span>Оценивание</span>
+          <span>{{ solutionMode() ? "Решение" : "Проект" }}</span
+          ><span>Оценивание</span>
           @if (data.hasNumericCriteria) {
             <span class="results__number"
               >Балл{{ data.maximum === null ? "" : " из " + data.maximum }}</span
@@ -200,7 +229,9 @@
             <section
               class="results__detail"
               [id]="'result-' + project.id"
-              [attr.aria-label]="'Оценки проекта ' + project.name"
+              [attr.aria-label]="
+                (solutionMode() ? 'Оценки решения ' : 'Оценки проекта ') + project.name
+              "
             >
               <app-result-project-scores
                 [project]="project"
@@ -306,7 +337,7 @@
       >
       <label class="results__filter-label"
         >Оценивание<select appField [formControl]="draftStatus" aria-label="Оценивание">
-          <option value="all">Все проекты</option>
+          <option value="all">{{ solutionMode() ? "Все решения" : "Все проекты" }}</option>
           <option value="complete">Оценивание завершено</option>
           <option value="pending">Ожидают оценки</option>
         </select></label
@@ -369,7 +400,11 @@
       </fieldset>
       <p class="results__muted">Два листа: рейтинг и оценки экспертов.</p>
       @if (exportScope() === "current" && !projectCount()) {
-        <p appAlert="info">В текущей выборке нет проектов.</p>
+        <p appAlert="info">
+          {{
+            solutionMode() ? "В текущей выборке нет решений." : "В текущей выборке нет проектов."
+          }}
+        </p>
       }
       @if (exportError()) {
         <p appAlert="error" role="alert">Не удалось подготовить файл. Попробуйте еще раз.</p>

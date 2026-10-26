@@ -1,0 +1,3 @@
+# Keep browser-verified fixture bytes and manifest hashes stable across checkouts.
+prototype/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+source-manifest.json -text

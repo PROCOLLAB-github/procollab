@@ -51,58 +51,95 @@ p {
 
 nav {
   display: flex;
-  gap: 32px;
+  gap: 4px;
+  width: min(100%, 432px);
+  padding: 4px;
   margin-bottom: 28px;
-  border-bottom: 1px solid var(--medium-grey-for-outline);
+  background: var(--medium-grey-for-outline);
+  border-radius: 24px;
 }
 
 nav a {
-  padding: 12px 4px;
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 12px;
   color: var(--black);
-  border-bottom: 2px solid transparent;
+  border-radius: 20px;
 }
 
 nav a[aria-current] {
   color: var(--accent);
-  border-bottom-color: var(--accent);
+  background: var(--white, #fff);
 }
 
-dl {
-  margin: 0;
+nav a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
-dl > div {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--medium-grey-for-outline);
+.solution-name {
+  display: grid;
+  gap: 8px;
+  margin: 24px 0;
 }
 
-dt {
-  margin-bottom: 8px;
+.solution-name .ui-field {
+  @include ui-foundation.control;
+
+  width: 100%;
 }
 
-dd {
-  margin: 0;
-  color: var(--grey-for-text);
+.error {
+  color: var(--error, var(--ui-error-text));
+}
+
+.local-answers {
+  padding: 20px 0;
+  border-top: 1px solid var(--medium-grey-for-outline);
+}
+
+.local-answers p {
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
 
-.members {
-  padding: 0;
-  list-style: none;
+.draft-actions {
+  padding-top: 20px;
+  margin-top: 24px;
+  border-top: 1px solid var(--medium-grey-for-outline);
 }
 
-.members li {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 24px;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--medium-grey-for-outline);
+.draft-actions__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
 }
 
-.name small {
-  display: block;
-  margin-top: 6px;
+.submission-confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.submission-issues {
+  padding-left: 20px;
+}
+
+.submission-issues .ui-button {
+  height: auto;
+  padding: 4px 0;
+  text-align: left;
+  white-space: normal;
+}
+
+h2:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 .ui-button {
@@ -114,8 +151,8 @@ dd {
     flex-direction: column;
   }
 
-  .members li {
-    grid-template-columns: 1fr;
-    gap: 8px;
+  .draft-actions__buttons {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

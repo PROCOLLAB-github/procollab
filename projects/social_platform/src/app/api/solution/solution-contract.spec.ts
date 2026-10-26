@@ -15,7 +15,7 @@ import { API_URL } from "@core/lib/providers";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { SolutionRepositoryPort } from "@domain/solution/ports/solution.repository.port";
 import { solutionContractScenarios } from "@domain/solution/solution-contract.fixture";
-import { ProgramSolution } from "@domain/solution/solution-contract.model";
+import { ProgramSolution, SolutionContext } from "@domain/solution/solution-contract.model";
 import { SolutionRepository } from "@infrastructure/repository/solution/solution.repository";
 import { SolutionHttpAdapter } from "@infrastructure/adapters/solution/solution-http.adapter";
 import {
@@ -92,6 +92,44 @@ describe("C00 solution API boundary", () => {
     expect(request.request.params.get("offset")).toBe("16");
     expect(request.request.params.get("submission")).toBe("not_submitted");
     request.flush({ count: 0, next: null, previous: null, results: [] });
+  });
+
+  it("preserves creation-disabled context through the real interceptor", async () => {
+    const expected = solutionContractScenarios.find(s => s.name === "context_creation_disabled")!
+      .response as SolutionContext;
+    const result = firstValueFrom(
+      TestBed.inject(GetSolutionContextUseCase).execute(expected.programId),
+    );
+    TestBed.inject(HttpTestingController)
+      .expectOne(`https://local.test/programs/${expected.programId}/solution-context/`)
+      .flush(snakecaseKeys(expected, { deep: true }));
+    expect(await result).toEqual({ ok: true, value: expected });
+  });
+
+  it("returns the authoritative disabled-creation error without retrying", async () => {
+    const expected = solutionContractScenarios.find(
+      s => s.name === "create_creation_disabled",
+    )!.response;
+    const result = firstValueFrom(TestBed.inject(CreateSolutionUseCase).execute(12));
+    const request = TestBed.inject(HttpTestingController).expectOne(
+      "https://local.test/programs/12/solutions/",
+    );
+    expect(request.request.body).toEqual({});
+    request.flush(expected, { status: 409, statusText: "Conflict" });
+    expect(await result).toEqual({ ok: false, error: expected });
+  });
+
+  it("returns the existing solution during paused creation without altering IDs", async () => {
+    const expected = solutionContractScenarios.find(
+      s => s.name === "create_existing_creation_disabled",
+    )!.response as ProgramSolution;
+    const result = firstValueFrom(
+      TestBed.inject(CreateSolutionUseCase).execute(expected.programId),
+    );
+    TestBed.inject(HttpTestingController)
+      .expectOne(`https://local.test/programs/${expected.programId}/solutions/`)
+      .flush(snakecaseKeys(expected, { deep: true }), { status: 200, statusText: "OK" });
+    expect(await result).toEqual({ ok: true, value: expected });
   });
 
   it.each([0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, NaN])(

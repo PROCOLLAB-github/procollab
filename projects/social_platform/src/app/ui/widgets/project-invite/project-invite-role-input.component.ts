@@ -29,6 +29,7 @@ let nextRoleId = 0;
 export class ProjectInviteRoleInputComponent implements OnInit {
   readonly control = input.required<FormControl<string>>();
   readonly readonly = input(false);
+  readonly label = input("Роль в проекте");
   readonly id = "invite-role-" + ++nextRoleId;
   readonly opened = signal(false);
   readonly query = signal("");

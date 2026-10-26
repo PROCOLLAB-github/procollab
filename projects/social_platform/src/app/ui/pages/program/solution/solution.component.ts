@@ -1,26 +1,71 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  HostListener,
+  inject,
+  Injector,
+  signal,
+} from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { combineLatest, EMPTY, map, startWith, Subject, switchMap } from "rxjs";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
+import {
+  combineLatest,
+  distinctUntilChanged,
+  EMPTY,
+  finalize,
+  map,
+  pairwise,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+} from "rxjs";
+import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import { EventBus } from "@domain/shared/event-bus";
+import { User } from "@domain/auth/user.model";
 import {
   GetSolutionContextUseCase,
   CreateSolutionUseCase,
   GetSolutionUseCase,
 } from "@api/solution/use-cases/solution.use-cases";
-import { solutionApplicationRoute } from "@api/solution/solution-navigation";
+import {
+  solutionApplicationRoute,
+  solutionCreationBlockedMessage,
+} from "@api/solution/solution-navigation";
 import { AppRoutes } from "@api/paths/app-routes";
-import { ProgramSolution, SolutionApiError } from "@domain/solution/solution-contract.model";
+import {
+  ProgramSolution,
+  SolutionApiError,
+  SolutionIssue,
+} from "@domain/solution/solution-contract.model";
 import { validSolutionId } from "@domain/solution/ports/solution.repository.port";
-import { ButtonDirective } from "@uilib";
+import { ButtonDirective, FieldDirective } from "@uilib";
 import { DatePipe } from "@angular/common";
+import { SolutionTeamComponent } from "./solution-team.component";
+import { SolutionDraftFacade } from "@api/solution/facades/solution-draft.facade";
+import { SolutionFieldsComponent } from "@ui/widgets/solution-fields/solution-fields.component";
+import { ProjectInviteDialogComponent } from "@ui/widgets/project-invite/project-invite-dialog.component";
 
-/** FE01: read surface and route foundation. Editing/team commands follow in FE03–FE06. */
 @Component({
   selector: "app-program-solution",
   standalone: true,
-  imports: [RouterLink, ButtonDirective, DatePipe],
+  imports: [
+    RouterLink,
+    ButtonDirective,
+    FieldDirective,
+    ReactiveFormsModule,
+    DatePipe,
+    SolutionTeamComponent,
+    SolutionFieldsComponent,
+    ProjectInviteDialogComponent,
+  ],
+  providers: [SolutionDraftFacade],
   templateUrl: "./solution.component.html",
   styleUrl: "./solution.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,19 +76,318 @@ export class ProgramSolutionComponent {
   private readonly context = inject(GetSolutionContextUseCase);
   private readonly create = inject(CreateSolutionUseCase);
   private readonly get = inject(GetSolutionUseCase);
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
+  private readonly profile = inject(ProfileInfoService).profile;
+  private readonly events = inject(EventBus);
+  readonly draft = inject(SolutionDraftFacade);
   readonly solution = signal<ProgramSolution | null>(null);
   readonly loading = signal(true);
   readonly error = signal<SolutionApiError | null>(null);
   readonly teamTab = signal(false);
   readonly programId = signal(0);
+  readonly refreshingTeam = signal(false);
+  readonly teamRefreshError = signal("");
   readonly routes = AppRoutes;
+  readonly submissionAttempted = signal(false);
+  readonly submissionIssues = signal<SolutionIssue[]>([]);
+  readonly confirmation = signal<ProgramSolution | null>(null);
+  readonly commandBusy = computed(() => this.draft.busy() || this.confirmation() !== null);
+  submissionTrigger: HTMLElement | null = null;
   private readonly retry = new Subject<void>();
+  private readonly teamRefresh = new Subject<{ programId: number; solutionId: number } | null>();
+  private readonly accountChanged = new Subject<void>();
+  private loggedOutProfile: User | null | undefined;
+  private identityRequired = false;
+  private reconcileDraft = false;
+
+  canLeave(): boolean {
+    return (
+      !(this.draft.dirty() || this.commandBusy()) ||
+      confirm("В заявке есть несохраненные изменения. Покинуть страницу?")
+    );
+  }
+
+  @HostListener("window:beforeunload", ["$event"])
+  onBeforeUnload(event: BeforeUnloadEvent): void {
+    if (this.draft.dirty() || this.commandBusy()) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+  }
+
+  saveDraft(): void {
+    if (this.commandBusy() || this.refreshingTeam() || this.teamRefreshError()) return;
+    this.draft.save().subscribe(result => {
+      if (result.ok) this.solution.set(result.value);
+      else this.handleCommandError(result.error);
+    });
+  }
+
+  prepareSubmission(event: Event): void {
+    if (
+      this.commandBusy() ||
+      this.refreshingTeam() ||
+      this.teamRefreshError() ||
+      !this.solution()?.permissions.canSubmit
+    )
+      return;
+    this.submissionTrigger = event.currentTarget as HTMLElement;
+    this.submissionAttempted.set(true);
+    this.submissionIssues.set([]);
+    this.draft.save().subscribe(result => {
+      if (!result.ok) {
+        this.handleCommandError(result.error);
+        return;
+      }
+      const saved = result.value;
+      this.solution.set(saved);
+      if (!saved.permissions.canSubmit) {
+        this.draft.error.set({
+          code: "submission_closed",
+          detail: "Сдача сейчас недоступна. Черновик сохранен.",
+          errors: [],
+          meta: {},
+        });
+        return;
+      }
+      const issues = saved.readiness?.issues ?? [];
+      if (issues.length) {
+        this.submissionIssues.set(issues);
+        this.draft.showIssues(issues);
+        void this.focusIssue(issues[0]);
+      } else this.confirmation.set(saved);
+    });
+  }
+
+  confirmSubmission(): void {
+    const checkpoint = this.confirmation();
+    if (!checkpoint || this.draft.busy()) return;
+    this.draft.submit(checkpoint).subscribe(result => {
+      this.confirmation.set(null);
+      if (result.ok) {
+        this.solution.set(result.value);
+        this.submissionIssues.set([]);
+        this.submissionAttempted.set(false);
+        this.refreshTeam();
+      } else {
+        this.handleCommandError(result.error);
+        // A network interruption has an unknown outcome: GET determines the actual state.
+        if (
+          [
+            "network",
+            "server_error",
+            "unknown",
+            "already_submitted",
+            "submission_closed",
+            "not_competitive",
+          ].includes(result.error.code)
+        )
+          this.refreshTeam();
+      }
+    });
+  }
+
+  private handleCommandError(error: SolutionApiError): void {
+    this.submissionIssues.set(error.errors);
+    if (error.errors.length) void this.focusIssue(error.errors[0]);
+    else if (this.draft.name.invalid)
+      void this.focusIssue({
+        path: "name",
+        code: "invalid",
+        detail: "Проверьте название",
+        fieldId: null,
+      });
+    else {
+      const field = this.solution()?.form.fields.find(
+        field => this.draft.group().get(String(field.id))?.invalid,
+      );
+      if (field)
+        void this.focusIssue({
+          path: "answers",
+          code: "invalid",
+          detail: "Проверьте значение",
+          fieldId: field.id,
+        });
+    }
+    if (
+      [
+        "version_conflict",
+        "form_revision_conflict",
+        "not_solution_captain",
+        "team_frozen",
+        "solution_mode_unavailable",
+      ].includes(error.code)
+    ) {
+      this.reconcileDraft = true;
+      this.refreshTeam();
+    } else if (
+      [
+        "not_found",
+        "forbidden",
+        "permission_denied",
+        "unauthorized",
+        "authentication_required",
+      ].includes(error.code)
+    ) {
+      this.draft.clear();
+      this.solution.set(null);
+      this.showError(error);
+    }
+  }
+
+  async focusIssue(issue: SolutionIssue): Promise<void> {
+    const key = this.solution()?.programId + ":" + this.solution()?.id;
+    await this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: issue.path.startsWith("team") ? { tab: "team" } : {},
+    });
+    afterNextRender(
+      () => {
+        if (this.solution()?.programId + ":" + this.solution()?.id !== key) return;
+        const selector = issue.path.startsWith("team")
+          ? "#team-title"
+          : issue.fieldId !== null
+            ? `#solution-field-${issue.fieldId}`
+            : issue.path === "name"
+              ? "#solution-name"
+              : "#data-title";
+        let target = this.element.nativeElement.querySelector<HTMLElement>(selector);
+        if (target?.matches('input[type="file"]'))
+          target = target.closest("fieldset")?.querySelector<HTMLElement>("button") ?? null;
+        if (target) {
+          if (!target.matches("input,select,textarea,button,a")) target.tabIndex = -1;
+          target.focus();
+          target.scrollIntoView?.({ block: "center", behavior: "smooth" });
+        }
+      },
+      { injector: this.injector },
+    );
+  }
+
+  issueLabel(issue: SolutionIssue): string {
+    const label =
+      issue.fieldId === null
+        ? issue.path.startsWith("team")
+          ? "Команда"
+          : "Заявка"
+        : this.solution()?.form.fields.find(field => field.id === issue.fieldId)?.label;
+    return label ? label + ": " + issue.detail : issue.detail;
+  }
+
+  discardDraft(): void {
+    if (!this.commandBusy() && confirm("Отменить несохраненные изменения решения?"))
+      this.draft.discard();
+  }
 
   reload(): void {
     this.retry.next();
   }
 
+  refreshTeam(): void {
+    const solution = this.solution();
+    if (solution) this.teamRefresh.next({ programId: solution.programId, solutionId: solution.id });
+  }
+
+  teamLeft(): void {
+    void this.router.navigate([AppRoutes.program.detail(this.programId())]);
+  }
+
+  private clearApplication(): void {
+    this.teamRefresh.next(null);
+    this.refreshingTeam.set(false);
+    this.teamRefreshError.set("");
+    this.reconcileDraft = false;
+    this.confirmation.set(null);
+    this.submissionTrigger = null;
+    this.submissionIssues.set([]);
+    this.submissionAttempted.set(false);
+    this.draft.clear();
+    this.solution.set(null);
+    this.error.set(null);
+  }
+
+  private showAccountError(): void {
+    this.showError({
+      code: "unauthorized",
+      detail: "Аккаунт изменился. Повторите вход и откройте заявку заново.",
+      errors: [],
+      meta: {},
+    });
+  }
+
+  private invalidateAccount(): void {
+    this.identityRequired = true;
+    this.accountChanged.next();
+    this.clearApplication();
+    this.showAccountError();
+  }
+
   constructor() {
+    this.events
+      .on("LoggedOut")
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        this.loggedOutProfile = this.profile();
+        this.invalidateAccount();
+      });
+    toObservable(this.profile)
+      .pipe(
+        map(profile => profile?.id ?? null),
+        distinctUntilChanged(),
+        pairwise(),
+        takeUntilDestroyed(),
+      )
+      .subscribe(([previous, current]) => {
+        if (previous !== null && previous !== current) this.invalidateAccount();
+      });
+    this.teamRefresh
+      .pipe(
+        switchMap(context => {
+          if (!context) return EMPTY;
+          this.refreshingTeam.set(true);
+          this.teamRefreshError.set("");
+          return this.get.execute(context.programId, context.solutionId).pipe(
+            map(result => ({ context, result })),
+            finalize(() => this.refreshingTeam.set(false)),
+          );
+        }),
+        takeUntilDestroyed(),
+      )
+      .subscribe(({ context, result }) => {
+        if (this.programId() !== context.programId || this.solution()?.id !== context.solutionId)
+          return;
+        if (result.ok) {
+          const hydrated = this.draft.hydrate(result.value);
+          if (hydrated) this.solution.set(result.value);
+          if (this.reconcileDraft) {
+            this.reconcileDraft = false;
+            this.draft.reconciled();
+          }
+          // GET подтверждает сдачу даже после потери ответа POST. Локальные
+          // несохраненные правки остаются в hydrate и отдельном блоке копирования.
+          if (hydrated && result.value.submission.status === "submitted") {
+            this.draft.error.set(null);
+            this.draft.notice.set("Решение сдано.");
+            this.submissionIssues.set([]);
+            this.submissionAttempted.set(false);
+          }
+          return;
+        }
+        if (
+          [
+            "not_found",
+            "forbidden",
+            "permission_denied",
+            "unauthorized",
+            "authentication_required",
+          ].includes(result.error.code)
+        ) {
+          this.draft.clear();
+          this.solution.set(null);
+          this.showError(result.error);
+        } else this.teamRefreshError.set(result.error.detail);
+      });
     this.route.queryParamMap
       .pipe(takeUntilDestroyed())
       .subscribe(params => this.teamTab.set(params.get("tab") === "team"));
@@ -57,10 +401,16 @@ export class ProgramSolutionComponent {
           solutionId: params.find(p => p.has("solutionId"))?.get("solutionId"),
         })),
         switchMap(({ programId, solutionId }) => {
-          this.solution.set(null);
-          this.error.set(null);
+          this.clearApplication();
           this.loading.set(true);
           this.programId.set(programId);
+          if (
+            (this.identityRequired && !this.profile()?.id) ||
+            this.profile() === this.loggedOutProfile
+          ) {
+            this.showAccountError();
+            return EMPTY;
+          }
           if (
             !validSolutionId(programId) ||
             (solutionId !== undefined && !validSolutionId(Number(solutionId)))
@@ -73,7 +423,10 @@ export class ProgramSolutionComponent {
             });
             return EMPTY;
           }
-          if (solutionId !== undefined) return this.get.execute(programId, Number(solutionId));
+          if (solutionId !== undefined)
+            return this.get
+              .execute(programId, Number(solutionId))
+              .pipe(takeUntil(this.accountChanged));
           return this.context.execute(programId).pipe(
             switchMap(result => {
               if (!result.ok) {
@@ -96,14 +449,14 @@ export class ProgramSolutionComponent {
               } else {
                 this.showError({
                   code: context.blockedReason ?? "forbidden",
-                  detail:
-                    "Создание заявки сейчас недоступно. Проверьте регистрацию и сроки программы.",
+                  detail: solutionCreationBlockedMessage(context.blockedReason),
                   errors: [],
                   meta: {},
                 });
               }
               return EMPTY;
             }),
+            takeUntil(this.accountChanged),
           );
         }),
         takeUntilDestroyed(),
@@ -115,6 +468,7 @@ export class ProgramSolutionComponent {
           return;
         }
         this.solution.set(result.value);
+        this.draft.hydrate(result.value);
         if (!this.route.snapshot.paramMap.has("solutionId")) {
           void this.router.navigate(
             [AppRoutes.program.solution(this.programId(), result.value.id)],
@@ -127,13 +481,5 @@ export class ProgramSolutionComponent {
   private showError(error: SolutionApiError): void {
     this.error.set(error);
     this.loading.set(false);
-  }
-
-  answer(fieldId: number): string {
-    const value = this.solution()?.answers.find(answer => answer.fieldId === fieldId)?.value;
-    if (value === null || value === undefined || value === "") return "Не заполнено";
-    if (typeof value === "boolean") return value ? "Да" : "Нет";
-    // File metadata is displayed as text until the validated download flow in FE03.
-    return typeof value === "object" ? "Файл прикреплен" : String(value);
   }
 }

@@ -1,0 +1,368 @@
+{
+  "checks": [
+    "public-case_championship-competitive:320",
+    "public-case_championship-competitive:390",
+    "public-case_championship-competitive:768",
+    "public-case_championship-competitive:1440",
+    "published-allowlist-and-applicability-case_championship-competitive",
+    "public-hackathon-competitive:320",
+    "public-hackathon-competitive:390",
+    "public-hackathon-competitive:768",
+    "public-hackathon-competitive:1440",
+    "published-allowlist-and-applicability-hackathon-competitive",
+    "public-hackathon-noncompetitive:320",
+    "public-hackathon-noncompetitive:390",
+    "public-hackathon-noncompetitive:768",
+    "public-hackathon-noncompetitive:1440",
+    "published-allowlist-and-applicability-hackathon-noncompetitive",
+    "case-admin:320",
+    "case-admin:390",
+    "case-admin:768",
+    "case-admin:1440",
+    "actual-admin-case-after-submit",
+    "actual-admin-member-after-submit",
+    "admin-preserves-score-and-updates-current-readers",
+    "registration-removal-admin:320",
+    "registration-removal-admin:390",
+    "registration-removal-admin:768",
+    "registration-removal-admin:1440",
+    "actual-registration-removal-after-submit",
+    "registration-removal-retained-history"
+  ],
+  "wire": [
+    {
+      "role": "anonymous",
+      "method": "GET",
+      "path": "/programs/52/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "anonymous",
+      "method": "GET",
+      "path": "/programs/52/published-solutions/?search=&offset=0&limit=20",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "anonymous",
+      "method": "GET",
+      "path": "/programs/53/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "anonymous",
+      "method": "GET",
+      "path": "/programs/53/published-solutions/?search=&offset=0&limit=20",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "anonymous",
+      "method": "GET",
+      "path": "/programs/54/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "anonymous",
+      "method": "GET",
+      "path": "/programs/54/published-solutions/?search=&offset=0&limit=20",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-analytics/solutions/?submission=all&case_scope=all&offset=0&limit=20",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-form/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/solutions/72/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/52/management/solutions/72/case/preview/",
+      "status": 200,
+      "request": {
+        "case_name": "Образование"
+      }
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/52/management/solutions/72/case/apply/",
+      "status": 200,
+      "request": {
+        "case_name": "Образование",
+        "preview_token": "[redacted]"
+      }
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-analytics/solutions/?submission=all&case_scope=all&offset=0&limit=20",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/solutions/72/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/solutions/72/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/52/management/solutions/72/members/remove/preview/",
+      "status": 200,
+      "request": {
+        "user_id": 40
+      }
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/52/management/solutions/72/members/remove/apply/",
+      "status": 200,
+      "request": {
+        "user_id": 40,
+        "preview_token": "[redacted]"
+      }
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/52/management/solution-analytics/solutions/?submission=all&case_scope=all&offset=0&limit=20",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/types/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/roles/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/industries/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/chats/has-unreads/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/core/notifications/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/?limit=20&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/auth/users/current/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/invites/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/?status=pending&limit=100&offset=0",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/participants/?search=qa01release-20261026-9c3c54b4-member-3@example.com&limit=20&offset=0&region_scope=all&activity=all&order=activity_desc",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/53/management/registrations/remove/preview/",
+      "status": 200,
+      "request": {
+        "registration_ids": [159]
+      }
+    },
+    {
+      "role": "manager",
+      "method": "POST",
+      "path": "/programs/53/management/registrations/remove/apply/",
+      "status": 200,
+      "request": {
+        "registration_ids": [159],
+        "preview_token": "[redacted]"
+      }
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/",
+      "status": 200,
+      "request": null
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/53/management/participants/?search=qa01release-20261026-9c3c54b4-member-3@example.com&limit=20&offset=0&region_scope=all&activity=all&order=activity_desc",
+      "status": 200,
+      "request": null
+    }
+  ],
+  "pageErrors": [],
+  "deniedExternal": [
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://fonts.googleapis.com/icon",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif"
+  ],
+  "completed": true
+}

@@ -1,0 +1,71 @@
+<!-- @format -->
+<app-project-invite-dialog
+  title="Пригласить участника"
+  [compact]="true"
+  [description]="description()"
+  [trigger]="trigger()"
+  (closed)="closed.emit()"
+>
+  <div inviteSearch>
+    <label class="invite-label" [for]="searchId">Участник</label>
+    <div class="invite-search">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <circle cx="10" cy="10" r="7" />
+        <path d="m15 15 6 6" />
+      </svg>
+      <input
+        #searchInput
+        [id]="searchId"
+        data-invite-autofocus
+        type="search"
+        aria-label="Поиск по имени или фамилии"
+        placeholder="Поиск по имени или фамилии…"
+        [formControl]="query()"
+        [readOnly]="busy()"
+      />
+    </div>
+  </div>
+  <app-participant-picker
+    inviteList
+    [state]="state()"
+    [selected]="selected()"
+    [unavailableReason]="unavailableReason()"
+    [busy]="busy()"
+    (chosen)="chosen.emit($event)"
+    (cleared)="clear()"
+  />
+  <app-project-invite-role-input
+    inviteRole
+    [control]="role()"
+    [readonly]="busy()"
+    [label]="roleLabel()"
+  />
+  @if (error()) {
+    <app-state inviteError class="invite-error" [compact]="true" kind="error" [title]="error()" />
+  }
+  <div inviteFooter class="invite-actions">
+    <button appButton="secondary" type="button" class="invite-button" (click)="closed.emit()">
+      Отмена
+    </button>
+    <button
+      appButton="primary"
+      type="button"
+      class="invite-button invite-button--primary"
+      [disabled]="!valid() || busy()"
+      [attr.aria-busy]="busy()"
+      (click)="submitted.emit()"
+    >
+      @if (busy()) {
+        <span class="invite-spinner" aria-hidden="true"></span>
+      }
+      {{ busy() ? "Отправляем…" : "Отправить приглашение" }}
+    </button>
+  </div>
+</app-project-invite-dialog>

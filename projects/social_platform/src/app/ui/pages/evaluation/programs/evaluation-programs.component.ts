@@ -15,16 +15,18 @@ import { DatePipe } from "@angular/common";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
-import { debounceTime, distinctUntilChanged, finalize } from "rxjs";
+import { debounceTime, distinctUntilChanged, finalize, forkJoin } from "rxjs";
 import { AlertDirective, AvatarComponent, ButtonDirective, FieldDirective } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
+import { EvaluationProgram, EvaluationPrograms } from "@domain/program/evaluation-workspace.model";
+import { GetCabinetApplicationsUseCase } from "@api/solution/use-cases/solution-evaluation.use-cases";
 import {
-  EvaluationProgram,
-  ExpertCabinet,
-  ExpertCabinetProject,
-} from "@domain/program/evaluation-workspace.model";
+  SolutionApplicationRef,
+  SolutionCabinetApplication,
+  SolutionCabinetApplications,
+} from "@domain/solution/solution-contract.model";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
@@ -33,6 +35,7 @@ import { presentationHref } from "@utils/program-case-analytics";
 import { EvaluationNavigationService } from "@api/program/evaluation-navigation.service";
 
 type CabinetTab = "pending" | "completed" | "invitations";
+type CabinetData = EvaluationPrograms & { applications: SolutionCabinetApplications };
 const positive = (value: string | null) => {
   const parsed = Number(value);
   return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : undefined;
@@ -58,6 +61,7 @@ const positive = (value: string | null) => {
 export class EvaluationProgramsComponent {
   readonly navigation = inject(EvaluationNavigationService);
   private readonly api = inject(EvaluationUseCase);
+  private readonly applications = inject(GetCabinetApplicationsUseCase);
   private readonly profile = inject(ProfileInfoService);
   private readonly auth = inject(AuthInfoService);
   private readonly route = inject(ActivatedRoute);
@@ -67,7 +71,7 @@ export class EvaluationProgramsComponent {
     initialValue: this.route.snapshot.queryParamMap,
   });
   private readonly accountId = computed(() => this.profile.profile()?.id);
-  private readonly snapshot = signal<{ accountId: number; data: ExpertCabinet } | null>(null);
+  private readonly snapshot = signal<{ accountId: number; data: CabinetData } | null>(null);
   private readonly revision = signal(0);
   private handledInvitation: string | null = null;
   readonly data = computed(() =>
@@ -105,26 +109,31 @@ export class EvaluationProgramsComponent {
     () => this.data()?.results.filter(p => p.status === "pending") ?? [],
   );
   readonly filtered = computed(() => !!this.query().q || !!this.query().programId);
-  readonly rangeStart = computed(() => (this.data()?.projects.count ? this.query().offset + 1 : 0));
-  readonly rangeEnd = computed(() =>
-    Math.min(this.query().offset + 20, this.data()?.projects.count ?? 0),
+  readonly rangeStart = computed(() =>
+    this.data()?.applications.results.length ? this.query().offset + 1 : 0,
   );
+  readonly rangeEnd = computed(() => {
+    const page = this.data()?.applications;
+    return page?.results.length
+      ? Math.min(this.query().offset + page.results.length, page.count)
+      : 0;
+  });
   readonly groups = computed(() => {
     const programs = new Map(this.programs().map(p => [p.id, p]));
     const groups = new Map<
       number,
-      { program: EvaluationProgram; projects: ExpertCabinetProject[] }
+      { program: EvaluationProgram; applications: SolutionCabinetApplication[] }
     >();
-    for (const project of this.data()?.projects.results ?? []) {
-      const program = programs.get(project.programId);
+    for (const row of this.data()?.applications.results ?? []) {
+      const program = programs.get(row.application.programId);
       if (!program) continue;
-      if (!groups.has(program.id)) groups.set(program.id, { program, projects: [] });
-      groups.get(program.id)!.projects.push(project);
+      if (!groups.has(program.id)) groups.set(program.id, { program, applications: [] });
+      groups.get(program.id)!.applications.push(row);
     }
     return [...groups.values()];
   });
   readonly allCompleted = computed(() => {
-    const p = this.data()?.projects;
+    const p = this.data()?.applications;
     return !!p && !p.pending && !!p.completed && !p.unavailable;
   });
 
@@ -164,13 +173,28 @@ export class EvaluationProgramsComponent {
         return;
       }
       this.loading.set(true);
-      const request = this.api.cabinet(query).subscribe({
-        next: data => {
-          if (!data.projects || !Array.isArray(data.projects.results)) {
+      const request = forkJoin({
+        programs: this.api.programs(),
+        applications: this.applications.execute(query),
+      }).subscribe({
+        next: ({ programs, applications }) => {
+          if (!applications.ok) {
+            this.snapshot.set(null);
+            this.failed.set(applications.error.detail);
+            this.unauthorized.set(
+              ["unauthorized", "authentication_required"].includes(applications.error.code),
+            );
+          } else if (
+            !Array.isArray(programs.results) ||
+            !Array.isArray(applications.value?.results)
+          ) {
             this.snapshot.set(null);
             this.failed.set("Кабинет временно недоступен. Попробуйте обновить страницу.");
           } else {
-            this.snapshot.set({ accountId, data });
+            this.snapshot.set({
+              accountId,
+              data: { ...programs, applications: applications.value },
+            });
             this.navigation.restore(this.router.url);
           }
           this.loading.set(false);
@@ -217,6 +241,11 @@ export class EvaluationProgramsComponent {
   }
   page(delta: number): void {
     this.navigate({ page: Math.max(1, this.query().offset / 20 + 1 + delta) });
+  }
+  evaluationPath(application: SolutionApplicationRef): string {
+    return application.kind === "solution"
+      ? `/office/program/${application.programId}/solutions/${application.solutionId}/evaluation`
+      : `${AppRoutes.program.projectsRating(application.programId)}/${application.projectId}`;
   }
   initials(name: string): string {
     return name

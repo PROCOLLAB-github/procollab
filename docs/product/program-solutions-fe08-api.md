@@ -1,0 +1,101 @@
+<!-- @format -->
+
+# FE08: API общего кабинета и выгрузки результатов
+
+## C00 1.12.0: фильтр поля и XLSX найденных решений
+
+Before: manager list принимал search/case/scope/submission/pagination, analytics export — только kind. After: list добавляет fieldId/answerState=all/present/missing/not_applicable; export kind=solutions/submitted получает те же непагинационные фильтры. Backend применяет snapshot/current форму и существующий empty_value (0/false present, новое поле не missing у старой сдачи); JSON и четыре листа книги используют одну выборку, XLSX включает все найденные, submitted — дополнительное пересечение. Неизвестное/чужое поле, invalid pair/state/blank, фильтры program/scores и export pagination дают C00 400. Права/no-store прежние, публикация не затрагивается.
+
+Реализовано: общий SolutionManagerSolutionFilters и строгий SolutionAnalyticsExportQuery; старый вызов с любым kind без фильтров остается допустимым, filtered program/scores и limit/offset в XLSX запрещены типами. Adapter передает field_id/answer_state через существующий API/interceptor, unsafe field ID отклоняет до HTTP. Repository/use cases и общий Blob error decoder сохраняются. Компоненты/фасады UI/route/SCSS этим checkpoint не меняются; D02 и D03 еще требуют approval.
+
+Checked by tests: 20 новых wire tests + 61 manager/C00 + 5 прежних export = 86 PASS; все состояния ответа, пересечение прежних query, original XLSX Blob, C00 JSON в Blob и unsafe IDs проверены. Полный npm run test:ci: **2754 tests / 478 files**, strict C00 types PASS; типовые negative cases для program/scores/pagination/unknown answer state. C00 1.12.0: **120 schemas / 45 operations / 158 scenarios**, обе копии трех документов byte-identical, прежние schemas/responses/144 сценария сохранены.
+
+Checked by build/static: Angular development build PASS (прежние Sass warnings), scoped ESLint 0 errors, locked Prettier 3.8.3 по 1969 LF-normalized files PASS. Backend: 15 новых PostgreSQL tests, общий прогон 244 PASS; 143 настоящих HTTP/JWT/anonymous checks трех форматов и filtered XLSX, без domain mutations. Evidence: design-artifacts/program-solutions-20261024/expert-v1/implementation/field-filters-http-evidence.json. Роли/размеры/сохраненные данные не менялись. Новый browser UI, production/CDN/Excel пересчет и большой memory benchmark не проверялись; это API scope, первый выпуск не завершен.
+
+Статус первого блока: API-слой общего входа подготовлен. D00 v3 и D01 согласованы, первый UI FE07 реализован; новые manager/public UI ожидают D02/D03. Первый выпуск не завершен.
+
+C00 1.4.0 добавляет GET /evaluation/applications/ и ApplicationRef обоих видов. Старая проекция /evaluation/programs/?include=projects остается прежней. Новая страница объединяет реальные назначения на сервере и только затем применяет общий limit/offset; фронт не объединяет два частично загруженных списка. Query использует status/q/program_id/limit/offset. Вкладочные счетчики pending/completed/unavailable возвращает сервер.
+
+Реализованы generated types/fixtures, SolutionRepositoryPort, repository/HTTP adapter и GetCabinetApplicationsUseCase. Сохраняются programId, projectId/programLinkId и solutionId в своих ветках; discriminator legacy_project/solution не преобразуется. Wire test специально использует совпадающие числовые ID двух видов заявки и проверяет, что различие сохраняется после CamelcaseInterceptor. Всего у экспертного API 11 wire tests.
+
+Checked by tests: полный Vitest — 2563 PASS в 466 файлах; после review повторно 11 wire tests и strict C00 types PASS. Проверены общая смешанная страница и отдельный запрос program_id с согласованным ответом сервера. Checked by build: Angular development build PASS. ESLint: 0 errors / 6 прежних warnings. Locked Prettier 3.8.3: 1945 файлов с LF, нарушений нет. C00 1.3 operations/schemas/examples семантически сохранены, 1.4 синхронизирован byte-for-byte в обоих репозиториях. Проверка product UI нового кабинета в браузере еще неприменима: реализация UI не начата до согласования D01. Запущенный backend обеих локальных форм проверен через HTTP/JWT, включая общую пагинацию и совместимую старую проекцию.
+
+Следующий блок C00 1.5.0: ExportSolutionResultsUseCase → SolutionRepositoryPort/repository → HTTP adapter → GET /programs/{program_id}/management/solution-results/export/. Query использует прежние search/case_scope/case_name/status/order и scope=current/all; получает исходный Blob через ApiService.getFile. JSON ошибки при responseType=blob декодируются и проходят общий SolutionApiError. Ни solution_id, ни project_id не подменяются; файл относится к явной программе решения.
+
+Checked by tests нового блока: 5 wire/error/ID tests PASS; полный Vitest — 2568 tests / 467 файлов PASS, strict C00 types PASS. Angular development build PASS; ESLint измененных TS — 0 errors. C00 1.5.0: 74 схемы, 34 операции, 57 независимых примеров; старые схемы/операции/примеры сохранены и обе копии контракта byte identical. Запущенный backend двух форм проверен через HTTP/JWT и чтение настоящей XLSX-книги. UI кнопки/результатов в браузере еще не проверяется: он ожидает согласования дизайна, API-слой интерфейс не добавляет.
+
+Осталось: административные команды с реальными SolutionRef, публикация материалов, остальная BE09/FE08 аналитика и выгрузки, UI результатов и QA01/REL01. Публикация неконкурсных сохраненных материалов внутри «Решений» программы подтверждена пользователем 25.10.2026; хранение остается ProgramSolution. Первый экспертный UI, кабинет, входы и ролевой виджет уже проверены в program-solutions-fe07-ui.md. Новые заглушки или автоматически включенный режим не добавлялись.
+
+## C00 1.8.0: агрегаты решений по кейсам, API
+
+Контракт CAS01–CAS07 зафиксирован в backend program-solutions-be09.md до реализации. Новый GET /programs/{program_id}/management/solution-cases/ не меняет прежний Project overview. GetSolutionCaseAnalyticsUseCase → port/repository/adapter получает только реальные program-scoped агрегаты, 0/null, current case order и withoutCase. Имя счетчика solutionsTotal; фиктивный Project DTO не вводится. Unsafe program IDs отклоняются до HTTP, C00 ошибки возвращаются обычным Result.
+
+Checked by source: те же ApiService/CamelcaseInterceptor и общий solutionRequestResult; UI пока не подключен. C00 1.8.0: 88 schemas / 36 operations / 80 scenarios; прежние 85/35/72 сохранены, обе копии byte-identical. Checked by tests: 12 real HTTP wire tests (все 8 сценариев + 4 unsafe IDs) PASS; полный npm run test:ci — 2627 tests / 474 files и strict C00 types PASS. Checked by build: Angular development build и scoped ESLint 0 errors PASS. Locked Prettier 3.8.3: 1963 LF-normalized files без нарушений; итоговый git diff --check PASS.
+
+Checked through running API: настоящий Django/PostgreSQL/JWT КЧ/хакатона/noncompetitive, реальные счетчики 1 решение и 2/1/2 зарегистрированных принятых участников, participant/expert 403, anonymous 401, noncompetitive null без submit. Backend 37 PostgreSQL tests (9 новых, legacy cases и solution widget) PASS. Review CAS07 PASS: query/DTO и ошибки сохраняются, прав клиент не добавляет. Browser нового продуктового экрана не проверялся: этот блок добавляет API-слой, без нового UI. Основная аналитика/attention, формы управления/результатов и остальные FE08 остаются в работе.
+
+## C00 1.9.0: основная manager analytics, API
+
+До runtime реализации записаны ANA01–ANA12 в backend program-solutions-be09.md и независимые схемы/сценарии. Добавлены use cases/port/repository/adapter для overview, actual assignment list/detail, scoped solution list и XLSX program/solutions/submitted/scores. Настоящий SolutionRef, assignmentId и Expert.user не преобразуются в Project DTO. Search/case/submission/scope/limit/offset передаются на проводе; unsafe IDs отклоняются до HTTP. Новые 47 wire tests проходят через настоящие ApiService/HttpClient/CamelcaseInterceptor и включают все 33 C00 сценария новых операций, 0/null, фильтры, четыре binary успеха и ошибки.
+
+Обработка JSON ошибки в Blob вынесена в общий solutionFileRequestResult и используется новой и прежней выгрузкой результатов. Прежние 5 export tests PASS; семантика ошибок/исходного Blob сохранена. Strict type tests запрещают projectId в assignment reference и legacy export kind, принимают noncompetitive null funnel.
+
+Checked by source: C00 1.9.0 — 110 schemas / 41 operations / 113 scenarios, старые 88/36/80 неизменны, обе копии byte-identical; UI не подключался и SCSS не менялся. Checked by tests: 52 targeted wire/export и полный npm run test:ci — 2674 tests / 475 files, strict C00 types PASS. Checked by build: обычный Angular development build, scoped ESLint 0 errors PASS. Locked Prettier 3.8.3: 1965 LF-normalized files PASS; git diff --check обоих repos PASS.
+
+Checked through running API: настоящий Django/PostgreSQL/JWT обеих форм/noncompetitive, сводка/cases/list/assignment detail, четыре настоящих XLSX и отрицательные роли PASS; 0 изменяющих запросов. Backend 114 PostgreSQL tests и 15 повторных после review PASS. API data больше не требуют Project проекции. Requirement audit ANA12 PASS. Новый экран/действия напоминаний/разрушающие команды/публикация и QA01/REL01 еще в работе; browser готовность из API-проверок не выводится.
+
+## C00 1.10 Напоминания экспертам о решениях
+
+До реализации зафиксированы REM01–REM09 в backend program-solutions-be09.md и C00 1.10.0: **116 schemas / 43 operations / 128 scenarios**. Прежние 110/41/113 неизменны. Добавлены manager-only POST reminder-preview/reminders под management/solution-analytics/attention/solutions-awaiting-evaluation. Selection использует настоящие solution IDs, selected/all/exclusions, поиск по snapshot name; signed token остается непрозрачным клиенту. Preview содержит null при отсутствии получателей, counts и первые 20 имен без email, confirm — created/skipped counts. Legacy endpoints/Project DTO не меняются.
+
+API layer: generated types/fixtures → SolutionRepositoryPort → repository/HTTP adapter → PreviewSolutionExpertReminderUseCase/ConfirmSolutionExpertReminderUseCase. Настоящий CamelcaseInterceptor преобразует excludedIds на проводе, не меняя значения IDs/token. Условная schema/strict types требуют ids для selected. Unsafe program ID отклоняется до HTTP. Ошибки C00 и 0/null сохраняются общим solutionRequestResult.
+
+Checked by tests: **21 новых wire tests** включают все 15 независимых C00 сценариев, selection/search/exclusions, opaque token, zero skipped/created и unsafe IDs; вместе с 47 analytics wire tests — 68 PASS. Полный `npm run test:ci`: **2695 tests / 476 files PASS** и strict C00 types PASS. Development build и scoped ESLint PASS; только прежние Sass deprecation warnings. C00 в обоих repos byte-identical, исходные схемы/операции/сценарии сохранены.
+
+Backend evidence: 22 новых tests, общий PostgreSQL прогон с предыдущими reminders/analytics — 144 PASS; Barrier подтверждает два одновременных confirm без дублей. Locmem tests проверяют recheck/отмену/фильтрацию и решение в action path. Реальный HTTP/JWT: 24 checks КЧ/хакатона/noncompetitive, empty preview/invalid confirm/roles, private headers и 0 domain mutations. Успешная доставка pending recipients в этом HTTP запуске не выполнялась.
+
+REM09: PASS для контракта и API layer. Review: реальных Project проекций, скрытой отправки или обхода server permissions нет. Новый manager экран/фасады/SCSS не менялись: [D02 макет](http://127.0.0.1:8769/manager-v1/) подготовлен и прошел prototype QA, но ожидает явного design approval. Not checked: runtime UI reminder interaction и production. Destructive actions, публичные решения, оставшиеся FE07/FE08 и QA01/REL01 впереди; API checkpoint не означает завершения feature.
+
+## C00 1.11 Публичные неконкурсные материалы
+
+До реализации зафиксированы PUB01–PUB10 в backend program-solutions-be08.md. C00 1.11.0 содержит **120 schemas / 45 operations / 144 scenarios**, прежние 116/43/128 структурно сохранены. Два anonymous GET `/programs/{program_id}/published-solutions/` и detail дают только опубликованные данные из ProgramSolution, без создания Project. На этом этапе поддерживается подтвержденная неконкурсная ветка; конкурсная публикация не объявляется завершенной.
+
+API layer: generated public page/card/materials/member → SolutionRepositoryPort → repository/adapter → GetPublishedSolutionsUseCase/GetPublishedSolutionUseCase. Query только limit/offset/search, настоящие program/solution IDs и immutable publishedAt. Team содержит accepted members/captain с минимальным User. Закрытые permissions/readiness/оценки/регистрация и контакты профиля не входят в DTO. Strict types не допускают закрытые submission filters и доступ к user.email. Наличие client DTO не заменяет server allowlist.
+
+Checked by tests: **25 новых wire tests** включают все 16 независимых C00 сценариев, anonymous запрос без ручной Authorization, 0/False/file/nullable pagination, errors/query и unsafe IDs до HTTP. Вместе с прежними 21 reminder tests — 46 PASS. Полный `npm run test:ci`: **2720 tests / 477 files PASS** и strict C00 types PASS. Development build и scoped ESLint PASS; только прежние Sass warnings. Backend: 19 новых publication tests, итоговая широкая PostgreSQL regression 229 PASS и 16 actual anonymous HTTP checks с восстановлением локальной фикстуры.
+
+PUB09 PASS для контракта/API layer; private program solution routes не становятся публичными. Этот checkpoint не добавляет Angular screen/route/layout/SCSS. Публичный интерфейс требует отдельного дизайна и явного approval, D02 организатора остается pending. Not checked: runtime public UI/browser и production. Migration backend 0033 (nullable marker/index) → API → frontend; реальные программы не переключались. Конкурсное правило по черновикам, остальные административные действия и QA01/REL01 остаются в работе.
+
+## C00 1.14 Первая сдача организатором
+
+Добавлен API слой существующего organizer/admin сценария поздней первой сдачи: POST management/solutions/actions/preview и apply. Настоящие Solution IDs/action=submit, nullable signed token и per-item issues/counts; apply передает previewToken без интерпретации. Schema/strict types требуют previewToken, отклоняют поле projectIds и действия detach/change_case; подпись проверяет сервер. Adapter отклоняет unsafe IDs/empty/oversized selection до HTTP. Все права, повторные проверки и атомарность находятся на сервере; клиент не добавляет force flag или автоматический повтор.
+
+C00 125 schemas/47 operations/185 scenarios; прежние 120/45/161 структурно неизменны, три contract файла byte-identical. Generated DTO/fixtures → repository port → repository/adapter → два use cases. 30 новых wire tests используют настоящий CamelcaseInterceptor, сохраняют scenario IDs, snake_case токена, null/0 и все C00 errors. Final npm run test:ci: 2793 tests/479 files и strict types PASS; development build/scoped ESLint PASS. Backend final 325 PostgreSQL tests (17 новых), два наблюдаемых confirm races и 42 actual HTTP/JWT checks двух форм PASS.
+
+На бэке общий finalize сохраняет captain deadline, ready validation и accepted-only snapshot, а confirmed manager command использует прежнее late-first-submit исключение. Сданные данные не перезаписываются. File locks захватываются до signed state fingerprint. Подробные spec/audit/evidence находятся в API repo docs/product/program-solutions-be08-submit-actions.md и docs/qa/program-solutions-submit-actions-20261025.
+
+Новых Angular screen/route/control/SCSS нет: D02 по-прежнему ожидает approval. Post-submission case/detach/removal, D03/конкурсная публикация и общий QA01/REL01 остаются открытыми. Это готовность API слоя, не всего административного интерфейса.
+
+## C00 1.15 Смена кейса черновика организатором
+
+Добавлены отдельные single-solution case preview/apply: DTO → port/repository/adapter → Preview/ApplySolutionCaseChangeUseCase. Точные caseName/opaque previewToken, настоящие program/solution IDs, nullable currentCase/token, field ID и MutationReceipt. Safe ID validation до HTTP; подпись, состояние и права проверяет сервер. Старые submit action schemas/scenarios не расширялись, Project ID не подменяет solution.
+
+128 schemas/49 operations/209 scenarios, прежние125/47/185 неизменны и три файла byte-identical.31 новых real-interceptor wire tests охватывают24 независимых сценария, errors/null/token/exact spaces/pipe/ID bounds; вместе с прежними submit61 PASS. Final test:ci2827 tests/480 files+strict types, development build/scoped lint PASS. Backend:19 новых tests, три observed PostgreSQL races, broad356 до final token guard и final52 после; actual115 response/88 valid requests+15 rejected invalid types трех форматов, без изменения прежних15 domain моделей. [Spec/evidence](https://github.com/PROCOLLAB-github/api/blob/d4709651e45b7d3411e19001ee4eada516afea48/docs/product/program-solutions-be08-case-actions.md).
+
+Это API слой до согласования D02; новых UI/layout/SCSS/routes нет. Submitted сохраняет freeze до ответа на ранее заданный вопрос, удаление/отвязка и конкурсная публикация не реализованы этим case command. Полные BE08/FE08/QA01/REL01 и первый выпуск остаются открытыми.
+
+## D02: административные сценарии, макет от 25.10.2026
+
+Существующий pending D02 дополнен до C00 1.20.1: первая сдача организатором, case/member preview/apply, архив с чтением материалов/состава, удаление registration_ids и независимая история. Команда остается второй вкладкой. Project conflict блокирует всю операцию; архивные фильтры/оценки не обещают неподдержанные readers. [Review bundle и handoff](../design/program-solutions-manager-d02-20261025/README.md) содержит source, tokens/patterns, AC D02-01–23, states, 130 Chrome prototype checks и screenshots.
+
+Это docs/design checkpoint; новые Angular routes/components/SCSS/фасады и API контракты не менялись. Runtime product BE394bf166/FEb4191a8b и C00 1.20.1 сохраняются. 130 проверок статического макета не заменяют 420 native/2949 FE предыдущего implementation checkpoint и не закрывают исходные AC18/19, QA01/REL01. D02/D03 approval и публикация несданных конкурсных черновиков уже запрошены, ответа здесь не предполагается. Без merge/deploy/реальных переключений.
+
+## C00 1.21: сданные конкурсные материалы
+
+Публичные GET поддерживают опубликованные submitted КЧ/хакатон работы; неконкурсные сохраненные материалы остаются без отдельной сдачи. DTO156/operations59 неизменны,6 новых scenarios, итого305. Временный пример404 всего competitive списка намеренно заменен200 пустого списка;298 остальных старых примеров сохранены. Публичные score/assignment/registration данные не добавлены. Shared contracts byte-identical; сгенерированы только новая версия types и fixtures. Существующий port/repository/adapter/use cases и CamelcaseInterceptor совместимы; новые route/layout/SCSS не добавлялись.
+
+Backend использует опубликованный действующий snapshot сдачи, сохраняет административную историю/оценки и исключает архивы. Запрос о несданных конкурсных черновиках остается открытым, D02/D03 approval не предполагается. Новый Angular public интерфейс и общие AC18/19/QA01/REL01 остаются в первом выпуске; BE10 отдельно. Миграций в этом checkpoint нет, backend1.21 → frontend; более старый competitive404 reader скроет уже опубликованные конкурсные материалы. Реальные программы не включались, merge/deploy не выполнялись.
+
+Проверки C00 1.21:31 public wire tests внутри2955 FE/484 files PASS, strict types/development build/scoped ESLint PASS. Native432+отдельные4 legacy/OK и97 actual HTTP/34 bodies подтверждают allowlist и совместимость. Предыдущий D02 docs/design checkpoint d59998e4 и его130 synthetic browser checks остаются отдельным evidence; этот API checkpoint не изменяет его HTML/Mont/вкладки или approval. [Backend CPUB spec и audit](https://github.com/PROCOLLAB-github/api/blob/feat/dev-program-solutions-be02-20261024/docs/product/program-solutions-competitive-publication.md).
+
+Последний target dev отдельно продвинулся: backend587a9155/frontend08414b79 содержат certificate changes. Read-only preview backend migration graph дает две leaf0031_certificate/0038_solution, хотя Git merge-tree без текстовых конфликтов. Интеграция с этим target и повторные проверки графа/данных остаются required_next;432/2955 не доказывают еще не созданную объединенную версию. Реальные ветки не сливались, histories не переписывались.

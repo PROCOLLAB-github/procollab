@@ -64,43 +64,52 @@ export class ProgramManagementService {
           this.closeTeam();
         }),
         switchMap(ctx => {
-          const content =
-            ctx.section === "participants"
-              ? this.api
-                  .participants(ctx.programId, ctx.query)
-                  .pipe(map(participants => ({ participants }) as Content))
-              : ctx.section === "projects"
-                ? this.api
-                    .projects(ctx.programId, ctx.query)
-                    .pipe(map(projects => ({ projects }) as Content))
-                : ctx.section === "evaluation" && ctx.linkId
-                  ? this.api
-                      .evaluation(ctx.programId, ctx.linkId)
-                      .pipe(map(evaluation => ({ evaluation }) as Content))
-                  : of({} as Content);
-          return forkJoin({ program: this.api.get(ctx.programId), content }).pipe(
-            tap(({ program, content }) => {
-              this.program.set(program);
-              this.participants.set(content.participants ?? null);
-              this.projects.set(content.projects ?? null);
-              this.evaluation.set(content.evaluation ?? null);
-              const selectedId = ctx.selectedId ?? this.selected()?.id;
-              this.selected.set(content.projects?.results.find(p => p.id === selectedId) ?? null);
-              this.programUI.program.set(
-                Object.assign(new Program(), Program.default(), program, { isUserManager: true }),
-              );
-            }),
-            catchError((error: HttpErrorResponse) => {
-              this.error.set(error);
-              this.program.set(null);
-              this.participants.set(null);
-              this.projects.set(null);
-              this.evaluation.set(null);
-              this.clearSelection();
-              return of(null);
-            }),
-            tap(() => this.pending.set(false)),
-          );
+          return this.api
+            .get(ctx.programId)
+            .pipe(
+              switchMap(program => {
+                const content =
+                  ctx.section === "participants"
+                    ? this.api
+                        .participants(ctx.programId, ctx.query)
+                        .pipe(map(participants => ({ participants }) as Content))
+                    : ctx.section === "projects" && program.solutionStorageMode !== "solution"
+                      ? this.api
+                          .projects(ctx.programId, ctx.query)
+                          .pipe(map(projects => ({ projects }) as Content))
+                      : ctx.section === "evaluation" &&
+                          ctx.linkId &&
+                          program.solutionStorageMode !== "solution"
+                        ? this.api
+                            .evaluation(ctx.programId, ctx.linkId)
+                            .pipe(map(evaluation => ({ evaluation }) as Content))
+                        : of({} as Content);
+                return forkJoin({ program: of(program), content });
+              }),
+            )
+            .pipe(
+              tap(({ program, content }) => {
+                this.program.set(program);
+                this.participants.set(content.participants ?? null);
+                this.projects.set(content.projects ?? null);
+                this.evaluation.set(content.evaluation ?? null);
+                const selectedId = ctx.selectedId ?? this.selected()?.id;
+                this.selected.set(content.projects?.results.find(p => p.id === selectedId) ?? null);
+                this.programUI.program.set(
+                  Object.assign(new Program(), Program.default(), program, { isUserManager: true }),
+                );
+              }),
+              catchError((error: HttpErrorResponse) => {
+                this.error.set(error);
+                this.program.set(null);
+                this.participants.set(null);
+                this.projects.set(null);
+                this.evaluation.set(null);
+                this.clearSelection();
+                return of(null);
+              }),
+              tap(() => this.pending.set(false)),
+            );
         }),
         takeUntilDestroyed(this.destroyRef),
       )

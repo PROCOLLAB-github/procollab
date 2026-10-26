@@ -88,6 +88,19 @@ describe("ProgramAnalyticsInfoService", () => {
     ]);
     expect(getOverview.execute).toHaveBeenCalledExactlyOnceWith(12);
   });
+  it("solution mode delegates to the solution UI without reading Project aggregates", () => {
+    programUI.program.set({
+      ...Program.default(),
+      id: 12,
+      isUserManager: true,
+      solutionStorageMode: "solution",
+    });
+    service.initialize();
+    expect(service.solutionMode()).toBe(true);
+    expect(service.programId()).toBe(12);
+    expect(service.data()).toBeNull();
+    expect(getOverview.execute).not.toHaveBeenCalled();
+  });
 
   it("не запрашивает аналитику для пользователя без manager-признака", () => {
     programUI.program.set({ ...Program.default(), id: 12, isUserManager: false });

@@ -35,6 +35,9 @@ export class ProgramAnalyticsInfoService {
   private routeProgramId: number | null = null;
   private loadedProgram: Program | undefined;
   readonly programId = signal<number | null>(null);
+  readonly solutionMode = computed(
+    () => this.programUI.program()?.solutionStorageMode === "solution",
+  );
   readonly programName = computed(() => this.programUI.program()?.name ?? "program");
   readonly scheduleDates = computed<ProgramScheduleDates | null>(() => {
     const program = this.programUI.program();
@@ -112,6 +115,10 @@ export class ProgramAnalyticsInfoService {
 
     this.state.set(loading());
     this.programId.set(programId);
+    if (program.solutionStorageMode === "solution") {
+      this.state.set(initial());
+      return;
+    }
     this.getOverview
       .execute(programId)
       .pipe(takeUntil(this.cancel), takeUntilDestroyed(this.destroyRef))

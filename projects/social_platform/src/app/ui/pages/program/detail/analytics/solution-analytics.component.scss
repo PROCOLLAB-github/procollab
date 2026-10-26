@@ -1,0 +1,85 @@
+/** @format */
+
+@use "styles/ui-foundation";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+}
+
+.ui-button:not(.attention__action).ui-button {
+  @include ui-foundation.button;
+}
+
+.ui-choice {
+  @include ui-foundation.choice;
+}
+
+.solution-analytics__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-block: 16px;
+}
+
+.solution-analytics__actions input {
+  flex: 1;
+  min-width: 140px;
+}
+
+.solution-analytics__dialog {
+  display: grid;
+  gap: 16px;
+  max-height: 78dvh;
+  padding: 24px;
+  overflow: auto;
+  font-family: Mont, sans-serif;
+}
+
+.solution-analytics__heading {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.solution-analytics__table {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.solution-analytics__table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.solution-analytics__table th,
+.solution-analytics__table td {
+  padding: 12px;
+  text-align: left;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.solution-analytics__table th {
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
+
+.solution-analytics__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+@media (max-width: 600px) {
+  .solution-analytics__dialog {
+    padding: 16px;
+  }
+}

@@ -1,0 +1,200 @@
+{
+  "status": "PASS",
+  "scope": "domain and HTTP checks only; browser outcome remains in separate evidence",
+  "programs": [
+    {
+      "program_id": 11,
+      "template": "case_championship",
+      "solution_id": 14,
+      "anchor_id": 12,
+      "anchorSnapshotUnchanged": true,
+      "zeroFalseCaseAndFileBytesRetained": true,
+      "deadlineRestored": true,
+      "newRequiredAppliesOnlyToNewSubmission": true
+    },
+    {
+      "program_id": 12,
+      "template": "hackathon",
+      "solution_id": 15,
+      "anchor_id": 13,
+      "anchorSnapshotUnchanged": true,
+      "zeroFalseCaseAndFileBytesRetained": true,
+      "deadlineRestored": true,
+      "newRequiredAppliesOnlyToNewSubmission": true
+    }
+  ],
+  "httpChecks": [
+    {
+      "path": "/programs/11/solutions/14/",
+      "role": "pending_b",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/11/solutions/14/",
+      "role": "pending_a",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/11/solutions/12/",
+      "role": "captain",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/11/management/solution-analytics/solutions/?field_id=82&answer_state=not_applicable",
+      "role": "manager",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/11/management/solution-analytics/solutions/?field_id=82&answer_state=present",
+      "role": "manager",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/11/management/solution-analytics/solutions/?field_id=82&answer_state=missing",
+      "role": "manager",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/11/solutions/14/",
+      "role": "anonymous",
+      "method": "GET",
+      "status": 401,
+      "code": "authentication_required"
+    },
+    {
+      "path": "/programs/11/solutions/14/",
+      "role": "member",
+      "method": "GET",
+      "status": 404,
+      "code": "not_found"
+    },
+    {
+      "path": "/programs/11/solutions/",
+      "role": "pending_b",
+      "method": "POST",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/11/solutions/14/",
+      "role": "pending_a",
+      "method": "PATCH",
+      "status": 403,
+      "code": "not_solution_captain"
+    },
+    {
+      "path": "/programs/11/solutions/14/",
+      "role": "pending_b",
+      "method": "PATCH",
+      "status": 409,
+      "code": "team_frozen"
+    },
+    {
+      "path": "/programs/11/solutions/14/submit/",
+      "role": "pending_b",
+      "method": "POST",
+      "status": 409,
+      "code": "already_submitted"
+    },
+    {
+      "path": "/programs/12/solutions/15/",
+      "role": "pending_b",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/12/solutions/15/",
+      "role": "pending_a",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/12/solutions/13/",
+      "role": "captain",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/12/management/solution-analytics/solutions/?field_id=83&answer_state=not_applicable",
+      "role": "manager",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/12/management/solution-analytics/solutions/?field_id=83&answer_state=present",
+      "role": "manager",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/12/management/solution-analytics/solutions/?field_id=83&answer_state=missing",
+      "role": "manager",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/12/solutions/15/",
+      "role": "anonymous",
+      "method": "GET",
+      "status": 401,
+      "code": "authentication_required"
+    },
+    {
+      "path": "/programs/12/solutions/15/",
+      "role": "member",
+      "method": "GET",
+      "status": 404,
+      "code": "not_found"
+    },
+    {
+      "path": "/programs/12/solutions/",
+      "role": "pending_b",
+      "method": "POST",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/12/solutions/15/",
+      "role": "pending_a",
+      "method": "PATCH",
+      "status": 403,
+      "code": "not_solution_captain"
+    },
+    {
+      "path": "/programs/12/solutions/15/",
+      "role": "pending_b",
+      "method": "PATCH",
+      "status": 409,
+      "code": "team_frozen"
+    },
+    {
+      "path": "/programs/12/solutions/15/submit/",
+      "role": "pending_b",
+      "method": "POST",
+      "status": 409,
+      "code": "already_submitted"
+    }
+  ],
+  "verificationDomainMutations": 0,
+  "preexistingDataSha256": "42a279014e03858fa9266dc24ddc7a44d4ffca2d8c0600e4d934f2279d3a6aad",
+  "preexistingDataUnchanged": true,
+  "projectCountUnchanged": true
+}

@@ -6,6 +6,7 @@ import {
   Component,
   HostListener,
   inject,
+  input,
   OnDestroy,
   OnInit,
 } from "@angular/core";
@@ -58,6 +59,7 @@ import { PROGRAM_DEFAULT_COVER, PROGRAM_LOGO_SIZES } from "@utils/program-brandi
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
+  readonly publicationsOnly = input(false);
   protected readonly defaultCover = PROGRAM_DEFAULT_COVER;
   protected get programCover(): string {
     const program = this.info();

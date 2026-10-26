@@ -1,0 +1,112 @@
+{
+  "status": "PROSPECTIVE FRONTEND CHECKS PASS; full release incomplete",
+  "feature": "ca1b203a34fddedd6f7d7d6a45752073697dfd7c",
+  "observedDev": "08414b794dd5b34de5471dddaa19cd0af7f4a167",
+  "prospectiveTree": "2f4f4f23b39b198247c3da01685685debf534faa",
+  "trackedSourceManifestSha256": "1199f2ca996a9fc9cb430687e4b9bdb7bb169e03452bbc17da7a2f93d991ddcc",
+  "tests": {
+    "files": 484,
+    "tests": 2987,
+    "result": "PASS",
+    "seconds": 402.27,
+    "command": "node node_modules/vitest/vitest.mjs run --maxWorkers=2 --minWorkers=1",
+    "mockScope": "Existing unit/component Vitest tests; not a real HTTP/browser journey"
+  },
+  "build": {
+    "command": "npm run build:pr",
+    "result": "PASS",
+    "seconds": 57.127,
+    "warnings": "Existing Sass deprecation warnings"
+  },
+  "strictTypes": {
+    "command": "npm run test:solution-contract",
+    "result": "PASS"
+  },
+  "eslint": {
+    "result": "PASS",
+    "targets": 103,
+    "selection": "All ACMR TS paths common base15905184..prospective tree2f4f4f23"
+  },
+  "format": {
+    "prettier": "3.8.3",
+    "locked": "3.8.3",
+    "checked": 2073,
+    "failures": []
+  },
+  "sourceRetention": {
+    "status": "PASS",
+    "snapshotFiles": 3681,
+    "archiveAndInitialManifestMatch": true,
+    "initialManifestSha256": "1199f2ca996a9fc9cb430687e4b9bdb7bb169e03452bbc17da7a2f93d991ddcc",
+    "trackedFilesChangedByBuild": [],
+    "realWorkspaceRuntimeChanged": false,
+    "noBranchMerge": true,
+    "noRealProgramSwitch": true
+  },
+  "contract": {
+    "version": "1.21.0",
+    "schemas": 156,
+    "operations": 59,
+    "scenarios": 305,
+    "changed": false,
+    "gitBytesComparedAfterCRLFNormalization": true
+  },
+  "backend": {
+    "head": "a787f0ee7d1cb01f9e777fbe2e0fa60999cc0805",
+    "product": "7cfe01be1c2caba38ad04fef0ab6d68147df1d02",
+    "synthetic": "020cc78ce6e45421cb1222c62a98611d8018562c",
+    "prospectiveTree": "2b93d6a99be4a1ac250912b59bea7b220ebf195f",
+    "native439": "OK no skips",
+    "focusedPostgreSQL15": "OK no skips",
+    "focusedSQLite15": "OK 3 PostgreSQL-only skips",
+    "mainModelsPreserved": 27,
+    "mainHash": "74555320f955379af8b51b609d5f27e6e6663fd9a2a8756ad871a9a383103ba6",
+    "linuxPostgreSQLRun": 40227938298,
+    "linuxGeneralRun": 40227933396,
+    "linuxFullSuiteStatus": "in_progress at packaging; not PASS",
+    "graphMigrateAndLockingSteps": "PASS on actual synthetic merged source"
+  },
+  "logs": {
+    "tests": {
+      "name": "procollab-solution-dev-integration-fe-tests.log",
+      "bytes": 81450,
+      "sha256": "8b6cc3fc6b14292fe64a5b6281c0eb4551813be586830626c653e11973db2d3c"
+    },
+    "build": {
+      "name": "procollab-solution-dev-integration-fe-build.log",
+      "bytes": 135488,
+      "sha256": "5b958dfe4b3b7dd075fbf32acfe7306af8f599c0a8e067b892de84947bad2b5c"
+    },
+    "types": {
+      "name": "procollab-solution-dev-integration-fe-types.log",
+      "bytes": 198,
+      "sha256": "9c49338a6bd87668f4525097ed9dbc34a680477f0387588bce160c2d95c749d8"
+    },
+    "eslint": {
+      "name": "procollab-solution-dev-integration-fe-eslint.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "name": "procollab-solution-dev-integration-fe-format.log",
+      "bytes": 90,
+      "sha256": "a243ef1f35e07668d780781fe0a1b6c964edaea690e4e19ab4649359d3701bcb"
+    },
+    "tests-before-snapshot": {
+      "name": "procollab-solution-dev-integration-fe-tests-before-snapshot.log",
+      "bytes": 841,
+      "sha256": "6f658f1b7e71820f7564e5cd828ad6e9729a5f89669549430bd8627d9ce83e73"
+    }
+  },
+  "retainedHarnessFailures": [
+    "Early Vitest launch before archive/junction completion: MODULE_NOT_FOUND; retained log; not product failure",
+    "First two source equality assertions compared CRLF Windows/archive bytes against Git LF bytes; diagnostic proved normalized equality, corrected verifier without changing source/contracts"
+  ],
+  "limits": [
+    "No new Angular manager/public screens, design approval, browser/HTTP/CDN/production proof",
+    "D02/D03 approvals and competitive unsent draft publication eligibility already pending",
+    "Original26 AC unchanged:23 PASS, AC18/19 OPEN, AC21 separate BE10",
+    "Complete BE01-BE09/FE01-FE08/C00/D00/QA01/REL01 first release remains in scope",
+    "No branch merge/rebase/force-push/deploy/real program switches"
+  ]
+}

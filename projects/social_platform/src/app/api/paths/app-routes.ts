@@ -42,6 +42,10 @@ export const AppRoutes = {
   },
 
   program: {
+    publishedSolutions: (programId: number | string) =>
+      `/office/program/${programId}/published-solutions`,
+    publishedSolution: (programId: number | string, solutionId: number | string) =>
+      `/office/program/${programId}/published-solutions/${solutionId}`,
     solutionCreate: (programId: number | string) => `/office/program/${programId}/solutions/new`,
     solution: (programId: number | string, solutionId: number | string) =>
       `/office/program/${programId}/solutions/${solutionId}`,
@@ -54,6 +58,8 @@ export const AppRoutes = {
     detail: (programId: number | string) => `/office/program/${programId}`,
     projects: (programId: number | string) => `/office/program/${programId}/projects`,
     projectsRating: (programId: number | string) => `/office/program/${programId}/projects-rating`,
+    rating: (programId: number | string, storageMode?: "legacy_project" | "solution") =>
+      `/office/program/${programId}/${storageMode === "solution" ? "solutions-rating" : "projects-rating"}`,
     analytics: (programId: number | string) => `/office/program/${programId}/analytics`,
     members: (programId: number | string) => `/office/program/${programId}/members`,
     register: (programId: number | string) => `/office/program/${programId}/register`,

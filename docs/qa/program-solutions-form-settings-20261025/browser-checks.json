@@ -1,0 +1,620 @@
+{
+  "status": "PASS for recorded checkpoints",
+  "prefix": "qa01f-20261025-a8f2c339",
+  "checks": [
+    {
+      "program": 27,
+      "key": "case_championship",
+      "run": "run-1792918810398",
+      "check": "explicit template, case options, file limits, numeric/text constraints and order persisted",
+      "widths": [320, 390, 768, 1440],
+      "fieldIds": [202, 203, 204, 205, 206, 207, 208, 209]
+    },
+    {
+      "program": 27,
+      "key": "case_championship",
+      "run": "run-1792918810398",
+      "check": "scoped creation control",
+      "action": "enable"
+    },
+    {
+      "program": 28,
+      "key": "hackathon",
+      "run": "run-1792918810398",
+      "check": "explicit template, case options, file limits, numeric/text constraints and order persisted",
+      "widths": [320, 390, 768, 1440],
+      "fieldIds": [210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221]
+    },
+    {
+      "program": 28,
+      "key": "hackathon",
+      "run": "run-1792918810398",
+      "check": "scoped creation control",
+      "action": "enable"
+    },
+    {
+      "program": 29,
+      "key": "noncompetitive",
+      "run": "run-1792918810398",
+      "check": "explicit template, case options, file limits, numeric/text constraints and order persisted",
+      "widths": [320, 390, 768, 1440],
+      "fieldIds": [222, 223, 224, 225, 226, 227, 228, 229]
+    },
+    {
+      "program": 29,
+      "key": "noncompetitive",
+      "run": "run-1792918810398",
+      "check": "scoped creation control",
+      "action": "enable"
+    },
+    {
+      "program": 27,
+      "key": "case_championship",
+      "run": "run-1792918810398",
+      "check": "captain-only empty draft saves without case or required materials",
+      "solution": 42
+    },
+    {
+      "program": 27,
+      "key": "case_championship",
+      "run": "run-1792918898397",
+      "check": "resume completed 0/false save without another write",
+      "solution": 42
+    },
+    {
+      "program": 27,
+      "key": "case_championship",
+      "run": "run-1792918898397",
+      "check": "scoped creation control",
+      "action": "disable"
+    },
+    {
+      "program": 27,
+      "key": "case_championship",
+      "run": "run-1792918898397",
+      "check": "0/false/null and name survive save/reload/tabs; no artificial noncompetitive submission",
+      "solution": 42,
+      "competitive": true,
+      "widths": [320, 390, 768, 1440]
+    },
+    {
+      "program": 28,
+      "key": "hackathon",
+      "run": "run-1792918898397",
+      "check": "captain-only empty draft saves without case or required materials",
+      "solution": 43
+    },
+    {
+      "program": 28,
+      "key": "hackathon",
+      "run": "run-1792918898397",
+      "check": "scoped creation control",
+      "action": "disable"
+    },
+    {
+      "program": 28,
+      "key": "hackathon",
+      "run": "run-1792918898397",
+      "check": "0/false/null and name survive save/reload/tabs; no artificial noncompetitive submission",
+      "solution": 43,
+      "competitive": true,
+      "widths": [320, 390, 768, 1440]
+    },
+    {
+      "program": 29,
+      "key": "noncompetitive",
+      "run": "run-1792918898397",
+      "check": "captain-only empty draft saves without case or required materials",
+      "solution": 44
+    },
+    {
+      "program": 29,
+      "key": "noncompetitive",
+      "run": "run-1792918898397",
+      "check": "scoped creation control",
+      "action": "disable"
+    },
+    {
+      "program": 29,
+      "key": "noncompetitive",
+      "run": "run-1792918898397",
+      "check": "0/false/null and name survive save/reload/tabs; no artificial noncompetitive submission",
+      "solution": 44,
+      "competitive": false,
+      "widths": [320, 390, 768, 1440]
+    },
+    {
+      "program": 27,
+      "key": "case_championship",
+      "run": "run-1792918898397",
+      "check": "manager of another program cannot read or change this form",
+      "status": 403
+    },
+    {
+      "program": 28,
+      "key": "hackathon",
+      "run": "run-1792918898397",
+      "check": "manager of another program cannot read or change this form",
+      "status": 403
+    },
+    {
+      "program": 29,
+      "key": "noncompetitive",
+      "run": "run-1792918898397",
+      "check": "manager of another program cannot read or change this form",
+      "status": 403
+    }
+  ],
+  "runs": [
+    {
+      "run": "run-1792918810398",
+      "head": "d2a2cd3f80549e7dcbc6b3e32e55fea7ead57175",
+      "origin": "http://127.0.0.1:8882",
+      "componentSha256": "303183b640190071d0588069ac0ba27e97cbc9d529e4cf3527f2f08688cb3be4"
+    },
+    {
+      "run": "run-1792918898397",
+      "head": "d2a2cd3f80549e7dcbc6b3e32e55fea7ead57175",
+      "origin": "http://127.0.0.1:8882",
+      "componentSha256": "303183b640190071d0588069ac0ba27e97cbc9d529e4cf3527f2f08688cb3be4"
+    }
+  ],
+  "earlierAttemptArtifacts": [
+    "browser-attempt-1792918390582.json",
+    "browser-attempt-1792918748942.json",
+    "browser-attempt-1792918843306.json"
+  ],
+  "browserResponses": 61,
+  "javascriptErrors": [],
+  "diagnosticCount": 84,
+  "programs": {
+    "27": {
+      "solutionId": 42,
+      "template": "case_championship",
+      "revision": "7fb45981a34d7b96a995750ff7c1b5fb386e41daf797d4d1b3ad767ded7bdd70",
+      "configured": true,
+      "draftChecked": true,
+      "fields": [
+        {
+          "id": 202,
+          "type": "select",
+          "purpose": "case",
+          "required": true,
+          "position": 0,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 203,
+          "type": "textarea",
+          "purpose": "other",
+          "required": true,
+          "position": 1,
+          "validation": {
+            "min_length": null,
+            "max_length": 3000,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 204,
+          "type": "file",
+          "purpose": "presentation",
+          "required": false,
+          "position": 2,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": ["pdf"],
+            "max_file_size_bytes": 1572864
+          }
+        },
+        {
+          "id": 205,
+          "type": "url",
+          "purpose": "video",
+          "required": false,
+          "position": 3,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 206,
+          "type": "number",
+          "purpose": "other",
+          "required": false,
+          "position": 4,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": 0,
+            "maximum": 100,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 207,
+          "type": "file",
+          "purpose": "other",
+          "required": false,
+          "position": 5,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": ["pdf", "zip"],
+            "max_file_size_bytes": 52428800
+          }
+        },
+        {
+          "id": 208,
+          "type": "checkbox",
+          "purpose": "other",
+          "required": false,
+          "position": 6,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 209,
+          "type": "textarea",
+          "purpose": "other",
+          "required": false,
+          "position": 7,
+          "validation": {
+            "min_length": 0,
+            "max_length": 20,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        }
+      ]
+    },
+    "28": {
+      "solutionId": 43,
+      "template": "hackathon",
+      "revision": "b297190ae6fc1323e7ebf062164e9e102365a45aca1bd1531ddcd76f1ef66409",
+      "configured": true,
+      "draftChecked": true,
+      "fields": [
+        {
+          "id": 210,
+          "type": "select",
+          "purpose": "case",
+          "required": true,
+          "position": 0,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 211,
+          "type": "textarea",
+          "purpose": "other",
+          "required": true,
+          "position": 1,
+          "validation": {
+            "min_length": null,
+            "max_length": 3000,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 212,
+          "type": "textarea",
+          "purpose": "other",
+          "required": true,
+          "position": 2,
+          "validation": {
+            "min_length": null,
+            "max_length": 10000,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 213,
+          "type": "url",
+          "purpose": "repository",
+          "required": true,
+          "position": 3,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 214,
+          "type": "textarea",
+          "purpose": "run_instructions",
+          "required": true,
+          "position": 4,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 215,
+          "type": "url",
+          "purpose": "demo",
+          "required": false,
+          "position": 5,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 216,
+          "type": "file",
+          "purpose": "presentation",
+          "required": false,
+          "position": 6,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": ["pdf"],
+            "max_file_size_bytes": 1572864
+          }
+        },
+        {
+          "id": 217,
+          "type": "url",
+          "purpose": "video",
+          "required": false,
+          "position": 7,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 218,
+          "type": "number",
+          "purpose": "other",
+          "required": false,
+          "position": 8,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": 0,
+            "maximum": 100,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 219,
+          "type": "file",
+          "purpose": "other",
+          "required": false,
+          "position": 9,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": ["pdf", "zip"],
+            "max_file_size_bytes": 52428800
+          }
+        },
+        {
+          "id": 220,
+          "type": "checkbox",
+          "purpose": "other",
+          "required": false,
+          "position": 10,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 221,
+          "type": "textarea",
+          "purpose": "other",
+          "required": false,
+          "position": 11,
+          "validation": {
+            "min_length": 0,
+            "max_length": 20,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        }
+      ]
+    },
+    "29": {
+      "solutionId": 44,
+      "template": "case_championship",
+      "revision": "0745c0af1268bc1cabe6fb2b6be2f639ee98514138320cad2b45b72481837829",
+      "configured": true,
+      "draftChecked": true,
+      "fields": [
+        {
+          "id": 222,
+          "type": "select",
+          "purpose": "case",
+          "required": true,
+          "position": 0,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 223,
+          "type": "textarea",
+          "purpose": "other",
+          "required": true,
+          "position": 1,
+          "validation": {
+            "min_length": null,
+            "max_length": 3000,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 224,
+          "type": "file",
+          "purpose": "presentation",
+          "required": false,
+          "position": 2,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": ["pdf"],
+            "max_file_size_bytes": 1572864
+          }
+        },
+        {
+          "id": 225,
+          "type": "url",
+          "purpose": "video",
+          "required": false,
+          "position": 3,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 226,
+          "type": "number",
+          "purpose": "other",
+          "required": false,
+          "position": 4,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": 0,
+            "maximum": 100,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 227,
+          "type": "file",
+          "purpose": "other",
+          "required": false,
+          "position": 5,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": ["pdf", "zip"],
+            "max_file_size_bytes": 52428800
+          }
+        },
+        {
+          "id": 228,
+          "type": "checkbox",
+          "purpose": "other",
+          "required": false,
+          "position": 6,
+          "validation": {
+            "min_length": null,
+            "max_length": null,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        },
+        {
+          "id": 229,
+          "type": "textarea",
+          "purpose": "other",
+          "required": false,
+          "position": 7,
+          "validation": {
+            "min_length": 0,
+            "max_length": 20,
+            "minimum": null,
+            "maximum": null,
+            "allowed_extensions": [],
+            "max_file_size_bytes": null
+          }
+        }
+      ]
+    }
+  },
+  "provenance": "19 checkpoints include 6 guarded CLI creation controls, 1 resumed-save observation, UI configuration/draft checks and direct foreign-manager requests. Completed phases are reused without resetting or re-saving first draft. Initial false-dirty product failure and later harness failures are retained. Only C00 traffic is counted; authentication/welcome requests are outside this wire capture, so zero browser writes is not claimed."
+}

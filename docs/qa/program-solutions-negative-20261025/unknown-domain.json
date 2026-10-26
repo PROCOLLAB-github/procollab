@@ -1,0 +1,158 @@
+{
+  "status": "PASS",
+  "scope": "domain and HTTP checks only; browser outcome remains in separate evidence",
+  "programs": [
+    {
+      "program_id": 13,
+      "template": "case_championship",
+      "solution_id": 18,
+      "anchor_id": 16,
+      "anchorSnapshotUnchanged": true,
+      "zeroFalseCaseAndFileBytesRetained": true,
+      "deadlineRestored": true,
+      "newRequiredAppliesOnlyToNewSubmission": false
+    },
+    {
+      "program_id": 14,
+      "template": "hackathon",
+      "solution_id": 19,
+      "anchor_id": 17,
+      "anchorSnapshotUnchanged": true,
+      "zeroFalseCaseAndFileBytesRetained": true,
+      "deadlineRestored": true,
+      "newRequiredAppliesOnlyToNewSubmission": false
+    }
+  ],
+  "httpChecks": [
+    {
+      "path": "/programs/13/solutions/18/",
+      "role": "pending_b",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/13/solutions/18/",
+      "role": "pending_a",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/13/solutions/16/",
+      "role": "captain",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/13/solutions/18/",
+      "role": "anonymous",
+      "method": "GET",
+      "status": 401,
+      "code": "authentication_required"
+    },
+    {
+      "path": "/programs/13/solutions/18/",
+      "role": "member",
+      "method": "GET",
+      "status": 404,
+      "code": "not_found"
+    },
+    {
+      "path": "/programs/13/solutions/",
+      "role": "pending_b",
+      "method": "POST",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/13/solutions/18/",
+      "role": "pending_a",
+      "method": "PATCH",
+      "status": 403,
+      "code": "not_solution_captain"
+    },
+    {
+      "path": "/programs/13/solutions/18/",
+      "role": "pending_b",
+      "method": "PATCH",
+      "status": 409,
+      "code": "team_frozen"
+    },
+    {
+      "path": "/programs/13/solutions/18/submit/",
+      "role": "pending_b",
+      "method": "POST",
+      "status": 409,
+      "code": "already_submitted"
+    },
+    {
+      "path": "/programs/14/solutions/19/",
+      "role": "pending_b",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/14/solutions/19/",
+      "role": "pending_a",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/14/solutions/17/",
+      "role": "captain",
+      "method": "GET",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/14/solutions/19/",
+      "role": "anonymous",
+      "method": "GET",
+      "status": 401,
+      "code": "authentication_required"
+    },
+    {
+      "path": "/programs/14/solutions/19/",
+      "role": "member",
+      "method": "GET",
+      "status": 404,
+      "code": "not_found"
+    },
+    {
+      "path": "/programs/14/solutions/",
+      "role": "pending_b",
+      "method": "POST",
+      "status": 200,
+      "code": null
+    },
+    {
+      "path": "/programs/14/solutions/19/",
+      "role": "pending_a",
+      "method": "PATCH",
+      "status": 403,
+      "code": "not_solution_captain"
+    },
+    {
+      "path": "/programs/14/solutions/19/",
+      "role": "pending_b",
+      "method": "PATCH",
+      "status": 409,
+      "code": "team_frozen"
+    },
+    {
+      "path": "/programs/14/solutions/19/submit/",
+      "role": "pending_b",
+      "method": "POST",
+      "status": 409,
+      "code": "already_submitted"
+    }
+  ],
+  "verificationDomainMutations": 0,
+  "preexistingDataSha256": "fe1ac880882cec6f8c3210028faa90d8a803c088d4027a283c34a9d8202df9c6",
+  "preexistingDataUnchanged": true,
+  "projectCountUnchanged": true
+}

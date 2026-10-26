@@ -1,0 +1,185 @@
+{
+  "rawDirectory": "Z:\\Документы\\PROCOLLAB-dev\\design-artifacts\\program-solutions-20261024\\qa01-form-settings",
+  "artifacts": [
+    {
+      "file": "browser-attempt-1792918390582.json",
+      "bytes": 32360,
+      "sha256": "274cfba317ad631b46511fad1fa5126ca0b405694aeec543612354c849a1b608"
+    },
+    {
+      "file": "browser-attempt-1792918748942.json",
+      "bytes": 62937,
+      "sha256": "41ba812fc31694b1f8bf9837f20387d2c005085eeb1992e0a107beabcba77b89"
+    },
+    {
+      "file": "browser-attempt-1792918843306.json",
+      "bytes": 213963,
+      "sha256": "082d72cb73543bd0eba278d7fdc31f19badce0989ba255f2c2213e529cd66bc0"
+    },
+    {
+      "file": "browser-failure-1792918390585.png",
+      "bytes": 118548,
+      "sha256": "ecc11995e06f86690d25d228f5d822127f6903c85f0369445363d09c6e197302"
+    },
+    {
+      "file": "browser-failure-1792918750574.png",
+      "bytes": 110674,
+      "sha256": "1277dd318bf17b076364376af8212617f9a19282fe035b30496ab8dfd64cb2d2"
+    },
+    {
+      "file": "browser-failure-1792918843311.png",
+      "bytes": 79453,
+      "sha256": "501fc73e9d6315217a8c63cd3482c4dafed3b4099dd9808c20574c234488db62"
+    },
+    {
+      "file": "browser-state.json",
+      "bytes": 385530,
+      "sha256": "d61577f16c0beff382398db18106877bc8892db07878bc7e4fbdf4fa0cc47c5c"
+    },
+    {
+      "file": "build-after.json",
+      "bytes": 1213,
+      "sha256": "bffd1fb0fd6d88491b5fb8777bc3d63bfb04fc9a164c45070ef2a78385e4134c"
+    },
+    {
+      "file": "build-final.json",
+      "bytes": 1503,
+      "sha256": "e12985c2b8518b19fa1ba2308061ad35341cfd21da5883cf44a049ad78da89d3"
+    },
+    {
+      "file": "case_championship-draft-zero-false.png",
+      "bytes": 92440,
+      "sha256": "6870e61a45945be75f03dedf9694ec8d43ab95974bb1546933a47bf7517ac47a"
+    },
+    {
+      "file": "case_championship-manager-configured.png",
+      "bytes": 150386,
+      "sha256": "924ba1ee038b066181dc6a4f9134cd16377c5f1ca4926b1c934e897a65a90401"
+    },
+    {
+      "file": "domain-and-contract-evidence.json",
+      "bytes": 104502,
+      "sha256": "a20383a09ae4abffa72ab48653f34b84997fbc20d76a20b50d5687cd1ce78a22"
+    },
+    {
+      "file": "hackathon-draft-zero-false.png",
+      "bytes": 50980,
+      "sha256": "7269f5eb603c89b232a9a0b6f571e9cb2048c1642c7ecf5cdd429a8c6e377f3f"
+    },
+    {
+      "file": "hackathon-manager-configured.png",
+      "bytes": 59547,
+      "sha256": "9723e132d752c35c318da7100177e5c30c1324a2a3fac2ad9908c8608772d292"
+    },
+    {
+      "file": "noncompetitive-copy-final.json",
+      "bytes": 6896,
+      "sha256": "667e1d1227b4c32baa4d72adc82201eab187f286c7232336d90e6aa92c4cc452"
+    },
+    {
+      "file": "noncompetitive-copy-final.png",
+      "bytes": 94838,
+      "sha256": "b233dc71891356b81c60ae4148b58bd80a6d1b16fb65aa6492eba80822bba6be"
+    },
+    {
+      "file": "noncompetitive-draft-zero-false.png",
+      "bytes": 94727,
+      "sha256": "bf5d9c8292f9456b55b315297c4f1becc3cd67e25d1dde11f358dcf602d0005f"
+    },
+    {
+      "file": "noncompetitive-manager-configured.png",
+      "bytes": 150386,
+      "sha256": "924ba1ee038b066181dc6a4f9134cd16377c5f1ca4926b1c934e897a65a90401"
+    },
+    {
+      "file": "setup-recovery.json",
+      "bytes": 1562,
+      "sha256": "910b28be662c6e93b181ece9e11f3ef05cee868858e86c3a034166241adcab9f"
+    }
+  ],
+  "helpers": [
+    {
+      "file": "procollab-form-qa-seed.py",
+      "sha256": "dc874134d571e7f64fe1c0b6cd2e1d0f87c4fc7010548d3a88d846c03fc1cd08"
+    },
+    {
+      "file": "procollab-form-qa-recover-seed.py",
+      "sha256": "7f5a2ebf83da47ee731b47b6ed1af7b3cb7f3a88d928f396efbf9eb5210d9e2d"
+    },
+    {
+      "file": "procollab-form-qa-control.py",
+      "sha256": "5a9b1ec2a7326facbda890a58096891ef1194d969c03c8a25a1ac6a096378844"
+    },
+    {
+      "file": "procollab-form-qa-browser.cjs",
+      "sha256": "0e64d146ca6bef47cf8d261dec875a61201e736f34a57ab906b4d8073e1c469a"
+    },
+    {
+      "file": "procollab-form-qa-build.cjs",
+      "sha256": "acd43db9de6a2d8c34c862ed4b3ac3960eea95718b81de3161eff00b7a74df2f"
+    },
+    {
+      "file": "procollab-form-qa-spa.py",
+      "sha256": "8e846d57f360bfa5157f117f0c2cdc90a56fb19e83f6bc7e3338fa0110ed3e38"
+    },
+    {
+      "file": "procollab-form-qa-copy.cjs",
+      "sha256": "27b8048873717c0abb1c7981556f9dbac820d04122027f5dff66f08ef8f03411"
+    },
+    {
+      "file": "procollab-form-qa-verify.py",
+      "sha256": "a66fa670ad19c8687aaaef4b853fb92b1d3bb7a46f0b33753276d3d3a3777871"
+    },
+    {
+      "file": "procollab-form-qa-package.py",
+      "sha256": "f580bc8bed6e8a79bf5d783cffab1be2bb7ea9c7c232bd0fe699515e2963e731"
+    }
+  ],
+  "sources": [
+    {
+      "file": "projects/social_platform/src/app/ui/pages/program/management/solution-form/solution-form.component.ts",
+      "sha256": "303183b640190071d0588069ac0ba27e97cbc9d529e4cf3527f2f08688cb3be4"
+    },
+    {
+      "file": "projects/social_platform/src/app/ui/pages/program/management/solution-form/solution-form.component.spec.ts",
+      "sha256": "74960c9216a2cf1c7956c7b3bc8af625146ee222b494822683066f95f3bcb4f5"
+    },
+    {
+      "file": "projects/social_platform/src/app/ui/pages/program/solution/solution.component.html",
+      "sha256": "9a7f7428e8c3884c4fddc478f20f6a3b7f1794f027acd8ed3ac53a39ee09042d"
+    },
+    {
+      "file": "projects/social_platform/src/app/ui/pages/program/solution/solution.component.spec.ts",
+      "sha256": "4f68ce31ecfdc87e823bc436795fe42f84a220bdff7e3426dd6d213b734d2781"
+    }
+  ],
+  "logs": [
+    {
+      "file": "procollab-form-qa-unit-before.log",
+      "sha256": "83ffad217305ff003995183c81c55d57fd0799576ffca3f7b3d6b44ea14c03ef"
+    },
+    {
+      "file": "procollab-form-qa-unit-after.log",
+      "sha256": "6361b3809752b5ac26c73e1d833d509f4a6338b00e70cb3ce366f06ad9b33938"
+    },
+    {
+      "file": "procollab-form-qa-test-final.log",
+      "sha256": "d0b9435b134c4ed2b46e2ca69fac2b587533bab9307fc213949637c0d3441c86"
+    },
+    {
+      "file": "procollab-form-qa-build-final.log",
+      "sha256": "6e5f11f68304dcb7000d62ba5365b03615fb9c2eff64e3e161a4f037cd408268"
+    },
+    {
+      "file": "procollab-form-qa-verify-final.log",
+      "sha256": "be155d849c00cd887021916e2cefc57bc2ad2ef1c86335e5c1338cb48d4ddb36"
+    }
+  ],
+  "credentialsIncluded": false,
+  "notes": [
+    "Raw wire and failed attempts kept locally, committed reports are curated.",
+    "Baseline captured after fixture setup, before tested API/UI writes; no pre-seed SHA claim.",
+    "9 screenshots: initial product FAIL, 2 harness failures and 6 main states, plus 1 final copy screenshot; actual file inventory is authoritative.",
+    "Initial false warning, hackathon manager at390 and noncompetitive draft/final copy at1440 visually inspected; screenshots may reflect nested scroll position."
+  ]
+}

@@ -25,9 +25,11 @@ import {
 } from "@angular/forms";
 import { noop, Subscription } from "rxjs";
 import { RangeCriterionInputComponent } from "./components/range-criterion-input/range-criterion-input.component";
-import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { evaluationCriterionControl } from "@utils/evaluation-criterion-control";
+import {
+  evaluationCriterionControl,
+  EvaluationCriterion,
+} from "@utils/evaluation-criterion-control";
 import { ButtonDirective, FieldDirective } from "@uilib";
 
 /** Оценка проекта по числовым, булевым и текстовым критериям через ControlValueAccessor. */
@@ -58,7 +60,7 @@ import { ButtonDirective, FieldDirective } from "@uilib";
 })
 export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, Validator {
   @Input({ required: true })
-  set criteria(val: ProjectRatingCriterion[]) {
+  set criteria(val: EvaluationCriterion[]) {
     if (!val) return;
     const ordered = [...val.filter(c => c.type !== "str"), ...val.filter(c => c.type === "str")];
     this._criteria.set(ordered);
@@ -70,7 +72,7 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     });
   }
 
-  get criteria(): ProjectRatingCriterion[] {
+  get criteria(): EvaluationCriterion[] {
     return this._criteria();
   }
 
@@ -116,7 +118,7 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
   readonly layout = input<"compact" | "full">("compact");
 
   /** Сигнал для хранения критериев оценки */
-  _criteria = signal<ProjectRatingCriterion[]>([]);
+  _criteria = signal<EvaluationCriterion[]>([]);
 
   /** Форма для управления всеми критериями оценки */
   form!: FormGroup;
@@ -177,7 +179,7 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     this.subscriptions$().forEach(subscription => subscription.unsubscribe());
   }
 
-  private createFormControls(criteria: ProjectRatingCriterion[]): void {
+  private createFormControls(criteria: EvaluationCriterion[]): void {
     this.subscriptions$().forEach(subscription => subscription.unsubscribe());
     this.subscriptions$.set([]);
     const formGroupControls: Record<string, FormControl> = {};

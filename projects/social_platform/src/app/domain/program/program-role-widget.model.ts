@@ -1,46 +1,23 @@
 /**
- * Read-only данные Angular-проектов; legacy currentApplication не используется.
+ * Read-only ролевой контракт: проект и решение различаются по storageMode.
  *
  * @format
  */
 
-export type ProgramWidgetRole = "organizer" | "expert" | "participant";
-export type ParticipantStage =
-  | "none"
-  | "not_submitted"
-  | "submitted"
-  | "review"
-  | "evaluated"
-  | "not_applicable";
-export interface ParticipantWidget {
-  participantProject: { id: number; name: string; programLinkId: number } | null;
-  caseProvided: boolean;
-  caseName: string | null;
-  stage: ParticipantStage;
-  submissionOpen: boolean;
-}
-export interface OrganizerWidget {
-  participants: number;
-  projects: number;
-  submittedSolutions: number | null;
-  participantsWithoutProject: number;
-}
-export interface ExpertWidget {
-  mode: "open" | "distributed";
-  assigned: number | null;
-  remaining: number | null;
-  evaluationEnds: string | null;
-}
-interface WidgetContext {
-  programId: number;
-  isCompetitive: boolean;
-}
-export type ProgramRoleWidget = WidgetContext &
-  (
-    | { role: "participant"; participant: ParticipantWidget }
-    | { role: "organizer"; organizer: OrganizerWidget }
-    | { role: "expert"; expert: ExpertWidget }
-  );
+import {
+  SolutionRoleWidget,
+  SolutionWidgetStage,
+  SolutionWidgetLegacyParticipant,
+  SolutionWidgetLegacyOrganizer,
+  SolutionWidgetExpert,
+} from "@domain/solution/solution-contract.model";
+
+export type ProgramRoleWidget = SolutionRoleWidget;
+export type ProgramWidgetRole = ProgramRoleWidget["role"];
+export type ParticipantStage = SolutionWidgetStage;
+export type ParticipantWidget = SolutionWidgetLegacyParticipant;
+export type OrganizerWidget = SolutionWidgetLegacyOrganizer;
+export type ExpertWidget = SolutionWidgetExpert;
 export type ProgramWidgetError =
   | "network"
   | "forbidden"

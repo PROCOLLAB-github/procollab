@@ -75,7 +75,7 @@
             <app-project-team-step style="width: 100%"></app-project-team-step>
           }
         } @else if (editingStep() === "additional") {
-          @defer {
+          @defer (on immediate) {
             <app-project-additional-step
               #additionalStepComponent
               style="width: 100%"

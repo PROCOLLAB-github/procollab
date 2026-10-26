@@ -18,6 +18,16 @@
         <p class="muted">
           {{ item.submission.status === "submitted" ? "Решение сдано" : "Черновик заявки" }}
         </p>
+        @if (item.submission.status !== "submitted") {
+          @if (!item.submission.required) {
+            <p class="muted">Программа не требует сдачи. Сохраняйте работу как черновик.</p>
+          } @else if (item.submission.deadline) {
+            <p class="muted">
+              {{ item.submission.submissionOpen ? "Сдать до" : "Прием решений закрыт" }}
+              {{ item.submission.deadline | date: "dd.MM.yyyy, HH:mm" }}
+            </p>
+          }
+        }
       </div>
       @if (item.submission.submittedAt) {
         <p>Сдано {{ item.submission.submittedAt | date: "dd.MM.yyyy, HH:mm" }}</p>
@@ -35,40 +45,205 @@
       >
     </nav>
     @if (teamTab()) {
-      <section aria-labelledby="team-title">
-        <h2 id="team-title">Команда заявки</h2>
-        <p class="muted">Участники команды · {{ item.team.acceptedCount }}</p>
-        <ul class="members">
-          @for (member of item.team.members; track member.user.id) {
-            <li>
-              <span class="name"
-                >{{ member.user.firstName }} {{ member.user.lastName
-                }}<small class="muted">{{
-                  member.isCaptain ? "Капитан" : "Участник команды"
-                }}</small></span
-              >
-              <span>{{ member.role || "Роль не указана" }}</span>
-              <span class="muted">В команде</span>
-            </li>
-          } @empty {
-            <li>В команде пока нет участников.</li>
-          }
-        </ul>
-      </section>
+      @if (teamRefreshError()) {
+        <p role="alert">{{ teamRefreshError() }}</p>
+        <button appButton="secondary" type="button" (click)="refreshTeam()">Обновить заявку</button>
+      }
+      <app-solution-team
+        [solution]="item"
+        [refreshing]="refreshingTeam() || !!teamRefreshError()"
+        [blocked]="commandBusy()"
+        (changed)="refreshTeam()"
+        (left)="teamLeft()"
+      />
     } @else {
-      <section aria-labelledby="data-title">
+      <section
+        class="solution-editor"
+        aria-labelledby="data-title"
+        [attr.aria-busy]="commandBusy()"
+      >
         <h2 id="data-title">Данные решения</h2>
-        <dl>
-          @for (field of item.form.fields; track field.id) {
-            <div>
-              <dt>{{ field.label }}{{ field.required ? " *" : "" }}</dt>
-              <dd>{{ answer(field.id) }}</dd>
-            </div>
-          } @empty {
-            <p class="muted">Организатор еще не настроил поля решения.</p>
-          }
-        </dl>
+        @if (draft.canEdit()) {
+          <p class="muted">
+            {{
+              item.submission.required
+                ? "Заполняйте решение постепенно. Обязательные поля понадобятся при сдаче."
+                : "Заполняйте решение постепенно и сохраняйте материалы по мере готовности."
+            }}
+          </p>
+          <div class="solution-name">
+            <label for="solution-name">Название решения *</label>
+            <input
+              appField
+              id="solution-name"
+              [formControl]="draft.name"
+              maxlength="256"
+              [readOnly]="commandBusy() || refreshingTeam()"
+            />
+            @if (draft.nameError()) {
+              <p class="error" role="alert">{{ draft.nameError() }}</p>
+            }
+          </div>
+        } @else {
+          <p class="muted">
+            {{
+              item.submission.status === "submitted"
+                ? "Решение сдано. Данные и состав команды зафиксированы."
+                : "Редактировать решение может капитан команды."
+            }}
+          </p>
+        }
+        <app-solution-fields
+          [fields]="item.form.fields"
+          [group]="draft.displayGroup()"
+          [readonly]="!draft.canEdit()"
+          [busy]="commandBusy() || refreshingTeam()"
+          [attempted]="draft.attempted()"
+          [requireAnswers]="submissionAttempted()"
+          [errors]="draft.fieldErrors()"
+          (upload)="draft.upload($event.fieldId, $event.file)"
+          (clearFile)="draft.clearFile($event)"
+        />
+        @if (!item.form.fields.length) {
+          <p class="muted">Организатор еще не настроил поля решения.</p>
+        }
+        @if (!draft.canEdit() && draft.dirty()) {
+          <aside class="local-answers" aria-label="Ваши несохраненные изменения">
+            <h3>Ваши несохраненные изменения</h3>
+            <p>Права изменились. При необходимости скопируйте введенные данные.</p>
+            @if (draft.name.value !== item.name) {
+              <strong>Название решения</strong>
+              <p>{{ draft.name.value }}</p>
+            }
+            @for (answer of draft.localChanges(); track answer.fieldId) {
+              <strong>{{ answer.label }}</strong>
+              <p>{{ draft.valueText(answer.value) }}</p>
+            }
+          </aside>
+        }
+        @if (draft.orphaned().length) {
+          <aside class="local-answers" aria-labelledby="local-answers-title">
+            <h3 id="local-answers-title">Несохраненные ответы измененной формы</h3>
+            <p>
+              Организатор изменил эти поля. Скопируйте нужные данные, затем уберите локальные
+              ответы, чтобы сохранить черновик.
+            </p>
+            @for (answer of draft.orphaned(); track answer.fieldId) {
+              <div>
+                <strong>{{ answer.label }}</strong>
+                <p>{{ draft.valueText(answer.value) }}</p>
+                <button
+                  appButton="text"
+                  type="button"
+                  [disabled]="commandBusy()"
+                  (click)="draft.resolveLocalCopy(answer.fieldId)"
+                >
+                  Убрать локальный ответ
+                </button>
+              </div>
+            }
+          </aside>
+        }
       </section>
     }
+    <footer class="draft-actions">
+      @if (teamRefreshError() && !teamTab()) {
+        <p role="alert">{{ teamRefreshError() }}</p>
+        <button appButton="secondary" type="button" (click)="refreshTeam()">Обновить заявку</button>
+      }
+      @if (draft.error(); as problem) {
+        <p class="error" role="alert">{{ problem.detail }}</p>
+      }
+      @if (submissionIssues().length) {
+        <ul class="submission-issues" aria-label="Что нужно исправить перед сдачей">
+          @for (issue of submissionIssues(); track $index) {
+            <li>
+              <button appButton="text" type="button" (click)="focusIssue(issue)">
+                {{ issueLabel(issue) }}
+              </button>
+            </li>
+          }
+        </ul>
+      }
+      @if (draft.notice()) {
+        <p role="status">{{ draft.notice() }}</p>
+      }
+      @if (draft.uploading() !== null) {
+        <p role="status">Загружаем файл…</p>
+      }
+      @if (draft.dirty() && !draft.canEdit()) {
+        <p role="status">
+          Права изменились. Ваши несохраненные правки остались в этой вкладке браузера.
+        </p>
+      }
+      <div class="draft-actions__buttons">
+        @if (item.submission.required && item.submission.status === "draft" && draft.canEdit()) {
+          <button
+            appButton="primary"
+            type="button"
+            [disabled]="
+              commandBusy() ||
+              refreshingTeam() ||
+              !!teamRefreshError() ||
+              !item.permissions.canSubmit
+            "
+            (click)="prepareSubmission($event)"
+          >
+            {{ draft.submitting() ? "Сдаем…" : "Сдать решение" }}
+          </button>
+        }
+        @if (draft.canEdit()) {
+          <button
+            appButton="secondary"
+            type="button"
+            [disabled]="commandBusy() || refreshingTeam() || !!teamRefreshError() || !draft.dirty()"
+            [attr.aria-busy]="draft.saving()"
+            (click)="saveDraft()"
+          >
+            {{ draft.saving() ? "Сохраняем…" : "Сохранить черновик" }}
+          </button>
+        }
+        @if (draft.dirty()) {
+          <button
+            appButton="text"
+            type="button"
+            [disabled]="commandBusy()"
+            (click)="discardDraft()"
+          >
+            Отменить изменения
+          </button>
+        }
+      </div>
+    </footer>
   }
 </main>
+@if (confirmation()) {
+  <app-project-invite-dialog
+    title="Сдать решение?"
+    description="После сдачи данные решения и состав команды будут зафиксированы. Вы уверены, что хотите отправить заявку сейчас?"
+    closeLabel="Закрыть подтверждение"
+    [compact]="true"
+    [trigger]="submissionTrigger"
+    (closed)="confirmation.set(null)"
+  >
+    <div inviteFooter class="submission-confirmation-actions">
+      <button
+        appButton="secondary"
+        type="button"
+        [disabled]="draft.submitting()"
+        (click)="confirmation.set(null)"
+      >
+        Отмена
+      </button>
+      <button
+        appButton="primary"
+        type="button"
+        [disabled]="draft.busy()"
+        [attr.aria-busy]="draft.submitting()"
+        (click)="confirmSubmission()"
+      >
+        {{ draft.submitting() ? "Сдаем…" : "Сдать решение" }}
+      </button>
+    </div>
+  </app-project-invite-dialog>
+}

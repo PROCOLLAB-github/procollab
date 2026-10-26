@@ -1,0 +1,123 @@
+{
+  "status": "PASS",
+  "sourceManifestSha256": "f419a5f072a26df4e66bf14ad32497425545fe68ac5000307fa2e72ec2be1ad3",
+  "sourceFiles": 24,
+  "browser": "headless msedge",
+  "scope": "Frozen synthetic bundle smoke; not HTTP/API/Angular or complete design QA",
+  "checks": [
+    {
+      "screen": "solutions",
+      "width": 320,
+      "noOverflow": true
+    },
+    {
+      "screen": "solutions",
+      "width": 390,
+      "noOverflow": true
+    },
+    {
+      "screen": "solutions",
+      "width": 768,
+      "noOverflow": true
+    },
+    {
+      "screen": "solutions",
+      "width": 1440,
+      "noOverflow": true
+    },
+    {
+      "screen": "analytics",
+      "width": 320,
+      "noOverflow": true
+    },
+    {
+      "screen": "analytics",
+      "width": 390,
+      "noOverflow": true
+    },
+    {
+      "screen": "analytics",
+      "width": 768,
+      "noOverflow": true
+    },
+    {
+      "screen": "analytics",
+      "width": 1440,
+      "noOverflow": true
+    },
+    {
+      "screen": "public",
+      "format": "kch",
+      "width": 320,
+      "noOverflow": true
+    },
+    {
+      "screen": "public",
+      "format": "kch",
+      "width": 390,
+      "noOverflow": true
+    },
+    {
+      "screen": "public",
+      "format": "kch",
+      "width": 1440,
+      "noOverflow": true
+    },
+    {
+      "screen": "public",
+      "format": "hack",
+      "width": 320,
+      "noOverflow": true
+    },
+    {
+      "screen": "public",
+      "format": "hack",
+      "width": 390,
+      "noOverflow": true
+    },
+    {
+      "screen": "public",
+      "format": "hack",
+      "width": 1440,
+      "noOverflow": true
+    },
+    {
+      "screen": "public",
+      "format": "noncompetitive",
+      "width": 320,
+      "noOverflow": true
+    },
+    {
+      "screen": "public",
+      "format": "noncompetitive",
+      "width": 390,
+      "noOverflow": true
+    },
+    {
+      "screen": "public",
+      "format": "noncompetitive",
+      "width": 1440,
+      "noOverflow": true
+    }
+  ],
+  "errors": [],
+  "deniedRequests": [],
+  "screenshots": [
+    {
+      "name": "solutions-390.png",
+      "sha256": "46f73ec3d473896e11e99532872f1e8faf34c75762a19f9c11e28b949482330b"
+    },
+    {
+      "name": "solutions-1440.png",
+      "sha256": "94fd95713cb7556efa8f4f780274f0d9bea1c186ec691ce5aba9af72a6266142"
+    },
+    {
+      "name": "analytics-390.png",
+      "sha256": "e5f6874b93477987546f4e98d30768a9f0e23ca537b753f7c7675b1e385953ef"
+    },
+    {
+      "name": "analytics-1440.png",
+      "sha256": "45be658f93f5a53bd703cbe28868e39650daef78a708ca6d0becb9347ab9da0c"
+    }
+  ]
+}

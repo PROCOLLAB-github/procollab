@@ -1,0 +1,45 @@
+{
+  "scope": "Runnable D02 seven-tab navigation correction and copy-only D03 annotation; synthetic data",
+  "contract": "1.21.0",
+  "designApproval": "PENDING; existing D02/D03 requests, no approval inferred",
+  "sourcesRawSha256": {
+    "assets/logo.svg": "bcb52226e6536dbafa001c3c4acd947634617753093204fb3531385b4d0ffa1c",
+    "assets/Mont-Bold.woff2": "141fa4004c0413987f1638c827f2faba62b54bd1f618796c49a5cf8f5ac7c4bd",
+    "assets/Mont-Regular.woff2": "e01372b13985c09f2a168382ad044312db914801a595b4306abd7d686b0cc64b",
+    "assets/Mont-SemiBold.woff2": "ea0681c9068fb473d3606e012e76728eb44b2e04c276266894aeca5fc1934b52",
+    "assets/search.svg": "d0ab63e0b09e49973a8dc8936b40ba7e45467f81dd6f09bf6eed85f10150cce6",
+    "manager-v1/admin.js": "73ab1ab7846cde895b1336c8dd35be114aa707bd0de56789c61e49bf358c4bbc",
+    "manager-v1/analytics-reference.css": "5c22d9d89a5f7998e4db3331834906ead8b35e5c23d9a992e235ca7c91c0320e",
+    "manager-v1/app.js": "33d8d4b3c36ea2004a1b9dee2f4dde24f70c86cee06cee09a0b4636401cf7d8b",
+    "manager-v1/drilldown-reference.css": "6fdaf18d7cf3a7d0f95f61ed5498361634d86605e668547ffd8d2ab5a19cb868",
+    "manager-v1/global-reference.css": "ac2b519c5e7d05310332298736f9e5fd19b634d21d2766b00bb8361c74e76138",
+    "manager-v1/icons.js": "7bb1132b94391e3ab52123e6e528d38057d222722d4ec675711ba398dc12662f",
+    "manager-v1/index.html": "bb28ce87f3c982df53d593c9d7507d946bbc0d74dad2c47568af18dec9c81d20",
+    "manager-v1/media/Mont-Regular-5LPDNI7X.ttf": "0bb5e1336fbeb2c78e049cf3a21101289c7b6c906d7335a5859acedfb8aa5875",
+    "manager-v1/media/Mont-Regular-T6L2NNOO.woff": "29c81b198136bf8a929f52133314319cb6d8375a526da5c97197df1960ceebb3",
+    "manager-v1/media/Mont-Regular-UA5RCVYG.woff2": "e01372b13985c09f2a168382ad044312db914801a595b4306abd7d686b0cc64b",
+    "manager-v1/media/Mont-SemiBold-7XOUXTAI.woff2": "ea0681c9068fb473d3606e012e76728eb44b2e04c276266894aeca5fc1934b52",
+    "manager-v1/media/Mont-SemiBold-M6WLAC2K.ttf": "a0d30d71b1ed99f8ff6cd6e5a83b93dc832e4a00f6cf402f587351c1ba8f7dc2",
+    "manager-v1/media/Mont-SemiBold-WNUGA77E.woff": "1d01cc3f8fafbed1582b3182c40eafa607fb6670a179f23116d8eed2e8907481",
+    "manager-v1/results-reference.css": "a92e429596fc8ddd9c382f2c38ea2d486ad2c90aa84e8f9ce294a8214419e4f2",
+    "manager-v1/styles.css": "1d32f0bb7e80462359a864cd27f747684726ab9dd09b117f07d760cd5ce37418",
+    "public-v1/app.js": "bd5a92a4428ad22a24afe5fba3d3dc5006dceafea33793d1697b15bac9abeff7",
+    "public-v1/index.html": "8817a0e6b0a8e958d7db4b70225ca0f567803bcce57b3298b561c7da22ab50c7",
+    "public-v1/source-reference.css": "9cd80d17494d8e8c3ffe8211023c77def047e0ef1c1020ad820ed779eddbf545",
+    "public-v1/styles.css": "cab6bb39aa0d588d691ee39c351f7ab3b62f6796f74be60458abb52a34cb7693"
+  },
+  "sourceFormattingNotApplied": true,
+  "historicalD02": "d59998e4091b57ee834d0bafb662d61bc6062874/docs/design/program-solutions-manager-d02-20261025",
+  "historical130ChecksDoNotVerifyNewNavigation": true,
+  "newNavigationQA": {
+    "layoutChecks": 48,
+    "productBodiesCompared": 12,
+    "unrelatedClicks": 12
+  },
+  "d03QA": {
+    "cases": 81,
+    "method": "jsdom; not browser or visual QA"
+  },
+  "screenshots": "Existing navigation QA run; may show transient preservation notice. Clean screenshots recorded separately if generated.",
+  "packagingCorrection": "Copied existing stylesheet media dependencies and search.svg; no HTML/JS/CSS changes"
+}

@@ -1,0 +1,198 @@
+{
+  "baseHead": "cff3195052415d6af4ef8bfe9a2236af89da49b1",
+  "observedDev": "08414b794dd5b34de5471dddaa19cd0af7f4a167",
+  "backend": "fdec3dcbd6693ddb487816114301d0df01798f93",
+  "contractVersion": "1.21.0",
+  "tests": 3003,
+  "testFiles": 493,
+  "browser": {
+    "journey": {
+      "artifact": "release-integration-browser-journey-2",
+      "checks": 24,
+      "pageErrors": 0,
+      "requests": 112,
+      "sha256": "6638ff96a39edcea3dda220a9f8de96b1e3884d13f4354f23360c71953a63299"
+    },
+    "administration": {
+      "artifact": "release-integration-browser-admin-1",
+      "checks": 28,
+      "pageErrors": 0,
+      "requests": 42,
+      "sha256": "55a2318520f115a7b8a07fafc31f77d9a974ed47a19a46e12dae00fce8cb3d17"
+    },
+    "archive": {
+      "artifact": "release-integration-browser-archive-1",
+      "checks": 7,
+      "pageErrors": 0,
+      "requests": 30,
+      "sha256": "d4d6aa33c8d2e375c95849c249001edd5a121875d2039f3225538d28416367d9"
+    },
+    "final": {
+      "artifact": "release-integration-browser-final-2",
+      "checks": 59,
+      "pageErrors": 0,
+      "requests": 121,
+      "sha256": "1c64e71ac14a59e9a411d777696917e0b0e1172af0b6d4d5439a7dec9fc14906"
+    }
+  },
+  "files": [
+    {
+      "path": "projects/social_platform/src/app/api/program/facades/detail/program-analytics-info.service.spec.ts",
+      "sha256Raw": "b4a91c59946fa0f0d5ae6b154db07e3098aaa659c64c7ef0187ef0f46981269f",
+      "sha256LF": "b4a91c59946fa0f0d5ae6b154db07e3098aaa659c64c7ef0187ef0f46981269f",
+      "gitBlob": "9711dbe9a6cd8eac071871158e18b176f3341450"
+    },
+    {
+      "path": "projects/social_platform/src/app/api/program/facades/detail/program-analytics-info.service.ts",
+      "sha256Raw": "e7b72fb8d80f42435bcbf5f5f25df5ace4c308306dc8ce1e6ff74ec68aaa594c",
+      "sha256LF": "e7b72fb8d80f42435bcbf5f5f25df5ace4c308306dc8ce1e6ff74ec68aaa594c",
+      "gitBlob": "67304e75dac499eae6817d79abe45bbc188e1f08"
+    },
+    {
+      "path": "projects/social_platform/src/app/domain/program/program-results.model.ts",
+      "sha256Raw": "9bd52e1946030593eada90fc1504218ec7d4a93fb286bbc05527cc7dbcef34ee",
+      "sha256LF": "9bd52e1946030593eada90fc1504218ec7d4a93fb286bbc05527cc7dbcef34ee",
+      "gitBlob": "7ec528248c41ed2ad7929fb466f359818132cb64"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/activity-chart/activity-chart.component.html",
+      "sha256Raw": "aab714940e8ffd1040a03c95fe938a5ed6be78320be55b39ee4bfd0db54c5339",
+      "sha256LF": "aab714940e8ffd1040a03c95fe938a5ed6be78320be55b39ee4bfd0db54c5339",
+      "gitBlob": "501702773a0372c980e4b95bc6cc2d65fbdb7a1e"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/activity-chart/activity-chart.component.spec.ts",
+      "sha256Raw": "a32c501465543fd2557f8daaa6dec7a05189fc89f1a8670aa6326214277403d7",
+      "sha256LF": "a32c501465543fd2557f8daaa6dec7a05189fc89f1a8670aa6326214277403d7",
+      "gitBlob": "2f1ac17b5e946cec7a7098080f28faa1952ec91d"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/activity-chart/activity-chart.component.ts",
+      "sha256Raw": "b37ff0bd4e59a716f2e03ca2952414b39b30818eb59d578c0b5ad6baf0ce56b1",
+      "sha256LF": "b37ff0bd4e59a716f2e03ca2952414b39b30818eb59d578c0b5ad6baf0ce56b1",
+      "gitBlob": "b7da6e9b357539a40b584625cbff7b2cc06b70db"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics.component.html",
+      "sha256Raw": "0dfa1df3cf370388c64a4621f352419d84eb8b748ffc2f9ae8300276b0f926a4",
+      "sha256LF": "0dfa1df3cf370388c64a4621f352419d84eb8b748ffc2f9ae8300276b0f926a4",
+      "gitBlob": "cb2dd017f15e18987f2b7336e7157077cd22f0ad"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics.component.spec.ts",
+      "sha256Raw": "2f0da103d29335da33d252cef68f1c148ca8c305336a246cfd01fdc26da3a306",
+      "sha256LF": "2f0da103d29335da33d252cef68f1c148ca8c305336a246cfd01fdc26da3a306",
+      "gitBlob": "04200d6126fea088656ff34ae1eb89c98a6479f9"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics.component.ts",
+      "sha256Raw": "4d9d891a2506d46d3c4c905fa2682589368ebca896612f0225671eed6b4c8b19",
+      "sha256LF": "4d9d891a2506d46d3c4c905fa2682589368ebca896612f0225671eed6b4c8b19",
+      "gitBlob": "2f0448093eee7ac798e8fd82ebc0c059b7b277be"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/solution-analytics.component.html",
+      "sha256Raw": "e4f48299e9936068045db4ef2b4e222a38828258fef122ee684486495900b038",
+      "sha256LF": "e4f48299e9936068045db4ef2b4e222a38828258fef122ee684486495900b038",
+      "gitBlob": "c0ccc1f3da51ca68d44811f86dc17e42de57651b"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/solution-analytics.component.scss",
+      "sha256Raw": "71f96044ab88493d7eb4bb5003ebd2412c48a5bf5eed13d634038a152c8786b9",
+      "sha256LF": "71f96044ab88493d7eb4bb5003ebd2412c48a5bf5eed13d634038a152c8786b9",
+      "gitBlob": "0b077ef50890d47a7861cd4f756da126657ca931"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/solution-analytics.component.spec.ts",
+      "sha256Raw": "754bff2a6634d1f2c3fb04b9c641c3155dff96798b36bd97e03e6b7ef0978e30",
+      "sha256LF": "754bff2a6634d1f2c3fb04b9c641c3155dff96798b36bd97e03e6b7ef0978e30",
+      "gitBlob": "e7ac715903688db3b85c82f1b7e10e0f9d87ec7b"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/solution-analytics.component.ts",
+      "sha256Raw": "da4f98ea82c38c26f5743cd66c089a3a56b9080fb3d7e79812d7e114ace9faa0",
+      "sha256LF": "da4f98ea82c38c26f5743cd66c089a3a56b9080fb3d7e79812d7e114ace9faa0",
+      "gitBlob": "818775d4ce8657c0c1ed6cc6dd7c26786a042d15"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/solution-experts.component.html",
+      "sha256Raw": "4a5a22994324fdbb4ef8c27c0b8302a2aaf202c277604b57ad613c04705bb33e",
+      "sha256LF": "4a5a22994324fdbb4ef8c27c0b8302a2aaf202c277604b57ad613c04705bb33e",
+      "gitBlob": "9ddc821fc059928adb5970b934a9cb2b7dafcd73"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/solution-experts.component.spec.ts",
+      "sha256Raw": "cb1cf94ce82d179050a2dd3605fcafd9b26e8e4eb20e3d453e5d5f62badbfa87",
+      "sha256LF": "cb1cf94ce82d179050a2dd3605fcafd9b26e8e4eb20e3d453e5d5f62badbfa87",
+      "gitBlob": "be93d0c46a39f760dbf647d99ec349921793b1d1"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/solution-experts.component.ts",
+      "sha256Raw": "dff447535f62f350f352978b15db7fa60add4569e29ce58b0f3c4668eb2d668a",
+      "sha256LF": "dff447535f62f350f352978b15db7fa60add4569e29ce58b0f3c4668eb2d668a",
+      "gitBlob": "0364194919d80cfebfa884dd6e0e5dc784e19918"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/management.component.html",
+      "sha256Raw": "cb8cc257cf04b57606243b24eea62de49235e503d458d5d8af1b80bfbf34de01",
+      "sha256LF": "cb8cc257cf04b57606243b24eea62de49235e503d458d5d8af1b80bfbf34de01",
+      "gitBlob": "dddd51fae6969820dec906f47b6af77e71ee2d94"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/management.component.ts",
+      "sha256Raw": "596073be98b943b86d02bff734e50fff2a11650e726311994949d978d25bae21",
+      "sha256LF": "596073be98b943b86d02bff734e50fff2a11650e726311994949d978d25bae21",
+      "gitBlob": "38d9d422a4bcffaf5d4e291e60f4eaab6d7a982a"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/results/result-project-scores.component.html",
+      "sha256Raw": "d7dbabf06adca08bae6fb1630ad0ecbd9faa22aad68556d030b9a0e7ea66e8df",
+      "sha256LF": "d7dbabf06adca08bae6fb1630ad0ecbd9faa22aad68556d030b9a0e7ea66e8df",
+      "gitBlob": "59fea219d242aad376e83b1f0b76a8d6e2538a4a"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/results/result-project-scores.component.ts",
+      "sha256Raw": "dfca69d690e358d3536e3bdd97e3622fcdfc0c9e3c8b5ca34948bf7d24ec8558",
+      "sha256LF": "dfca69d690e358d3536e3bdd97e3622fcdfc0c9e3c8b5ca34948bf7d24ec8558",
+      "gitBlob": "d12aefa000f2e0fad5e7d6ccd2979e04cb627b80"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/results/results.component.html",
+      "sha256Raw": "6712bb6c0811d6601c656d629286df3e9a9cc1a8930e9975672b6de26e90ddea",
+      "sha256LF": "6712bb6c0811d6601c656d629286df3e9a9cc1a8930e9975672b6de26e90ddea",
+      "gitBlob": "1f19902c8d6383bd4ebaa170625b9f8f85655373"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/results/results.component.ts",
+      "sha256Raw": "b6c77fe3138c97591cae0f88ce98323cb7e4a6c48b7ec4f8896539c086608465",
+      "sha256LF": "b6c77fe3138c97591cae0f88ce98323cb7e4a6c48b7ec4f8896539c086608465",
+      "gitBlob": "75c69a6374be37ca6038a5dc69b77eb240b604a1"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/results/solution-results.component.spec.ts",
+      "sha256Raw": "ecda712ddda8bb8edb011235a7fcac12cf753331a61c50362e0ab8e0a9342a98",
+      "sha256LF": "ecda712ddda8bb8edb011235a7fcac12cf753331a61c50362e0ab8e0a9342a98",
+      "gitBlob": "e6b834f07eb6a59ae90737270c99ee6f644d60db"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-allocation.component.ts",
+      "sha256Raw": "ba9cbd1473e6b2a2858234f6666aeb09de2c8ef6a13b554b99f21e92bda3cd9f",
+      "sha256LF": "ba9cbd1473e6b2a2858234f6666aeb09de2c8ef6a13b554b99f21e92bda3cd9f",
+      "gitBlob": "dfe85e392048d942fddd6846bcf913db7635983f"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-registration-removal.component.spec.ts",
+      "sha256Raw": "8ab5535a33fbd1f7c12031b44b3b9b8642e4b1b20d0f585656271dc2fb8ea182",
+      "sha256LF": "8ab5535a33fbd1f7c12031b44b3b9b8642e4b1b20d0f585656271dc2fb8ea182",
+      "gitBlob": "0ea1236c2955024871e76b6f3dd07c20461475ba"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-registration-removal.component.ts",
+      "sha256Raw": "fe8823b49668c89d616e77bc592ced78764422a12142d6f754ab150476c75763",
+      "sha256LF": "fe8823b49668c89d616e77bc592ced78764422a12142d6f754ab150476c75763",
+      "gitBlob": "58514f66bdfd5585d08395e1106af279130c6995"
+    }
+  ],
+  "testScope": "Feature3003/493 before final stale-assignment retry fix; post-review7 targeted tests PASS. Exact prospective full suite is reported separately in PR.",
+  "postReviewTargetedTests": 7
+}

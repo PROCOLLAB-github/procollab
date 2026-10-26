@@ -15,6 +15,7 @@ import { ChatUnreadStateService } from "@api/chat/chat-unread-state.service";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { NotificationService } from "@ui/services/notification/notification.service";
+import { SolutionInvitationInboxService } from "@api/solution/facades/solution-invitation-inbox.service";
 
 describe("OfficeComponent", () => {
   let component: OfficeComponent;
@@ -96,10 +97,22 @@ describe("OfficeComponent", () => {
             OfficeUIInfoService,
             AuthUIInfoService,
             AuthRegisterService,
+            SolutionInvitationInboxService,
           ],
         },
         add: {
           providers: [
+            {
+              provide: SolutionInvitationInboxService,
+              useValue: {
+                bindUser: vi.fn(),
+                count: signal(0),
+                loading: signal(false),
+                error: signal(""),
+                items: signal([]),
+                pendingId: signal(null),
+              },
+            },
             { provide: OfficeInfoService, useValue: officeInfoServiceSpy },
             { provide: OfficeUIInfoService, useValue: officeUIInfoServiceSpy },
             { provide: AuthUIInfoService, useValue: authUIInfoServiceSpy },

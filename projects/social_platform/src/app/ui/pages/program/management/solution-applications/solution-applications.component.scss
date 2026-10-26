@@ -1,0 +1,125 @@
+/** @format */
+@use "styles/ui-foundation";
+@use "styles/program-management-controls";
+
+.management__solution-link {
+  padding: 0;
+  font: inherit;
+  color: var(--accent);
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+}
+
+.ui-field {
+  @include ui-foundation.control;
+
+  font-size: 12px;
+}
+
+.ui-button.ui-button {
+  @include ui-foundation.button;
+  @include program-management-controls.compact-action;
+}
+
+.ui-choice {
+  @include ui-foundation.choice;
+}
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.solution-dialog {
+  width: 100%;
+  min-width: 0;
+  max-height: 78dvh;
+  padding: 4px;
+  overflow: auto;
+  font:
+    400 12px/1.5 Mont,
+    sans-serif;
+
+  header,
+  footer {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  footer {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  h2 {
+    font-size: 20px;
+    line-height: 28px;
+    overflow-wrap: anywhere;
+  }
+
+  p {
+    overflow-wrap: anywhere;
+  }
+
+  label {
+    display: grid;
+    gap: 8px;
+    margin: 16px 0;
+  }
+
+  [role="alert"] {
+    color: var(--red);
+  }
+
+  &__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  &__team {
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: grid;
+      gap: 8px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--medium-grey-for-outline);
+    }
+  }
+}
+
+.management__card {
+  font:
+    400 12px/1.5 Mont,
+    sans-serif;
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+.solution-selection {
+  left: 50%;
+  width: min(863px, calc(100% - 32px));
+  transform: translateX(-50%);
+}

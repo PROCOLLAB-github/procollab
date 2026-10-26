@@ -1,0 +1,104 @@
+{
+  "status": "PASS",
+  "programs": [
+    {
+      "id": 11,
+      "template": "case_championship",
+      "anchorId": 12
+    },
+    {
+      "id": 12,
+      "template": "hackathon",
+      "anchorId": 13
+    }
+  ],
+  "events": [
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/11/solutions/",
+      "status": 201
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/11/solutions/12/invitations/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/11/solutions/12/invitations/",
+      "status": 201
+    },
+    {
+      "role": "member",
+      "method": "POST",
+      "path": "/solution-invitations/26/accept/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/11/solutions/12/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/12/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/11/solutions/12/submit/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/12/solutions/",
+      "status": 201
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/12/solutions/13/invitations/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/12/solutions/13/invitations/",
+      "status": 201
+    },
+    {
+      "role": "member",
+      "method": "POST",
+      "path": "/solution-invitations/27/accept/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/12/solutions/13/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "PATCH",
+      "path": "/programs/12/solutions/13/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "POST",
+      "path": "/programs/12/solutions/13/submit/",
+      "status": 200
+    }
+  ],
+  "usersCreated": 0,
+  "projectsCreated": 0,
+  "anchorSnapshotsRealHTTP": true
+}

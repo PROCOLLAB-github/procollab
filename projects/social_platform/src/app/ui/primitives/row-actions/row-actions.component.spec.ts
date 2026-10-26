@@ -40,6 +40,15 @@ describe("Меню действий строки", () => {
     disabled.click();
     expect(chosen).not.toHaveBeenCalled();
   });
+  it("сообщает об открытии меню для загрузки материала, не выбирая действие", () => {
+    const { fixture, trigger, chosen } = setup();
+    const opened = vi.fn();
+    fixture.componentInstance.opened.subscribe(opened);
+    trigger.click();
+    fixture.detectChanges();
+    expect(opened).toHaveBeenCalledTimes(1);
+    expect(chosen).not.toHaveBeenCalled();
+  });
   it("закрывается по Escape и возвращает фокус кнопке своей строки", () => {
     const { fixture, trigger, overlay } = setup();
     trigger.focus();

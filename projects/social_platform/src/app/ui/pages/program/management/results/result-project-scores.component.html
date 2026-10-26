@@ -1,7 +1,7 @@
 <!-- @format -->
 <div class="results__detail-heading">
   <strong>Оценки экспертов</strong
-  ><a [routerLink]="paths.projects.detail(project().projectId)">Открыть проект</a>
+  ><a [routerLink]="detailLink()">{{ solution() ? "Открыть решение" : "Открыть проект" }}</a>
 </div>
 @if (!project().experts.length) {
   <p class="results__muted">Оценок пока нет.</p>

@@ -1,0 +1,417 @@
+<!-- @format -->
+<div class="experts" [class.experts--people]="tab() === 'experts'">
+  <nav class="experts__tabs" aria-label="Управление экспертами">
+    <button
+      type="button"
+      [attr.aria-current]="tab() === 'experts' ? 'page' : null"
+      [disabled]="busy() || allocationBusy()"
+      (click)="tab.set('experts')"
+    >
+      Эксперты</button
+    ><button
+      type="button"
+      [attr.aria-current]="tab() === 'distribution' ? 'page' : null"
+      [disabled]="busy() || allocationBusy()"
+      (click)="tab.set('distribution')"
+    >
+      Распределение экспертов
+    </button>
+  </nav>
+  @if (message()) {
+    <p role="status">{{ message() }}</p>
+  }
+  @if (error()) {
+    <div role="alert">
+      {{ error() }}
+      <button
+        appButton="text"
+        type="button"
+        [disabled]="busy() || allocationBusy()"
+        (click)="load()"
+      >
+        Повторить
+      </button>
+    </div>
+  }
+  @if (loading()) {
+    <p role="status">Загружаем экспертов и решения…</p>
+  }
+  <section class="experts__card" [attr.aria-busy]="loading()">
+    <header class="experts__heading">
+      <h2>{{ tab() === "experts" ? "Эксперты программы" : "Распределение экспертов" }}</h2>
+      <div class="experts__heading-actions">
+        @if (tab() === "experts") {
+          <button
+            appButton="primary"
+            type="button"
+            [disabled]="busy() || loading()"
+            (click)="open('invite')"
+          >
+            Пригласить эксперта</button
+          ><button
+            appButton="secondary"
+            type="button"
+            [disabled]="loading() || !filtered().length"
+            (click)="downloadExperts()"
+          >
+            Выгрузить экспертов
+          </button>
+        } @else {
+          <button
+            appButton="secondary"
+            type="button"
+            [disabled]="busy() || loading()"
+            (click)="open('quota')"
+          >
+            Оценщиков: {{ required() }}</button
+          ><button
+            appButton="primary"
+            type="button"
+            [disabled]="busy() || loading() || !filteredSolutions().length"
+            (click)="startAllocation()"
+          >
+            Распределить решения
+          </button>
+        }
+      </div>
+    </header>
+    <div class="experts__toolbar">
+      <input
+        appField
+        type="search"
+        [formControl]="search"
+        [attr.aria-label]="tab() === 'experts' ? 'Поиск экспертов' : 'Поиск решений'"
+        [placeholder]="
+          tab() === 'experts' ? 'Поиск по имени или почте' : 'Поиск по названию решения'
+        "
+        maxlength="200"
+      />
+      @if (tab() === "experts") {
+        <select appField [formControl]="status" aria-label="Статус эксперта">
+          <option value="all">Все статусы</option>
+          <option value="joined">В программе</option>
+          <option value="pending">Ожидают подтверждения</option>
+          <option value="expired">Срок истек</option>
+          <option value="revoked">Отозваны</option>
+        </select>
+      } @else {
+        <select appField [formControl]="caseFilter" aria-label="Кейс решения">
+          <option value="all">Все кейсы</option>
+          <option value="null">Без выбранного кейса</option>
+          @for (name of cases(); track name) {
+            <option [value]="caseKey(name)">{{ name }}</option>
+          }
+        </select>
+      }
+    </div>
+    @if (tab() === "experts" && selectedExperts().size) {
+      <div class="solution-analytics__actions">
+        <span>Выбрано: {{ selectedExperts().size }}</span
+        ><button appButton="secondary" type="button" [disabled]="busy()" (click)="bulk('cases')">
+          Изменить кейсы</button
+        ><button
+          appButton="secondary"
+          type="button"
+          [disabled]="busy() || !canBulkInvite()"
+          (click)="bulk('resend')"
+        >
+          Повторить приглашения</button
+        ><button
+          appButton="secondary"
+          type="button"
+          [disabled]="busy() || !canBulkInvite()"
+          (click)="bulk('revoke')"
+        >
+          Отозвать приглашения</button
+        ><button
+          appButton="text"
+          type="button"
+          [disabled]="busy()"
+          (click)="clearSelectedExperts()"
+        >
+          Снять выбор
+        </button>
+      </div>
+    }
+    <div class="solution-analytics__table">
+      <table appTable>
+        @if (tab() === "experts") {
+          <thead>
+            <tr>
+              <th><span class="experts__sr">Выбрать</span></th>
+              <th>Эксперт</th>
+              <th>Кейсы</th>
+              <th>Статус</th>
+              <th>Назначено</th>
+              <th>Оценено</th>
+
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (expert of filtered(); track expert.id) {
+              <tr>
+                <td>
+                  <input
+                    appChoice
+                    type="checkbox"
+                    [checked]="selectedExperts().has(expert.id)"
+                    [disabled]="busy()"
+                    [attr.aria-label]="'Выбрать ' + (expert.name || expert.email)"
+                    (change)="toggleExpert(expert.id)"
+                  />
+                </td>
+                <td>
+                  <div class="experts__person">
+                    <app-avatar
+                      [url]="href(expert.avatar ?? null) ?? undefined"
+                      [size]="32"
+                      [fallbackLabel]="initials(expert)"
+                    /><span class="experts__identity"
+                      ><strong>{{ expert.name || expert.email }}</strong
+                      ><span class="experts__email">{{ expert.email }}</span></span
+                    >
+                  </div>
+                </td>
+                <td>{{ expert.allCases ? "Все кейсы" : expert.caseNames?.join(", ") }}</td>
+                <td>
+                  {{
+                    expert.status === "joined"
+                      ? "В программе"
+                      : expert.status === "pending"
+                        ? "Ожидает подтверждения"
+                        : expert.status === "expired"
+                          ? "Срок приглашения истек"
+                          : "Приглашение отозвано"
+                  }}
+                  @if (expert.deliveryStatus === "failed") {
+                    <small>Не удалось отправить письмо</small>
+                  } @else if (expert.deliveryStatus === "queued") {
+                    <small>Письмо в очереди</small>
+                  }
+                </td>
+                <td>{{ expert.assigned ?? "—" }}</td>
+                <td>{{ expert.completed ?? "—" }}</td>
+
+                <td>
+                  <app-row-actions
+                    [label]="'Действия эксперта: ' + (expert.name || expert.email)"
+                    [actions]="rowActions(expert)"
+                    [disabled]="busy()"
+                    (action)="rowAction(expert, $event)"
+                  />
+                </td>
+              </tr>
+            }
+          </tbody>
+        } @else {
+          <thead>
+            <tr>
+              <th>Решение</th>
+              <th>Кейс</th>
+              <th>Назначено</th>
+              <th>Оценено</th>
+              <th>Эксперты</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of filteredSolutions(); track row.application.solutionId) {
+              <tr>
+                <td>
+                  <a
+                    [routerLink]="paths.program.solution(programId(), row.application.solutionId)"
+                    >{{ row.application.name }}</a
+                  >
+                </td>
+                <td>{{ row.caseName ?? "Без кейса" }}</td>
+                <td>{{ counts(row.application.solutionId).assigned }} из {{ required() }}</td>
+                <td>{{ counts(row.application.solutionId).completed }}</td>
+                <td>
+                  @for (assignment of assignments(); track assignment.assignmentId) {
+                    @if (assignment.application.solutionId === row.application.solutionId) {
+                      <span
+                        >{{ assignment.expert.fullName
+                        }}{{ assignment.status === "completed" ? " · оценено" : "" }}</span
+                      >
+                    }
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        }
+      </table>
+    </div>
+    @if (!loading() && (tab() === "experts" ? !filtered().length : !filteredSolutions().length)) {
+      <p class="experts__empty">
+        {{
+          tab() === "experts"
+            ? "Экспертов не найдено"
+            : "Сданных решений для распределения не найдено"
+        }}
+      </p>
+    }
+  </section>
+</div>
+<app-modal
+  [open]="modal() !== null"
+  size="large"
+  labelledBy="solution-experts-title"
+  (openChange)="!$event && close()"
+  ><section class="solution-analytics__dialog" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+    <header class="solution-analytics__heading">
+      <h2 id="solution-experts-title">
+        {{
+          modal() === "invite"
+            ? "Пригласить эксперта"
+            : modal() === "scope"
+              ? "Кейсы эксперта"
+              : modal() === "quota"
+                ? "Число оценщиков"
+                : "Назначить решения"
+        }}
+      </h2>
+      <button appButton="text" cdkFocusInitial type="button" [disabled]="busy()" (click)="close()">
+        Закрыть
+      </button>
+    </header>
+    @if (dialogError()) {
+      <p role="alert">{{ dialogError() }}</p>
+      <button appButton="secondary" type="button" [disabled]="busy()" (click)="refreshDialog()">
+        Обновить данные
+      </button>
+    }
+    @if (modal() === "invite" || modal() === "scope") {
+      @if (modal() === "invite") {
+        <label
+          >Email эксперта<input
+            appField
+            type="email"
+            [formControl]="email"
+            [readOnly]="busy()"
+            autocomplete="email"
+        /></label>
+        @if (email.touched && email.invalid) {
+          <p role="alert">Введите корректный email эксперта.</p>
+        }
+      }
+      <label
+        ><input
+          appChoice
+          type="checkbox"
+          [checked]="scopeAll()"
+          [disabled]="busy()"
+          (change)="scopeAll.set(!scopeAll())"
+        />Все кейсы</label
+      >
+      @for (name of cases(); track name) {
+        <label
+          ><input
+            appChoice
+            type="checkbox"
+            [checked]="scopeAll() || scopeCases().has(name)"
+            [disabled]="busy()"
+            (change)="toggleScope(name)"
+          />{{ name }}</label
+        >
+      }
+      <label
+        ><input
+          appChoice
+          type="checkbox"
+          [checked]="scopeAll() || scopeCases().has(null)"
+          [disabled]="busy()"
+          (change)="toggleScope(null)"
+        />Без выбранного кейса</label
+      >
+      <button
+        appButton="primary"
+        type="button"
+        [disabled]="busy() || (!scopeAll() && !scopeCases().size)"
+        (click)="modal() === 'invite' ? invite() : saveScope()"
+      >
+        {{ modal() === "invite" ? "Отправить приглашение" : "Сохранить кейсы" }}
+      </button>
+    } @else if (modal() === "assignments") {
+      <p>
+        {{ selected()?.name || selected()?.email }}. Сохраненные оценки защищены; их назначения
+        снять нельзя.
+      </p>
+      @if (options(); as loaded) {
+        @for (solution of loaded.solutions; track solution.solutionId) {
+          <label
+            ><input
+              appChoice
+              type="checkbox"
+              [checked]="selectedSolutions().has(solution.solutionId)"
+              [disabled]="
+                busy() ||
+                solution.protected ||
+                (!solution.assigned &&
+                  (!solution.eligible || solution.ownTeam || !solution.submitted))
+              "
+              (change)="toggleSolution(solution.solutionId)"
+            />{{ solution.name }} · {{ solution.caseName ?? "Без кейса"
+            }}{{
+              solution.protected
+                ? " · есть оценка"
+                : solution.ownTeam
+                  ? " · собственная команда"
+                  : !solution.submitted
+                    ? " · не сдано"
+                    : !solution.eligible
+                      ? " · другой кейс"
+                      : ""
+            }}</label
+          >
+        }
+        <button appButton="primary" type="button" [disabled]="busy()" (click)="saveAssignments()">
+          Сохранить назначения
+        </button>
+      } @else if (!dialogError()) {
+        <p role="status">Загружаем решения…</p>
+      }
+    } @else if (modal() === "quota") {
+      <label
+        >Оценщиков на одно решение<input
+          appField
+          type="number"
+          min="1"
+          max="1000"
+          step="1"
+          [formControl]="quota"
+          [readOnly]="busy()"
+      /></label>
+      @if (quotaPreview(); as p) {
+        <p>
+          Готовых решений: {{ p.readyBefore }} → {{ p.readyAfter }}. Не хватает назначений:
+          {{ p.missingAssignments }}. Лишних назначений: {{ p.surplusAssignments }}. Сохраненные
+          оценки и назначения остаются.
+        </p>
+        <button
+          appButton="primary"
+          type="button"
+          [disabled]="busy() || p.requiredEvaluators !== quota.value"
+          (click)="saveQuota()"
+        >
+          Подтвердить изменение
+        </button>
+      } @else {
+        <button
+          appButton="primary"
+          type="button"
+          [disabled]="busy() || quota.invalid"
+          (click)="previewQuota()"
+        >
+          Проверить изменение
+        </button>
+      }
+    }
+  </section></app-modal
+>
+<app-solution-allocation
+  [request]="allocation()"
+  (closed)="allocation.set(null)"
+  (busyChange)="allocationBusy.set($event)"
+  (completed)="allocation.set(null); load()"
+/>

@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "snapshotFiles": 3681,
+  "archiveAndInitialManifestMatch": true,
+  "initialManifestSha256": "1199f2ca996a9fc9cb430687e4b9bdb7bb169e03452bbc17da7a2f93d991ddcc",
+  "trackedFilesChangedByBuild": [],
+  "realWorkspaceRuntimeChanged": false,
+  "noBranchMerge": true,
+  "noRealProgramSwitch": true
+}

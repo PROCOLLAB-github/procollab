@@ -101,10 +101,13 @@ export class ParticipantPickerComponent {
   readonly collaborators = input<Collaborator[]>([]);
   readonly invites = input<Invite[]>([]);
   readonly busy = input(false);
+  readonly unavailableReason = input<((id: number) => string | null) | null>(null);
   readonly chosen = output<User>();
   readonly cleared = output<void>();
 
   reason(id: number): string | null {
+    const reason = this.unavailableReason();
+    if (reason) return reason(id);
     return inviteCandidateReason(id, this.leaderId(), this.collaborators(), this.invites());
   }
 }

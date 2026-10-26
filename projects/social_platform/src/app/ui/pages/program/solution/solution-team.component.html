@@ -1,0 +1,225 @@
+<!-- @format -->
+<section aria-labelledby="team-title" [attr.aria-busy]="busy()">
+  @if (updating()) {
+    <p role="status">Обновляем команду…</p>
+  }
+  <header class="team-header">
+    <div>
+      <h2 id="team-title">Команда заявки</h2>
+      <p class="muted">Управляйте участниками команды, приглашайте новых и назначайте роли.</p>
+    </div>
+    @if (solution().permissions.canInvite) {
+      <button
+        appButton="secondary"
+        type="button"
+        [disabled]="busy() || loading() || !!listError()"
+        (click)="openInvite($event)"
+      >
+        <i appIcon icon="plus" appSquare="12" aria-hidden="true"></i> Пригласить участника
+      </button>
+    }
+    @if (solution().permissions.canLeave) {
+      <button appButton="secondary" type="button" [disabled]="busy()" (click)="leave()">
+        Выйти из команды
+      </button>
+    }
+  </header>
+  @if (solution().team.isFrozen) {
+    <p class="muted">Состав команды зафиксирован после сдачи.</p>
+  }
+  @if (error() && !editing()) {
+    <p role="alert">{{ error() }}</p>
+  }
+  <h3>Участники команды · {{ solution().team.acceptedCount }}</h3>
+  <ul class="members">
+    @for (member of solution().team.members; track member.user.id) {
+      <li class="member-row">
+        <app-avatar [url]="member.user.avatarUrl || undefined" [size]="40" />
+        <div class="member-row__identity">
+          <span class="member-row__name"
+            >{{ member.user.firstName }} {{ member.user.lastName }}</span
+          ><small class="member-row__description"
+            >{{ member.isCaptain ? "Капитан команды" : "Участник команды"
+            }}{{ member.user.id === currentUser()?.id ? " · Вы" : "" }}</small
+          >
+        </div>
+        <span class="member-row__role">{{ member.role || "Роль не указана" }}</span
+        ><span class="member-row__status">В команде</span>
+        <div class="member-row__actions">
+          @if (solution().permissions.canManageTeam && !member.isCaptain) {
+            <button
+              appButton="secondary"
+              type="button"
+              class="member-row__action"
+              title="Передать капитанство"
+              [disabled]="busy()"
+              (click)="transfer(member)"
+              [attr.aria-label]="
+                'Передать капитанство: ' + member.user.firstName + ' ' + member.user.lastName
+              "
+            >
+              <i
+                appIcon
+                icon="team"
+                appWidth="15"
+                appHeight="13"
+                appViewBox="0 0 15 13"
+                aria-hidden="true"
+              ></i>
+              <span class="member-row__action-label">Передать капитанство</span>
+            </button>
+            <button
+              appButton="danger"
+              type="button"
+              class="member-row__action member-row__action--danger"
+              title="Исключить участника"
+              [disabled]="busy()"
+              (click)="remove(member)"
+              [attr.aria-label]="
+                'Исключить участника: ' + member.user.firstName + ' ' + member.user.lastName
+              "
+            >
+              <i
+                appIcon
+                icon="basket"
+                appWidth="13"
+                appHeight="15"
+                appViewBox="0 0 13 15"
+                aria-hidden="true"
+              ></i>
+              <span class="member-row__action-label">Исключить</span>
+            </button>
+          }
+        </div>
+      </li>
+    }
+  </ul>
+  <h3>Ожидают подтверждения · {{ solution().team.pendingCount }}</h3>
+  <p class="muted">Участники появятся в команде, когда примут приглашение.</p>
+  @if (currentUser()?.id === solution().captainId) {
+    @if (loading()) {
+      <p role="status">Загружаем приглашения…</p>
+    } @else if (listError()) {
+      <p role="alert">{{ listError() }}</p>
+      <button appButton="secondary" type="button" (click)="reloadInvitations()">
+        Повторить загрузку приглашений
+      </button>
+    } @else {
+      <ul class="members">
+        @for (invitation of pending(); track invitation.id) {
+          <li class="member-row member-row--pending">
+            <app-avatar [url]="invitation.recipient.avatarUrl || undefined" [size]="40" />
+            <div class="member-row__identity">
+              <span class="member-row__name"
+                >{{ invitation.recipient.firstName }} {{ invitation.recipient.lastName }}</span
+              ><small class="member-row__description"
+                >Отправлено {{ invitation.createdAt | date: "dd.MM.yyyy" }}</small
+              >
+            </div>
+            <span class="member-row__role">{{ invitation.role || "Роль не указана" }}</span
+            ><span class="member-row__status">Приглашение отправлено</span>
+            <div class="member-row__actions">
+              @if (invitation.permissions.canEdit) {
+                <button
+                  appButton="secondary"
+                  type="button"
+                  class="member-row__action"
+                  title="Изменить роль"
+                  [disabled]="busy()"
+                  (click)="edit(invitation, $event)"
+                  [attr.aria-label]="
+                    'Изменить роль: ' +
+                    invitation.recipient.firstName +
+                    ' ' +
+                    invitation.recipient.lastName
+                  "
+                >
+                  <i
+                    appIcon
+                    icon="edit-pen"
+                    appWidth="12"
+                    appHeight="11"
+                    appViewBox="0 0 12 11"
+                    aria-hidden="true"
+                  ></i>
+                  <span class="member-row__action-label">Изменить роль</span>
+                </button>
+              }
+              @if (invitation.permissions.canRevoke) {
+                <button
+                  appButton="danger"
+                  type="button"
+                  class="member-row__action member-row__action--danger"
+                  title="Отозвать приглашение"
+                  [disabled]="busy()"
+                  (click)="revoke(invitation)"
+                  [attr.aria-label]="
+                    'Отозвать приглашение: ' +
+                    invitation.recipient.firstName +
+                    ' ' +
+                    invitation.recipient.lastName
+                  "
+                >
+                  <i
+                    appIcon
+                    icon="basket"
+                    appWidth="13"
+                    appHeight="15"
+                    appViewBox="0 0 13 15"
+                    aria-hidden="true"
+                  ></i>
+                  <span class="member-row__action-label">Отозвать</span>
+                </button>
+              }
+            </div>
+          </li>
+        } @empty {
+          <li class="empty">Нет ожидающих приглашений.</li>
+        }
+      </ul>
+    }
+  } @else {
+    <p class="muted">Список отправленных приглашений доступен капитану.</p>
+  }
+</section>
+@if (inviting()) {
+  <app-solution-member-invite-modal
+    [solution]="solution()"
+    [invitations]="pending()"
+    [trigger]="trigger"
+    (created)="changed.emit()"
+    (refreshRequired)="changed.emit()"
+    (closed)="inviting.set(false)"
+  />
+}
+@if (editing()) {
+  <app-project-invite-dialog
+    title="Изменить роль"
+    description="Укажите роль участника в команде"
+    [compact]="true"
+    [trigger]="trigger"
+    (closed)="editing.set(null)"
+  >
+    <app-project-invite-role-input
+      inviteRole
+      [control]="role"
+      label="Роль в команде"
+      [readonly]="busy() || !solution().permissions.canManageTeam"
+    />
+    @if (error()) {
+      <p inviteError role="alert">{{ error() }}</p>
+    }
+    <div inviteFooter class="invite-actions">
+      <button appButton="secondary" type="button" (click)="editing.set(null)">Отмена</button
+      ><button
+        appButton="primary"
+        type="button"
+        [disabled]="role.invalid || busy() || !solution().permissions.canManageTeam"
+        [attr.aria-busy]="busy()"
+        (click)="saveRole()"
+      >
+        {{ busy() ? "Сохраняем…" : "Сохранить роль" }}
+      </button>
+    </div>
+  </app-project-invite-dialog>
+}

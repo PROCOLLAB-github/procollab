@@ -6,6 +6,7 @@ import {
   computed,
   effect,
   inject,
+  Injector,
   input,
   signal,
   untracked,
@@ -26,7 +27,10 @@ import {
   IconComponent,
 } from "@uilib";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
-import { ProgramResults, ResultProject, ResultsQuery } from "@domain/program/program-results.model";
+import { ProgramResults, ResultEntry, ResultsQuery } from "@domain/program/program-results.model";
+import { GetSolutionResultsUseCase } from "@api/solution/use-cases/solution-evaluation.use-cases";
+import { ExportSolutionResultsUseCase } from "@api/solution/use-cases/solution-results-export.use-case";
+import { map } from "rxjs";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ResultProjectScoresComponent } from "./result-project-scores.component";
 
@@ -54,6 +58,9 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
 })
 export class ManagementResultsComponent {
   readonly programId = input.required<number>();
+  readonly solutionMode = input(false);
+  readonly submissionApplicable = input(true);
+  private readonly injector = inject(Injector);
   private readonly api = inject(ProgramManagementUseCase);
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder).nonNullable;
@@ -89,7 +96,7 @@ export class ManagementResultsComponent {
   readonly filterCount = computed(
     () => Number(this.caseValue() !== "all") + Number(this.statusValue() !== "all"),
   );
-  readonly isComplete = (project: ResultProject): boolean =>
+  readonly isComplete = (project: ResultEntry): boolean =>
     project.evaluationComplete ?? project.ready;
   readonly caseKey = (name: string): string => JSON.stringify(name);
   readonly format = (value: number | null | undefined): string =>
@@ -197,7 +204,28 @@ export class ManagementResultsComponent {
         switchMap(id => {
           this.loading.set(true);
           this.error.set(false);
-          return this.api.results(id).pipe(
+          const request = this.solutionMode()
+            ? this.injector
+                .get(GetSolutionResultsUseCase)
+                .execute(id)
+                .pipe(
+                  map(result => {
+                    if (!result.ok) throw result.error;
+                    const data = result.value;
+                    return {
+                      ...data,
+                      groups: data.groups.map(group => ({
+                        caseName: group.caseName,
+                        projects: group.solutions.map(solution => ({
+                          ...solution,
+                          id: solution.solutionId,
+                        })),
+                      })),
+                    } satisfies ProgramResults;
+                  }),
+                )
+            : this.api.results(id);
+          return request.pipe(
             tap(data => {
               this.snapshot.set(data);
               this.page.set(this.currentPage());
@@ -214,6 +242,7 @@ export class ManagementResultsComponent {
       .subscribe();
     effect(() => {
       const id = this.programId();
+      this.solutionMode();
       untracked(() => {
         this.snapshot.set(null);
         this.expanded.set(new Set());
@@ -250,7 +279,7 @@ export class ManagementResultsComponent {
     this.statusFilter.setValue(this.draftStatus.value);
     this.modal.set(null);
   }
-  private compareNames(a: ResultProject, b: ResultProject): number {
+  private compareNames(a: ResultEntry, b: ResultEntry): number {
     const first = a.name.toLowerCase(),
       second = b.name.toLowerCase();
     return first === second ? a.id - b.id : first < second ? -1 : 1;
@@ -286,8 +315,18 @@ export class ManagementResultsComponent {
     this.exporting.set(true);
     this.exportError.set(false);
     this.exportSuccess.set(false);
-    this.api
-      .exportResults(this.programId(), query)
+    const request = this.solutionMode()
+      ? this.injector
+          .get(ExportSolutionResultsUseCase)
+          .execute(this.programId(), query)
+          .pipe(
+            map(result => {
+              if (!result.ok) throw result.error;
+              return result.value;
+            }),
+          )
+      : this.api.exportResults(this.programId(), query);
+    request
       .pipe(
         takeUntil(this.requests),
         takeUntilDestroyed(this.destroyRef),

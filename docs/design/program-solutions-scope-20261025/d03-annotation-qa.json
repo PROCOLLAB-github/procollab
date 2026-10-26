@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "scope": "Copy-only prototype API annotation, jsdom comparison, not browser/visual QA",
+  "cases": 81,
+  "formats": 3,
+  "states": 9,
+  "routes": 3,
+  "productDomAndTitleUnchanged": true,
+  "annotationOutsideProduct": true,
+  "domainRequests": 0,
+  "jsdomErrors": [],
+  "approval": "DESIGN APPROVAL REQUIRED; existing pending question unchanged",
+  "before": {
+    "index.html": "18cc66a613dd95ae1f968d0b2f93f62a4737c9659d9ce0c7724f0be479a51e6c",
+    "app.js": "07da85fdc5d5149c12ab5e8214b2ba1fcf2eea39276a89913d9f97a814a3f5ef",
+    "design-handoff.md": "78a97dd77eedec3c28edb36ca80f424339386028885bb5fef3070fb222e2e96b"
+  },
+  "after": {
+    "index.html": "8817a0e6b0a8e958d7db4b70225ca0f567803bcce57b3298b561c7da22ab50c7",
+    "app.js": "bd5a92a4428ad22a24afe5fba3d3dc5006dceafea33793d1697b15bac9abeff7",
+    "design-handoff.md": "5538c5c8790d21f03285b729fd914c61d41bdaec9582924c139cb7749e053614"
+  },
+  "oldQaAndScreenshotsPreserved": true,
+  "newVisualOrBrowserQa": false
+}

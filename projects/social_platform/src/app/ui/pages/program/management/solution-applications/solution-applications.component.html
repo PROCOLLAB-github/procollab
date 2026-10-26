@@ -1,0 +1,447 @@
+<!-- @format -->
+<section class="management__card" [attr.aria-busy]="loading()">
+  @if (formError()) {
+    <p role="alert">Не удалось загрузить настройки полей: {{ formError() }}</p>
+  }
+  <div class="management__list-heading">
+    <div>
+      <h2>Заявки</h2>
+      <p class="management__participant-count">
+        {{ archived() ? "В архиве" : "Всего заявок по фильтрам" }}: <strong>{{ count() }}</strong>
+      </p>
+    </div>
+    <button
+      appButton="icon"
+      class="management__export"
+      type="button"
+      aria-label="Выгрузить заявки в Excel"
+      [appButtonLoading]="exporting()"
+      [disabled]="loading() || exporting() || archived() || !count()"
+      (click)="export()"
+    >
+      <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="management__toolbar management__toolbar--projects">
+    <form
+      class="management__search"
+      (ngSubmit)="navigate({ search: search.value.trim() || null, offset: null })"
+    >
+      <label class="management__sr" for="solution-management-search"
+        >Поиск по названию решения</label
+      ><input
+        id="solution-management-search"
+        type="search"
+        appField
+        [formControl]="search"
+        maxlength="200"
+        placeholder="Поиск по названию решения"
+      />
+    </form>
+    <div class="management__toolbar-actions management__toolbar-actions--projects">
+      <button
+        #filtersTrigger
+        appButton="secondary"
+        class="management__filter-trigger"
+        type="button"
+        aria-haspopup="dialog"
+        [attr.aria-expanded]="filtersOpen()"
+        (click)="openFilters(filtersTrigger)"
+      >
+        <i appIcon icon="filter" appSquare="16" aria-hidden="true"></i>Фильтры
+      </button>
+    </div>
+  </div>
+  @if (loading()) {
+    <p role="status">Загружаем заявки…</p>
+  } @else if (error()) {
+    <p role="alert">{{ error() }}</p>
+    <button appButton="secondary" type="button" (click)="load()">Повторить</button>
+  } @else if (!rows().length) {
+    <p role="status">
+      {{
+        search.value.trim()
+          ? "Ничего не найдено. Измените запрос или фильтры."
+          : archived()
+            ? "В архиве пока нет заявок."
+            : "В программе пока нет заявок по выбранным условиям."
+      }}
+    </p>
+  } @else {
+    @if (!archived()) {
+      <div class="management__mobile-tools">
+        <label class="management__pick-all"
+          ><input
+            type="checkbox"
+            appChoice
+            [checked]="allPicked()"
+            [disabled]="selecting()"
+            (change)="selectAll()"
+          />Все заявки</label
+        >
+      </div>
+    }
+    <table appTable class="management__table management__projects">
+      <caption class="management__sr">
+        Заявки программы
+      </caption>
+      <colgroup>
+        <col class="management__col-select" />
+        <col class="management__col-number" />
+        <col style="width: 26%" />
+        <col style="width: 18%" />
+        <col style="width: 16%" />
+        <col style="width: 16%" />
+        <col style="width: 24%" />
+        <col class="management__col-actions" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th scope="col">
+            <label class="management__pick-all"
+              ><input
+                type="checkbox"
+                appChoice
+                aria-label="Выбрать все заявки по фильтрам"
+                [checked]="allPicked()"
+                [indeterminate]="!!selected().size && !allPicked()"
+                [disabled]="selecting() || archived()"
+                (change)="selectAll()"
+            /></label>
+          </th>
+          <th scope="col">№</th>
+          <th scope="col">Решение</th>
+          <th scope="col">Руководитель</th>
+          <th scope="col">Сдача решения</th>
+          <th scope="col">Оценивание</th>
+          <th scope="col">Кейс</th>
+          <th scope="col"><span class="management__sr">Действия</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row.application.solutionId; let index = $index) {
+          <tr [class.management__row-selected]="selected().has(row.application.solutionId)">
+            <td class="management__pick">
+              <label
+                ><input
+                  type="checkbox"
+                  appChoice
+                  [checked]="selected().has(row.application.solutionId)"
+                  [disabled]="selecting() || archived()"
+                  [attr.aria-label]="'Выбрать решение: ' + row.application.name"
+                  (change)="toggle(row.application.solutionId)"
+              /></label>
+            </td>
+            <td data-label="№">{{ offset() + index + 1 }}</td>
+            <td class="management__name" data-label="Решение">
+              <button class="management__solution-link" type="button" (click)="open(row)">
+                {{ row.application.name }}
+              </button>
+              @if (program().isCompetitive && row.submissionStatus === "draft") {
+                <small class="management__draft-badge">Черновик заявки</small>
+              }
+            </td>
+            <td data-label="Руководитель">{{ row.captain.fullName }}</td>
+            <td data-label="Сдача решения">
+              {{
+                program().isCompetitive
+                  ? row.submissionStatus === "submitted"
+                    ? "Сдано"
+                    : "Не сдано"
+                  : "Не применяется"
+              }}
+            </td>
+            <td data-label="Оценивание">{{ evaluation(row) }}</td>
+            <td data-label="Кейс">{{ row.caseName || "Не выбран" }}</td>
+            <td class="management__row-actions">
+              <app-row-actions
+                [label]="'Действия решения: ' + row.application.name"
+                [actions]="actions(row)"
+                [disabled]="applying()"
+                (opened)="loadMaterial(row)"
+                (action)="action(row, $event)"
+              />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <app-pagination
+      [previousDisabled]="offset() === 0"
+      [nextDisabled]="offset() + limit >= count()"
+      (previous)="page(-1)"
+      (next)="page(1)"
+      >{{ offset() + 1 }}–{{ offset() + rows().length }} из {{ count() }}</app-pagination
+    >
+  }
+  @if (message()) {
+    <p role="status">{{ message() }}</p>
+  }
+  @if (selected().size && !archived()) {
+    <section
+      class="management__selection management__bulk management__bulk--projects solution-selection"
+      aria-label="Массовые действия"
+    >
+      <strong>Выбрано заявок: {{ selected().size }}</strong
+      ><button
+        appButton="secondary"
+        type="button"
+        [disabled]="!program().isCompetitive || applying()"
+        (click)="beginAction({ kind: 'submit', ids: Array.from(selected()) })"
+      >
+        Сдать решения</button
+      ><button
+        #allocationTrigger
+        appButton="primary"
+        type="button"
+        [disabled]="!program().isCompetitive || applying()"
+        (click)="openAllocation(allocationTrigger)"
+      >
+        Назначить экспертов</button
+      ><button appButton="icon" type="button" aria-label="Снять весь выбор" (click)="clear()">
+        ×
+      </button>
+    </section>
+  }
+</section>
+<app-modal
+  [open]="filtersOpen()"
+  size="small"
+  labelledBy="solution-filters-title"
+  (openChange)="filtersOpen.set($event); !$event && restoreFocus()"
+  ><section class="solution-dialog">
+    <header>
+      <h2 id="solution-filters-title">Фильтры заявок</h2>
+      <button
+        appButton="icon"
+        type="button"
+        aria-label="Закрыть"
+        (click)="filtersOpen.set(false); restoreFocus()"
+      >
+        ×
+      </button>
+    </header>
+    <label
+      >Участие<select appField [formControl]="participation">
+        <option value="active">Активные</option>
+        <option value="archived">Архив</option>
+      </select></label
+    >
+    @if (participation.value === "active") {
+      <label
+        >Кейс<select appField [formControl]="caseFilter">
+          <option value="all">Все кейсы</option>
+          <option value="without_case">Без кейса</option>
+          @for (name of caseOptions(); track name) {
+            <option [value]="'case:' + name">{{ name }}</option>
+          }
+        </select></label
+      >
+      @if (program().isCompetitive) {
+        <label
+          >Сдача решения<select appField [formControl]="submissionFilter">
+            <option value="all">Все</option>
+            <option value="submitted">Сдано</option>
+            <option value="not_submitted">Не сдано</option>
+          </select></label
+        >
+      }
+      <label
+        >Поле решения<select appField [formControl]="fieldFilter">
+          <option value="">Все поля</option>
+          @for (field of fields(); track field.id) {
+            <option [value]="'' + field.id">{{ field.label }}</option>
+          }
+        </select></label
+      >
+      @if (fieldFilter.value) {
+        <label
+          >Заполнение<select appField [formControl]="answerFilter">
+            <option value="all">Все</option>
+            <option value="present">Заполнено</option>
+            <option value="missing">Не заполнено</option>
+            <option value="not_applicable">Не применяется</option>
+          </select></label
+        >
+      }
+    }
+    <footer>
+      <button appButton="secondary" type="button" (click)="filtersOpen.set(false); restoreFocus()">
+        Отмена</button
+      ><button appButton="primary" type="button" (click)="applyFilters()">Применить</button>
+    </footer>
+  </section></app-modal
+>
+<app-modal
+  [open]="detailOpen()"
+  size="large"
+  labelledBy="managed-solution-title"
+  (openChange)="!$event && closeDetail()"
+  ><section class="solution-dialog" [attr.aria-busy]="detailLoading()">
+    <header>
+      <h2 id="managed-solution-title">{{ detail()?.name || "Заявка" }}</h2>
+      <button appButton="icon" type="button" aria-label="Закрыть заявку" (click)="closeDetail()">
+        ×
+      </button>
+    </header>
+    @if (detailLoading()) {
+      <p role="status">Загружаем заявку…</p>
+    }
+    @if (detailError()) {
+      <p role="alert">{{ detailError() }}</p>
+    }
+    @if (detail(); as item) {
+      <nav class="solution-dialog__tabs" aria-label="Разделы заявки">
+        <button
+          appButton="secondary"
+          type="button"
+          [attr.aria-current]="!teamTab() ? 'page' : null"
+          (click)="teamTab.set(false); historyOpen.set(false)"
+        >
+          Решение</button
+        ><button
+          appButton="secondary"
+          type="button"
+          [attr.aria-current]="teamTab() ? 'page' : null"
+          (click)="teamTab.set(true); historyOpen.set(false)"
+        >
+          Команда
+        </button>
+      </nav>
+      @if (historyOpen()) {
+        <h3>История изменений</h3>
+        @if (historyLoading()) {
+          <p role="status">Загружаем историю…</p>
+        }
+        @if (history(); as records) {
+          @for (record of records.results; track record.id) {
+            <p>
+              {{ record.createdAt | date: "dd.MM.yyyy HH:mm" : "+0300" }} · {{ record.actorName }} ·
+              {{ historyLabel(record.action) }}
+            </p>
+          } @empty {
+            <p>Изменений пока нет.</p>
+          }
+        }
+      } @else if (teamTab()) {
+        <h3>Принятых участников: {{ item.team.acceptedCount }}</h3>
+        <ul class="solution-dialog__team">
+          @for (member of item.team.members; track member.user.id) {
+            <li>
+              <span>{{ member.user.firstName }} {{ member.user.lastName }}</span
+              ><small
+                >{{ member.role || member.specialization || "Участник"
+                }}{{ member.isCaptain ? " · Капитан" : "" }}</small
+              >
+              @if (!member.isCaptain && item.participation?.status !== "archived") {
+                <button
+                  appButton="text"
+                  type="button"
+                  (click)="beginAction({ kind: 'member', ids: [item.id], member: member })"
+                >
+                  Исключить участника
+                </button>
+              }
+            </li>
+          }
+        </ul>
+        @if (item.team.pendingCount) {
+          <p>
+            Ожидают подтверждения: {{ item.team.pendingCount }}. Приглашенные войдут в состав после
+            принятия приглашения.
+          </p>
+        }
+      } @else {
+        <app-solution-fields [fields]="item.form.fields" [group]="materials()" [readonly]="true" />
+      }
+      <footer>
+        <button appButton="secondary" type="button" (click)="openHistory()">
+          История изменений</button
+        ><button appButton="secondary" type="button" (click)="closeDetail()">Закрыть</button>
+      </footer>
+    }
+  </section></app-modal
+>
+<app-solution-case-action
+  [request]="caseRequest()"
+  [caseOptions]="caseOptions()"
+  (closed)="caseRequest.set(null); restoreFocus()"
+  (completed)="caseChanged()"
+  (busyChange)="busyChange.emit($event)"
+/>
+<app-solution-allocation
+  [request]="allocationRequest()"
+  (closed)="allocationRequest.set(null); restoreFocus()"
+  (completed)="allocationCompleted()"
+  (busyChange)="busyChange.emit($event)"
+/>
+<app-modal
+  [open]="!!actionRequest()"
+  size="small"
+  labelledBy="solution-action-title"
+  (openChange)="!$event && closeAction()"
+  ><section class="solution-dialog" [attr.aria-busy]="actionLoading() || applying()">
+    <header>
+      <h2 id="solution-action-title">{{ actionTitle() }}</h2>
+      <button
+        appButton="icon"
+        type="button"
+        aria-label="Закрыть"
+        [disabled]="applying()"
+        (click)="closeAction()"
+      >
+        ×
+      </button>
+    </header>
+    @if (actionRequest()?.kind === "archive") {
+      <p>
+        Материалы, состав и оценки сохранятся в архиве. Решение исчезнет из активных списков,
+        оценивания и публичной выдачи. Возврат из архива не предусмотрен.
+      </p>
+    } @else if (actionRequest()?.kind === "member") {
+      <p>{{ actionRequest()?.kind === "member" ? memberName() : "" }}</p>
+      <p>
+        Прежний состав останется в истории. Регистрация в программе, материалы и оценки сохранятся.
+      </p>
+    } @else {
+      <p>
+        После подтверждения материалы и принятый состав будут зафиксированы. Проверим обязательные
+        поля и команду. Ожидающие приглашения в состав не входят.
+      </p>
+    }
+    @if (actionLoading()) {
+      <p role="status">Проверяем изменения…</p>
+    }
+    @if (actionPreview(); as checked) {
+      @if (actionRequest()?.kind !== "submit") {
+        <p>
+          Сохранится оценок: {{ checked.scores }}. Будет снято назначений:
+          {{ checked.removedAssignments }}. Будет отозвано приглашений: {{ checked.invitations }}.
+        </p>
+      }
+      @for (issue of checked.issues; track $index) {
+        <p role="alert">{{ issue }}</p>
+      }
+    }
+    @if (actionError()) {
+      <p role="alert">{{ actionError() }}</p>
+      <button appButton="secondary" type="button" [disabled]="applying()" (click)="retryAction()">
+        Обновить данные
+      </button>
+    }
+    <footer>
+      <button appButton="secondary" type="button" [disabled]="applying()" (click)="closeAction()">
+        Отмена</button
+      ><button
+        appButton="primary"
+        type="button"
+        [disabled]="
+          applying() || actionLoading() || !actionPreview()?.canApply || !actionPreview()?.token
+        "
+        (click)="confirmAction()"
+      >
+        {{ applying() ? "Сохраняем…" : "Подтвердить" }}
+      </button>
+    </footer>
+  </section></app-modal
+>

@@ -9,9 +9,12 @@ import { ProgramRoleWidgetService } from "@api/program/facades/detail/program-ro
 import { DetailProgramInfoService } from "@ui/widgets/detail/services/program/detail-program-info.service";
 import { AsyncState, failure, loading, success } from "@domain/shared/async-state";
 import { ProgramRoleWidget, ProgramWidgetError } from "@domain/program/program-role-widget.model";
+import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
+import { Program } from "@domain/program/program.model";
 
 describe("ProgramRoleWidgetComponent", () => {
   const state = signal<AsyncState<ProgramRoleWidget, ProgramWidgetError>>(loading());
+  const program = signal<Program>({ ...Program.default(), id: 12 });
   const retry = vi.fn(),
     create = vi.fn();
   const participant: ProgramRoleWidget = {
@@ -30,10 +33,12 @@ describe("ProgramRoleWidgetComponent", () => {
     retry.mockClear();
     create.mockClear();
     state.set(loading());
+    program.set({ ...Program.default(), id: 12 });
     TestBed.configureTestingModule({
       imports: [ProgramRoleWidgetComponent],
       providers: [
         provideRouter([]),
+        { provide: ProgramDetailMainUIInfoService, useValue: { program } },
         {
           provide: DetailProgramInfoService,
           useValue: { addNewProject: create, applicationPending: signal(false) },
@@ -59,6 +64,98 @@ describe("ProgramRoleWidgetComponent", () => {
     const f = render();
     expect(f.nativeElement.querySelector(".widget__skeleton")).toBeTruthy();
     expect(f.nativeElement.querySelector("dd")).toBeNull();
+  });
+  it("uses a real solution reference for both participant links and clears legacy query parameters", () => {
+    const f = render(participant);
+    state.set(
+      success({
+        programId: 12,
+        storageMode: "solution",
+        role: "participant",
+        isCompetitive: true,
+        participant: {
+          application: {
+            kind: "solution",
+            programId: 12,
+            solutionId: 301,
+            name: "Решение команды",
+          },
+          caseProvided: true,
+          caseName: "Кейс А",
+          stage: "evaluated",
+          submissionOpen: false,
+        },
+      }),
+    );
+    f.detectChanges();
+    const links = f.nativeElement.querySelectorAll("a");
+    expect(links).toHaveLength(2);
+    for (const link of links)
+      expect(link.getAttribute("href")).toBe("/office/program/12/solutions/301");
+    expect(f.nativeElement.textContent).toContain("Решение:");
+    expect(f.nativeElement.textContent).not.toContain("Проект:");
+    expect(f.nativeElement.querySelectorAll(".widget__step--complete")).toHaveLength(3);
+    expect(f.nativeElement.querySelector('[aria-label="Этапы решения"]')).toBeTruthy();
+    expect(create).not.toHaveBeenCalled();
+  });
+  it("creates only on the explicit solution action and keeps noncompetitive submission inapplicable", () => {
+    const f = render({
+      programId: 12,
+      storageMode: "solution",
+      role: "participant",
+      isCompetitive: false,
+      participant: {
+        application: null,
+        caseProvided: false,
+        caseName: null,
+        stage: "not_applicable",
+        submissionOpen: true,
+      },
+    });
+    expect(f.nativeElement.textContent).toContain("Решение не создано");
+    expect(f.nativeElement.textContent).toContain("Сдача не предусмотрена");
+    expect(create).not.toHaveBeenCalled();
+    (f.nativeElement.querySelector("button") as HTMLButtonElement).click();
+    expect(create).toHaveBeenCalledExactlyOnceWith(12);
+  });
+  it("renders distinct solution organizer counters without Project placeholders or false noncompetitive zero", () => {
+    const f = render({
+      programId: 12,
+      storageMode: "solution",
+      role: "organizer",
+      isCompetitive: false,
+      organizer: {
+        participants: 5,
+        solutions: 2,
+        submittedSolutions: null,
+        participantsWithoutSolution: 1,
+      },
+    });
+    expect(
+      [...f.nativeElement.querySelectorAll("dd")].map((el: HTMLElement) => el.textContent?.trim()),
+    ).toEqual(["5", "2", "—", "1"]);
+    expect(f.nativeElement.textContent).toContain("Решения");
+    expect(f.nativeElement.textContent).toContain("Без команды");
+    expect(f.nativeElement.textContent).not.toContain("Проекты");
+  });
+  it("uses server-owned solution format and expert facts before deadline wording", () => {
+    const f = render({
+      programId: 12,
+      storageMode: "solution",
+      role: "expert",
+      isCompetitive: true,
+      expert: {
+        mode: "distributed",
+        assigned: 1,
+        remaining: 0,
+        evaluationEnds: "2000-01-01T00:00:00Z",
+      },
+    });
+    expect(f.nativeElement.textContent).toContain("Все решения оценены");
+    expect(f.nativeElement.textContent).not.toContain("Срок оценивания истек");
+    expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
+      "/office/program/12/solutions-rating",
+    );
   });
   it("opens the exact project from both name and action and retains full accessible names", () => {
     const f = render(participant);
@@ -178,6 +275,23 @@ describe("ProgramRoleWidgetComponent", () => {
     });
     expect(f.nativeElement.querySelectorAll("dd")).toHaveLength(2);
     expect(f.nativeElement.textContent).toContain("Нет назначенных проектов");
+    expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
+      "/office/program/12/projects-rating",
+    );
+  });
+  it("opens solution evaluation only for the explicit solution program format", () => {
+    program.update(value => ({ ...value, solutionStorageMode: "solution" }));
+    const f = render({
+      role: "expert",
+      programId: 12,
+      isCompetitive: true,
+      expert: { mode: "distributed", assigned: 1, remaining: 1, evaluationEnds: null },
+    });
+    expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
+      "/office/program/12/solutions-rating",
+    );
+    program.update(value => ({ ...value, solutionStorageMode: "legacy_project" }));
+    f.detectChanges();
     expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
       "/office/program/12/projects-rating",
     );

@@ -38,6 +38,8 @@ import { A11yModule } from "@angular/cdk/a11y";
 import { Overlay } from "@angular/cdk/overlay";
 import { desktop } from "@utils/responsive";
 import { NotificationListComponent } from "@ui/widgets/notification-list/notification-list.component";
+import { SolutionInvitationInboxComponent } from "@ui/widgets/solution-invitation-inbox/solution-invitation-inbox.component";
+import { SolutionInvitationInboxService } from "@api/solution/facades/solution-invitation-inbox.service";
 
 /**
  * Компонент навигационного меню
@@ -84,6 +86,7 @@ import { NotificationListComponent } from "@ui/widgets/notification-list/notific
     AsyncPipe,
     A11yModule,
     NotificationListComponent,
+    SolutionInvitationInboxComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -95,6 +98,7 @@ export class NavComponent implements OnInit, OnDestroy {
   private menuTrigger?: HTMLElement;
 
   readonly invites = this.inviteInfoService.invites;
+  readonly solutionInbox = inject(SolutionInvitationInboxService);
   readonly logout = output<void>();
 
   constructor(
@@ -182,7 +186,7 @@ export class NavComponent implements OnInit, OnDestroy {
    * Возвращает true если есть приглашения со статусом null (не принято/не отклонено)
    */
   get hasInvites(): boolean {
-    return this.invites().some(i => i.isAccepted === null);
+    return this.invites().some(i => i.isAccepted === null) || this.solutionInbox.count() > 0;
   }
 
   /**

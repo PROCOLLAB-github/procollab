@@ -1,0 +1,15 @@
+{
+  "counts": {
+    "partner_programs.PartnerProgram": 10,
+    "partner_programs.PartnerProgramField": 56,
+    "partner_programs.ProgramSolution": 10,
+    "partner_programs.ProgramSolutionAnswer": 35,
+    "partner_programs.ProgramSolutionMember": 16,
+    "partner_programs.SolutionInvitation": 9,
+    "project_rates.SolutionScore": 12,
+    "project_rates.SolutionExpertAssignment": 4,
+    "files.UserFile": 6,
+    "projects.Project": 2
+  },
+  "sha256": "42a279014e03858fa9266dc24ddc7a44d4ffca2d8c0600e4d934f2279d3a6aad"
+}

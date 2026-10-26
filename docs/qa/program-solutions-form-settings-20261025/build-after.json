@@ -1,0 +1,26 @@
+{
+  "source": "Z:\\Документы\\PROCOLLAB-dev\\procollab-dev-program-solutions-fe01-20261024\\dist\\social_platform",
+  "target": "C:\\Users\\evsee\\AppData\\Local\\Temp\\procollab-form-qa-angular",
+  "head": "d2a2cd3f80549e7dcbc6b3e32e55fea7ead57175",
+  "workingTreeRuntimeFix": true,
+  "modifiedGeneratedFiles": [
+    {
+      "file": "chunk-CHX6T2XY.js",
+      "before": "4707c125db5485fa8b5eeb9e30e23c6f90759d9f2daf86b56a5a0b332da287dd",
+      "after": "d8252699c1d7f5986df9684f6f5b9be81943d068050e6537958be0680cac6380"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "file": "projects/social_platform/src/app/ui/pages/program/management/solution-form/solution-form.component.ts",
+      "sha256": "303183b640190071d0588069ac0ba27e97cbc9d529e4cf3527f2f08688cb3be4",
+      "headSha256": "eeda84fe4ad19c39baec8e9d8a6e2695473791b52efb6d4ea903e290c2375ab2"
+    },
+    {
+      "file": "projects/social_platform/src/app/ui/pages/program/management/solution-form/solution-form.component.html",
+      "sha256": "777602d45216da4aa8da7f8b7d9cf7c5a76e85d825fc0e958421629ddbad66f4",
+      "headSha256": "777602d45216da4aa8da7f8b7d9cf7c5a76e85d825fc0e958421629ddbad66f4"
+    }
+  ],
+  "productEnvironmentUnchanged": true
+}

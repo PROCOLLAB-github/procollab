@@ -1,0 +1,10 @@
+{
+  "reason": "Third monitor required direct blocking by the controller; this does not observe a second waiter blocked through the first. The next monitor records transitive pg_blocking_pids paths as evidence instead of assuming all waiters have the same immediate blocker.",
+  "program_id": 15,
+  "solution_id": 20,
+  "revokedPendingId": 36,
+  "status": 204,
+  "solutionPreserved": true,
+  "sourceVersion": 6,
+  "resultVersion": 7
+}

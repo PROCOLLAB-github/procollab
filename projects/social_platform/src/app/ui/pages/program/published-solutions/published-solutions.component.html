@@ -1,0 +1,111 @@
+<!-- @format -->
+<section class="published" aria-labelledby="published-title" [attr.aria-busy]="loading()">
+  @if (solutionId() !== null) {
+    <a [routerLink]="paths.program.publishedSolutions(programId())" [queryParams]="listQuery()"
+      >К решениям программы</a
+    >
+  }
+  <h2 id="published-title">{{ solution()?.application?.name || "Решения программы" }}</h2>
+  @if (solutionId() === null) {
+    <label class="published__search"
+      >Поиск решений<input
+        appField
+        type="search"
+        [formControl]="search"
+        placeholder="Поиск по названию решения"
+    /></label>
+  }
+  @if (loading()) {
+    <p role="status">Загружаем опубликованные решения…</p>
+  } @else if (error(); as problem) {
+    <p role="alert">
+      {{
+        problem.code === "not_found"
+          ? "Решение недоступно или еще не опубликовано."
+          : problem.detail
+      }}
+    </p>
+    <button appButton="secondary" type="button" (click)="reload()">Повторить</button>
+  } @else if (solution(); as item) {
+    <p class="published__muted">Опубликовано {{ item.publishedAt | date: "dd.MM.yyyy" }}</p>
+    <nav class="published__tabs" aria-label="Разделы решения">
+      <a
+        appButton="secondary"
+        [routerLink]="[]"
+        [queryParams]="{ tab: null }"
+        queryParamsHandling="merge"
+        [attr.aria-current]="!teamTab() ? 'page' : null"
+        >Решение</a
+      >
+      <a
+        appButton="secondary"
+        [routerLink]="[]"
+        [queryParams]="{ tab: 'team' }"
+        queryParamsHandling="merge"
+        [attr.aria-current]="teamTab() ? 'page' : null"
+        >Команда</a
+      >
+    </nav>
+    @if (teamTab()) {
+      <h3>Команда · {{ item.team.acceptedCount }}</h3>
+      <ul class="published__team">
+        @for (member of item.team.members; track member.user.id) {
+          <li>
+            <span>{{ member.user.firstName }} {{ member.user.lastName }}</span
+            ><small
+              >{{ member.role || member.specialization || "Участник"
+              }}{{ member.isCaptain ? " · Капитан" : "" }}</small
+            >
+          </li>
+        }
+      </ul>
+    } @else {
+      <app-solution-fields [fields]="item.fields" [group]="materials()" [readonly]="true" />
+      @if (!item.fields.length) {
+        <p>Материалы не добавлены.</p>
+      }
+    }
+  } @else if (data(); as list) {
+    <p class="published__muted">Опубликовано решений: {{ list.count }}</p>
+    @if (!list.results.length) {
+      <p role="status">
+        {{
+          search.value.trim()
+            ? "По вашему запросу решений не найдено."
+            : "В программе пока нет опубликованных решений."
+        }}
+      </p>
+      @if (search.value.trim()) {
+        <button appButton="secondary" type="button" (click)="navigate({ q: null, offset: null })">
+          Сбросить поиск
+        </button>
+      }
+    } @else {
+      <ul class="published__list">
+        @for (card of list.results; track card.application.solutionId) {
+          <li>
+            <a
+              [routerLink]="
+                paths.program.publishedSolution(programId(), card.application.solutionId)
+              "
+              [queryParams]="listQuery()"
+              >{{ card.application.name }}</a
+            >
+            <p>{{ card.captain.firstName }} {{ card.captain.lastName }}</p>
+            <small
+              >В команде: {{ card.acceptedCount }} ·
+              {{ card.publishedAt | date: "dd.MM.yyyy" }}</small
+            >
+          </li>
+        }
+      </ul>
+      <app-pagination
+        [previousDisabled]="offset() === 0"
+        [nextDisabled]="offset() + limit >= list.count"
+        (previous)="page(-1)"
+        (next)="page(1)"
+        >{{ offset() + 1 }}–{{ offset() + list.results.length }} из {{ list.count }}</app-pagination
+      >
+    }
+  }
+</section>

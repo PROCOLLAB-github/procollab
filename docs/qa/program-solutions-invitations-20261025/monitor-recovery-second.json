@@ -1,0 +1,10 @@
+{
+  "reason": "Second monitor observed only one blocked API worker; two-worker concurrency was not established. The next probe uses two separate local API processes.",
+  "program_id": 15,
+  "solution_id": 20,
+  "revokedPendingId": 35,
+  "status": 204,
+  "solutionPreserved": true,
+  "sourceVersion": 4,
+  "resultVersion": 5
+}

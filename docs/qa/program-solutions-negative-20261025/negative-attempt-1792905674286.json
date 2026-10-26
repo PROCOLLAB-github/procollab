@@ -1,0 +1,130 @@
+{
+  "status": "FAIL",
+  "checkedAt": "2026-10-25T05:21:14.286Z",
+  "message": "TimeoutError: locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Сдать решение', exact: true }) to be hidden\u001b[22m\n\u001b[2m    43 × locator resolved to visible <button disabled type=\"button\" appbutton=\"primary\" aria-disabled=\"true\" _ngcontent-ng-c2791305489=\"\" class=\"ui-button ui-button--primary ng-star-inserted\"> Сдать решение </button>\u001b[22m\n",
+  "events": [
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "captain",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solution-context/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "PATCH",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "pending_b",
+      "method": "POST",
+      "path": "/programs/11/solutions/14/submit/",
+      "status": 409
+    },
+    {
+      "role": "pending_b",
+      "method": "GET",
+      "path": "/programs/11/solutions/14/",
+      "status": 200
+    },
+    {
+      "role": "manager",
+      "method": "GET",
+      "path": "/solution-invitations/",
+      "status": 200
+    }
+  ],
+  "checks": [
+    {
+      "program": 11,
+      "check": "local deadline fixture close",
+      "receipt": {
+        "program_id": 11,
+        "action": "close",
+        "submission_open": false,
+        "mode": "solution"
+      }
+    },
+    {
+      "program": 11,
+      "check": "local deadline fixture restore",
+      "receipt": {
+        "program_id": 11,
+        "action": "restore",
+        "submission_open": true,
+        "mode": "solution"
+      }
+    }
+  ],
+  "faults": [],
+  "findings": [],
+  "state": {
+    "prefix": "qa01n-20261025-bdb96b29",
+    "programs": {
+      "11": {
+        "solutionId": 14,
+        "checks": [
+          "empty draft saves, team focus, explicit missing case focus; no submit POST",
+          "pending does not satisfy team minimum; accepted member permits material/file focus from team tab"
+        ],
+        "emptyDone": true,
+        "basicsDone": true
+      }
+    }
+  },
+  "javascriptErrors": []
+}

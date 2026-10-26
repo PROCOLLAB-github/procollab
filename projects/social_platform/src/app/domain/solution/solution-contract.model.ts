@@ -1,6 +1,6 @@
 /** @format */
 
-// Сгенерировано tools/generate-solution-contract.py из C00 1.0.0.
+// Сгенерировано tools/generate-solution-contract.py из C00 1.21.0.
 // camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.
 
 export type SolutionUser = {
@@ -37,6 +37,7 @@ export type SolutionIssue = {
   code: string;
   fieldId: number | null;
   detail: string;
+  criterionId?: number | null;
 };
 
 export type SolutionApiError = {
@@ -191,6 +192,7 @@ export type SolutionPermissions = {
   canManageTeam: boolean;
   canInvite: boolean;
   canSubmit: boolean;
+  canLeave?: boolean;
 };
 
 export type SolutionSubmission = {
@@ -220,6 +222,7 @@ export type ProgramSolution = {
   submission: SolutionSubmission;
   permissions: SolutionPermissions;
   readiness: SolutionReadiness | null;
+  participation?: SolutionParticipation;
 };
 
 export type SolutionSummary = {
@@ -231,13 +234,26 @@ export type SolutionSummary = {
   caseValue: string | null;
   status: "draft" | "submitted";
   submittedAt: string | null;
+  participation?: SolutionParticipation;
 };
 
 export type CreateSolutionCommand = {
   name?: string;
 };
 
-export type UpdateSolutionCommand = unknown | unknown;
+export type UpdateSolutionCommand =
+  | {
+      expectedVersion: number;
+      expectedFormRevision: string;
+      name: string;
+      answers?: Array<SolutionAnswerPatch>;
+    }
+  | {
+      expectedVersion: number;
+      expectedFormRevision: string;
+      name?: string;
+      answers: Array<SolutionAnswerPatch>;
+    };
 
 export type SubmitSolutionCommand = {
   expectedVersion: number;
@@ -279,12 +295,33 @@ export type SolutionInvitation = {
 export type SolutionCreateInvitation = {
   expectedSolutionVersion: number;
   recipientUserId: number;
-  role?: string | null;
+  role: string;
   specialization?: string | null;
   motivationalLetter?: string | null;
 };
 
-export type SolutionUpdateInvitation = unknown | unknown | unknown;
+export type SolutionUpdateInvitation =
+  | {
+      expectedVersion: number;
+      expectedSolutionVersion: number;
+      role: string;
+      specialization?: string | null;
+      motivationalLetter?: string | null;
+    }
+  | {
+      expectedVersion: number;
+      expectedSolutionVersion: number;
+      role?: string;
+      specialization: string | null;
+      motivationalLetter?: string | null;
+    }
+  | {
+      expectedVersion: number;
+      expectedSolutionVersion: number;
+      role?: string;
+      specialization?: string | null;
+      motivationalLetter: string | null;
+    };
 
 export type SolutionInvitationAction = {
   expectedVersion: number;
@@ -332,4 +369,935 @@ export type SolutionSubmissionSnapshot = {
   form: SolutionForm;
   answers: Array<SolutionAnswer>;
   submittedAt: string;
+};
+
+export type SolutionRatingCriterion = {
+  id: number;
+  name: string;
+  description: string | null;
+  type: "int" | "float" | "bool" | "str";
+  minValue: number | null;
+  maxValue: number | null;
+  value: string | null;
+};
+
+export type SolutionRatingValue = {
+  criterionId: number;
+  value: string | null;
+};
+
+export type RateSolutionCommand = {
+  expectedCriteriaRevision: string;
+  scores: Array<SolutionRatingValue>;
+};
+
+export type SolutionRatingSummary = {
+  application: SolutionRef;
+  caseName: string | null;
+  assigned: boolean;
+  isCompleted: boolean;
+  canRate: boolean;
+  blockedReason: string | null;
+};
+
+export type SolutionRatingPage = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Array<SolutionRatingSummary>;
+  evaluationCounts?: {
+    pending: number;
+    completed: number;
+  };
+  caseOptions?: Array<string>;
+};
+
+export type SolutionRatingFrame = {
+  program: SolutionProgramRef;
+  solution: ProgramSolution;
+  criteriaRevision: string;
+  criteria: Array<SolutionRatingCriterion>;
+  managedEvaluation: boolean;
+  canRate: boolean;
+  blockedReason: string | null;
+  isCompleted: boolean;
+  ratedCount: number;
+  maxRates: number | null;
+  requiredEvaluators: number;
+  deadline: string | null;
+};
+
+export type SolutionAssignmentOption = {
+  solutionId: number;
+  name: string;
+  caseName: string | null;
+  submitted: boolean;
+  assigned: boolean;
+  protected: boolean;
+  isCompleted: boolean;
+  ownTeam: boolean;
+  eligible: boolean;
+};
+
+export type SolutionAssignmentOptions = {
+  programId: number;
+  expertId: number;
+  revision: string;
+  solutions: Array<SolutionAssignmentOption>;
+};
+
+export type SolutionAssignmentsWrite = {
+  revision: string;
+  solutionIds: Array<number>;
+};
+
+export type SolutionCasePool = {
+  caseName: string | null;
+  expertIds: Array<number>;
+};
+
+export type SolutionAssignmentOverride = {
+  solutionId: number;
+  expertIds: Array<number>;
+};
+
+export type SolutionAllocationWrite = {
+  revision: string;
+  expertIds: Array<number>;
+  solutionIds?: Array<number>;
+  casePools?: Array<SolutionCasePool>;
+  seed?: number;
+  previousPlanToken?: string;
+  assignmentOverrides?: Array<SolutionAssignmentOverride>;
+};
+
+export type SolutionPlannedAssignment = {
+  solutionId: number;
+  solutionName: string;
+  expertId: number;
+  expertName: string;
+  caseName: string | null;
+};
+
+export type SolutionAssignmentShortage = {
+  solutionId: number;
+  solutionName: string;
+  missing: number;
+  caseName: string | null;
+};
+
+export type SolutionExpertLoad = {
+  expertId: number;
+  name: string;
+  before: number;
+  after: number;
+  assignedBefore: number;
+  assignedAfter: number;
+};
+
+export type SolutionAllocationPlan = {
+  revision: string;
+  planToken: string;
+  assignments: Array<SolutionPlannedAssignment>;
+  shortages: Array<SolutionAssignmentShortage>;
+  canReroll: boolean;
+  load: Array<SolutionExpertLoad>;
+};
+
+export type SolutionAllocationApply = {
+  planToken: string;
+};
+
+export type SolutionAssignmentReceipt = {
+  programId: number;
+  revision: string;
+  created: number;
+};
+
+export type SolutionQuotaWrite = {
+  revision: string;
+  requiredEvaluators: number;
+};
+
+export type SolutionQuota = {
+  revision: string;
+  requiredEvaluators: number;
+  submittedSolutions: number;
+  solutionsMissingExperts: number;
+  readyBefore: number;
+  readyAfter: number;
+  missingAssignments: number;
+  surplusAssignments: number;
+};
+
+export type SolutionResultCriterion = {
+  id: number;
+  name: string;
+  description: string | null;
+  type: "int" | "float" | "bool" | "str";
+  minValue: number | null;
+  maxValue: number | null;
+};
+
+export type SolutionResultExpert = {
+  userId: number;
+  name: string;
+  email: string;
+  avatar: string | null;
+  complete: boolean;
+  total: number | null;
+  values: Array<SolutionRatingValue>;
+};
+
+export type SolutionResult = {
+  application: SolutionRef;
+  solutionId: number;
+  name: string;
+  caseName: string | null;
+  completed: number;
+  required: number;
+  evaluationComplete: boolean;
+  ready: boolean;
+  score: number | null;
+  place: number | null;
+  averages: Record<string, number>;
+  experts: Array<SolutionResultExpert>;
+};
+
+export type SolutionResultGroup = {
+  caseName: string | null;
+  solutions: Array<SolutionResult>;
+};
+
+export type SolutionResults = {
+  programId: number;
+  programName: string;
+  generatedAt: string;
+  requiredEvaluators: number;
+  maximum: number | null;
+  hasNumericCriteria: boolean;
+  caseOptions: Array<string>;
+  groups: Array<SolutionResultGroup>;
+  criteria: Array<SolutionResultCriterion>;
+};
+
+export type SolutionCabinetApplication = {
+  application: SolutionApplicationRef;
+  assignmentId: number;
+  program: SolutionProgramRef;
+  deadline: string | null;
+  caseName: string | null;
+  isCompleted: boolean;
+  canRate: boolean;
+  blockedReason: string | null;
+};
+
+export type SolutionCabinetApplications = {
+  count: number;
+  limit: number;
+  offset: number;
+  pending: number;
+  completed: number;
+  unavailable: number;
+  results: Array<SolutionCabinetApplication>;
+};
+
+export type SolutionWidgetProjectRef = {
+  id: number;
+  name: string;
+  programLinkId: number;
+};
+
+export type SolutionWidgetStage =
+  | "none"
+  | "not_submitted"
+  | "submitted"
+  | "review"
+  | "evaluated"
+  | "not_applicable";
+
+export type SolutionWidgetLegacyParticipant = {
+  participantProject: SolutionWidgetProjectRef | null;
+  caseProvided: boolean;
+  caseName: string | null;
+  stage: SolutionWidgetStage;
+  submissionOpen: boolean;
+};
+
+export type SolutionWidgetParticipant = {
+  application: SolutionRef | null;
+  caseProvided: boolean;
+  caseName: string | null;
+  stage: SolutionWidgetStage;
+  submissionOpen: boolean;
+};
+
+export type SolutionWidgetLegacyOrganizer = {
+  participants: number;
+  projects: number;
+  submittedSolutions: number | null;
+  participantsWithoutProject: number;
+};
+
+export type SolutionWidgetOrganizer = {
+  participants: number;
+  solutions: number;
+  submittedSolutions: number | null;
+  participantsWithoutSolution: number;
+};
+
+export type SolutionWidgetExpert = {
+  mode: "open" | "distributed";
+  assigned: number | null;
+  remaining: number | null;
+  evaluationEnds: string | null;
+};
+
+export type SolutionWidget =
+  | {
+      programId: number;
+      role: "participant";
+      isCompetitive: boolean;
+      storageMode: "solution";
+      participant: SolutionWidgetParticipant;
+    }
+  | {
+      programId: number;
+      role: "organizer";
+      isCompetitive: boolean;
+      storageMode: "solution";
+      organizer: SolutionWidgetOrganizer;
+    }
+  | {
+      programId: number;
+      role: "expert";
+      isCompetitive: boolean;
+      storageMode: "solution";
+      expert: SolutionWidgetExpert;
+    };
+
+export type SolutionLegacyWidget =
+  | {
+      programId: number;
+      role: "participant";
+      isCompetitive: boolean;
+      storageMode?: "legacy_project";
+      participant: SolutionWidgetLegacyParticipant;
+    }
+  | {
+      programId: number;
+      role: "organizer";
+      isCompetitive: boolean;
+      storageMode?: "legacy_project";
+      organizer: SolutionWidgetLegacyOrganizer;
+    }
+  | {
+      programId: number;
+      role: "expert";
+      isCompetitive: boolean;
+      storageMode?: "legacy_project";
+      expert: SolutionWidgetExpert;
+    };
+
+export type SolutionRoleWidget = SolutionWidget | SolutionLegacyWidget;
+
+export type SolutionWidgetError = {
+  detail: string;
+};
+
+export type SolutionCaseSolutionMetrics = {
+  participantsTotal: number;
+  solutionsTotal: number;
+  notSubmitted: number | null;
+  submitted: number | null;
+};
+
+export type SolutionCaseSolutionItem = {
+  name: string;
+  participantsTotal: number;
+  solutionsTotal: number;
+  notSubmitted: number | null;
+  submitted: number | null;
+};
+
+export type SolutionCaseSolutionAnalytics = {
+  programId: number;
+  configured: boolean;
+  submissionApplicable: boolean;
+  items: Array<SolutionCaseSolutionItem>;
+  withoutCase: SolutionCaseSolutionMetrics;
+};
+
+export type SolutionManagerTotal = {
+  total: number;
+};
+
+export type SolutionManagerRegion = {
+  name: string;
+  count: number;
+};
+
+export type SolutionManagerRegions = {
+  total: number;
+  items: Array<SolutionManagerRegion>;
+};
+
+export type SolutionManagerSummary = {
+  participants: SolutionManagerTotal;
+  solutions: SolutionManagerTotal;
+  experts: SolutionManagerTotal;
+  participantRegions: SolutionManagerRegions;
+};
+
+export type SolutionManagerParticipantFunnel = {
+  registrations: number;
+  uniqueParticipants: number;
+  visitedParticipants: number;
+  onboardedParticipants: number;
+  withTeam: number;
+  captains: number;
+  submittedCaptains: number | null;
+};
+
+export type SolutionManagerSolutionFunnel = {
+  created: number;
+  submissionApplicable: boolean;
+  notSubmitted: number | null;
+  submitted: number | null;
+  evaluated: number | null;
+};
+
+export type SolutionManagerEvaluationCounters = {
+  total: number;
+  pending: number;
+  evaluated: number;
+};
+
+export type SolutionManagerEvaluationSolutions = {
+  submitted: number;
+  awaitingEvaluation: number;
+  partiallyEvaluated: number;
+  evaluated: number;
+};
+
+export type SolutionManagerEvaluationStatus = {
+  applicable: boolean;
+  mode: "open" | "distributed";
+  requiredEvaluators: number | null;
+  maxEvaluationsPerSolution: number | null;
+  assignments: SolutionManagerEvaluationCounters | null;
+  solutions: SolutionManagerEvaluationSolutions | null;
+};
+
+export type SolutionManagerExpert = {
+  expertId: number;
+  userId: number;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  avatar: string | null;
+};
+
+export type SolutionManagerAssignment = {
+  assignmentId: number;
+  expert: SolutionManagerExpert;
+  application: SolutionRef;
+  status: "not_ready" | "pending" | "in_progress" | "completed";
+  assignedAt: string;
+  submitted: boolean;
+  submittedAt: string | null;
+  waitingSince: string | null;
+  waitingSeconds: number | null;
+};
+
+export type SolutionManagerAssignmentCriterion = {
+  name: string;
+  description: string | null;
+  type: "int" | "float" | "bool" | "str";
+  minValue: number | null;
+  maxValue: number | null;
+  value: string | null;
+  criterionId: number;
+  isScored: boolean;
+};
+
+export type SolutionManagerAssignmentDetail = {
+  assignmentId: number;
+  expert: SolutionManagerExpert;
+  application: SolutionRef;
+  status: "not_ready" | "pending" | "in_progress" | "completed";
+  assignedAt: string;
+  submitted: boolean;
+  submittedAt: string | null;
+  waitingSince: string | null;
+  waitingSeconds: number | null;
+  scores: Array<SolutionManagerAssignmentCriterion>;
+};
+
+export type SolutionManagerAssignments = {
+  applicable: boolean;
+  mode: "open" | "distributed";
+  results: Array<SolutionManagerAssignment>;
+};
+
+export type SolutionManagerDelayedExpert = {
+  expertId: number;
+  userId: number;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  avatar: string | null;
+  assignmentsTotal: number;
+  completed: number;
+  pending: number;
+  overdue_24h: number;
+  overdue_48h: number;
+  oldestWaitingSince: string | null;
+  oldestWaitingSeconds: number | null;
+  severity: "critical" | "warning";
+};
+
+export type SolutionManagerDelayedExperts = {
+  total: number;
+  items: Array<SolutionManagerDelayedExpert>;
+};
+
+export type SolutionManagerAttention = {
+  participantsWithoutVisit: number;
+  participantsWithoutOnboarding: number;
+  participantsWithoutTeam: number;
+  solutionsAwaitingEvaluation: number | null;
+  solutionsNotSubmitted: number | null;
+  delayedExperts: SolutionManagerDelayedExperts;
+};
+
+export type SolutionManagerActivity = {
+  date: string;
+  registrations: number;
+  submittedSolutions: number | null;
+};
+
+export type SolutionManagerFieldCoverage = {
+  fieldId: number;
+  label: string;
+  type: SolutionFieldType;
+  purpose: SolutionPurpose;
+  applicable: number;
+  answered: number;
+  requiredApplicable: number;
+  requiredUnanswered: number;
+};
+
+export type SolutionManagerAnalytics = {
+  programId: number;
+  summary: SolutionManagerSummary;
+  participantFunnel: SolutionManagerParticipantFunnel;
+  solutionFunnel: SolutionManagerSolutionFunnel;
+  evaluationStatus: SolutionManagerEvaluationStatus;
+  attention: SolutionManagerAttention;
+  activity: Array<SolutionManagerActivity>;
+  cases: SolutionCaseSolutionAnalytics;
+  fieldCoverage: Array<SolutionManagerFieldCoverage>;
+};
+
+export type SolutionManagerSolutionRow = {
+  application: SolutionRef;
+  captain: {
+    userId: number;
+    fullName: string;
+    avatar: string | null;
+  };
+  caseName: string | null;
+  submissionStatus: "draft" | "submitted";
+  evaluationStatus:
+    | "not_applicable"
+    | "not_submitted"
+    | "awaiting_evaluation"
+    | "partially_evaluated"
+    | "evaluated";
+  createdAt: string;
+  submittedAt: string | null;
+  assignmentsTotal: number | null;
+  assignmentsCompleted: number | null;
+  waitingReason:
+    | null
+    | "no_assignments"
+    | "no_completed_evaluations"
+    | "partially_evaluated"
+    | "awaiting_first_evaluation";
+};
+
+export type SolutionManagerSolutions = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  submissionApplicable: boolean;
+  mode: "open" | "distributed";
+  results: Array<SolutionManagerSolutionRow>;
+};
+
+export type SolutionReminderSelection =
+  | {
+      mode: "selected";
+      ids: Array<number>;
+      excludedIds?: Array<number>;
+    }
+  | {
+      mode: "all";
+      ids?: Array<number>;
+      excludedIds?: Array<number>;
+    };
+
+export type SolutionReminderPreviewRequest = {
+  search?: string;
+  selection: SolutionReminderSelection;
+};
+
+export type SolutionReminderRecipient = {
+  userId: number;
+  fullName: string;
+};
+
+export type SolutionReminderPreview = {
+  token: string | null;
+  selectedCount: number;
+  recipientCount: number;
+  withoutAssignmentsCount: number;
+  unavailableCount: number;
+  previewText: string;
+  recipients: Array<SolutionReminderRecipient>;
+  expiresIn: 900;
+};
+
+export type SolutionReminderConfirm = {
+  token: string;
+};
+
+export type SolutionReminderReceipt = {
+  createdCount: number;
+  skippedCount: number;
+};
+
+export type SolutionPublishedSolutionMember = {
+  user: SolutionUser;
+  role: string | null;
+  specialization: string | null;
+  isCaptain: boolean;
+};
+
+export type SolutionPublishedSolution = {
+  application: SolutionRef;
+  publishedAt: string;
+  fields: Array<SolutionField>;
+  answers: Array<SolutionAnswer>;
+  team: {
+    members: Array<SolutionPublishedSolutionMember>;
+    acceptedCount: number;
+  };
+};
+
+export type SolutionPublishedSolutionCard = {
+  application: SolutionRef;
+  publishedAt: string;
+  captain: SolutionUser;
+  acceptedCount: number;
+};
+
+export type SolutionPublishedSolutionPage = {
+  programId: number;
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Array<SolutionPublishedSolutionCard>;
+};
+
+export type SolutionActionPreviewRequest = {
+  action: "submit";
+  ids: Array<number>;
+};
+
+export type SolutionActionApplyRequest = {
+  action: "submit";
+  ids: Array<number>;
+  previewToken: string;
+};
+
+export type SolutionActionItem = {
+  application: SolutionRef;
+  errors: Array<SolutionIssue>;
+};
+
+export type SolutionActionPreview = {
+  items: Array<SolutionActionItem>;
+  readyCount: number;
+  alreadySubmittedCount: number;
+  canApply: boolean;
+  previewToken: string | null;
+};
+
+export type SolutionActionResult = {
+  changedCount: number;
+  alreadySubmittedCount: number;
+};
+
+export type SolutionCaseChangePreviewRequest = {
+  caseName: string;
+};
+
+export type SolutionCaseChangeApplyRequest = {
+  caseName: string;
+  previewToken: string;
+};
+
+export type SolutionCaseChangePreview = {
+  application: SolutionRef;
+  caseFieldId: number;
+  currentCase: string | null;
+  caseName: string;
+  solutionVersion: number;
+  errors: Array<SolutionIssue>;
+  canApply: boolean;
+  previewToken: string | null;
+  isSubmitted: boolean;
+  removedAssignmentsCount: number;
+  scoreCount: number;
+};
+
+export type SolutionAdminChange =
+  | SolutionCaseAdminChange
+  | SolutionMemberAdminChange
+  | SolutionArchiveAdminChange
+  | SolutionRegistrationAdminChange;
+
+export type SolutionAdminChangePage = {
+  count: number;
+  offset: number;
+  limit: number;
+  results: Array<SolutionAdminChange>;
+};
+
+export type SolutionAdminChangeDetail = {
+  change: SolutionAdminChange;
+  beforeSnapshot: SolutionSubmissionSnapshot | null;
+  afterSnapshot: SolutionSubmissionSnapshot | null;
+  archiveSnapshot?: SolutionArchiveSnapshot;
+};
+
+export type SolutionMemberRemovalPreviewRequest = {
+  userId: number;
+};
+
+export type SolutionMemberRemovalApplyRequest = {
+  userId: number;
+  previewToken: string;
+};
+
+export type SolutionMemberRemovalPreview = {
+  application: SolutionRef;
+  member: SolutionMember;
+  solutionVersion: number;
+  isSubmitted: boolean;
+  remainingMemberCount: number;
+  revokedInvitationCount: number;
+  scoreCount: number;
+  errors: Array<SolutionIssue>;
+  canApply: boolean;
+  previewToken: string | null;
+};
+
+export type SolutionCaseAdminChange = {
+  id: number;
+  application: SolutionRef;
+  action: "change_case";
+  actor: SolutionUser | null;
+  actorName: string;
+  createdAt: string;
+  beforeVersion: number;
+  afterVersion: number;
+  caseFieldId: number;
+  previousCase: string | null;
+  caseName: string;
+  removedAssignmentsCount: number;
+  scoreCount: number;
+  wasSubmitted: boolean;
+};
+
+export type SolutionMemberAdminChange = {
+  id: number;
+  application: SolutionRef;
+  action: "remove_member";
+  actor: SolutionUser | null;
+  actorName: string;
+  createdAt: string;
+  beforeVersion: number;
+  afterVersion: number;
+  removedAssignmentsCount: 0;
+  scoreCount: number;
+  wasSubmitted: boolean;
+  removedMember: SolutionMember;
+  revokedInvitationCount: number;
+};
+
+export type SolutionParticipation = {
+  status: "active" | "archived";
+  archivedAt: string | null;
+  reason: "detached" | "registration_removed" | null;
+};
+
+export type SolutionArchiveSnapshot = {
+  name: string;
+  captainId: number;
+  members: Array<SolutionMember>;
+  form: SolutionForm;
+  answers: Array<SolutionAnswer>;
+  capturedAt: string;
+};
+
+export type SolutionArchivePreviewRequest = {
+  ids: Array<number>;
+};
+
+export type SolutionArchiveApplyRequest = {
+  ids: Array<number>;
+  previewToken: string;
+};
+
+export type SolutionArchivePreviewItem = {
+  application: SolutionRef;
+  solutionVersion: number;
+  isSubmitted: boolean;
+  isArchived: boolean;
+  scoreCount: number;
+  removedAssignmentsCount: number;
+  revokedInvitationCount: number;
+  errors: Array<SolutionIssue>;
+};
+
+export type SolutionArchivePreview = {
+  items: Array<SolutionArchivePreviewItem>;
+  scoreCount: number;
+  removedAssignmentsCount: number;
+  revokedInvitationCount: number;
+  canApply: boolean;
+  previewToken: string | null;
+};
+
+export type SolutionArchiveResult = {
+  application: SolutionRef;
+  solutionVersion: number;
+  archivedAt: string;
+};
+
+export type SolutionArchiveReceipt = {
+  changedCount: number;
+  items: Array<SolutionArchiveResult>;
+};
+
+export type SolutionArchiveAdminChange = {
+  id: number;
+  application: SolutionRef;
+  action: "archive";
+  actor: SolutionUser | null;
+  actorName: string;
+  createdAt: string;
+  beforeVersion: number;
+  afterVersion: number;
+  removedAssignmentsCount: number;
+  scoreCount: number;
+  wasSubmitted: boolean;
+  archivedAt: string;
+  reason: "detached" | "registration_removed";
+  revokedInvitationCount: number;
+  registrationRemovalId?: number;
+};
+
+export type SolutionRegistrationRemovalPreviewRequest = {
+  registrationIds: Array<number>;
+};
+
+export type SolutionRegistrationRemovalApplyRequest = {
+  registrationIds: Array<number>;
+  previewToken: string;
+};
+
+export type SolutionRemovedRegistration = {
+  registrationId: number;
+  user: SolutionUser;
+};
+
+export type SolutionRegistrationRemovalEffect = {
+  application: SolutionRef;
+  solutionVersion: number;
+  isSubmitted: boolean;
+  effect: "archive" | "remove_members" | "revoke_invitations";
+  removedMembers: Array<SolutionMember>;
+  removedAssignmentsCount: number;
+  revokedInvitationCount: number;
+  scoreCount: number;
+};
+
+export type SolutionRegistrationRemovalPreview = {
+  registrations: Array<SolutionRemovedRegistration>;
+  effects: Array<SolutionRegistrationRemovalEffect>;
+  deletedCount: number;
+  archivedCount: number;
+  removedMemberCount: number;
+  removedAssignmentsCount: number;
+  revokedInvitationCount: number;
+  scoreCount: number;
+  canApply: boolean;
+  errors: Array<SolutionIssue>;
+  previewToken: string | null;
+};
+
+export type SolutionRegistrationRemovalResult = {
+  application: SolutionRef;
+  solutionVersion: number;
+  changeId: number;
+  action: "archive" | "remove_registrations";
+};
+
+export type SolutionRegistrationRemovalReceipt = {
+  auditId: number;
+  deletedCount: number;
+  items: Array<SolutionRegistrationRemovalResult>;
+};
+
+export type SolutionRegistrationRemovalAudit = {
+  id: number;
+  programId: number;
+  actor: SolutionUser | null;
+  actorName: string;
+  createdAt: string;
+  registrations: Array<SolutionRemovedRegistration>;
+  deletedCount: number;
+};
+
+export type SolutionRegistrationRemovalAuditDetail = {
+  audit: SolutionRegistrationRemovalAudit;
+  changes: Array<SolutionAdminChange>;
+};
+
+export type SolutionRegistrationRemovalAuditPage = {
+  count: number;
+  offset: number;
+  limit: number;
+  results: Array<SolutionRegistrationRemovalAudit>;
+};
+
+export type SolutionRegistrationAdminChange = {
+  id: number;
+  application: SolutionRef;
+  action: "remove_registrations";
+  actor: SolutionUser | null;
+  actorName: string;
+  createdAt: string;
+  beforeVersion: number;
+  afterVersion: number;
+  removedAssignmentsCount: 0;
+  scoreCount: number;
+  wasSubmitted: boolean;
+  revokedInvitationCount: number;
+  removedMembers: Array<SolutionMember>;
+  registrationRemovalId: number;
 };

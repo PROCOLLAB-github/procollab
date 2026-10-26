@@ -11,10 +11,29 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
 import { ProgramAnalyticsComponent } from "@ui/pages/program/detail/analytics/analytics.component";
 import { ProgramManagementComponent } from "@ui/pages/program/management/management.component";
 import { canLeaveManagement } from "./management-leave.guard";
+import { canLeaveSolution } from "./solution-leave.guard";
 import { RatingWorkspaceComponent } from "@ui/pages/program/rating/rating-workspace.component";
 
 /** Маршруты детальной страницы программы: информация, проекты и участники. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
+  {
+    path: "solutions-rating",
+    providers: [ProgramDetailMainUIInfoService],
+    resolve: { data: ProgramDetailResolver },
+    runGuardsAndResolvers: "pathParamsChange",
+    loadComponent: () =>
+      import("@ui/pages/program/solution-evaluation/solution-evaluation-list.component").then(
+        m => m.SolutionEvaluationListComponent,
+      ),
+  },
+  {
+    path: "solutions/:solutionId/evaluation",
+    canDeactivate: [canLeaveManagement],
+    loadComponent: () =>
+      import("@ui/pages/program/solution-evaluation/solution-evaluation.component").then(
+        m => m.SolutionEvaluationComponent,
+      ),
+  },
   ...["projects-rating", "projects-rating/:projectId"].map(path => ({
     path,
     component: RatingWorkspaceComponent,
@@ -25,16 +44,19 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
   })),
   {
     path: "solutions/new",
+    canDeactivate: [canLeaveSolution],
     loadComponent: () =>
       import("@ui/pages/program/solution/solution.component").then(m => m.ProgramSolutionComponent),
   },
   {
     path: "solutions/:solutionId/edit",
+    canDeactivate: [canLeaveSolution],
     loadComponent: () =>
       import("@ui/pages/program/solution/solution.component").then(m => m.ProgramSolutionComponent),
   },
   {
     path: "solutions/:solutionId",
+    canDeactivate: [canLeaveSolution],
     loadComponent: () =>
       import("@ui/pages/program/solution/solution.component").then(m => m.ProgramSolutionComponent),
   },

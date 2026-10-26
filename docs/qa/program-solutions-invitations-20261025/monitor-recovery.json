@@ -1,0 +1,11 @@
+{
+  "reason": "first monitor incorrectly searched truncated pg_stat_activity SQL for trailing FOR UPDATE",
+  "trackActivityQuerySize": "1kB",
+  "actualProgramLockSqlLength": 2003,
+  "forUpdateOffset": 1993,
+  "program_id": 15,
+  "solution_id": 20,
+  "revokedPendingId": 34,
+  "status": 204,
+  "solutionPreserved": true
+}

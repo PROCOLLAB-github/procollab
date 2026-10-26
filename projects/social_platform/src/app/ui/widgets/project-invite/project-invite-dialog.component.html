@@ -31,7 +31,7 @@
         appButton="icon"
         type="button"
         class="project-invite__close"
-        aria-label="Закрыть приглашение"
+        [attr.aria-label]="closeLabel()"
         (click)="close()"
       >
         @if (compact()) {
