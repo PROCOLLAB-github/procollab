@@ -1,3 +1,5 @@
+<!-- @format -->
+
 # Program creation and first publication — API contract
 
 Version: 2026-10-27. Target: dev. Keys below use server snake_case; the existing Angular ApiService camel-cases responses and snake-cases requests.

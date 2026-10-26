@@ -1,3 +1,5 @@
+<!-- @format -->
+
 # Создание программы и первая публикация
 
 Дата: 27.10.2026. Целевая среда: dev, Angular + API.
@@ -77,38 +79,38 @@ Runtime использует Mont; Figma использует Inter как те�
 
 См. `docs/contracts/program-creation-publication.md` в API и Angular PR.
 
-| Метод | URL | Назначение |
-| --- | --- | --- |
-| GET | `/programs/capabilities/` | `can_create_program` |
-| POST | `/programs/drafts/` | `name`, `format`, `idempotency_key`; 201/200 |
-| GET | `/programs/managed/?search=&limit=10&offset=0` | Scoped список с пагинацией |
-| GET | `/programs/{id}/management/launch/` | checks, blockers, warnings, revision, links |
-| GET | `/programs/{id}/management/preview/` | Read-only participant representation |
-| POST | `/programs/{id}/management/publish/` | ожидаемая revision; 400 blockers, 409 stale |
+| Метод | URL                                            | Назначение                                   |
+| ----- | ---------------------------------------------- | -------------------------------------------- |
+| GET   | `/programs/capabilities/`                      | `can_create_program`                         |
+| POST  | `/programs/drafts/`                            | `name`, `format`, `idempotency_key`; 201/200 |
+| GET   | `/programs/managed/?search=&limit=10&offset=0` | Scoped список с пагинацией                   |
+| GET   | `/programs/{id}/management/launch/`            | checks, blockers, warnings, revision, links  |
+| GET   | `/programs/{id}/management/preview/`           | Read-only participant representation         |
+| POST  | `/programs/{id}/management/publish/`           | ожидаемая revision; 400 blockers, 409 stale  |
 
 Старый POST каталога также проверяет право создания и назначает автора организатором.
 Nullable даты допускаются только у draft; DB constraint и существующий published serializer не допускают их у публичной программы.
 
 ## Acceptance criteria и audit
 
-| AC | Требование | Evidence | Verdict |
-| --- | --- | --- | --- |
-| AC01 | Создание только по отдельному праву | API capabilities/create/legacy POST negatives; browser no-access | PASS |
-| AC02 | Автор управляет, без автоматического участия | Creation API tests + real browser editors | PASS |
-| AC03 | Черновик скрыт в каталоге и по прямым URL | API negatives, all program route boundary, no-store tests | PASS |
-| AC04 | Собственный список с поиском/пагинацией и возвратом | Scoped API tests; browser error/retry/search; URL query source | PASS |
-| AC05 | Только имя/формат, без фиктивных дат | API three formats/null dates; browser create/checklist | PASS |
-| AC06 | Server blockers без частичной публикации | API validation/rollback/concurrency tests | PASS |
-| AC07 | Публикация до формы решения/оценки/экспертов | API tests; real Angular/API full flow and participant enrollment | PASS |
-| AC08 | Внешняя регистрация ждет подключения | API connected/not-connected; browser readiness disabled and explanation | PASS |
-| AC09 | Изменение настроек требует обновления revision | API stale page/schema and concurrent publication tests | PASS |
-| AC10 | Повтор create/publish не создает дубликаты | API concurrency/idempotency; component lost-response retry | PASS |
-| AC11 | Preview без участия, просмотров и писем | API no-enrollment/no-view; browser shared preview; source no writes | PASS |
-| AC12 | Поздняя настройка формы без ручного rollout | API canonical solution context before/after config and operator rollback | PASS |
-| AC13 | Неконкурсный запуск без конкурсных требований | API publication; real Angular/API full noncompetitive flow | PASS |
-| AC14 | Desktop/390/360, длинное имя, empty/errors | Browser no overflow, 255 chars, denied/retry/no-results; keyboard focus source/test | PASS |
-| AC15 | Один renderer/схема предпросмотра анкеты | Shared component; browser saved fields order/help/disabled; registration tests | PASS |
-| AC16 | Existing UI совпадает с реальной платформой | Source continuity + native Mont browser screenshots + Figma audit | PASS |
+| AC   | Требование                                          | Evidence                                                                            | Verdict |
+| ---- | --------------------------------------------------- | ----------------------------------------------------------------------------------- | ------- |
+| AC01 | Создание только по отдельному праву                 | API capabilities/create/legacy POST negatives; browser no-access                    | PASS    |
+| AC02 | Автор управляет, без автоматического участия        | Creation API tests + real browser editors                                           | PASS    |
+| AC03 | Черновик скрыт в каталоге и по прямым URL           | API negatives, all program route boundary, no-store tests                           | PASS    |
+| AC04 | Собственный список с поиском/пагинацией и возвратом | Scoped API tests; browser error/retry/search; URL query source                      | PASS    |
+| AC05 | Только имя/формат, без фиктивных дат                | API three formats/null dates; browser create/checklist                              | PASS    |
+| AC06 | Server blockers без частичной публикации            | API validation/rollback/concurrency tests                                           | PASS    |
+| AC07 | Публикация до формы решения/оценки/экспертов        | API tests; real Angular/API full flow and participant enrollment                    | PASS    |
+| AC08 | Внешняя регистрация ждет подключения                | API connected/not-connected; browser readiness disabled and explanation             | PASS    |
+| AC09 | Изменение настроек требует обновления revision      | API stale page/schema and concurrent publication tests                              | PASS    |
+| AC10 | Повтор create/publish не создает дубликаты          | API concurrency/idempotency; component lost-response retry                          | PASS    |
+| AC11 | Preview без участия, просмотров и писем             | API no-enrollment/no-view; browser shared preview; source no writes                 | PASS    |
+| AC12 | Поздняя настройка формы без ручного rollout         | API canonical solution context before/after config and operator rollback            | PASS    |
+| AC13 | Неконкурсный запуск без конкурсных требований       | API publication; real Angular/API full noncompetitive flow                          | PASS    |
+| AC14 | Desktop/390/360, длинное имя, empty/errors          | Browser no overflow, 255 chars, denied/retry/no-results; keyboard focus source/test | PASS    |
+| AC15 | Один renderer/схема предпросмотра анкеты            | Shared component; browser saved fields order/help/disabled; registration tests      | PASS    |
+| AC16 | Existing UI совпадает с реальной платформой         | Source continuity + native Mont browser screenshots + Figma audit                   | PASS    |
 
 ## Verification и границы evidence
 
