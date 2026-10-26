@@ -49,6 +49,7 @@ export class Program {
   currentApplication!: ProgramCurrentApplication | null;
   welcomeAcknowledgedAt!: string | null;
   publishProjectsAfterFinish!: boolean;
+  publishedProjectsAvailable?: boolean;
   courseId!: number | null;
   courses!: { id: number; title: string; isAvailable: boolean }[];
 

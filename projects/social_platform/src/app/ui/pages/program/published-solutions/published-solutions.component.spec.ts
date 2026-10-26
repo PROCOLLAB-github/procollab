@@ -73,7 +73,7 @@ describe("Публичные решения внутри программы", ()
     expect(values).toContain("0");
     expect(values).toContain("Нет");
     expect(harness.routeNativeElement!.querySelector('a[target="_blank"]')).not.toBeNull();
-    const tabs = Array.from(harness.routeNativeElement!.querySelectorAll("nav a"));
+    const tabs = Array.from(harness.routeNativeElement!.querySelectorAll("app-tabs button"));
     expect(tabs.map(a => a.textContent?.trim())).toEqual(["Решение", "Команда"]);
     await harness.navigateByUrl(
       "/office/program/14/published-solutions/501?q=Прототип&offset=20&tab=team",
@@ -128,13 +128,16 @@ describe("Публичные решения внутри программы", ()
       "/office/program/14/published-solutions?q=Текст",
       PublishedSolutionsComponent,
     );
-    const input =
-      harness.routeNativeElement!.querySelector<HTMLInputElement>('input[type="search"]');
+    await new Promise(resolve => setTimeout(resolve, 0));
+    harness.detectChanges();
+    const input = harness.routeNativeElement!.querySelector<HTMLInputElement>(
+      ".published__search input",
+    );
     expect(input?.value).toBe("Текст");
     loading.next(ok(list));
     loading.complete();
     harness.detectChanges();
-    expect(harness.routeNativeElement!.querySelector('input[type="search"]')).toBe(input);
+    expect(harness.routeNativeElement!.querySelector(".published__search input")).toBe(input);
     component.reload();
     expect(getList.execute).toHaveBeenCalledTimes(2);
   });

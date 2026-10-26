@@ -1,6 +1,7 @@
 /** @format */
 
 @use "styles/ui-foundation";
+@use "styles/typography";
 
 :host {
   display: block;
@@ -22,8 +23,7 @@ fieldset {
 }
 
 label {
-  font-size: 14px;
-  line-height: 1.5;
+  @include typography.body-12;
 }
 
 .ui-field {
@@ -35,7 +35,7 @@ label {
 textarea.ui-field {
   min-height: 120px;
   resize: vertical;
-  border-radius: 12px;
+  border-radius: var(--rounded-xl);
 }
 
 .file-upload,

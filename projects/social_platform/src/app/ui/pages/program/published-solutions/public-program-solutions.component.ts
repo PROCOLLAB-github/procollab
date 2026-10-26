@@ -17,7 +17,7 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
   </main>`,
   styles: `
     .public-program {
-      max-width: 1200px;
+      max-width: 864px;
       margin: 24px auto;
       padding: 0 16px;
       font-family: Mont, sans-serif;
@@ -28,7 +28,8 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
       margin-bottom: 24px;
     }
     .public-program__title {
-      font-size: 24px;
+      font-size: 18px;
+      font-weight: 400;
       overflow-wrap: anywhere;
     }
     @media (max-width: 999px) {

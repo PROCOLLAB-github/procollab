@@ -61,6 +61,12 @@ describe("Доступ внешнего посетителя к опублико
     expect(TestBed.inject(Router).url).toBe("/office/program/14/published-solutions");
     expect(harness.routeNativeElement!.textContent).toContain("Решения программы");
   });
+  it("сохраняет office-оболочку для вошедшего пользователя", async () => {
+    TestBed.overrideProvider(TokenService, { useValue: { getTokens: () => ({}) } });
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl("/office/program/14/published-solutions");
+    expect(harness.routeNativeElement!.textContent).toBe("private");
+  });
   it.each([
     "/office/program/14",
     "/office/program/14/projects",

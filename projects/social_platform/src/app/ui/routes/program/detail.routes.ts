@@ -13,6 +13,7 @@ import { ProgramManagementComponent } from "@ui/pages/program/management/managem
 import { canLeaveManagement } from "./management-leave.guard";
 import { canLeaveSolution } from "./solution-leave.guard";
 import { RatingWorkspaceComponent } from "@ui/pages/program/rating/rating-workspace.component";
+import { ProgramProjectsPageComponent } from "@ui/pages/program/published-solutions/published-projects.component";
 
 /** Маршруты детальной страницы программы: информация, проекты и участники. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
@@ -86,13 +87,20 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
     runGuardsAndResolvers: "always",
     data: { listType: "program" },
     children: [
+      ...["published-solutions", "published-solutions/:solutionId"].map(path => ({
+        path,
+        loadComponent: () =>
+          import("@ui/pages/program/published-solutions/published-solutions.component").then(
+            m => m.PublishedSolutionsComponent,
+          ),
+      })),
       {
         path: "",
         component: ProgramDetailMainComponent,
       },
       {
         path: "projects",
-        component: ProgramListComponent,
+        component: ProgramProjectsPageComponent,
         resolve: {
           data: ProgramProjectsResolver,
         },

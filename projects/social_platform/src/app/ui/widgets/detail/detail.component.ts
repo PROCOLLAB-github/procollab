@@ -102,6 +102,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly isMembersPage = this.detailProgramInfoService.isMembersPage;
   protected readonly isProjectsRatingPage = this.detailProgramInfoService.isProjectsRatingPage;
   protected readonly isAnalyticsPage = this.detailProgramInfoService.isAnalyticsPage;
+  protected readonly isPublishedSolutionsPage =
+    this.detailProgramInfoService.isPublishedSolutionsPage;
 
   protected readonly isTeamPage = this.detailProjectInfoService.isTeamPage;
   protected readonly isVacanciesPage = this.detailProjectInfoService.isVacanciesPage;

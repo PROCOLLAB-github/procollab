@@ -4,6 +4,17 @@
 @use "styles/typography";
 @use "styles/program-branding";
 
+.info__actions--program {
+  > a,
+  > .info__primary-action {
+    min-width: 0;
+  }
+
+  app-button {
+    max-width: 100%;
+  }
+}
+
 .info__actions.info__actions--manager {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 207px minmax(0, 1fr);
