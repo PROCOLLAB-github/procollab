@@ -75,6 +75,8 @@ import { ManagementSolutionFormComponent } from "./solution-form/solution-form.c
 import { SolutionApplicationsComponent } from "./solution-applications/solution-applications.component";
 import { ManagementCriteriaComponent } from "./criteria/criteria.component";
 import { ManagementExpertsComponent } from "./experts/experts.component";
+import { SolutionExpertsComponent } from "./experts/solution-experts.component";
+import { SolutionRegistrationRemovalComponent } from "./solution-applications/solution-registration-removal.component";
 import { ResultProjectScoresComponent } from "./results/result-project-scores.component";
 import { ManagementResultsComponent } from "./results/results.component";
 import { ManagementOrganizersComponent } from "./organizers/organizers.component";
@@ -116,6 +118,8 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     SolutionApplicationsComponent,
     ManagementCriteriaComponent,
     ManagementExpertsComponent,
+    SolutionExpertsComponent,
+    SolutionRegistrationRemovalComponent,
     ManagementResultsComponent,
     ResultProjectScoresComponent,
     ManagementOrganizersComponent,
@@ -206,6 +210,7 @@ export class ProgramManagementComponent implements OnInit {
     preview: ParticipantRemovalPreview;
   } | null>(null);
   readonly removingParticipants = signal(false);
+  readonly solutionRemovalRequest = signal<{ programId: number; ids: number[] } | null>(null);
   readonly tableError = signal<string | null>(null);
   readonly tableMessage = signal<string | null>(null, { equal: () => false });
   private selectionKey = "";
@@ -253,6 +258,7 @@ export class ProgramManagementComponent implements OnInit {
   readonly criteriaStatus = signal({ dirty: false, busy: false });
   readonly expertsStatus = signal({ dirty: false, busy: false });
   readonly expertsForm = viewChild(ManagementExpertsComponent);
+  readonly solutionExpertsForm = viewChild(SolutionExpertsComponent);
   readonly organizersForm = viewChild(ManagementOrganizersComponent);
   readonly organizersStatus = signal({ dirty: false, busy: false });
   readonly registrationForm = viewChild(ManagementRegistrationComponent);
@@ -484,6 +490,7 @@ export class ProgramManagementComponent implements OnInit {
           this.clearRows();
           this.projectActionRequest.set(null);
           this.participantRemoval.set(null);
+          this.solutionRemovalRequest.set(null);
           this.tableError.set(null);
           this.tableMessage.set(null);
           this.selectionKey = selectionKey;
@@ -869,7 +876,11 @@ export class ProgramManagementComponent implements OnInit {
   }
   previewParticipantRemoval(ids: number[]): void {
     const ctx = this.state.context;
-    if (!ctx || !ids.length || this.removingParticipants()) return;
+    if (!ctx || !ids.length || this.removingParticipants() || this.solutionActionBusy()) return;
+    if (this.state.program()?.solutionStorageMode === "solution") {
+      this.solutionRemovalRequest.set({ programId: ctx.programId, ids: [...ids] });
+      return;
+    }
     const key = this.selectionKey;
     this.removingParticipants.set(true);
     this.tableError.set(null);
@@ -919,6 +930,15 @@ export class ProgramManagementComponent implements OnInit {
   }
   selectFromRow(event: MouseEvent, project: ManagementProject): void {
     if (!(event.target as HTMLElement).closest("a,button,input,label")) this.select(project);
+  }
+  solutionRegistrationsRemoved(count: number): void {
+    this.solutionRemovalRequest.set(null);
+    this.clearRows();
+    this.tableMessage.set(`Удалено участников из программы: ${count}.`);
+    const lastOffset =
+      Math.max(0, Math.ceil((this.count() - count) / this.pageSize) - 1) * this.pageSize;
+    if (this.offset() > lastOffset) void this.changeQuery({ offset: lastOffset });
+    else this.state.retry();
   }
   clearProjectSelection(): void {
     const selectedId = this.state.selected()?.id;
@@ -1131,6 +1151,7 @@ export class ProgramManagementComponent implements OnInit {
       this.criteriaForm()?.discard();
       this.criteriaStatus.set({ dirty: false, busy: false });
       this.expertsForm()?.discard();
+      this.solutionExpertsForm()?.discard();
       this.expertsStatus.set({ dirty: false, busy: false });
       this.organizersForm()?.discard();
       this.organizersStatus.set({ dirty: false, busy: false });

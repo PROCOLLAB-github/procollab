@@ -1,5 +1,6 @@
 /** @format */
 import { ManagementCriterion } from "./program-criteria.model";
+import { SolutionRef } from "@domain/solution/solution-contract.model";
 
 export interface ResultExpert {
   userId: number;
@@ -26,8 +27,11 @@ export interface ResultProject {
 }
 export interface ResultsGroup {
   caseName: string | null;
-  projects: ResultProject[];
+  projects: ResultEntry[];
 }
+/** Shared results presentation. Solution entries never contain a Project foreign key. */
+export type ResultSolution = Omit<ResultProject, "projectId"> & { application: SolutionRef };
+export type ResultEntry = ResultProject | ResultSolution;
 export interface ProgramResults {
   programId: number;
   programName: string;

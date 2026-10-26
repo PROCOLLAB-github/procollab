@@ -4,7 +4,7 @@ import { AvatarComponent, IconComponent } from "@uilib";
 import { RouterLink } from "@angular/router";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ManagementCriterion } from "@domain/program/program-criteria.model";
-import { ResultExpert, ResultProject } from "@domain/program/program-results.model";
+import { ResultExpert, ResultEntry } from "@domain/program/program-results.model";
 import { presentationHref } from "@utils/program-case-analytics";
 
 @Component({
@@ -15,7 +15,17 @@ import { presentationHref } from "@utils/program-case-analytics";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResultProjectScoresComponent {
-  readonly project = input.required<ResultProject>();
+  readonly project = input.required<ResultEntry>();
+  readonly solution = computed(() => {
+    const item = this.project();
+    return "application" in item ? item.application : null;
+  });
+  readonly detailLink = computed(() => {
+    const item = this.project();
+    return "application" in item
+      ? AppRoutes.program.solution(item.application.programId, item.application.solutionId)
+      : AppRoutes.projects.detail(item.projectId);
+  });
   readonly criteria = input.required<ManagementCriterion[]>();
   readonly expandedExperts = model(new Set<string>());
   readonly href = presentationHref;

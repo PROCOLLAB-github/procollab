@@ -1,0 +1,661 @@
+<!-- @format -->
+<main class="analytics" aria-labelledby="solution-analytics-title" [attr.aria-busy]="pending()">
+  <header class="analytics__header">
+    <div class="analytics__title-row">
+      <h1 id="solution-analytics-title" class="analytics__title text-heading-3">Аналитика</h1>
+      <button appButton="secondary" type="button" [disabled]="pending()" (click)="load()">
+        Обновить
+      </button>
+      @if (data()) {
+        <button
+          appButton="icon"
+          type="button"
+          class="regions__export analytics__export-trigger"
+          [cdkMenuTriggerFor]="solutionExports"
+          [disabled]="exporting()"
+          aria-label="Выгрузить данные программы"
+          title="Выгрузить данные программы"
+        >
+          <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+        </button>
+        <ng-template #solutionExports
+          ><div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
+            <button cdkMenuItem type="button" (click)="download('program')">Вся программа</button>
+            <button cdkMenuItem type="button" (click)="download('solutions')">Все заявки</button>
+            @if (data()?.solutionFunnel?.submissionApplicable) {
+              <button cdkMenuItem type="button" (click)="download('submitted')">
+                Сданные решения
+              </button>
+              <button cdkMenuItem type="button" (click)="download('scores')">Оценки решений</button>
+            }
+          </div></ng-template
+        >
+      }
+    </div>
+    @if (exporting()) {
+      <p role="status">Подготавливаем Excel…</p>
+    }
+    @if (exportError()) {
+      <p role="alert">{{ exportError() }}</p>
+    }
+  </header>
+  @if (pending()) {
+    <p role="status">Загружаем аналитику программы…</p>
+  } @else if (error()) {
+    <section class="analytics-state" role="alert">
+      <h2>Аналитика недоступна</h2>
+      <p>{{ error() }}</p>
+      <button appButton="secondary" type="button" (click)="load()">Повторить</button>
+    </section>
+  } @else if (data(); as overview) {
+    <section class="summary" aria-label="Основные показатели">
+      <article class="summary-card">
+        <div class="summary-card__content">
+          <h2 class="summary-card__label">Участники</h2>
+          <strong class="summary-card__value" data-testid="solution-participants">{{
+            overview.summary.participants.total
+          }}</strong>
+        </div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-card__content">
+          <h2 class="summary-card__label">Заявки</h2>
+          <strong class="summary-card__value" data-testid="solution-total">{{
+            overview.summary.solutions.total
+          }}</strong>
+        </div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-card__content">
+          <h2 class="summary-card__label">
+            {{ overview.solutionFunnel.submissionApplicable ? "Сдано" : "В командах" }}
+          </h2>
+          <strong class="summary-card__value">{{
+            overview.solutionFunnel.submissionApplicable
+              ? overview.solutionFunnel.submitted
+              : overview.participantFunnel.withTeam
+          }}</strong>
+        </div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-card__content">
+          <h2 class="summary-card__label">Эксперты</h2>
+          <strong class="summary-card__value">{{ overview.summary.experts.total }}</strong>
+        </div>
+      </article>
+    </section>
+    <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
+      <article class="attention">
+        <h2 class="text-body-12">Требует внимания</h2>
+        <ul class="attention__list">
+          <li data-attention-kind="without-visit">
+            <button
+              #visit
+              appButton="primary"
+              class="attention__action"
+              type="button"
+              [disabled]="!overview.attention.participantsWithoutVisit"
+              (click)="openParticipants('participants-without-visit', visit)"
+            >
+              <span class="attention__icon"
+                ><i appIcon icon="person" appSquare="20" aria-hidden="true"></i></span
+              ><span class="text-body-10">Участники еще не заходили на платформу</span
+              ><strong>{{ overview.attention.participantsWithoutVisit }}</strong>
+            </button>
+          </li>
+          <li data-attention-kind="without-team">
+            <button
+              #team
+              appButton="primary"
+              class="attention__action"
+              type="button"
+              [disabled]="!overview.attention.participantsWithoutTeam"
+              (click)="openParticipants('participants-without-team', team)"
+            >
+              <span class="attention__icon"
+                ><i appIcon icon="analytics-team" appSquare="20" aria-hidden="true"></i></span
+              ><span class="text-body-10">Участники без команды</span
+              ><strong>{{ overview.attention.participantsWithoutTeam }}</strong>
+            </button>
+          </li>
+          @if (overview.solutionFunnel.submissionApplicable) {
+            <li data-attention-kind="awaiting-evaluation">
+              <button
+                #awaiting
+                appButton="primary"
+                class="attention__action"
+                type="button"
+                [disabled]="!overview.attention.solutionsAwaitingEvaluation"
+                (click)="
+                  openSolutions(
+                    'Решения ожидают оценивания',
+                    { scope: 'awaiting_evaluation' },
+                    awaiting
+                  )
+                "
+              >
+                <span class="attention__icon"
+                  ><i appIcon icon="pen" appSquare="20" aria-hidden="true"></i></span
+                ><span class="text-body-10">Работы ожидают оценивания</span
+                ><strong>{{ overview.attention.solutionsAwaitingEvaluation }}</strong>
+              </button>
+            </li>
+            <li data-attention-kind="not-submitted">
+              <button
+                #drafts
+                appButton="primary"
+                class="attention__action"
+                type="button"
+                [disabled]="!overview.attention.solutionsNotSubmitted"
+                (click)="openSolutions('Несданные решения', { scope: 'not_submitted' }, drafts)"
+              >
+                <span class="attention__icon"
+                  ><i appIcon icon="folder" appSquare="20" aria-hidden="true"></i></span
+                ><span class="text-body-10">Решения не сданы</span
+                ><strong>{{ overview.attention.solutionsNotSubmitted }}</strong>
+              </button>
+            </li>
+          }
+        </ul>
+      </article>
+      <article class="analytics-card program-deadlines">
+        <h2 class="analytics-card__title">Сроки программы</h2>
+        <ul class="program-deadlines__list">
+          @for (deadline of deadlines(); track deadline.key) {
+            <li
+              class="program-deadlines__row"
+              [class.program-deadlines__row--active]="deadline.active"
+            >
+              <div>
+                <h3 class="program-deadlines__label">{{ deadline.label }}</h3>
+                <time [attr.datetime]="deadline.datetime">{{ deadline.dateLabel }}</time>
+              </div>
+              <span>{{ deadline.status }}</span>
+            </li>
+          }
+        </ul>
+        @if (!deadlines().length) {
+          <p class="analytics-empty-state">Сроки программы пока не заданы</p>
+        }
+      </article>
+    </section>
+    <section class="analytics-grid" aria-label="Воронки программы">
+      <article class="analytics-card">
+        <h2 class="text-body-12">Воронка участников</h2>
+        <app-analytics-funnel-chart
+          [items]="participantFunnel()"
+          label="Воронка участников"
+          kind="participants"
+        />
+      </article>
+      <article class="analytics-card">
+        <h2 class="text-body-12">Воронка заявок</h2>
+        <app-analytics-funnel-chart
+          [items]="solutionFunnel()"
+          label="Воронка заявок"
+          kind="projects"
+        />
+        @if (!overview.solutionFunnel.submissionApplicable) {
+          <p class="analytics-empty-state">Для этой программы сдача и оценивание не требуются.</p>
+        }
+      </article>
+    </section>
+    @if (overview.evaluationStatus.applicable) {
+      <section class="analytics-grid analytics-grid--evaluation" aria-label="Ход оценивания">
+        <article class="analytics-card evaluation">
+          <h2 class="analytics-card__title">Ход оценивания</h2>
+          <p>
+            {{
+              overview.evaluationStatus.mode === "distributed"
+                ? "Распределенное оценивание"
+                : "Открытое оценивание"
+            }}
+          </p>
+          @if (overview.evaluationStatus.assignments; as totals) {
+            <div class="solution-analytics__actions">
+              <button
+                #all
+                appButton="secondary"
+                type="button"
+                (click)="openAssignments('all', all)"
+              >
+                Все назначения · {{ totals.total }}
+              </button>
+              <button
+                #complete
+                appButton="secondary"
+                type="button"
+                (click)="openAssignments('completed', complete)"
+              >
+                Выполнено · {{ totals.evaluated }}
+              </button>
+              <button
+                #pending
+                appButton="secondary"
+                type="button"
+                (click)="openAssignments('pending', pending)"
+              >
+                Ожидают оценки · {{ totals.pending }}
+              </button>
+            </div>
+          }
+          @if (overview.evaluationStatus.solutions; as solutions) {
+            <p>
+              Сдано: {{ solutions.submitted }} · Оценено: {{ solutions.evaluated }} · Частично
+              оценено: {{ solutions.partiallyEvaluated }}
+            </p>
+          }
+          @for (expert of overview.attention.delayedExperts.items; track expert.expertId) {
+            <button
+              #delayed
+              appButton="text"
+              type="button"
+              (click)="openAssignments('pending', delayed, expert.expertId)"
+            >
+              {{ expert.fullName }} · ожидают оценки: {{ expert.pending }}
+            </button>
+          }
+        </article>
+      </section>
+    }
+    <section class="analytics-bottom" aria-label="Кейсы и материалы">
+      <article class="analytics-card cases-card">
+        <h2 class="cases-card__title">Кейсы</h2>
+        @if (!overview.cases.configured) {
+          <p class="analytics-empty-state">Кейсы не настроены для этой программы</p>
+        }
+        <ul class="cases-card__list">
+          @for (row of overview.cases.items; track row.name) {
+            <li>
+              <button
+                #caseTrigger
+                type="button"
+                class="case-row"
+                [class.case-row--without-submission]="!overview.cases.submissionApplicable"
+                (click)="
+                  openSolutions(
+                    'Кейс: ' + row.name,
+                    { caseScope: 'selected', caseName: row.name },
+                    caseTrigger
+                  )
+                "
+              >
+                <span class="case-row__name">{{ row.name }}</span
+                ><span>Заявки: {{ row.solutionsTotal }}</span>
+                @if (overview.cases.submissionApplicable) {
+                  <span>Сдано: {{ row.submitted }}</span>
+                }
+                <span>Участники: {{ row.participantsTotal }}</span>
+              </button>
+            </li>
+          }
+          @if (overview.cases.withoutCase.solutionsTotal) {
+            <li>
+              <button
+                #withoutCase
+                type="button"
+                class="case-row case-row--without-case"
+                [class.case-row--without-submission]="!overview.cases.submissionApplicable"
+                (click)="
+                  openSolutions('Без выбранного кейса', { caseScope: 'without_case' }, withoutCase)
+                "
+              >
+                <span>Без выбранного кейса</span
+                ><span>Заявки: {{ overview.cases.withoutCase.solutionsTotal }}</span>
+                @if (overview.cases.submissionApplicable) {
+                  <span>Сдано: {{ overview.cases.withoutCase.submitted }}</span>
+                }
+                <span>Участники: {{ overview.cases.withoutCase.participantsTotal }}</span>
+              </button>
+            </li>
+          }
+        </ul>
+      </article>
+      <article class="analytics-card">
+        <h2 class="analytics-card__title">Материалы решений</h2>
+        <p>
+          Учитываются только поля, применимые к заявке. Число 0 и ответ «Нет» считаются
+          заполненными.
+        </p>
+        @for (field of overview.fieldCoverage; track field.fieldId) {
+          <button
+            #fieldTrigger
+            appButton="text"
+            type="button"
+            (click)="
+              openSolutions(
+                field.label,
+                { fieldId: field.fieldId, answerState: 'missing' },
+                fieldTrigger
+              )
+            "
+          >
+            {{ field.label }} · заполнено {{ field.answered }} из {{ field.applicable }} ·
+            обязательных не заполнено: {{ field.requiredUnanswered }}
+          </button>
+        }
+        @if (!overview.fieldCoverage.length) {
+          <p class="analytics-empty-state">Поля формы пока не настроены</p>
+        }
+      </article>
+    </section>
+    <section class="regions-grid" aria-label="География и динамика программы">
+      <article class="regions">
+        <h2 class="text-body-12">Регионы участников</h2>
+        @if (overview.summary.participantRegions.items.length) {
+          <app-analytics-region-chart
+            [items]="overview.summary.participantRegions.items"
+            label="Регионы участников"
+            kind="participants"
+          />
+        } @else {
+          <p class="analytics-empty-state">У участников пока не указаны регионы</p>
+        }
+      </article>
+      <article class="analytics-card">
+        <h2 class="analytics-card__title">Динамика активности</h2>
+        @if (activityPoints().length) {
+          <app-analytics-activity-chart
+            [points]="activityPoints()"
+            [submissionApplicable]="overview.solutionFunnel.submissionApplicable"
+          />
+        } @else {
+          <p class="analytics-empty-state">За последние 30 дней активности не было</p>
+        }
+      </article>
+    </section>
+  }
+</main>
+<app-modal
+  [open]="modal() !== null"
+  size="large"
+  labelledBy="solution-analytics-dialog-title"
+  (openChange)="!$event && close()"
+>
+  <div class="solution-analytics__dialog" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+    <header class="solution-analytics__heading">
+      <h2 id="solution-analytics-dialog-title">{{ title() }}</h2>
+      <button
+        appButton="text"
+        cdkFocusInitial
+        type="button"
+        [disabled]="actionPending()"
+        (click)="close()"
+      >
+        Закрыть
+      </button>
+    </header>
+    @if (message()) {
+      <p role="status">{{ message() }}</p>
+    }
+    @if (actionError()) {
+      <p role="alert">{{ actionError() }}</p>
+    }
+    @if (preview(); as reviewed) {
+      <h3>Отправить напоминание</h3>
+      <p>
+        Получателей: {{ reviewed.recipientCount }} · Без назначений:
+        {{ reviewed.withoutAssignmentsCount }} · Недоступно: {{ reviewed.unavailableCount }}
+      </p>
+      <p>{{ reviewed.previewText }}</p>
+      <ul>
+        @for (recipient of reviewed.recipients; track recipient.userId) {
+          <li>{{ recipient.fullName }}</li>
+        }
+      </ul>
+      <div class="solution-analytics__actions">
+        <button
+          appButton="secondary"
+          type="button"
+          [disabled]="actionPending()"
+          (click)="preview.set(null)"
+        >
+          Назад к списку</button
+        ><button
+          appButton="primary"
+          type="button"
+          [disabled]="!reviewed.token || actionPending()"
+          (click)="confirmReminder()"
+        >
+          {{ actionPending() ? "Отправляем…" : "Отправить напоминание" }}
+        </button>
+      </div>
+    } @else if (modal() === "assignments") {
+      @if (detailPending()) {
+        <p role="status">Загружаем оценку…</p>
+      }
+      @if (detailError()) {
+        <p role="alert">{{ detailError() }}</p>
+      }
+      @if (detail(); as scores) {
+        <button appButton="text" type="button" (click)="backToAssignments()">
+          Назад к назначениям
+        </button>
+        <h3>{{ scores.application.name }} · {{ scores.expert.fullName }}</h3>
+        <div class="solution-analytics__table">
+          <table appTable>
+            <thead>
+              <tr>
+                <th>Критерий</th>
+                <th>Оценка</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (criterion of scores.scores; track criterion.criterionId) {
+                <tr>
+                  <td>{{ criterion.name }}</td>
+                  <td>{{ criterionValue(criterion) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        @if (listPending()) {
+          <p role="status">Загружаем назначения…</p>
+        }
+        @if (listError()) {
+          <p role="alert">{{ listError() }}</p>
+          <button appButton="secondary" type="button" (click)="loadList()">Повторить</button>
+        }
+        <div class="solution-analytics__table">
+          <table appTable>
+            <thead>
+              <tr>
+                <th>Эксперт</th>
+                <th>Решение</th>
+                <th>Статус</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of visibleAssignments(); track row.assignmentId) {
+                <tr>
+                  <td>{{ row.expert.fullName }}</td>
+                  <td>
+                    <a
+                      [routerLink]="paths.program.solution(programId(), row.application.solutionId)"
+                      (click)="close()"
+                      >{{ row.application.name }}</a
+                    >
+                  </td>
+                  <td>{{ statusLabel[row.status] }}</td>
+                  <td>
+                    @if (row.status === "completed") {
+                      <button appButton="text" type="button" (click)="showScores(row)">
+                        Посмотреть оценку
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        @if (!listPending() && !listError() && !visibleAssignments().length) {
+          <p>Назначений не найдено</p>
+        }
+      }
+    } @else {
+      <form class="solution-analytics__actions" (submit)="$event.preventDefault(); applySearch()">
+        <input
+          appField
+          type="search"
+          [formControl]="search"
+          placeholder="Поиск"
+          aria-label="Поиск"
+          maxlength="200"
+          [readOnly]="actionPending()"
+        /><button appButton="secondary" type="submit" [disabled]="actionPending()">Найти</button>
+      </form>
+      @if (listPending()) {
+        <p role="status">Загружаем список…</p>
+      }
+      @if (listError()) {
+        <p role="alert">{{ listError() }}</p>
+        <button appButton="secondary" type="button" (click)="loadList()">Повторить</button>
+      }
+      @if (!listPending() && !listError()) {
+        <div class="solution-analytics__table">
+          <table appTable>
+            <thead>
+              <tr>
+                @if (canRemind()) {
+                  <th><span class="solution-analytics__sr">Выбрать</span></th>
+                }
+                <th>{{ modal() === "solutions" ? "Решение" : "Участник" }}</th>
+                <th>{{ modal() === "solutions" ? "Кейс" : "Город" }}</th>
+                <th>Статус</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (modal() === "solutions") {
+                @for (row of list()?.results; track row.application.solutionId) {
+                  <tr>
+                    @if (canRemind()) {
+                      <td>
+                        <input
+                          appChoice
+                          type="checkbox"
+                          [checked]="isSelected(row.application.solutionId)"
+                          [disabled]="actionPending()"
+                          [attr.aria-label]="'Выбрать ' + row.application.name"
+                          (change)="toggle(row.application.solutionId)"
+                        />
+                      </td>
+                    }
+                    <td>
+                      <a
+                        [routerLink]="
+                          paths.program.solution(programId(), row.application.solutionId)
+                        "
+                        (click)="close()"
+                        >{{ row.application.name }}</a
+                      >
+                    </td>
+                    <td>{{ row.caseName ?? "Без кейса" }}</td>
+                    <td>
+                      {{
+                        row.evaluationStatus === "not_applicable"
+                          ? "Без оценивания"
+                          : row.submissionStatus === "draft"
+                            ? "Не сдано"
+                            : row.evaluationStatus === "evaluated"
+                              ? "Оценено"
+                              : "Ожидает оценки"
+                      }}
+                    </td>
+                  </tr>
+                }
+              } @else {
+                @for (row of participants(); track row.userId) {
+                  <tr>
+                    <td>
+                      <input
+                        appChoice
+                        type="checkbox"
+                        [checked]="isSelected(row.userId)"
+                        [disabled]="actionPending()"
+                        [attr.aria-label]="'Выбрать ' + row.fullName"
+                        (change)="toggle(row.userId)"
+                      />
+                    </td>
+                    <td>
+                      <a [routerLink]="paths.profile.detail(row.userId)" (click)="close()">{{
+                        row.fullName
+                      }}</a>
+                    </td>
+                    <td>{{ row.city ?? "—" }}</td>
+                    <td>Зарегистрирован</td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+        <p aria-live="polite">
+          {{ count() ? offset() + 1 : 0 }}–{{
+            modal() === "solutions"
+              ? offset() + (list()?.results?.length ?? 0)
+              : offset() + participants().length
+          }}
+          из {{ count() }}
+        </p>
+        <div class="solution-analytics__actions">
+          <button
+            appButton="text"
+            type="button"
+            [disabled]="!offset() || actionPending()"
+            (click)="changePage(-1)"
+          >
+            Назад</button
+          ><button
+            appButton="text"
+            type="button"
+            [disabled]="offset() + 20 >= count() || actionPending()"
+            (click)="changePage(1)"
+          >
+            Далее
+          </button>
+          @if (modal() === "solutions") {
+            <button
+              appButton="secondary"
+              type="button"
+              [disabled]="exporting() || !count()"
+              (click)="download('solutions', true)"
+            >
+              Выгрузить найденные решения
+            </button>
+          }
+          @if (canRemind() && count()) {
+            <button
+              appButton="secondary"
+              type="button"
+              [disabled]="actionPending()"
+              (click)="selectAll()"
+            >
+              Выбрать все найденные</button
+            ><button
+              appButton="secondary"
+              type="button"
+              [disabled]="actionPending() || !selectedCount()"
+              (click)="resetSelection()"
+            >
+              Снять выбор</button
+            ><button
+              appButton="primary"
+              type="button"
+              [disabled]="actionPending() || !selectedCount()"
+              (click)="previewReminder()"
+            >
+              Напомнить · {{ selectedCount() }}
+            </button>
+          }
+        </div>
+        @if (!count()) {
+          <p>Ничего не найдено. Измените поиск.</p>
+        }
+      }
+    }
+  </div>
+</app-modal>

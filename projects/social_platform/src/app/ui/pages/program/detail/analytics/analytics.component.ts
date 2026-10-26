@@ -36,6 +36,7 @@ import {
   AnalyticsFunnelStage,
 } from "./funnel-chart/funnel-chart.component";
 import { AnalyticsEvaluationProgressComponent } from "./evaluation-progress/evaluation-progress.component";
+import { SolutionAnalyticsComponent } from "./solution-analytics.component";
 
 interface AnalyticsMetric {
   key: string;
@@ -77,6 +78,7 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
     AnalyticsActivityChartComponent,
     AnalyticsFunnelChartComponent,
     AnalyticsEvaluationProgressComponent,
+    SolutionAnalyticsComponent,
   ],
   providers: [ProgramAnalyticsInfoService, ExportFileInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -97,6 +99,8 @@ export class ProgramAnalyticsComponent implements OnInit {
   private readonly pluralize = new PluralizePipe();
 
   protected readonly data = this.analytics.data;
+  protected readonly solutionMode = this.analytics.solutionMode;
+  protected readonly scheduleDates = this.analytics.scheduleDates;
   protected readonly programId = this.analytics.programId;
   protected readonly programName = this.analytics.programName;
   protected readonly pending = this.analytics.pending;

@@ -1,0 +1,169 @@
+{
+  "completed": true,
+  "programs": [
+    {
+      "programId": 52,
+      "activeSolutions": 1,
+      "acceptedInTeams": 1,
+      "publicSolutions": 0,
+      "scoresRetained": 4,
+      "history": ["change_case", "remove_member", "archive"],
+      "originalSnapshotRetained": true
+    },
+    {
+      "programId": 53,
+      "activeSolutions": 2,
+      "acceptedInTeams": 2,
+      "publicSolutions": 1,
+      "scoresRetained": 4,
+      "history": ["remove_registrations"],
+      "originalSnapshotRetained": true
+    },
+    {
+      "programId": 54,
+      "activeSolutions": 2,
+      "acceptedInTeams": 3,
+      "publicSolutions": 2,
+      "scoresRetained": 0,
+      "history": [],
+      "originalSnapshotRetained": true
+    }
+  ],
+  "creationOnlyRollback": [
+    {
+      "programId": 52,
+      "receipts": [
+        {
+          "program_id": 52,
+          "storage_mode": "solution",
+          "previous_enabled": true,
+          "requested_enabled": false,
+          "applied": false,
+          "changed": false
+        },
+        {
+          "program_id": 52,
+          "storage_mode": "solution",
+          "previous_enabled": true,
+          "requested_enabled": false,
+          "applied": true,
+          "changed": true
+        },
+        {
+          "program_id": 52,
+          "storage_mode": "solution",
+          "previous_enabled": false,
+          "requested_enabled": false,
+          "applied": true,
+          "changed": false
+        }
+      ],
+      "newCreationStatus": 409,
+      "existingDraftReadableAndWritable": true,
+      "existingApplicationReopened": false
+    },
+    {
+      "programId": 53,
+      "receipts": [
+        {
+          "program_id": 53,
+          "storage_mode": "solution",
+          "previous_enabled": true,
+          "requested_enabled": false,
+          "applied": false,
+          "changed": false
+        },
+        {
+          "program_id": 53,
+          "storage_mode": "solution",
+          "previous_enabled": true,
+          "requested_enabled": false,
+          "applied": true,
+          "changed": true
+        },
+        {
+          "program_id": 53,
+          "storage_mode": "solution",
+          "previous_enabled": false,
+          "requested_enabled": false,
+          "applied": true,
+          "changed": false
+        }
+      ],
+      "newCreationStatus": 409,
+      "existingDraftReadableAndWritable": true,
+      "existingApplicationReopened": true
+    },
+    {
+      "programId": 54,
+      "receipts": [
+        {
+          "program_id": 54,
+          "storage_mode": "solution",
+          "previous_enabled": true,
+          "requested_enabled": false,
+          "applied": false,
+          "changed": false
+        },
+        {
+          "program_id": 54,
+          "storage_mode": "solution",
+          "previous_enabled": true,
+          "requested_enabled": false,
+          "applied": true,
+          "changed": true
+        },
+        {
+          "program_id": 54,
+          "storage_mode": "solution",
+          "previous_enabled": false,
+          "requested_enabled": false,
+          "applied": true,
+          "changed": false
+        }
+      ],
+      "newCreationStatus": 409,
+      "existingDraftReadableAndWritable": true,
+      "existingApplicationReopened": true
+    }
+  ],
+  "exports": [
+    {
+      "programId": 52,
+      "count": 0,
+      "listIds": [],
+      "xlsxIds": [],
+      "sha256": "1d74bb7684e9d8aaed2c0f9eb68ed25eaacefbbcbd340782485fc452ae426228",
+      "sheets": ["Решения", "Команды", "Поля формы", "Ответы решения"]
+    },
+    {
+      "programId": 53,
+      "count": 1,
+      "listIds": [74],
+      "xlsxIds": [74],
+      "sha256": "63e075dffeb5f407976fc3a949b2974a3f76e7f3b92c44a28d9c2b5b01e25ebc",
+      "sheets": ["Решения", "Команды", "Поля формы", "Ответы решения"]
+    },
+    {
+      "programId": 54,
+      "count": 1,
+      "listIds": [76],
+      "xlsxIds": [76],
+      "sha256": "7420ddab38bda539ac44a9c7afcad8b59b619d8dc368279f686ea4ef01bbaead",
+      "sheets": ["Решения", "Команды", "Поля формы", "Ответы решения"]
+    }
+  ],
+  "oldModelsUnchanged": 26,
+  "baselineHash": "25307a71850fa695332d83047ec32d94954ffe310d9d2562f97fa07ac3443030",
+  "finalHash": "25307a71850fa695332d83047ec32d94954ffe310d9d2562f97fa07ac3443030",
+  "projectCount": 5,
+  "newProjectsDuringJourney": 0,
+  "legacyModeUnchanged": true,
+  "publicMarkersSurviveLaterOptOut": true,
+  "httpChecks": 27,
+  "notChecked": [
+    "production deployment",
+    "BE10 migration of old programs",
+    "CDN file bytes; fixture metadata only"
+  ]
+}

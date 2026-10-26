@@ -84,7 +84,12 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
           Отмена
         </button>
         @if (plan()) {
-          <button appButton="primary" type="button" [disabled]="busy()" (click)="confirm()">
+          <button
+            appButton="primary"
+            type="button"
+            [disabled]="busy() || !!plan()?.shortages?.length"
+            (click)="confirm()"
+          >
             Подтвердить назначения
           </button>
         } @else {
@@ -197,7 +202,7 @@ export class SolutionAllocationComponent {
   confirm(): void {
     const request = this.request(),
       plan = this.plan();
-    if (!request || !plan?.planToken || this.busy()) return;
+    if (!request || !plan?.planToken || plan.shortages.length || this.busy()) return;
     this.busy.set(true);
     this.busyChange.emit(true);
     this.apply

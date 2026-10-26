@@ -57,14 +57,26 @@
       />
     }
     @if (section() === "results") {
-      <app-management-results [programId]="program.id" />
+      <app-management-results
+        [programId]="program.id"
+        [solutionMode]="program.solutionStorageMode === 'solution'"
+        [submissionApplicable]="program.isCompetitive"
+      />
     }
     @if (section() === "experts") {
-      <app-management-experts
-        [programId]="program.id"
-        [confirmDiscard]="confirmProjectFormDiscard"
-        (statusChange)="expertsStatus.set($event)"
-      />
+      @if (program.solutionStorageMode === "solution") {
+        <app-solution-experts
+          [programId]="program.id"
+          [confirmDiscard]="confirmProjectFormDiscard"
+          (statusChange)="expertsStatus.set($event)"
+        />
+      } @else {
+        <app-management-experts
+          [programId]="program.id"
+          [confirmDiscard]="confirmProjectFormDiscard"
+          (statusChange)="expertsStatus.set($event)"
+        />
+      }
     }
     @if (section() === "projects" && program.solutionStorageMode === "solution") {
       <app-solution-applications
@@ -1090,6 +1102,14 @@
     </section>
   }
 </app-modal>
+@if (solutionRemovalRequest()) {
+  <app-solution-registration-removal
+    [request]="solutionRemovalRequest()"
+    (closed)="solutionRemovalRequest.set(null)"
+    (busyChange)="solutionActionBusy.set($event)"
+    (completed)="solutionRegistrationsRemoved($event)"
+  />
+}
 <app-management-project-actions
   [request]="projectActionRequest()"
   [caseOptions]="state.projects()?.caseOptions ?? []"

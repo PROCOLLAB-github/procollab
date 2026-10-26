@@ -46,11 +46,15 @@ Chart.register(
 })
 export class AnalyticsActivityChartComponent {
   readonly points = input.required<readonly ProgramAnalyticsActivityPoint[]>();
+  readonly submissionApplicable = input(true);
 
   protected readonly series = [
     { key: "registrations", label: "Новые регистрации" },
     { key: "submittedSolutions", label: "Отправленные решения" },
   ] as const;
+  protected readonly visibleSeries = computed(() =>
+    this.submissionApplicable() ? this.series : this.series.slice(0, 1),
+  );
   protected readonly selectedDate = signal<string | null>(null);
   protected readonly selectedIndex = computed(() => {
     const index = this.points().findIndex(point => point.date === this.selectedDate());
@@ -63,7 +67,7 @@ export class AnalyticsActivityChartComponent {
   protected readonly selectionLabel = computed(() => {
     const point = this.selectedPoint() ?? this.points()[0];
     return point
-      ? `${this.dateLabel(point.date)}: новые регистрации — ${point.registrations}, отправленные решения — ${point.submittedSolutions}`
+      ? `${this.dateLabel(point.date)}: новые регистрации — ${point.registrations}${this.submissionApplicable() ? `, отправленные решения — ${point.submittedSolutions}` : ""}`
       : "Нет данных";
   });
 
@@ -75,6 +79,9 @@ export class AnalyticsActivityChartComponent {
     afterRenderEffect(() => {
       const points = this.points();
       const canvases = this.canvases();
+      for (let index = canvases.length; index < this.charts.length; index++)
+        this.charts[index].destroy();
+      this.charts.length = Math.min(this.charts.length, canvases.length);
       this.zone.runOutsideAngular(() => {
         untracked(() =>
           canvases.forEach((canvas, index) =>

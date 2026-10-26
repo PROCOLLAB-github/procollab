@@ -136,4 +136,18 @@ describe("AnalyticsActivityChartComponent", () => {
     expect(vi.mocked(Chart).mock.results[0].value.data.datasets[0].pointRadius).toBe(3);
     expect(plot.getAttribute("aria-valuemax")).toBe("1");
   });
+  it("omits the submission chart and accessible values when submission is not applicable", async () => {
+    const fixture = await render();
+    fixture.componentRef.setInput("submissionApplicable", false);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const plots = fixture.nativeElement.querySelectorAll('[role="slider"]');
+    expect(plots).toHaveLength(1);
+    plots[0].dispatchEvent(new FocusEvent("focus"));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(plots[0].getAttribute("aria-valuetext")).not.toContain("отправленные решения");
+    expect(fixture.nativeElement.textContent).not.toContain("Отправленные решения");
+    expect(vi.mocked(Chart).mock.results[1].value.destroy).toHaveBeenCalledOnce();
+  });
 });

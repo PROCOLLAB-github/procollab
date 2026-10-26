@@ -124,6 +124,7 @@ describe("ProgramAnalyticsComponent", () => {
   const error = signal<any>(null);
   const analytics = {
     programId: signal<number | null>(12),
+    solutionMode: signal(false),
     programName: signal("Тестовая программа"),
     scheduleDates: signal<ProgramScheduleDates | null>(null),
     data,

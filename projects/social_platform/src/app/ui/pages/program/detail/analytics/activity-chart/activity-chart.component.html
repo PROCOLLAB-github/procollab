@@ -1,6 +1,6 @@
 <!-- @format -->
 
-@for (item of series; track item.key) {
+@for (item of visibleSeries(); track item.key) {
   <section
     class="activity-chart__series"
     [class.activity-chart__series--solutions]="item.key === 'submittedSolutions'"
@@ -31,9 +31,11 @@
     <span
       >Регистрации <b>{{ point.registrations }}</b></span
     >
-    <span
-      >Решения <b>{{ point.submittedSolutions }}</b></span
-    >
+    @if (submissionApplicable()) {
+      <span
+        >Решения <b>{{ point.submittedSolutions }}</b></span
+      >
+    }
   } @else {
     Наведите указатель или выберите дату стрелками на клавиатуре
   }
