@@ -203,6 +203,10 @@ export class ProgramRepository implements ProgramRepositoryPort {
     return this.programAdapter.getAllProjects(programId, params);
   }
 
+  getPublishedProjects(programId: number, params?: HttpParams): Observable<ApiPagination<Project>> {
+    return this.programAdapter.getPublishedProjects(programId, params);
+  }
+
   getAllMembers(programId: number, skip: number, take: number): Observable<ApiPagination<User>> {
     return this.programAdapter.getAllMembers(programId, skip, take).pipe(
       map(result => ({

@@ -74,6 +74,7 @@
           }
           <div
             class="info__actions"
+            [class.info__actions--program]="listType() === 'program'"
             [class.info__actions--manager]="listType() === 'program' && isUserManager()"
           >
             <ng-container
@@ -97,6 +98,7 @@
                 (isProjectsPage() ||
                   isProjectsRatingPage() ||
                   isAnalyticsPage() ||
+                  isPublishedSolutionsPage() ||
                   isMembersPage()) &&
                 appWidth < 1000
               ) {
@@ -159,6 +161,25 @@
                           зарегистрироваться
                         </app-button>
                       </a>
+                    } @else {
+                      <span
+                        class="info__unavailable"
+                        tabindex="0"
+                        role="button"
+                        aria-disabled="true"
+                        aria-describedby="registration-unavailable"
+                      >
+                        <app-button
+                          appearance="outline"
+                          size="medium"
+                          [disabled]="true"
+                          customTypographyClass="text-body-12"
+                          >зарегистрироваться</app-button
+                        >
+                        <span id="registration-unavailable" class="info__unavailable-tooltip">
+                          Организатор еще не открыл регистрацию.
+                        </span>
+                      </span>
                     }
                   }
                   @if (
@@ -271,7 +292,7 @@
                     </app-button>
                   }
                 }
-                @if (info().solutionStorageMode === "solution") {
+                @if (!isUserManager() && info().solutionStorageMode === "solution") {
                   <a
                     [routerLink]="AppRoutes.program.publishedSolutions(info().id)"
                     routerLinkActive
@@ -285,19 +306,33 @@
                       >решения</app-button
                     >
                   </a>
-                } @else if (!isUserManager() && isUserExpert() && appWidth >= 1000) {
-                  <a [routerLink]="AppRoutes.program.projects(info().id)">
+                } @else if (
+                  !isUserManager() && (isUserExpert() || info().publishedProjectsAvailable)
+                ) {
+                  <a
+                    [routerLink]="
+                      info().publishedProjectsAvailable
+                        ? AppRoutes.program.projects(info().id)
+                        : null
+                    "
+                  >
                     <app-button
                       [appearance]="isProjectsPage() ? 'inline' : 'outline'"
                       size="medium"
-                      [disabled]="isUserExpert() && !isUserManager()"
+                      [disabled]="!info().publishedProjectsAvailable"
                       customTypographyClass="text-body-12"
                     >
                       проекты-участники
                     </app-button>
                   </a>
                 }
-                @if (!isUserManager() && !isUserExpert() && appWidth >= 1000) {
+                @if (
+                  !isUserManager() &&
+                  !isUserExpert() &&
+                  appWidth >= 1000 &&
+                  info().solutionStorageMode !== "solution" &&
+                  !info().publishedProjectsAvailable
+                ) {
                   <a class="info__more">
                     <app-button
                       appearance="outline"

@@ -172,8 +172,16 @@ describe("Program page: program-scoped news and role visibility", () => {
     expect(mine).not.toHaveBeenCalled();
   });
   it("preserves advertisement and no internal content for an unrelated user", () => {
-    const f = render({});
+    const f = render({ advertisementImageAddress: "/advertisement.webp" });
     expect(f.nativeElement.querySelector(".program__advertisement")).toBeTruthy();
+    expect(
+      f.nativeElement.querySelector("app-program-role-widget,app-news-card,app-news-form"),
+    ).toBeNull();
+    expect(fetch).not.toHaveBeenCalled();
+  });
+  it("does not render a broken advertisement when the program has no image", () => {
+    const f = render({});
+    expect(f.nativeElement.querySelector(".program__advertisement img")).toBeNull();
     expect(
       f.nativeElement.querySelector("app-program-role-widget,app-news-card,app-news-form"),
     ).toBeNull();

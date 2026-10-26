@@ -4,7 +4,12 @@
   <main class="project">
     <section class="program__main">
       <!-- advertisementImageAddress поле только для тех кто не участник программы поэтому нельзя сделать toggle и давать появляться или нет полю -->
-      @if (!program()!.isUserMember && !program()!.isUserManager && !program()!.isUserExpert) {
+      @if (
+        !program()!.isUserMember &&
+        !program()!.isUserManager &&
+        !program()!.isUserExpert &&
+        program()!.advertisementImageAddress
+      ) {
         <div class="program__advertisement">
           <img
             [src]="program()!.advertisementImageAddress"

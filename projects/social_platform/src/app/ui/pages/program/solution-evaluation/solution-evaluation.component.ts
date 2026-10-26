@@ -21,7 +21,7 @@ import {
 } from "@api/solution/use-cases/solution-evaluation.use-cases";
 import { SolutionApiError, SolutionRatingFrame } from "@domain/solution/solution-contract.model";
 import { validSolutionId } from "@domain/solution/ports/solution.repository.port";
-import { ButtonDirective } from "@uilib";
+import { ButtonDirective, TabsComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { SolutionFieldsComponent } from "@ui/widgets/solution-fields/solution-fields.component";
 import { SolutionTeamComponent } from "../solution/solution-team.component";
@@ -37,6 +37,7 @@ type Values = Record<string, unknown>;
     RouterLink,
     ReactiveFormsModule,
     ButtonDirective,
+    TabsComponent,
     ModalComponent,
     SolutionFieldsComponent,
     SolutionTeamComponent,
@@ -63,6 +64,10 @@ export class SolutionEvaluationComponent {
   readonly busy = signal(false);
   readonly editing = signal(false);
   readonly teamTab = signal(false);
+  readonly sectionTabs = [
+    { id: "materials", linkText: "Решение", iconName: "box" },
+    { id: "team", linkText: "Команда", iconName: "team" },
+  ];
   readonly confirmation = signal(false);
   readonly leaveOpen = signal(false);
   readonly previous = signal<{ name: string; value: string }[]>([]);

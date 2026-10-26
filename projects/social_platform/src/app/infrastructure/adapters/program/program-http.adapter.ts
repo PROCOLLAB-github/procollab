@@ -129,6 +129,10 @@ export class ProgramHttpAdapter {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/`);
   }
 
+  getPublishedProjects(programId: number, params?: HttpParams): Observable<ApiPagination<Project>> {
+    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/published-projects/`, params);
+  }
+
   getManagerOverview(programId: number): Observable<ProgramAnalyticsOverview> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/manager-overview/`);
   }

@@ -10,6 +10,7 @@ import {
   input,
   model,
   output,
+  OnInit,
   viewChild,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
@@ -50,7 +51,7 @@ import { IconComponent } from "../icon/icon.component";
   ],
   imports: [ClickOutsideModule, IconComponent],
 })
-export class SearchComponent implements ControlValueAccessor {
+export class SearchComponent implements ControlValueAccessor, OnInit {
   /** Текст подсказки */
   placeholder = input("");
 
@@ -79,7 +80,7 @@ export class SearchComponent implements ControlValueAccessor {
   open = false;
   private readonly cdRef = inject(ChangeDetectorRef);
 
-  constructor() {
+  ngOnInit(): void {
     this.open = !this.openable();
   }
 

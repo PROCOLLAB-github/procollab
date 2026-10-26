@@ -33,17 +33,13 @@
         <p>Сдано {{ item.submission.submittedAt | date: "dd.MM.yyyy, HH:mm" }}</p>
       }
     </header>
-    <nav aria-label="Разделы заявки">
-      <a [routerLink]="[]" [queryParams]="{}" [attr.aria-current]="!teamTab() ? 'page' : null"
-        >Решение</a
-      >
-      <a
-        [routerLink]="[]"
-        [queryParams]="{ tab: 'team' }"
-        [attr.aria-current]="teamTab() ? 'page' : null"
-        >Команда</a
-      >
-    </nav>
+    <app-tabs
+      appearance="steps"
+      label="Разделы заявки"
+      [items]="sectionTabs"
+      [active]="teamTab() ? 'team' : 'materials'"
+      (selected)="selectTab($event)"
+    />
     @if (teamTab()) {
       @if (teamRefreshError()) {
         <p role="alert">{{ teamRefreshError() }}</p>

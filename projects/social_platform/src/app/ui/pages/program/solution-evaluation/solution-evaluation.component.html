@@ -27,23 +27,13 @@
         }
       </div>
     </header>
-    <nav class="solution-evaluation-sections" aria-label="Разделы решения">
-      <button
-        type="button"
-        appButton="secondary"
-        [attr.aria-current]="!teamTab() ? 'page' : null"
-        (click)="teamTab.set(false)"
-      >
-        Решение</button
-      ><button
-        type="button"
-        appButton="secondary"
-        [attr.aria-current]="teamTab() ? 'page' : null"
-        (click)="teamTab.set(true)"
-      >
-        Команда
-      </button>
-    </nav>
+    <app-tabs
+      appearance="steps"
+      label="Разделы решения"
+      [items]="sectionTabs"
+      [active]="teamTab() ? 'team' : 'materials'"
+      (selected)="teamTab.set($event === 'team')"
+    />
     <div [hidden]="teamTab()" class="scoring">
       <aside class="scoring__materials">
         <h2>Материалы решения</h2>

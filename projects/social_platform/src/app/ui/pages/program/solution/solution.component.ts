@@ -45,7 +45,7 @@ import {
   SolutionIssue,
 } from "@domain/solution/solution-contract.model";
 import { validSolutionId } from "@domain/solution/ports/solution.repository.port";
-import { ButtonDirective, FieldDirective } from "@uilib";
+import { ButtonDirective, FieldDirective, TabsComponent } from "@uilib";
 import { DatePipe } from "@angular/common";
 import { SolutionTeamComponent } from "./solution-team.component";
 import { SolutionDraftFacade } from "@api/solution/facades/solution-draft.facade";
@@ -59,6 +59,7 @@ import { ProjectInviteDialogComponent } from "@ui/widgets/project-invite/project
     RouterLink,
     ButtonDirective,
     FieldDirective,
+    TabsComponent,
     ReactiveFormsModule,
     DatePipe,
     SolutionTeamComponent,
@@ -85,6 +86,17 @@ export class ProgramSolutionComponent {
   readonly loading = signal(true);
   readonly error = signal<SolutionApiError | null>(null);
   readonly teamTab = signal(false);
+  readonly sectionTabs = [
+    { id: "materials", linkText: "Решение", iconName: "box" },
+    { id: "team", linkText: "Команда", iconName: "team" },
+  ];
+  selectTab(tab: string): void {
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab: tab === "team" ? "team" : null },
+      queryParamsHandling: "merge",
+    });
+  }
   readonly programId = signal(0);
   readonly refreshingTeam = signal(false);
   readonly teamRefreshError = signal("");

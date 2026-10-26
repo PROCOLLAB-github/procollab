@@ -8,11 +8,15 @@ import { catchError, EMPTY, map, of } from "rxjs";
 import { Project } from "@domain/project/project.model";
 import { GetAllProjectsUseCase } from "@api/program/use-cases/get-all-projects.use-case";
 import { CreateProgramFiltersUseCase } from "@api/program/use-cases/create-program-filters.use-case";
+import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 
 /** Предзагружает проекты программы с фильтрацией. */
 export const ProgramProjectsResolver: ResolveFn<ApiPagination<Project>> = (
   route: ActivatedRouteSnapshot,
 ) => {
+  const program = inject(ProgramDetailMainUIInfoService).program();
+  if (program && !program.isUserManager)
+    return of({ count: 0, results: [], next: "", previous: "" });
   const getAllProjectsUseCase = inject(GetAllProjectsUseCase);
   const createProgramFiltersUseCase = inject(CreateProgramFiltersUseCase);
   const programId = route.parent?.params["programId"];

@@ -259,9 +259,11 @@ describe("Solution route foundation", () => {
     harness.detectChanges();
     expect(harness.routeNativeElement?.textContent).toContain("Команда заявки");
     expect(get.execute).toHaveBeenCalledTimes(1);
-    expect(harness.routeNativeElement?.querySelector('a[aria-current="page"]')?.textContent).toBe(
-      "Команда",
-    );
+    expect(
+      harness.routeNativeElement
+        ?.querySelector('app-tabs button[aria-pressed="true"]')
+        ?.textContent?.trim(),
+    ).toBe("Команда");
   });
 
   it("an existing current application redirects without posting", async () => {
