@@ -181,7 +181,11 @@
             <button
               appButton="primary"
               type="button"
-              [disabled]="applicationPending()"
+              [disabled]="
+                program()?.preview ||
+                program()?.solutionActionAvailable === false ||
+                applicationPending()
+              "
               (click)="createApplication()"
             >
               Создать заявку →

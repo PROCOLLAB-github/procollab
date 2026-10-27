@@ -41,6 +41,7 @@ export class ProgramRoleWidgetService {
     if (!this.auth.profile()?.id || this.auth.profile() === this.loggedOutProfile())
       return failure("unauthorized");
     const program = this.programUI.program();
+    if (program?.preview && program.previewWidget) return success(program.previewWidget);
     if (program && !programWidgetRole(program)) return failure("forbidden");
     return this.key() && this.loadedKey() === this.key()
       ? this.rawState()
@@ -82,6 +83,7 @@ export class ProgramRoleWidgetService {
     this.loadedKey.set(key);
     this.rawState.set(loading());
     if (!key) return;
+    if (this.programUI.program()?.preview) return;
     const programId = this.programId();
     this.activeRequest = this.request.execute(programId).subscribe(result => {
       if (version !== this.version || key !== this.key()) return;

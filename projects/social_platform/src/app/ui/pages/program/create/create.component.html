@@ -1,0 +1,82 @@
+<!-- @format -->
+<main class="program-create">
+  <a [routerLink]="paths.program.managed()">К программам</a>
+  <header>
+    <h1>Создание программы</h1>
+    <p>Начните с названия и формата. Остальное можно заполнить позже.</p>
+  </header>
+  @if (error()) {
+    <div appAlert="error" role="alert">
+      {{ error() }}
+      @if (loading() === false && !allowed()) {
+        <button appButton="text" (click)="reloadCapability()">Обновить данные</button>
+      }
+    </div>
+  }
+  @if (loading()) {
+    <p role="status">Загружаем доступные действия…</p>
+  } @else if (!allowed()) {
+    <section class="program-create__card">
+      <h2>Создание программ недоступно</h2>
+      <p>Право создания отдельно выдает администратор.</p>
+      <a [routerLink]="paths.program.managed()">К моим программам</a>
+    </section>
+  } @else {
+    <form
+      class="program-create__card"
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      [attr.aria-busy]="pending()"
+    >
+      <fieldset [disabled]="pending()">
+        <label
+          >Название программы *<input
+            #nameInput
+            appField
+            formControlName="name"
+            maxlength="255"
+            [attr.aria-invalid]="form.controls.name.touched && form.controls.name.invalid"
+            aria-describedby="program-name-hint"
+        /></label>
+        <p id="program-name-hint">
+          @if (form.controls.name.touched && form.controls.name.invalid) {
+            <span role="alert">Введите название программы до 255 символов.</span>
+          } @else {
+            Название увидят участники после публикации.
+          }
+        </p>
+        <fieldset class="program-create__formats">
+          <legend>Формат программы *</legend>
+          @for (format of formats; track format.id) {
+            <label
+              class="program-create__format"
+              [class.program-create__format--active]="form.controls.format.value === format.id"
+            >
+              <span
+                ><input appChoice type="radio" formControlName="format" [value]="format.id" />{{
+                  format.label
+                }}</span
+              >
+              <p>{{ format.description }}</p>
+            </label>
+          }
+        </fieldset>
+        <p>
+          Черновик будет доступен вам и организаторам программы. В каталоге он появится после
+          публикации.
+        </p>
+        <div class="program-create__actions">
+          <button appButton="secondary" type="button" (click)="cancel()">Отмена</button
+          ><button
+            appButton="primary"
+            type="submit"
+            [disabled]="pending()"
+            [appButtonLoading]="pending()"
+          >
+            Создать черновик
+          </button>
+        </div>
+      </fieldset>
+    </form>
+  }
+</main>

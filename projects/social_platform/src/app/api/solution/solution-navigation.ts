@@ -21,6 +21,8 @@ export function solutionApplicationRoute(application: SolutionApplicationRef) {
 }
 
 export function solutionCreationBlockedMessage(reason: string | null): string {
+  if (reason === "form_not_configured")
+    return "Организатор еще настраивает форму решения. Подать решение можно будет позже.";
   return reason === "solution_creation_disabled"
     ? "Создание новых решений временно приостановлено. Ранее созданные заявки доступны."
     : "Создание заявки сейчас недоступно. Проверьте регистрацию и сроки программы.";

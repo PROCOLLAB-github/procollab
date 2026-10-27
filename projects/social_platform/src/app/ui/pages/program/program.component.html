@@ -2,12 +2,34 @@
 
 <main class="page">
   <div class="page__bar">
-    <app-page-header title="программы" backRoute="/office/feed" />
+    <div class="program-heading">
+      <app-page-header title="программы" backRoute="/office/feed" />
+      @if (canCreate()) {
+        <a appButton="primary" [routerLink]="paths.program.create()"
+          ><i appIcon icon="plus" appSquare="12"></i>Создать программу</a
+        >
+      }
+    </div>
 
-    <form appFormLayout class="page__search" [formGroup]="searchForm">
-      <app-search formControlName="search"></app-search>
-    </form>
+    @if (!isManaged()) {
+      <form appFormLayout class="page__search" [formGroup]="searchForm">
+        <app-search formControlName="search"></app-search>
+      </form>
+    }
   </div>
 
+  <nav class="program-navigation" aria-label="Программы">
+    <a
+      appButton="secondary"
+      [routerLink]="paths.program.list()"
+      routerLinkActive="program-navigation__active"
+      >Все программы</a
+    ><a
+      appButton="secondary"
+      [routerLink]="paths.program.managed()"
+      routerLinkActive="program-navigation__active"
+      >Я организую</a
+    >
+  </nav>
   <router-outlet></router-outlet>
 </main>

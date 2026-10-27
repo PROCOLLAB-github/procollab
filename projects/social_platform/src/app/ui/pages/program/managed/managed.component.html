@@ -1,0 +1,59 @@
+<!-- @format -->
+<section class="managed" aria-label="Мои программы" [attr.aria-busy]="loading()">
+  <label class="managed__search"
+    ><span>Поиск по названию</span><app-search [formControl]="search"
+  /></label>
+  @if (loading()) {
+    <p role="status">Загружаем программы…</p>
+  } @else if (error()) {
+    <div appAlert="error" role="alert">
+      {{ error() }} <button appButton="secondary" (click)="reload()">Повторить</button>
+    </div>
+  } @else if (data(); as data) {
+    <div class="managed__list">
+      @for (program of data.results; track program.id) {
+        <article class="managed__row">
+          <div>
+            <h2>{{ program.name }}</h2>
+            <p>{{ program.draft ? "Черновик · Не виден участникам" : "Опубликована" }}</p>
+          </div>
+          <a
+            appButton="secondary"
+            [routerLink]="
+              program.draft
+                ? paths.program.launch(program.id)
+                : paths.program.management(program.id)
+            "
+            >{{ program.draft ? "Продолжить настройку" : "Управлять" }}</a
+          >
+        </article>
+      } @empty {
+        @if (search.value) {
+          <h2>Программы не найдены</h2>
+          <p>Попробуйте изменить название в поиске.</p>
+          <button appButton="secondary" (click)="search.setValue('')">Сбросить поиск</button>
+        } @else if (offset()) {
+          <p>На этой странице программ нет.</p>
+          <button appButton="secondary" (click)="page(-1)">На предыдущую страницу</button>
+        } @else {
+          <h2>Программы пока не созданы</h2>
+          <p>Здесь появятся программы, которыми вы управляете, включая незавершенные черновики.</p>
+          @if (canCreate()) {
+            <a appButton="secondary" [routerLink]="paths.program.create()">Создать программу</a>
+          }
+        }
+      }
+    </div>
+    @if (data.count > 10 || offset()) {
+      <app-pagination
+        [loading]="loading()"
+        [previousDisabled]="offset() === 0"
+        [nextDisabled]="rangeEnd() >= data.count"
+        (previous)="page(-1)"
+        (next)="page(1)"
+        >{{ data.results.length ? offset() + 1 : 0 }}–{{ rangeEnd() }} из
+        {{ data.count }}</app-pagination
+      >
+    }
+  }
+</section>

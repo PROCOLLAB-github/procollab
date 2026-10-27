@@ -15,6 +15,12 @@
       <p>{{ state.program()?.name }}</p>
     }
   </header>
+  @if (state.program()?.draft) {
+    <p class="management__muted">Черновик · Не виден участникам</p>
+    <a class="management__back" [routerLink]="paths.program.launch(state.program()!.id)"
+      >К подготовке к запуску</a
+    >
+  }
   @if (state.program(); as program) {
     <nav class="management__tabs" aria-label="Разделы управления программой">
       @for (tab of tabs; track tab.id) {

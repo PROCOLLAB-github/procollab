@@ -25,7 +25,8 @@ export class ProgramCardComponent implements OnInit {
   readonly program = input.required<Program>();
 
   ngOnInit(): void {
-    this.registerDateExpired = Date.now() > Date.parse(this.program().datetimeRegistrationEnds);
+    const deadline = this.program().datetimeRegistrationEnds;
+    this.registerDateExpired = Boolean(deadline && Date.now() > Date.parse(deadline));
   }
 
   registerDateExpired?: boolean;

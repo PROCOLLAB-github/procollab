@@ -42,13 +42,15 @@ export interface ManagementBasic {
   presentationAddress: string | null;
 }
 export interface ManagementDates {
-  datetimeStarted: string;
-  datetimeRegistrationEnds: string;
+  datetimeStarted: string | null;
+  datetimeRegistrationEnds: string | null;
   datetimeProjectSubmissionEnds: string | null;
   datetimeEvaluationEnds: string | null;
-  datetimeFinished: string;
+  datetimeFinished: string | null;
 }
 export interface ProgramManagement extends ManagementBasic, ManagementDates {
+  draft?: boolean;
+  programFormat?: "case_championship" | "hackathon" | "noncompetitive" | null;
   solutionStorageMode?: "legacy_project" | "solution";
   id: number;
   updatedAt: string;

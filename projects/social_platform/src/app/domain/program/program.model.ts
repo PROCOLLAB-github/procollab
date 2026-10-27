@@ -1,6 +1,7 @@
 /** @format */
 
 import { ProgramImageFraming } from "./program-image-framing.model";
+import type { ProgramRoleWidget } from "./program-role-widget.model";
 
 export interface ProgramCurrentApplication {
   projectId: number;
@@ -10,6 +11,11 @@ export interface ProgramCurrentApplication {
 
 /** Основная модель программы */
 export class Program {
+  preview?: boolean;
+  previewWidget?: ProgramRoleWidget;
+  draft?: boolean;
+  solutionActionAvailable?: boolean;
+  solutionActionBlockedReason?: string | null;
   id!: number;
   imageAddress!: string;
   coverImageAddress!: string;
@@ -27,9 +33,9 @@ export class Program {
   registrationManaged?: boolean;
   materials!: { title: string; url: string }[];
   shortDescription!: string;
-  datetimeRegistrationEnds!: string;
-  datetimeStarted!: string;
-  datetimeFinished!: string;
+  datetimeRegistrationEnds!: string | null;
+  datetimeStarted!: string | null;
+  datetimeFinished!: string | null;
   datetimeProjectSubmissionEnds!: string;
   datetimeEvaluationEnds!: string;
   viewsCount!: number;

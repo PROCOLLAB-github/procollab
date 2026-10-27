@@ -148,7 +148,15 @@
     }
     <section class="registration__card">
       <h2>Страница регистрации</h2>
-      @if (!data.published) {
+      @if (data.programDraft) {
+        <div appAlert="info">
+          <strong>Регистрация откроется вместе с программой</strong>
+          <p>
+            Сохраните анкету и проверьте ее в предпросмотре. Саму программу можно опубликовать из
+            подготовки к запуску.
+          </p>
+        </div>
+      } @else if (!data.published) {
         <div appAlert="warning">
           <strong>Форма еще не опубликована</strong>
           <p>Настройте анкету и проверьте ее в предпросмотре.</p>
@@ -175,7 +183,13 @@
           </button>
         </div>
       } @else {
-        <p>Ссылка появится после публикации формы.</p>
+        <p>
+          {{
+            data.programDraft
+              ? "Ссылка появится после публикации программы."
+              : "Ссылка появится после публикации формы."
+          }}
+        </p>
       }
       <div class="registration__actions">
         <button
@@ -198,7 +212,7 @@
           [appButtonLoading]="busy()"
           (click)="save(true)"
         >
-          Опубликовать форму
+          {{ data.programDraft ? "Сохранить анкету" : "Опубликовать форму" }}
         </button>
       </div>
     </section>
@@ -347,22 +361,7 @@
           </p>
         </form>
       } @else if (dialog() === "preview") {
-        <div class="registration__actions">
-          <button appButton="secondary" type="button" (click)="previewMobile.set(false)">
-            Компьютер</button
-          ><button appButton="secondary" type="button" (click)="previewMobile.set(true)">
-            Телефон
-          </button>
-        </div>
-        <div class="registration__preview" [class.registration__preview--mobile]="previewMobile()">
-          <h3>Анкета участника</h3>
-          <app-registration-fields
-            prefix="preview"
-            [fields]="draft().fields"
-            [group]="previewGroup"
-          /><button appButton="primary" type="button" disabled>Зарегистрироваться</button>
-        </div>
-        <p>Это предпросмотр. Аккаунт и участие не создаются.</p>
+        <app-registration-preview-content [fields]="draft().fields" [group]="previewGroup" />
       } @else if (dialog() === "importPreview") {
         @if (importResult(); as result) {
           <div appAlert="success">

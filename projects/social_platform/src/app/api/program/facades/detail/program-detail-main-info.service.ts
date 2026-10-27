@@ -49,6 +49,10 @@ export class ProgramDetailMainService {
   readonly programId = this.programDetailMainUIInfoService.programId;
 
   initializationProgramDetailMain(descEl: ElementRef | undefined): void {
+    if (this.programDetailMainUIInfoService.program()?.preview) {
+      this.newsInfoService.applySetNews({ results: [], count: 0 });
+      return;
+    }
     this.initializationProgramId();
     this.initializationProgramQueryParams();
     this.initializationProgram(descEl);
@@ -141,6 +145,7 @@ export class ProgramDetailMainService {
   }
 
   initScroll(target: HTMLElement, descEl: ElementRef | undefined): void {
+    if (this.programDetailMainUIInfoService.program()?.preview) return;
     this.checkDescriptionTimeout(descEl);
 
     fromEvent(target, "scroll")

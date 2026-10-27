@@ -42,6 +42,10 @@ export const AppRoutes = {
   },
 
   program: {
+    create: () => "/office/program/create",
+    managed: () => "/office/program/managed",
+    launch: (programId: number | string) => `/office/program/${programId}/launch`,
+    preview: (programId: number | string) => `/office/program/${programId}/preview`,
     publishedSolutions: (programId: number | string) =>
       `/office/program/${programId}/published-solutions`,
     publishedSolution: (programId: number | string, solutionId: number | string) =>

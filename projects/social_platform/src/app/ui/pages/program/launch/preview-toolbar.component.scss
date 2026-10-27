@@ -1,0 +1,77 @@
+/** @format */
+@use "styles/ui-foundation";
+@use "styles/program-management-controls";
+
+.ui-button.ui-button {
+  @include ui-foundation.button;
+  @include program-management-controls.compact-action;
+}
+
+.preview-toolbar {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: var(--black);
+
+  p {
+    margin: 0;
+  }
+
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+.preview-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: min(680px, calc(100vw - 32px));
+  max-height: min(860px, calc(100dvh - 48px));
+  padding: 24px;
+  font-size: 14px;
+
+  header {
+    display: flex;
+    flex-shrink: 0;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      width: 32px;
+      padding: 0;
+    }
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+  }
+
+  footer {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: flex-end;
+  }
+
+  &__scroll {
+    display: grid;
+    min-height: 0;
+    padding: 2px;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+::ng-deep .modal .modal__body.program-registration-preview {
+  width: 680px;
+  max-width: calc(100vw - 24px);
+  padding: 0;
+  overflow: hidden;
+}

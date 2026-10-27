@@ -29,7 +29,12 @@
           </div>
 
           <div class="program__content">
-            @if (program()!.isUserMember) {
+            @if (applicationBlockedMessage()) {
+              <p class="program__launch-notice" appAlert="info" role="status">
+                {{ applicationBlockedMessage() }}
+              </p>
+            }
+            @if (program()!.isUserMember && !program()!.preview) {
               <app-my-certificate [programId]="program()!.id" />
             }
             <div class="about program__about">

@@ -1,6 +1,9 @@
 <!-- @format -->
 
 <div class="detail">
+  @if (listType() === "program" && info()?.preview) {
+    <app-program-preview-toolbar />
+  }
   <div class="detail__body">
     @if (info()) {
       <div class="info detail__section detail__info">
@@ -191,6 +194,8 @@
                     <app-button
                       [size]="appWidth >= 1000 ? 'medium' : 'big'"
                       [disabled]="
+                        info().preview ||
+                        info().solutionActionAvailable === false ||
                         (info().solutionStorageMode !== 'solution' &&
                           (!!submissionProjectDateExpired || isProjectAssigned())) ||
                         applicationPending()
