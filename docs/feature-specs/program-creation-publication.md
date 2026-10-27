@@ -117,7 +117,7 @@ Nullable даты допускаются только у draft; DB constraint и
 - API: 1045 program tests и 135 project tests прошли на настоящем PostgreSQL 18 с Unicode ICU collation. После обновления dev дополнительно прошли 30 launch/public-project tests.
 - Локальный harness исключает 4 существующих native PDF tests: WeasyPrint/Pango завершает Python с Windows access violation. В репозитории тесты не пропущены; полный Linux PostgreSQL CI остается обязательным.
 - Django check, makemigrations --check, Black и flake8 проходят. Миграция применена на пустой локальной базе.
-- Angular: полный `npm run test:ci` — 496 files / 3055 tests плюс solution contract types. После обновления dev — 37 targeted tests, build:pr и browser integration.
+- Angular: полный `npm run test:ci` — 496 files / 3056 tests плюс solution contract types. После обновления dev — 37 targeted tests, build:pr и browser integration.
 - Browser: installed Edge/Playwright, реальный Angular build и Django API с локальной PostgreSQL базой. Тестовые учетные записи и данные изолированы. Внешние API и изображения заблокированы; поэтому remote fallback avatars на скриншотах могут быть недоступны.
 - В локальном static QA server изменяется только API origin при отдаче build; файлы окружений и исходный код не переключаются на fake API.
 - Проверены case-championship и noncompetitive full flow, создание трех форматов, реальная регистрация участника, readiness, обе анкеты preview, error/retry, no access, no results, mobile 360/390, CTA text color и отсутствие page errors.

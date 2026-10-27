@@ -54,7 +54,9 @@ export class ProgramShellInfoService {
 
   readonly actualPrograms = computed(() => {
     return this.programs()
-      .filter(p => Date.now() < Date.parse(p.datetimeRegistrationEnds))
+      .filter(
+        p => p.datetimeRegistrationEnds && Date.now() < Date.parse(p.datetimeRegistrationEnds),
+      )
       .slice(0, 3);
   });
 

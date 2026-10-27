@@ -49,7 +49,12 @@ export class ProgramDetailMainUIInfoService {
 
   applyFormatingProgramData(program: Program): void {
     this.program.set(program);
-    this.registerDateExpired.set(Date.now() > Date.parse(program.datetimeRegistrationEnds));
+    this.registerDateExpired.set(
+      Boolean(
+        program.datetimeRegistrationEnds &&
+        Date.now() > Date.parse(program.datetimeRegistrationEnds),
+      ),
+    );
     const evaluationEnds = Date.parse(program.datetimeEvaluationEnds ?? "");
     this.evaluationDateExpired.set(Number.isFinite(evaluationEnds) && Date.now() > evaluationEnds);
     this.registeredProgramModal.set(

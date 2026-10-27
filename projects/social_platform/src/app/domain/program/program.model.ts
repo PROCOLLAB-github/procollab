@@ -33,9 +33,9 @@ export class Program {
   registrationManaged?: boolean;
   materials!: { title: string; url: string }[];
   shortDescription!: string;
-  datetimeRegistrationEnds!: string;
-  datetimeStarted!: string;
-  datetimeFinished!: string;
+  datetimeRegistrationEnds!: string | null;
+  datetimeStarted!: string | null;
+  datetimeFinished!: string | null;
   datetimeProjectSubmissionEnds!: string;
   datetimeEvaluationEnds!: string;
   viewsCount!: number;

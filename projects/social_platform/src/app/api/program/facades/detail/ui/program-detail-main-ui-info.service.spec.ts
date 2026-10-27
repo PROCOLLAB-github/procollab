@@ -69,6 +69,23 @@ describe("ProgramDetailMainUIInfoService", () => {
         expect(service.evaluationDateExpired()).toBe(expired);
       }
     });
+
+    it("does not carry an expired registration into a draft without invented dates", () => {
+      const service = new ProgramDetailMainUIInfoService();
+      service.applyFormatingProgramData({ ...createProgram(1), datetimeRegistrationEnds: past });
+      expect(service.registerDateExpired()).toBe(true);
+      service.applyFormatingProgramData({
+        ...createProgram(2),
+        preview: true,
+        draft: true,
+        datetimeRegistrationEnds: null,
+        datetimeStarted: null,
+        datetimeFinished: null,
+      });
+      expect(service.registerDateExpired()).toBe(false);
+      expect(service.program()?.datetimeRegistrationEnds).toBeNull();
+      expect(service.registeredProgramModal()).toBe(false);
+    });
   });
 
   it("uses null as the required default current application", () => {
