@@ -8,7 +8,7 @@ import {
   OnInit,
   signal,
 } from "@angular/core";
-import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { filter, startWith } from "rxjs";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -19,6 +19,7 @@ import {
   FormLayoutDirective,
   IconComponent,
   PageHeaderComponent,
+  TabsComponent,
 } from "@uilib";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-case";
@@ -38,7 +39,7 @@ import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-u
     RouterOutlet,
     BackComponent,
     RouterLink,
-    RouterLinkActive,
+    TabsComponent,
     ButtonDirective,
     IconComponent,
   ],
@@ -50,6 +51,10 @@ export class ProgramComponent implements OnInit {
   private readonly destroy = inject(DestroyRef);
   private readonly router = inject(Router);
   readonly paths = AppRoutes;
+  readonly programTabs = [
+    { link: AppRoutes.program.list(), linkText: "Все программы", isRouterLinkActiveOptions: true },
+    { link: AppRoutes.program.managed(), linkText: "Я организую", isRouterLinkActiveOptions: true },
+  ];
   readonly canCreate = signal(false);
   readonly isManaged = signal(false);
   private readonly programInfoService = inject(ProgramInfoService);

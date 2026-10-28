@@ -39,6 +39,55 @@
   }
 }
 
+// Opt-in route navigation matching the UI kit's Tabs / Underline.
+.tabs.tabs--underline {
+  box-sizing: border-box;
+  display: flex;
+  gap: 0;
+  width: 100%;
+  min-height: 63px;
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: var(--ui-radius-card);
+
+  .tabs__item {
+    display: flex;
+    flex: 1 1 0;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+    min-height: 61px;
+    padding: 18px 20px;
+    margin: 0;
+    font: inherit;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--grey-for-text);
+    white-space: normal;
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+
+    &--active,
+    &:hover:not(:disabled) {
+      color: var(--black);
+      background: transparent;
+    }
+
+    &--active {
+      border-bottom-color: var(--black);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -3px;
+    }
+  }
+}
+
 @media screen and (max-width: 999px) {
   :host {
     display: block;

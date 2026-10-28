@@ -18,7 +18,12 @@ export interface TabItem {
   selector: "app-tabs",
   imports: [RouterLink, RouterLinkActive, IconComponent],
   template: `
-    <nav class="tabs" [class.tabs--steps]="appearance() === 'steps'" [attr.aria-label]="label()">
+    <nav
+      class="tabs"
+      [class.tabs--steps]="appearance() === 'steps'"
+      [class.tabs--underline]="appearance() === 'underline'"
+      [attr.aria-label]="label()"
+    >
       @for (item of items(); track $index) {
         @if (item.link && !item.disabled) {
           <a
@@ -63,5 +68,5 @@ export class TabsComponent {
   readonly label = input("Разделы");
   readonly active = input<string>();
   readonly selected = output<string>();
-  readonly appearance = input<"default" | "steps">("default");
+  readonly appearance = input<"default" | "steps" | "underline">("default");
 }

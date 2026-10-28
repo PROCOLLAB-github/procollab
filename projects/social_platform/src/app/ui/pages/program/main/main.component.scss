@@ -1,5 +1,11 @@
 @use "styles/responsive";
 
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
 .programs {
   display: grid;
   grid-template-columns: 1fr;

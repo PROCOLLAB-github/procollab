@@ -49,15 +49,14 @@
 }
 
 .program-navigation {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  display: block;
+  width: 100%;
   margin-bottom: 24px;
+}
 
-  &__active.ui-button {
-    color: var(--white);
-    background: var(--accent);
-  }
+.page__search {
+  width: 100%;
+  margin-bottom: 24px;
 }
 
 @media (max-width: 650px) {
@@ -68,9 +67,5 @@
     > a {
       margin-block: 6px;
     }
-  }
-
-  .program-navigation > a {
-    margin-block: 6px;
   }
 }
