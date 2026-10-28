@@ -27,6 +27,7 @@ import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-
 import { ManagedProgramsPage } from "@domain/program/program-launch.model";
 import { AppRoutes } from "@api/paths/app-routes";
 import { evaluationError } from "@utils/evaluation-workspace";
+import { ProgramCardComponent } from "../main/program-card/program-card.component";
 
 @Component({
   selector: "app-managed-programs",
@@ -37,6 +38,7 @@ import { evaluationError } from "@utils/evaluation-workspace";
     AlertDirective,
     ButtonDirective,
     PaginationComponent,
+    ProgramCardComponent,
   ],
   templateUrl: "./managed.component.html",
   styleUrl: "./managed.component.scss",

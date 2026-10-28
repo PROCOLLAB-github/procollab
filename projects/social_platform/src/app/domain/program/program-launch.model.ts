@@ -1,6 +1,7 @@
 /** @format */
 import { Program } from "./program.model";
 import { ManagementPage } from "./program-management.model";
+import { ProgramImageFraming } from "./program-image-framing.model";
 
 export type ProgramFormat = "case_championship" | "hackathon" | "noncompetitive";
 export const PROGRAM_FORMATS: { id: ProgramFormat; label: string; description: string }[] = [
@@ -24,6 +25,8 @@ export interface ManagedProgram {
   id: number;
   name: string;
   draft: boolean;
+  imageAddress?: string | null;
+  imageFraming?: ProgramImageFraming | null;
   programFormat: ProgramFormat | null;
   solutionStorageMode?: "legacy_project" | "solution";
   updatedAt: string;

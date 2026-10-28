@@ -1,6 +1,11 @@
 <!-- @format -->
 
-<div class="search" (click)="onSwitchSearch(true)" (clickOutside)="onClickOutside($event)">
+<div
+  class="search"
+  [class.search--inline]="appearance() === 'inline'"
+  (click)="onSwitchSearch(true)"
+  (clickOutside)="onClickOutside($event)"
+>
   <i
     class="search__icon"
     [class.search__icon--open]="open"
@@ -19,6 +24,7 @@
           [type]="type()"
           [value]="value"
           [placeholder]="placeholder()"
+          [attr.aria-label]="ariaLabel()"
           (input)="onInput($event)"
         />
       </div>

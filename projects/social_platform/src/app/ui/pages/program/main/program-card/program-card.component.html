@@ -1,94 +1,120 @@
 <!-- @format -->
-
-@if (desktopLayout()) {
-  @if (program()) {
+<div class="program-card" [class.program-card--managed]="management()">
+  @if (desktopLayout()) {
     <div class="card">
       <div class="card__photo">
         <app-avatar
-          [url]="program().imageAddress"
+          [url]="program().imageAddress || ''"
           [imageFraming]="program().imageFraming?.logo ?? null"
           [size]="100"
-        ></app-avatar>
+        />
       </div>
-
       <div class="card__info">
-        <p class="text-body-10 card__name" style="padding-left: 25px">{{ program().name }}</p>
-
+        <p class="text-body-10 card__name" style="padding-left: 25px" [title]="program().name">
+          {{ program().name }}
+        </p>
         <p
           class="text-body-10 card__description card__registration"
-          [ngClass]="{
-            'card__registration--ended': registerDateExpired,
-            'card__registration--participating': !registerDateExpired && program().isUserMember,
-            'card__registration--actual':
-              !registerDateExpired && (!program().isUserMember || !program().isUserManager),
-          }"
+          [ngClass]="'card__registration--' + registrationState()"
         >
-          <!-- ? "Регистрация до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM") -->
-          {{
-            registerDateExpired
-              ? "регистрация завершена"
-              : program().isUserMember
-                ? "ты уже участвуешь!"
-                : "Регистрация до " + (program().datetimeRegistrationEnds | date: "dd MMMM")
-          }}
+          <ng-container [ngTemplateOutlet]="registrationText" />
         </p>
-
         <div class="card__dates">
-          <p class="text-body-10 card__description" style="padding-left: 25px">
-            {{ program().datetimeStarted | date: "dd.MM.yyyy" }}
-          </p>
-          <p class="text-body-10 card__description">-</p>
-          <p class="text-body-10 card__description">
-            {{ program().datetimeFinished | date: "dd.MM.yyyy" }}
-          </p>
-          <!-- TODO: изменить когда на бэке для программ будет возможность для регионов поле -->
-          <p class="text-body-10 card__description">• для всей России</p>
+          @if (program().datetimeStarted && program().datetimeFinished) {
+            <p class="text-body-10 card__description" style="padding-left: 25px">
+              {{ program().datetimeStarted | date: "dd.MM.yyyy" }}
+            </p>
+            <p class="text-body-10 card__description">-</p>
+            <p class="text-body-10 card__description">
+              {{ program().datetimeFinished | date: "dd.MM.yyyy" }}
+            </p>
+            <p class="text-body-10 card__description">• для всей России</p>
+          } @else {
+            <p class="text-body-10 card__description" style="padding-left: 25px">
+              {{
+                program().datetimeStarted || program().datetimeFinished
+                  ? "Сроки заполнены не полностью"
+                  : "Сроки не заданы"
+              }}
+            </p>
+          }
         </div>
       </div>
     </div>
-  }
-} @else {
-  @if (program()) {
-    <div appCard [interactive]="true" class="card">
+  } @else {
+    <div appCard [interactive]="!management()" class="card">
       <div class="card__photo">
         <app-avatar
-          [url]="program().imageAddress"
+          [url]="program().imageAddress || ''"
           [imageFraming]="program().imageFraming?.logo ?? null"
           [size]="64"
-        ></app-avatar>
+        />
       </div>
-
       <div class="card__info">
         <h3 class="card__name" [title]="program().name">{{ program().name }}</h3>
-
         <p
           class="card__description card__registration"
-          [ngClass]="{
-            'card__registration--ended': registerDateExpired,
-            'card__registration--participating': !registerDateExpired && program().isUserMember,
-            'card__registration--actual':
-              !registerDateExpired && (!program().isUserMember || !program().isUserManager),
-          }"
+          [ngClass]="'card__registration--' + registrationState()"
         >
-          <!-- ? "Регистрация до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM") -->
-          {{
-            registerDateExpired
-              ? "регистрация завершена"
-              : program().isUserMember
-                ? "ты уже участвуешь!"
-                : "Регистрация до " + (program().datetimeRegistrationEnds | date: "dd MMMM")
-          }}
+          <ng-container [ngTemplateOutlet]="registrationText" />
         </p>
-
         <div class="card__dates">
-          <p class="card__description">
-            {{ program().datetimeStarted | date: "dd.MM.yyyy" }} -
-            {{ program().datetimeFinished | date: "dd.MM.yyyy" }}
-          </p>
-          <!-- TODO: изменить когда на бэке для программ будет возможность для регионов поле -->
-          <p class="card__description card__region">для всей России</p>
+          @if (program().datetimeStarted && program().datetimeFinished) {
+            <p class="card__description">
+              {{ program().datetimeStarted | date: "dd.MM.yyyy" }} -
+              {{ program().datetimeFinished | date: "dd.MM.yyyy" }}
+            </p>
+            <p class="card__description card__region">для всей России</p>
+          } @else {
+            <p class="card__description">
+              {{
+                program().datetimeStarted || program().datetimeFinished
+                  ? "Сроки заполнены не полностью"
+                  : "Сроки не заданы"
+              }}
+            </p>
+          }
         </div>
       </div>
     </div>
   }
-}
+  @if (management()) {
+    <div class="program-card__actions">
+      <p class="program-card__publication">
+        {{ program().draft ? "Не виден участникам" : "Опубликована" }}
+      </p>
+      <a
+        appButton="secondary"
+        [class.program-card__continue]="program().draft"
+        [routerLink]="
+          program().draft
+            ? paths.program.launch(program().id)
+            : paths.program.management(program().id)
+        "
+        [attr.aria-label]="
+          (program().draft ? 'Продолжить настройку: ' : 'Управлять: ') + program().name
+        "
+        >{{ program().draft ? "Продолжить настройку" : "Управлять" }}</a
+      >
+    </div>
+  }
+</div>
+<ng-template #registrationText>
+  @switch (registrationState()) {
+    @case ("draft") {
+      Черновик
+    }
+    @case ("ended") {
+      регистрация завершена
+    }
+    @case ("participating") {
+      ты уже участвуешь!
+    }
+    @case ("actual") {
+      Регистрация до {{ program().datetimeRegistrationEnds | date: "dd MMMM" }}
+    }
+    @default {
+      Срок регистрации не задан
+    }
+  }
+</ng-template>

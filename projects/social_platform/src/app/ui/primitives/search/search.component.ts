@@ -54,6 +54,8 @@ import { IconComponent } from "../icon/icon.component";
 export class SearchComponent implements ControlValueAccessor, OnInit {
   /** Текст подсказки */
   placeholder = input("");
+  readonly ariaLabel = input("Поиск");
+  readonly appearance = input<"default" | "inline">("default");
 
   /** Тип поля ввода */
   type = input<"text" | "password" | "email">("text");

@@ -2,8 +2,77 @@
 
 @use "styles/ui-foundation";
 @use "styles/responsive";
+@use "styles/program-management-controls";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.program-card {
+  &__actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  &__publication {
+    min-width: 0;
+    margin: 0;
+    font-size: 10px;
+    line-height: 13px;
+    color: var(--dark-grey);
+  }
+
+  .ui-button.ui-button {
+    @include ui-foundation.button;
+    @include program-management-controls.compact-action;
+
+    flex-shrink: 0;
+    min-width: 110px;
+  }
+
+  .program-card__continue {
+    width: 188px;
+  }
+}
+
+.card__registration--draft,
+.card__registration--not-set {
+  background: var(--dark-grey);
+}
 
 @media screen and (max-width: 999px) {
+  .program-card--managed {
+    @include ui-foundation.card;
+
+    .card {
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+  }
+
+  .program-card__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+
+    .ui-button.ui-button {
+      justify-self: stretch;
+      width: 100%;
+      min-height: 44px;
+    }
+  }
+
+  .program-card__publication {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
   .card {
     @include ui-foundation.card;
 
@@ -72,6 +141,21 @@
 }
 
 @media screen and (min-width: 1000px) {
+  .program-card {
+    max-width: 333px;
+  }
+
+  .program-card--managed {
+    .card__info {
+      flex: 1;
+    }
+
+    .ui-button.ui-button.program-card__continue {
+      padding-inline: 12px;
+      white-space: nowrap;
+    }
+  }
+
   .card {
     position: relative;
     display: flex;

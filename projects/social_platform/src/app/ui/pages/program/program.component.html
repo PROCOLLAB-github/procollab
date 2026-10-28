@@ -10,26 +10,24 @@
         >
       }
     </div>
-
-    @if (!isManaged()) {
-      <form appFormLayout class="page__search" [formGroup]="searchForm">
-        <app-search formControlName="search"></app-search>
-      </form>
-    }
   </div>
 
-  <nav class="program-navigation" aria-label="Программы">
-    <a
-      appButton="secondary"
-      [routerLink]="paths.program.list()"
-      routerLinkActive="program-navigation__active"
-      >Все программы</a
-    ><a
-      appButton="secondary"
-      [routerLink]="paths.program.managed()"
-      routerLinkActive="program-navigation__active"
-      >Я организую</a
-    >
-  </nav>
+  <app-tabs
+    class="program-navigation"
+    label="Программы"
+    appearance="underline"
+    [items]="programTabs"
+  />
+  @if (!isManaged()) {
+    <form appFormLayout class="page__search" [formGroup]="searchForm">
+      <app-search
+        formControlName="search"
+        [openable]="false"
+        appearance="inline"
+        placeholder="Поиск"
+        ariaLabel="Поиск по названию программы"
+      />
+    </form>
+  }
   <router-outlet></router-outlet>
 </main>

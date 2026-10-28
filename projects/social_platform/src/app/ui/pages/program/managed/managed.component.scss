@@ -4,6 +4,7 @@
 
 :host {
   display: block;
+  width: 100%;
   min-width: 0;
 }
 
@@ -31,50 +32,23 @@
   }
 
   &__search {
-    display: grid;
-    gap: 8px;
-    max-width: 480px;
+    width: 100%;
     margin-bottom: 24px;
   }
 
   &__list {
     display: grid;
     gap: 24px;
-    padding: 20px;
-    background: var(--light-white);
-    border-radius: 15px;
+    align-items: start;
   }
 
-  &__row {
-    display: flex;
-    gap: 24px;
-    align-items: center;
-    justify-content: space-between;
-
-    > div {
-      min-width: 0;
-    }
-
-    > a {
-      flex-shrink: 0;
-    }
+  &__empty {
+    grid-column: 1 / -1;
   }
 }
 
-@media (max-width: 999px) {
-  .managed {
-    &__list {
-      padding: 16px;
-    }
-
-    &__row {
-      display: grid;
-      gap: 12px;
-
-      > a {
-        justify-self: start;
-        margin-block: 6px;
-      }
-    }
+@media (min-width: 1000px) {
+  .managed__list {
+    grid-template-columns: repeat(2, minmax(0, 333px));
   }
 }
