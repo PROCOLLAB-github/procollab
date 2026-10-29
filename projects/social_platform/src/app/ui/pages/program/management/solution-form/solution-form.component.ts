@@ -485,6 +485,24 @@ export class ManagementSolutionFormComponent {
     this.previewGroup.set(solutionFieldsGroup(fields));
     this.previewOpen.set(true);
   }
+  optionsProblem(field: EditableSolutionField): string | null {
+    if (
+      !["select", "radio"].includes(field.type) ||
+      (field.options.length && field.options.every(option => option.trim()))
+    )
+      return null;
+    if (field.purpose === "case")
+      return this.template() === "hackathon"
+        ? "Добавьте хотя бы одну задачу или трек."
+        : "Добавьте хотя бы один кейс.";
+    return "Добавьте хотя бы один вариант выбора.";
+  }
+  optionsAction(field: EditableSolutionField): string {
+    if (!this.optionsProblem(field)) return "Изменить";
+    if (field.purpose === "case")
+      return this.template() === "hackathon" ? "Добавить задачи" : "Добавить кейсы";
+    return "Добавить варианты";
+  }
   save() {
     if (
       this.saving() ||
@@ -495,6 +513,12 @@ export class ManagementSolutionFormComponent {
       this.missingIds().length
     )
       return;
+    const incomplete = this.fields().find(field => this.optionsProblem(field));
+    if (incomplete) {
+      this.edit(incomplete);
+      this.editorError.set(this.optionsProblem(incomplete)!);
+      return;
+    }
     this.saving.set(true);
     this.error.set("");
     this.notice.set("");

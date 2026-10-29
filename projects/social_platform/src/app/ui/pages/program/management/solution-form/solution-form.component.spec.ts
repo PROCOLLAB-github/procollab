@@ -129,6 +129,32 @@ describe("Конструктор формы решения", () => {
       true,
     );
   });
+  it.each(["case_championship", "hackathon"] as const)(
+    "guides an incomplete %s template to its case editor without a failed request",
+    async template => {
+      read.execute.mockReturnValue(
+        of(ok({ ...structuredClone(base), hasAnswers: false, fieldsUsage: [] })),
+      );
+      const fixture = await setup(),
+        component = fixture.componentInstance;
+      component.templateChoice.setValue(template);
+      await component.applyTemplate();
+      fixture.detectChanges();
+      const caseField = component.fields().find(field => field.purpose === "case")!;
+      const action = template === "hackathon" ? "Добавить задачи" : "Добавить кейсы";
+      expect(fixture.nativeElement.textContent).toContain(action);
+      component.save();
+      expect(save.execute).not.toHaveBeenCalled();
+      expect(component.editing()).toBe(caseField.clientKey);
+      expect(component.editorError()).toContain(template === "hackathon" ? "трек" : "кейс");
+      component.addOption();
+      component.editor.controls.options.at(0).setValue("Городская среда");
+      component.applyField();
+      component.save();
+      expect(save.execute).toHaveBeenCalledTimes(1);
+      expect(save.execute.mock.calls[0][1].fields[0].options).toEqual(["Городская среда"]);
+    },
+  );
   it("keeps local edits on failure and merges fresh fields on revision conflict", async () => {
     const fixture = await setup(),
       component = fixture.componentInstance;

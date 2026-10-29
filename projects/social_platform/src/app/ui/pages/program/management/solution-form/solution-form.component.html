@@ -106,6 +106,9 @@
                 добавьте его заново.
               </p>
             }
+            @if (optionsProblem(field); as problem) {
+              <p appAlert="warning">{{ problem }}</p>
+            }
           </div>
           <div class="project-form__actions">
             <button
@@ -125,7 +128,7 @@
             >
               Ниже</button
             ><button appButton="text" type="button" [disabled]="saving()" (click)="edit(field)">
-              Изменить</button
+              {{ optionsAction(field) }}</button
             ><button
               appButton="text"
               type="button"

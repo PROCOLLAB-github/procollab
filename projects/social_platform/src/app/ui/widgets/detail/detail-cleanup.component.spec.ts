@@ -133,6 +133,22 @@ describe("Detail cleanup actions", () => {
     fixture.detectChanges();
     expect(button().disabled).toBe(true);
   });
+  it.each(["", "https://example.test/cover.png"])(
+    "shows exactly one program heading on desktop and mobile with cover %s",
+    coverImageAddress => {
+      info.set({ ...Program.default(), name: "Название программы", coverImageAddress });
+      const fixture = TestBed.createComponent(DeatilComponent);
+      fixture.detectChanges();
+      for (const width of [1440, 390]) {
+        Object.assign(fixture.componentInstance, { appWidth: width });
+        fixture.changeDetectorRef.markForCheck();
+        fixture.detectChanges();
+        const headings = fixture.nativeElement.querySelectorAll("h1");
+        expect(headings).toHaveLength(1);
+        expect(headings[0].textContent).toContain("Название программы");
+      }
+    },
+  );
   it("organizer has management without a duplicate public-solutions action", () => {
     manager.set(true);
     info.set({ ...Program.default(), solutionStorageMode: "solution" });

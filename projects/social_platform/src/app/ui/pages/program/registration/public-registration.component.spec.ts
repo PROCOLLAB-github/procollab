@@ -100,7 +100,13 @@ describe("Публичная регистрация участника", () => {
     const { component, api } = setup(true);
     component.submit();
     expect(api.submit).not.toHaveBeenCalled();
-    expect(component.error()).toBeTruthy();
+    expect(component.error()).toBe("Заполните обязательные поля анкеты.");
+  });
+  it("напоминает о согласиях только при создании аккаунта", () => {
+    const { component, api } = setup();
+    component.submit();
+    expect(api.submit).not.toHaveBeenCalled();
+    expect(component.error()).toBe("Заполните обязательные поля и подтвердите согласия.");
   });
   it("не сохраняет пароль в браузере после регистрации", () => {
     const { component } = setup();

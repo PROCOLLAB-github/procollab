@@ -181,6 +181,12 @@ $detail-bar-mb: 12px;
     overflow-wrap: anywhere;
   }
 
+  &__program-heading {
+    display: block;
+    margin-bottom: 20px;
+    overflow-wrap: anywhere;
+  }
+
   &__cover-frame {
     position: absolute;
     inset: 0;
