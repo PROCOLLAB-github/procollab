@@ -820,7 +820,12 @@
                 type="datetime-local"
                 [id]="field.key"
                 [formControlName]="field.key"
+                [attr.aria-invalid]="dateError(field.key) ? 'true' : null"
+                [attr.aria-describedby]="dateError(field.key) ? field.key + '-error' : null"
             /></label>
+            @if (dateError(field.key); as error) {
+              <p appAlert="error" role="alert" [id]="field.key + '-error'">{{ error }}</p>
+            }
           }
           <p class="management__muted">
             Если отдельный срок сдачи не задан, действует срок окончания регистрации.

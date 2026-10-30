@@ -1197,6 +1197,18 @@ export class ProgramManagementComponent implements OnInit {
       control.updateValueAndValidity({ emitEvent: false });
     }
   }
+  dateError(field: string): string | null {
+    const values = this.datesForm.getRawValue();
+    const timestamp = (value: string | null) => (value ? Date.parse(`${value}+03:00`) : Number.NaN);
+    const start = timestamp(values.datetimeStarted),
+      finish = timestamp(values.datetimeFinished),
+      registration = timestamp(values.datetimeRegistrationEnds);
+    if (field === "datetimeFinished" && finish <= start)
+      return "Окончание программы должно быть позже начала.";
+    if (field === "datetimeRegistrationEnds" && registration > finish)
+      return "Регистрация должна завершиться не позже окончания программы.";
+    return null;
+  }
   save(confirmReopen = false): void {
     const p = this.state.program(),
       section = this.settingsTab();
@@ -1212,9 +1224,13 @@ export class ProgramManagementComponent implements OnInit {
     )
       return;
     const form = section === "basic" ? this.basicForm : this.datesForm;
-    if (form.invalid) {
+    const dateError =
+      section === "dates"
+        ? this.dateFields.map(field => this.dateError(field.key)).find(Boolean)
+        : null;
+    if (form.invalid || dateError) {
       form.markAllAsTouched();
-      this.formError.set("Заполните обязательные поля.");
+      this.formError.set(dateError || "Заполните обязательные поля.");
       return;
     }
     const body: ManagementSettingsWrite = { expectedUpdatedAt: p.updatedAt, confirmReopen };

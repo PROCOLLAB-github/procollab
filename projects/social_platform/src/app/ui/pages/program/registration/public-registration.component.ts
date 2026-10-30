@@ -208,7 +208,11 @@ export class PublicRegistrationComponent {
     this.answers.markAllAsTouched();
     if (!this.authenticated()) this.account.markAllAsTouched();
     if (this.answers.invalid || (!this.authenticated() && this.account.invalid)) {
-      this.error.set("Заполните обязательные поля и подтвердите согласие.");
+      this.error.set(
+        this.authenticated()
+          ? "Заполните обязательные поля анкеты."
+          : "Заполните обязательные поля и подтвердите согласия.",
+      );
       return;
     }
     const account = this.account.getRawValue();

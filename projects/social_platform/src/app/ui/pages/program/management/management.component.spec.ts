@@ -113,6 +113,49 @@ describe("Сохранение настроек организатора", () =>
     expect(component.basicForm.dirty).toBe(true);
     expect(component.formError()).toContain("Данные изменились");
   });
+  it.each(["2026-09-30T18:00", "2026-10-01T15:00", "2026-10-01T15:00:00"])(
+    "не отправляет несогласованные сроки и сохраняет введенное окончание %s",
+    finish => {
+      const { component, save } = setup();
+      component.settingsTab.set("dates");
+      component.datesForm.controls.datetimeFinished.setValue(finish);
+      component.datesForm.controls.datetimeFinished.markAsDirty();
+      component.save();
+      expect(save).not.toHaveBeenCalled();
+      expect(component.dateError("datetimeFinished")).toContain("позже начала");
+      expect(component.dateError("datetimeRegistrationEnds")).toContain("не позже окончания");
+      expect(component.datesForm.controls.datetimeFinished.value).toBe(finish);
+      expect(component.datesForm.dirty).toBe(true);
+    },
+  );
+  it("разрешает регистрацию после старта вплоть до окончания программы", () => {
+    const { component, save } = setup();
+    component.settingsTab.set("dates");
+    const registration = component.datesForm.controls.datetimeRegistrationEnds;
+    registration.setValue(component.datesForm.controls.datetimeFinished.value);
+    registration.markAsDirty();
+    component.save();
+    expect(component.dateError("datetimeRegistrationEnds")).toBeNull();
+    expect(save).toHaveBeenCalledWith(1, "dates", {
+      expectedUpdatedAt: program.updatedAt,
+      confirmReopen: false,
+      datetimeRegistrationEnds: new Date(program.datetimeFinished!).toISOString(),
+    });
+  });
+  it("не требует полного календаря черновика", () => {
+    const { component, state, save } = setup();
+    state.program.set({ ...program, draft: true });
+    component.resetForms();
+    component.settingsTab.set("dates");
+    component.datesForm.controls.datetimeFinished.setValue("");
+    component.datesForm.controls.datetimeFinished.markAsDirty();
+    component.save();
+    expect(save).toHaveBeenCalledWith(1, "dates", {
+      expectedUpdatedAt: program.updatedAt,
+      confirmReopen: false,
+      datetimeFinished: null,
+    });
+  });
   it("сохраняет mobile URL и полный framing; 409 оставляет кадр для повторной попытки", () => {
     const { component, save } = setup();
     component.settingsTab.set("basic");
