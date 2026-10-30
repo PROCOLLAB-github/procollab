@@ -91,7 +91,7 @@
             ></ng-container>
           </div>
 
-          @if (appWidth >= 1000 && listType() === "program") {
+          @if (appWidth >= 1000 && listType() === "program" && !publicationsOnly()) {
             <h1 class="info__program-heading text-body-18">{{ info().name }}</h1>
           }
 

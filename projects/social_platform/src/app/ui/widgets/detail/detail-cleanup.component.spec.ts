@@ -10,6 +10,8 @@ import { ProjectFormService } from "@api/project/project-form.service";
 import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
 import { ChatStateService } from "@domain/shared/chat-state.service";
 import { Program } from "@domain/program/program.model";
+import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
+import { PublicProgramSolutionsComponent } from "@ui/pages/program/published-solutions/public-program-solutions.component";
 import { DeatilComponent } from "./detail.component";
 import { DetailInfoService } from "./services/detail-info.service";
 import { DetailProgramInfoService } from "./services/program/detail-program-info.service";
@@ -49,9 +51,10 @@ describe("Detail cleanup actions", () => {
       },
     );
     await TestBed.configureTestingModule({
-      imports: [DeatilComponent],
+      imports: [DeatilComponent, PublicProgramSolutionsComponent],
       providers: [
         provideRouter([]),
+        { provide: ProgramDetailMainUIInfoService, useValue: { program: info } },
         { provide: ProjectFormService, useValue: { getForm: () => new FormGroup({}) } },
         { provide: ChatStateService, useValue: { userOnlineStatusCache: of({}) } },
       ],
@@ -146,6 +149,23 @@ describe("Detail cleanup actions", () => {
         const headings = fixture.nativeElement.querySelectorAll("h1");
         expect(headings).toHaveLength(1);
         expect(headings[0].textContent).toContain("Название программы");
+      }
+    },
+  );
+  it.each(["", "https://example.test/cover.png"])(
+    "keeps one desktop heading in the public solutions page with cover %s",
+    coverImageAddress => {
+      const previousWidth = window.innerWidth;
+      Object.defineProperty(window, "innerWidth", { configurable: true, value: 1440 });
+      try {
+        info.set({ ...Program.default(), name: "Публичная программа", coverImageAddress });
+        const fixture = TestBed.createComponent(PublicProgramSolutionsComponent);
+        fixture.detectChanges();
+        const headings = fixture.nativeElement.querySelectorAll("h1");
+        expect(headings).toHaveLength(1);
+        expect(headings[0].textContent).toContain("Публичная программа");
+      } finally {
+        Object.defineProperty(window, "innerWidth", { configurable: true, value: previousWidth });
       }
     },
   );
