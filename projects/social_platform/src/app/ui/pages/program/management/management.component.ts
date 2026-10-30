@@ -244,6 +244,7 @@ export class ProgramManagementComponent implements OnInit {
   });
   private searchNavigation: { value: string } | null = null;
   readonly saving = signal(false);
+  readonly returningToDraft = signal(false);
   readonly certificatesForm = viewChild(ManagementCertificatesComponent);
   readonly certificatesStatus = signal({ dirty: false, busy: false });
   readonly uploading = signal<string | null>(null);
@@ -1208,6 +1209,62 @@ export class ProgramManagementComponent implements OnInit {
     if (field === "datetimeRegistrationEnds" && registration > finish)
       return "Регистрация должна завершиться не позже окончания программы.";
     return null;
+  }
+  async returnToDraft(): Promise<void> {
+    const program = this.state.program();
+    if (
+      !program ||
+      program.draft ||
+      this.saving() ||
+      this.uploading() ||
+      this.state.pending() ||
+      this.dirty() ||
+      this.confirmation()
+    )
+      return;
+    const yes = await this.confirm(
+      "Вернуть программу в черновик?",
+      "Программа исчезнет из каталога и станет недоступна участникам. Участники, заявки, решения и оценки сохранятся. Программу можно будет опубликовать снова через подготовку к запуску.",
+      "Вернуть в черновик",
+    );
+    if (
+      !yes ||
+      this.destroyRef.destroyed ||
+      this.saving() ||
+      this.uploading() ||
+      this.dirty() ||
+      this.state.program()?.id !== program.id ||
+      this.state.program()?.updatedAt !== program.updatedAt
+    )
+      return;
+    this.saving.set(true);
+    this.returningToDraft.set(true);
+    this.saved.set(false);
+    this.formError.set(null);
+    this.basicForm.disable({ emitEvent: false });
+    this.state.api
+      .returnToDraft(program.id, program.updatedAt)
+      .pipe(
+        finalize(() => {
+          this.basicForm.enable({ emitEvent: false });
+          this.saving.set(false);
+          this.returningToDraft.set(false);
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: result => {
+          if (this.state.program()?.id !== program.id) return;
+          this.state.program.set(result);
+          this.saved.set(true);
+          afterNextRender(() => this.document.getElementById("program-launch-link")?.focus(), {
+            injector: this.injector,
+          });
+        },
+        error: (error: HttpErrorResponse) => {
+          if (this.state.program()?.id === program.id) this.formError.set(this.errorMessage(error));
+        },
+      });
   }
   save(confirmReopen = false): void {
     const p = this.state.program(),

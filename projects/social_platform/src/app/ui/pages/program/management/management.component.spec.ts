@@ -237,6 +237,9 @@ describe("Списки управления программой в DOM", () => 
       team: signal<ManagementTeam | null>(null),
       context: null as ManagementContext | null,
       api: {
+        returnToDraft: vi.fn<(id: number, version: string) => Observable<ProgramManagement>>(() =>
+          of({ ...program, draft: true, updatedAt: "2026-10-30T10:01:00Z" }),
+        ),
         previewProjectAction: vi.fn(() =>
           of({
             items: [],
@@ -302,6 +305,104 @@ describe("Списки управления программой в DOM", () => 
     const element = () => harness.routeNativeElement!;
     return { harness, component, state, project, element, uploadFile, uploaded };
   }
+
+  it("возврат в черновик открывает подтверждение; отмена не отправляет запрос", async () => {
+    const { component, state, element, harness } = await setup("settings", "?tab=basic");
+    const button = [...element().querySelectorAll<HTMLButtonElement>("button")].find(
+      item => item.textContent?.trim() === "Вернуть в черновик",
+    )!;
+    expect(button).toBeTruthy();
+    button.click();
+    harness.detectChanges();
+    expect(component.confirmation()?.text).toContain("решения и оценки сохранятся");
+    expect(state.api.returnToDraft).not.toHaveBeenCalled();
+    component.resolveConfirmation(false);
+    await Promise.resolve();
+    expect(state.api.returnToDraft).not.toHaveBeenCalled();
+    expect(state.program().draft).toBeFalsy();
+  });
+
+  it("подтверждение блокирует повтор и уход, затем показывает черновик и подготовку к запуску", async () => {
+    const { component, state, element, harness } = await setup("settings", "?tab=basic");
+    const response = new Subject<ProgramManagement>();
+    state.api.returnToDraft.mockReturnValue(response);
+    const action = component.returnToDraft();
+    component.resolveConfirmation(true);
+    await action;
+    expect(state.api.returnToDraft).toHaveBeenCalledWith(program.id, program.updatedAt);
+    expect(component.returningToDraft()).toBe(true);
+    expect(component.basicForm.disabled).toBe(true);
+    expect(await component.canLeave()).toBe(false);
+    await component.returnToDraft();
+    expect(state.api.returnToDraft).toHaveBeenCalledTimes(1);
+    response.next({ ...program, draft: true, updatedAt: "2026-10-30T10:01:00Z" });
+    response.complete();
+    harness.detectChanges();
+    expect(component.basicForm.enabled).toBe(true);
+    expect(component.returningToDraft()).toBe(false);
+    expect(state.program().draft).toBe(true);
+    expect(element().textContent).toContain("Черновик · Не виден участникам");
+    expect(element().textContent).toContain("К подготовке к запуску");
+    expect(element().querySelector("#program-publication-title")).toBeNull();
+  });
+
+  it("несохраненные настройки блокируют возврат без потери введенного текста", async () => {
+    const { component, state, element, harness } = await setup("settings", "?tab=basic");
+    component.basicForm.controls.name.setValue("Мое название");
+    component.basicForm.controls.name.markAsDirty();
+    harness.detectChanges();
+    const button = [...element().querySelectorAll<HTMLButtonElement>("button")].find(
+      item => item.textContent?.trim() === "Вернуть в черновик",
+    )!;
+    expect(button.disabled).toBe(true);
+    expect(button.getAttribute("aria-describedby")).toBe("program-publication-dirty");
+    await component.returnToDraft();
+    expect(component.confirmation()).toBeNull();
+    expect(state.api.returnToDraft).not.toHaveBeenCalled();
+    expect(component.basicForm.controls.name.value).toBe("Мое название");
+    expect(component.basicForm.dirty).toBe(true);
+  });
+
+  it.each([409, 503])(
+    "ошибка %s сохраняет опубликованный статус и разрешает повтор",
+    async status => {
+      const { component, state } = await setup("settings", "?tab=basic");
+      state.api.returnToDraft.mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status,
+              error: { detail: "Программа изменена другим организатором" },
+            }),
+        ),
+      );
+      const action = component.returnToDraft();
+      component.resolveConfirmation(true);
+      await action;
+      expect(state.program().draft).toBeFalsy();
+      expect(component.formError()).toBeTruthy();
+      expect(component.returningToDraft()).toBe(false);
+      expect(component.basicForm.enabled).toBe(true);
+      expect(component.basicForm.controls.name.value).toBe(program.name);
+    },
+  );
+
+  it("подтверждение после смены программы не вызывает действие для прежнего ID", async () => {
+    const { component, state } = await setup("settings", "?tab=basic");
+    const action = component.returnToDraft();
+    state.program.set({ ...program, id: 2 });
+    component.resolveConfirmation(true);
+    await action;
+    expect(state.api.returnToDraft).not.toHaveBeenCalled();
+  });
+
+  it("у черновика нет обратной кнопки", async () => {
+    const { state, element, harness } = await setup("settings", "?tab=basic");
+    state.program.set({ ...program, draft: true });
+    harness.detectChanges();
+    expect(element().querySelector("#program-publication-title")).toBeNull();
+    expect(element().textContent).toContain("К подготовке к запуску");
+  });
 
   it("действия строки используют ID связи, а массовая сдача включает другие страницы", async () => {
     const { component, project } = await setup("projects");

@@ -43,6 +43,10 @@ export abstract class ProgramManagementRepositoryPort {
     body: ManagementProjectFormWrite,
   ): Observable<ManagementProjectForm>;
   abstract get(programId: number): Observable<ProgramManagement>;
+  abstract returnToDraft(
+    programId: number,
+    expectedUpdatedAt: string,
+  ): Observable<ProgramManagement>;
   abstract participants(
     programId: number,
     query: ManagementQuery,

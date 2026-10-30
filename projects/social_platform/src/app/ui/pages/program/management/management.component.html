@@ -17,7 +17,10 @@
   </header>
   @if (state.program()?.draft) {
     <p class="management__muted">Черновик · Не виден участникам</p>
-    <a class="management__back" [routerLink]="paths.program.launch(state.program()!.id)"
+    <a
+      id="program-launch-link"
+      class="management__back"
+      [routerLink]="paths.program.launch(state.program()!.id)"
       >К подготовке к запуску</a
     >
   }
@@ -808,6 +811,34 @@
             </button>
           </div>
         </form>
+        @if (!program.draft) {
+          <section
+            class="management__card management__form"
+            aria-labelledby="program-publication-title"
+          >
+            <h2 id="program-publication-title">Публикация программы</h2>
+            <p class="management__muted">
+              Можно скрыть программу от участников, сохранив заявки, решения и оценки.
+            </p>
+            <div class="management__inline">
+              <button
+                type="button"
+                appButton="secondary"
+                [appButtonLoading]="returningToDraft()"
+                [disabled]="dirty() || saving() || !!uploading() || state.pending()"
+                [attr.aria-describedby]="dirty() ? 'program-publication-dirty' : null"
+                (click)="returnToDraft()"
+              >
+                Вернуть в черновик
+              </button>
+            </div>
+            @if (dirty()) {
+              <p class="management__muted" id="program-publication-dirty">
+                Сначала сохраните или отмените изменения в настройках.
+              </p>
+            }
+          </section>
+        }
       } @else if (settingsTab() === "dates") {
         <form [formGroup]="datesForm" (ngSubmit)="save()" class="management__card management__form">
           <h2>Календарь программы</h2>

@@ -43,6 +43,9 @@ export class ProgramManagementUseCase {
   get(id: number) {
     return this.repository.get(id);
   }
+  returnToDraft(id: number, expectedUpdatedAt: string) {
+    return this.repository.returnToDraft(id, expectedUpdatedAt);
+  }
   participants(id: number, q: ManagementQuery) {
     return this.repository.participants(id, q);
   }
