@@ -76,6 +76,9 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
   get(id: number) {
     return this.api.get<ProgramManagement>(`${this.root(id)}/`);
   }
+  returnToDraft(id: number, expectedUpdatedAt: string) {
+    return this.api.post<ProgramManagement>(`${this.root(id)}/unpublish/`, { expectedUpdatedAt });
+  }
   participants(id: number, q: ManagementQuery) {
     return this.api.get<ManagementParticipantsPage>(
       `${this.root(id)}/participants/`,

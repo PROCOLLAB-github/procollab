@@ -48,6 +48,9 @@ export class ProgramManagementRepository implements ProgramManagementRepositoryP
   get(id: number) {
     return this.adapter.get(id);
   }
+  returnToDraft(id: number, expectedUpdatedAt: string) {
+    return this.adapter.returnToDraft(id, expectedUpdatedAt).pipe(tap(() => this.changed(id)));
+  }
   participants(id: number, q: ManagementQuery) {
     return this.adapter.participants(id, q);
   }

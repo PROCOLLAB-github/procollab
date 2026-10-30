@@ -11,6 +11,17 @@ import { API_URL } from "@core/lib/providers";
 
 describe("Контракт HTTP панели организатора", () => {
   let adapter: ProgramManagementHttpAdapter, http: HttpTestingController;
+  it("возврат в черновик передает версию и получает новый статус через общий interceptor", () => {
+    const updatedAt = "2026-10-30T10:00:00.123456Z";
+    adapter.returnToDraft(4, updatedAt).subscribe(program => {
+      expect(program.draft).toBe(true);
+      expect(program.updatedAt).toBe("2026-10-30T10:01:00Z");
+    });
+    const request = http.expectOne(r => r.url.endsWith("/programs/4/management/unpublish/"));
+    expect(request.request.method).toBe("POST");
+    expect(request.request.body).toEqual({ expected_updated_at: updatedAt });
+    request.flush({ id: 4, draft: true, updated_at: "2026-10-30T10:01:00Z" });
+  });
   it("результаты получают независимую готовность, а экспорт передает текущий статус", () => {
     adapter
       .results(4)
