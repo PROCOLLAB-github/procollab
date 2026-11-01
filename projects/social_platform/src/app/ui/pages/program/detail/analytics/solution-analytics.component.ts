@@ -20,7 +20,15 @@ import { AnalyticsActivityChartComponent } from "./activity-chart/activity-chart
 import { Result } from "@domain/shared/result.type";
 import { saveAs } from "file-saver";
 import { A11yModule } from "@angular/cdk/a11y";
-import { ButtonDirective, ChoiceDirective, FieldDirective, TableDirective } from "@uilib";
+import { EvaluationProgressSummaryComponent } from "./evaluation-progress/evaluation-progress-summary.component";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import {
+  AlertDirective,
+  ButtonDirective,
+  ChoiceDirective,
+  FieldDirective,
+  TableDirective,
+} from "@uilib";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { AnalyticsFunnelChartComponent } from "./funnel-chart/funnel-chart.component";
@@ -62,6 +70,9 @@ type View =
   selector: "app-solution-analytics",
   imports: [
     ReactiveFormsModule,
+    AlertDirective,
+    MatProgressBarModule,
+    EvaluationProgressSummaryComponent,
     RouterLink,
     A11yModule,
     ButtonDirective,
@@ -100,6 +111,12 @@ export class SolutionAnalyticsComponent {
   private readonly cancelExport = new Subject<void>();
   private trigger: HTMLElement | null = null;
   readonly data = signal<SolutionManagerAnalytics | null>(null);
+  readonly caseMaximum = computed(() => {
+    const cases = this.data()?.cases;
+    return cases
+      ? Math.max(0, cases.withoutCase.solutionsTotal, ...cases.items.map(row => row.solutionsTotal))
+      : 0;
+  });
   readonly pending = signal(false);
   readonly error = signal("");
   readonly exporting = signal(false);

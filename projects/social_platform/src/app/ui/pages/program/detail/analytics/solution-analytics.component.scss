@@ -1,6 +1,7 @@
 /** @format */
 
 @use "styles/ui-foundation";
+@use "styles/program-management-controls";
 
 :host {
   display: block;
@@ -13,6 +14,7 @@
 
 .ui-button:not(.attention__action).ui-button {
   @include ui-foundation.button;
+  @include program-management-controls.compact-action;
 }
 
 .ui-choice {
@@ -38,6 +40,21 @@
   padding: 24px;
   overflow: auto;
   font-family: Mont, sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+
+  h2 { @include program-management-controls.section-title; }
+
+  h3 {
+    margin: 0;
+    font-size: 14px;
+    line-height: 21px;
+  }
+  p { margin: 0; }
+}
+
+.ui-alert.ui-alert.ui-alert {
+  @include program-management-controls.status-notice;
 }
 
 .solution-analytics__heading {
@@ -54,6 +71,8 @@
 
 .solution-analytics__table table {
   width: 100%;
+  font-size: 12px;
+  line-height: 1.5;
   border-collapse: collapse;
 }
 
@@ -66,8 +85,15 @@
 }
 
 .solution-analytics__table th {
+  font-weight: 400;
+  color: var(--grey-for-text);
   overflow-wrap: normal;
   white-space: nowrap;
+  background: transparent;
+}
+
+.solution-analytics__dialog .regions__export.ui-button.ui-button {
+  @include program-management-controls.export-trigger;
 }
 
 .solution-analytics__sr {

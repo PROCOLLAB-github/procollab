@@ -15,6 +15,8 @@ import {
   GetSolutionManagerSolutionsUseCase,
 } from "@api/solution/use-cases/solution-manager-analytics.use-cases";
 import { SolutionAssignmentOptions, SolutionQuota } from "@domain/solution/solution-contract.model";
+import { SolutionManagerSolutions } from "@domain/solution/solution-contract.model";
+import { solutionContractScenarios } from "@domain/solution/solution-contract.fixture";
 const option = (id: number, assigned: boolean, protectedScore = false) => ({
   solutionId: id,
   name: `Решение ${id}`,
@@ -112,6 +114,57 @@ function setup() {
   };
 }
 describe("Solution expert management", () => {
+  it("applies the filter draft only on confirmation and resets selection without changing the roster API", () => {
+    const { c, roster } = setup();
+    c.selectAllExperts();
+    expect(c.selectedExperts().size).toBe(1);
+    c.openFilters();
+    c.filterDraft.controls.status.setValue("pending");
+    expect(c.filtered()).toHaveLength(1);
+    c.filtersOpen.set(false);
+    c.openFilters();
+    expect(c.filterDraft.controls.status.value).toBe("all");
+    c.filterDraft.controls.status.setValue("pending");
+    c.applyFilters();
+    expect(c.filtered()).toHaveLength(0);
+    expect(c.selectedExperts().size).toBe(0);
+    expect(c.filtersOpen()).toBe(false);
+    expect(roster.workspace).toHaveBeenCalledTimes(1);
+  });
+  it("selects the filtered roster across pages and clears hidden selections when searching", () => {
+    const { c, expert } = setup();
+    c.experts.set(
+      Array.from({ length: 21 }, (_, i) => ({ ...expert, id: i + 1, name: `Эксперт ${i + 1}` })),
+    );
+    c.selectAllExperts();
+    expect(c.selectedExperts().size).toBe(21);
+    c.page.set(1);
+    expect(c.visible().map(e => e.id)).toEqual([21]);
+    c.search.setValue("Эксперт 21");
+    expect(c.page()).toBe(0);
+    expect(c.visible().map(e => e.id)).toEqual([21]);
+    expect(c.selectedExperts().size).toBe(0);
+    c.selectAllExperts();
+    expect([...c.selectedExperts()]).toEqual([21]);
+  });
+  it("allocates only selected solution IDs and clears distribution selection when the case changes", () => {
+    const { c } = setup();
+    const source = solutionContractScenarios.find(s => s.name === "manager_solution_list_awaiting")!
+      .response as SolutionManagerSolutions;
+    const row = source.results[0];
+    c.solutions.set([row, { ...row, application: { ...row.application, solutionId: 302 } }]);
+    c.toggleDistribution(302);
+    c.startAllocation();
+    expect(c.allocation()).toEqual({ programId: 12, ids: [302] });
+    c.allocationBusy.set(true);
+    c.startAllocation([301]);
+    expect(c.allocation()?.ids).toEqual([302]);
+    c.allocationBusy.set(false);
+    c.caseFilter.setValue(JSON.stringify(row.caseName));
+    expect(c.distributionSelection().size).toBe(0);
+    c.startAllocation();
+    expect(c.allocation()?.ids).toEqual([301, 302]);
+  });
   it("ignores every Project counter in the existing expert roster", () => {
     const { c } = setup();
     expect(c.experts()[0]).toMatchObject({ assigned: 1, completed: 0, remaining: 1 });

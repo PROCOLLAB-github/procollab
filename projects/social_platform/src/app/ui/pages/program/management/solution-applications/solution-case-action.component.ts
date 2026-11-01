@@ -20,7 +20,7 @@ import {
 } from "@api/solution/use-cases/solution-case-actions.use-cases";
 import { SolutionCaseChangePreview } from "@domain/solution/solution-contract.model";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { ButtonDirective, FieldDirective } from "@uilib";
+import { ButtonDirective, FieldDirective, AlertDirective, IconComponent } from "@uilib";
 
 export interface SolutionCaseRequest {
   programId: number;
@@ -30,7 +30,14 @@ export interface SolutionCaseRequest {
 
 @Component({
   selector: "app-solution-case-action",
-  imports: [ReactiveFormsModule, ModalComponent, ButtonDirective, FieldDirective],
+  imports: [
+    AlertDirective,
+    IconComponent,
+    ReactiveFormsModule,
+    ModalComponent,
+    ButtonDirective,
+    FieldDirective,
+  ],
   templateUrl: "./solution-case-action.component.html",
   styleUrl: "./solution-applications.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

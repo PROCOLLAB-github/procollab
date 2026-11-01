@@ -1,0 +1,2765 @@
+{
+  "fileKey": "tvog0fpEgWgEtr7KUTjbyE",
+  "pages": [
+    {
+      "page": "UI KIT",
+      "id": "0:1",
+      "rows": [
+        {
+          "id": "3:2",
+          "name": "00 — Cover",
+          "type": "SECTION",
+          "children": 1
+        },
+        {
+          "id": "3:3",
+          "name": "01 — Foundations",
+          "type": "SECTION",
+          "children": 9
+        },
+        {
+          "id": "3:4",
+          "name": "02 — Components",
+          "type": "SECTION",
+          "children": 23
+        },
+        {
+          "id": "3:5",
+          "name": "03 — Patterns",
+          "type": "SECTION",
+          "children": 13
+        },
+        {
+          "id": "3:6",
+          "name": "04 — Templates",
+          "type": "SECTION",
+          "children": 4
+        },
+        {
+          "id": "3:7",
+          "name": "05 — Examples",
+          "type": "SECTION",
+          "children": 4
+        },
+        {
+          "id": "3:8",
+          "name": "06 — Legacy / Deprecated",
+          "type": "SECTION",
+          "children": 8
+        },
+        {
+          "id": "3:9",
+          "name": "07 — Decisions / Needs review",
+          "type": "SECTION",
+          "children": 5
+        },
+        {
+          "id": "30:1518",
+          "name": "08 — Feature Design / Analytics case drilldown",
+          "type": "SECTION",
+          "children": 1
+        },
+        {
+          "id": "38:1632",
+          "name": "09 — Feature Design / Project team · continuity refinement",
+          "type": "SECTION",
+          "children": 9
+        },
+        {
+          "id": "51:1751",
+          "name": "Feature Design / Vacancies",
+          "type": "SECTION",
+          "children": 1
+        },
+        {
+          "id": "51:1752",
+          "name": "Proposed extensions / Vacancies · REVIEW REQUIRED",
+          "type": "SECTION",
+          "children": 24
+        },
+        {
+          "id": "142:3219",
+          "name": "Group 1000003068",
+          "type": "GROUP",
+          "children": 4
+        },
+        {
+          "id": "717:3219",
+          "name": "Frame 1",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "717:3221",
+          "name": "Frame 2",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "1206:3440",
+          "name": "Card / Program · Единая карточка программы · 28.10.2026",
+          "type": "SECTION",
+          "children": 4
+        }
+      ]
+    },
+    {
+      "page": "10 · Управление программой · предложение",
+      "id": "152:3219",
+      "rows": [
+        {
+          "id": "152:3220",
+          "name": "01 · Программа · вход в настройки",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "152:3221",
+          "name": "02 · Настройки · основное",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "152:3222",
+          "name": "03 · Настройки · сроки",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "152:3223",
+          "name": "04 · Настройки · материалы",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "152:3224",
+          "name": "05 · Mobile · основное",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "152:3225",
+          "name": "06 · Mobile · сроки",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "152:3226",
+          "name": "07 · Mobile · материалы",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "152:3227",
+          "name": "08 · Состояния и диалоги",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "152:3228",
+          "name": "00 · Как встроено в продукт",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "156:3881",
+          "name": "09 · Mobile 360 · сроки",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "159:3965",
+          "name": "Proposed / ProgramShell / Desktop header",
+          "type": "COMPONENT",
+          "children": 4
+        },
+        {
+          "id": "159:4073",
+          "name": "Proposed / ProgramShell / Desktop navigation",
+          "type": "COMPONENT",
+          "children": 8
+        },
+        {
+          "id": "159:4229",
+          "name": "Proposed / ProgramShell / Mobile header",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "163:3877",
+          "name": "Proposed / ProgramMaterialRow",
+          "type": "COMPONENT_SET",
+          "children": 2
+        },
+        {
+          "id": "163:3961",
+          "name": "Proposed / Icon / calendar · source SVG",
+          "type": "COMPONENT",
+          "children": 1
+        }
+      ]
+    },
+    {
+      "page": "11 · Управление программой · v2",
+      "id": "179:3219",
+      "rows": [
+        {
+          "id": "179:3220",
+          "name": "Программа · два входа",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "179:3340",
+          "name": "Управление · участники",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "179:3341",
+          "name": "Управление · проекты",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "179:3342",
+          "name": "Управление · аналитика",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "179:3343",
+          "name": "Настройки · основное",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "179:3497",
+          "name": "Настройки · сроки",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "179:3626",
+          "name": "Настройки · материалы",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "179:3755",
+          "name": "Mobile · программа",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "179:3756",
+          "name": "Mobile · участники",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "179:3757",
+          "name": "Mobile · проекты",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "179:3758",
+          "name": "Mobile · аналитика",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "179:3759",
+          "name": "Mobile · основное",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "179:3874",
+          "name": "Mobile · сроки",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "179:3964",
+          "name": "Mobile · материалы",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "179:4054",
+          "name": "360 · участники",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "179:4055",
+          "name": "Состояния таблиц",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "179:4056",
+          "name": "Структура и решения v2",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "179:4057",
+          "name": "Состояния форм и материалов",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "180:4116",
+          "name": "Proposed / ProgramManagement / Navigation",
+          "type": "COMPONENT_SET",
+          "children": 12
+        },
+        {
+          "id": "180:4147",
+          "name": "Proposed / ProgramManagement / Settings navigation",
+          "type": "COMPONENT_SET",
+          "children": 3
+        },
+        {
+          "id": "180:4163",
+          "name": "Proposed / ProgramManagement / Participant row",
+          "type": "COMPONENT_SET",
+          "children": 2
+        },
+        {
+          "id": "180:4184",
+          "name": "Proposed / ProgramManagement / Project row",
+          "type": "COMPONENT_SET",
+          "children": 2
+        },
+        {
+          "id": "182:4572",
+          "name": "Proposed / ManagementAnalytics / Summary",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "182:4575",
+          "name": "Proposed / ManagementAnalytics / Deadlines",
+          "type": "COMPONENT",
+          "children": 8
+        },
+        {
+          "id": "182:4595",
+          "name": "Proposed / ManagementAnalytics / Attention",
+          "type": "COMPONENT",
+          "children": 4
+        },
+        {
+          "id": "182:4606",
+          "name": "Proposed / ManagementAnalytics / Evaluation",
+          "type": "COMPONENT",
+          "children": 10
+        },
+        {
+          "id": "182:4638",
+          "name": "Proposed / ManagementAnalytics / Participant funnel",
+          "type": "COMPONENT",
+          "children": 5
+        },
+        {
+          "id": "182:4664",
+          "name": "Proposed / ManagementAnalytics / Project funnel",
+          "type": "COMPONENT",
+          "children": 5
+        },
+        {
+          "id": "182:4690",
+          "name": "Proposed / ManagementAnalytics / Cases",
+          "type": "COMPONENT",
+          "children": 6
+        },
+        {
+          "id": "182:4705",
+          "name": "Proposed / ManagementAnalytics / Activity",
+          "type": "COMPONENT",
+          "children": 4
+        },
+        {
+          "id": "182:4742",
+          "name": "Proposed / ManagementAnalytics / Participant regions",
+          "type": "COMPONENT",
+          "children": 5
+        },
+        {
+          "id": "182:4768",
+          "name": "Proposed / ManagementAnalytics / Project regions",
+          "type": "COMPONENT",
+          "children": 5
+        },
+        {
+          "id": "187:5135",
+          "name": "Proposed / ProgramManagement / Search responsive adapter",
+          "type": "COMPONENT",
+          "children": 1
+        },
+        {
+          "id": "201:5226",
+          "name": "Proposed / ProgramManagement / Single project selection",
+          "type": "COMPONENT_SET",
+          "children": 2
+        },
+        {
+          "id": "201:5389",
+          "name": "Proposed / ProgramManagement / Selected project toolbar",
+          "type": "COMPONENT_SET",
+          "children": 2
+        },
+        {
+          "id": "201:5390",
+          "name": "Проекты · выбран один проект",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "201:5433",
+          "name": "Mobile · выбран один проект",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "201:5830",
+          "name": "Проекты · команда выбранного проекта",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "201:5874",
+          "name": "Mobile · команда выбранного проекта",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "201:5941",
+          "name": "Выбор проекта · правила и состояния V1",
+          "type": "FRAME",
+          "children": 1
+        }
+      ]
+    },
+    {
+      "page": "12 · Кейсы и поля · предложение",
+      "id": "227:3219",
+      "rows": [
+        {
+          "id": "227:3220",
+          "name": "01 · Настройки · кейсы и поля",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "227:3221",
+          "name": "02 · Добавление кейса",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "227:3222",
+          "name": "03 · Настройка поля",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "227:3223",
+          "name": "04 · Предпросмотр формы команды",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "227:3224",
+          "name": "05 · Проверка перед сдачей",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "227:3225",
+          "name": "06 · Телефон · кейсы и поля",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "227:3226",
+          "name": "07 · Телефон · настройка поля",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "227:3227",
+          "name": "08 · Телефон · предпросмотр",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "227:3228",
+          "name": "09 · Узкий экран · 360",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "227:3229",
+          "name": "10 · Состояния и правила",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "228:3251",
+          "name": "Proposed / CasesFields / Settings navigation",
+          "type": "COMPONENT_SET",
+          "children": 3
+        },
+        {
+          "id": "228:3318",
+          "name": "Proposed / CasesFields / ProgramCaseRow",
+          "type": "COMPONENT_SET",
+          "children": 4
+        },
+        {
+          "id": "228:3379",
+          "name": "Proposed / CasesFields / ProgramFieldRow",
+          "type": "COMPONENT_SET",
+          "children": 4
+        },
+        {
+          "id": "229:3746",
+          "name": "11 · Поле добавлено · сохранение настроек",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "229:3747",
+          "name": "12 · Телефон · ошибки перед сдачей",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "229:5401",
+          "name": "13 · Телефон · добавление кейса",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "230:4867",
+          "name": "14 · Предпросмотр · пустой черновик сохранён",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "230:5026",
+          "name": "15 · Телефон · пустой черновик сохранён",
+          "type": "FRAME",
+          "children": 2
+        }
+      ]
+    },
+    {
+      "page": "13 · Оценивание · Критерии · предложение",
+      "id": "267:3219",
+      "rows": [
+        {
+          "id": "267:3220",
+          "name": "01 · Критерии · настройка",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "267:3221",
+          "name": "02 · Добавить критерий · редактор по центру",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "267:3222",
+          "name": "03 · Предпросмотр формы эксперта",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "267:3223",
+          "name": "04 · Первая оценка · критерии зафиксированы",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "267:3224",
+          "name": "05 · Оценка появилась во время редактирования",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "267:3225",
+          "name": "06 · Телефон · критерии",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "267:3226",
+          "name": "07 · Телефон · редактор по центру",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "267:3227",
+          "name": "08 · Телефон · предпросмотр",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "267:3228",
+          "name": "09 · Телефон · критерии зафиксированы",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "267:3229",
+          "name": "10 · Узкий экран · 360",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "267:3230",
+          "name": "11 · Состояния и правила",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "267:3231",
+          "name": "12 · Изменения применены · сохранить набор",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "268:3269",
+          "name": "Proposed / EvaluationCriteria / Settings navigation",
+          "type": "COMPONENT_SET",
+          "children": 2
+        },
+        {
+          "id": "268:3322",
+          "name": "Proposed / EvaluationCriteria / CriterionRow",
+          "type": "COMPONENT_SET",
+          "children": 4
+        },
+        {
+          "id": "274:4749",
+          "name": "13 · Критерии сохранены",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "275:4889",
+          "name": "14 · Изменить критерий · баллы",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "275:5114",
+          "name": "15 · Изменить критерий · Да или нет",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "275:5337",
+          "name": "16 · Изменить критерий · комментарий",
+          "type": "FRAME",
+          "children": 5
+        }
+      ]
+    },
+    {
+      "page": "14 · Эксперты · приглашения и распределение",
+      "id": "293:3219",
+      "rows": [
+        {
+          "id": "293:3220",
+          "name": "01 · Эксперты · список",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "293:3221",
+          "name": "02 · Пригласить эксперта · email",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "293:3222",
+          "name": "03 · Приглашение отправлено",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "293:3223",
+          "name": "04 · Назначить проекты · вручную",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "293:3224",
+          "name": "05 · Назначения эксперта · сохранённые оценки",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "293:3225",
+          "name": "06 · Автораспределение · параметры",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "293:3226",
+          "name": "07 · Автораспределение · предпросмотр",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "293:3227",
+          "name": "08 · Не хватает экспертов",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "293:3228",
+          "name": "09 · Распределение применено",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "293:3229",
+          "name": "10 · Оценщиков 2 → 3 · пересчёт",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "293:3230",
+          "name": "11 · Оценщиков 3 → 2 · избыток назначений",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "293:3231",
+          "name": "12 · Состояния и правила",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "293:3232",
+          "name": "13 · Телефон · эксперты",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "293:3233",
+          "name": "14 · Телефон · приглашение",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "293:3234",
+          "name": "15 · Телефон · ручное назначение",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "293:3235",
+          "name": "16 · Телефон · автораспределение",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "293:3236",
+          "name": "17 · Телефон · план назначений",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "293:3237",
+          "name": "18 · Узкий экран · 360",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "293:3238",
+          "name": "19 · Телефон · изменение числа оценщиков",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "293:3239",
+          "name": "20 · Телефон · нехватка экспертов",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "294:3233",
+          "name": "Proposed / Experts / Navigation / Desktop",
+          "type": "COMPONENT",
+          "children": 5
+        },
+        {
+          "id": "294:3261",
+          "name": "Proposed / Experts / Navigation / Mobile",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "294:3408",
+          "name": "Proposed / Experts / ExpertRow",
+          "type": "COMPONENT_SET",
+          "children": 6
+        },
+        {
+          "id": "294:3481",
+          "name": "Proposed / Experts / AssignmentChoiceRow",
+          "type": "COMPONENT_SET",
+          "children": 6
+        },
+        {
+          "id": "295:3289",
+          "name": "21 · Ручное назначение сохранено",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "295:3290",
+          "name": "22 · Число оценщиков изменено",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "298:4328",
+          "name": "23 · Телефон · приглашение отправлено",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "298:4329",
+          "name": "24 · Телефон · проекты назначены",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "298:4330",
+          "name": "25 · Телефон · автораспределение сохранено",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "298:4331",
+          "name": "26 · Телефон · число оценщиков изменено",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "299:6835",
+          "name": "27 · Эксперт выбран · панель действий",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "299:6836",
+          "name": "28 · Телефон · эксперт выбран",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "299:6837",
+          "name": "29 · Телефон · назначения эксперта",
+          "type": "FRAME",
+          "children": 4
+        }
+      ]
+    },
+    {
+      "page": "17 · Эксперты · кейсы и распределение · v2",
+      "id": "452:3219",
+      "rows": [
+        {
+          "id": "452:3220",
+          "name": "01 · Эксперты",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3221",
+          "name": "02 · Распределение экспертов",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3222",
+          "name": "03 · Пригласить эксперта",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3223",
+          "name": "04 · Кейсы эксперта · универсальный",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3224",
+          "name": "05 · Способ распределения",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3225",
+          "name": "06 · Автоматически · эксперты по кейсам",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3226",
+          "name": "07 · Выбор экспертов для кейса",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3227",
+          "name": "08 · Предпросмотр · общая нагрузка",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3228",
+          "name": "09 · Не хватает экспертов в кейсе",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3229",
+          "name": "10 · Вручную · массовый выбор проектов",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "452:3230",
+          "name": "11 · Назначить экспертов проекту",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3231",
+          "name": "12 · Назначить нескольким проектам",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3232",
+          "name": "13 · Сохранённая оценка",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3233",
+          "name": "14 · Число оценок",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3234",
+          "name": "15 · Эксперты распределены",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3235",
+          "name": "16 · Телефон · Эксперты",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "452:3236",
+          "name": "17 · Телефон · Распределение",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "452:3237",
+          "name": "18 · Телефон · Назначить экспертов",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3238",
+          "name": "19 · Телефон · Автоматически",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "452:3239",
+          "name": "20 · Узкий экран · 360",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "452:3240",
+          "name": "21 · Состояния и handoff",
+          "type": "FRAME",
+          "children": 16
+        },
+        {
+          "id": "453:3356",
+          "name": "Proposed / Experts v2 / Tabs",
+          "type": "COMPONENT_SET",
+          "children": 4
+        },
+        {
+          "id": "453:3383",
+          "name": "Proposed / Experts v2 / ExpertRow",
+          "type": "COMPONENT_SET",
+          "children": 2
+        },
+        {
+          "id": "453:3412",
+          "name": "Proposed / Experts v2 / ProjectAssignmentRow",
+          "type": "COMPONENT_SET",
+          "children": 2
+        },
+        {
+          "id": "453:3455",
+          "name": "Proposed / Experts v2 / ExpertChoiceRow",
+          "type": "COMPONENT_SET",
+          "children": 3
+        },
+        {
+          "id": "453:3476",
+          "name": "Proposed / Experts v2 / CaseExpertPool",
+          "type": "COMPONENT_SET",
+          "children": 2
+        },
+        {
+          "id": "455:4458",
+          "name": "Proposed / Experts v2 / View / experts",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "455:4646",
+          "name": "Proposed / Experts v2 / View / distribution",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "455:4783",
+          "name": "Proposed / Experts v2 / View / mobileExperts",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "455:4903",
+          "name": "Proposed / Experts v2 / View / mobileDistribution",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "455:4904",
+          "name": "22 · Телефон · Приглашение",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "455:4905",
+          "name": "23 · Телефон · Эксперты для кейса",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "455:4906",
+          "name": "24 · Телефон · Общая нагрузка",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "456:4676",
+          "name": "25 · Добавить эксперта · Сбер",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "456:4677",
+          "name": "26 · Добавить эксперта · Т‑Банк",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "456:4678",
+          "name": "27 · Вручную · назначено двум проектам",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "456:4679",
+          "name": "28 · Вручную · назначено проекту",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "456:4680",
+          "name": "29 · Приглашение отправлено",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "458:7492",
+          "name": "30 · Эксперты для кейса Т‑Банка",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "458:7493",
+          "name": "31 · Телефон · Эксперты Т‑Банка",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "461:9243",
+          "name": "32 · Телефон · Кейсы универсального эксперта",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "485:9413",
+          "name": "Proposed / Experts v2 / Navigation / Mobile / Compact",
+          "type": "COMPONENT",
+          "children": 2
+        }
+      ]
+    },
+    {
+      "page": "18 · Результаты · рейтинг и оценки экспертов",
+      "id": "519:3219",
+      "rows": [
+        {
+          "id": "520:3237",
+          "name": "Proposed / Results / ManagementNavigation",
+          "type": "COMPONENT_SET",
+          "children": 6
+        },
+        {
+          "id": "520:3396",
+          "name": "Proposed / Results / ProjectRow",
+          "type": "COMPONENT_SET",
+          "children": 9
+        },
+        {
+          "id": "520:3477",
+          "name": "Proposed / Results / CriterionRow",
+          "type": "COMPONENT_SET",
+          "children": 2
+        },
+        {
+          "id": "520:3491",
+          "name": "Proposed / Results / ExpertSummary",
+          "type": "COMPONENT_SET",
+          "children": 3
+        },
+        {
+          "id": "526:3628",
+          "name": "18 · Результаты · Сбер · Рейтинг",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "527:3798",
+          "name": "18 · Результаты · Раскрытие оценок экспертов",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "527:4045",
+          "name": "18 · Результаты · Т-Банк · Нулевой балл",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "527:4216",
+          "name": "18 · Результаты · Все кейсы",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "527:4473",
+          "name": "18 · Результаты · Неполное оценивание",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "527:4724",
+          "name": "18 · Телефон · Рейтинг по кейсу",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "527:5302",
+          "name": "18 · Телефон · Ожидается третья оценка",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "529:5415",
+          "name": "18 · Телефон · Оценка эксперта раскрыта",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "530:4838",
+          "name": "18 · Расчёт балла · Модалка по центру",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "530:5053",
+          "name": "18 · Телефон · Расчёт балла",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "530:5248",
+          "name": "18 · Выбор кейса",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "530:5446",
+          "name": "18 · Телефон · Выбор кейса",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "530:5624",
+          "name": "18 · Телефон · Список оценок экспертов",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "530:6290",
+          "name": "18 · Телефон · Рейтинг Т-Банка",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "530:6433",
+          "name": "18 · Телефон · Все кейсы",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "530:6679",
+          "name": "18 · Вход в результаты · Вкладка Эксперты",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "531:6457",
+          "name": "18 · Результаты · Состояния и крайние случаи",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "531:6526",
+          "name": "18 · Результаты · Правила и handoff",
+          "type": "FRAME",
+          "children": 12
+        },
+        {
+          "id": "532:6480",
+          "name": "18 · Выбор кейса · Т-Банк",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "532:6654",
+          "name": "18 · Выбор кейса · Все кейсы",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "532:6914",
+          "name": "18 · Телефон · Выбор кейса Т-Банк",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "532:7060",
+          "name": "18 · Телефон · Выбор всех кейсов",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "532:7309",
+          "name": "18 · Prototype overlay · Расчёт балла",
+          "type": "FRAME",
+          "children": 10
+        },
+        {
+          "id": "532:7330",
+          "name": "18 · Prototype overlay · Расчёт балла · Телефон",
+          "type": "FRAME",
+          "children": 10
+        },
+        {
+          "id": "535:7136",
+          "name": "18 · Телефон 360 · Рейтинг",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "535:7308",
+          "name": "18 · Телефон · Оценка Анны Мироновой",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "535:7533",
+          "name": "18 · Телефон · Оценка Марии Ивановой",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "547:7268",
+          "name": "18 · Результаты · Сбер · Рейтинг · Балл по возрастанию",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "547:7472",
+          "name": "18 · Результаты · Т-Банк · Нулевой балл · Балл по возрастанию",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "547:7652",
+          "name": "18 · Результаты · Все кейсы · Балл по возрастанию",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "547:7918",
+          "name": "18 · Телефон · Рейтинг по кейсу · Балл по возрастанию",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "547:8106",
+          "name": "18 · Телефон 360 · Рейтинг · Балл по возрастанию",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "547:8294",
+          "name": "18 · Телефон · Рейтинг Т-Банка · Балл по возрастанию",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "547:8450",
+          "name": "18 · Телефон · Все кейсы · Балл по возрастанию",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "548:8348",
+          "name": "18 · Excel · Текущая выборка",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "548:8589",
+          "name": "18 · Overlay · Excel · Текущая выборка",
+          "type": "FRAME",
+          "children": 8
+        },
+        {
+          "id": "548:8623",
+          "name": "18 · Excel · Вся программа",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "548:8862",
+          "name": "18 · Overlay · Excel · Вся программа",
+          "type": "FRAME",
+          "children": 8
+        },
+        {
+          "id": "548:8896",
+          "name": "18 · Телефон · Excel · Текущая выборка",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "548:9121",
+          "name": "18 · Overlay · Телефон · Excel · Текущая выборка",
+          "type": "FRAME",
+          "children": 8
+        },
+        {
+          "id": "548:9157",
+          "name": "18 · Телефон · Excel · Вся программа",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "548:9382",
+          "name": "18 · Overlay · Телефон · Excel · Вся программа",
+          "type": "FRAME",
+          "children": 8
+        },
+        {
+          "id": "549:9052",
+          "name": "18 · Excel · Состав листов и формулы",
+          "type": "FRAME",
+          "children": 5
+        }
+      ]
+    },
+    {
+      "page": "19 · Организаторы · доступ к программе",
+      "id": "582:9038",
+      "rows": [
+        {
+          "id": "582:9039",
+          "name": "01 · Организаторы · список",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "582:9040",
+          "name": "02 · Выбран организатор · плавающая плашка",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "582:9041",
+          "name": "03 · Выбрано приглашение",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "582:9042",
+          "name": "04 · Пригласить организатора",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "582:9043",
+          "name": "05 · Приглашение · email уже добавлен",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "582:9044",
+          "name": "06 · Убрать доступ",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "582:9045",
+          "name": "07 · Отозвать приглашение",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "582:9046",
+          "name": "08 · Последний организатор",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "582:9047",
+          "name": "09 · Выйти из организаторов",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "582:9048",
+          "name": "10 · Приглашение отправлено",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "582:9049",
+          "name": "11 · Телефон · список",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "582:9050",
+          "name": "12 · Телефон · плавающая плашка",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "582:9051",
+          "name": "13 · Телефон · приглашение выбрано",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "582:9052",
+          "name": "14 · Телефон · приглашение",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "582:9053",
+          "name": "15 · Телефон · убрать доступ",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "582:9054",
+          "name": "16 · Телефон · последний организатор",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "582:9055",
+          "name": "17 · Узкий экран · 360",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "583:3249",
+          "name": "Proposed / Organizers / Row",
+          "type": "COMPONENT_SET",
+          "children": 4
+        },
+        {
+          "id": "583:3283",
+          "name": "Proposed / Organizers / SettingsNavigation",
+          "type": "COMPONENT_SET",
+          "children": 3
+        },
+        {
+          "id": "586:5436",
+          "name": "18 · Выбран свой аккаунт",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "586:5623",
+          "name": "19 · Приглашение отправлено повторно",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "586:5669",
+          "name": "20 · Доступ снят",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "586:5842",
+          "name": "21 · Приглашение отозвано",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "586:6015",
+          "name": "22 · Телефон · Доступ снят",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "589:6092",
+          "name": "24 · Телефон · отозвать приглашение",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "589:6153",
+          "name": "25 · Телефон · приглашение отправлено",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "589:6192",
+          "name": "26 · Телефон · приглашение отправлено повторно",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "589:6232",
+          "name": "27 · Телефон · приглашение отозвано",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "589:6368",
+          "name": "23 · Доступ к управлению закрыт",
+          "type": "FRAME",
+          "children": 2
+        }
+      ]
+    },
+    {
+      "page": "20 · Аналитика · Ход оценивания",
+      "id": "629:3219",
+      "rows": [
+        {
+          "id": "629:3220",
+          "name": "Аналитика / Ход оценивания / Предложение",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "630:3263",
+          "name": "Analytics proposal / Label and value row",
+          "type": "COMPONENT",
+          "children": 2
+        }
+      ]
+    },
+    {
+      "page": "21 · Регистрация · анкета и путь участника",
+      "id": "652:3219",
+      "rows": [
+        {
+          "id": "652:3220",
+          "name": "01 · Регистрация · черновик",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "652:3221",
+          "name": "02 · Регистрация · ссылка опубликована",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "652:3222",
+          "name": "03 · Внешний сайт · не подключён",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "652:3223",
+          "name": "04 · Внешний сайт · подключён",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "652:3224",
+          "name": "05 · Поле анкеты · справочник",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "652:3225",
+          "name": "06 · Поле анкеты · свой список",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "652:3226",
+          "name": "07 · Загрузка списка · файл",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "652:3227",
+          "name": "08 · Загрузка списка · проверка строк",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "652:3228",
+          "name": "09 · Загрузка списка · ошибка",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "652:3229",
+          "name": "10 · Публикация · не заполнены варианты",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "652:3230",
+          "name": "11 · Предпросмотр анкеты",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "652:3231",
+          "name": "12 · Запрос подключения · внешний сайт",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "652:3232",
+          "name": "13 · Внешний сайт · подключение запрошено",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "652:3233",
+          "name": "14 · Поле с ответами · архивирование",
+          "type": "FRAME",
+          "children": 5
+        },
+        {
+          "id": "652:3234",
+          "name": "15 · Опубликованная форма · есть изменения",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "652:3235",
+          "name": "16 · Участник · новый аккаунт",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3236",
+          "name": "17 · Участник · email уже используется",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3237",
+          "name": "18 · Участник · вход с возвратом",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3238",
+          "name": "19 · Участник · анкета после входа",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3239",
+          "name": "20 · Подтверждение email · письмо отправлено",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3240",
+          "name": "21 · Письмо · подтверждение регистрации",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "652:3241",
+          "name": "22 · Участник · программа открыта",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "652:3242",
+          "name": "23 · Участник · уже зарегистрирован",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3243",
+          "name": "24 · Участник · регистрация завершена",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3244",
+          "name": "25 · Анкета · ошибки заполнения",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3245",
+          "name": "26 · Подтверждение email · ссылка истекла",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3246",
+          "name": "27 · Анкета · выбор вуза с поиском",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3247",
+          "name": "28 · Анкета · сохранение",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3248",
+          "name": "29 · Телефон · настройка анкеты",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3249",
+          "name": "30 · Телефон · редактор поля по центру",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "652:3250",
+          "name": "31 · Телефон · проверка загруженного списка",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "652:3251",
+          "name": "32 · Телефон · ссылка опубликована",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3252",
+          "name": "33 · Телефон · новый аккаунт",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3253",
+          "name": "34 · Телефон · вход",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3254",
+          "name": "35 · Телефон · анкета после входа",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3255",
+          "name": "36 · Телефон · подтверждение email",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3256",
+          "name": "37 · Телефон · письмо",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "652:3257",
+          "name": "38 · Телефон · программа открыта",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3258",
+          "name": "39 · Узкий телефон · регистрация завершена",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3259",
+          "name": "40 · Узкий телефон · ошибки анкеты",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "652:3260",
+          "name": "41 · Телефон · поиск вуза",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "653:3233",
+          "name": "Proposed / Registration / FieldRow / Desktop",
+          "type": "COMPONENT",
+          "children": 4
+        },
+        {
+          "id": "653:3244",
+          "name": "Proposed / Registration / FieldRow / Mobile",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "658:3990",
+          "name": "__Registration / Notice / Warning / 823",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "658:3996",
+          "name": "__Registration / Choice / Radio / true / 823 / false",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "658:4010",
+          "name": "__Registration / Choice / Radio / false / 823 / false",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "658:4022",
+          "name": "__Registration / Notice / Success / 823",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "658:4028",
+          "name": "__Registration / ReadOnly / 823 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "658:4125",
+          "name": "__Registration / Notice / Warning / 310",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "658:4131",
+          "name": "__Registration / Choice / Radio / true / 310 / true",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "658:4145",
+          "name": "__Registration / Choice / Radio / false / 310 / true",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "658:4157",
+          "name": "__Registration / Notice / Success / 310",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "658:4163",
+          "name": "__Registration / ReadOnly / 310 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:4155",
+          "name": "__Registration / Input / 308 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:4228",
+          "name": "__Registration / Select / 308 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:4243",
+          "name": "__Registration / Input / 632 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:4251",
+          "name": "__Registration / Choice / Checkbox / true / 632 / false",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:4270",
+          "name": "__Registration / Choice / Radio / true / 632 / false",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:4284",
+          "name": "__Registration / Choice / Radio / false / 632 / false",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:4296",
+          "name": "__Registration / Notice / Info / 632",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:4311",
+          "name": "__Registration / Select / 632 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:4983",
+          "name": "__Registration / Notice / Success / 672",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:5224",
+          "name": "__Registration / Notice / Error / 592",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:5445",
+          "name": "__Registration / Notice / Warning / 592",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:5678",
+          "name": "__Registration / Notice / Info / 732",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:5752",
+          "name": "__Registration / Input / 358 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:5764",
+          "name": "__Registration / Input / 732 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:5776",
+          "name": "__Registration / Password / 732 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "659:5792",
+          "name": "__Registration / Password / 732 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:5808",
+          "name": "__Registration / Select / 732 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:5836",
+          "name": "__Registration / Input / 732 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "659:5979",
+          "name": "__Registration / Notice / Warning / 632",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:6357",
+          "name": "__Registration / Input / 302 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:6430",
+          "name": "__Registration / Select / 302 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:6449",
+          "name": "__Registration / Choice / Checkbox / true / 302 / true",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:6468",
+          "name": "__Registration / Choice / Radio / true / 302 / true",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:6482",
+          "name": "__Registration / Choice / Radio / false / 302 / true",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:6494",
+          "name": "__Registration / Notice / Info / 302",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "659:6632",
+          "name": "__Registration / Notice / Success / 302",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:5521",
+          "name": "__Registration / Input / 268 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:5533",
+          "name": "__Registration / Input / 552 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:5545",
+          "name": "__Registration / Password / 552 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "661:5561",
+          "name": "__Registration / Password / 552 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:5577",
+          "name": "__Registration / Select / 552 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:5605",
+          "name": "__Registration / Input / 552 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "661:5615",
+          "name": "__Registration / Choice / Checkbox / true / 552 / false",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:5659",
+          "name": "__Registration / Notice / Warning / 552",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:5779",
+          "name": "__Registration / Notice / Success / 552",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:5879",
+          "name": "__Registration / Notice / Success / 863",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:5975",
+          "name": "__Registration / Notice / Error / 552",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:5983",
+          "name": "__Registration / Error / 268 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "661:6029",
+          "name": "__Registration / SelectError / 552 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "661:6057",
+          "name": "__Registration / Choice / Checkbox / false / 552 / false",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6171",
+          "name": "__Registration / Input / 520 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6311",
+          "name": "__Registration / Notice / Info / 552",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6335",
+          "name": "__Registration / Input / 310 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6355",
+          "name": "__Registration / Password / 310 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "661:6371",
+          "name": "__Registration / Password / 310 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6387",
+          "name": "__Registration / Select / 310 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6415",
+          "name": "__Registration / Input / 310 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "661:6425",
+          "name": "__Registration / Choice / Checkbox / true / 310 / true",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6615",
+          "name": "__Registration / Notice / Success / 350",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6657",
+          "name": "__Registration / Notice / Warning / 280",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6688",
+          "name": "__Registration / Notice / Error / 280",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6695",
+          "name": "__Registration / Error / 280 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "661:6705",
+          "name": "__Registration / Input / 280 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6721",
+          "name": "__Registration / Password / 280 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "661:6737",
+          "name": "__Registration / Password / 280 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6753",
+          "name": "__Registration / Select / 280 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6767",
+          "name": "__Registration / SelectError / 280 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "661:6790",
+          "name": "__Registration / Input / 280 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "661:6800",
+          "name": "__Registration / Choice / Checkbox / false / 280 / true",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "661:6886",
+          "name": "__Registration / Input / 278 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "662:6117",
+          "name": "42 · Телефон · свой список",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "662:6118",
+          "name": "43 · Телефон · загрузка файла",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "662:6119",
+          "name": "44 · Узкий телефон · ошибка файла",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "662:6120",
+          "name": "45 · Телефон · внешний сайт",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "662:6121",
+          "name": "46 · Телефон · запрос подключения",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "662:6122",
+          "name": "47 · Телефон · подключение запрошено",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "662:6123",
+          "name": "48 · Телефон · сайт подключён",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "662:6124",
+          "name": "49 · Телефон · предпросмотр без отправки",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "662:6125",
+          "name": "50 · Ссылка скопирована",
+          "type": "FRAME",
+          "children": 4
+        },
+        {
+          "id": "662:6126",
+          "name": "51 · Телефон · ссылка скопирована",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "662:6630",
+          "name": "__Registration / Notice / Success / 340",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "662:36667",
+          "name": "__Registration / Notice / Error / 272",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "662:36845",
+          "name": "__Registration / Notice / Warning / 302",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "662:37026",
+          "name": "__Registration / Password / 302 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "662:37107",
+          "name": "__Registration / Password / 302 / Plain",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "662:37144",
+          "name": "__Registration / Input / 302 / Hint",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "665:7009",
+          "name": "__Registration / Choice / Checkbox / true / 280 / true",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "665:7027",
+          "name": "__Registration / Choice / Checkbox / false / 732 / false",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "665:7047",
+          "name": "__Registration / Choice / Checkbox / false / 302 / true",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "665:7065",
+          "name": "00 · Начать просмотр · Регистрация",
+          "type": "FRAME",
+          "children": 6
+        }
+      ]
+    },
+    {
+      "page": "22 / Проекты / Действия в строке / 3 варианта",
+      "id": "733:3219",
+      "rows": [
+        {
+          "id": "733:3223",
+          "name": "Experiment / Project row / Action trigger",
+          "type": "COMPONENT_SET",
+          "children": 3
+        },
+        {
+          "id": "733:3224",
+          "name": "Experiment / Icon / more-vertical",
+          "type": "COMPONENT",
+          "children": 3
+        },
+        {
+          "id": "733:3290",
+          "name": "Сравнение / Действия, Еще, три точки",
+          "type": "FRAME",
+          "children": 2
+        }
+      ]
+    },
+    {
+      "page": "23 · Участники · фильтры и сортировка",
+      "id": "822:3219",
+      "rows": [
+        {
+          "id": "822:3220",
+          "name": "Участники / предложенная панель управления",
+          "type": "FRAME",
+          "children": 5
+        }
+      ]
+    },
+    {
+      "page": "24 · Сертификаты · автоматическая выдача",
+      "id": "904:3219",
+      "rows": [
+        {
+          "id": "904:3220",
+          "name": "01 · Шаблон сертификата",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "904:3221",
+          "name": "02 · Автовыдача и письмо",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "904:3222",
+          "name": "03 · Журнал отправок",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "904:3223",
+          "name": "04 · Состояния и подтверждение",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "904:3224",
+          "name": "05 · Mobile · настройка",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "904:3225",
+          "name": "06 · Mobile · сертификат участника",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "904:3226",
+          "name": "07 · Письмо участнику",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "904:3227",
+          "name": "08 · Логика и handoff · предложение",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "906:3219",
+          "name": "Сертификаты · обзор сценария",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "906:3223",
+          "name": "Proposed / Certificates / Certificate preview",
+          "type": "COMPONENT",
+          "children": 5
+        },
+        {
+          "id": "906:3268",
+          "name": "Proposed / Certificates / Asset upload",
+          "type": "COMPONENT_SET",
+          "children": 3
+        },
+        {
+          "id": "906:3269",
+          "name": "Proposed / Certificates / Delivery row",
+          "type": "COMPONENT",
+          "children": 4
+        },
+        {
+          "id": "908:3785",
+          "name": "09 · Подтверждение включения",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "910:3756",
+          "name": "10 · Сертификат · перетаскивание элементов",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "915:3914",
+          "name": "11 · Автовыдача · все зарегистрированные",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "915:4109",
+          "name": "12 · Подтверждение · все зарегистрированные",
+          "type": "FRAME",
+          "children": 1
+        },
+        {
+          "id": "915:4129",
+          "name": "13 · Журнал · все зарегистрированные",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "916:4155",
+          "name": "14 · Подпись · перетащить и изменить размер",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "916:4400",
+          "name": "15 · Mobile · перетаскивание подписи",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "925:4410",
+          "name": "16 · Перетаскивание · подпись перемещена",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "925:4583",
+          "name": "17 · Перетаскивание · поле перемещено",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "940:4465",
+          "name": "18 · Отправки · только ошибки · 128",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "940:4669",
+          "name": "19 · Отправки · отправлено · 128",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "940:4901",
+          "name": "20 · Отправки · только ошибки · 164",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "940:5105",
+          "name": "21 · Отправки · отправлено · 164",
+          "type": "FRAME",
+          "children": 3
+        }
+      ]
+    },
+    {
+      "page": "27 · Создание программы · черновик и публикация",
+      "id": "1109:3284",
+      "rows": [
+        {
+          "id": "1109:3285",
+          "name": "01Б · Я организую · единые карточки",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "1109:3341",
+          "name": "02 · Создание программы",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "1109:3397",
+          "name": "03 · Черновик · подготовка",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "1109:3453",
+          "name": "04 · Готово к публикации",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "1109:3509",
+          "name": "05 · Предпросмотр страницы",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "1109:3565",
+          "name": "06 · Подтверждение публикации",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "1109:3621",
+          "name": "07 · Программа опубликована",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "1109:3677",
+          "name": "08 · Предпросмотр регистрации",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "1109:3733",
+          "name": "09 · Состояния и восстановление",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "1109:3789",
+          "name": "Mobile · Создание · 390",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "1109:3806",
+          "name": "Mobile · Подготовка · 390",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "1109:3823",
+          "name": "Mobile · Публикация · 360",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "1111:4211",
+          "name": "27 / Создание программы и публикация · Груминг от 26.10.2026 · Mont canonical / Inter technical preview · Новые экраны — предложение для review",
+          "type": "TEXT",
+          "children": 0
+        },
+        {
+          "id": "1112:3989",
+          "name": "10 · Неконкурсная программа · готово к запуску",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "1125:4147",
+          "name": "11 · Настройки регистрации · черновик / существующий редактор",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "1127:4283",
+          "name": "Source / Angular dev / Sidebar navigation / 2026-10-26",
+          "type": "COMPONENT",
+          "children": 8
+        },
+        {
+          "id": "1144:4186",
+          "name": "Source / Angular dev / Registration select / 2026-10-26",
+          "type": "COMPONENT",
+          "children": 2
+        },
+        {
+          "id": "1209:4329",
+          "name": "01А · Все программы · единые карточки",
+          "type": "FRAME",
+          "children": 2
+        },
+        {
+          "id": "1209:4570",
+          "name": "01В · Телефон 390 · Все программы",
+          "type": "FRAME",
+          "children": 3
+        },
+        {
+          "id": "1209:4707",
+          "name": "01Г · Телефон 360 · Я организую",
+          "type": "FRAME",
+          "children": 3
+        }
+      ]
+    },
+    {
+      "page": "Аналитика",
+      "id": "746:3219",
+      "rows": [
+        {
+          "id": "753:3219",
+          "name": "Аналитика / UI KIT / Предложение 21.10",
+          "type": "FRAME",
+          "children": 8
+        },
+        {
+          "id": "753:3509",
+          "name": "О макете",
+          "type": "FRAME",
+          "children": 6
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "base": "9ef90b5824b857fe53d52c097e37b279b897d9bf",
+  "targetBranch": "dev",
+  "workingBranch": "fix/program-v2-design-system",
+  "verifiedAtUtc": "2026-11-01T16:14:06.622431+00:00",
+  "runtime": {
+    "node": "v24.19.0",
+    "angular": "20.3.23",
+    "chromium": "Chromium 154.0.8037.57 built on Debian GNU/Linux 13 (trixie)"
+  },
+  "productFiles": [
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/evaluation-progress/evaluation-progress-summary.component.html",
+      "sha256": "8185e2761412f943249eb90b292af5a40e6d84506668bd8fd6cdbdecaab3730d"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/evaluation-progress/evaluation-progress-summary.component.scss",
+      "sha256": "1f4f73ad46e5bb2288e26945fe3faa62ed058f74dfad97b2c78b99ec1a4cbae1"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/evaluation-progress/evaluation-progress-summary.component.ts",
+      "sha256": "14d2194e7dfd33027765ed8e8b9d3a563e181bcf17995d8e3adab32abbaf340e"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/evaluation-progress/evaluation-progress.component.html",
+      "sha256": "bdd849238043f66150dcf01ce3f25aa91b1edb154ec6f7020888f2d11f123f3f"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/evaluation-progress/evaluation-progress.component.spec.ts",
+      "sha256": "3526ea7a1fb0133382c8ed7d7dc472a8ef46ee63eeecb5ed03ca5c67a81ec159"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/evaluation-progress/evaluation-progress.component.ts",
+      "sha256": "3c64eb5a5b7fd394567ee0ee3aa7c60c94b5a826b080bafaa0547f2192b6e140"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/solution-analytics.component.html",
+      "sha256": "952dac2206f13adb887cf12af9ab46f91d38ee68e66bc87fa350a21d17ebb0a6"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/solution-analytics.component.scss",
+      "sha256": "3c13a504080faa77f1166e7d1379cd9b46b0eed4f50736b1e1c375781be3ad60"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/solution-analytics.component.ts",
+      "sha256": "a08f25a0e5ec4ec9f6700f5e4a2764883a2b0e9ed6cd03c01b55932ea541c8d0"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/expert-presentation.ts",
+      "sha256": "219301d53b7aa8b30398cc0105908c8cf061dfb1e18de3fdf90a5788312f0dc9"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/expert-roster.component.html",
+      "sha256": "cd94cda9922fc5e5c02dfee4caa0b425a1c2a51b2eb2a7c4ff4fad69cd8cabc8"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/expert-roster.component.scss",
+      "sha256": "b02b11b19dca715c2006340bb7520241e2162c232cf8f37ef7ea2065bca6e91f"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/expert-roster.component.ts",
+      "sha256": "f75ce017fcea91b4a5dcd1e4b246deb9d3af7d30157a26bef3429c3be2d125c2"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/experts.component.html",
+      "sha256": "0e1d86bc7328cb685261b96a0d2e4650c457393cdb5418bb52036732033ff8e3"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/experts.component.scss",
+      "sha256": "3190e9930231ecd027983331a564810c3021bc6f54063ab67ad9c54032bc621c"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/experts.component.ts",
+      "sha256": "2bf338228a00cf56e7a9f033f9e3b4b56e2f5b347514262ef55e558c7c8d77f4"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/solution-experts.component.html",
+      "sha256": "ec54c87ae8522d024e3ba80668efbe03860c02dab4da741528680f35d7cff7e0"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/solution-experts.component.spec.ts",
+      "sha256": "62db830d0ab495c6bf4226719ab546a80f8cea1d9f59b6e39a4ac546eb5aef0f"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/solution-experts.component.ts",
+      "sha256": "3cebee67604ead44b25fb6a3e819fbde385fc67608ab438e86d80b58bad07fb9"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/management.component.html",
+      "sha256": "a5cb23eb20e7f2419f861dddf9dce1f4c65d161890b09d7f6d755ca77ec7438f"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/management.component.scss",
+      "sha256": "1c00fd62f9eb3e454811bec1340377545fd3b74687af0f44e9f8c4ede9e59cf7"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-allocation.component.ts",
+      "sha256": "7a1193c1a257255c150a206ac2cbcd0bb8e1615cf2435efda5cb42d4379faef8"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-applications.component.html",
+      "sha256": "422f02fc8bc94137e4c962d9c62cf9e4393964192c96505c86a09593d893fecf"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-applications.component.scss",
+      "sha256": "680f6951ccdfb915bddead9c9c13f67d0ad2649f5228a7f31cdf458be1290b2c"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-applications.component.ts",
+      "sha256": "82092b0c5dcc8ac3db1db8d3e91f44ca0bcec4c5c565dfca92a4e8abb6599a8c"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-case-action.component.html",
+      "sha256": "ab6cbca320c07d829be9209e7650b3034c5d4e5ceb29850d6fb4a5052e1a3581"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-case-action.component.ts",
+      "sha256": "84ef5ebc4a25b12c8ec1325e0ffec65a2f5350fc196c0e7c7f340ac1f276ae9a"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-registration-removal.component.ts",
+      "sha256": "100b1f36971127dd5bcb8392d11d747795a62d722c425c3c14db6e5296a93ca7"
+    },
+    {
+      "path": "projects/social_platform/src/styles/_program-expert-roster.scss",
+      "sha256": "9d3f82e78df984191448a37bae2fa2d1a75e2a81d90ea919756f44a502c524a6"
+    },
+    {
+      "path": "projects/social_platform/src/styles/_program-management-controls.scss",
+      "sha256": "182cae1fcf1c84a3eedafba52f1032bf0e260bdd0e973cb0ef027fda066b1a49"
+    }
+  ],
+  "unchangedContracts": [
+    "projects/social_platform/src/app/domain",
+    "projects/social_platform/src/app/infrastructure/adapters",
+    "projects/social_platform/src/app/ui/routes"
+  ],
+  "migrations": false,
+  "merged": false,
+  "deployed": false
+}

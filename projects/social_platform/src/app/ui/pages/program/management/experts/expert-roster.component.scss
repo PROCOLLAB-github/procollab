@@ -1,0 +1,36 @@
+/** @format */
+@use "styles/ui-foundation";
+@use "styles/program-management-controls";
+@use "styles/program-expert-roster";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.ui-button.ui-button {
+  @include ui-foundation.button;
+  @include program-management-controls.compact-action;
+}
+
+.ui-choice {
+  @include ui-foundation.choice;
+
+  flex-shrink: 0;
+}
+
+.experts__roster {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  font-size: 12px;
+}
+
+.experts__roster p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--grey-for-text);
+}
+
+@include program-expert-roster.styles;

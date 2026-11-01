@@ -36,38 +36,56 @@
       <p role="status">Подготавливаем Excel…</p>
     }
     @if (exportError()) {
-      <p role="alert">{{ exportError() }}</p>
+      <p appAlert="error" role="alert">{{ exportError() }}</p>
     }
   </header>
   @if (pending()) {
-    <p role="status">Загружаем аналитику программы…</p>
+    <section class="analytics__loading" aria-live="polite" aria-busy="true">
+      <mat-progress-bar mode="indeterminate" />
+      <p class="text-body-10">Загружаем аналитику программы…</p>
+      <div class="summary summary--loading" aria-hidden="true">
+        @for (card of [1, 2, 3, 4]; track card) {
+          <div class="summary-card summary-card--skeleton"></div>
+        }
+      </div>
+    </section>
   } @else if (error()) {
     <section class="analytics-state" role="alert">
-      <h2>Аналитика недоступна</h2>
-      <p>{{ error() }}</p>
+      <i appIcon icon="accent-error" appSquare="40" aria-hidden="true"></i>
+      <h2 class="text-body-14">Аналитика недоступна</h2>
+      <p class="text-body-10">{{ error() }}</p>
       <button appButton="secondary" type="button" (click)="load()">Повторить</button>
     </section>
   } @else if (data(); as overview) {
     <section class="summary" aria-label="Основные показатели">
-      <article class="summary-card">
+      <article class="summary-card" data-metric="participants">
+        <div class="summary-card__icon">
+          <i appIcon icon="person" appSquare="24" aria-hidden="true"></i>
+        </div>
         <div class="summary-card__content">
-          <h2 class="summary-card__label">Участники</h2>
+          <h2 class="summary-card__label text-body-10">Участники</h2>
           <strong class="summary-card__value" data-testid="solution-participants">{{
             overview.summary.participants.total
           }}</strong>
         </div>
       </article>
-      <article class="summary-card">
+      <article class="summary-card" data-metric="solutions">
+        <div class="summary-card__icon">
+          <i appIcon icon="folder" appSquare="24" aria-hidden="true"></i>
+        </div>
         <div class="summary-card__content">
-          <h2 class="summary-card__label">Заявки</h2>
+          <h2 class="summary-card__label text-body-10">Заявки</h2>
           <strong class="summary-card__value" data-testid="solution-total">{{
             overview.summary.solutions.total
           }}</strong>
         </div>
       </article>
-      <article class="summary-card">
+      <article class="summary-card" data-metric="submitted-projects">
+        <div class="summary-card__icon">
+          <i appIcon icon="analytics-submitted" appSquare="24" aria-hidden="true"></i>
+        </div>
         <div class="summary-card__content">
-          <h2 class="summary-card__label">
+          <h2 class="summary-card__label text-body-10">
             {{ overview.solutionFunnel.submissionApplicable ? "Сдано" : "В командах" }}
           </h2>
           <strong class="summary-card__value">{{
@@ -77,16 +95,19 @@
           }}</strong>
         </div>
       </article>
-      <article class="summary-card">
+      <article class="summary-card" data-metric="experts">
+        <div class="summary-card__icon">
+          <i appIcon icon="analytics-team" appSquare="24" aria-hidden="true"></i>
+        </div>
         <div class="summary-card__content">
-          <h2 class="summary-card__label">Эксперты</h2>
+          <h2 class="summary-card__label text-body-10">Эксперты</h2>
           <strong class="summary-card__value">{{ overview.summary.experts.total }}</strong>
         </div>
       </article>
     </section>
     <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
       <article class="attention">
-        <h2 class="text-body-12">Требует внимания</h2>
+        <h2 class="analytics-card__title">Требует внимания</h2>
         <ul class="attention__list">
           <li data-attention-kind="without-visit">
             <button
@@ -181,7 +202,7 @@
     </section>
     <section class="analytics-grid" aria-label="Воронки программы">
       <article class="analytics-card">
-        <h2 class="text-body-12">Воронка участников</h2>
+        <h2 class="analytics-card__title">Воронка участников</h2>
         <app-analytics-funnel-chart
           [items]="participantFunnel()"
           label="Воронка участников"
@@ -189,7 +210,7 @@
         />
       </article>
       <article class="analytics-card">
-        <h2 class="text-body-12">Воронка заявок</h2>
+        <h2 class="analytics-card__title">Воронка заявок</h2>
         <app-analytics-funnel-chart
           [items]="solutionFunnel()"
           label="Воронка заявок"
@@ -204,7 +225,7 @@
       <section class="analytics-grid analytics-grid--evaluation" aria-label="Ход оценивания">
         <article class="analytics-card evaluation">
           <h2 class="analytics-card__title">Ход оценивания</h2>
-          <p>
+          <p class="evaluation__mode analytics-card__subtitle">
             {{
               overview.evaluationStatus.mode === "distributed"
                 ? "Распределенное оценивание"
@@ -212,32 +233,12 @@
             }}
           </p>
           @if (overview.evaluationStatus.assignments; as totals) {
-            <div class="solution-analytics__actions">
-              <button
-                #all
-                appButton="secondary"
-                type="button"
-                (click)="openAssignments('all', all)"
-              >
-                Все назначения · {{ totals.total }}
-              </button>
-              <button
-                #complete
-                appButton="secondary"
-                type="button"
-                (click)="openAssignments('completed', complete)"
-              >
-                Выполнено · {{ totals.evaluated }}
-              </button>
-              <button
-                #pending
-                appButton="secondary"
-                type="button"
-                (click)="openAssignments('pending', pending)"
-              >
-                Ожидают оценки · {{ totals.pending }}
-              </button>
-            </div>
+            <app-evaluation-progress-summary
+              [totals]="totals"
+              [showEmptyAction]="true"
+              [mode]="overview.evaluationStatus.mode"
+              (openAssignments)="openAssignments($event.scope, $event.trigger)"
+            />
           }
           @if (overview.evaluationStatus.solutions; as solutions) {
             <p>
@@ -264,6 +265,19 @@
         @if (!overview.cases.configured) {
           <p class="analytics-empty-state">Кейсы не настроены для этой программы</p>
         }
+        @if (overview.cases.items.length || overview.cases.withoutCase.solutionsTotal) {
+          <div
+            class="cases-card__columns"
+            [class.cases-card__columns--without-submission]="!overview.cases.submissionApplicable"
+            aria-hidden="true"
+          >
+            <span>Кейс</span><span>Заявки</span>
+            @if (overview.cases.submissionApplicable) {
+              <span>Сдано</span>
+            }
+            <span>Участники</span>
+          </div>
+        }
         <ul class="cases-card__list">
           @for (row of overview.cases.items; track row.name) {
             <li>
@@ -281,11 +295,27 @@
                 "
               >
                 <span class="case-row__name">{{ row.name }}</span
-                ><span>Заявки: {{ row.solutionsTotal }}</span>
+                ><span class="case-row__projects"
+                  ><strong>{{ row.solutionsTotal }}</strong
+                  ><span class="case-row__mobile-label">Заявки</span
+                  ><span class="case-row__bar" aria-hidden="true"
+                    ><span
+                      class="case-row__volume"
+                      [style.width.%]="
+                        caseMaximum() ? (row.solutionsTotal / caseMaximum()) * 100 : 0
+                      "
+                    ></span></span
+                ></span>
                 @if (overview.cases.submissionApplicable) {
-                  <span>Сдано: {{ row.submitted }}</span>
+                  <span class="case-row__metric"
+                    ><span class="case-row__mobile-label">Сдано</span
+                    ><strong>{{ row.submitted }}</strong></span
+                  >
                 }
-                <span>Участники: {{ row.participantsTotal }}</span>
+                <span class="case-row__metric"
+                  ><span class="case-row__mobile-label">Участники</span
+                  ><strong>{{ row.participantsTotal }}</strong></span
+                >
               </button>
             </li>
           }
@@ -301,11 +331,29 @@
                 "
               >
                 <span>Без выбранного кейса</span
-                ><span>Заявки: {{ overview.cases.withoutCase.solutionsTotal }}</span>
+                ><span class="case-row__projects"
+                  ><strong>{{ overview.cases.withoutCase.solutionsTotal }}</strong
+                  ><span class="case-row__mobile-label">Заявки</span
+                  ><span class="case-row__bar" aria-hidden="true"
+                    ><span
+                      class="case-row__volume"
+                      [style.width.%]="
+                        caseMaximum()
+                          ? (overview.cases.withoutCase.solutionsTotal / caseMaximum()) * 100
+                          : 0
+                      "
+                    ></span></span
+                ></span>
                 @if (overview.cases.submissionApplicable) {
-                  <span>Сдано: {{ overview.cases.withoutCase.submitted }}</span>
+                  <span class="case-row__metric"
+                    ><span class="case-row__mobile-label">Сдано</span
+                    ><strong>{{ overview.cases.withoutCase.submitted }}</strong></span
+                  >
                 }
-                <span>Участники: {{ overview.cases.withoutCase.participantsTotal }}</span>
+                <span class="case-row__metric"
+                  ><span class="case-row__mobile-label">Участники</span
+                  ><strong>{{ overview.cases.withoutCase.participantsTotal }}</strong></span
+                >
               </button>
             </li>
           }
@@ -341,7 +389,7 @@
     </section>
     <section class="regions-grid" aria-label="География и динамика программы">
       <article class="regions">
-        <h2 class="text-body-12">Регионы участников</h2>
+        <h2 class="analytics-card__title">Регионы участников</h2>
         @if (overview.summary.participantRegions.items.length) {
           <app-analytics-region-chart
             [items]="overview.summary.participantRegions.items"
@@ -389,7 +437,7 @@
       <p role="status">{{ message() }}</p>
     }
     @if (actionError()) {
-      <p role="alert">{{ actionError() }}</p>
+      <p appAlert="error" role="alert">{{ actionError() }}</p>
     }
     @if (preview(); as reviewed) {
       <h3>Отправить напоминание</h3>
@@ -425,7 +473,7 @@
         <p role="status">Загружаем оценку…</p>
       }
       @if (detailError()) {
-        <p role="alert">{{ detailError() }}</p>
+        <p appAlert="error" role="alert">{{ detailError() }}</p>
       }
       @if (detail(); as scores) {
         <button appButton="text" type="button" (click)="backToAssignments()">
@@ -455,7 +503,7 @@
           <p role="status">Загружаем назначения…</p>
         }
         @if (listError()) {
-          <p role="alert">{{ listError() }}</p>
+          <p appAlert="error" role="alert">{{ listError() }}</p>
           <button appButton="secondary" type="button" (click)="loadList()">Повторить</button>
         }
         <div class="solution-analytics__table">
@@ -512,7 +560,7 @@
         <p role="status">Загружаем список…</p>
       }
       @if (listError()) {
-        <p role="alert">{{ listError() }}</p>
+        <p appAlert="error" role="alert">{{ listError() }}</p>
         <button appButton="secondary" type="button" (click)="loadList()">Повторить</button>
       }
       @if (!listPending() && !listError()) {

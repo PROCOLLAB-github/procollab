@@ -76,6 +76,7 @@
     @if (section() === "experts") {
       @if (program.solutionStorageMode === "solution") {
         <app-solution-experts
+          [floatingPosition]="floatingPosition()"
           [programId]="program.id"
           [confirmDiscard]="confirmProjectFormDiscard"
           (statusChange)="expertsStatus.set($event)"
@@ -90,6 +91,7 @@
     }
     @if (section() === "projects" && program.solutionStorageMode === "solution") {
       <app-solution-applications
+        [floatingPosition]="floatingPosition()"
         [program]="program"
         (busyChange)="solutionActionBusy.set($event)"
       />

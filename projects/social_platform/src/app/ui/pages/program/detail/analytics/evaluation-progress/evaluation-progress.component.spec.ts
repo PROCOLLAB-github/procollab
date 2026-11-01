@@ -3,6 +3,7 @@
 import { TestBed } from "@angular/core/testing";
 import { of, Subject } from "rxjs";
 import { AnalyticsEvaluationProgressComponent } from "./evaluation-progress.component";
+import { EvaluationProgressSummaryComponent } from "./evaluation-progress-summary.component";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import {
   ProgramAnalyticsAssignment,
@@ -10,6 +11,25 @@ import {
 } from "@domain/program/program-analytics.model";
 import { assignment } from "@domain/program/program-analytics-assignment.fixture";
 import { fail, ok } from "@domain/shared/result.type";
+
+describe("Общее представление назначений V1/V2", () => {
+  it("сохраняет вход V2 в пустой список назначений без зависимости от Project API", () => {
+    TestBed.configureTestingModule({ imports: [EvaluationProgressSummaryComponent] });
+    const fixture = TestBed.createComponent(EvaluationProgressSummaryComponent);
+    fixture.componentRef.setInput("totals", { total: 0, evaluated: 0, pending: 0 });
+    fixture.componentRef.setInput("mode", "distributed");
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector("button")).toBeNull();
+    fixture.componentRef.setInput("showEmptyAction", true);
+    fixture.detectChanges();
+    const action = vi.fn();
+    fixture.componentInstance.openAssignments.subscribe(action);
+    const trigger = fixture.nativeElement.querySelector("button") as HTMLButtonElement;
+    trigger.click();
+    expect(action).toHaveBeenCalledExactlyOnceWith({ scope: "all", trigger });
+    fixture.destroy();
+  });
+});
 
 describe("AnalyticsEvaluationProgressComponent", () => {
   const requests = { execute: vi.fn() };

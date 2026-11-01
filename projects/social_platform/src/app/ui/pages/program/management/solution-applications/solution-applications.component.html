@@ -1,7 +1,7 @@
 <!-- @format -->
 <section class="management__card" [attr.aria-busy]="loading()">
   @if (formError()) {
-    <p role="alert">Не удалось загрузить настройки полей: {{ formError() }}</p>
+    <p appAlert="error" role="alert">Не удалось загрузить настройки полей: {{ formError() }}</p>
   }
   <div class="management__list-heading">
     <div>
@@ -48,14 +48,16 @@
         [attr.aria-expanded]="filtersOpen()"
         (click)="openFilters(filtersTrigger)"
       >
-        <i appIcon icon="filter" appSquare="16" aria-hidden="true"></i>Фильтры
+        <i appIcon icon="filter" appSquare="16" aria-hidden="true"></i>Фильтры{{
+          filterCount() ? " · " + filterCount() : ""
+        }}
       </button>
     </div>
   </div>
   @if (loading()) {
     <p role="status">Загружаем заявки…</p>
   } @else if (error()) {
-    <p role="alert">{{ error() }}</p>
+    <p appAlert="error" role="alert">{{ error() }}</p>
     <button appButton="secondary" type="button" (click)="load()">Повторить</button>
   } @else if (!rows().length) {
     <p role="status">
@@ -175,31 +177,45 @@
     >
   }
   @if (message()) {
-    <p role="status">{{ message() }}</p>
+    <app-transient-notice [source]="message" (dismissed)="message.set(null)">{{
+      message()
+    }}</app-transient-notice>
   }
   @if (selected().size && !archived()) {
     <section
-      class="management__selection management__bulk management__bulk--projects solution-selection"
+      class="management__selection management__bulk management__bulk--projects"
+      [style.left.px]="floatingPosition()?.center"
+      [style.width.px]="floatingPosition()?.width"
       aria-label="Массовые действия"
     >
-      <strong>Выбрано заявок: {{ selected().size }}</strong
-      ><button
-        appButton="secondary"
+      <strong class="management__bulk-summary">Выбрано заявок: {{ selected().size }}</strong>
+      <div class="management__bulk-actions">
+        <button
+          appButton="secondary"
+          type="button"
+          [disabled]="!program().isCompetitive || applying()"
+          (click)="beginAction({ kind: 'submit', ids: Array.from(selected()) })"
+        >
+          Сдать решения
+        </button>
+        <button
+          #allocationTrigger
+          appButton="primary"
+          type="button"
+          [disabled]="!program().isCompetitive || applying()"
+          (click)="openAllocation(allocationTrigger)"
+        >
+          Назначить экспертов
+        </button>
+      </div>
+      <button
+        class="management__clear-selection"
+        appButton="icon"
         type="button"
-        [disabled]="!program().isCompetitive || applying()"
-        (click)="beginAction({ kind: 'submit', ids: Array.from(selected()) })"
+        aria-label="Снять весь выбор"
+        (click)="clear()"
       >
-        Сдать решения</button
-      ><button
-        #allocationTrigger
-        appButton="primary"
-        type="button"
-        [disabled]="!program().isCompetitive || applying()"
-        (click)="openAllocation(allocationTrigger)"
-      >
-        Назначить экспертов</button
-      ><button appButton="icon" type="button" aria-label="Снять весь выбор" (click)="clear()">
-        ×
+        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
       </button>
     </section>
   }
@@ -207,6 +223,7 @@
 <app-modal
   [open]="filtersOpen()"
   size="small"
+  bodyClass="modal__body--no-flex"
   labelledBy="solution-filters-title"
   (openChange)="filtersOpen.set($event); !$event && restoreFocus()"
   ><section class="solution-dialog">
@@ -218,7 +235,7 @@
         aria-label="Закрыть"
         (click)="filtersOpen.set(false); restoreFocus()"
       >
-        ×
+        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
       </button>
     </header>
     <label
@@ -275,32 +292,31 @@
 <app-modal
   [open]="detailOpen()"
   size="large"
+  bodyClass="modal__body--no-flex"
   labelledBy="managed-solution-title"
   (openChange)="!$event && closeDetail()"
   ><section class="solution-dialog" [attr.aria-busy]="detailLoading()">
     <header>
       <h2 id="managed-solution-title">{{ detail()?.name || "Заявка" }}</h2>
       <button appButton="icon" type="button" aria-label="Закрыть заявку" (click)="closeDetail()">
-        ×
+        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
       </button>
     </header>
     @if (detailLoading()) {
       <p role="status">Загружаем заявку…</p>
     }
     @if (detailError()) {
-      <p role="alert">{{ detailError() }}</p>
+      <p appAlert="error" role="alert">{{ detailError() }}</p>
     }
     @if (detail(); as item) {
       <nav class="solution-dialog__tabs" aria-label="Разделы заявки">
         <button
-          appButton="secondary"
           type="button"
           [attr.aria-current]="!teamTab() ? 'page' : null"
           (click)="teamTab.set(false); historyOpen.set(false)"
         >
           Решение</button
         ><button
-          appButton="secondary"
           type="button"
           [attr.aria-current]="teamTab() ? 'page' : null"
           (click)="teamTab.set(true); historyOpen.set(false)"
@@ -378,6 +394,7 @@
 <app-modal
   [open]="!!actionRequest()"
   size="small"
+  bodyClass="modal__body--no-flex"
   labelledBy="solution-action-title"
   (openChange)="!$event && closeAction()"
   ><section class="solution-dialog" [attr.aria-busy]="actionLoading() || applying()">
@@ -390,7 +407,7 @@
         [disabled]="applying()"
         (click)="closeAction()"
       >
-        ×
+        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
       </button>
     </header>
     @if (actionRequest()?.kind === "archive") {
@@ -420,11 +437,11 @@
         </p>
       }
       @for (issue of checked.issues; track $index) {
-        <p role="alert">{{ issue }}</p>
+        <p appAlert="error" role="alert">{{ issue }}</p>
       }
     }
     @if (actionError()) {
-      <p role="alert">{{ actionError() }}</p>
+      <p appAlert="error" role="alert">{{ actionError() }}</p>
       <button appButton="secondary" type="button" [disabled]="applying()" (click)="retryAction()">
         Обновить данные
       </button>

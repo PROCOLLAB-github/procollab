@@ -1,5 +1,55 @@
 /** @format */
 
+@mixin export-trigger {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 5px;
+  color: var(--accent);
+  background: var(--light-white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 8px;
+}
+
+@mixin section-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  overflow-wrap: anywhere;
+}
+
+@mixin section-tabs {
+  display: flex;
+  min-width: 0;
+  border-bottom: 1px solid var(--medium-grey-for-outline);
+
+  button {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px;
+    font: inherit;
+    color: var(--black);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid transparent;
+
+    &[aria-current] {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    &:hover { color: var(--accent); }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -3px;
+    }
+  }
+}
+
 @mixin status-notice {
   box-sizing: border-box;
   padding: 12px 16px;

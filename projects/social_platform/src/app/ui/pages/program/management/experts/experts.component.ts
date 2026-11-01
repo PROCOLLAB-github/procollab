@@ -1,4 +1,12 @@
 /** @format */
+
+import {
+  expertStatusLabel,
+  expertStatusDescription,
+  expertDeliveryLabel,
+  expertInitials,
+  expertScopeLabel,
+} from "./expert-presentation";
 import {
   ChangeDetectionStrategy,
   afterNextRender,
@@ -59,12 +67,14 @@ import {
 import { evaluationError } from "@utils/evaluation-workspace";
 import { presentationHref } from "@utils/program-case-analytics";
 
+import { ExpertRosterComponent } from "./expert-roster.component";
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 
 @Component({
   selector: "app-management-experts",
   imports: [
     TransientNoticeComponent,
+    ExpertRosterComponent,
     ReactiveFormsModule,
     AlertDirective,
     AvatarComponent,
@@ -595,6 +605,7 @@ export class ManagementExpertsComponent {
     if (this.element.nativeElement.ownerDocument.defaultView?.getSelection()?.toString()) return;
     this.toggleSelectedExpert(row);
   }
+  readonly rosterActions = (row: ExpertRow) => this.rowActions(row);
   rowActions(row: ExpertRow): RowAction[] {
     const actions: RowAction[] = [{ id: "scope", label: "Изменить кейсы" }];
     if (row.userId)
@@ -701,36 +712,10 @@ export class ManagementExpertsComponent {
       { injector: this.injector },
     );
   }
-  label(row: ExpertRow): string {
-    if (row.status === "joined") return "Доступ предоставлен";
-    if (row.status === "expired") return "Приглашение истекло";
-    if (row.status === "revoked") return "Приглашение отозвано";
-    return "Ожидает принятия";
-  }
-  statusDescription(row: ExpertRow): string {
-    return row.status === "joined"
-      ? "Эксперт добавлен в программу. Проекты для оценки назначаются отдельно."
-      : row.status === "pending"
-        ? "Эксперт еще не принял приглашение. Статус отправки письма указан ниже."
-        : row.status === "expired"
-          ? "Срок приглашения истек. Его можно отправить повторно через меню действий."
-          : "Приглашение отозвано организатором.";
-  }
-  deliveryLabel(row: ExpertRow): string {
-    if (row.status !== "pending") return "";
-    if (row.deliveryStatus === "failed") return "Не удалось отправить письмо";
-    if (row.deliveryStatus === "queued") return "Письмо в очереди";
-    if (row.deliveryStatus === "sent") return "Письмо отправлено · ждем принятия";
-    return "Статус отправки неизвестен";
-  }
-  initials(row: ExpertRow): string {
-    return (row.name || row.email)
-      .split(/\s+/)
-      .slice(0, 2)
-      .map(s => s[0])
-      .join("")
-      .toUpperCase();
-  }
+  readonly label = expertStatusLabel;
+  readonly statusDescription = expertStatusDescription;
+  readonly deliveryLabel = expertDeliveryLabel;
+  readonly initials = expertInitials;
   open(kind: "invite" | "auto" | "quota" | "revoke" | "method"): void {
     this.allocationBeforeSettings = null;
     this.bulkRevoke.set(false);
@@ -982,13 +967,7 @@ export class ManagementExpertsComponent {
     this.distributionCase.setValue("all");
     this.distributionStatus.setValue(active ? "all" : "missing");
   }
-  scopeLabel(expert: ExpertRow): string {
-    return (expert.allCases ?? true)
-      ? "Все кейсы"
-      : expert.caseNames?.length
-        ? expert.caseNames.map(n => this.caseLabel(n)).join(", ")
-        : "Кейсы не выбраны";
-  }
+  readonly scopeLabel = expertScopeLabel;
   eligibleFor(expert: ExpertRow, name: string | null): boolean {
     return (
       expert.status === "joined" &&

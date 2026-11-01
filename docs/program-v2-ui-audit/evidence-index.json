@@ -1,0 +1,65 @@
+{
+  "location": "Full task archive: docs/program-v2-ui-audit/",
+  "files": [
+    {
+      "path": "after-interaction-results.json",
+      "sha256": "71ba57a79b7c6e97f5a0ab0e4f4dbb4f95f6380c5b6588a48b3e910a001f08fd",
+      "bytes": 683845
+    },
+    {
+      "path": "after-results.json",
+      "sha256": "f303ab734c06fc5822e29d39bff6ed2ddd18b175b4cf245495090250af389871",
+      "bytes": 221356
+    },
+    {
+      "path": "before-interaction-results.json",
+      "sha256": "18e4b149df5894cbb96f79a3c5d0761878fe1cb928be8779923ec36b41256ca4",
+      "bytes": 74566
+    },
+    {
+      "path": "before-results.json",
+      "sha256": "afe386df3c4513e3943498c69e4046e4b1c81dba12ab1ee46c94281afe1addda",
+      "bytes": 219809
+    },
+    {
+      "path": "state-results.json",
+      "sha256": "7998927da79104d13ddeeffa660c60c340ec7bba13ceb4b9813cd9fc28f9fc52",
+      "bytes": 68143
+    },
+    {
+      "path": "visual-contract-results.json",
+      "sha256": "c508f15548ad004eff2ffb4a565cbf0383e19a037b0d10bdc455096856340ade",
+      "bytes": 28283
+    },
+    {
+      "path": "production-smoke-results.json",
+      "sha256": "158b93846421cb3bc84fac1329b3cd6b4498cf5f58c9dc96324b2d79278dcabe",
+      "bytes": 26800
+    },
+    {
+      "path": "tests-results.json",
+      "sha256": "ff29b603262a701d58f4df9f2afe7e4a4f9030442899e1faa64cd27c900c0310",
+      "bytes": 114291
+    },
+    {
+      "path": "figma-foundations.json",
+      "sha256": "247c0052400f5f782d43b6b7f01313a4031d6d3f16f0d5d5307de6dc2f5c2cbd",
+      "bytes": 10991
+    },
+    {
+      "path": "figma-contracts-controls.json",
+      "sha256": "dda6660efcc671e44af0edcfe91450be655953782f04d0c8f3b6b4b21b1485d7",
+      "bytes": 42725
+    },
+    {
+      "path": "figma-contracts-layout.json",
+      "sha256": "c98fa79eecb2088058bed8ec852fe37cd553ae4118484b9cfc0acbe999e36677",
+      "bytes": 35634
+    },
+    {
+      "path": "figma-patterns.json",
+      "sha256": "4bb76727af9066ca55ea198239256b16d2ada2a1636bba401941e92f89438fff",
+      "bytes": 17324
+    }
+  ]
+}
