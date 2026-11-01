@@ -305,8 +305,12 @@ export class SolutionExpertsComponent {
     this.filtersOpen.set(true);
   }
   applyFilters(): void {
-    if (this.tab() === "experts") this.status.setValue(this.filterDraft.controls.status.value);
-    else this.caseFilter.setValue(this.filterDraft.controls.case.value);
+    const control = this.tab() === "experts" ? this.status : this.caseFilter;
+    const value =
+      this.tab() === "experts"
+        ? this.filterDraft.controls.status.value
+        : this.filterDraft.controls.case.value;
+    if (value !== control.value) control.setValue(value);
     this.filtersOpen.set(false);
   }
   resetFilterDraft(): void {

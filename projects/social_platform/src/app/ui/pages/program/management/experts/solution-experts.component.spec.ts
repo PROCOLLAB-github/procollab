@@ -17,6 +17,8 @@ import {
 import { SolutionAssignmentOptions, SolutionQuota } from "@domain/solution/solution-contract.model";
 import { SolutionManagerSolutions } from "@domain/solution/solution-contract.model";
 import { solutionContractScenarios } from "@domain/solution/solution-contract.fixture";
+import { exportExperts } from "@utils/export-experts";
+vi.mock("@utils/export-experts", () => ({ exportExperts: vi.fn(async () => {}) }));
 const option = (id: number, assigned: boolean, protectedScore = false) => ({
   solutionId: id,
   name: `Решение ${id}`,
@@ -51,6 +53,7 @@ function setup() {
       }),
     ),
     saveCaseScope: vi.fn(() => of({})),
+    bulkExperts: vi.fn(() => new Subject()),
   };
   const assignments = {
     execute: vi.fn(() =>
@@ -114,6 +117,73 @@ function setup() {
   };
 }
 describe("Solution expert management", () => {
+  it("разделяет ID экспертов и приглашений в массовом действии и запрещает повтор для смешанного выбора", () => {
+    const { c, expert, roster } = setup();
+    c.experts.set([
+      expert,
+      { ...expert, id: "invite:77", userId: null, status: "pending", invitationId: 77 },
+    ]);
+    c.selectAllExperts();
+    c.bulk("resend");
+    c.bulk("revoke");
+    expect(roster.bulkExperts).not.toHaveBeenCalled();
+    c.bulk("cases");
+    c.scopeAll.set(false);
+    c.scopeCases.set(new Set(["Город"]));
+    c.bulk("cases");
+    expect(roster.bulkExperts).toHaveBeenCalledExactlyOnceWith(12, {
+      action: "cases",
+      revision: "r1",
+      expertIds: [11],
+      invitationIds: [77],
+      allCases: false,
+      caseNames: ["Город"],
+    });
+  });
+  it("выгружает весь фильтр экспертов независимо от страницы и массового выбора", async () => {
+    const { c, expert } = setup();
+    vi.mocked(exportExperts).mockClear();
+    c.experts.set(Array.from({ length: 21 }, (_, i) => ({ ...expert, id: i + 1 })));
+    c.page.set(1);
+    c.toggleExpert(21);
+    await c.downloadExperts();
+    expect(exportExperts).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(exportExperts).mock.calls[0][0]).toBe(12);
+    expect(vi.mocked(exportExperts).mock.calls[0][1]).toHaveLength(21);
+    expect(c.exportSuccess()).toBe(true);
+    expect(c.exporting()).toBe(false);
+  });
+  it("сохраняет выбранных экспертов и страницу при применении неизмененного фильтра", () => {
+    const { c, expert, roster } = setup();
+    c.experts.set(
+      Array.from({ length: 21 }, (_, i) => ({ ...expert, id: i + 1, name: `Эксперт ${i + 1}` })),
+    );
+    c.status.setValue("joined");
+    c.selectAllExperts();
+    c.page.set(1);
+    c.openFilters();
+    c.applyFilters();
+    expect(c.selectedExperts().size).toBe(21);
+    expect(c.page()).toBe(1);
+    expect(c.status.value).toBe("joined");
+    expect(c.filtersOpen()).toBe(false);
+    expect(roster.workspace).toHaveBeenCalledTimes(1);
+  });
+  it("не расширяет распределение до всех решений после применения неизмененного фильтра", () => {
+    const { c } = setup();
+    const source = solutionContractScenarios.find(s => s.name === "manager_solution_list_awaiting")!
+      .response as SolutionManagerSolutions;
+    const row = source.results[0];
+    c.solutions.set([row, { ...row, application: { ...row.application, solutionId: 302 } }]);
+    c.tab.set("distribution");
+    c.caseFilter.setValue(JSON.stringify(row.caseName));
+    c.toggleDistribution(302);
+    c.openFilters();
+    c.applyFilters();
+    expect([...c.distributionSelection()]).toEqual([302]);
+    c.startAllocation();
+    expect(c.allocation()).toEqual({ programId: 12, ids: [302] });
+  });
   it("applies the filter draft only on confirmation and resets selection without changing the roster API", () => {
     const { c, roster } = setup();
     c.selectAllExperts();

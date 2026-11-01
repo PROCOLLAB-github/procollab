@@ -1,0 +1,225 @@
+{
+  "reviewedBaseline": "0a589f4cbacb100a186db05fb5044ed9a826107a",
+  "base": "9ef90b5824b857fe53d52c097e37b279b897d9bf",
+  "codeFix": {
+    "id": "R1",
+    "source": "projects/social_platform/src/app/ui/pages/program/management/experts/solution-experts.component.ts",
+    "sha256": "f1e2fbf89be238e89eadbcd743962babff212c1a978191edcdc3ec52aa105c51",
+    "beforeUnit": {
+      "tests": 12,
+      "failed": 2
+    },
+    "afterUnit": {
+      "files": 6,
+      "tests": 75,
+      "passed": 75,
+      "failed": 0
+    },
+    "apiChanged": false,
+    "visualChanged": false
+  },
+  "standardProductionBuild": {
+    "command": "NG_BUILD_MAX_WORKERS=2 npm run build:prod",
+    "exitCode": 0,
+    "originalBudgets": true,
+    "log": "production-build.log"
+  },
+  "baselineBrowser": {
+    "commit": "0a589f4cbacb100a186db05fb5044ed9a826107a",
+    "sourceSha256": "464f6f633d9ce3fa45bc224bc6672164b1eb1babc5471a99587c7ba7292435f0",
+    "appSourceClean": true,
+    "normalLoginRendered": true,
+    "origin": "http://127.0.0.1:4317",
+    "api": "https://dev.procollab.ru",
+    "reads": [
+      {
+        "path": "/programs/39/",
+        "status": 200,
+        "mode": "legacy_project",
+        "detail": null
+      },
+      {
+        "path": "/programs/49/",
+        "status": 200,
+        "mode": "solution",
+        "detail": null
+      },
+      {
+        "path": "/programs/39/management/experts/",
+        "status": 401,
+        "mode": null,
+        "detail": "Authentication credentials were not provided."
+      },
+      {
+        "path": "/programs/49/management/experts/",
+        "status": 401,
+        "mode": null,
+        "detail": "Authentication credentials were not provided."
+      }
+    ],
+    "anonymousRedirects": [
+      {
+        "programId": 39,
+        "login": true
+      },
+      {
+        "programId": 49,
+        "login": true
+      }
+    ],
+    "blockedThirdPartyOrigins": [],
+    "apiMocked": false,
+    "authorizationAttempted": false,
+    "credentialsRecorded": false,
+    "writes": 0
+  },
+  "connectivity": [
+    {
+      "path": "/programs/?limit=1",
+      "method": "GET",
+      "status": 200,
+      "cors": {
+        "access-control-allow-origin": "*"
+      },
+      "detail": null
+    },
+    {
+      "path": "/api/token/",
+      "method": "OPTIONS",
+      "status": 200,
+      "cors": {
+        "access-control-allow-origin": "*",
+        "access-control-allow-headers": "accept, accept-encoding, authorization, content-type, dnt, origin, user-agent, x-csrftoken, x-requested-with",
+        "access-control-allow-methods": "DELETE, GET, OPTIONS, PATCH, POST, PUT",
+        "access-control-max-age": "86400"
+      },
+      "detail": null
+    },
+    {
+      "path": "/programs/49/management/",
+      "method": "OPTIONS",
+      "status": 200,
+      "cors": {
+        "access-control-allow-origin": "*",
+        "access-control-allow-headers": "accept, accept-encoding, authorization, content-type, dnt, origin, user-agent, x-csrftoken, x-requested-with",
+        "access-control-allow-methods": "DELETE, GET, OPTIONS, PATCH, POST, PUT",
+        "access-control-max-age": "86400"
+      },
+      "detail": null
+    },
+    {
+      "path": "/auth/users/current/",
+      "method": "GET",
+      "status": 401,
+      "cors": {},
+      "detail": "Authentication credentials were not provided."
+    }
+  ],
+  "anonymousManagement": [
+    {
+      "path": "/programs/39/management/",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "path": "/programs/39/management/settings/basic/",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "path": "/programs/39/management/experts/",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "path": "/programs/39/management/projects/",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "path": "/programs/39/management/results/",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "path": "/programs/49/management/",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "path": "/programs/49/management/settings/basic/",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "path": "/programs/49/management/experts/",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "path": "/programs/49/management/solution-analytics/",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "path": "/programs/49/management/solution-analytics/solutions/?limit=1",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "path": "/programs/49/management/solution-analytics/assignments/",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "path": "/programs/49/management/solution-results/",
+      "method": "GET",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    }
+  ],
+  "matrixSummary": {
+    "PASS": 5,
+    "FAIL": 0,
+    "NOT TESTED": 20
+  },
+  "integrationAcceptance": "INSUFFICIENT EVIDENCE: no authenticated organizer/expert/participant session",
+  "mailSent": false,
+  "certificateDelivery": false,
+  "merge": false,
+  "deploy": false,
+  "rawEvidence": "Separate integration artifact; no credentials/HAR/storageState",
+  "codeChecks": [
+    {
+      "name": "ESLint updated TS/spec",
+      "exitCode": 0
+    },
+    {
+      "name": "Prettier updated TS/spec",
+      "exitCode": 0
+    },
+    {
+      "name": "npm run test:solution-contract",
+      "exitCode": 0
+    },
+    {
+      "name": "bash -n start-preview.sh",
+      "exitCode": 0
+    },
+    {
+      "name": "node --check anonymous-readiness.cjs",
+      "exitCode": 0
+    }
+  ]
+}
