@@ -47,6 +47,10 @@ describe("Attention views: real overlay", () => {
     Array.from(dialog().querySelectorAll<HTMLButtonElement>("button")).find(
       item => item.textContent?.trim() === text,
     )!;
+  const closeButton = () =>
+    dialog().querySelector<HTMLButtonElement>(
+      'button[aria-label="Закрыть детализацию аналитики"]',
+    )!;
 
   beforeEach(async () => {
     actions.preview.mockReset().mockReturnValue(
@@ -497,7 +501,7 @@ describe("Attention views: real overlay", () => {
         );
       else if (method === "backdrop")
         document.querySelector<HTMLElement>(".modal__overlay")!.click();
-      else button("×").click();
+      else closeButton().click();
       await detached;
       await fixture.whenStable();
       expect(close).toHaveBeenCalledOnce();

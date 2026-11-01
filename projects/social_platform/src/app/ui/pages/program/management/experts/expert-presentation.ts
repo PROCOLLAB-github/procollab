@@ -1,6 +1,18 @@
 /** @format */
 import { ExpertRow } from "@domain/program/evaluation-workspace.model";
 
+export function expertDialogBodyClass(kind: string | null): string {
+  const variant =
+    kind === "invite" || kind === "quota" || kind === "revoke"
+      ? "compact"
+      : kind === "scope"
+        ? "scope"
+        : kind === "project" || kind === "assignments"
+          ? "assignments"
+          : "wide";
+  return `modal__body--no-flex experts-modal experts-modal--${variant}`;
+}
+
 export function expertStatusLabel(row: ExpertRow): string {
   if (row.status === "joined") return "Доступ предоставлен";
   if (row.status === "expired") return "Приглашение истекло";

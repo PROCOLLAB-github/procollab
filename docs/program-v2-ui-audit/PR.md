@@ -1,56 +1,53 @@
-<!-- @format -->
-
-Предлагаемый заголовок: **fix(programs): unify V1/V2 management UI with PROCOLLAB components**
-
-Ветка `fix/program-v2-design-system`; предполагаемая base `dev`, проверена на `9ef90b58`. Описание подготовлено локально. PR не опубликован, merge и deploy не выполнялись. Статус: требуется завершить приемку по ограничениям ниже.
-
 ## Что изменено
 
-Управление программами V2 использовало другую таблицу экспертов и стили аналитики для controls и диалогов. Теперь V1/V2 разделяют roster, подписи статусов, геометрию таблиц и сводку оценивания. Заявки, распределение и аналитика V2 следуют композиции V1; новые сущности Solution и действия сохранены.
+V2 управления программами приведена к общим UI-компонентам PROCOLLAB и композиции V1: таблицы экспертов, фильтры, распределение, заявки, аналитика и вложенные диалоги. Устранены блокеры обычной production-сборки без изменения budgets. Ветка предназначена для draft review; серверная приемка под организатором остается открытой.
 
 ## Зачем
 
-Восстановить единый ранее согласованный интерфейс PROCOLLAB. [Матрица расхождений, источники и полный отчет](README.md).
+Устранить два визуально разных интерфейса одного продукта, сохранив самостоятельные Solution в V2 и существующие Project в V1. Аудит всех экранов и исключения: `docs/program-v2-ui-audit/ACCEPTANCE.md`, первоначальная матрица — `README.md` в том же каталоге.
 
 ## Реализация
 
-Чистые ExpertRosterComponent и EvaluationProgressSummaryComponent получают данные/события; загрузка и бизнес-операции остаются в V1/V2 parents. Общие SCSS mixins заменяют копирование разметки. Исправлены scoped-стили дочерних компонентов, filter Modal, selection/bulk layout, export controls, иконки, alerts, карточки аналитики и мобильные подписи. Уже общие participants/results/settings/certificates проверены регрессионно.
+Общие ExpertRoster, EvaluationProgressSummary, подписи статусов, native controls, списки management и таблицы/диалоги аналитики. Обработчики и API V1/V2 остаются раздельными. Исправлены scoped-стили, кнопка фильтров/selection, мобильные подписи и положение меню распределения V1, ширина empty state и модальные presets. Стандартная сборка восстановлена удалением неиспользуемой внешней ссылки Material Icons и выделением реально переиспользуемого CSS по ответственности; V2 заявки больше не загружают shell/settings стили.
 
 ## API
 
-Контракт не менялся: adapters, ports и domain-файлы не затронуты. V2 сохраняет Solution IDs, snapshots, preview/apply tokens, команду, историю, quota и protected/own-team/eligibility. Project API не используется вместо Solution API.
+Контракт не менялся: domain, ports, HTTP adapters и backend не затронуты. Solution IDs, snapshots, teams, preview/apply tokens, quota и protected/own-team/eligibility сохранены. Project API не используется вместо Solution API. Типовой C00 контракт проходит.
 
 ## UI
 
-[Figma UI Kit](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=0-1), [эксперты](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=452-3220), [распределение](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=452-3221). Mont и действующие DS primitives сохранены. [Сравнительная галерея](gallery.html), [review и границы evidence](REVIEW.md). Бизнес-различия восьмиколоночной таблицы V2, формы решения и дополнительной аналитики описаны в README.
+[Figma PROCOLLAB](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE), [эксперты](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=452-3220), [приглашение](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=452-3222), [назначение](https://www.figma.com/design/tvog0fpEgWgEtr7KUTjbyE?node-id=452-3230). Повторно получены оригинальные metrics/PNG основных экранов, всех настроек и сертификатов. Восстановлены диалоги 560/600/680 px и общая аналитика 880/980/1100 px. Mont и SVG сохранены. Галереи и компактные PNG находятся в `docs/program-v2-ui-audit/`.
+
+Остались явные различия исторических макетов и текущего общего V1/V2: семь действующих вкладок, требуемая панель «Фильтры», Mont вместо TEMP Inter, развитый редактор сертификатов/формы и бизнес-колонки Solution. Они перечислены для финального визуального ревью; полный pixel match всех состояний не заявлен.
 
 ## Permissions
 
-Серверные permissions, object scope, guards и route rules не менялись. Клиентские busy/disabled и проверки отсутствия доступа сохранены; 403 проверен на изолированном стенде. Реальная серверная авторизация не проверена.
+Guards, server-side permissions, object scope и routes не менялись. 403 проверен локально с fixtures. Реальный dev API доступен: публичные GET программ и опубликованных Project/Solution — 200; management/settings/experts/assignments без organizer сессии — 401 `Authentication credentials were not provided.` Production для тестов не использовался, реальные записи не выполнялись.
 
 ## Проверки
 
-- [x] 3089 Vitest tests, 498 настроенных файлов, 0 failed/pending; неизмененные три config exclusions.
-- [x] `npm run test:solution-contract`.
-- [x] ESLint/Stylelint/Prettier всех измененных TS/SCSS/HTML, `git diff --check`.
-- [x] Chromium: 140 основных + 395 interactions + 40 states + 5 visual contracts, 320/390/768/1440/1920 px.
-- [x] V1: 70 пар снимков, без изменения размеров/геометрии; 60 идентичны попиксельно.
-- [x] Оптимизированный диагностический артефакт с отключенным fonts inlining и budgets; 16 browser smoke checks.
-- [ ] Стандартный `npm run build:prod`: FAILED из-за Google Fonts 403; затем воспроизведены пять исходных CSS-budget failures на базе и ветке. Production config не ослаблен.
-- [ ] Live API, настройки/exports/PDF/email/серверные права и конфликты: нет сессии организатора и тестовых программ.
+- [x] Обычный `NG_BUILD_MAX_WORKERS=2 npm run build:prod`: exit 0, исходные budgets и font inlining.
+- [x] Именно стандартный dist: 16 заполненных страниц и 30 dialog/data проверок на 390/1440 px с изолированным API.
+- [x] Настроенный Vitest-набор: 498 файлов, 3089 passed, 0 failed/pending; существующие три exclusions сохранены. После обновления семи glyph-selectors выполнен final replay 107 тестов четырех файлов без ослабления focus/lifecycle assertions.
+- [x] `npm run test:solution-contract`, адресные ESLint/Stylelint/Prettier и `git diff --check`.
+- [x] Chromium, 320/390/768/1440/1920: 140 заполненных страниц обеих версий, 400 interactions, 75 dialog/data checks, 40 states, 5 control comparisons.
+- [x] 140 сравнений с `44761cdc`, размеры всех страниц сохранены; 111 изображений идентичны. Ожидаемое изменение основных V1 — мобильные меню распределения; остальные различия единичные пиксели сглаживания/границ.
+- [x] Dev connectivity, публичное чтение обеих моделей и отказ анонимным management-запросам.
+- [ ] Реальные сохранение/повторное чтение настроек V1/V2, назначение экспертов, оценивание, серверные роли и конфликты.
 
 ## Acceptance criteria
 
-- [x] Аудит всех основных management sections, семи настроек, сертификатов и вложенных UI.
-- [x] Существенные визуальные отличия исправлены либо объяснены бизнес-моделью.
-- [x] Общие визуальные компоненты; данные Project/Solution разделены.
-- [x] Desktop/mobile, снимки до/после, tests и код review.
-- [ ] Полная работоспособность обеих версий на реальном контуре и успешная стандартная production-сборка — приемка открыта.
+- [x] Аудит охватывает все разделы управления и семь подразделов настроек.
+- [x] Расхождения устранены либо явно документированы с источниками Figma и V1.
+- [x] Общие UI и отдельные Project/Solution контракты сохранены.
+- [x] Desktop/mobile, снимки, тесты и обычная production-сборка подтверждены.
+- [ ] Полная сохранность реальных organizer flows на dev подтверждена авторизованной интеграционной проверкой.
+- [ ] Перечисленные различия исторической Figma/общего V1 приняты на финальном визуальном ревью.
 
 ## Не проверено
 
-Реальные тестовые программы, серверная запись/экспорт/рассылка и конкурентные операции. Полный context фрейма аналитики Figma не вернулся: использованы структура всех секций, сводка и действующий V1; pixel-perfect каждого состояния не заявляется. Соседние участнические/публичные маршруты не входят в основную browser matrix управления.
+Нет учетных данных/сессии организатора dev. Не проверены реальные записи Project/Solution, сохранение всех настроек и повторное чтение, назначение/снятие/защита экспертов, запись/пересчет оценок, конкурентный preview/apply, реальные роли, email/Excel/PDF и выдача сертификатов. Моки подтверждают только поведение клиента. Safari/Firefox и реальные устройства не проверены.
 
 ## Риски / migration
 
-Миграции и backend rollout не нужны: изменения клиентского представления. Риск общих компонентов покрыт V1/V2 unit и browser regression. После устранения baseline build ограничений и live приемки ветка может проходить обычное внешнее review. Merge и production deploy требуют отдельного разрешения владельца.
+Общие стили затрагивают V1: проверены обе версии, заполненные данные, меню, клавиатура и пять ширин. Остаточный риск — реальные серверные данные, права и конфликты вне fixtures. Миграций и изменений данных нет. Сохраняются существующие Sass/CommonJS и warning-budget предупреждения; build ошибок нет. Merge в dev и deploy не выполнялись и требуют разрешения владельца.

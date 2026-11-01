@@ -39,7 +39,12 @@ export interface SolutionCaseRequest {
     FieldDirective,
   ],
   templateUrl: "./solution-case-action.component.html",
-  styleUrl: "./solution-applications.component.scss",
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "./solution-applications.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolutionCaseActionComponent {

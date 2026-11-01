@@ -383,7 +383,7 @@
   [open]="modal() !== null"
   (openChange)="close()"
   labelledBy="experts-dialog-title"
-  bodyClass="modal__body--no-flex experts-modal"
+  [bodyClass]="dialogBodyClass(modal())"
 >
   <div class="experts__dialog" [attr.aria-busy]="busy()">
     <header class="experts__heading">
@@ -395,7 +395,7 @@
         (click)="close()"
         [disabled]="busy()"
       >
-        ×
+        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
       </button>
     </header>
     @if (dialogError()) {
@@ -410,7 +410,7 @@
       @case ("invite") {
         <form (submit)="$event.preventDefault(); sendInvite()" novalidate>
           <label
-            >Email эксперта<input
+            >Email эксперта *<input
               appField
               type="email"
               autocomplete="email"

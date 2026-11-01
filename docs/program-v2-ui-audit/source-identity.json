@@ -2,13 +2,45 @@
   "base": "9ef90b5824b857fe53d52c097e37b279b897d9bf",
   "targetBranch": "dev",
   "workingBranch": "fix/program-v2-design-system",
-  "verifiedAtUtc": "2026-11-01T16:14:06.622431+00:00",
+  "verifiedAtUtc": "2026-11-01T19:07:56.894725+00:00",
   "runtime": {
     "node": "v24.19.0",
     "angular": "20.3.23",
     "chromium": "Chromium 154.0.8037.57 built on Debian GNU/Linux 13 (trixie)"
   },
   "productFiles": [
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics-dialog.scss",
+      "sha256": "f160b4392fc4bcd8dbc05b7dfcf88c22c64c49d907adab120eb5626b0493d61f"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics-table.scss",
+      "sha256": "72e4177f3ba01d23d9bc6bad0f251d91a822dd1f40d0d1d7af08d164bf7cac3e"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics.component.scss",
+      "sha256": "120d4aa1d62516803b0ebd33477ffd9ddceee1339d6b968a8e2b92c1ba430055"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-attention.component.spec.ts",
+      "sha256": "f71edec99a803b38f236079a23492d7a590ac0c824078504cc61b824053bbff1"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-drilldown.component.html",
+      "sha256": "5a0d097124a43a39b2106129296b3acc64bc10148a47cae6fccad97c50420e49"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-drilldown.component.scss",
+      "sha256": "f1e3ac54ee89592503e27629852bb94257a7d01dff81e3806688012d681be9dd"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-drilldown.component.spec.ts",
+      "sha256": "3eb9ad806c7dd824474af77ac5033be39dec8eabbbbd8b60849540425c5dd32f"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-drilldown.component.ts",
+      "sha256": "1d4d55b456fe8a14f2b1bd5a5a3b478801237d97a84efeab9e0dd5779f65f61e"
+    },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/evaluation-progress/evaluation-progress-summary.component.html",
       "sha256": "8185e2761412f943249eb90b292af5a40e6d84506668bd8fd6cdbdecaab3730d"
@@ -35,19 +67,27 @@
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/solution-analytics.component.html",
-      "sha256": "952dac2206f13adb887cf12af9ab46f91d38ee68e66bc87fa350a21d17ebb0a6"
+      "sha256": "039c74a53c8c657ef0be9ced15d0291359437ab19b0ff005a06fef1e921e6b9e"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/solution-analytics.component.scss",
-      "sha256": "3c13a504080faa77f1166e7d1379cd9b46b0eed4f50736b1e1c375781be3ad60"
+      "sha256": "a537c5aade08960886fdd72bf6ab16f4322ccbd507233da57eca3eed6a5dc425"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/detail/analytics/solution-analytics.component.ts",
-      "sha256": "a08f25a0e5ec4ec9f6700f5e4a2764883a2b0e9ed6cd03c01b55932ea541c8d0"
+      "sha256": "d02dd257c59983582ea39bde41e647addb404dfa9ab823b3c9cdebb760cb5c82"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/certificates/certificates.component.scss",
+      "sha256": "38b1548c9528319cab37791c1c3515550dadcb932474b639f910b71045c0072f"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/certificates/certificates.component.ts",
+      "sha256": "a6d4464f057411a5804d501ac63f2d3cb80afe37b988bdb0d6fe956895d950db"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/experts/expert-presentation.ts",
-      "sha256": "219301d53b7aa8b30398cc0105908c8cf061dfb1e18de3fdf90a5788312f0dc9"
+      "sha256": "8ec83708ff427ab8b15086a976f796d9feeb3b62410fd7f8ce74a2943520a3f2"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/experts/expert-roster.component.html",
@@ -55,27 +95,31 @@
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/experts/expert-roster.component.scss",
-      "sha256": "b02b11b19dca715c2006340bb7520241e2162c232cf8f37ef7ea2065bca6e91f"
+      "sha256": "dfbff52691b5f6ef34c45c437fc4e93e28da219fef6db56240b32b9253d31693"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/experts/expert-roster.component.ts",
-      "sha256": "f75ce017fcea91b4a5dcd1e4b246deb9d3af7d30157a26bef3429c3be2d125c2"
+      "sha256": "1c19b8017bece25229f4658cb4e894df0ca04d49a3e12abe438948c721011903"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/experts/expert-table.scss",
+      "sha256": "0100252cb152be5137af2d3dc6a34dfe9bd9d6797b6c417edf271beb76978356"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/experts/experts.component.html",
-      "sha256": "0e1d86bc7328cb685261b96a0d2e4650c457393cdb5418bb52036732033ff8e3"
+      "sha256": "02b0da358730db9aff27056706a4e4bd7db5db9f921ac1000e611e897c9b2370"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/experts/experts.component.scss",
-      "sha256": "3190e9930231ecd027983331a564810c3021bc6f54063ab67ad9c54032bc621c"
+      "sha256": "93b9c20949b187d85ed837a9fbe3710f7808759dc1756a22a276d95326e0a220"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/experts/experts.component.ts",
-      "sha256": "2bf338228a00cf56e7a9f033f9e3b4b56e2f5b347514262ef55e558c7c8d77f4"
+      "sha256": "12c38b8cb78cb04f5542d4c1a949c46b2abdbf2fff529b0cfac767786550ac99"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/experts/solution-experts.component.html",
-      "sha256": "ec54c87ae8522d024e3ba80668efbe03860c02dab4da741528680f35d7cff7e0"
+      "sha256": "e4615eb87f9bd565a177f0496f46a488df6e365ad4f82965af2694162fc910d2"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/experts/solution-experts.component.spec.ts",
@@ -83,7 +127,11 @@
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/experts/solution-experts.component.ts",
-      "sha256": "3cebee67604ead44b25fb6a3e819fbde385fc67608ab438e86d80b58bad07fb9"
+      "sha256": "464f6f633d9ce3fa45bc224bc6672164b1eb1babc5471a99587c7ba7292435f0"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/management-list.scss",
+      "sha256": "30ab4b7f7acd6d15c3a5f23bde6e1036929601f2bc9301c49bb55321cad9f1fb"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/management.component.html",
@@ -91,11 +139,27 @@
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/management.component.scss",
-      "sha256": "1c00fd62f9eb3e454811bec1340377545fd3b74687af0f44e9f8c4ede9e59cf7"
+      "sha256": "b10ee84c7d0549650abf41f444c335566fc7fea776fe2c9a4c03856bf53a373d"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/management.component.ts",
+      "sha256": "d3453f89fc3ad393ca8f0351b0006ed91126b7713bd72c47603beaf27576bc26"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/program-native-button.scss",
+      "sha256": "6e1bc8b90b4d31f6d304281b4da42be7bcee34a6ece5160c59f9a2067682c309"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/program-native-choice.scss",
+      "sha256": "0742f328ee3a359c7caaa8747114fd80b9896f5be8031fe1ec83f9766a8bd098"
+    },
+    {
+      "path": "projects/social_platform/src/app/ui/pages/program/management/program-native-field.scss",
+      "sha256": "69a8112ab618e8e073394d9af00b546a9491682cf1e9c1009ab7f53be82885b6"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-allocation.component.ts",
-      "sha256": "7a1193c1a257255c150a206ac2cbcd0bb8e1615cf2435efda5cb42d4379faef8"
+      "sha256": "832ed7a600382abe7a41a8169f50d0c62065e1ab14e7b7f9fbf10ec752ea3531"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-applications.component.html",
@@ -103,11 +167,11 @@
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-applications.component.scss",
-      "sha256": "680f6951ccdfb915bddead9c9c13f67d0ad2649f5228a7f31cdf458be1290b2c"
+      "sha256": "65ead9141a7c96712b5cfa5260dcb025e2da0b0030a1d7244ad9fb8c22879a45"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-applications.component.ts",
-      "sha256": "82092b0c5dcc8ac3db1db8d3e91f44ca0bcec4c5c565dfca92a4e8abb6599a8c"
+      "sha256": "a42b3bd9874b27032cc3cd647f69a37b8688e8f13f04695043064a31f788cfb9"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-case-action.component.html",
@@ -115,15 +179,23 @@
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-case-action.component.ts",
-      "sha256": "84ef5ebc4a25b12c8ec1325e0ffec65a2f5350fc196c0e7c7f340ac1f276ae9a"
+      "sha256": "8c0788e41a520699e35547200d3f30a1a851fc409c19d7b2207431ed61c2f117"
     },
     {
       "path": "projects/social_platform/src/app/ui/pages/program/management/solution-applications/solution-registration-removal.component.ts",
-      "sha256": "100b1f36971127dd5bcb8392d11d747795a62d722c425c3c14db6e5296a93ca7"
+      "sha256": "d5b41c88d10ed8e4a2fc2682fa5d4bce49c7acb50eeb6e401ba17d2dfe5b77b8"
+    },
+    {
+      "path": "projects/social_platform/src/index.html",
+      "sha256": "523760273902354c7c8c6d961ed6d152ce7329e89063978d0d0d69a89c540e1f"
+    },
+    {
+      "path": "projects/social_platform/src/styles/_program-analytics-dialog.scss",
+      "sha256": "50007d9262a470088f590653e558fcbaf9248d10359cb249ea7facff2aec4f27"
     },
     {
       "path": "projects/social_platform/src/styles/_program-expert-roster.scss",
-      "sha256": "9d3f82e78df984191448a37bae2fa2d1a75e2a81d90ea919756f44a502c524a6"
+      "sha256": "e65b214958a9d134666ebe090dcb3be28568eaa44e183c4643b5a4d00187dd99"
     },
     {
       "path": "projects/social_platform/src/styles/_program-management-controls.scss",
@@ -137,5 +209,7 @@
   ],
   "migrations": false,
   "merged": false,
-  "deployed": false
+  "deployed": false,
+  "priorImplementation": "44761cdc",
+  "productFingerprint": "21da4ebef54a5584bcc24f70f4d5ff9970d241fa27fde578b6f8240be18c027b"
 }

@@ -1,6 +1,11 @@
 /** @format */
 
-import { expertScopeLabel, expertStatusLabel, expertDeliveryLabel } from "./expert-presentation";
+import {
+  expertScopeLabel,
+  expertStatusLabel,
+  expertDeliveryLabel,
+  expertDialogBodyClass,
+} from "./expert-presentation";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -86,10 +91,17 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     TransientNoticeComponent,
   ],
   templateUrl: "./solution-experts.component.html",
-  styleUrl: "./experts.component.scss",
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "./expert-table.scss",
+    "./experts.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolutionExpertsComponent {
+  readonly dialogBodyClass = expertDialogBodyClass;
   readonly programId = input.required<number>();
   readonly floatingPosition = input<{ center: number; width: number } | null>(null);
   readonly confirmDiscard = input.required<() => Promise<boolean>>();

@@ -24,7 +24,12 @@ import { SolutionRegistrationRemovalPreview } from "@domain/solution/solution-co
 @Component({
   selector: "app-solution-registration-removal",
   imports: [AlertDirective, IconComponent, A11yModule, ButtonDirective, ModalComponent],
-  styleUrl: "./solution-applications.component.scss",
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "./solution-applications.component.scss",
+  ],
   template: `<app-modal
     [open]="!!request()"
     bodyClass="modal__body--no-flex"

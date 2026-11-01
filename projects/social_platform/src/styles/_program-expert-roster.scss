@@ -197,6 +197,7 @@
     }
 
     .experts__table--projects tr {
+      position: relative;
       grid-template-columns: 24px minmax(0, 1fr);
     }
 
@@ -298,7 +299,7 @@
     }
 
     .experts__table td.experts__row-actions,
-    .experts__table--projects td:last-child {
+    .experts__table--projects td:last-child:not([colspan]) {
       position: absolute;
       top: 8px;
       right: 0;

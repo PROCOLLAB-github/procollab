@@ -75,7 +75,33 @@ async function open(page, version, route, name) {
       .filter({ hasText: "Распределение экспертов" })
       .waitFor();
   await page.waitForTimeout(180);
+  await page.waitForLoadState("networkidle");
   await page.evaluate(() => document.fonts.ready);
+}
+async function assertPopulatedScreen(page, name) {
+  const selector = {
+    participants: ".management__participants tbody tr",
+    projects: ".management__projects tbody tr",
+    experts: ".experts__table tbody tr, .solution-analytics__table tbody tr",
+    distribution: ".experts__table--projects tbody tr, .solution-analytics__table tbody tr",
+    results: ".results__row",
+    analytics: ".summary-card__value",
+    "settings-basic": "#program-name",
+    "settings-dates": ".management__form input",
+    "settings-materials": ".management__material",
+    "settings-project-form": ".project-form__row",
+    "settings-criteria": ".criteria__row",
+    "settings-organizers": ".organizers__row-actions",
+    "settings-registration": ".registration__row",
+    certificates: "app-certificate-canvas",
+  }[name];
+  if (!selector) throw new Error(`Unknown screen: ${name}`);
+  await page.locator(selector).first().waitFor();
+  const count = await page.locator(selector).count();
+  if (!count) throw new Error(`No populated content in ${name}`);
+  await page.mouse.move(0, 0);
+  await page.waitForTimeout(250);
+  return { selector, populatedElements: count };
 }
 async function capture() {
   const results = [];
@@ -87,6 +113,7 @@ async function capture() {
         const startErrors = errors.length;
         try {
           await open(page, version, route, name);
+          const readiness = await assertPopulatedScreen(page, name);
           const metrics = await measure(page);
           const file = `${version}-${name}-${width}.png`;
           await page.screenshot({ path: path.join(destination, file), fullPage: true });
@@ -95,6 +122,7 @@ async function capture() {
             screen: name,
             width,
             file,
+            readiness,
             ...metrics,
             errors: errors.slice(startErrors),
           });

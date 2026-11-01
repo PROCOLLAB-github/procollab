@@ -40,6 +40,10 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     Array.from(dialog().querySelectorAll<HTMLButtonElement>("button")).find(item =>
       item.textContent?.includes(text),
     )!;
+  const closeButton = () =>
+    dialog().querySelector<HTMLButtonElement>(
+      'button[aria-label="Закрыть детализацию аналитики"]',
+    )!;
 
   beforeEach(async () => {
     assignments.execute.mockReset().mockReturnValue(of(ok([assignment()])));
@@ -191,7 +195,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
         );
       } else if (method === "backdrop") {
         document.querySelector<HTMLElement>(".modal__overlay")!.click();
-      } else button("×").click();
+      } else closeButton().click();
       await detached;
       await fixture.whenStable();
       expect(close).toHaveBeenCalledOnce();
@@ -206,7 +210,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     trigger.remove();
     const focus = vi.spyOn(trigger, "focus");
     const detached = firstValueFrom(modal.overlayRef!.detachments());
-    button("×").click();
+    closeButton().click();
     await detached;
     expect(focus).not.toHaveBeenCalled();
   });
@@ -215,7 +219,7 @@ describe("AnalyticsDrilldownComponent: real overlay lifecycle", () => {
     await open();
     const trap = fixture.debugElement.query(By.directive(CdkTrapFocus)).injector.get(CdkTrapFocus);
     const detached = firstValueFrom(modal.overlayRef!.detachments());
-    button("×").click();
+    closeButton().click();
     await detached;
     await fixture.whenStable();
     await open("pending");

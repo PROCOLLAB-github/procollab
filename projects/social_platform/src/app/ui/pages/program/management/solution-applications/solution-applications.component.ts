@@ -107,7 +107,13 @@ type ActionPreview = {
     SolutionAllocationComponent,
   ],
   templateUrl: "./solution-applications.component.html",
-  styleUrls: ["../management.component.scss", "./solution-applications.component.scss"],
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "../management-list.scss",
+    "./solution-applications.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolutionApplicationsComponent {

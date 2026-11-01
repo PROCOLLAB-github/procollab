@@ -221,12 +221,14 @@ const scenarios = [
   [
     "distribution-row-menu",
     "experts",
-    async p => {
+    async (p, v) => {
       await button(p, "Распределение экспертов").click();
-      await p.locator(".experts__table--solutions").waitFor();
-      const rows = p.locator(".experts__table--solutions tbody tr");
+      const table = v === "v1" ? ".experts__table--projects" : ".experts__table--solutions";
+      const triggerName = v === "v1" ? /^Действия проекта:/ : /^Назначения решения:/;
+      await p.locator(table).waitFor();
+      const rows = p.locator(`${table} tbody tr`);
       for (const row of await rows.all()) {
-        const trigger = row.getByRole("button", { name: /^Назначения решения:/ });
+        const trigger = row.getByRole("button", { name: triggerName });
         const parent = await row.boundingBox(),
           control = await trigger.boundingBox();
         assert.ok(
@@ -234,20 +236,16 @@ const scenarios = [
             control &&
             control.x >= parent.x &&
             control.x + control.width <= parent.x + parent.width + 1,
-          "Меню должно помещаться по ширине строки решения",
+          "Меню должно помещаться по ширине строки",
         );
         assert.ok(
           control.y >= parent.y && control.y + control.height <= parent.y + parent.height + 1,
-          "Меню должно принадлежать своей строке решения",
+          "Меню должно принадлежать своей строке",
         );
       }
-      await rows
-        .first()
-        .getByRole("button", { name: /^Назначения решения:/ })
-        .click();
-      await p.getByRole("menuitem", { name: "Назначить экспертов", exact: true }).waitFor();
+      await rows.first().getByRole("button", { name: triggerName }).click();
+      await p.getByRole("menuitem", { name: /^(Изменить|Назначить) экспертов$/ }).waitFor();
     },
-    "v2",
   ],
   [
     "distribution-allocation",

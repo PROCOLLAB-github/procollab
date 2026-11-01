@@ -3,7 +3,8 @@
 @use "styles/responsive";
 @use "styles/program-management-controls";
 
-.analytics .ui-button.ui-button:not(.attention__action, .evaluation__assignment-action) {
+.analytics .ui-button.ui-button:not(.attention__action,
+.evaluation__assignment-action) {
   @include program-management-controls.compact-action;
 }
 
@@ -548,64 +549,6 @@
   .cases-card__columns--without-submission,
   .case-row--without-submission {
     grid-template-columns: minmax(0, 2fr) minmax(100px, 1fr) 100px;
-  }
-}
-
-.status-list {
-  display: grid;
-  gap: 10px;
-  margin-top: 16px;
-
-  li {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 12px;
-    background: var(--light-gray);
-    border-radius: 8px;
-
-    span {
-      font-weight: 500;
-      line-height: 18px;
-      color: var(--black);
-    }
-
-    strong {
-      line-height: 20px;
-      color: var(--black);
-
-      @media screen and (max-width: 999px) {
-        font-size: var(--ui-font-h2);
-        font-weight: 700;
-      }
-
-      @media screen and (min-width: 1000px) {
-        font-size: 17px;
-        font-weight: 700;
-      }
-    }
-  }
-
-  &--compact {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 6px;
-    margin-top: 8px;
-
-    li {
-      flex-direction: column;
-      gap: 4px;
-      align-items: flex-start;
-    }
-
-    @media screen and (max-width: 520px) {
-      grid-template-columns: 1fr;
-
-      li {
-        flex-direction: row;
-        justify-content: space-between;
-      }
-    }
   }
 }
 

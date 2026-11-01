@@ -92,7 +92,13 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
 @Component({
   selector: "app-program-management",
   templateUrl: "./management.component.html",
-  styleUrl: "./management.component.scss",
+  styleUrls: [
+    "./program-native-button.scss",
+    "./program-native-field.scss",
+    "./program-native-choice.scss",
+    "./management.component.scss",
+    "./management-list.scss",
+  ],
   imports: [
     TransientNoticeComponent,
     RouterLink,

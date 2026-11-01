@@ -1,0 +1,9 @@
+/** @format */
+@use "styles/ui-foundation";
+
+// Общие состояния Field, включая мобильный размер и focus/error.
+.ui-field {
+  @include ui-foundation.control;
+
+  font-size: 12px;
+}

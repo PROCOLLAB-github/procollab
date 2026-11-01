@@ -7,7 +7,8 @@
     "errors": [
       "Inlining Google Material Icons failed: fonts.googleapis.com returned 403 under Cloud network policy."
     ],
-    "log": "logs/standard-production.log"
+    "log": "logs/standard-production.log",
+    "historicalBeforeFollowup": true
   },
   {
     "name": "baseline-production-offline",
@@ -22,7 +23,8 @@
       "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-drilldown.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 4.57 kB with a total of 19.57 kB.",
       "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/management/experts/experts.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 9.65 kB with a total of 24.65 kB."
     ],
-    "log": "logs/baseline-production-offline.log"
+    "log": "logs/baseline-production-offline.log",
+    "historicalBeforeFollowup": true
   },
   {
     "name": "strict-production-offline",
@@ -36,7 +38,8 @@
       "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 71 bytes with a total of 15.07 kB.",
       "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/management/experts/experts.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 9.83 kB with a total of 24.83 kB."
     ],
-    "log": "logs/strict-production-offline.log"
+    "log": "logs/strict-production-offline.log",
+    "historicalBeforeFollowup": true
   },
   {
     "name": "production-compile",
@@ -44,6 +47,22 @@
     "fontInlining": false,
     "originalBudgets": false,
     "errors": [],
-    "log": "logs/production-compile.log"
+    "log": "logs/production-compile.log",
+    "historicalBeforeFollowup": true
+  },
+  {
+    "name": "standard-production-final",
+    "command": "NG_BUILD_MAX_WORKERS=2 npm run build:prod",
+    "exitCode": 0,
+    "originalBudgets": true,
+    "fontInlining": true,
+    "angularConfigChanged": false,
+    "errors": [],
+    "log": "logs/program-v2-followup-standard-final.log",
+    "artifactChecks": {
+      "populatedPages": 16,
+      "dialogData": 30,
+      "api": "isolated fixtures"
+    }
   }
 ]

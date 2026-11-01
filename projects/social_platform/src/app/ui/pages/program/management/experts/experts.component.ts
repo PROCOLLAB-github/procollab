@@ -6,6 +6,7 @@ import {
   expertDeliveryLabel,
   expertInitials,
   expertScopeLabel,
+  expertDialogBodyClass,
 } from "./expert-presentation";
 import {
   ChangeDetectionStrategy,
@@ -89,10 +90,17 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     IconComponent,
   ],
   templateUrl: "./experts.component.html",
-  styleUrl: "./experts.component.scss",
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "./expert-table.scss",
+    "./experts.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementExpertsComponent {
+  readonly dialogBodyClass = expertDialogBodyClass;
   readonly programId = input.required<number>();
   readonly confirmDiscard = input.required<() => Promise<boolean>>();
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();

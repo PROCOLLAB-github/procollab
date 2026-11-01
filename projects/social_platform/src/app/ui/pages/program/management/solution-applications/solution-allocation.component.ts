@@ -106,7 +106,12 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
       </footer>
     </section></app-modal
   >`,
-  styleUrl: "./solution-applications.component.scss",
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "./solution-applications.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolutionAllocationComponent {

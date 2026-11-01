@@ -383,11 +383,11 @@
 <app-modal
   [open]="modal() !== null"
   [size]="modal() === 'assignments' ? 'large' : 'small'"
-  bodyClass="modal__body--no-flex"
+  [bodyClass]="dialogBodyClass(modal())"
   labelledBy="solution-experts-title"
   (openChange)="!$event && close()"
   ><section class="experts__dialog">
-    <header class="experts__filter-heading">
+    <header class="experts__heading">
       <h2 id="solution-experts-title">
         {{
           modal() === "invite"
@@ -419,12 +419,14 @@
     @if (modal() === "invite" || modal() === "scope") {
       @if (modal() === "invite") {
         <label
-          >Email эксперта<input
+          >Email эксперта *<input
             appField
             type="email"
             [formControl]="email"
             [readOnly]="busy()"
             autocomplete="email"
+            [attr.aria-invalid]="email.touched && email.invalid"
+            required
         /></label>
         @if (email.touched && email.invalid) {
           <p appAlert="error" role="alert">Введите корректный email эксперта.</p>

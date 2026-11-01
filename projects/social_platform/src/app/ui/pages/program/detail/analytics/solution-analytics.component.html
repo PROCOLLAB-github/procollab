@@ -417,20 +417,30 @@
 <app-modal
   [open]="modal() !== null"
   size="large"
+  [bodyClass]="
+    'modal__body--no-flex analytics-drilldown-body ' +
+    (modal() === 'assignments'
+      ? 'analytics-drilldown-body--assignments'
+      : modal() === 'solutions'
+        ? 'analytics-drilldown-body--case'
+        : 'analytics-drilldown-body--attention')
+  "
   labelledBy="solution-analytics-dialog-title"
   (openChange)="!$event && close()"
 >
-  <div class="solution-analytics__dialog" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
-    <header class="solution-analytics__heading">
+  <div class="solution-analytics__dialog analytics-drilldown">
+    <header class="analytics-drilldown__header">
       <h2 id="solution-analytics-dialog-title">{{ title() }}</h2>
       <button
-        appButton="text"
+        appButton="icon"
+        class="analytics-drilldown__close"
+        aria-label="Закрыть"
         cdkFocusInitial
         type="button"
         [disabled]="actionPending()"
         (click)="close()"
       >
-        Закрыть
+        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
       </button>
     </header>
     @if (message()) {
@@ -481,7 +491,7 @@
         </button>
         <h3>{{ scores.application.name }} · {{ scores.expert.fullName }}</h3>
         <div class="solution-analytics__table">
-          <table appTable>
+          <table appTable class="analytics-drilldown__table">
             <thead>
               <tr>
                 <th>Критерий</th>
@@ -491,8 +501,8 @@
             <tbody>
               @for (criterion of scores.scores; track criterion.criterionId) {
                 <tr>
-                  <td>{{ criterion.name }}</td>
-                  <td>{{ criterionValue(criterion) }}</td>
+                  <td data-label="Критерий">{{ criterion.name }}</td>
+                  <td data-label="Оценка">{{ criterionValue(criterion) }}</td>
                 </tr>
               }
             </tbody>
@@ -507,32 +517,56 @@
           <button appButton="secondary" type="button" (click)="loadList()">Повторить</button>
         }
         <div class="solution-analytics__table">
-          <table appTable>
+          <table
+            appTable
+            class="analytics-drilldown__table analytics-drilldown__table--assignments"
+          >
             <thead>
               <tr>
                 <th>Эксперт</th>
                 <th>Решение</th>
                 <th>Статус</th>
-                <th></th>
+                <th>Оценка</th>
               </tr>
             </thead>
             <tbody>
               @for (row of visibleAssignments(); track row.assignmentId) {
                 <tr>
-                  <td>{{ row.expert.fullName }}</td>
-                  <td>
+                  <td data-label="Эксперт">
+                    <div class="analytics-drilldown__identity">
+                      <app-avatar
+                        [url]="href(row.expert.avatar) ?? undefined"
+                        [size]="32"
+                        [fallbackLabel]="initials(row.expert.fullName)"
+                      />
+                      <a [routerLink]="paths.profile.detail(row.expert.userId)" (click)="close()">{{
+                        row.expert.fullName
+                      }}</a>
+                    </div>
+                  </td>
+                  <td data-label="Решение">
                     <a
                       [routerLink]="paths.program.solution(programId(), row.application.solutionId)"
                       (click)="close()"
                       >{{ row.application.name }}</a
                     >
                   </td>
-                  <td>{{ statusLabel[row.status] }}</td>
-                  <td>
+                  <td data-label="Статус">
+                    <span
+                      class="analytics-drilldown__badge"
+                      [class.analytics-drilldown__badge--pending]="row.status === 'pending'"
+                      [class.analytics-drilldown__badge--in_progress]="row.status === 'in_progress'"
+                      [class.analytics-drilldown__badge--completed]="row.status === 'completed'"
+                      >{{ statusLabel[row.status] }}</span
+                    >
+                  </td>
+                  <td data-label="Оценка">
                     @if (row.status === "completed") {
                       <button appButton="text" type="button" (click)="showScores(row)">
                         Посмотреть оценку
                       </button>
+                    } @else {
+                      <span>—</span>
                     }
                   </td>
                 </tr>
@@ -565,11 +599,13 @@
       }
       @if (!listPending() && !listError()) {
         <div class="solution-analytics__table">
-          <table appTable>
+          <table appTable class="analytics-drilldown__table">
             <thead>
               <tr>
                 @if (canRemind()) {
-                  <th><span class="solution-analytics__sr">Выбрать</span></th>
+                  <th class="attention-check-cell">
+                    <span class="solution-analytics__sr">Выбрать</span>
+                  </th>
                 }
                 <th>{{ modal() === "solutions" ? "Решение" : "Участник" }}</th>
                 <th>{{ modal() === "solutions" ? "Кейс" : "Город" }}</th>
@@ -579,9 +615,9 @@
             <tbody>
               @if (modal() === "solutions") {
                 @for (row of list()?.results; track row.application.solutionId) {
-                  <tr>
+                  <tr [class.attention-selected-row]="isSelected(row.application.solutionId)">
                     @if (canRemind()) {
-                      <td>
+                      <td class="attention-check-cell" data-label="Выбор">
                         <input
                           appChoice
                           type="checkbox"
@@ -592,7 +628,7 @@
                         />
                       </td>
                     }
-                    <td>
+                    <td data-label="Решение">
                       <a
                         [routerLink]="
                           paths.program.solution(programId(), row.application.solutionId)
@@ -601,8 +637,8 @@
                         >{{ row.application.name }}</a
                       >
                     </td>
-                    <td>{{ row.caseName ?? "Без кейса" }}</td>
-                    <td>
+                    <td data-label="Кейс">{{ row.caseName ?? "Без кейса" }}</td>
+                    <td data-label="Статус">
                       {{
                         row.evaluationStatus === "not_applicable"
                           ? "Без оценивания"
@@ -617,8 +653,8 @@
                 }
               } @else {
                 @for (row of participants(); track row.userId) {
-                  <tr>
-                    <td>
+                  <tr [class.attention-selected-row]="isSelected(row.userId)">
+                    <td class="attention-check-cell" data-label="Выбор">
                       <input
                         appChoice
                         type="checkbox"
@@ -628,13 +664,13 @@
                         (change)="toggle(row.userId)"
                       />
                     </td>
-                    <td>
+                    <td data-label="Участник">
                       <a [routerLink]="paths.profile.detail(row.userId)" (click)="close()">{{
                         row.fullName
                       }}</a>
                     </td>
-                    <td>{{ row.city ?? "—" }}</td>
-                    <td>Зарегистрирован</td>
+                    <td data-label="Город">{{ row.city ?? "—" }}</td>
+                    <td data-label="Статус">Зарегистрирован</td>
                   </tr>
                 }
               }

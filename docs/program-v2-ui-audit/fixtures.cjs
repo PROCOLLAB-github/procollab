@@ -327,10 +327,44 @@ function response(url, method, body) {
   if (/\/management\/solution-form\/$/.test(p)) return scenario("form_management");
   if (/\/solution-form\/templates\/$/.test(p)) return scenario("templates");
   if (/\/management\/solution-results\/$/.test(p)) return scenario("solution_results");
-  if (/\/management\/solution-analytics\/$/.test(p))
-    return scenario("manager_solution_analytics_distributed");
-  if (/\/solution-analytics\/assignments\/$/.test(p))
-    return scenario("manager_solution_assignments_completed");
+  if (/\/management\/solution-analytics\/$/.test(p)) {
+    const data = scenario("manager_solution_analytics_distributed");
+    data.summary.solutions.total = 3;
+    data.evaluationStatus.assignments = { total: 3, pending: 2, evaluated: 1 };
+    data.evaluationStatus.solutions = {
+      submitted: 3,
+      awaitingEvaluation: 2,
+      partiallyEvaluated: 1,
+      evaluated: 0,
+    };
+    return data;
+  }
+  if (/\/solution-analytics\/assignments\/$/.test(p)) {
+    const data = scenario("manager_solution_assignments_completed");
+    const row = data.results[0];
+    data.results = ["completed", "pending", "in_progress"].map((status, i) => ({
+      ...row,
+      assignmentId: 801 + i,
+      status,
+      expert: { ...row.expert, expertId: 91 + i, userId: 91 + i, fullName: names[i] },
+      application: {
+        ...row.application,
+        solutionId: i === 2 ? 302 : 301,
+        name: projects[i === 2 ? 1 : 0].name,
+      },
+    }));
+    if (q.get("scope") === "completed")
+      data.results = data.results.filter(row => row.status === "completed");
+    if (q.get("scope") === "pending")
+      data.results = data.results.filter(row => row.status !== "completed");
+    return data;
+  }
+  if (/\/solution-analytics\/assignments\/\d+\/$/.test(p)) {
+    const data = scenario("manager_solution_assignment_zero_false_comment");
+    data.expert = { ...data.expert, expertId: 91, userId: 91, fullName: names[0] };
+    data.application.name = projects[0].name;
+    return data;
+  }
   if (/\/solution-analytics\/solutions\/$/.test(p)) {
     const source = scenario("manager_solution_list_awaiting").results[0];
     let rows = projects.map((pr, i) => ({

@@ -7,7 +7,7 @@ import subprocess
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT = Path("/workspace/artifacts/program-v2-ui-audit/tests")
+OUTPUT = Path(os.environ.get("PROGRAM_UI_TEST_OUTPUT", str(ROOT.parent / "artifacts/program-v2-ui-audit/tests")))
 OUTPUT.mkdir(parents=True, exist_ok=True)
 EXCLUDED = {
     "projects/social_platform/src/app/ui/pages/projects/projects.component.spec.ts",

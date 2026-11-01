@@ -1,7 +1,13 @@
+@use "styles/program-analytics-dialog";
+
 /** @format */
 
 @use "styles/ui-foundation";
 @use "styles/program-management-controls";
+
+::ng-deep {
+  @include program-analytics-dialog.body;
+}
 
 :host {
   display: block;
@@ -36,20 +42,6 @@
 .solution-analytics__dialog {
   display: grid;
   gap: 16px;
-  max-height: 78dvh;
-  padding: 24px;
-  overflow: auto;
-  font-family: Mont, sans-serif;
-  font-size: 12px;
-  line-height: 1.5;
-
-  h2 { @include program-management-controls.section-title; }
-
-  h3 {
-    margin: 0;
-    font-size: 14px;
-    line-height: 21px;
-  }
   p { margin: 0; }
 }
 
@@ -57,39 +49,9 @@
   @include program-management-controls.status-notice;
 }
 
-.solution-analytics__heading {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
 .solution-analytics__table {
   min-width: 0;
   overflow-x: auto;
-}
-
-.solution-analytics__table table {
-  width: 100%;
-  font-size: 12px;
-  line-height: 1.5;
-  border-collapse: collapse;
-}
-
-.solution-analytics__table th,
-.solution-analytics__table td {
-  padding: 12px;
-  text-align: left;
-  overflow-wrap: anywhere;
-  border-bottom: 1px solid var(--light-gray);
-}
-
-.solution-analytics__table th {
-  font-weight: 400;
-  color: var(--grey-for-text);
-  overflow-wrap: normal;
-  white-space: nowrap;
-  background: transparent;
 }
 
 .solution-analytics__dialog .regions__export.ui-button.ui-button {
@@ -102,10 +64,4 @@
   height: 1px;
   overflow: hidden;
   clip-path: inset(50%);
-}
-
-@media (max-width: 600px) {
-  .solution-analytics__dialog {
-    padding: 16px;
-  }
 }

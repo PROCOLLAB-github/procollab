@@ -24,12 +24,14 @@ import { EvaluationProgressSummaryComponent } from "./evaluation-progress/evalua
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import {
   AlertDirective,
+  AvatarComponent,
   ButtonDirective,
   ChoiceDirective,
   FieldDirective,
   TableDirective,
 } from "@uilib";
 import { AppRoutes } from "@api/paths/app-routes";
+import { presentationHref } from "@utils/program-case-analytics";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { AnalyticsFunnelChartComponent } from "./funnel-chart/funnel-chart.component";
 import { AnalyticsRegionChartComponent } from "./region-chart/region-chart.component";
@@ -71,6 +73,7 @@ type View =
   imports: [
     ReactiveFormsModule,
     AlertDirective,
+    AvatarComponent,
     MatProgressBarModule,
     EvaluationProgressSummaryComponent,
     RouterLink,
@@ -87,10 +90,22 @@ type View =
     IconComponent,
   ],
   templateUrl: "./solution-analytics.component.html",
-  styleUrls: ["./analytics.component.scss", "./solution-analytics.component.scss"],
+  styleUrls: [
+    "./analytics.component.scss",
+    "./analytics-table.scss",
+    "./analytics-dialog.scss",
+    "./solution-analytics.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolutionAnalyticsComponent {
+  readonly href = presentationHref;
+  readonly initials = (name: string) =>
+    name
+      .split(/\s+/)
+      .slice(0, 2)
+      .map(part => part[0])
+      .join("");
   readonly programId = input.required<number>();
   readonly dates = input<ProgramScheduleDates | null>(null);
   private readonly overviewApi = inject(GetSolutionManagerAnalyticsUseCase);

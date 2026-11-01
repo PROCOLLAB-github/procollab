@@ -1,115 +1,106 @@
 {
-  "scope": "Angular management UI; isolated API fixtures; no live acceptance",
-  "widths": [320, 390, 768, 1440, 1920],
+  "scope": "Program management UI acceptance after 44761cdc",
+  "baseline": "44761cdc",
+  "widths": [
+    320,
+    390,
+    768,
+    1440,
+    1920
+  ],
   "browser": {
     "beforeMain": 140,
-    "beforeInteractions": 43,
     "afterMain": 140,
-    "afterInteractions": 395,
+    "afterInteractions": 400,
+    "afterConformance": 75,
     "afterStates": 40,
     "visualContracts": 5,
-    "optimizedArtifactSmoke": 16,
+    "standardArtifactMain": 16,
+    "standardArtifactConformance": 30,
     "failed": 0,
-    "afterTotal": 596
+    "api": "Isolated fixtures, never live integration"
   },
   "tests": {
+    "runner": "vitest",
+    "pool": "forks",
+    "maxWorkers": 1,
     "files": 498,
     "filesReported": 498,
+    "excludedByExistingConfig": [
+      "projects/social_platform/src/app/ui/pages/profile/edit/editor-submit-button.directive.spec.ts",
+      "projects/social_platform/src/app/ui/pages/program/program.component.spec.ts",
+      "projects/social_platform/src/app/ui/pages/projects/projects.component.spec.ts"
+    ],
     "tests": 3089,
     "passed": 3089,
     "failed": 0,
     "pending": 0,
     "success": true,
-    "excludedByExistingConfig": [
-      "projects/social_platform/src/app/ui/pages/profile/edit/editor-submit-button.directive.spec.ts",
-      "projects/social_platform/src/app/ui/pages/program/program.component.spec.ts",
-      "projects/social_platform/src/app/ui/pages/projects/projects.component.spec.ts"
-    ]
-  },
-  "v1ScreenshotComparison": {
-    "pairs": 70,
-    "identical": 60,
-    "sameDimensions": true,
-    "maxChangedPercent": 0.000625
+    "finalReplay": {
+      "files": 4,
+      "tests": 107,
+      "passed": 107,
+      "report": "tests/final-regression.json",
+      "reason": "Close buttons use their existing accessible names after switching text glyphs to SVG. No assertions removed."
+    }
   },
   "codeChecks": [
     {
-      "check": "typescript",
-      "files": 13,
+      "name": "eslint",
+      "files": 18,
       "exitCode": 0,
-      "seconds": 1.19
+      "scope": "complete PR vs origin/dev"
     },
     {
-      "check": "styles",
-      "files": 8,
+      "name": "stylelint",
+      "files": 19,
       "exitCode": 0,
-      "seconds": 0.66
+      "scope": "complete PR vs origin/dev"
     },
     {
-      "check": "format",
-      "files": 22,
+      "name": "prettier",
+      "files": 29,
       "exitCode": 0,
-      "seconds": 1.26
+      "scope": "complete PR vs origin/dev"
     },
     {
-      "check": "git diff --check",
+      "name": "git diff --check",
       "exitCode": 0
     },
     {
-      "check": "npm run test:solution-contract",
-      "exitCode": 0,
-      "log": "logs/solution-contract.log"
+      "name": "npm run test:solution-contract",
+      "exitCode": 0
     }
   ],
-  "productionBuilds": [
-    {
-      "name": "standard-production",
-      "command": "NG_BUILD_MAX_WORKERS=2 npm run build:prod",
-      "exitCode": 1,
-      "originalBudgets": true,
-      "errors": [
-        "Inlining Google Material Icons failed: fonts.googleapis.com returned 403 under Cloud network policy."
-      ],
-      "log": "logs/standard-production.log"
-    },
-    {
-      "name": "baseline-production-offline",
-      "base": "9ef90b5824b857fe53d52c097e37b279b897d9bf",
-      "exitCode": 1,
-      "fontInlining": false,
-      "originalBudgets": true,
-      "errors": [
-        "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/management/certificates/certificates.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 2.33 kB with a total of 17.33 kB.",
-        "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/management/management.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 9.91 kB with a total of 24.91 kB.",
-        "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 71 bytes with a total of 15.07 kB.",
-        "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-drilldown.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 4.57 kB with a total of 19.57 kB.",
-        "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/management/experts/experts.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 9.65 kB with a total of 24.65 kB."
-      ],
-      "log": "logs/baseline-production-offline.log"
-    },
-    {
-      "name": "strict-production-offline",
-      "exitCode": 1,
-      "fontInlining": false,
-      "originalBudgets": true,
-      "errors": [
-        "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/management/certificates/certificates.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 2.33 kB with a total of 17.33 kB.",
-        "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/management/management.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 10.00 kB with a total of 25.00 kB.",
-        "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/detail/analytics/drilldown/analytics-drilldown.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 4.57 kB with a total of 19.57 kB.",
-        "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/detail/analytics/analytics.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 71 bytes with a total of 15.07 kB.",
-        "✘ [ERROR] projects/social_platform/src/app/ui/pages/program/management/experts/experts.component.scss exceeded maximum budget. Budget 15.00 kB was not met by 9.83 kB with a total of 24.83 kB."
-      ],
-      "log": "logs/strict-production-offline.log"
-    },
-    {
-      "name": "production-compile",
-      "exitCode": 0,
-      "fontInlining": false,
-      "originalBudgets": false,
-      "errors": [],
-      "log": "logs/production-compile.log"
+  "productionBuild": {
+    "name": "standard-production-final",
+    "command": "NG_BUILD_MAX_WORKERS=2 npm run build:prod",
+    "exitCode": 0,
+    "originalBudgets": true,
+    "fontInlining": true,
+    "angularConfigChanged": false,
+    "errors": [],
+    "log": "logs/program-v2-followup-standard-final.log",
+    "artifactChecks": {
+      "populatedPages": 16,
+      "dialogData": 30,
+      "api": "isolated fixtures"
     }
-  ],
-  "liveApi": "NOT VERIFIED: no organizer session or test program IDs",
-  "acceptance": "insufficient evidence: standard production build and real API checks remain open"
+  },
+  "visualComparison": {
+    "baseline": "44761cdc",
+    "pairs": 140,
+    "identical": 111,
+    "v1Pairs": 70,
+    "v1Identical": 54,
+    "sameDimensions": true
+  },
+  "liveApi": {
+    "reachable": true,
+    "publicReads": "200; Project and Solution independently",
+    "organizerScenarios": "NOT VERIFIED: no organizer session, endpoints return 401",
+    "productionUsed": false,
+    "writes": 0
+  },
+  "acceptance": "Draft review appropriate; merge acceptance open for live organizer integration and documented historical Figma/common-V1 differences"
 }

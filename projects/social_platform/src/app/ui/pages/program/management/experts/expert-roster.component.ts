@@ -24,7 +24,12 @@ import {
   selector: "app-expert-roster",
   imports: [RouterLink, AvatarComponent, ButtonDirective, ChoiceDirective, RowActionsComponent],
   templateUrl: "./expert-roster.component.html",
-  styleUrl: "./expert-roster.component.scss",
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-choice.scss",
+    "./expert-table.scss",
+    "./expert-roster.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpertRosterComponent {
