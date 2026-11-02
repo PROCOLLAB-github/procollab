@@ -13,6 +13,7 @@ import {
 } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { HttpErrorResponse } from "@angular/common/http";
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Subject, finalize, takeUntil } from "rxjs";
 import { AlertDirective, ButtonDirective, FieldDirective, IconComponent } from "@uilib";
@@ -61,6 +62,7 @@ export class ManagementProjectActionsComponent {
   readonly loading = signal(false);
   readonly applying = signal(false);
   readonly error = signal<string | null>(null);
+  readonly displayError = userErrorMessage;
   readonly blocked = computed(() => this.preview()?.items.filter(item => item.errors.length) ?? []);
   readonly title = computed(
     () =>
@@ -193,7 +195,11 @@ export class ManagementProjectActionsComponent {
     if (error.status === 401 || error.status === 403)
       return "Нет доступа к действиям с проектами этой программы.";
     if (error.status === 404) return "Проект больше не связан с этой программой. Обновите список.";
-    if (typeof error.error?.detail === "string") return error.error.detail;
+    if (typeof error.error?.detail === "string")
+      return userErrorMessage(
+        error.error.detail,
+        "Не удалось проверить или выполнить действие. Повторите проверку.",
+      );
     return "Не удалось проверить или выполнить действие. Повторите проверку.";
   }
 }

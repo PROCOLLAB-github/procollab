@@ -83,7 +83,7 @@
                 <strong>{{ item.name }}</strong>
                 <ul>
                   @for (error of item.errors; track $index) {
-                    <li>{{ error }}</li>
+                    <li>{{ displayError(error, "Действие с этим проектом недоступно.") }}</li>
                   }
                 </ul>
               </li>

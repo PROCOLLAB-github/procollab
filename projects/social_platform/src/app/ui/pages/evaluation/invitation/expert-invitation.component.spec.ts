@@ -183,6 +183,33 @@ describe("Путь приглашённого эксперта", () => {
     expect(api.resetPassword).toHaveBeenCalledWith(token, "expert@example.com");
     expect(component.mode()).toBe("sent");
   });
+  it("ошибка восстановления показана по-русски и сохраняет контекст приглашения", () => {
+    const { component, api, token, fixture } = setup();
+    api.resetPassword.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 400,
+            error: {
+              detail:
+                "We couldn't find an account associated with that email. Please try a different e-mail address.",
+            },
+          }),
+      ),
+    );
+    component.changeMode("reset");
+    const invitation = component.invitation();
+    component.resetPassword();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain(
+      "Аккаунт с этой почтой не найден. Проверьте адрес электронной почты.",
+    );
+    expect(fixture.nativeElement.textContent).not.toContain("We couldn't");
+    expect(component.mode()).toBe("reset");
+    expect(component.busy()).toBe(false);
+    expect(component.invitation()).toBe(invitation);
+    expect(api.resetPassword).toHaveBeenCalledExactlyOnceWith(token, "expert@example.com");
+  });
   it("принятое приглашение позволяет восстановить пароль после выхода", () => {
     const { component, api, fixture, invitation } = setup();
     api.invitation.mockReturnValue(of({ ...invitation, status: "accepted", accountExists: true }));

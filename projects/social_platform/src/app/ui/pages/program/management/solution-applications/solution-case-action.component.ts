@@ -1,4 +1,6 @@
 /** @format */
+
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -58,6 +60,7 @@ export class SolutionCaseActionComponent {
   readonly loading = signal(false);
   readonly applying = signal(false);
   readonly error = signal<string | null>(null);
+  readonly displayError = userErrorMessage;
   readonly canApply = computed(() => {
     const checked = this.preview(),
       request = this.request();

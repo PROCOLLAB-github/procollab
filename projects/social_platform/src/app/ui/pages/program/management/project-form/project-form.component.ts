@@ -21,6 +21,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { HttpErrorResponse } from "@angular/common/http";
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { finalize } from "rxjs";
 import {
@@ -388,11 +389,8 @@ export class ManagementProjectFormComponent {
     if (error.status === 400) {
       const detail = error.error?.fields ?? error.error?.cases ?? error.error?.detail;
       return (
-        (typeof detail === "string"
-          ? detail
-          : Array.isArray(detail) && typeof detail[0] === "string"
-            ? detail.join(" ")
-            : "Проверьте название, тип и варианты ответа.") + " Изменения остались в форме."
+        userErrorMessage(detail, "Проверьте название, тип и варианты ответа.") +
+        " Изменения остались в форме."
       );
     }
     return "Не удалось загрузить или сохранить настройки. Проверьте соединение и повторите попытку.";

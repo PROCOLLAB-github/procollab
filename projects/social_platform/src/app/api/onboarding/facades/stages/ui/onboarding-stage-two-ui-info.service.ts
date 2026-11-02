@@ -1,5 +1,7 @@
 /** @format */
 
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
+
 import { inject, Injectable, signal } from "@angular/core";
 import { NonNullableFormBuilder } from "@angular/forms";
 import { UserInput } from "@domain/auth/user.model";
@@ -43,7 +45,7 @@ export class OnboardingStageTwoUIInfoService {
   applySubmitErrorModal(err: any): void {
     if (err.status === 400) {
       this.isChooseSkill.set(true);
-      this.isChooseSkillText.set(err.error[0]);
+      this.isChooseSkillText.set(userErrorMessage(err.error?.[0]));
     }
   }
 }

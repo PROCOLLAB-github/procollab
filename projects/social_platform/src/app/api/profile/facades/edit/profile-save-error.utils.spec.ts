@@ -46,4 +46,18 @@ describe("profile save error utils", () => {
   it("should return generic text only for unparseable response", () => {
     expect(resolveProfileSaveErrorText()).toBe("Ошибка при сохранении профиля");
   });
+  it("не выводит неизвестный английский ответ и техническое имя поля", () => {
+    expect(
+      resolveProfileSaveErrorText({
+        error: { unknown_backend_field: ["Unexpected upstream failure"] },
+      }),
+    ).toBe("Поле: Ошибка при сохранении профиля");
+  });
+  it("сохраняет русскую причину и пользовательское название", () => {
+    expect(
+      resolveProfileSaveErrorText({
+        error: { title: ["Название «My Project» уже используется."] },
+      }),
+    ).toBe("название: Название «My Project» уже используется.");
+  });
 });

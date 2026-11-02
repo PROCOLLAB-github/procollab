@@ -13,6 +13,7 @@ import {
   untracked,
 } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
@@ -269,7 +270,8 @@ export class ManagementCriteriaComponent {
   private errorText(e: HttpErrorResponse): string {
     if (e.status === 403 || e.status === 401)
       return "Нет доступа к управлению критериями этой программы.";
-    if (e.status === 409) return e.error?.detail ?? "Критерии изменились. Обновите данные.";
+    if (e.status === 409)
+      return userErrorMessage(e.error?.detail, "Критерии изменились. Обновите данные.");
     return e.status === 400
       ? "Проверьте названия, типы и шкалы критериев. Изменения не сохранены."
       : "Не удалось загрузить или сохранить критерии. Попробуйте еще раз.";

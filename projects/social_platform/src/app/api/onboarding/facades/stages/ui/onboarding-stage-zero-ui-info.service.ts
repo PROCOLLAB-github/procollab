@@ -1,5 +1,7 @@
 /** @format */
 
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
+
 import { inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, Validators } from "@angular/forms";
 import { generateOptionsList } from "@utils/generate-options-list";
@@ -508,6 +510,6 @@ export class OnboardingStageZeroUIInfoService {
 
   applySkipRegistrationModalError(error: any): void {
     this.isModalErrorYear.set(true);
-    this.isModalErrorYearText.set(error.error?.message || "Ошибка сохранения");
+    this.isModalErrorYearText.set(userErrorMessage(error.error?.message, "Ошибка сохранения"));
   }
 }

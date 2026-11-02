@@ -1,5 +1,7 @@
 /** @format */
 
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
+
 type ValidationBody = unknown;
 
 const GENERIC_SAVE_ERROR = "Ошибка при сохранении профиля";
@@ -74,10 +76,10 @@ export const translateProfileSaveMessage = (message: unknown): string => {
   if (!text) return "";
 
   const translated = MESSAGE_TRANSLATIONS.find(([pattern]) => pattern.test(text))?.[1];
-  return translated ?? text;
+  return translated ?? userErrorMessage(text, GENERIC_SAVE_ERROR);
 };
 
-const fieldLabel = (key: string): string => FIELD_LABELS[key] ?? key;
+const fieldLabel = (key: string): string => FIELD_LABELS[key] ?? "Поле";
 
 const collectionItemLabel = (key: string, index: number): string => {
   const base = COLLECTION_ITEM_LABELS[key] ?? fieldLabel(key);

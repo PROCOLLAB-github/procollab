@@ -1,5 +1,7 @@
 /** @format */
 
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
+
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ApplyProjectToProgramUseCase } from "@api/program/use-cases/apply-project-to-program.use-case";
@@ -142,7 +144,12 @@ export class DetailProgramInfoService {
               | undefined;
             if (error?.status === 400) {
               this.isAssignProjectToProgramModalOpen.set(true);
-              this.assignProjectToProgramModalMessage.set(error.error?.detail ?? null);
+              this.assignProjectToProgramModalMessage.set(
+                userErrorMessage(
+                  error.error?.detail,
+                  "Не удалось добавить проект в программу. Проверьте заполненные поля.",
+                ),
+              );
             }
             return;
           }
