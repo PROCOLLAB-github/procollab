@@ -190,12 +190,16 @@
     }
   ],
   "matrixSummary": {
-    "PASS": 5,
+    "PASS": 12,
     "FAIL": 0,
-    "NOT TESTED": 20
+    "NOT TESTED": 23
   },
-  "integrationAcceptance": "INSUFFICIENT EVIDENCE: no authenticated organizer/expert/participant session",
-  "mailSent": false,
+  "integrationAcceptance": "INSUFFICIENT EVIDENCE: authenticated organizer acceptance in progress; live settings writes, V2 R1, assignment/grade/conflict/role scenarios and visual decisions remain open",
+  "mailSent": {
+    "expertInvitationEmails": 4,
+    "admin": 0,
+    "participant": 0
+  },
   "certificateDelivery": false,
   "merge": false,
   "deploy": false,
@@ -221,5 +225,58 @@
       "name": "node --check anonymous-readiness.cjs",
       "exitCode": 0
     }
-  ]
+  ],
+  "historicalScope": "Existing baselineBrowser/anonymousManagement/codeFix entries describe the earlier cloud stage. currentRun describes the Windows continuation.",
+  "currentRun": {
+    "date": "2026-11-02",
+    "sourceSha": "b221ce4cc98a61cd901a198fc89066097c2a7960",
+    "frontend": "http://127.0.0.1:4317",
+    "api": "https://dev.procollab.ru",
+    "appSourceCleanAtLaunch": true,
+    "organizerAuthenticated": true,
+    "expertE2Authenticated": false,
+    "liveEvidence": "MATRIX.csv records per-scenario SHA; local sanitized evidence is kept outside Git",
+    "currentVisualComparison": {
+      "programs": [
+        39,
+        49
+      ],
+      "screen": "settings/basic",
+      "width": 1440,
+      "completeVisualAcceptance": false
+    },
+    "historicalVisualStage": {
+      "screens": 14,
+      "widths": 5,
+      "apiFixtures": true,
+      "isCurrentDevE2E": false
+    },
+    "settingsWritesCompleted": false,
+    "newTestWorksCreated": false,
+    "assignmentWritesCompleted": false,
+    "gradesWritten": false,
+    "expertInvitationsCreated": 4,
+    "expertInvitationsRevoked": 2,
+    "adminMailSent": false,
+    "participantMailSent": false,
+    "credentialsRecorded": false,
+    "missingResetTokenUi": {
+      "lang": "ru",
+      "russianInvalidLinkAlert": true
+    },
+    "actualUserResetFailureDiagnosed": false,
+    "codeChecks": {
+      "unitFiles": 22,
+      "unitPassed": 235,
+      "productionBuildExitCode": 0,
+      "eslintExitCode": 0,
+      "prettierExitCode": 0,
+      "solutionTypeContractExitCode": 0
+    },
+    "fixesPushedWithoutForce": [
+      "d378a0f38c5542d6c005cb0be98cd00c8c66a58f",
+      "b221ce4cc98a61cd901a198fc89066097c2a7960"
+    ]
+  },
+  "matrixSummaryScope": "Mixed historical and current SHA; not a count of completed current-head acceptance scenarios"
 }
