@@ -34,6 +34,12 @@ const TRANSLATIONS: ReadonlyArray<readonly [RegExp, string]> = [
     "Введите корректное число.",
   ],
   [/^invalid value\.?$/i, "Проверьте введенное значение."],
+  [/^this password is too common\.?$/i, "Этот пароль слишком распространен. Придумайте другой."],
+  [/^this password is entirely numeric\.?$/i, "Пароль не должен состоять только из цифр."],
+  [
+    /^the password is too similar to the .+\.?$/i,
+    "Пароль слишком похож на данные аккаунта. Придумайте другой.",
+  ],
   [/^".*" is not a valid choice\.?$/i, "Выберите допустимый вариант из списка."],
   [/^invalid pk .*object does not exist\.?$/i, "Выбранный объект не найден. Обновите данные."],
 ];
@@ -55,6 +61,11 @@ export function userErrorMessage(message: unknown, fallback = DEFAULT_MESSAGE): 
   if (maxLength) return `Максимальное количество символов: ${maxLength[1]}.`;
   const minLength = text.match(/^ensure this field has at least (\d+) characters\.?$/i);
   if (minLength) return `Минимальное количество символов: ${minLength[1]}.`;
+  const minPasswordLength = text.match(
+    /^this password is too short\. it must contain at least (\d+) characters\.?$/i,
+  );
+  if (minPasswordLength)
+    return `Пароль должен содержать не менее ${minPasswordLength[1]} символов.`;
   const minValue = text.match(
     /^ensure this value is greater than or equal to (-?\d+(?:\.\d+)?)\.?$/i,
   );

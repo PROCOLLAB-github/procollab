@@ -12,6 +12,16 @@ describe("userErrorMessage", () => {
     ],
     ["This field is required.", "Заполните обязательное поле."],
     ["This field may not be blank.", "Поле не должно быть пустым."],
+    ["This password is too common.", "Этот пароль слишком распространен. Придумайте другой."],
+    ["This password is entirely numeric.", "Пароль не должен состоять только из цифр."],
+    [
+      "The password is too similar to the email.",
+      "Пароль слишком похож на данные аккаунта. Придумайте другой.",
+    ],
+    [
+      "This password is too short. It must contain at least 12 characters.",
+      "Пароль должен содержать не менее 12 символов.",
+    ],
     ["Enter a valid email address.", "Введите корректный адрес электронной почты."],
     ["No active account found with the given credentials", "Неверная почта или пароль."],
     [

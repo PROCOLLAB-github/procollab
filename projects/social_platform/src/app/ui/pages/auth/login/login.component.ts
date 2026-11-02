@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
   protected readonly loginForm = this.authUIInfoService.loginForm;
   protected readonly loginIsSubmitting = this.authUIInfoService.loginIsSubmitting;
 
-  protected readonly errorWrongAuth = this.authUIInfoService.errorWrongAuth;
+  protected readonly requestErrorMessage = this.authUIInfoService.loginErrorMessage;
 
   protected readonly errorMessage = ErrorMessage;
 

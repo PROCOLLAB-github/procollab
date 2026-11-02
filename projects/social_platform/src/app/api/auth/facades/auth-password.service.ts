@@ -11,6 +11,7 @@ import { SetPasswordUseCase } from "../use-cases/set-password.use-case";
 import { toAsyncState } from "@domain/shared/to-async-state";
 import { PasswordError } from "@domain/auth/results/password.result";
 import { AppRoutes } from "@api/paths/app-routes";
+import { failure } from "@domain/shared/async-state";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Управляет сбросом и установкой пароля, а также состоянием форм пароля. */
@@ -40,7 +41,7 @@ export class AuthPasswordService {
   init(): void {
     const token = this.route.snapshot.queryParamMap.get("token");
     if (!token) {
-      this.logger.error("Token is missing");
+      this.password$.set(failure<PasswordError>({ kind: "invalid_token" }));
     }
   }
 
@@ -75,8 +76,12 @@ export class AuthPasswordService {
     this.credsSubmitInitiated.set(true);
     const token = this.route.snapshot.queryParamMap.get("token");
 
+    if (!token) {
+      this.password$.set(failure<PasswordError>({ kind: "invalid_token" }));
+      return;
+    }
+
     if (
-      !token ||
       !this.validationService.getFormValidation(this.passwordForm) ||
       this.password$().status === "loading"
     )
@@ -114,7 +119,7 @@ export class AuthPasswordService {
               .navigateByUrl(AppRoutes.auth.login())
               .then(() => this.logger.debug("SetPasswordComponent"));
           } else {
-            this.logger.error("Error setting password:", result.error);
+            this.logger.error("Не удалось установить новый пароль.", { kind: result.error.kind });
           }
         }),
         toAsyncState<void, PasswordError>(),

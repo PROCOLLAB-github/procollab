@@ -33,7 +33,7 @@ export class SetPasswordComponent implements OnInit {
   protected readonly passwordForm = this.authUIInfoService.passwordForm;
 
   protected readonly isSubmitting = this.authUIInfoService.isSubmitting;
-  protected readonly errorRequest = this.authUIInfoService.errorRequest;
+  protected readonly requestErrorMessage = this.authUIInfoService.setPasswordErrorMessage;
   protected readonly credsSubmitInitiated = this.authUIInfoService.credsSubmitInitiated;
 
   protected readonly errorMessage = ErrorMessage;

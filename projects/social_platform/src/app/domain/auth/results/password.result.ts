@@ -1,6 +1,8 @@
 /** @format */
 
 export type PasswordError =
+  | { kind: "invalid_token" }
+  | { kind: "validation_error"; messages: string[] }
   | { kind: "bad_request"; status: 400 }
   | { kind: "server_error"; status: 500 }
   | { kind: "network"; status: 0; cause: "unknown" }

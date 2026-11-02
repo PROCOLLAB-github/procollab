@@ -9,6 +9,7 @@ import { of } from "rxjs";
 import { provideNgxMask } from "ngx-mask";
 import { provideRouter } from "@angular/router";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 describe("SetPasswordComponent", () => {
   let component: SetPasswordComponent;
@@ -46,5 +47,27 @@ describe("SetPasswordComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+  it("показывает ошибку ссылки вместо ошибки логина и сохраняет новый пароль в форме", () => {
+    const ui = fixture.debugElement.injector.get(AuthUIInfoService);
+    ui.passwordForm.setValue({
+      password: "Pr517-unit-only-Aa1!",
+      passwordRepeated: "Pr517-unit-only-Aa1!",
+    });
+    ui.password$.set({ status: "failure", error: { kind: "invalid_token" } });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain(
+      "Ссылка восстановления недействительна или истекла.",
+    );
+    expect(fixture.nativeElement.textContent).not.toContain("Неправильный логин или пароль");
+    expect(ui.passwordForm.value.password).toBe("Pr517-unit-only-Aa1!");
+  });
+  it("ошибку сервера показывает как сбой сохранения пароля", () => {
+    const ui = fixture.debugElement.injector.get(AuthUIInfoService);
+    ui.password$.set({ status: "failure", error: { kind: "server_error", status: 500 } });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain(
+      "Не удалось сохранить новый пароль. Попробуйте позже.",
+    );
   });
 });

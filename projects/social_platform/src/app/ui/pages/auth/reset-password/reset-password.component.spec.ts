@@ -9,6 +9,7 @@ import { AuthRepository } from "@infrastructure/repository/auth/auth.repository"
 import { provideNgxMask } from "ngx-mask";
 import { provideRouter } from "@angular/router";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 describe("ResetPasswordComponent", () => {
   let component: ResetPasswordComponent;
@@ -46,5 +47,14 @@ describe("ResetPasswordComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+  it("ошибка сервера не объявляет существующий аккаунт незарегистрированным", () => {
+    const ui = fixture.debugElement.injector.get(AuthUIInfoService);
+    ui.password$.set({ status: "failure", error: { kind: "server_error", status: 500 } });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain(
+      "Не удалось отправить письмо. Попробуйте позже.",
+    );
+    expect(fixture.nativeElement.textContent).not.toContain("не зарегистрирован");
   });
 });
