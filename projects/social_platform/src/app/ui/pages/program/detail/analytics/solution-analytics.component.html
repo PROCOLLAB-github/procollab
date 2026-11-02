@@ -341,7 +341,7 @@
             />
           }
           @if (overview.evaluationStatus.solutions; as solutions) {
-            <p>
+            <p class="solution-analytics__evaluation-totals">
               Сдано: {{ solutions.submitted }} · Оценено: {{ solutions.evaluated }} · Частично
               оценено: {{ solutions.partiallyEvaluated }}
             </p>
@@ -479,24 +479,42 @@
             (hide)="hideTooltip('field-coverage')"
           />
         </div>
-        @for (field of overview.fieldCoverage; track field.fieldId) {
-          <button
-            #fieldTrigger
-            appButton="text"
-            type="button"
-            (click)="
-              openSolutions(
-                field.label,
-                { fieldId: field.fieldId, answerState: 'missing' },
-                fieldTrigger
-              )
-            "
-          >
-            {{ field.label }} · заполнено {{ field.answered }} из {{ field.applicable }} ·
-            обязательных не заполнено: {{ field.requiredUnanswered }}
-          </button>
-        }
-        @if (!overview.fieldCoverage.length) {
+        @if (overview.fieldCoverage.length) {
+          <table appTable class="analytics-drilldown__table solution-analytics__coverage">
+            <thead>
+              <tr>
+                <th>Поле формы</th>
+                <th>Заполнено</th>
+                <th>Обязательных без ответа</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (field of overview.fieldCoverage; track field.fieldId) {
+                <tr>
+                  <td data-label="Поле формы">
+                    <button
+                      #fieldTrigger
+                      appButton="text"
+                      type="button"
+                      [attr.aria-label]="'Заявки без ответа: ' + field.label"
+                      (click)="
+                        openSolutions(
+                          field.label,
+                          { fieldId: field.fieldId, answerState: 'missing' },
+                          fieldTrigger
+                        )
+                      "
+                    >
+                      {{ field.label }}
+                    </button>
+                  </td>
+                  <td data-label="Заполнено">{{ field.answered }} из {{ field.applicable }}</td>
+                  <td data-label="Обязательных без ответа">{{ field.requiredUnanswered }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        } @else {
           <p class="analytics-empty-state">Поля формы пока не настроены</p>
         }
       </article>

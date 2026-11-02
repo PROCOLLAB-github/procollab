@@ -39,19 +39,21 @@
       />
     </form>
     <div class="management__toolbar-actions management__toolbar-actions--projects">
-      <button
-        #filtersTrigger
-        appButton="secondary"
-        class="management__filter-trigger"
-        type="button"
-        aria-haspopup="dialog"
-        [attr.aria-expanded]="filtersOpen()"
-        (click)="openFilters(filtersTrigger)"
-      >
-        <i appIcon icon="filter" appSquare="16" aria-hidden="true"></i>Фильтры{{
-          filterCount() ? " · " + filterCount() : ""
-        }}
-      </button>
+      <div class="management__toolbar-slot">
+        <button
+          #filtersTrigger
+          appButton="secondary"
+          class="management__filter-trigger"
+          type="button"
+          aria-haspopup="dialog"
+          [attr.aria-expanded]="filtersOpen()"
+          (click)="openFilters(filtersTrigger)"
+        >
+          <i appIcon icon="filter" appSquare="16" aria-hidden="true"></i>Фильтры{{
+            filterCount() ? " · " + filterCount() : ""
+          }}
+        </button>
+      </div>
     </div>
   </div>
   @if (loading()) {

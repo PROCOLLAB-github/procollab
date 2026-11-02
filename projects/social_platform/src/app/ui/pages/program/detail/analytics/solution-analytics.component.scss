@@ -60,6 +60,31 @@
   overflow-x: auto;
 }
 
+.solution-analytics__evaluation-totals {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dark-grey);
+}
+
+.solution-analytics__coverage {
+  margin-top: 12px;
+
+  .ui-button.ui-button {
+    justify-content: flex-start;
+    max-width: 100%;
+    padding-inline: 0;
+    text-align: left;
+    white-space: normal;
+  }
+
+  @media (min-width: 1000px) {
+    td { vertical-align: middle; }
+    th:first-child { width: 50%; }
+    th:last-child { width: 25%; }
+  }
+}
+
 .analytics__header-actions .regions__export.ui-button.ui-button,
 .solution-analytics__dialog .regions__export.ui-button.ui-button {
   @include program-management-controls.export-trigger;
