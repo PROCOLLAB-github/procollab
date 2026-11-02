@@ -234,7 +234,11 @@ export class ManagementRegistrationComponent {
     const field = this.editing();
     this.draft.update(d => ({ ...d, fields: d.fields.filter(f => f.id !== field?.id) }));
     this.dialog.set(null);
-    this.message.set("Поле убрано из черновика. Примените изменения публикацией формы.");
+    this.message.set(
+      this.snapshot()?.published
+        ? "Поле убрано из черновика. Примените изменения публикацией формы."
+        : "Поле убрано из черновика. Сохраните черновик, чтобы применить изменения.",
+    );
   }
   save(publish = false) {
     const snapshot = this.snapshot();
