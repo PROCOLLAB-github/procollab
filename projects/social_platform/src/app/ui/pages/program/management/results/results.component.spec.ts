@@ -62,6 +62,23 @@ function setup() {
   return { fixture, component: fixture.componentInstance, api };
 }
 describe("Результаты программы", () => {
+  it("не показывает нулевую оцененность и безбалльное оценивание, когда оценивание не применяется", async () => {
+    const { fixture, component } = setup();
+    fixture.componentRef.setInput("submissionApplicable", false);
+    component.snapshot.set({ ...snapshot, hasNumericCriteria: false, groups: [] });
+    fixture.detectChanges();
+    const text = fixture.nativeElement.textContent;
+    expect(text).not.toContain("Оценено 0 из 0");
+    expect(text).not.toContain("Оценивание без баллов");
+    expect(text).toContain("Обновлено");
+    component.openModal("filters");
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    expect(document.querySelector('select[aria-label="Оценивание"]')).toBeNull();
+    expect(document.querySelector('select[aria-label="Кейс"]')).not.toBeNull();
+  });
+
   it("сохраняет раскрытие эксперта при закрытии и повторном открытии проекта", () => {
     const { fixture, component } = setup();
     component.snapshot.update(data => ({

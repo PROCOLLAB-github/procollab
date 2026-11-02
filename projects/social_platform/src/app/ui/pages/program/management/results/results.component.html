@@ -92,16 +92,18 @@
       </div>
     </div>
     <div class="results__summary" aria-live="polite">
-      <span
-        >Оценено {{ readyCount() }} из {{ matchingCount() }}
-        {{
-          matchingCount()
-            | pluralize
-              : (solutionMode()
-                  ? ["решения", "решений", "решений"]
-                  : ["проекта", "проектов", "проектов"])
-        }}</span
-      >
+      @if (submissionApplicable()) {
+        <span
+          >Оценено {{ readyCount() }} из {{ matchingCount() }}
+          {{
+            matchingCount()
+              | pluralize
+                : (solutionMode()
+                    ? ["решения", "решений", "решений"]
+                    : ["проекта", "проектов", "проектов"])
+          }}</span
+        >
+      }
       @if (updatedTime(); as time) {
         <time [attr.datetime]="data.generatedAt">Обновлено {{ time }}</time>
       }
@@ -118,7 +120,7 @@
         ><span>{{ statusFilter.value === "pending" ? "Показать все" : "Показать" }}</span>
       </button>
     }
-    @if (!data.hasNumericCriteria) {
+    @if (submissionApplicable() && !data.hasNumericCriteria) {
       <p class="results__muted">Оценивание без баллов</p>
     }
     @if (exportSuccess()) {
@@ -335,13 +337,15 @@
           <option value="null">Без кейса</option>
         </select></label
       >
-      <label class="results__filter-label"
-        >Оценивание<select appField [formControl]="draftStatus" aria-label="Оценивание">
-          <option value="all">{{ solutionMode() ? "Все решения" : "Все проекты" }}</option>
-          <option value="complete">Оценивание завершено</option>
-          <option value="pending">Ожидают оценки</option>
-        </select></label
-      >
+      @if (submissionApplicable()) {
+        <label class="results__filter-label"
+          >Оценивание<select appField [formControl]="draftStatus" aria-label="Оценивание">
+            <option value="all">{{ solutionMode() ? "Все решения" : "Все проекты" }}</option>
+            <option value="complete">Оценивание завершено</option>
+            <option value="pending">Ожидают оценки</option>
+          </select></label
+        >
+      }
       <footer class="results__filter-actions">
         <button
           type="button"

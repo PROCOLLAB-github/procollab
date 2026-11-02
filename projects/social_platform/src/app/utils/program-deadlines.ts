@@ -71,7 +71,7 @@ export function programDeadlines(
       label: "Оценивание",
       activeLabel: "Идет оценивание",
       datetime: dates.datetimeEvaluationEnds,
-      applicable: true,
+      applicable: submissionApplicable,
       usesRegistrationDeadline: false,
     },
   ];

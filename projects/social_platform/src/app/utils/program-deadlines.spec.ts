@@ -47,7 +47,7 @@ describe("programDeadlines", () => {
     [11, "Осталось 11 дней"],
   ])("uses Russian day plurals for %s calendar days", (days, status) => {
     const datetime = new Date(2026, 9, 14 + days, 18).toISOString();
-    expect(programDeadlines({ datetimeEvaluationEnds: datetime }, false, now)[0].status).toBe(
+    expect(programDeadlines({ datetimeEvaluationEnds: datetime }, true, now)[0].status).toBe(
       status,
     );
   });
@@ -73,11 +73,10 @@ describe("programDeadlines", () => {
     expect(rows.map(row => row.key)).toEqual(["registration", "submission"]);
   });
 
-  it("hides the submission stage when submission is not applicable", () => {
+  it("hides submission and evaluation stages in a noncompetitive program", () => {
     const rows = programDeadlines(dates, false, now);
-    expect(rows.map(row => row.key)).toEqual(["registration", "evaluation"]);
-    expect(rows[1].active).toBe(true);
-    expect(rows[1].label).toBe("Идет оценивание");
+    expect(rows.map(row => row.key)).toEqual(["registration"]);
+    expect(rows[0].active).toBe(false);
   });
 
   it("skips missing and invalid dates without inventing an evaluation or replacing an invalid explicit date", () => {
