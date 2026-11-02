@@ -22,7 +22,8 @@
     "command": "NG_BUILD_MAX_WORKERS=2 npm run build:prod",
     "exitCode": 0,
     "originalBudgets": true,
-    "log": "production-build.log"
+    "log": "private .acceptance-517/design-continuity-20261103/production-build-final.log",
+    "source": "20ea3590756d8053479dd3fca318bc4ea68233ca"
   },
   "baselineBrowser": {
     "commit": "0a589f4cbacb100a186db05fb5044ed9a826107a",
@@ -190,11 +191,11 @@
     }
   ],
   "matrixSummary": {
-    "PASS": 52,
-    "NOT TESTED": 13,
+    "PASS": 54,
+    "NOT TESTED": 15,
     "FAIL": 1
   },
-  "integrationAcceptance": "NOT READY: open server XLSX defect R9 and remaining real E2E evidence; see MATRIX.csv",
+  "integrationAcceptance": "NOT READY: R9 server XLSX defect, unfinished real E2E and final visual verification after browser safety stop",
   "mailSent": true,
   "certificateDelivery": false,
   "merge": false,
@@ -220,10 +221,215 @@
     {
       "name": "node --check anonymous-readiness.cjs",
       "exitCode": 0
+    },
+    {
+      "date": "2026-11-03",
+      "source": "20ea3590756d8053479dd3fca318bc4ea68233ca",
+      "phase1Tests": 68,
+      "phase2Tests": 12,
+      "overlap": 5,
+      "scopedChecks": "PASS",
+      "standardProductionBuild": 0,
+      "realBrowserSource": "9c92cd7fa274477575163ec0443205d47d51b591"
     }
   ],
-  "historicalScope": "Existing baselineBrowser/anonymousManagement/codeFix entries describe the earlier cloud stage. currentRun describes the Windows continuation.",
+  "historicalScope": "baselineBrowser/anonymousManagement/codeFix are cloud evidence; desktopFunctionalRun20261102 is prior Windows functional evidence; currentRun is the 03.11 visual continuation with source/runtime separated.",
   "currentRun": {
+    "date": "2026-11-03",
+    "timezone": "Europe/Moscow",
+    "sourceHead": "20ea3590756d8053479dd3fca318bc4ea68233ca",
+    "testedProductCommit": "9c92cd7fa274477575163ec0443205d47d51b591",
+    "priorFunctionalEvidence": "desktopFunctionalRun20261102; each matrix row retains its actual SHA",
+    "origin": "http://127.0.0.1:4317",
+    "api": "https://dev.procollab.ru",
+    "apiMocked": false,
+    "verdict": "NOT READY",
+    "acceptanceComplete": false,
+    "designTarget": "polished Project tabs plus PROCOLLAB design system; Mont confirmed available in Figma; no blanket VE approval pending",
+    "realVisual": {
+      "desktopPairs": 13,
+      "mobileFirstScreenPairs": 11,
+      "mobileWidth": 390,
+      "analyticsScrollLevels": ["top", "middle", "bottom"],
+      "metricLabel": "16px/22px Mont",
+      "exportTrigger": "32x32",
+      "tooltipKeyboard": true,
+      "exportMenuFocusReturn": true,
+      "excludedWrongRoute": "two tab=fields captures; actual tab=project-form not retested"
+    },
+    "codeChecks": [
+      {
+        "phase": "9c92",
+        "tests": 68,
+        "files": 3,
+        "lint": 0,
+        "format": 0,
+        "productionBuild": 0
+      },
+      {
+        "phase": "20ea",
+        "tests": 12,
+        "files": 2,
+        "overlapWithFirst": 5,
+        "stylelint": 0,
+        "format": 0,
+        "productionBuild": 0
+      }
+    ],
+    "browserStop": "Computer Use stopped by tool because Windows current browser URL could not be reliably determined; no subsequent browser actions or alternative-control bypass.",
+    "activeChanges": {
+      "program49CreationEnabled": false,
+      "restoredBy": "user supported disable command; previous_enabled=true requested_enabled=false applied=true changed=true",
+      "quota39": 3,
+      "quota49": 1,
+      "solution21": "archived with explicit approval; apply200 and removed from active list; archive content readback pending",
+      "newDraftCreated": false,
+      "newInvitationSent": false,
+      "additionalUserId": 341
+    },
+    "mail": {
+      "additionalParticipantInvitationsSent": 0,
+      "oneInvitationToPystou2AuthorizedAndUnused": true,
+      "noAdminMail": true
+    },
+    "openDefects": [
+      {
+        "id": "R9",
+        "status": "OPEN",
+        "scope": "server-generated draft XLSX team duplicate; PR provenance unestablished"
+      },
+      {
+        "id": "R10",
+        "status": "source fixed; partial real verification",
+        "remaining": "final coverage/filter source, add-field padding, mobile analytics/form, long/modal states"
+      }
+    ],
+    "open": [
+      "S11: Настройки: чтение, сохранение всех разделов и повторное чтение",
+      "S21: Приглашение, принятие, повтор и отзыв эксперта",
+      "S12: Настройки: чтение, сохранение всех разделов и повторное чтение",
+      "S22: Приглашение, принятие, повтор и отзыв эксперта",
+      "S32: Поиск, фильтры, массовый выбор и смена страницы",
+      "S72: Работа с Project либо Solution, составом и snapshot",
+      "N01: Конфликт изменений формы/решения",
+      "N02: Устаревший allocation/назначение и гонка с оценкой",
+      "N04: Роли и чужие объекты",
+      "N05: Хакатон и неконкурсные ограничения",
+      "X01: Письма участникам и массовая выдача сертификатов",
+      "L13: Реальный сброс пароля Play station",
+      "V01: Сверка интерфейса с действующим V1",
+      "X14: Уникальность участников команды в XLSX черновика",
+      "V03: Повтор отступов кнопки добавления поля",
+      "V04: Таблица заполнения формы и слот фильтра"
+    ],
+    "credentialsRecorded": false,
+    "certificateDelivery": false,
+    "merge": false,
+    "deploy": false
+  },
+  "matrixSummaryScope": "70 rows; historical PASS rows keep actual tested SHA. Latest source20ea is not declared completely browser tested.",
+  "previousDesktopRun": {
+    "date": "2026-11-02",
+    "timezone": "Europe/Moscow",
+    "testedProductCommit": "b6ab5864ebc0ff577bc90b915606d1f6d4cd66fb",
+    "origin": "http://127.0.0.1:4317",
+    "api": "https://dev.procollab.ru",
+    "apiMocked": false,
+    "verdict": "INSUFFICIENT EVIDENCE",
+    "acceptanceComplete": false,
+    "programs": {
+      "39": "legacy_project",
+      "49": "solution/competitive",
+      "50": "solution/competitive/hackathon",
+      "51": "solution/noncompetitive"
+    },
+    "newSolutions": [
+      {
+        "solutionId": 19,
+        "captainUserId": 11
+      },
+      {
+        "solutionId": 20,
+        "captainUserId": 59
+      }
+    ],
+    "grades": [
+      {
+        "solutionId": 19,
+        "expertId": 64,
+        "userId": 28,
+        "initialScore": 0,
+        "score": 2,
+        "boolean": false
+      },
+      {
+        "solutionId": 19,
+        "expertId": 95,
+        "userId": 59,
+        "score": 6,
+        "boolean": true
+      },
+      {
+        "solutionId": 20,
+        "expertId": 64,
+        "userId": 28,
+        "score": 4,
+        "boolean": false
+      }
+    ],
+    "live": {
+      "R1SelectedSolutionIds": [19],
+      "unselected20UntouchedByR1": true,
+      "staleSolutionStatus": 409,
+      "staleAllocationApplyStatus": 409,
+      "gradeRemovalRaceStatus": 409,
+      "quota49Restored": 1,
+      "quota39Restored": 3,
+      "ready49": 2,
+      "submitted49": 3,
+      "R7NoncompetitiveRetest": true
+    },
+    "codeChecks": {
+      "R7TargetedTests": 30,
+      "files": 2,
+      "beforeFailed": 2,
+      "eslint": "PASS",
+      "prettier": "PASS",
+      "standardProductionBuildExitCode": 0,
+      "originalBudgets": true,
+      "fullSuiteRepeated": false
+    },
+    "exports": {
+      "filteredResultIds": [19, 20],
+      "allResultIds": [19, 20, 7],
+      "gradeRows": 3,
+      "numericInputsAndFormulasChecked": true,
+      "excelRuntimeRecalculationPerformed": false,
+      "exportIdColumn": "ID эксперта contains user IDs28/59; management Expert IDs64/95 mapped separately"
+    },
+    "activeChanges": {
+      "creationFlag49": true,
+      "creationFlag49MustRestore": true,
+      "creationFlag49RestoreTarget": false,
+      "calendar49KeptByExplicitApproval": true,
+      "prefixedCriteriaLockedByNewGrades": true,
+      "newScopedRolesRemain": true,
+      "existingSolution7Unchanged": true
+    },
+    "open": [
+      "V1 new Project and scoring",
+      "other case/draft/team membership/pure participant",
+      "nonempty pending and remaining analytics exports",
+      "remaining V1 conflicts",
+      "visual comparisons and VE01-06 decision",
+      "restore creation flag49 false"
+    ],
+    "credentialsRecorded": false,
+    "additionalMailSent": false,
+    "merge": false,
+    "deploy": false
+  },
+  "desktopFunctionalRun20261102": {
     "date": "2026-11-02",
     "timezone": "Europe/Moscow",
     "testedProductCommit": "8d36f4a833b9c664bea52c4806afe3484620f313",
@@ -417,108 +623,6 @@
     },
     "credentialsRecorded": false,
     "certificateDelivery": false,
-    "merge": false,
-    "deploy": false
-  },
-  "matrixSummaryScope": "Current MATRIX.csv; each PASS retains its actual tested SHA. Historical cloud evidence is separate.",
-  "previousDesktopRun": {
-    "date": "2026-11-02",
-    "timezone": "Europe/Moscow",
-    "testedProductCommit": "b6ab5864ebc0ff577bc90b915606d1f6d4cd66fb",
-    "origin": "http://127.0.0.1:4317",
-    "api": "https://dev.procollab.ru",
-    "apiMocked": false,
-    "verdict": "INSUFFICIENT EVIDENCE",
-    "acceptanceComplete": false,
-    "programs": {
-      "39": "legacy_project",
-      "49": "solution/competitive",
-      "50": "solution/competitive/hackathon",
-      "51": "solution/noncompetitive"
-    },
-    "newSolutions": [
-      {
-        "solutionId": 19,
-        "captainUserId": 11
-      },
-      {
-        "solutionId": 20,
-        "captainUserId": 59
-      }
-    ],
-    "grades": [
-      {
-        "solutionId": 19,
-        "expertId": 64,
-        "userId": 28,
-        "initialScore": 0,
-        "score": 2,
-        "boolean": false
-      },
-      {
-        "solutionId": 19,
-        "expertId": 95,
-        "userId": 59,
-        "score": 6,
-        "boolean": true
-      },
-      {
-        "solutionId": 20,
-        "expertId": 64,
-        "userId": 28,
-        "score": 4,
-        "boolean": false
-      }
-    ],
-    "live": {
-      "R1SelectedSolutionIds": [19],
-      "unselected20UntouchedByR1": true,
-      "staleSolutionStatus": 409,
-      "staleAllocationApplyStatus": 409,
-      "gradeRemovalRaceStatus": 409,
-      "quota49Restored": 1,
-      "quota39Restored": 3,
-      "ready49": 2,
-      "submitted49": 3,
-      "R7NoncompetitiveRetest": true
-    },
-    "codeChecks": {
-      "R7TargetedTests": 30,
-      "files": 2,
-      "beforeFailed": 2,
-      "eslint": "PASS",
-      "prettier": "PASS",
-      "standardProductionBuildExitCode": 0,
-      "originalBudgets": true,
-      "fullSuiteRepeated": false
-    },
-    "exports": {
-      "filteredResultIds": [19, 20],
-      "allResultIds": [19, 20, 7],
-      "gradeRows": 3,
-      "numericInputsAndFormulasChecked": true,
-      "excelRuntimeRecalculationPerformed": false,
-      "exportIdColumn": "ID эксперта contains user IDs28/59; management Expert IDs64/95 mapped separately"
-    },
-    "activeChanges": {
-      "creationFlag49": true,
-      "creationFlag49MustRestore": true,
-      "creationFlag49RestoreTarget": false,
-      "calendar49KeptByExplicitApproval": true,
-      "prefixedCriteriaLockedByNewGrades": true,
-      "newScopedRolesRemain": true,
-      "existingSolution7Unchanged": true
-    },
-    "open": [
-      "V1 new Project and scoring",
-      "other case/draft/team membership/pure participant",
-      "nonempty pending and remaining analytics exports",
-      "remaining V1 conflicts",
-      "visual comparisons and VE01-06 decision",
-      "restore creation flag49 false"
-    ],
-    "credentialsRecorded": false,
-    "additionalMailSent": false,
     "merge": false,
     "deploy": false
   }
