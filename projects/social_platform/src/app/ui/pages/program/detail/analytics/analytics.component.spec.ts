@@ -484,7 +484,7 @@ describe("ProgramAnalyticsComponent", () => {
       expect(card.previousElementSibling?.getAttribute("data-testid")).toBe("attention-block");
     });
 
-    it("does not show a submission deadline in a noncompetitive program", () => {
+    it("does not show submission or evaluation deadlines in a noncompetitive program", () => {
       const base = overview();
       data.set({ ...base, cases: { ...base.cases, submissionApplicable: false } });
       analytics.scheduleDates.set({
@@ -497,8 +497,10 @@ describe("ProgramAnalyticsComponent", () => {
       const card = fixture.nativeElement.querySelector(
         '[data-testid="program-deadlines"]',
       ) as HTMLElement;
-      expect(card.querySelectorAll("time")).toHaveLength(2);
+      expect(card.querySelectorAll("time")).toHaveLength(1);
+      expect(card.querySelector('[data-deadline="registration"]')).not.toBeNull();
       expect(card.querySelector('[data-deadline="submission"]')).toBeNull();
+      expect(card.querySelector('[data-deadline="evaluation"]')).toBeNull();
     });
 
     it("shows an empty state when no valid dates are available", () => {

@@ -3,34 +3,45 @@
   <header class="analytics__header">
     <div class="analytics__title-row">
       <h1 id="solution-analytics-title" class="analytics__title text-heading-3">Аналитика</h1>
-      <button appButton="secondary" type="button" [disabled]="pending()" (click)="load()">
-        Обновить
-      </button>
-      @if (data()) {
+      <div class="analytics__header-actions">
         <button
           appButton="icon"
           type="button"
-          class="regions__export analytics__export-trigger"
-          [cdkMenuTriggerFor]="solutionExports"
-          [disabled]="exporting()"
-          aria-label="Выгрузить данные программы"
-          title="Выгрузить данные программы"
+          [disabled]="pending()"
+          (click)="load()"
+          aria-label="Обновить аналитику"
+          title="Обновить аналитику"
         >
-          <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+          <i appIcon icon="reload" appSquare="16" aria-hidden="true"></i>
         </button>
-        <ng-template #solutionExports
-          ><div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
-            <button cdkMenuItem type="button" (click)="download('program')">Вся программа</button>
-            <button cdkMenuItem type="button" (click)="download('solutions')">Все заявки</button>
-            @if (data()?.solutionFunnel?.submissionApplicable) {
-              <button cdkMenuItem type="button" (click)="download('submitted')">
-                Сданные решения
-              </button>
-              <button cdkMenuItem type="button" (click)="download('scores')">Оценки решений</button>
-            }
-          </div></ng-template
-        >
-      }
+        @if (data()) {
+          <button
+            appButton="icon"
+            type="button"
+            class="regions__export analytics__export-trigger"
+            [cdkMenuTriggerFor]="solutionExports"
+            [disabled]="exporting()"
+            aria-label="Выгрузить данные программы"
+            title="Выгрузить данные программы"
+          >
+            <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+          </button>
+          <ng-template #solutionExports
+            ><div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
+              <button cdkMenuItem type="button" (click)="download('program')">Вся программа</button>
+              <button cdkMenuItem type="button" (click)="download('solutions')">Все заявки</button>
+              @if (data()?.solutionFunnel?.submissionApplicable) {
+                <button cdkMenuItem type="button" (click)="download('submitted')">
+                  Сданные решения
+                </button>
+                <button cdkMenuItem type="button" (click)="download('scores')">
+                  Оценки решений
+                </button>
+              }
+            </div></ng-template
+          >
+        }
+      </div>
     </div>
     @if (exporting()) {
       <p role="status">Подготавливаем Excel…</p>
@@ -63,7 +74,16 @@
           <i appIcon icon="person" appSquare="24" aria-hidden="true"></i>
         </div>
         <div class="summary-card__content">
-          <h2 class="summary-card__label text-body-10">Участники</h2>
+          <div class="analytics__heading-row">
+            <h2 class="summary-card__label text-body-10">Участники</h2>
+            <app-tooltip
+              text="Уникальные пользователи, зарегистрированные в программе."
+              [isVisible]="activeTooltip() === 'participants'"
+              [useOverlay]="true"
+              (show)="showTooltip('participants')"
+              (hide)="hideTooltip('participants')"
+            />
+          </div>
           <strong class="summary-card__value" data-testid="solution-participants">{{
             overview.summary.participants.total
           }}</strong>
@@ -74,7 +94,16 @@
           <i appIcon icon="folder" appSquare="24" aria-hidden="true"></i>
         </div>
         <div class="summary-card__content">
-          <h2 class="summary-card__label text-body-10">Заявки</h2>
+          <div class="analytics__heading-row">
+            <h2 class="summary-card__label text-body-10">Заявки</h2>
+            <app-tooltip
+              text="Все заявки, связанные с программой."
+              [isVisible]="activeTooltip() === 'solutions'"
+              [useOverlay]="true"
+              (show)="showTooltip('solutions')"
+              (hide)="hideTooltip('solutions')"
+            />
+          </div>
           <strong class="summary-card__value" data-testid="solution-total">{{
             overview.summary.solutions.total
           }}</strong>
@@ -85,9 +114,22 @@
           <i appIcon icon="analytics-submitted" appSquare="24" aria-hidden="true"></i>
         </div>
         <div class="summary-card__content">
-          <h2 class="summary-card__label text-body-10">
-            {{ overview.solutionFunnel.submissionApplicable ? "Сдано" : "В командах" }}
-          </h2>
+          <div class="analytics__heading-row">
+            <h2 class="summary-card__label text-body-10">
+              {{ overview.solutionFunnel.submissionApplicable ? "Сдано" : "В командах" }}
+            </h2>
+            <app-tooltip
+              [text]="
+                overview.solutionFunnel.submissionApplicable
+                  ? 'Заявки программы с отправленным решением.'
+                  : 'Участники, состоящие в командах заявок программы.'
+              "
+              [isVisible]="activeTooltip() === 'submitted'"
+              [useOverlay]="true"
+              (show)="showTooltip('submitted')"
+              (hide)="hideTooltip('submitted')"
+            />
+          </div>
           <strong class="summary-card__value">{{
             overview.solutionFunnel.submissionApplicable
               ? overview.solutionFunnel.submitted
@@ -100,14 +142,32 @@
           <i appIcon icon="analytics-team" appSquare="24" aria-hidden="true"></i>
         </div>
         <div class="summary-card__content">
-          <h2 class="summary-card__label text-body-10">Эксперты</h2>
+          <div class="analytics__heading-row">
+            <h2 class="summary-card__label text-body-10">Эксперты</h2>
+            <app-tooltip
+              text="Эксперты, которым предоставлен доступ к программе."
+              [isVisible]="activeTooltip() === 'experts'"
+              [useOverlay]="true"
+              (show)="showTooltip('experts')"
+              (hide)="hideTooltip('experts')"
+            />
+          </div>
           <strong class="summary-card__value">{{ overview.summary.experts.total }}</strong>
         </div>
       </article>
     </section>
     <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
       <article class="attention">
-        <h2 class="analytics-card__title">Требует внимания</h2>
+        <div class="analytics__heading-row">
+          <h2 class="analytics-card__title">Требует внимания</h2>
+          <app-tooltip
+            text="Показатели, которые могут потребовать действия организатора."
+            [isVisible]="activeTooltip() === 'attention'"
+            [useOverlay]="true"
+            (show)="showTooltip('attention')"
+            (hide)="hideTooltip('attention')"
+          />
+        </div>
         <ul class="attention__list">
           <li data-attention-kind="without-visit">
             <button
@@ -180,7 +240,16 @@
         </ul>
       </article>
       <article class="analytics-card program-deadlines">
-        <h2 class="analytics-card__title">Сроки программы</h2>
+        <div class="analytics__heading-row">
+          <h2 class="analytics-card__title">Сроки программы</h2>
+          <app-tooltip
+            text="Текущие этапы и сроки программы."
+            [isVisible]="activeTooltip() === 'deadlines'"
+            [useOverlay]="true"
+            (show)="showTooltip('deadlines')"
+            (hide)="hideTooltip('deadlines')"
+          />
+        </div>
         <ul class="program-deadlines__list">
           @for (deadline of deadlines(); track deadline.key) {
             <li
@@ -189,9 +258,11 @@
             >
               <div>
                 <h3 class="program-deadlines__label">{{ deadline.label }}</h3>
-                <time [attr.datetime]="deadline.datetime">{{ deadline.dateLabel }}</time>
+                <time class="program-deadlines__date" [attr.datetime]="deadline.datetime">{{
+                  deadline.dateLabel
+                }}</time>
               </div>
-              <span>{{ deadline.status }}</span>
+              <span class="program-deadlines__status">{{ deadline.status }}</span>
             </li>
           }
         </ul>
@@ -202,7 +273,16 @@
     </section>
     <section class="analytics-grid" aria-label="Воронки программы">
       <article class="analytics-card">
-        <h2 class="analytics-card__title">Воронка участников</h2>
+        <div class="analytics__heading-row">
+          <h2 class="analytics-card__title">Воронка участников</h2>
+          <app-tooltip
+            text="Регистрация в программе → зафиксированное посещение платформы → участие в команде. Показано текущее состояние участников; посещение учитывается и до регистрации в этой программе."
+            [isVisible]="activeTooltip() === 'participant-funnel'"
+            [useOverlay]="true"
+            (show)="showTooltip('participant-funnel')"
+            (hide)="hideTooltip('participant-funnel')"
+          />
+        </div>
         <app-analytics-funnel-chart
           [items]="participantFunnel()"
           label="Воронка участников"
@@ -210,7 +290,16 @@
         />
       </article>
       <article class="analytics-card">
-        <h2 class="analytics-card__title">Воронка заявок</h2>
+        <div class="analytics__heading-row">
+          <h2 class="analytics-card__title">Воронка заявок</h2>
+          <app-tooltip
+            text="Путь заявок программы от создания до завершения работы."
+            [isVisible]="activeTooltip() === 'solution-funnel'"
+            [useOverlay]="true"
+            (show)="showTooltip('solution-funnel')"
+            (hide)="hideTooltip('solution-funnel')"
+          />
+        </div>
         <app-analytics-funnel-chart
           [items]="solutionFunnel()"
           label="Воронка заявок"
@@ -224,14 +313,25 @@
     @if (overview.evaluationStatus.applicable) {
       <section class="analytics-grid analytics-grid--evaluation" aria-label="Ход оценивания">
         <article class="analytics-card evaluation">
-          <h2 class="analytics-card__title">Ход оценивания</h2>
-          <p class="evaluation__mode analytics-card__subtitle">
-            {{
-              overview.evaluationStatus.mode === "distributed"
-                ? "Распределенное оценивание"
-                : "Открытое оценивание"
-            }}
-          </p>
+          <div class="analytics__heading-row">
+            <div>
+              <h2 class="analytics-card__title">Ход оценивания</h2>
+              <p class="evaluation__mode analytics-card__subtitle">
+                {{
+                  overview.evaluationStatus.mode === "distributed"
+                    ? "Распределенное оценивание"
+                    : "Открытое оценивание"
+                }}
+              </p>
+            </div>
+            <app-tooltip
+              text="Доля выполненных назначений экспертов. Назначение выполнено, когда эксперт заполнил все критерии сданного решения."
+              [isVisible]="activeTooltip() === 'evaluation-status'"
+              [useOverlay]="true"
+              (show)="showTooltip('evaluation-status')"
+              (hide)="hideTooltip('evaluation-status')"
+            />
+          </div>
           @if (overview.evaluationStatus.assignments; as totals) {
             <app-evaluation-progress-summary
               [totals]="totals"
@@ -261,7 +361,16 @@
     }
     <section class="analytics-bottom" aria-label="Кейсы и материалы">
       <article class="analytics-card cases-card">
-        <h2 class="cases-card__title">Кейсы</h2>
+        <div class="analytics__heading-row">
+          <h2 class="cases-card__title">Кейсы</h2>
+          <app-tooltip
+            text="Распределение заявок и участников по кейсам программы."
+            [isVisible]="activeTooltip() === 'cases'"
+            [useOverlay]="true"
+            (show)="showTooltip('cases')"
+            (hide)="hideTooltip('cases')"
+          />
+        </div>
         @if (!overview.cases.configured) {
           <p class="analytics-empty-state">Кейсы не настроены для этой программы</p>
         }
@@ -360,11 +469,16 @@
         </ul>
       </article>
       <article class="analytics-card">
-        <h2 class="analytics-card__title">Материалы решений</h2>
-        <p>
-          Учитываются только поля, применимые к заявке. Число 0 и ответ «Нет» считаются
-          заполненными.
-        </p>
+        <div class="analytics__heading-row">
+          <h2 class="analytics-card__title">Материалы решений</h2>
+          <app-tooltip
+            text="Учитываются только поля, применимые к заявке. Число 0 и ответ «Нет» считаются заполненными. Нажмите на поле, чтобы увидеть заявки без ответа."
+            [isVisible]="activeTooltip() === 'field-coverage'"
+            [useOverlay]="true"
+            (show)="showTooltip('field-coverage')"
+            (hide)="hideTooltip('field-coverage')"
+          />
+        </div>
         @for (field of overview.fieldCoverage; track field.fieldId) {
           <button
             #fieldTrigger
@@ -389,7 +503,16 @@
     </section>
     <section class="regions-grid" aria-label="География и динамика программы">
       <article class="regions">
-        <h2 class="analytics-card__title">Регионы участников</h2>
+        <div class="analytics__heading-row">
+          <h2 class="analytics-card__title">Регионы участников</h2>
+          <app-tooltip
+            text="Количество участников программы по региону, указанному в профиле."
+            [isVisible]="activeTooltip() === 'participant-regions'"
+            [useOverlay]="true"
+            (show)="showTooltip('participant-regions')"
+            (hide)="hideTooltip('participant-regions')"
+          />
+        </div>
         @if (overview.summary.participantRegions.items.length) {
           <app-analytics-region-chart
             [items]="overview.summary.participantRegions.items"
@@ -400,8 +523,23 @@
           <p class="analytics-empty-state">У участников пока не указаны регионы</p>
         }
       </article>
-      <article class="analytics-card">
-        <h2 class="analytics-card__title">Динамика активности</h2>
+      <article class="activity">
+        <div class="analytics__heading-row">
+          <div>
+            <h2 class="analytics-card__title">Динамика активности</h2>
+            @if (activityPoints().length) {
+              <p class="activity__note analytics-card__subtitle">Последние 30 дней</p>
+            }
+          </div>
+          <app-tooltip
+            text="Ежедневные новые регистрации и отправленные решения за последние 30 дней."
+            [isVisible]="activeTooltip() === 'activity'"
+            [useOverlay]="true"
+            position="left"
+            (show)="showTooltip('activity')"
+            (hide)="hideTooltip('activity')"
+          />
+        </div>
         @if (activityPoints().length) {
           <app-analytics-activity-chart
             [points]="activityPoints()"

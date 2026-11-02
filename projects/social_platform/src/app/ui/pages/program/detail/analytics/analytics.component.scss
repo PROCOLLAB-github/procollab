@@ -191,7 +191,9 @@
 
   &__label {
     min-width: 0;
+    font-size: var(--ui-font-h3);
     font-weight: 600;
+    line-height: 22px;
     color: var(--black);
     overflow-wrap: anywhere;
   }

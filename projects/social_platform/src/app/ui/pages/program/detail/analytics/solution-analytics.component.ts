@@ -16,6 +16,7 @@ import { RouterLink } from "@angular/router";
 import { Observable, Subject, takeUntil, timer } from "rxjs";
 import { CdkMenuModule } from "@angular/cdk/menu";
 import { IconComponent } from "@ui/primitives/icon/icon.component";
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { AnalyticsActivityChartComponent } from "./activity-chart/activity-chart.component";
 import { Result } from "@domain/shared/result.type";
 import { saveAs } from "file-saver";
@@ -88,6 +89,7 @@ type View =
     AnalyticsActivityChartComponent,
     CdkMenuModule,
     IconComponent,
+    TooltipComponent,
   ],
   templateUrl: "./solution-analytics.component.html",
   styleUrls: [
@@ -133,6 +135,7 @@ export class SolutionAnalyticsComponent {
       : 0;
   });
   readonly pending = signal(false);
+  readonly activeTooltip = signal<string | null>(null);
   readonly error = signal("");
   readonly exporting = signal(false);
   readonly exportError = signal("");
@@ -266,6 +269,7 @@ export class SolutionAnalyticsComponent {
     });
   }
   load(): void {
+    this.activeTooltip.set(null);
     this.cancel.next();
     this.cancelExport.next();
     this.exporting.set(false);
@@ -281,6 +285,12 @@ export class SolutionAnalyticsComponent {
         if (result.ok && result.value.programId === this.programId()) this.data.set(result.value);
         else this.error.set("Не удалось загрузить аналитику этой программы.");
       });
+  }
+  showTooltip(key: string): void {
+    this.activeTooltip.set(key);
+  }
+  hideTooltip(key: string): void {
+    if (this.activeTooltip() === key) this.activeTooltip.set(null);
   }
   download(kind: "program" | "solutions" | "submitted" | "scores", filtered = false): void {
     if (this.exporting()) return;

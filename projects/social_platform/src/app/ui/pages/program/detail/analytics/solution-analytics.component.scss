@@ -1,7 +1,6 @@
-@use "styles/program-analytics-dialog";
-
 /** @format */
 
+@use "styles/program-analytics-dialog";
 @use "styles/ui-foundation";
 @use "styles/program-management-controls";
 
@@ -25,6 +24,13 @@
 
 .ui-choice {
   @include ui-foundation.choice;
+}
+
+.analytics__header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-left: auto;
 }
 
 .solution-analytics__actions {
@@ -54,6 +60,7 @@
   overflow-x: auto;
 }
 
+.analytics__header-actions .regions__export.ui-button.ui-button,
 .solution-analytics__dialog .regions__export.ui-button.ui-button {
   @include program-management-controls.export-trigger;
 }
