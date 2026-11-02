@@ -190,16 +190,12 @@
     }
   ],
   "matrixSummary": {
-    "PASS": 12,
-    "FAIL": 0,
-    "NOT TESTED": 23
+    "PASS": 52,
+    "NOT TESTED": 13,
+    "FAIL": 1
   },
-  "integrationAcceptance": "INSUFFICIENT EVIDENCE: authenticated organizer acceptance in progress; live settings writes, V2 R1, assignment/grade/conflict/role scenarios and visual decisions remain open",
-  "mailSent": {
-    "expertInvitationEmails": 4,
-    "admin": 0,
-    "participant": 0
-  },
+  "integrationAcceptance": "NOT READY: open server XLSX defect R9 and remaining real E2E evidence; see MATRIX.csv",
+  "mailSent": true,
   "certificateDelivery": false,
   "merge": false,
   "deploy": false,
@@ -229,54 +225,301 @@
   "historicalScope": "Existing baselineBrowser/anonymousManagement/codeFix entries describe the earlier cloud stage. currentRun describes the Windows continuation.",
   "currentRun": {
     "date": "2026-11-02",
-    "sourceSha": "b221ce4cc98a61cd901a198fc89066097c2a7960",
-    "frontend": "http://127.0.0.1:4317",
+    "timezone": "Europe/Moscow",
+    "testedProductCommit": "8d36f4a833b9c664bea52c4806afe3484620f313",
+    "origin": "http://127.0.0.1:4317",
     "api": "https://dev.procollab.ru",
-    "appSourceCleanAtLaunch": true,
-    "organizerAuthenticated": true,
-    "expertE2Authenticated": false,
-    "liveEvidence": "MATRIX.csv records per-scenario SHA; local sanitized evidence is kept outside Git",
-    "currentVisualComparison": {
-      "programs": [
-        39,
-        49
-      ],
-      "screen": "settings/basic",
-      "width": 1440,
-      "completeVisualAcceptance": false
+    "apiMocked": false,
+    "verdict": "NOT READY",
+    "acceptanceComplete": false,
+    "programs": {
+      "39": "legacy_project",
+      "49": "solution/competitive",
+      "50": "solution/competitive/hackathon (read only)",
+      "51": "solution/noncompetitive (read only)"
     },
-    "historicalVisualStage": {
-      "screens": 14,
-      "widths": 5,
-      "apiFixtures": true,
-      "isCurrentDevE2E": false
+    "newProjects": [
+      {
+        "projectId": 403,
+        "programLinkId": 205,
+        "captainUserId": 84,
+        "submitted": true,
+        "teamUserIds": [84, 59]
+      },
+      {
+        "projectId": 404,
+        "programLinkId": 206,
+        "captainUserId": 11,
+        "submitted": true,
+        "linkFixtureCreatedThroughAdmin": true
+      }
+    ],
+    "newSolutions": [
+      {
+        "solutionId": 19,
+        "captainUserId": 11,
+        "submitted": true
+      },
+      {
+        "solutionId": 20,
+        "captainUserId": 59,
+        "submitted": true
+      },
+      {
+        "solutionId": 21,
+        "captainUserId": 84,
+        "case": "Образование",
+        "submitted": true,
+        "grades": 0
+      }
+    ],
+    "solutionGrades": [
+      {
+        "solutionId": 19,
+        "expertId": 64,
+        "userId": 28,
+        "initialScore": 0,
+        "score": 2,
+        "boolean": false
+      },
+      {
+        "solutionId": 19,
+        "expertId": 95,
+        "userId": 59,
+        "score": 6,
+        "boolean": true
+      },
+      {
+        "solutionId": 20,
+        "expertId": 64,
+        "userId": 28,
+        "score": 4,
+        "boolean": false
+      }
+    ],
+    "projectGrades": [
+      {
+        "projectId": 403,
+        "expertId": 64,
+        "userId": 28,
+        "numbers": [0, 0, 0],
+        "boolean": false
+      },
+      {
+        "projectId": 404,
+        "expertId": 64,
+        "userId": 28,
+        "numbers": [0, 8, 2],
+        "boolean": false
+      },
+      {
+        "projectId": 404,
+        "expertId": 95,
+        "userId": 59,
+        "numbers": [4, 10, 6],
+        "boolean": true
+      }
+    ],
+    "live": {
+      "R1SelectedSolutionIds": [19],
+      "V1GradeRemovalRaceStatus": 409,
+      "V2GradeRemovalRaceStatus": 409,
+      "V2StaleAllocationApplyStatus": 409,
+      "submittedTeamRemoval403Status": 409,
+      "foreignSolution19Participant84Status": 404,
+      "resetUnknownAccountStatus": 400,
+      "resetServerEnglishToRussianUI": true,
+      "quota39": 3,
+      "quota49": 1,
+      "V1ReadyAtQuota2": 25,
+      "V1ReadyAfterRestore3": 20,
+      "V1Submitted": 50,
+      "V1CompletedAssignments": 75,
+      "V1PendingAssignments": 48,
+      "V2Submitted": 4,
+      "V2Ready": 2,
+      "temporaryAssignment64to21Removed": true,
+      "R8SenderRetestedBeforeAccept126": true
     },
-    "settingsWritesCompleted": false,
-    "newTestWorksCreated": false,
-    "assignmentWritesCompleted": false,
-    "gradesWritten": false,
-    "expertInvitationsCreated": 4,
-    "expertInvitationsRevoked": 2,
-    "adminMailSent": false,
-    "participantMailSent": false,
-    "credentialsRecorded": false,
-    "missingResetTokenUi": {
-      "lang": "ru",
-      "russianInvalidLinkAlert": true
-    },
-    "actualUserResetFailureDiagnosed": false,
     "codeChecks": {
-      "unitFiles": 22,
-      "unitPassed": 235,
-      "productionBuildExitCode": 0,
-      "eslintExitCode": 0,
-      "prettierExitCode": 0,
-      "solutionTypeContractExitCode": 0
+      "R8TargetedTests": 15,
+      "R8TestFiles": 3,
+      "eslint": "PASS",
+      "prettier": "PASS",
+      "standardProductionBuildExitCode": 0,
+      "originalBudgets": true,
+      "fullSuiteRepeated": false,
+      "R7EarlierRed": 2,
+      "R7EarlierGreenTests": 30
     },
-    "fixesPushedWithoutForce": [
-      "d378a0f38c5542d6c005cb0be98cd00c8c66a58f",
-      "b221ce4cc98a61cd901a198fc89066097c2a7960"
-    ]
+    "exports": {
+      "V1ExpertsAllFromPage2": 27,
+      "V1ExpertsFilteredJoined": 26,
+      "V1FilteredResults": 2,
+      "V1AllResults": 50,
+      "V1FilteredRatingRows": 3,
+      "V1AllRatingRows": 123,
+      "V1AnalyticsAssignments": 123,
+      "V2AnalyticsSolutionIds": [7, 19, 20, 21],
+      "V2AnalyticsAssignmentsWithPending": 4,
+      "V2AnalyticsCompleted": 3,
+      "draftTeamDuplicate": "R9",
+      "numericInputsAndFormulasChecked": true,
+      "excelRuntimeRecalculationPerformed": false,
+      "resultsExpertIdColumnContainsUserId": true,
+      "managementExpertIdMapping": {
+        "64": 28,
+        "95": 59
+      }
+    },
+    "activeChanges": {
+      "creationFlag49": false,
+      "creationFlag49MustRestore": false,
+      "quota39Restored": 3,
+      "quota49Restored": 1,
+      "calendar49KeptByExplicitApproval": true,
+      "prefixedCriteriaLockedByNewGrades": true,
+      "newScopedRolesRemain": true,
+      "existingSolution7Unchanged": true
+    },
+    "openDefects": [
+      {
+        "id": "R9",
+        "severity": "P2",
+        "status": "OPEN",
+        "scope": "server-generated draft team XLSX",
+        "regressionOfPRProven": false,
+        "frontendWorkaroundApplied": false
+      }
+    ],
+    "open": [
+      "Solution team joining requires an extra active account without application49; user asked",
+      "V2 real pagination requires more than4 works",
+      "V1 automatic allocation apply affects old works and was not applied",
+      "V1 form concurrency and forbidden direct grade writes not exercised",
+      "extra invitation resend mail not authorized",
+      "original Play station reset-confirm response/root cause unavailable",
+      "VE01-VE06 owner decision pending"
+    ],
+    "mail": {
+      "expertInvitationsPreviouslyAuthorized": 4,
+      "additionalParticipantInvitation": {
+        "id": 126,
+        "projectId": 403,
+        "programLinkId": 205,
+        "recipientUserId": 59,
+        "count": 1,
+        "accepted": true
+      },
+      "adminMailSent": false,
+      "resetProbeUsedActiveRecipient": false,
+      "resendSent": false
+    },
+    "credentialsRecorded": false,
+    "certificateDelivery": false,
+    "merge": false,
+    "deploy": false
   },
-  "matrixSummaryScope": "Mixed historical and current SHA; not a count of completed current-head acceptance scenarios"
+  "matrixSummaryScope": "Current MATRIX.csv; each PASS retains its actual tested SHA. Historical cloud evidence is separate.",
+  "previousDesktopRun": {
+    "date": "2026-11-02",
+    "timezone": "Europe/Moscow",
+    "testedProductCommit": "b6ab5864ebc0ff577bc90b915606d1f6d4cd66fb",
+    "origin": "http://127.0.0.1:4317",
+    "api": "https://dev.procollab.ru",
+    "apiMocked": false,
+    "verdict": "INSUFFICIENT EVIDENCE",
+    "acceptanceComplete": false,
+    "programs": {
+      "39": "legacy_project",
+      "49": "solution/competitive",
+      "50": "solution/competitive/hackathon",
+      "51": "solution/noncompetitive"
+    },
+    "newSolutions": [
+      {
+        "solutionId": 19,
+        "captainUserId": 11
+      },
+      {
+        "solutionId": 20,
+        "captainUserId": 59
+      }
+    ],
+    "grades": [
+      {
+        "solutionId": 19,
+        "expertId": 64,
+        "userId": 28,
+        "initialScore": 0,
+        "score": 2,
+        "boolean": false
+      },
+      {
+        "solutionId": 19,
+        "expertId": 95,
+        "userId": 59,
+        "score": 6,
+        "boolean": true
+      },
+      {
+        "solutionId": 20,
+        "expertId": 64,
+        "userId": 28,
+        "score": 4,
+        "boolean": false
+      }
+    ],
+    "live": {
+      "R1SelectedSolutionIds": [19],
+      "unselected20UntouchedByR1": true,
+      "staleSolutionStatus": 409,
+      "staleAllocationApplyStatus": 409,
+      "gradeRemovalRaceStatus": 409,
+      "quota49Restored": 1,
+      "quota39Restored": 3,
+      "ready49": 2,
+      "submitted49": 3,
+      "R7NoncompetitiveRetest": true
+    },
+    "codeChecks": {
+      "R7TargetedTests": 30,
+      "files": 2,
+      "beforeFailed": 2,
+      "eslint": "PASS",
+      "prettier": "PASS",
+      "standardProductionBuildExitCode": 0,
+      "originalBudgets": true,
+      "fullSuiteRepeated": false
+    },
+    "exports": {
+      "filteredResultIds": [19, 20],
+      "allResultIds": [19, 20, 7],
+      "gradeRows": 3,
+      "numericInputsAndFormulasChecked": true,
+      "excelRuntimeRecalculationPerformed": false,
+      "exportIdColumn": "ID эксперта contains user IDs28/59; management Expert IDs64/95 mapped separately"
+    },
+    "activeChanges": {
+      "creationFlag49": true,
+      "creationFlag49MustRestore": true,
+      "creationFlag49RestoreTarget": false,
+      "calendar49KeptByExplicitApproval": true,
+      "prefixedCriteriaLockedByNewGrades": true,
+      "newScopedRolesRemain": true,
+      "existingSolution7Unchanged": true
+    },
+    "open": [
+      "V1 new Project and scoring",
+      "other case/draft/team membership/pure participant",
+      "nonempty pending and remaining analytics exports",
+      "remaining V1 conflicts",
+      "visual comparisons and VE01-06 decision",
+      "restore creation flag49 false"
+    ],
+    "credentialsRecorded": false,
+    "additionalMailSent": false,
+    "merge": false,
+    "deploy": false
+  }
 }
