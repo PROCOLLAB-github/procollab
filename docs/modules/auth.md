@@ -175,14 +175,14 @@ DI-биндинг (см. `infrastructure/di/auth.providers.ts`):
 
 ## Use-cases (`api/auth/use-cases/`)
 
-| Use-case               | Команда / параметры               | Возвращает                                            | Ошибки                                                                                                         |
-| ---------------------- | --------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `LoginUseCase`         | `command: LoginCommand`           | `Result<LoginResult, LoginError>`                     | `wrong_credentials` (HTTP 401), `unknown`                                                                      |
-| `RegisterUseCase`      | `command: RegisterCommand`        | `Result<void, RegisterError>`                         | `server_error` (500), `validation_error` (400, прокидывает `error.error` как `RegisterFieldErrors`), `unknown` |
-| `ResendEmailUseCase`   | `email: string`                   | `Result<void, { kind: "unknown" }>`                   | `unknown`                                                                                                      |
-| `ResetPasswordUseCase` | `email: string`                   | `Result<void, PasswordError>`                         | `bad_request` (400), `server_error` (500), `network`                                                            |
+| Use-case               | Команда / параметры               | Возвращает                                            | Ошибки                                                                                                                            |
+| ---------------------- | --------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `LoginUseCase`         | `command: LoginCommand`           | `Result<LoginResult, LoginError>`                     | `wrong_credentials` (HTTP 401), `unknown`                                                                                         |
+| `RegisterUseCase`      | `command: RegisterCommand`        | `Result<void, RegisterError>`                         | `server_error` (500), `validation_error` (400, прокидывает `error.error` как `RegisterFieldErrors`), `unknown`                    |
+| `ResendEmailUseCase`   | `email: string`                   | `Result<void, { kind: "unknown" }>`                   | `unknown`                                                                                                                         |
+| `ResetPasswordUseCase` | `email: string`                   | `Result<void, PasswordError>`                         | `bad_request` (400), `server_error` (500), `network`                                                                              |
 | `SetPasswordUseCase`   | `password: string, token: string` | `Result<void, PasswordError>`                         | `invalid_token` (404/410 или поле `token`), `validation_error` (поле пароля), `bad_request`, `server_error`, `network`, `unknown` |
-| `DownloadCvUseCase`    | —                                 | `Result<Blob, { kind: "download_cv_error"; cause? }>` | `download_cv_error`                                                                                            |
+| `DownloadCvUseCase`    | —                                 | `Result<Blob, { kind: "download_cv_error"; cause? }>` | `download_cv_error`                                                                                                               |
 
 Все use-case'ы покрыты `*.spec.ts` файлами рядом — мокают `AuthRepositoryPort` через `jasmine.createSpyObj`.
 
@@ -279,7 +279,7 @@ Profile-edit хранит достижения в общей форме проф
 | `EmailVerificationComponent`    | `app-email-verification`     | `AuthEmailService`, `AuthUIInfoService`                       | Экран «отправили письмо», counter 60→0 для повторной отправки. Берёт `?adress=...` из query.                                                                                                                                                       |
 | `ConfirmEmailComponent`         | `app-confirm-email`          | `AuthEmailService`                                            | Принимает `?access_token` + `?refresh_token` из URL (magic-link), сохраняет в cookie, навигирует в `/office`.                                                                                                                                      |
 | `ResetPasswordComponent`        | `app-reset-password`         | `AuthPasswordService`, `AuthUIInfoService`                    | Форма `email`, отправляет ссылку на сброс.                                                                                                                                                                                                         |
-| `SetPasswordComponent`          | `app-set-password`           | `AuthPasswordService`, `AuthUIInfoService`                    | Форма `password + repeat`, требует `?token=` в URL. Без токена показывает ошибку ссылки и не отправляет запрос. Ошибки ссылки, пароля, сети и сервера показываются отдельно по-русски. |
+| `SetPasswordComponent`          | `app-set-password`           | `AuthPasswordService`, `AuthUIInfoService`                    | Форма `password + repeat`, требует `?token=` в URL. Без токена показывает ошибку ссылки и не отправляет запрос. Ошибки ссылки, пароля, сети и сервера показываются отдельно по-русски.                                                             |
 | `ConfirmPasswordResetComponent` | `app-confirm-password-reset` | `AuthPasswordService`                                         | Экран «письмо отправлено», `?email=...` из query.                                                                                                                                                                                                  |
 
 ---

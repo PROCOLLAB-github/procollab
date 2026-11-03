@@ -6,18 +6,18 @@
 
 ## Requirement audit
 
-| AC | Требование | Реализация и доказательство | Вердикт |
-| --- | --- | --- | --- |
-| 1 | Аудит всех экранов управления | README: карта всех маршрутов и модальных окон; ACCEPTANCE: 14 экранов, семь настроек, свежие Figma metrics/PNG, обе версии | PASS в границе управления |
-| 2 | Устранить или документировать визуальные расхождения | Общие roster, controls, progress, таблицы и dialog presets; новая галерея; явный список исключений Figma/V1 | PASS для аудита и документирования; окончательное визуальное ревью открыто |
-| 3 | Переиспользовать UI | ExpertRoster, EvaluationProgressSummary, expert-presentation, native controls, management-list, analytics-table/dialog, общий mixin portal body | PASS |
-| 4 | Сохранить Project/Solution | Domain, API adapters, routes и guards не менялись; идентификаторы и preview/apply обработчики сохранены; C00 типовой контракт и tests | PASS на клиенте |
-| 5 | Сохранить работу V1/V2 | Tests и настоящие UI с fixtures, сравнение обеих версий с 44761cdc; реальных organizer записей нет | NOT VERIFIED полностью |
-| 6 | Проверить desktop/mobile | 320/390/768/1440/1920; заполненные списки, forms, dialogs, states, menus, focus | PASS для зафиксированных сценариев |
-| 7 | Доказать результат снимками/тестами | Галереи, JSON, PNG, логи и fingerprints; уровни mock/live явно разделены | PASS |
-| 8 | Обычная production-сборка | NG_BUILD_MAX_WORKERS=2 npm run build:prod: exit 0, исходные budgets/font inlining; 46 проверок именно этого артефакта | PASS |
-| 9 | Установить причину API blocker | Публичные dev GET 200, management/settings/experts/assignments 401 без сессии; production не использован | PASS для диагностики, NOT VERIFIED для live organizer scenarios |
-| 10 | Проверить Git/подготовить PR | dev base совпадает; ветка локальная, dry-run push разрешен; только коммиты задачи, чистота и remote ref проверяются после commit/push | См. итоговый Git-результат |
+| AC  | Требование                                           | Реализация и доказательство                                                                                                                     | Вердикт                                                                    |
+| --- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| 1   | Аудит всех экранов управления                        | README: карта всех маршрутов и модальных окон; ACCEPTANCE: 14 экранов, семь настроек, свежие Figma metrics/PNG, обе версии                      | PASS в границе управления                                                  |
+| 2   | Устранить или документировать визуальные расхождения | Общие roster, controls, progress, таблицы и dialog presets; новая галерея; явный список исключений Figma/V1                                     | PASS для аудита и документирования; окончательное визуальное ревью открыто |
+| 3   | Переиспользовать UI                                  | ExpertRoster, EvaluationProgressSummary, expert-presentation, native controls, management-list, analytics-table/dialog, общий mixin portal body | PASS                                                                       |
+| 4   | Сохранить Project/Solution                           | Domain, API adapters, routes и guards не менялись; идентификаторы и preview/apply обработчики сохранены; C00 типовой контракт и tests           | PASS на клиенте                                                            |
+| 5   | Сохранить работу V1/V2                               | Tests и настоящие UI с fixtures, сравнение обеих версий с 44761cdc; реальных organizer записей нет                                              | NOT VERIFIED полностью                                                     |
+| 6   | Проверить desktop/mobile                             | 320/390/768/1440/1920; заполненные списки, forms, dialogs, states, menus, focus                                                                 | PASS для зафиксированных сценариев                                         |
+| 7   | Доказать результат снимками/тестами                  | Галереи, JSON, PNG, логи и fingerprints; уровни mock/live явно разделены                                                                        | PASS                                                                       |
+| 8   | Обычная production-сборка                            | NG_BUILD_MAX_WORKERS=2 npm run build:prod: exit 0, исходные budgets/font inlining; 46 проверок именно этого артефакта                           | PASS                                                                       |
+| 9   | Установить причину API blocker                       | Публичные dev GET 200, management/settings/experts/assignments 401 без сессии; production не использован                                        | PASS для диагностики, NOT VERIFIED для live organizer scenarios            |
+| 10  | Проверить Git/подготовить PR                         | dev base совпадает; ветка локальная, dry-run push разрешен; только коммиты задачи, чистота и remote ref проверяются после commit/push           | См. итоговый Git-результат                                                 |
 
 ## Checked by source
 

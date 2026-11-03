@@ -92,12 +92,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v1-distribution-1920.png",
@@ -113,12 +108,7 @@
       "identical": false,
       "changedPixels": 48,
       "changedPercent": 0.015,
-      "bounds": [
-        260,
-        959,
-        264,
-        975
-      ]
+      "bounds": [260, 959, 264, 975]
     },
     {
       "file": "v1-distribution-390.png",
@@ -126,12 +116,7 @@
       "identical": false,
       "changedPixels": 48,
       "changedPercent": 0.012307692307692308,
-      "bounds": [
-        330,
-        911,
-        334,
-        927
-      ]
+      "bounds": [330, 911, 334, 927]
     },
     {
       "file": "v1-distribution-768.png",
@@ -139,12 +124,7 @@
       "identical": false,
       "changedPixels": 48,
       "changedPercent": 0.00625,
-      "bounds": [
-        693,
-        863,
-        697,
-        879
-      ]
+      "bounds": [693, 863, 697, 879]
     },
     {
       "file": "v1-experts-1440.png",
@@ -152,12 +132,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v1-experts-1920.png",
@@ -245,12 +220,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00026041666666666666,
-      "bounds": [
-        566,
-        429,
-        568,
-        484
-      ]
+      "bounds": [566, 429, 568, 484]
     },
     {
       "file": "v1-projects-320.png",
@@ -322,12 +292,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v1-settings-basic-1920.png",
@@ -367,12 +332,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v1-settings-criteria-1920.png",
@@ -380,12 +340,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00026041666666666666,
-      "bounds": [
-        566,
-        429,
-        568,
-        484
-      ]
+      "bounds": [566, 429, 568, 484]
     },
     {
       "file": "v1-settings-criteria-320.png",
@@ -425,12 +380,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00026041666666666666,
-      "bounds": [
-        566,
-        429,
-        568,
-        484
-      ]
+      "bounds": [566, 429, 568, 484]
     },
     {
       "file": "v1-settings-dates-320.png",
@@ -502,12 +452,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v1-settings-organizers-1920.png",
@@ -523,12 +468,7 @@
       "identical": false,
       "changedPixels": 26,
       "changedPercent": 0.008125,
-      "bounds": [
-        40,
-        663,
-        43,
-        763
-      ]
+      "bounds": [40, 663, 43, 763]
     },
     {
       "file": "v1-settings-organizers-390.png",
@@ -552,12 +492,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v1-settings-project-form-1920.png",
@@ -565,12 +500,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00026041666666666666,
-      "bounds": [
-        566,
-        429,
-        568,
-        484
-      ]
+      "bounds": [566, 429, 568, 484]
     },
     {
       "file": "v1-settings-project-form-320.png",
@@ -602,12 +532,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v1-settings-registration-1920.png",
@@ -615,12 +540,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00026041666666666666,
-      "bounds": [
-        566,
-        429,
-        568,
-        484
-      ]
+      "bounds": [566, 429, 568, 484]
     },
     {
       "file": "v1-settings-registration-320.png",
@@ -692,12 +612,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v2-certificates-1920.png",
@@ -745,12 +660,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00026041666666666666,
-      "bounds": [
-        566,
-        429,
-        568,
-        484
-      ]
+      "bounds": [566, 429, 568, 484]
     },
     {
       "file": "v2-distribution-320.png",
@@ -798,12 +708,7 @@
       "identical": false,
       "changedPixels": 2,
       "changedPercent": 0.000625,
-      "bounds": [
-        53,
-        584,
-        57,
-        587
-      ]
+      "bounds": [53, 584, 57, 587]
     },
     {
       "file": "v2-experts-390.png",
@@ -907,12 +812,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v2-results-1920.png",
@@ -952,12 +852,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v2-settings-basic-1920.png",
@@ -965,12 +860,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00026041666666666666,
-      "bounds": [
-        566,
-        429,
-        568,
-        484
-      ]
+      "bounds": [566, 429, 568, 484]
     },
     {
       "file": "v2-settings-basic-320.png",
@@ -1002,12 +892,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v2-settings-criteria-1920.png",
@@ -1015,12 +900,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00026041666666666666,
-      "bounds": [
-        566,
-        429,
-        568,
-        484
-      ]
+      "bounds": [566, 429, 568, 484]
     },
     {
       "file": "v2-settings-criteria-320.png",
@@ -1060,12 +940,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00026041666666666666,
-      "bounds": [
-        566,
-        429,
-        568,
-        484
-      ]
+      "bounds": [566, 429, 568, 484]
     },
     {
       "file": "v2-settings-dates-320.png",
@@ -1105,12 +980,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00026041666666666666,
-      "bounds": [
-        566,
-        429,
-        568,
-        484
-      ]
+      "bounds": [566, 429, 568, 484]
     },
     {
       "file": "v2-settings-materials-320.png",
@@ -1190,12 +1060,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00026041666666666666,
-      "bounds": [
-        566,
-        429,
-        568,
-        484
-      ]
+      "bounds": [566, 429, 568, 484]
     },
     {
       "file": "v2-settings-project-form-320.png",
@@ -1211,12 +1076,7 @@
       "identical": false,
       "changedPixels": 15,
       "changedPercent": 0.0038461538461538464,
-      "bounds": [
-        20,
-        624,
-        22,
-        636
-      ]
+      "bounds": [20, 624, 22, 636]
     },
     {
       "file": "v2-settings-project-form-768.png",
@@ -1232,12 +1092,7 @@
       "identical": false,
       "changedPixels": 5,
       "changedPercent": 0.00034722222222222224,
-      "bounds": [
-        326,
-        429,
-        328,
-        484
-      ]
+      "bounds": [326, 429, 328, 484]
     },
     {
       "file": "v2-settings-registration-1920.png",
