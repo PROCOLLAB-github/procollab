@@ -34,7 +34,7 @@ export class ResetPasswordComponent implements OnInit {
 
   protected readonly resetForm = this.authUIInfoService.resetForm;
   protected readonly isSubmitting = this.authUIInfoService.isSubmitting;
-  protected readonly errorServer = this.authUIInfoService.errorServer;
+  protected readonly requestErrorMessage = this.authUIInfoService.resetPasswordErrorMessage;
 
   protected readonly errorMessage = ErrorMessage;
 

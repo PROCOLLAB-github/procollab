@@ -13,7 +13,7 @@ import {
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { A11yModule } from "@angular/cdk/a11y";
 import { Subject, takeUntil } from "rxjs";
-import { ButtonDirective } from "@uilib";
+import { ButtonDirective, AlertDirective, IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import {
   PreviewSolutionRegistrationRemovalUseCase,
@@ -23,10 +23,16 @@ import { SolutionRegistrationRemovalPreview } from "@domain/solution/solution-co
 
 @Component({
   selector: "app-solution-registration-removal",
-  imports: [A11yModule, ButtonDirective, ModalComponent],
-  styleUrl: "./solution-applications.component.scss",
+  imports: [AlertDirective, IconComponent, A11yModule, ButtonDirective, ModalComponent],
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "./solution-applications.component.scss",
+  ],
   template: `<app-modal
     [open]="!!request()"
+    bodyClass="modal__body--no-flex"
     labelledBy="solution-registration-removal-title"
     (openChange)="!$event && close()"
     ><section class="solution-dialog" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
@@ -35,7 +41,7 @@ import { SolutionRegistrationRemovalPreview } from "@domain/solution/solution-co
         <p role="status">Проверяем регистрации и связанные решения…</p>
       }
       @if (error()) {
-        <p role="alert">{{ error() }}</p>
+        <p appAlert="error" role="alert">{{ error() }}</p>
         <button appButton="secondary" type="button" [disabled]="busy()" (click)="load()">
           Обновить данные
         </button>
@@ -72,7 +78,7 @@ import { SolutionRegistrationRemovalPreview } from "@domain/solution/solution-co
           }
         </ul>
         @for (issue of p.errors; track $index) {
-          <p role="alert">{{ issue.detail }}</p>
+          <p appAlert="error" role="alert">{{ issue.detail }}</p>
         }
       }
       <footer>

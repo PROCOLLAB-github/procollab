@@ -54,6 +54,7 @@ import {
 } from "@domain/solution/solution-contract.model";
 import { ProgramManagement } from "@domain/program/program-management.model";
 import {
+  AlertDirective,
   ButtonDirective,
   ChoiceDirective,
   FieldDirective,
@@ -67,6 +68,7 @@ import {
   RowActionEvent,
   RowActionsComponent,
 } from "@ui/primitives/row-actions/row-actions.component";
+import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 import { SolutionFieldsComponent } from "@ui/widgets/solution-fields/solution-fields.component";
 import { SolutionCaseActionComponent, SolutionCaseRequest } from "./solution-case-action.component";
 import { SolutionAllocationComponent } from "./solution-allocation.component";
@@ -90,6 +92,8 @@ type ActionPreview = {
     DatePipe,
     ReactiveFormsModule,
     RouterLink,
+    AlertDirective,
+    TransientNoticeComponent,
     ButtonDirective,
     ChoiceDirective,
     FieldDirective,
@@ -103,11 +107,18 @@ type ActionPreview = {
     SolutionAllocationComponent,
   ],
   templateUrl: "./solution-applications.component.html",
-  styleUrls: ["../management.component.scss", "./solution-applications.component.scss"],
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "../management-list.scss",
+    "./solution-applications.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolutionApplicationsComponent {
   readonly program = input.required<ProgramManagement>();
+  readonly floatingPosition = input<{ center: number; width: number } | null>(null);
   readonly busyChange = output<boolean>();
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -225,6 +236,16 @@ export class SolutionApplicationsComponent {
     this.search.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe(search => this.navigate({ search: search.trim() || null, offset: null }));
+  }
+  filterCount(): number {
+    const q = this.route.snapshot.queryParamMap;
+    return (
+      Number(q.get("participation") === "archived") +
+      Number(!!q.get("case_scope") && q.get("case_scope") !== "all") +
+      Number(!!q.get("submission") && q.get("submission") !== "all") +
+      Number(!!q.get("field_id")) +
+      Number(!!q.get("answer_state") && q.get("answer_state") !== "all")
+    );
   }
   filters(): SolutionManagerSolutionFilters {
     const q = this.route.snapshot.queryParamMap;

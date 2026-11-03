@@ -1,5 +1,4 @@
 /** @format */
-@use "styles/ui-foundation";
 @use "styles/program-management-controls";
 
 .management__solution-link {
@@ -22,19 +21,8 @@
   }
 }
 
-.ui-field {
-  @include ui-foundation.control;
-
-  font-size: 12px;
-}
-
 .ui-button.ui-button {
-  @include ui-foundation.button;
   @include program-management-controls.compact-action;
-}
-
-.ui-choice {
-  @include ui-foundation.choice;
 }
 
 :host {
@@ -43,6 +31,8 @@
 }
 
 .solution-dialog {
+  display: grid;
+  gap: 16px;
   width: 100%;
   min-width: 0;
   padding: 4px;
@@ -65,30 +55,42 @@
   }
 
   h2 {
-    font-size: 20px;
-    line-height: 28px;
-    overflow-wrap: anywhere;
+    @include program-management-controls.section-title;
   }
 
   p {
+    margin: 0;
+    color: var(--grey-for-text);
     overflow-wrap: anywhere;
+  }
+
+  header > button { flex-shrink: 0; }
+
+  h3 {
+    margin: 0;
+    font-size: 12px;
+    line-height: 20px;
   }
 
   label {
     display: grid;
     gap: 8px;
-    margin: 16px 0;
+    margin: 0;
   }
 
-  [role="alert"] {
-    color: var(--red);
+  label:has(> .ui-choice) {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    min-height: 44px;
+    padding-block: 8px;
+    cursor: pointer;
+
+    .ui-choice { flex-shrink: 0; }
   }
 
   &__tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 20px 0;
+    @include program-management-controls.section-tabs;
   }
 
   &__team {
@@ -110,14 +112,12 @@
     sans-serif;
 
   h2 {
-    margin: 0;
-    font-size: 16px;
-    line-height: 24px;
+    @include program-management-controls.section-title;
   }
 }
 
-.solution-selection {
-  left: 50%;
-  width: min(863px, calc(100% - 32px));
-  transform: translateX(-50%);
+.management__participant-count { margin: 4px 0 0; }
+
+.ui-alert.ui-alert.ui-alert {
+  @include program-management-controls.status-notice;
 }

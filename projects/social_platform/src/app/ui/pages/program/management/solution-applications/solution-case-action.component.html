@@ -2,6 +2,7 @@
 <app-modal
   [open]="!!request()"
   size="small"
+  bodyClass="modal__body--no-flex"
   labelledBy="solution-case-title"
   (openChange)="!$event && close()"
 >
@@ -16,7 +17,7 @@
           [disabled]="applying()"
           (click)="close()"
         >
-          ×
+          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
         </button>
       </header>
       <p>{{ item.name }}</p>
@@ -48,11 +49,13 @@
           </p>
         </div>
         @for (issue of checked.errors; track $index) {
-          <p role="alert">{{ issue.detail }}</p>
+          <p appAlert="error" role="alert">
+            {{ displayError(issue.detail, "Проверьте заполненные поля.") }}
+          </p>
         }
       }
       @if (error()) {
-        <p role="alert">{{ error() }}</p>
+        <p appAlert="error" role="alert">{{ error() }}</p>
         <button
           appButton="secondary"
           type="button"

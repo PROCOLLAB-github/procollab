@@ -95,141 +95,27 @@
       @if (loading() && !snapshot()) {
         <p role="status">Загружаем экспертов…</p>
       }
-      <div class="experts__mobile-tools">
-        <label class="experts__pick-target">
-          <input
-            type="checkbox"
-            appChoice
-            aria-label="Выбрать всех экспертов по фильтрам"
-            [checked]="allExpertsSelected()"
-            [indeterminate]="!!selectedExpertIds().size && !allExpertsSelected()"
-            [disabled]="busy() || loading()"
-            (change)="selectAllExperts()"
-          />
-          Все эксперты
-        </label>
-      </div>
-      <table class="experts__table experts__table--people">
-        <thead>
-          <tr>
-            <th class="experts__pick">
-              <label class="experts__pick-target"
-                ><input
-                  type="checkbox"
-                  appChoice
-                  aria-label="Выбрать всех экспертов по фильтрам"
-                  [checked]="allExpertsSelected()"
-                  [indeterminate]="!!selectedExpertIds().size && !allExpertsSelected()"
-                  [disabled]="busy() || loading()"
-                  (change)="selectAllExperts()"
-              /></label>
-            </th>
-            <th>Эксперт</th>
-            <th>Кейсы</th>
-            <th>Статус</th>
-            <th>Назначено</th>
-            <th>Оценено</th>
-            <th>Действия</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (expert of visible(); track expert.id) {
-            <tr
-              [attr.data-expert-id]="expert.id"
-              (click)="expertRowClick($event, expert)"
-              [class.experts__row--selected]="selectedExpertIds().has(expert.id)"
-            >
-              <td class="experts__pick">
-                <label class="experts__pick-target">
-                  <input
-                    type="checkbox"
-                    appChoice
-                    [attr.aria-label]="'Выбрать эксперта: ' + (expert.name || expert.email)"
-                    [checked]="selectedExpertIds().has(expert.id)"
-                    [disabled]="busy()"
-                    (change)="toggleSelectedExpert(expert)"
-                  />
-                </label>
-              </td>
-              <td>
-                <div class="experts__person">
-                  <app-avatar
-                    [url]="href(expert.avatar ?? null) ?? undefined"
-                    [size]="32"
-                    [fallbackLabel]="initials(expert)"
-                  /><span class="experts__identity">
-                    @if (expert.userId) {
-                      <a
-                        class="experts__profile"
-                        [routerLink]="paths.profile.detail(expert.userId)"
-                        >{{ expert.name || expert.email }}</a
-                      >
-                    } @else {
-                      <strong>{{ expert.name || "Имя пока не указано" }}</strong>
-                    }
-                    <span class="experts__email">{{ expert.email }}</span></span
-                  >
-                </div>
-              </td>
-              <td data-label="Кейсы">{{ scopeLabel(expert) }}</td>
-              <td data-label="Статус">
-                <span
-                  class="experts__badge"
-                  [title]="statusDescription(expert)"
-                  [class.experts__badge--ready]="expert.status === 'joined'"
-                  [class.experts__badge--error]="expert.deliveryStatus === 'failed'"
-                  >{{ label(expert) }}</span
-                >
-                @if (expert.status === "pending") {
-                  <p class="experts__delivery">{{ deliveryLabel(expert) }}</p>
-                }
-              </td>
-              <td data-label="Назначено">{{ expert.assigned ?? "—" }}</td>
-              <td data-label="Оценено">{{ expert.completed ?? "—" }}</td>
-              <td class="experts__row-actions">
-                <app-row-actions
-                  [label]="'Действия эксперта: ' + (expert.name || expert.email)"
-                  [actions]="rowActions(expert)"
-                  [disabled]="busy()"
-                  (action)="rowAction(expert, $event)"
-                />
-              </td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="7">
-                {{
-                  search.value || status.value !== "all"
-                    ? "Эксперты не найдены. Измените поиск или статус."
-                    : "Экспертов пока нет. Пригласите первого эксперта по email."
-                }}
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-      <footer class="experts__pagination">
-        <button
-          type="button"
-          appButton="text"
-          [disabled]="page() === 0"
-          (click)="page.set(page() - 1); selected.set(null)"
-        >
-          Назад</button
-        ><span
-          >{{ filtered().length ? page() * pageSize + 1 : 0 }}–{{
-            page() * pageSize + visible().length
-          }}
-          из {{ filtered().length }}</span
-        ><button
-          type="button"
-          appButton="text"
-          [disabled]="(page() + 1) * pageSize >= filtered().length"
-          (click)="page.set(page() + 1); selected.set(null)"
-        >
-          Далее
-        </button>
-      </footer>
+      <app-expert-roster
+        [rows]="visible()"
+        [selectedIds]="selectedExpertIds()"
+        [allSelected]="allExpertsSelected()"
+        [busy]="busy()"
+        [loading]="loading()"
+        [page]="page()"
+        [pageSize]="pageSize"
+        [total]="filtered().length"
+        [actions]="rosterActions"
+        [emptyText]="
+          search.value || status.value !== 'all'
+            ? 'Эксперты не найдены. Измените поиск или статус.'
+            : 'Экспертов пока нет. Пригласите первого эксперта по email.'
+        "
+        (toggleAll)="selectAllExperts()"
+        (toggleRow)="toggleSelectedExpert($event)"
+        (rowClick)="expertRowClick($event.event, $event.expert)"
+        (action)="rowAction($event.expert, $event.event)"
+        (pageChange)="page.set($event); selected.set(null)"
+      />
     </section>
   } @else {
     @if (snapshot(); as state) {
@@ -497,7 +383,7 @@
   [open]="modal() !== null"
   (openChange)="close()"
   labelledBy="experts-dialog-title"
-  bodyClass="modal__body--no-flex experts-modal"
+  [bodyClass]="dialogBodyClass(modal())"
 >
   <div class="experts__dialog" [attr.aria-busy]="busy()">
     <header class="experts__heading">
@@ -509,7 +395,7 @@
         (click)="close()"
         [disabled]="busy()"
       >
-        ×
+        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
       </button>
     </header>
     @if (dialogError()) {
@@ -524,7 +410,7 @@
       @case ("invite") {
         <form (submit)="$event.preventDefault(); sendInvite()" novalidate>
           <label
-            >Email эксперта<input
+            >Email эксперта *<input
               appField
               type="email"
               autocomplete="email"

@@ -1,0 +1,388 @@
+{
+  "environment": "dev only",
+  "writes": 0,
+  "productionUsed": false,
+  "publicPrograms": {
+    "count": 18,
+    "programs": [
+      {
+        "id": 67,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 70,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 73,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 39,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 2,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 5,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 38,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 8,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 50,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 51,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 6,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 4,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 58,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 1,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 49,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 3,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 9,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      },
+      {
+        "id": 7,
+        "solution_storage_mode": null,
+        "draft": null,
+        "is_competitive": null
+      }
+    ]
+  },
+  "publicModes": [
+    {
+      "programId": 4,
+      "status": 200,
+      "modelFields": {
+        "id": 4,
+        "solution_storage_mode": "legacy_project"
+      },
+      "fieldNames": [
+        "id",
+        "name",
+        "tag",
+        "city",
+        "materials",
+        "image_address",
+        "cover_image_address",
+        "mobile_cover_image_address",
+        "image_framing",
+        "advertisement_image_address",
+        "presentation_address",
+        "registration_link",
+        "registration_managed",
+        "datetime_registration_ends",
+        "datetime_project_submission_ends",
+        "datetime_evaluation_ends",
+        "publish_projects_after_finish",
+        "published_projects_available",
+        "legacy_team_min_size",
+        "legacy_team_max_size",
+        "is_user_manager",
+        "is_user_expert",
+        "solution_storage_mode",
+        "pending_expert_invitation_id",
+        "courses",
+        "is_user_member",
+        "current_application"
+      ]
+    },
+    {
+      "programId": 49,
+      "status": 200,
+      "modelFields": {
+        "id": 49,
+        "solution_storage_mode": "solution"
+      },
+      "fieldNames": [
+        "id",
+        "name",
+        "tag",
+        "city",
+        "materials",
+        "image_address",
+        "cover_image_address",
+        "mobile_cover_image_address",
+        "image_framing",
+        "advertisement_image_address",
+        "presentation_address",
+        "registration_link",
+        "registration_managed",
+        "datetime_registration_ends",
+        "datetime_project_submission_ends",
+        "datetime_evaluation_ends",
+        "publish_projects_after_finish",
+        "published_projects_available",
+        "legacy_team_min_size",
+        "legacy_team_max_size",
+        "is_user_manager",
+        "is_user_expert",
+        "solution_storage_mode",
+        "pending_expert_invitation_id",
+        "courses",
+        "is_user_member",
+        "current_application"
+      ]
+    },
+    {
+      "programId": 50,
+      "status": 200,
+      "modelFields": {
+        "id": 50,
+        "solution_storage_mode": "solution"
+      },
+      "fieldNames": [
+        "id",
+        "name",
+        "tag",
+        "city",
+        "materials",
+        "image_address",
+        "cover_image_address",
+        "mobile_cover_image_address",
+        "image_framing",
+        "advertisement_image_address",
+        "presentation_address",
+        "registration_link",
+        "registration_managed",
+        "datetime_registration_ends",
+        "datetime_project_submission_ends",
+        "datetime_evaluation_ends",
+        "publish_projects_after_finish",
+        "published_projects_available",
+        "legacy_team_min_size",
+        "legacy_team_max_size",
+        "is_user_manager",
+        "is_user_expert",
+        "solution_storage_mode",
+        "pending_expert_invitation_id",
+        "courses",
+        "is_user_member",
+        "current_application"
+      ]
+    },
+    {
+      "programId": 51,
+      "status": 200,
+      "modelFields": {
+        "id": 51,
+        "solution_storage_mode": "solution"
+      },
+      "fieldNames": [
+        "id",
+        "name",
+        "tag",
+        "city",
+        "materials",
+        "image_address",
+        "cover_image_address",
+        "mobile_cover_image_address",
+        "image_framing",
+        "advertisement_image_address",
+        "presentation_address",
+        "registration_link",
+        "registration_managed",
+        "datetime_registration_ends",
+        "datetime_project_submission_ends",
+        "datetime_evaluation_ends",
+        "publish_projects_after_finish",
+        "published_projects_available",
+        "legacy_team_min_size",
+        "legacy_team_max_size",
+        "is_user_manager",
+        "is_user_expert",
+        "solution_storage_mode",
+        "pending_expert_invitation_id",
+        "courses",
+        "is_user_member",
+        "current_application"
+      ]
+    }
+  ],
+  "publicEntities": [
+    {
+      "url": "https://dev.procollab.ru/programs/4/projects/?limit=1",
+      "status": 401,
+      "detail": "{\"detail\":\"Authentication credentials were not provided.\"}"
+    },
+    {
+      "url": "https://dev.procollab.ru/programs/4/published-projects/?limit=1",
+      "status": 200,
+      "count": 8,
+      "firstRowKeys": [
+        "id",
+        "team_policy",
+        "name",
+        "leader",
+        "short_description",
+        "image_address",
+        "industry",
+        "draft",
+        "views_count",
+        "is_company",
+        "partner_program"
+      ],
+      "model": null
+    },
+    {
+      "url": "https://dev.procollab.ru/programs/49/published-solutions/?limit=1",
+      "status": 200,
+      "count": 1,
+      "firstRowKeys": [
+        "application",
+        "published_at",
+        "captain",
+        "accepted_count"
+      ],
+      "model": null
+    }
+  ],
+  "management": [
+    {
+      "programId": 4,
+      "method": "GET",
+      "url": "https://dev.procollab.ru/programs/4/management/",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "programId": 4,
+      "method": "GET",
+      "url": "https://dev.procollab.ru/programs/4/management/settings/basic/",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "programId": 4,
+      "method": "GET",
+      "url": "https://dev.procollab.ru/programs/4/management/experts/",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "programId": 4,
+      "method": "GET",
+      "url": "https://dev.procollab.ru/programs/4/management/results/",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "programId": 4,
+      "method": "GET",
+      "url": "https://dev.procollab.ru/programs/4/management/projects/",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "programId": 49,
+      "method": "GET",
+      "url": "https://dev.procollab.ru/programs/49/management/",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "programId": 49,
+      "method": "GET",
+      "url": "https://dev.procollab.ru/programs/49/management/settings/basic/",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "programId": 49,
+      "method": "GET",
+      "url": "https://dev.procollab.ru/programs/49/management/experts/",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "programId": 49,
+      "method": "GET",
+      "url": "https://dev.procollab.ru/programs/49/management/solution-results/",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    },
+    {
+      "programId": 49,
+      "method": "GET",
+      "url": "https://dev.procollab.ru/programs/49/management/solution-analytics/assignments/",
+      "status": 401,
+      "detail": "Authentication credentials were not provided."
+    }
+  ],
+  "blocker": "No organizer credentials/session; management endpoints return 401 Authentication credentials were not provided.",
+  "notVerified": [
+    "Settings save and re-read",
+    "Project/Solution mutations",
+    "Assignment mutations/protected evaluations",
+    "Evaluation write/recalculation",
+    "Concurrent preview/apply",
+    "Real organizer/expert/participant permissions",
+    "Email/Excel/PDF/certificate delivery"
+  ]
+}

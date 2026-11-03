@@ -1,0 +1,5 @@
+/** @format */
+@use "styles/program-expert-roster";
+
+// Одна геометрия для roster V1/V2 и таблицы распределения.
+@include program-expert-roster.styles;

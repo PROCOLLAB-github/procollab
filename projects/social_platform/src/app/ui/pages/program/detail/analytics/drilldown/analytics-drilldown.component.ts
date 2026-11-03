@@ -59,7 +59,11 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
 @Component({
   selector: "app-analytics-drilldown",
   templateUrl: "./analytics-drilldown.component.html",
-  styleUrl: "./analytics-drilldown.component.scss",
+  styleUrls: [
+    "../analytics-table.scss",
+    "../analytics-dialog.scss",
+    "./analytics-drilldown.component.scss",
+  ],
   imports: [
     TransientNoticeComponent,
     StateComponent,

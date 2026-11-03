@@ -69,7 +69,12 @@ interface CertificateEditState {
     { provide: ProgramCertificatesRepositoryPort, useClass: ProgramCertificatesHttpAdapter },
   ],
   templateUrl: "./certificates.component.html",
-  styleUrl: "./certificates.component.scss",
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "./certificates.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementCertificatesComponent {

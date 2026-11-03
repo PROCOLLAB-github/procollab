@@ -1,0 +1,25 @@
+/** @format */
+@use "styles/program-management-controls";
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.ui-button.ui-button {
+  @include program-management-controls.compact-action;
+}
+
+.experts__roster {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  font-size: 12px;
+}
+
+.experts__roster p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--grey-for-text);
+}

@@ -1,6 +1,7 @@
 /** @format */
 
 import { HttpErrorResponse } from "@angular/common/http";
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import camelcaseKeys from "camelcase-keys";
 import { SolutionApiError, SolutionIssue } from "@domain/solution/solution-contract.model";
 
@@ -29,7 +30,7 @@ export function solutionError(error: unknown): SolutionApiError {
               {
                 path: row["path"],
                 code: row["code"],
-                detail: row["detail"],
+                detail: userErrorMessage(row["detail"], "Проверьте заполненное поле."),
                 fieldId: typeof row["field_id"] === "number" ? row["field_id"] : null,
                 ...(typeof row["criterion_id"] === "number" &&
                 Number.isSafeInteger(row["criterion_id"])
@@ -41,7 +42,14 @@ export function solutionError(error: unknown): SolutionApiError {
         : [];
       return {
         code: body["code"],
-        detail: body["detail"],
+        detail: userErrorMessage(
+          body["detail"],
+          error.status === 409
+            ? "Данные изменились. Обновите страницу и повторите действие."
+            : error.status === 400 || error.status === 422
+              ? "Проверьте заполненные поля и повторите действие."
+              : "Не удалось выполнить действие. Попробуйте еще раз.",
+        ),
         errors,
         meta:
           body["meta"] && typeof body["meta"] === "object" && !Array.isArray(body["meta"])

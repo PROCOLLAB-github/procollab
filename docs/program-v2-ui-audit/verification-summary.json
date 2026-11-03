@@ -1,0 +1,106 @@
+{
+  "scope": "Program management UI acceptance after 44761cdc",
+  "baseline": "44761cdc",
+  "widths": [
+    320,
+    390,
+    768,
+    1440,
+    1920
+  ],
+  "browser": {
+    "beforeMain": 140,
+    "afterMain": 140,
+    "afterInteractions": 400,
+    "afterConformance": 75,
+    "afterStates": 40,
+    "visualContracts": 5,
+    "standardArtifactMain": 16,
+    "standardArtifactConformance": 30,
+    "failed": 0,
+    "api": "Isolated fixtures, never live integration"
+  },
+  "tests": {
+    "runner": "vitest",
+    "pool": "forks",
+    "maxWorkers": 1,
+    "files": 498,
+    "filesReported": 498,
+    "excludedByExistingConfig": [
+      "projects/social_platform/src/app/ui/pages/profile/edit/editor-submit-button.directive.spec.ts",
+      "projects/social_platform/src/app/ui/pages/program/program.component.spec.ts",
+      "projects/social_platform/src/app/ui/pages/projects/projects.component.spec.ts"
+    ],
+    "tests": 3089,
+    "passed": 3089,
+    "failed": 0,
+    "pending": 0,
+    "success": true,
+    "finalReplay": {
+      "files": 4,
+      "tests": 107,
+      "passed": 107,
+      "report": "tests/final-regression.json",
+      "reason": "Close buttons use their existing accessible names after switching text glyphs to SVG. No assertions removed."
+    }
+  },
+  "codeChecks": [
+    {
+      "name": "eslint",
+      "files": 18,
+      "exitCode": 0,
+      "scope": "complete PR vs origin/dev"
+    },
+    {
+      "name": "stylelint",
+      "files": 19,
+      "exitCode": 0,
+      "scope": "complete PR vs origin/dev"
+    },
+    {
+      "name": "prettier",
+      "files": 29,
+      "exitCode": 0,
+      "scope": "complete PR vs origin/dev"
+    },
+    {
+      "name": "git diff --check",
+      "exitCode": 0
+    },
+    {
+      "name": "npm run test:solution-contract",
+      "exitCode": 0
+    }
+  ],
+  "productionBuild": {
+    "name": "standard-production-final",
+    "command": "NG_BUILD_MAX_WORKERS=2 npm run build:prod",
+    "exitCode": 0,
+    "originalBudgets": true,
+    "fontInlining": true,
+    "angularConfigChanged": false,
+    "errors": [],
+    "log": "logs/program-v2-followup-standard-final.log",
+    "artifactChecks": {
+      "populatedPages": 16,
+      "dialogData": 30,
+      "api": "isolated fixtures"
+    }
+  },
+  "visualComparison": {
+    "baseline": "44761cdc",
+    "pairs": 140,
+    "identical": 111,
+    "v1Pairs": 70,
+    "v1Identical": 54,
+    "sameDimensions": true
+  },
+  "liveApi": {
+    "reachable": true,
+    "publicReads": "200; Project and Solution independently",
+    "organizerScenarios": "NOT VERIFIED: no organizer session, endpoints return 401",
+    "productionUsed": false,
+    "writes": 0
+  },
+  "acceptance": "Draft review appropriate; merge acceptance open for live organizer integration and documented historical Figma/common-V1 differences"
+}

@@ -1,0 +1,370 @@
+/* @format */
+
+@use "styles/responsive";
+
+/* Общее представление таблиц и статусов аналитики V1/V2; данные остаются в consumers. */
+
+.analytics-case {
+  .analytics-case__table {
+    small {
+      display: block;
+      margin-top: 4px;
+      font-size: var(--ui-font-small);
+    }
+
+    @include responsive.apply-desktop {
+      th,
+      td {
+        padding: 10px 8px;
+      }
+
+      th {
+        font-size: 13px;
+      }
+
+      th:first-child,
+      td:first-child {
+        width: 32%;
+      }
+
+      th:nth-child(2),
+      td:nth-child(2) {
+        width: 28%;
+      }
+
+      th:nth-child(3),
+      td:nth-child(3) {
+        width: 20%;
+      }
+
+      th:last-child,
+      td:last-child {
+        width: 20%;
+      }
+    }
+  }
+}
+
+.analytics-drilldown {
+  &__identity {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    min-width: 0;
+  }
+
+  &__badge {
+    display: inline-block;
+    padding: 3px 7px;
+    font-size: var(--ui-font-small);
+    font-weight: 600;
+    line-height: 18px;
+    color: var(--dark-grey);
+    background: var(--light-gray);
+    border-radius: 6px;
+  }
+
+  &__badge--pending {
+    color: var(--gold-dark);
+    background: var(--gold-light);
+  }
+
+  &__badge--in_progress {
+    color: var(--blue-dark);
+    background: var(--accent-light);
+  }
+
+  &__badge--completed {
+    color: var(--green-dark);
+    background: var(--green-light);
+  }
+
+  &__badge--critical {
+    color: var(--red-dark);
+    background: var(--red-light);
+  }
+
+  &__table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+
+    thead {
+      display: none;
+    }
+
+    tbody {
+      display: grid;
+      gap: 12px;
+    }
+
+    tr {
+      display: block;
+      padding: 12px;
+      border: 1px solid var(--medium-grey-for-outline);
+      border-radius: 12px;
+    }
+
+    td {
+      display: block;
+      padding-block: 4px;
+    }
+
+    td::before {
+      display: block;
+      font-size: var(--ui-font-small);
+      font-weight: 600;
+      color: var(--dark-grey);
+      content: attr(data-label);
+    }
+
+    @include responsive.apply-desktop {
+      thead {
+        display: table-header-group;
+      }
+
+      tbody {
+        display: table-row-group;
+      }
+
+      tr {
+        display: table-row;
+        padding: 0;
+        border: 0;
+      }
+
+      th,
+      td {
+        display: table-cell;
+        padding: 12px 8px;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid var(--medium-grey-for-outline);
+      }
+
+      th {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      td::before {
+        display: none;
+      }
+
+      th:first-child {
+        width: 25%;
+      }
+
+      th:last-child {
+        width: 15%;
+      }
+    }
+  }
+
+  &__table--projects {
+    @include responsive.apply-desktop {
+      th:first-child {
+        width: 18%;
+      }
+    }
+  }
+
+  &__table--assignments {
+    tr {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+    }
+
+    td {
+      padding: 0;
+      line-height: 22px;
+    }
+
+    td::before {
+      margin-bottom: 4px;
+    }
+
+    .analytics-drilldown__identity {
+      gap: 12px;
+      font-weight: 500;
+    }
+
+    .analytics-drilldown__assignment-status {
+      display: flex;
+      flex-flow: column wrap;
+      gap: 12px 14px;
+      align-items: flex-start;
+    }
+
+    .analytics-drilldown__badge {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 9px;
+      border-radius: 8px;
+
+      &::before {
+        flex: 0 0 6px;
+        width: 6px;
+        height: 6px;
+        content: "";
+        background: currentcolor;
+        border-radius: 50%;
+      }
+    }
+
+    .analytics-drilldown__action {
+      padding: 4px 0;
+      line-height: 20px;
+
+      @media screen and (max-width: 999px) {
+        font-size: var(--ui-font-body);
+        font-weight: 500;
+      }
+
+      @media screen and (min-width: 1000px) {
+        font-size: 13px;
+        font-weight: 500;
+      }
+    }
+
+    @include responsive.apply-desktop {
+      border-spacing: 0;
+      border-collapse: separate;
+
+      .analytics-drilldown__assignment-status {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      tr {
+        display: table-row;
+        height: 72px;
+        padding: 0;
+      }
+
+      th,
+      td {
+        padding: 16px 12px;
+        vertical-align: middle;
+      }
+
+      thead tr {
+        height: auto;
+      }
+
+      th {
+        padding-block: 13px;
+        color: var(--dark-grey);
+        background: var(--light-gray);
+        border-bottom: 0;
+
+        &:first-child {
+          width: 27%;
+          border-radius: 8px 0 0 8px;
+        }
+
+        &:nth-child(2) {
+          width: 31%;
+        }
+
+        &:nth-child(3) {
+          width: 29%;
+        }
+
+        &:last-child {
+          width: 13%;
+          border-radius: 0 8px 8px 0;
+        }
+      }
+
+      th:nth-child(3),
+      td:nth-child(3) {
+        padding-inline: 8px;
+      }
+    }
+  }
+}
+
+.analytics-drilldown__table th.attention-check-cell,
+.analytics-drilldown__table td.attention-check-cell {
+  width: 44px;
+  padding: 0;
+
+  &::before {
+    display: none;
+  }
+}
+
+.attention-check {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+
+  input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: inherit;
+    accent-color: var(--accent);
+  }
+
+  input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+}
+
+.attention-check__label {
+  display: none;
+}
+
+@media (max-width: 999px) {
+  .analytics-drilldown__table:has(th.attention-check-cell) {
+    thead {
+      display: block;
+    }
+
+    thead tr {
+      padding: 0;
+      border: 0;
+    }
+
+    thead th:not(.attention-check-cell) {
+      display: none;
+    }
+
+    th.attention-check-cell {
+      width: auto;
+    }
+
+    thead .attention-check {
+      display: flex;
+      gap: 12px;
+      width: auto;
+      font-size: 12px;
+    }
+
+    .attention-check__label {
+      display: inline;
+    }
+  }
+}
+
+.analytics-drilldown__table tr.attention-selected-row {
+  background: color-mix(in srgb, var(--accent-light) 35%, var(--light-white));
+}
+
+@media (min-width: 1000px) {
+  .analytics-drilldown__table--assignments th {
+    &:first-child { width: 24%; }
+    &:nth-child(2) { width: 27%; }
+    &:nth-child(3) { width: 18%; }
+    &:nth-child(4) { width: 19%; }
+    &:last-child { width: 12%; }
+  }
+}

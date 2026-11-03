@@ -1,0 +1,6 @@
+/** @format */
+@use "styles/ui-foundation";
+
+.ui-choice {
+  @include ui-foundation.choice;
+}

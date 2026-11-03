@@ -1,6 +1,11 @@
 /** @format */
 
 @use "../project-form/project-form.component";
+@use "styles/program-management-controls";
+
+.project-form__section-heading .ui-button.ui-button {
+  @include program-management-controls.compact-action;
+}
 
 .constraints {
   display: grid;

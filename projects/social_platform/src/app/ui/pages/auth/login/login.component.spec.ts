@@ -62,6 +62,23 @@ describe("LoginComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+  it("не называет неизвестный сбой входа неверными учетными данными", () => {
+    const ui = fixture.debugElement.injector.get(AuthUIInfoService);
+    ui.login$.set({ status: "failure", error: { kind: "unknown" } });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain(
+      "Не удалось войти. Повторите попытку позже.",
+    );
+    expect(fixture.nativeElement.textContent).not.toContain("Неправильный логин или пароль");
+  });
+  it("сохраняет сообщение о неверных данных при отказе авторизации", () => {
+    const ui = fixture.debugElement.injector.get(AuthUIInfoService);
+    ui.login$.set({ status: "failure", error: { kind: "wrong_credentials" } });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain(
+      "Неправильный логин или пароль",
+    );
+  });
 
   it("keeps the native password input and visibility control in adjacent sibling slots", () => {
     const password = fixture.nativeElement.querySelector(

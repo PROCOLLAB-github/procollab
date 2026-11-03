@@ -1,0 +1,562 @@
+[
+  {
+    "file": "v1-analytics-1440.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-analytics-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-analytics-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-analytics-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-analytics-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-certificates-1440.png",
+    "identical": false,
+    "sameSize": true,
+    "changedPixels": 5,
+    "changedPercent": 0.0003472,
+    "bounds": [326, 429, 328, 484]
+  },
+  {
+    "file": "v1-certificates-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-certificates-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-certificates-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-certificates-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-distribution-1440.png",
+    "identical": false,
+    "sameSize": true,
+    "changedPixels": 5,
+    "changedPercent": 0.0003472,
+    "bounds": [326, 429, 328, 484]
+  },
+  {
+    "file": "v1-distribution-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-distribution-320.png",
+    "identical": false,
+    "sameSize": true,
+    "changedPixels": 2,
+    "changedPercent": 0.000625,
+    "bounds": [53, 814, 57, 817]
+  },
+  {
+    "file": "v1-distribution-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-distribution-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-experts-1440.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-experts-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-experts-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-experts-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-experts-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-participants-1440.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-participants-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-participants-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-participants-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-participants-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-projects-1440.png",
+    "identical": false,
+    "sameSize": true,
+    "changedPixels": 5,
+    "changedPercent": 0.0003472,
+    "bounds": [326, 429, 328, 484]
+  },
+  {
+    "file": "v1-projects-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-projects-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-projects-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-projects-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-results-1440.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-results-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-results-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-results-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-results-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-basic-1440.png",
+    "identical": false,
+    "sameSize": true,
+    "changedPixels": 5,
+    "changedPercent": 0.0003472,
+    "bounds": [326, 429, 328, 484]
+  },
+  {
+    "file": "v1-settings-basic-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-basic-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-basic-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-basic-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-criteria-1440.png",
+    "identical": false,
+    "sameSize": true,
+    "changedPixels": 5,
+    "changedPercent": 0.0003472,
+    "bounds": [326, 429, 328, 484]
+  },
+  {
+    "file": "v1-settings-criteria-1920.png",
+    "identical": false,
+    "sameSize": true,
+    "changedPixels": 5,
+    "changedPercent": 0.0002604,
+    "bounds": [566, 429, 568, 484]
+  },
+  {
+    "file": "v1-settings-criteria-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-criteria-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-criteria-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-dates-1440.png",
+    "identical": false,
+    "sameSize": true,
+    "changedPixels": 5,
+    "changedPercent": 0.0003472,
+    "bounds": [326, 429, 328, 484]
+  },
+  {
+    "file": "v1-settings-dates-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-dates-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-dates-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-dates-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-materials-1440.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-materials-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-materials-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-materials-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-materials-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-organizers-1440.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-organizers-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-organizers-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-organizers-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-organizers-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-project-form-1440.png",
+    "identical": false,
+    "sameSize": true,
+    "changedPixels": 5,
+    "changedPercent": 0.0003472,
+    "bounds": [326, 429, 328, 484]
+  },
+  {
+    "file": "v1-settings-project-form-1920.png",
+    "identical": false,
+    "sameSize": true,
+    "changedPixels": 5,
+    "changedPercent": 0.0002604,
+    "bounds": [566, 429, 568, 484]
+  },
+  {
+    "file": "v1-settings-project-form-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-project-form-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-project-form-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-registration-1440.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-registration-1920.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-registration-320.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-registration-390.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  },
+  {
+    "file": "v1-settings-registration-768.png",
+    "identical": true,
+    "sameSize": true,
+    "changedPixels": 0,
+    "changedPercent": 0.0,
+    "bounds": null
+  }
+]

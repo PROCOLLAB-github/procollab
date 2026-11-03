@@ -1,4 +1,11 @@
 /** @format */
+
+import {
+  expertScopeLabel,
+  expertStatusLabel,
+  expertDeliveryLabel,
+  expertDialogBodyClass,
+} from "./expert-presentation";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,7 +19,7 @@ import {
   untracked,
 } from "@angular/core";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
-import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 import {
   catchError,
@@ -28,11 +35,11 @@ import {
 } from "rxjs";
 import { A11yModule } from "@angular/cdk/a11y";
 import {
-  AvatarComponent,
   ButtonDirective,
   ChoiceDirective,
   FieldDirective,
-  TableDirective,
+  AlertDirective,
+  IconComponent,
 } from "@uilib";
 import {
   RowAction,
@@ -62,6 +69,8 @@ import {
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { SolutionAllocationComponent } from "../solution-applications/solution-allocation.component";
 import { exportExperts } from "@utils/export-experts";
+import { ExpertRosterComponent } from "./expert-roster.component";
+import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 
 /** Program experts keep their existing invitation/case-scope API. Assignment IDs and counters come only from solutions. */
 @Component({
@@ -73,21 +82,28 @@ import { exportExperts } from "@utils/export-experts";
     ButtonDirective,
     ChoiceDirective,
     FieldDirective,
-    TableDirective,
-    AvatarComponent,
+    AlertDirective,
+    IconComponent,
     RowActionsComponent,
     ModalComponent,
     SolutionAllocationComponent,
+    ExpertRosterComponent,
+    TransientNoticeComponent,
   ],
   templateUrl: "./solution-experts.component.html",
   styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "./expert-table.scss",
     "./experts.component.scss",
-    "../../detail/analytics/solution-analytics.component.scss",
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolutionExpertsComponent {
+  readonly dialogBodyClass = expertDialogBodyClass;
   readonly programId = input.required<number>();
+  readonly floatingPosition = input<{ center: number; width: number } | null>(null);
   readonly confirmDiscard = input.required<() => Promise<boolean>>();
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
   private readonly roster = inject(EvaluationUseCase);
@@ -110,7 +126,18 @@ export class SolutionExpertsComponent {
   readonly allocationBusy = signal(false);
   readonly error = signal("");
   readonly dialogError = signal("");
-  readonly message = signal("");
+  readonly message = signal("", { equal: () => false });
+  readonly exporting = signal(false);
+  readonly exportError = signal(false);
+  readonly exportSuccess = signal(false, { equal: () => false });
+  readonly filtersOpen = signal(false);
+  readonly filterDraft = new FormGroup({
+    status: new FormControl("all", { nonNullable: true }),
+    case: new FormControl("all", { nonNullable: true }),
+  });
+  readonly page = signal(0);
+  readonly pageSize = 20;
+  readonly distributionSelection = signal(new Set<number>());
   readonly tab = signal<"experts" | "distribution">("experts");
   readonly modal = signal<"invite" | "scope" | "assignments" | "quota" | null>(null);
   readonly selected = signal<ExpertRow | null>(null);
@@ -221,6 +248,74 @@ export class SolutionExpertsComponent {
         (this.caseValue() === "all" || JSON.stringify(row.caseName) === this.caseValue()),
     ),
   );
+  readonly visible = computed(() =>
+    this.filtered().slice(this.page() * this.pageSize, (this.page() + 1) * this.pageSize),
+  );
+  readonly allExpertsSelected = computed(
+    () => !!this.filtered().length && this.filtered().every(e => this.selectedExperts().has(e.id)),
+  );
+  readonly allSolutionsSelected = computed(
+    () =>
+      !!this.filteredSolutions().length &&
+      this.filteredSolutions().every(row =>
+        this.distributionSelection().has(row.application.solutionId),
+      ),
+  );
+  readonly filterCount = computed(() =>
+    Number((this.tab() === "experts" ? this.statusValue() : this.caseValue()) !== "all"),
+  );
+  readonly distributionActions: RowAction[] = [{ id: "assign", label: "Назначить экспертов" }];
+  readonly rosterActions = (expert: ExpertRow) => this.rowActions(expert);
+  selectAllExperts(): void {
+    if (this.busy() || this.loading()) return;
+    this.selectedExperts.set(
+      this.allExpertsSelected() ? new Set() : new Set(this.filtered().map(e => e.id)),
+    );
+  }
+  expertRowClick(event: MouseEvent, expert: ExpertRow): void {
+    const target = event.target;
+    if (
+      event.defaultPrevented ||
+      !(target instanceof Element) ||
+      target.closest("a,button,input,label,select,textarea,app-row-actions,.experts__row-actions")
+    )
+      return;
+    if (target.ownerDocument.defaultView?.getSelection()?.toString()) return;
+    this.toggleExpert(expert.id);
+  }
+  clearDistributionSelection(): void {
+    this.distributionSelection.set(new Set());
+  }
+  toggleDistribution(id: number): void {
+    if (this.busy() || this.loading() || this.allocationBusy()) return;
+    const ids = new Set(this.distributionSelection());
+    ids.has(id) ? ids.delete(id) : ids.add(id);
+    this.distributionSelection.set(ids);
+  }
+  selectAllSolutions(): void {
+    if (this.busy() || this.loading() || this.allocationBusy()) return;
+    this.distributionSelection.set(
+      this.allSolutionsSelected()
+        ? new Set()
+        : new Set(this.filteredSolutions().map(row => row.application.solutionId)),
+    );
+  }
+  openFilters(): void {
+    this.filterDraft.setValue({ status: this.status.value, case: this.caseFilter.value });
+    this.filtersOpen.set(true);
+  }
+  applyFilters(): void {
+    const control = this.tab() === "experts" ? this.status : this.caseFilter;
+    const value =
+      this.tab() === "experts"
+        ? this.filterDraft.controls.status.value
+        : this.filterDraft.controls.case.value;
+    if (value !== control.value) control.setValue(value);
+    this.filtersOpen.set(false);
+  }
+  resetFilterDraft(): void {
+    this.filterDraft.setValue({ status: "all", case: "all" });
+  }
   toggleExpert(id: number | string): void {
     if (this.busy()) return;
     const ids = new Set(this.selectedExperts());
@@ -260,6 +355,18 @@ export class SolutionExpertsComponent {
     );
   }
   constructor() {
+    this.search.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.page.set(0);
+      this.clearSelectedExperts();
+      this.distributionSelection.set(new Set());
+    });
+    this.status.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.page.set(0);
+      this.clearSelectedExperts();
+    });
+    this.caseFilter.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.distributionSelection.set(new Set()));
     timer(4000, 4000)
       .pipe(
         filter(
@@ -321,6 +428,9 @@ export class SolutionExpertsComponent {
     this.assignments.set([]);
     this.solutions.set([]);
     this.selectedExperts.set(new Set());
+    this.distributionSelection.set(new Set());
+    this.page.set(0);
+    this.filtersOpen.set(false);
     const id = this.programId();
     forkJoin({ roster: this.roster.workspace(id), assignments: this.assignmentsApi.execute(id) })
       .pipe(takeUntil(this.cancel), takeUntilDestroyed(this.destroyRef))
@@ -599,11 +709,15 @@ export class SolutionExpertsComponent {
       "Число оценщиков изменено. Готовность решений пересчитана.",
     );
   }
-  startAllocation(): void {
-    if (!this.busy() && !this.loading() && this.solutions().length)
+  startAllocation(
+    ids = this.distributionSelection().size
+      ? [...this.distributionSelection()]
+      : this.filteredSolutions().map(row => row.application.solutionId),
+  ): void {
+    if (!this.busy() && !this.allocationBusy() && !this.loading() && ids.length)
       this.allocation.set({
         programId: this.programId(),
-        ids: this.filteredSolutions().map(row => row.application.solutionId),
+        ids,
       });
   }
   async close(): Promise<void> {
@@ -620,24 +734,28 @@ export class SolutionExpertsComponent {
     this.dialogError.set("");
   }
   async downloadExperts(): Promise<void> {
+    if (this.exporting()) return;
+    this.exporting.set(true);
+    this.exportError.set(false);
     try {
       await exportExperts(
         this.programId(),
         this.filtered().map(e => ({
           name: e.name ?? "",
           email: e.email,
-          cases: e.allCases
-            ? "Все кейсы"
-            : (e.caseNames ?? []).map(c => c ?? "Без кейса").join(", "),
-          status: e.status === "joined" ? "В программе" : "Приглашен",
-          delivery: e.deliveryStatus ?? "",
+          cases: expertScopeLabel(e),
+          status: expertStatusLabel(e),
+          delivery: expertDeliveryLabel(e),
           assigned: e.assigned,
           completed: e.completed,
           remaining: e.remaining,
         })),
       );
+      this.exportSuccess.set(true);
     } catch {
-      this.error.set("Не удалось выгрузить экспертов.");
+      this.exportError.set(true);
+    } finally {
+      this.exporting.set(false);
     }
   }
 }

@@ -1,4 +1,6 @@
 /** @format */
+
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,7 +22,7 @@ import {
 } from "@api/solution/use-cases/solution-case-actions.use-cases";
 import { SolutionCaseChangePreview } from "@domain/solution/solution-contract.model";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { ButtonDirective, FieldDirective } from "@uilib";
+import { ButtonDirective, FieldDirective, AlertDirective, IconComponent } from "@uilib";
 
 export interface SolutionCaseRequest {
   programId: number;
@@ -30,9 +32,21 @@ export interface SolutionCaseRequest {
 
 @Component({
   selector: "app-solution-case-action",
-  imports: [ReactiveFormsModule, ModalComponent, ButtonDirective, FieldDirective],
+  imports: [
+    AlertDirective,
+    IconComponent,
+    ReactiveFormsModule,
+    ModalComponent,
+    ButtonDirective,
+    FieldDirective,
+  ],
   templateUrl: "./solution-case-action.component.html",
-  styleUrl: "./solution-applications.component.scss",
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "./solution-applications.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolutionCaseActionComponent {
@@ -46,6 +60,7 @@ export class SolutionCaseActionComponent {
   readonly loading = signal(false);
   readonly applying = signal(false);
   readonly error = signal<string | null>(null);
+  readonly displayError = userErrorMessage;
   readonly canApply = computed(() => {
     const checked = this.preview(),
       request = this.request();

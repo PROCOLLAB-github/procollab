@@ -4,7 +4,7 @@ import { computed, DestroyRef, inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { tap } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
-import { ValidationService } from "@corelib";
+import { ValidationService, userErrorMessage } from "@corelib";
 import { RegisterUseCase } from "../use-cases/register.use-case";
 import { toAsyncState } from "@domain/shared/to-async-state";
 import { RegisterError } from "@domain/auth/results/register.result";
@@ -41,7 +41,13 @@ export class AuthRegisterService {
   readonly serverErrors = computed(() => {
     const state = this.register$();
     if (isFailure(state) && state.error.kind === "validation_error") {
-      return Object.values(state.error.errors).flat();
+      return [
+        ...new Set(
+          Object.values(state.error.errors)
+            .flat()
+            .map(message => userErrorMessage(message, "Проверьте данные регистрации.")),
+        ),
+      ];
     }
     return [];
   });

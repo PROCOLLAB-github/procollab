@@ -11,7 +11,9 @@ export const inviteToProjectMapper = (invites: Invite[] = []): InviteProjectSumm
     vacancies: invite.project.vacancies,
     collaborators: invite.project.collaborators,
     name: invite.project.name,
-    shortDescription: invite.user.firstName + " " + invite.user.lastName,
+    shortDescription:
+      [invite.sender?.firstName, invite.sender?.lastName].filter(Boolean).join(" ") ||
+      "Пользователь",
     industry: invite.project.industry,
   }));
 };

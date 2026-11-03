@@ -88,9 +88,9 @@
               }
             </fieldset>
           }
-          @if (errorWrongAuth()) {
-            <div class="text-body-10 error">
-              {{ errorMessage.AUTH_WRONG_AUTH }}
+          @if (requestErrorMessage(); as message) {
+            <div class="text-body-10 error" role="alert">
+              {{ message }}
             </div>
           }
 

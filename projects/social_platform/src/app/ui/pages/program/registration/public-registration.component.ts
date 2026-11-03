@@ -31,6 +31,7 @@ import {
 import { LoginUseCase } from "@api/auth/use-cases/login.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { evaluationError } from "@utils/evaluation-workspace";
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 @Component({
   selector: "app-public-program-registration",
   imports: [
@@ -263,14 +264,16 @@ export class PublicRegistrationComponent {
               Object.fromEntries(
                 Object.entries(errors).map(([k, v]) => [
                   k,
-                  Array.isArray(v) ? v.join(" ") : String(v),
+                  userErrorMessage(v, "Проверьте ответ на этот вопрос."),
                 ]),
               ),
             );
             this.error.set(
               "Проверьте поля анкеты: " +
                 Object.keys(errors)
-                  .map(key => this.program()?.fields.find(f => f.id === key)?.label ?? key)
+                  .map(
+                    key => this.program()?.fields.find(f => f.id === key)?.label ?? "Поле анкеты",
+                  )
                   .join(", ") +
                 ".",
             );

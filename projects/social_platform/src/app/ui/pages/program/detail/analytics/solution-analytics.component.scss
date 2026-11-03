@@ -1,6 +1,12 @@
 /** @format */
 
+@use "styles/program-analytics-dialog";
 @use "styles/ui-foundation";
+@use "styles/program-management-controls";
+
+::ng-deep {
+  @include program-analytics-dialog.body;
+}
 
 :host {
   display: block;
@@ -13,10 +19,18 @@
 
 .ui-button:not(.attention__action).ui-button {
   @include ui-foundation.button;
+  @include program-management-controls.compact-action;
 }
 
 .ui-choice {
   @include ui-foundation.choice;
+}
+
+.analytics__header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-left: auto;
 }
 
 .solution-analytics__actions {
@@ -34,17 +48,11 @@
 .solution-analytics__dialog {
   display: grid;
   gap: 16px;
-  max-height: 78dvh;
-  padding: 24px;
-  overflow: auto;
-  font-family: Mont, sans-serif;
+  p { margin: 0; }
 }
 
-.solution-analytics__heading {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  justify-content: space-between;
+.ui-alert.ui-alert.ui-alert {
+  @include program-management-controls.status-notice;
 }
 
 .solution-analytics__table {
@@ -52,22 +60,34 @@
   overflow-x: auto;
 }
 
-.solution-analytics__table table {
-  width: 100%;
-  border-collapse: collapse;
+.solution-analytics__evaluation-totals {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dark-grey);
 }
 
-.solution-analytics__table th,
-.solution-analytics__table td {
-  padding: 12px;
-  text-align: left;
-  overflow-wrap: anywhere;
-  border-bottom: 1px solid var(--light-gray);
+.solution-analytics__coverage {
+  margin-top: 12px;
+
+  .ui-button.ui-button {
+    justify-content: flex-start;
+    max-width: 100%;
+    padding-inline: 0;
+    text-align: left;
+    white-space: normal;
+  }
+
+  @media (min-width: 1000px) {
+    td { vertical-align: middle; }
+    th:first-child { width: 50%; }
+    th:last-child { width: 25%; }
+  }
 }
 
-.solution-analytics__table th {
-  overflow-wrap: normal;
-  white-space: nowrap;
+.analytics__header-actions .regions__export.ui-button.ui-button,
+.solution-analytics__dialog .regions__export.ui-button.ui-button {
+  @include program-management-controls.export-trigger;
 }
 
 .solution-analytics__sr {
@@ -76,10 +96,4 @@
   height: 1px;
   overflow: hidden;
   clip-path: inset(50%);
-}
-
-@media (max-width: 600px) {
-  .solution-analytics__dialog {
-    padding: 16px;
-  }
 }

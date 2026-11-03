@@ -21,6 +21,7 @@ import { ActivatedRoute, NavigationEnd, Router, RouterLink } from "@angular/rout
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { HttpErrorResponse } from "@angular/common/http";
+import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import { authLoginUrl } from "@core/lib/models/auth/auth-return-url";
 import { debounceTime, distinctUntilChanged, filter, finalize, startWith } from "rxjs";
 import { saveAs } from "file-saver";
@@ -92,7 +93,13 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
 @Component({
   selector: "app-program-management",
   templateUrl: "./management.component.html",
-  styleUrl: "./management.component.scss",
+  styleUrls: [
+    "./program-native-button.scss",
+    "./program-native-field.scss",
+    "./program-native-choice.scss",
+    "./management.component.scss",
+    "./management-list.scss",
+  ],
   imports: [
     TransientNoticeComponent,
     RouterLink,
@@ -1316,7 +1323,10 @@ export class ProgramManagementComponent implements OnInit {
           if (error.error?.code === "reopen_confirmation_required")
             void this.confirm(
               "Снова открыть прием?",
-              error.error.detail,
+              userErrorMessage(
+                error.error.detail,
+                "Изменение дат снова откроет прием. Подтвердите сохранение новых сроков.",
+              ),
               "Подтвердить и сохранить",
             ).then(yes => {
               if (yes) this.save(true);
@@ -1563,7 +1573,10 @@ export class ProgramManagementComponent implements OnInit {
     if (error?.status === 401) return "Войдите в аккаунт, чтобы продолжить.";
     if (error?.status === 404) return "Программа или выбранный объект не найдены.";
     if (error?.status === 409)
-      return error.error?.detail ?? "Данные изменились. Обновите страницу перед сохранением.";
+      return userErrorMessage(
+        error.error?.detail,
+        "Данные изменились. Обновите страницу перед сохранением.",
+      );
     if (error?.status === 400)
       return "Проверьте введенные значения и ссылки. Изменения сохранены в форме.";
     return "Не удалось выполнить запрос. Проверьте соединение и повторите попытку.";

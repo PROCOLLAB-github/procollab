@@ -1,0 +1,130 @@
+<!-- @format -->
+<div class="experts experts__roster">
+  <div class="experts__mobile-tools">
+    <label class="experts__pick-target">
+      <input
+        type="checkbox"
+        appChoice
+        aria-label="Выбрать всех экспертов по фильтрам"
+        [checked]="allSelected()"
+        [indeterminate]="!!selectedIds().size && !allSelected()"
+        [disabled]="busy() || loading()"
+        (change)="toggleAll.emit()"
+      />
+      Все эксперты
+    </label>
+  </div>
+  <table class="experts__table experts__table--people">
+    <thead>
+      <tr>
+        <th class="experts__pick">
+          <label class="experts__pick-target"
+            ><input
+              type="checkbox"
+              appChoice
+              aria-label="Выбрать всех экспертов по фильтрам"
+              [checked]="allSelected()"
+              [indeterminate]="!!selectedIds().size && !allSelected()"
+              [disabled]="busy() || loading()"
+              (change)="toggleAll.emit()"
+          /></label>
+        </th>
+        <th>Эксперт</th>
+        <th>Кейсы</th>
+        <th>Статус</th>
+        <th>Назначено</th>
+        <th>Оценено</th>
+        <th>Действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (expert of rows(); track expert.id) {
+        <tr
+          [attr.data-expert-id]="expert.id"
+          (click)="rowClick.emit({ event: $event, expert })"
+          [class.experts__row--selected]="selectedIds().has(expert.id)"
+        >
+          <td class="experts__pick">
+            <label class="experts__pick-target">
+              <input
+                type="checkbox"
+                appChoice
+                [attr.aria-label]="'Выбрать эксперта: ' + (expert.name || expert.email)"
+                [checked]="selectedIds().has(expert.id)"
+                [disabled]="busy()"
+                (change)="toggleRow.emit(expert)"
+              />
+            </label>
+          </td>
+          <td>
+            <div class="experts__person">
+              <app-avatar
+                [url]="href(expert.avatar ?? null) ?? undefined"
+                [size]="32"
+                [fallbackLabel]="initials(expert)"
+              /><span class="experts__identity">
+                @if (expert.userId) {
+                  <a class="experts__profile" [routerLink]="paths.profile.detail(expert.userId)">{{
+                    expert.name || expert.email
+                  }}</a>
+                } @else {
+                  <strong>{{ expert.name || "Имя пока не указано" }}</strong>
+                }
+                <span class="experts__email">{{ expert.email }}</span></span
+              >
+            </div>
+          </td>
+          <td data-label="Кейсы">{{ scopeLabel(expert) }}</td>
+          <td data-label="Статус">
+            <span
+              class="experts__badge"
+              [title]="statusDescription(expert)"
+              [class.experts__badge--ready]="expert.status === 'joined'"
+              [class.experts__badge--error]="expert.deliveryStatus === 'failed'"
+              >{{ label(expert) }}</span
+            >
+            @if (expert.status === "pending") {
+              <p class="experts__delivery">{{ deliveryLabel(expert) }}</p>
+            }
+          </td>
+          <td data-label="Назначено">{{ expert.assigned ?? "—" }}</td>
+          <td data-label="Оценено">{{ expert.completed ?? "—" }}</td>
+          <td class="experts__row-actions">
+            <app-row-actions
+              [label]="'Действия эксперта: ' + (expert.name || expert.email)"
+              [actions]="actions()(expert)"
+              [disabled]="busy()"
+              (action)="action.emit({ expert, event: $event })"
+            />
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7">
+            {{ emptyText() }}
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <footer class="experts__pagination">
+    <button
+      type="button"
+      appButton="text"
+      [disabled]="page() === 0"
+      (click)="pageChange.emit(page() - 1)"
+    >
+      Назад</button
+    ><span
+      >{{ total() ? page() * pageSize() + 1 : 0 }}–{{ page() * pageSize() + rows().length }} из
+      {{ total() }}</span
+    ><button
+      type="button"
+      appButton="text"
+      [disabled]="(page() + 1) * pageSize() >= total()"
+      (click)="pageChange.emit(page() + 1)"
+    >
+      Далее
+    </button>
+  </footer>
+</div>

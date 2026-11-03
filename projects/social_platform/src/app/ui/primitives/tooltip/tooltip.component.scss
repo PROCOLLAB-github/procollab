@@ -130,6 +130,7 @@
   .tooltip__content {
     max-width: calc(100vw - 32px);
     max-height: calc(var(--visual-viewport-height, 100dvh) - 24px);
+    overflow-x: hidden;
     overflow-y: auto;
     overflow-wrap: anywhere;
   }

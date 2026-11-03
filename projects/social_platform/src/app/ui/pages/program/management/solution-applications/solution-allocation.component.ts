@@ -20,14 +20,15 @@ import {
 import { solutionError } from "@api/solution/solution-error";
 import { ExpertRow } from "@domain/program/evaluation-workspace.model";
 import { SolutionAllocationPlan } from "@domain/solution/solution-contract.model";
-import { ButtonDirective, ChoiceDirective } from "@uilib";
+import { ButtonDirective, ChoiceDirective, AlertDirective, IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
 @Component({
   selector: "app-solution-allocation",
-  imports: [ButtonDirective, ChoiceDirective, ModalComponent],
+  imports: [AlertDirective, IconComponent, ButtonDirective, ChoiceDirective, ModalComponent],
   template: `<app-modal
     [open]="!!request()"
+    bodyClass="modal__body--no-flex"
     labelledBy="solution-allocation-title"
     (openChange)="!$event && close()"
     ><section class="solution-dialog">
@@ -40,7 +41,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
           [disabled]="busy()"
           (click)="close()"
         >
-          ×
+          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
         </button>
       </header>
       <p>
@@ -65,7 +66,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
         <p>В программе пока нет принявших приглашение экспертов.</p>
       }
       @if (error()) {
-        <p role="alert">{{ error() }}</p>
+        <p appAlert="error" role="alert">{{ error() }}</p>
         <button appButton="secondary" type="button" [disabled]="busy()" (click)="load()">
           Обновить данные
         </button>
@@ -105,7 +106,12 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
       </footer>
     </section></app-modal
   >`,
-  styleUrl: "./solution-applications.component.scss",
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "../program-native-choice.scss",
+    "./solution-applications.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolutionAllocationComponent {

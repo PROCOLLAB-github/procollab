@@ -8,6 +8,7 @@ import { LoginError, LoginResult } from "@domain/auth/results/login.result";
 import { PasswordError } from "@domain/auth/results/password.result";
 import { RegisterError } from "@domain/auth/results/register.result";
 import { AsyncState, initial, isFailure, isLoading } from "@domain/shared/async-state";
+import { resetPasswordErrorMessage, setPasswordErrorMessage } from "../../password-error";
 
 /** Хранит формы и состояние auth-страниц: логин, регистрация и сброс пароля. */
 @Injectable()
@@ -22,6 +23,13 @@ export class AuthUIInfoService {
   readonly login$ = signal<AsyncState<LoginResult, LoginError>>(initial());
   readonly loginIsSubmitting = computed(() => isLoading(this.login$()));
   readonly errorWrongAuth = computed(() => isFailure(this.login$()));
+  readonly loginErrorMessage = computed(() => {
+    const state = this.login$();
+    if (!isFailure(state)) return null;
+    return state.error.kind === "wrong_credentials"
+      ? "Неправильный логин или пароль"
+      : "Не удалось войти. Повторите попытку позже.";
+  });
 
   // Состояние сброса пароля.
   readonly credsSubmitInitiated = signal<boolean>(false);
@@ -32,6 +40,14 @@ export class AuthUIInfoService {
     return isFailure(s) && s.error.kind === "server_error";
   });
   readonly errorRequest = computed(() => isFailure(this.password$()));
+  readonly setPasswordErrorMessage = computed(() => {
+    const state = this.password$();
+    return isFailure(state) ? setPasswordErrorMessage(state.error) : null;
+  });
+  readonly resetPasswordErrorMessage = computed(() => {
+    const state = this.password$();
+    return isFailure(state) ? resetPasswordErrorMessage(state.error) : null;
+  });
 
   // Состояние регистрации.
   readonly registerAgreement = signal<boolean>(false);

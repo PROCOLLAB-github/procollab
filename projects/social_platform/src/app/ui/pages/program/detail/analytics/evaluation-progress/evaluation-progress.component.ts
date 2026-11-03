@@ -11,7 +11,7 @@ import {
   signal,
 } from "@angular/core";
 import { ButtonDirective } from "@uilib";
-import { IconComponent } from "@ui/primitives";
+import { EvaluationProgressSummaryComponent } from "./evaluation-progress-summary.component";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
 import {
   ProgramAnalyticsAssignment,
@@ -39,7 +39,7 @@ interface ExpertProgress {
 
 @Component({
   selector: "app-analytics-evaluation-progress",
-  imports: [ButtonDirective, IconComponent],
+  imports: [ButtonDirective, EvaluationProgressSummaryComponent],
   templateUrl: "./evaluation-progress.component.html",
   styleUrl: "./evaluation-progress.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,12 +57,6 @@ export class AnalyticsEvaluationProgressComponent {
     signal<AsyncState<ProgramAnalyticsAssignment[], ProgramAnalyticsError>>(initial());
 
   protected readonly totals = computed(() => this.status().assignments);
-  protected readonly percentage = computed(() => {
-    const { total, evaluated } = this.totals();
-    return total > 0 ? (evaluated / total) * 100 : null;
-  });
-  // Never display 100% while an assignment is still unfinished.
-  protected readonly percentageLabel = computed(() => Math.floor(this.percentage() ?? 0));
   protected readonly pending = computed(() => isLoading(this.expertState()));
   protected readonly failed = computed(() => isFailure(this.expertState()));
   protected readonly experts = computed(() => {

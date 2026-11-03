@@ -16,12 +16,23 @@ import { RouterLink } from "@angular/router";
 import { Observable, Subject, takeUntil, timer } from "rxjs";
 import { CdkMenuModule } from "@angular/cdk/menu";
 import { IconComponent } from "@ui/primitives/icon/icon.component";
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { AnalyticsActivityChartComponent } from "./activity-chart/activity-chart.component";
 import { Result } from "@domain/shared/result.type";
 import { saveAs } from "file-saver";
 import { A11yModule } from "@angular/cdk/a11y";
-import { ButtonDirective, ChoiceDirective, FieldDirective, TableDirective } from "@uilib";
+import { EvaluationProgressSummaryComponent } from "./evaluation-progress/evaluation-progress-summary.component";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import {
+  AlertDirective,
+  AvatarComponent,
+  ButtonDirective,
+  ChoiceDirective,
+  FieldDirective,
+  TableDirective,
+} from "@uilib";
 import { AppRoutes } from "@api/paths/app-routes";
+import { presentationHref } from "@utils/program-case-analytics";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { AnalyticsFunnelChartComponent } from "./funnel-chart/funnel-chart.component";
 import { AnalyticsRegionChartComponent } from "./region-chart/region-chart.component";
@@ -62,6 +73,10 @@ type View =
   selector: "app-solution-analytics",
   imports: [
     ReactiveFormsModule,
+    AlertDirective,
+    AvatarComponent,
+    MatProgressBarModule,
+    EvaluationProgressSummaryComponent,
     RouterLink,
     A11yModule,
     ButtonDirective,
@@ -74,12 +89,25 @@ type View =
     AnalyticsActivityChartComponent,
     CdkMenuModule,
     IconComponent,
+    TooltipComponent,
   ],
   templateUrl: "./solution-analytics.component.html",
-  styleUrls: ["./analytics.component.scss", "./solution-analytics.component.scss"],
+  styleUrls: [
+    "./analytics.component.scss",
+    "./analytics-table.scss",
+    "./analytics-dialog.scss",
+    "./solution-analytics.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolutionAnalyticsComponent {
+  readonly href = presentationHref;
+  readonly initials = (name: string) =>
+    name
+      .split(/\s+/)
+      .slice(0, 2)
+      .map(part => part[0])
+      .join("");
   readonly programId = input.required<number>();
   readonly dates = input<ProgramScheduleDates | null>(null);
   private readonly overviewApi = inject(GetSolutionManagerAnalyticsUseCase);
@@ -100,7 +128,14 @@ export class SolutionAnalyticsComponent {
   private readonly cancelExport = new Subject<void>();
   private trigger: HTMLElement | null = null;
   readonly data = signal<SolutionManagerAnalytics | null>(null);
+  readonly caseMaximum = computed(() => {
+    const cases = this.data()?.cases;
+    return cases
+      ? Math.max(0, cases.withoutCase.solutionsTotal, ...cases.items.map(row => row.solutionsTotal))
+      : 0;
+  });
   readonly pending = signal(false);
+  readonly activeTooltip = signal<string | null>(null);
   readonly error = signal("");
   readonly exporting = signal(false);
   readonly exportError = signal("");
@@ -234,6 +269,7 @@ export class SolutionAnalyticsComponent {
     });
   }
   load(): void {
+    this.activeTooltip.set(null);
     this.cancel.next();
     this.cancelExport.next();
     this.exporting.set(false);
@@ -249,6 +285,12 @@ export class SolutionAnalyticsComponent {
         if (result.ok && result.value.programId === this.programId()) this.data.set(result.value);
         else this.error.set("Не удалось загрузить аналитику этой программы.");
       });
+  }
+  showTooltip(key: string): void {
+    this.activeTooltip.set(key);
+  }
+  hideTooltip(key: string): void {
+    if (this.activeTooltip() === key) this.activeTooltip.set(null);
   }
   download(kind: "program" | "solutions" | "submitted" | "scores", filtered = false): void {
     if (this.exporting()) return;

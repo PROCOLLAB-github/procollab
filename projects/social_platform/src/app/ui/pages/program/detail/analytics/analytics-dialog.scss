@@ -1,0 +1,77 @@
+/* @format */
+
+/* Общая оболочка детализации аналитики; API и состояния остаются у V1/V2. */
+
+.analytics-drilldown {
+  width: 100%;
+  min-width: 0;
+  font-size: var(--ui-font-body);
+  line-height: 1.5;
+  color: var(--black);
+  overflow-wrap: anywhere;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: var(--ui-font-h3);
+    font-weight: 600;
+  }
+
+  ul {
+    padding: 0;
+    list-style: none;
+  }
+
+  button {
+    font: inherit;
+    cursor: pointer;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  h2:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  app-avatar {
+    flex-shrink: 0;
+  }
+
+  &__header {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  &__close {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    color: var(--dark-grey);
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+  }
+}
+
+.analytics-drilldown .ui-button.ui-button.analytics-drilldown__close {
+  flex: 0 0 32px;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  color: var(--dark-grey);
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+
+  &:hover { background: var(--light-gray); }
+}

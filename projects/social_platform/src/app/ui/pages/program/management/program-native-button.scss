@@ -1,0 +1,15 @@
+/** @format */
+@use "styles/ui-foundation";
+
+// Единая основа native Button для экранов программ; размеры задает consumer.
+.ui-button.ui-button {
+  @include ui-foundation.button;
+}
+
+// В исходном общем блоке Sass размещал text-variant после compact declarations.
+// Сохраняем его desktop padding при загрузке основы отдельным ресурсом.
+@media (min-width: 1000px) {
+  .ui-button.ui-button.ui-button--text {
+    padding-inline: 12px;
+  }
+}

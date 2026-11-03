@@ -1,0 +1,85 @@
+<!-- @format -->
+@if (totals().total > 0) {
+  <div class="evaluation-progress__overview">
+    <div class="evaluation-progress__headline">
+      <strong data-testid="evaluation-percentage">{{ percentageLabel() }}%</strong>
+      <span class="text-body-10">назначений выполнено</span>
+    </div>
+    <div
+      class="evaluation-progress__track"
+      role="progressbar"
+      aria-label="Выполнение назначений экспертов"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [attr.aria-valuenow]="percentage()"
+      [attr.aria-valuetext]="
+        'Выполнено ' + totals().evaluated + ' из ' + totals().total + ' назначений'
+      "
+    >
+      <span class="evaluation-progress__fill" [style.width.%]="percentage()"></span>
+    </div>
+    <p class="evaluation-progress__caption text-body-10">
+      Готово {{ totals().evaluated }} из {{ totals().total }}
+    </p>
+    <div class="evaluation-progress__totals" data-testid="assignment-statuses">
+      <button
+        appButton="secondary"
+        #completedTrigger
+        type="button"
+        class="evaluation__assignment-action"
+        [disabled]="totals().evaluated === 0"
+        (click)="openAssignments.emit({ scope: 'completed', trigger: completedTrigger })"
+      >
+        <span class="text-body-10">Выполнено</span><strong>{{ totals().evaluated }}</strong>
+        <i
+          class="evaluation__assignment-arrow"
+          appIcon
+          icon="arrowright"
+          appSquare="20"
+          aria-hidden="true"
+        ></i>
+      </button>
+      <button
+        appButton="secondary"
+        #pendingTrigger
+        type="button"
+        class="evaluation__assignment-action"
+        [disabled]="totals().pending === 0"
+        (click)="openAssignments.emit({ scope: 'pending', trigger: pendingTrigger })"
+      >
+        <span class="text-body-10">Осталось</span><strong>{{ totals().pending }}</strong>
+        <i
+          class="evaluation__assignment-arrow"
+          appIcon
+          icon="arrowright"
+          appSquare="20"
+          aria-hidden="true"
+        ></i>
+      </button>
+    </div>
+    <button
+      appButton="secondary"
+      #allTrigger
+      type="button"
+      class="evaluation-progress__open"
+      data-testid="open-all-assignments"
+      (click)="openAssignments.emit({ scope: 'all', trigger: allTrigger })"
+    >
+      Открыть назначения
+    </button>
+  </div>
+} @else {
+  <p class="analytics-empty-state evaluation-progress__empty text-body-10">
+    {{ mode() === "distributed" ? "Эксперты еще не назначены" : "Нет назначений экспертов" }}
+  </p>
+  @if (showEmptyAction()) {
+    <button
+      appButton="secondary"
+      #emptyTrigger
+      type="button"
+      (click)="openAssignments.emit({ scope: 'all', trigger: emptyTrigger })"
+    >
+      Открыть назначения
+    </button>
+  }
+}
