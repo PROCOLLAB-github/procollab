@@ -294,12 +294,7 @@
       "url": "https://dev.procollab.ru/programs/49/published-solutions/?limit=1",
       "status": 200,
       "count": 1,
-      "firstRowKeys": [
-        "application",
-        "published_at",
-        "captain",
-        "accepted_count"
-      ],
+      "firstRowKeys": ["application", "published_at", "captain", "accepted_count"],
       "model": null
     }
   ],

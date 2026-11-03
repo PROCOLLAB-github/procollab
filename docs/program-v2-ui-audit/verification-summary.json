@@ -1,13 +1,7 @@
 {
   "scope": "Program management UI acceptance after 44761cdc",
   "baseline": "44761cdc",
-  "widths": [
-    320,
-    390,
-    768,
-    1440,
-    1920
-  ],
+  "widths": [320, 390, 768, 1440, 1920],
   "browser": {
     "beforeMain": 140,
     "afterMain": 140,
