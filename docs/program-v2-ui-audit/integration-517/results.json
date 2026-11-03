@@ -191,13 +191,13 @@
     }
   ],
   "matrixSummary": {
-    "PASS": 65,
-    "NOT TESTED": 7,
+    "PASS": 72,
+    "NOT TESTED": 0,
     "FAIL": 0
   },
-  "integrationAcceptance": "IN PROGRESS: R9/R11 closed on dev;65 PASS/7 NOT TESTED/0 FAIL; required new mail/issuance/negative-write consent and manual reset pending",
+  "integrationAcceptance": "PASS:72 PASS/0 NOT TESTED/0 FAIL within documented scope; R9/R11 closed; authorized mail/portal issuance and temporary-publication cleanup complete",
   "mailSent": true,
-  "certificateDelivery": false,
+  "certificateDelivery": true,
   "merge": {
     "frontend517": "6d0c691917293fb16372a4be02e49dbdb7ac75ac",
     "frontend518": "8337094716c1886f54cad440b572f8b2957bda6f",
@@ -252,13 +252,13 @@
       "realBrowserSource": "9c92cd7fa274477575163ec0443205d47d51b591"
     }
   ],
-  "historicalScope": "baselineBrowser/codeFix, previousDesktopRun, desktopFunctionalRun20261102 and previousVisualRun20261103 are historical evidence. currentRun is the final continuation; old per-scenario SHAs have not been retagged.",
+  "historicalScope": "baselineBrowser/codeFix, previousDesktopRun, desktopFunctionalRun20261102 and previousVisualRun20261103 are historical evidence. currentRun is the final continuation; old per-scenario SHAs have not been retagged. previousBackendCheckpoint20261103 preserves the earlier65/7 checkpoint; currentRun records the completed continuation.",
   "currentRun": {
     "date": "2026-11-03",
     "timezone": "Europe/Moscow",
-    "phase": "backend closeout checkpoint",
-    "verdict": "IN PROGRESS",
-    "acceptanceComplete": false,
+    "phase": "completed real-dev acceptance",
+    "verdict": "PASS within the documented acceptance scope",
+    "acceptanceComplete": true,
     "testedProductCommit": "ffe677f5cefb4f2412f4b513954269ee1d846a10",
     "publishedFrontendSha": "8337094716c1886f54cad440b572f8b2957bda6f",
     "publishedProductTreeIdenticalToTestedProduct": true,
@@ -269,7 +269,21 @@
     "apiMocked": false,
     "visualComparisonCompleteWithinDocumentedScope": true,
     "visualEvidence": "previousFinalAcceptance20261103.realVisual; all7 tabs and7 settings,1440/390 and selected360; Mont; no approved VE exceptions",
-    "closedThisRun": ["S11", "S12", "S32", "N01", "X14", "X15"],
+    "closedThisRun": [
+      "S11",
+      "S12",
+      "S32",
+      "N01",
+      "X14",
+      "X15",
+      "S21",
+      "S22",
+      "N02",
+      "N04",
+      "N05",
+      "X01",
+      "L13"
+    ],
     "closedDefects": [
       {
         "id": "R9",
@@ -296,7 +310,7 @@
       }
     ],
     "openDefects": [],
-    "openScenarioIds": ["S21", "S22", "N02", "N04", "N05", "X01", "L13"],
+    "openScenarioIds": [],
     "codeChecks": {
       "backendRelatedRealPostgresTests": 81,
       "fixtureRealPostgresTests": 3,
@@ -323,25 +337,86 @@
       "previewRun": 41562326457,
       "applyRun": 41562451738,
       "creationSentMail": false,
-      "currentChanges": "Project407/408 submitted through manager UI200; extra QA-manager11 removed only79/80; criteria blank description null normalized to empty string; cert80 configured submitted/manual/sendEmail=false, no batch"
+      "currentChanges": "QA79:407/408 submitted, both assigned64; QA80:grade29 by64; QA81:open grade47 by95; portal batch12 exactly3ready/sent0/paused; all79-82 draft,79-81 registration closed; original39/49/50/51 not changed in this final cycle"
     },
-    "pendingUser": [
-      "Exact consent for4 expert letters+1 participant reminder to341, portal-only certificates59/349/350 and forbidden-write probes on new QA works",
-      "Fresh reset/normal login in permanent Chrome9442; no credentials or reset URLs read"
-    ],
+    "pendingUser": [],
     "safetyReview": {
       "request": "member341 rate existing Solution19",
       "executed": false,
       "rejected": true,
       "reason": "possible new grade without exact consent if guard failed",
-      "alternative": "new ungraded QA works with explicit scope pending consent"
+      "alternative": "Explicit consent obtained for new QA work; negative probes completed; original19 POST never retried"
     },
     "privateEvidence": ".acceptance-517/backend-closeout-20261103",
     "credentialsRecorded": false,
     "harExported": false,
-    "permissionsForged": false
+    "permissionsForged": false,
+    "reportPR": 519,
+    "publishedFrontendShaScope": "Frontend dev at the E2E run, before final docs-only PR519; product tree identical to tested source",
+    "finalScenarioEvidence": {
+      "S21": "s21-final.json; invite79-after-resend.json",
+      "S22": "s22-final.json",
+      "N02": "n02-v1-stale-apply.json; n02-v1-fresh-plan.json; n02-v1-final.json",
+      "N04": "n04-member341-v1.json; n04-v2-positive-control29.json; n04-v2-published-guards.json",
+      "N05": "n05-noncompetitive48.json; n05-hack47.json",
+      "X01": "x01-final.json; cert80-issued-final.json; certificates80-pdf-proof.json; reminder79-recipient-visible.json; publication-cleanup-final.json",
+      "L13": "l13-reset-current-proof.json; explicit user confirmation of new password and email typo"
+    },
+    "authorizedMail": {
+      "expertLetters": 4,
+      "recipientUserId": 341,
+      "programs": [79, 80],
+      "expertDeliveryObserved": "sent after create and resend; invitations then revoked",
+      "participantReminder": {
+        "program": 79,
+        "userId": 341,
+        "count": 1,
+        "postStatus": 200,
+        "createdCount": 1,
+        "skippedCount": 0,
+        "visibleInRecipientNotifications": true
+      },
+      "allFiveDispatchesConsumed": true,
+      "adminMail": false,
+      "externalInboxInspected": false
+    },
+    "portalCertificates": {
+      "program": 80,
+      "batchId": 12,
+      "userIds": [59, 349, 350],
+      "activateStatus": 201,
+      "ready": 3,
+      "sent": 0,
+      "failed": 0,
+      "sendEmail": false,
+      "pauseStatus": 200,
+      "batchActive": false,
+      "participant59PortalDownload": true,
+      "bulkPdfCount": 3,
+      "pdfPagesEach": 1,
+      "allThreeRenderedAndVisuallyInspected": true,
+      "qaTemplate": "Recipient name only; other elements intentionally hidden"
+    },
+    "temporaryPublication": {
+      "explicitUserConsent": true,
+      "programs": [79, 80, 81],
+      "publishStatuses": [200, 200, 200],
+      "registrationClosedImmediately": true,
+      "unpublishStatuses": [200, 200, 200],
+      "finalDraftAll": true,
+      "finalRegistrationKeptClosed": true,
+      "program82NeverPublished": true,
+      "creationFlagsUnchangedFalse": true
+    },
+    "observationLimits": [
+      "Reset link/password handled by user; reset-confirm HTTP was not captured. Current new-password use confirmed explicitly, normal token POST200/profile59 observed. Historical initial reset failure cause remains unknown.",
+      "Four expert deliveries observed sent in UI; reminder send receipt200 and recipient notification observed. External mailbox/SMTP inbox delivery was not inspected.",
+      "Historical E2E entries retain their own SHAs. Not every historical case was rerun on current backend; original50/51 remain read-only and write checks use81/82 clones.",
+      "Russian UI messages were checked in covered flows. Raw V1 forbidden-grade API detail is English; it was a direct denied probe and is not a claim that all API responses or every platform text are translated.",
+      "XLSX numeric/formula contents inspected; external Excel-runtime recalculation was not run."
+    ]
   },
-  "matrixSummaryScope": "72 actual acceptance scenarios; historical mocks and CI are not counted as E2E",
+  "matrixSummaryScope": "72 acceptance scenarios with real-dev evidence, including an explicitly manual sensitive reset step; historical CI/mocks are not counted as E2E",
   "previousDesktopRun": {
     "date": "2026-11-02",
     "timezone": "Europe/Moscow",
@@ -890,5 +965,93 @@
     "certificateDelivery": false,
     "merge": false,
     "deploy": false
+  },
+  "previousBackendCheckpoint20261103": {
+    "date": "2026-11-03",
+    "timezone": "Europe/Moscow",
+    "phase": "backend closeout checkpoint",
+    "verdict": "IN PROGRESS",
+    "acceptanceComplete": false,
+    "testedProductCommit": "ffe677f5cefb4f2412f4b513954269ee1d846a10",
+    "publishedFrontendSha": "8337094716c1886f54cad440b572f8b2957bda6f",
+    "publishedProductTreeIdenticalToTestedProduct": true,
+    "backendFixMerge": "32d1f92b1021f2021afce7f32f2582c9817f97c9",
+    "backendCurrentMerge": "912dedc439412279bf57aca6d47dd63f67eb40f2",
+    "origin": "http://127.0.0.1:4317",
+    "api": "https://dev.procollab.ru",
+    "apiMocked": false,
+    "visualComparisonCompleteWithinDocumentedScope": true,
+    "visualEvidence": "previousFinalAcceptance20261103.realVisual; all7 tabs and7 settings,1440/390 and selected360; Mont; no approved VE exceptions",
+    "closedThisRun": ["S11", "S12", "S32", "N01", "X14", "X15"],
+    "closedDefects": [
+      {
+        "id": "R9",
+        "status": "CLOSED",
+        "pr": 854,
+        "draft25Before": [84, 84, 341],
+        "draft25After": [84, 341],
+        "teamSize": 2,
+        "latestLiveBackend": "912dedc439412279bf57aca6d47dd63f67eb40f2"
+      },
+      {
+        "id": "R11",
+        "status": "CLOSED",
+        "pr": 854,
+        "program49CountsBefore": {
+          "all": 5,
+          "submitted": 0
+        },
+        "program49CountsAfter": {
+          "all": 5,
+          "submitted": 3
+        },
+        "latestLiveBackend": "912dedc439412279bf57aca6d47dd63f67eb40f2"
+      }
+    ],
+    "openDefects": [],
+    "openScenarioIds": ["S21", "S22", "N02", "N04", "N05", "X01", "L13"],
+    "codeChecks": {
+      "backendRelatedRealPostgresTests": 81,
+      "fixtureRealPostgresTests": 3,
+      "backend854FullCi": "PostgreSQL and SQLite PASS; Docker/lint PASS",
+      "backend855FullCi": "PostgreSQL and SQLite PASS; Docker/lint and PG14/18 migration-role tests PASS",
+      "frontendDeployCi": "format:check,lint:ts,test:ci,build:pr and deploy PASS",
+      "frontend518Scope": "9 documentary Prettier files only; no product changes"
+    },
+    "fixtures": {
+      "pr": 855,
+      "programs": [79, 80, 81, 82],
+      "draft": true,
+      "creationFlags": false,
+      "newProjects": [406, 407, 408, 409],
+      "newSolutions": [
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48
+      ],
+      "syntheticUsers": [
+        349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366
+      ],
+      "syntheticAccountsHaveUsablePasswords": false,
+      "addresses": "reserved .invalid",
+      "oldModelsUnchangedAtCreation": 43,
+      "previewRun": 41562326457,
+      "applyRun": 41562451738,
+      "creationSentMail": false,
+      "currentChanges": "Project407/408 submitted through manager UI200; extra QA-manager11 removed only79/80; criteria blank description null normalized to empty string; cert80 configured submitted/manual/sendEmail=false, no batch"
+    },
+    "pendingUser": [
+      "Exact consent for4 expert letters+1 participant reminder to341, portal-only certificates59/349/350 and forbidden-write probes on new QA works",
+      "Fresh reset/normal login in permanent Chrome9442; no credentials or reset URLs read"
+    ],
+    "safetyReview": {
+      "request": "member341 rate existing Solution19",
+      "executed": false,
+      "rejected": true,
+      "reason": "possible new grade without exact consent if guard failed",
+      "alternative": "new ungraded QA works with explicit scope pending consent"
+    },
+    "privateEvidence": ".acceptance-517/backend-closeout-20261103",
+    "credentialsRecorded": false,
+    "harExported": false,
+    "permissionsForged": false
   }
 }

@@ -6,7 +6,7 @@
 
 Последний source/runtime `ffe677f5cefb4f2412f4b513954269ee1d846a10`:5 CSS-строк убирают разрывы слов в мобильных итогах оценивания и горизонтальную полосу tooltip. Обе версии 360px, нижняя подсказка 390px, Enter/Escape/outside проверены.13 существующих tests/2files, scoped stylelint/Prettier и штатный prod build PASS. Ранее 68/3 и 12/2 (5 пересекаются) не суммируются.
 
-Draft25/приглашение37/вступление завершены обычными интерфейсами; flag49=false. R9/R11 теперь CLOSED: backend PR854 смержен и опубликован, повтор на текущем dev912dedc пройден. Текущая приемка IN PROGRESS:65 PASS/7 NOT TESTED/0 FAIL; новые письма, выдача и прямые отрицательные записи ожидают отдельного согласия, свежий сброс — ручного ввода.
+Draft25/приглашение37/вступление завершены обычными интерфейсами; flag49=false. R9/R11 теперь CLOSED: backend PR854 смержен и опубликован, повтор на текущем dev912dedc пройден. Текущая приемка завершена в документированной области:72 PASS/0 NOT TESTED/0 FAIL. Новые письма, три сертификата без писем, прямые отрицательные записи на новых QA-работах и ручной чувствительный reset/обычный вход выполнены по явному согласию. QA79–81 возвращены в черновики, регистрация закрыта, batch12 приостановлен. Пределы наблюдений перечислены в README/MATRIX/results.
 
 ### R8 — отправитель Project invitation, исправлен
 
@@ -20,7 +20,7 @@ Draft25/приглашение37/вступление завершены обы�
 
 ### R11 — P1, CLOSED: аудитория сертификатов Solution
 
-Backend PR854 добавляет в общий `recipients()` состав snapshot сданных активных Solution и фильтр регистрации. Счетчик и инициализация batch используют один service; legacy Project ветка сохранена. Регрессии проверяют API counts, actual batch recipient rows, snapshot/live drift, draft/archive/чужую программу и dedup. Вместе с R9 и смежными сценариями прошел81 Django/PostgreSQL тест; полные PostgreSQL/SQLite CI прошли. На реальном49 GET200 после32d1f92 и912dedc дает all5/submitted3 вместо0. Выдача49 не запускалась.
+Backend PR854 добавляет в общий `recipients()` состав snapshot сданных активных Solution и фильтр регистрации. Счетчик и инициализация batch используют один service; legacy Project ветка сохранена. Регрессии проверяют API counts, actual batch recipient rows, snapshot/live drift, draft/archive/чужую программу и dedup. Вместе с R9 и смежными сценариями прошел81 Django/PostgreSQL тест; полные PostgreSQL/SQLite CI прошли. На реальном49 GET200 после32d1f92 и912dedc дает all5/submitted3 вместо0. Выдача49 не запускалась. Отдельно согласованная реальная выдача в QA80 после fix: activate201, batch12 ровно59/349/350,3 ready/0 sent; portal59 download и bulk3 PDF проверены. Pause200/active=false. Таким образом actual batch подтвержден и на настоящем dev, а не только регрессионными тестами.
 
 Сопутствующий PR855 добавляет только preview-first dev QA-operation и ее тесты: четыре закрытые программы79–82,23 Solution,4 Project,18 synthetic `.invalid` аккаунтов без пригодных паролей. Creation flags закрываются в той же транзакции; hash-проверка43 моделей подтверждает неизменность прежних строк. Три локальных PostgreSQL теста и полный CI PASS; текущий backend dev912dedc успешно опубликован.
 
@@ -28,11 +28,19 @@ Backend PR854 добавляет в общий `recipients()` состав snaps
 
 На 8d36 V1 grade/removal race:POST project_ids403/expert_ids[] получил 409 после оценки 201; свежий редактор защищает 64 checked/disabled, reload эксперта сохраняет 0/Нет/comment. Отдельно согласованный stale team remove59 после сдачи 403: DELETE 409 с русским сообщением, свежая команда сохраняет 84/59. V1 transport pool=[95] не добавил собственного 95 к 403 и дал shortage 2; общий preview отменен без apply. V2 другой кейс 95/21 дал added0/shortage 1; чужое 19 у обычного 84 вернуло 404. Disabled controls отдельно не выдаются за запрет подмененного grade POST.
 
+### Финальный повтор на backend912dedc и продуктном frontend ffe677f
+
+Новый V1 stale auto plan в QA79 отклонен409 после ручного назначения B200; свежий apply200 сохраняет B и добавляет только недостающее назначение. Pure member341 V1 rate407403 оставил evaluation точно неизменным. В опубликованной QA80 успешный контроль grade29=0/False/comment200 отделен от forbidden member341->27404 и own-team expert59->27403: оценки27 не изменились. Предварительный draft404 не засчитан как роль/own-team защита.
+
+QA81 open hackathon grade47=0/False/comment200 сохраняется после reload; expert submit47403/not_solution_captain не изменяет snapshot/команду/версию. Неконкурсная QA82 submit preview48409/not_competitive не меняет статус. Публикация79–81 была отдельно согласована, сразу закрыта регистрация; после проверок unpublish200 и fresh draft=true для всех трех. Создание Solution не включалось. Исходные50/51 сохранены.
+
+Invitation10/11: create201/resend200/revoke204, sent и кейс Город проверены после reload. Reminder79 только341: preview1, created1/skipped0, русское уведомление видно получателю. Это ровно согласованные5 dispatch; внешняя почта не инспектировалась. Свежий сброс выполнен пользователем, обычный вход200 проверен; reset-confirm HTTP не захвачен. Исторические результаты ниже сохраняют прежние даты и ограничения своего этапа.
+
 ## Продолжение desktop: R7, 02.11.2026
 
 На реальной 51 management200 подтвердил is_competitive=false, однако результаты показывали оцененность 0/0 и безбалльное оценивание, а analytics deadlines — активное оценивание. В `b6ab5864ebc0ff577bc90b915606d1f6d4cd66fb` применимость существующего флага теперь скрывает summary/hint/status filter и evaluation deadline. Форматы/API не менялись, новый дизайн не вводился. Две регрессионные проверки упали до исправления; после 30 tests/2files, lint/format и стандартный prod build прошли. Реальный retest51 подтвердил отсутствие неприменимых текстов/контролов, с сохранением case filter и правильного noncompetitive empty state. Записей 50/51 нет.
 
-R2–R6 и реальные R1/assignment/version/grade conflicts описаны в README и MATRIX с точными SHA. Итог интеграции остается insufficient evidence до оставшихся сценариев; исторические утверждения об отсутствии auth/writes ниже относятся к прежнему облачному этапу.
+R2–R6 и реальные R1/assignment/version/grade conflicts описаны в README и MATRIX с точными SHA. На том промежуточном этапе доказательств еще не хватало; оставшиеся сценарии закрыты финальным циклом выше. Исторические утверждения об отсутствии auth/writes ниже относятся к прежнему облачному этапу.
 
 ## Историческое code review облачного этапа
 
