@@ -191,15 +191,34 @@
     }
   ],
   "matrixSummary": {
-    "PASS": 59,
-    "NOT TESTED": 11,
-    "FAIL": 2
+    "PASS": 65,
+    "NOT TESTED": 7,
+    "FAIL": 0
   },
-  "integrationAcceptance": "NOT READY: confirmed backend R9/R11; visual comparison complete, 11 bounded scenarios remain NOT TESTED",
+  "integrationAcceptance": "IN PROGRESS: R9/R11 closed on dev;65 PASS/7 NOT TESTED/0 FAIL; required new mail/issuance/negative-write consent and manual reset pending",
   "mailSent": true,
   "certificateDelivery": false,
-  "merge": false,
-  "deploy": false,
+  "merge": {
+    "frontend517": "6d0c691917293fb16372a4be02e49dbdb7ac75ac",
+    "frontend518": "8337094716c1886f54cad440b572f8b2957bda6f",
+    "backend854": "32d1f92b1021f2021afce7f32f2582c9817f97c9",
+    "backend855": "912dedc439412279bf57aca6d47dd63f67eb40f2",
+    "authorizedByUser": true,
+    "production": false
+  },
+  "deploy": {
+    "frontend": {
+      "sha": "8337094716c1886f54cad440b572f8b2957bda6f",
+      "run": 41558542023,
+      "status": "success"
+    },
+    "backend": {
+      "sha": "912dedc439412279bf57aca6d47dd63f67eb40f2",
+      "run": 41561994284,
+      "status": "success"
+    },
+    "production": false
+  },
   "rawEvidence": "Separate integration artifact; no credentials/HAR/storageState",
   "codeChecks": [
     {
@@ -237,162 +256,92 @@
   "currentRun": {
     "date": "2026-11-03",
     "timezone": "Europe/Moscow",
-    "sourceHead": "ffe677f5cefb4f2412f4b513954269ee1d846a10",
+    "phase": "backend closeout checkpoint",
+    "verdict": "IN PROGRESS",
+    "acceptanceComplete": false,
     "testedProductCommit": "ffe677f5cefb4f2412f4b513954269ee1d846a10",
-    "earlierRuntime": "1e2fb68d361896aba1a632f759568d4dac70e164",
+    "publishedFrontendSha": "8337094716c1886f54cad440b572f8b2957bda6f",
+    "publishedProductTreeIdenticalToTestedProduct": true,
+    "backendFixMerge": "32d1f92b1021f2021afce7f32f2582c9817f97c9",
+    "backendCurrentMerge": "912dedc439412279bf57aca6d47dd63f67eb40f2",
     "origin": "http://127.0.0.1:4317",
     "api": "https://dev.procollab.ru",
     "apiMocked": false,
-    "verdict": "NOT READY",
-    "acceptanceComplete": false,
     "visualComparisonCompleteWithinDocumentedScope": true,
-    "designTarget": "Polished Project tabs + PROCOLLAB design system; Mont canonical, Figma Inter restriction obsolete. VE01-VE06 were never approved.",
-    "realVisual": {
-      "summary": {
-        "uniqueFrames": 185,
-        "finalRuntimeFrames": 147,
-        "runtimeCounts": {
-          "1e2fb68d361896aba1a632f759568d4dac70e164": 35,
-          "ffe677f5cefb4f2412f4b513954269ee1d846a10": 150
-        },
-        "pageOverflow": [],
-        "allFinalFramesLangRu": true,
-        "allFinalFramesMontReady": true,
-        "excluded": {
-          "39-form-bottom-desktop": "partial first screen, not footer",
-          "49-allocation-start-final-390": "loading; superseded by loaded frame",
-          "49-certificate-delivery-final-390": "loading; superseded by loaded frame",
-          "39-certificate-delivery-final-390": "loading; superseded by loaded frame"
-        },
-        "screenshotsMissing": [],
-        "note": "Geometry checks supplement visual inspection. English user data and email labels are not error messages. Program51 calendar validation is Russian; its inconsistent fixture was not changed."
-      },
-      "privateEvidence": ".acceptance-517/final-acceptance-20261103",
-      "gallery": "visual-review.html",
-      "allManagementTabs": true,
-      "allSevenSettingsSections": true,
-      "scope": "1440/390, selected360; long pages, branding, filters, field/questionnaire/criteria previews and editors, assignments, expanded results, selection, team/history/case dialog, 3 certificate steps",
-      "runtimeProvenance": "provenance-correction.json corrects helper metadata at known sequential preview restart; original pixels unchanged"
-    },
-    "codeChecks": {
-      "source": "ffe677f5cefb4f2412f4b513954269ee1d846a10",
-      "existingTests": 13,
-      "files": 2,
-      "stylelint": "PASS",
-      "prettier": "PASS",
-      "productionBuildExitCode": 0,
-      "originalBudgets": true,
-      "fullSuiteRepeated": false,
-      "priorVisualRuns": [
-        {
-          "source": "9c92cd7fa274477575163ec0443205d47d51b591",
-          "tests": 68,
-          "files": 3
-        },
-        {
-          "source": "20ea3590756d8053479dd3fca318bc4ea68233ca",
-          "tests": 12,
-          "files": 2,
-          "overlapWithPrior": 5
-        }
-      ]
-    },
-    "browserStop": {
-      "active": false,
-      "recovered": true,
-      "mechanism": "Visible authenticated QA Chrome profiles and ordinary local UI; no native Chrome window workaround after a current safeguard stop"
-    },
-    "team25": {
-      "captainUserId": 84,
-      "status": "draft",
-      "createStatus": 201,
-      "saveStatus": 200,
-      "number": 0,
-      "boolean": false,
-      "members": [84, 341],
-      "role341": "PR517 QA участник",
-      "invitationId": 37,
-      "inviteStatus": 201,
-      "acceptStatus": 200,
-      "pending": 0,
-      "registrationProfile341": 352,
-      "reloadConfirmedBothAccounts": true
-    },
-    "pureMember341": {
-      "management49": 403,
-      "foreign19": 404,
-      "own25": 200,
-      "canEdit": false,
-      "canManageTeam": false,
-      "canInvite": false,
-      "canSubmit": false,
-      "canLeave": true
-    },
-    "activeChanges": {
-      "creationFlag49": false,
-      "restoreRequired": false,
-      "quota39": 3,
-      "quota49": 1,
-      "calendar49KeptByApproval": true,
-      "solution21Archived": true,
-      "solution25DraftKept": true,
-      "registrationProfile352Added": true
-    },
-    "mail": {
-      "oneSolutionInvitationCreated": 37,
-      "recipientUserId": 341,
-      "sentOnce": true,
-      "accepted": true,
-      "resend": false,
-      "adminMail": false,
-      "smtpInboxDeliveryVerified": false
-    },
-    "openDefects": [
+    "visualEvidence": "previousFinalAcceptance20261103.realVisual; all7 tabs and7 settings,1440/390 and selected360; Mont; no approved VE exceptions",
+    "closedThisRun": ["S11", "S12", "S32", "N01", "X14", "X15"],
+    "closedDefects": [
       {
         "id": "R9",
-        "severity": "P2",
-        "status": "OPEN",
-        "server": true,
-        "draft25ActualTeamRows": [84, 84, 341],
-        "expected": [84, 341],
-        "proposedPatch": "private R9-backend-proposed.patch",
-        "pureMethodCheck": "PASS",
-        "djangoDbTestsRun": false,
-        "backendModified": false,
-        "regressionOfPRProven": false
+        "status": "CLOSED",
+        "pr": 854,
+        "draft25Before": [84, 84, 341],
+        "draft25After": [84, 341],
+        "teamSize": 2,
+        "latestLiveBackend": "912dedc439412279bf57aca6d47dd63f67eb40f2"
       },
       {
         "id": "R11",
-        "severity": "P1",
-        "status": "OPEN",
-        "server": true,
-        "program49EligibleCounts": {
+        "status": "CLOSED",
+        "pr": 854,
+        "program49CountsBefore": {
           "all": 5,
           "submitted": 0
         },
-        "expectedSubmittedAtLeast": 3,
-        "source": "backend recipients() only Project membership",
-        "issuanceAttempted": false,
-        "regressionOfPRProven": false
+        "program49CountsAfter": {
+          "all": 5,
+          "submitted": 3
+        },
+        "latestLiveBackend": "912dedc439412279bf57aca6d47dd63f67eb40f2"
       }
     ],
-    "open": [
-      "Backend R9/R11 fix and real retest",
-      "Every-settings-section write not tested: locked criteria and organizer changes excluded",
-      "Extra expert invitation resend not authorized",
-      "Real V2 pagination >20 works absent",
-      "V1 form concurrency and whole-program automatic apply/stale plan not exercised",
-      "Direct forbidden grade writes not exercised",
-      "50/51 write/evaluation negative scenarios read-only scope",
-      "Original Play station reset-confirm root cause not captured",
-      "Participant bulk mail and certificate issuance not authorized"
+    "openDefects": [],
+    "openScenarioIds": ["S21", "S22", "N02", "N04", "N05", "X01", "L13"],
+    "codeChecks": {
+      "backendRelatedRealPostgresTests": 81,
+      "fixtureRealPostgresTests": 3,
+      "backend854FullCi": "PostgreSQL and SQLite PASS; Docker/lint PASS",
+      "backend855FullCi": "PostgreSQL and SQLite PASS; Docker/lint and PG14/18 migration-role tests PASS",
+      "frontendDeployCi": "format:check,lint:ts,test:ci,build:pr and deploy PASS",
+      "frontend518Scope": "9 documentary Prettier files only; no product changes"
+    },
+    "fixtures": {
+      "pr": 855,
+      "programs": [79, 80, 81, 82],
+      "draft": true,
+      "creationFlags": false,
+      "newProjects": [406, 407, 408, 409],
+      "newSolutions": [
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48
+      ],
+      "syntheticUsers": [
+        349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366
+      ],
+      "syntheticAccountsHaveUsablePasswords": false,
+      "addresses": "reserved .invalid",
+      "oldModelsUnchangedAtCreation": 43,
+      "previewRun": 41562326457,
+      "applyRun": 41562451738,
+      "creationSentMail": false,
+      "currentChanges": "Project407/408 submitted through manager UI200; extra QA-manager11 removed only79/80; criteria blank description null normalized to empty string; cert80 configured submitted/manual/sendEmail=false, no batch"
+    },
+    "pendingUser": [
+      "Exact consent for4 expert letters+1 participant reminder to341, portal-only certificates59/349/350 and forbidden-write probes on new QA works",
+      "Fresh reset/normal login in permanent Chrome9442; no credentials or reset URLs read"
     ],
+    "safetyReview": {
+      "request": "member341 rate existing Solution19",
+      "executed": false,
+      "rejected": true,
+      "reason": "possible new grade without exact consent if guard failed",
+      "alternative": "new ungraded QA works with explicit scope pending consent"
+    },
+    "privateEvidence": ".acceptance-517/backend-closeout-20261103",
     "credentialsRecorded": false,
-    "certificateDelivery": false,
-    "merge": false,
-    "deploy": false
+    "harExported": false,
+    "permissionsForged": false
   },
-  "matrixSummaryScope": "72 rows; historical scenarios retain their actual tested SHAs. New visual and role reads on ffe677f5cefb4f2412f4b513954269ee1d846a10; functional team25/invitation37 on 1e2fb68d361896aba1a632f759568d4dac70e164.",
+  "matrixSummaryScope": "72 actual acceptance scenarios; historical mocks and CI are not counted as E2E",
   "previousDesktopRun": {
     "date": "2026-11-02",
     "timezone": "Europe/Moscow",
@@ -778,6 +727,164 @@
       "X14: Уникальность участников команды в XLSX черновика",
       "V03: Повтор отступов кнопки добавления поля",
       "V04: Таблица заполнения формы и слот фильтра"
+    ],
+    "credentialsRecorded": false,
+    "certificateDelivery": false,
+    "merge": false,
+    "deploy": false
+  },
+  "previousFinalAcceptance20261103": {
+    "date": "2026-11-03",
+    "timezone": "Europe/Moscow",
+    "sourceHead": "ffe677f5cefb4f2412f4b513954269ee1d846a10",
+    "testedProductCommit": "ffe677f5cefb4f2412f4b513954269ee1d846a10",
+    "earlierRuntime": "1e2fb68d361896aba1a632f759568d4dac70e164",
+    "origin": "http://127.0.0.1:4317",
+    "api": "https://dev.procollab.ru",
+    "apiMocked": false,
+    "verdict": "NOT READY",
+    "acceptanceComplete": false,
+    "visualComparisonCompleteWithinDocumentedScope": true,
+    "designTarget": "Polished Project tabs + PROCOLLAB design system; Mont canonical, Figma Inter restriction obsolete. VE01-VE06 were never approved.",
+    "realVisual": {
+      "summary": {
+        "uniqueFrames": 185,
+        "finalRuntimeFrames": 147,
+        "runtimeCounts": {
+          "1e2fb68d361896aba1a632f759568d4dac70e164": 35,
+          "ffe677f5cefb4f2412f4b513954269ee1d846a10": 150
+        },
+        "pageOverflow": [],
+        "allFinalFramesLangRu": true,
+        "allFinalFramesMontReady": true,
+        "excluded": {
+          "39-form-bottom-desktop": "partial first screen, not footer",
+          "49-allocation-start-final-390": "loading; superseded by loaded frame",
+          "49-certificate-delivery-final-390": "loading; superseded by loaded frame",
+          "39-certificate-delivery-final-390": "loading; superseded by loaded frame"
+        },
+        "screenshotsMissing": [],
+        "note": "Geometry checks supplement visual inspection. English user data and email labels are not error messages. Program51 calendar validation is Russian; its inconsistent fixture was not changed."
+      },
+      "privateEvidence": ".acceptance-517/final-acceptance-20261103",
+      "gallery": "visual-review.html",
+      "allManagementTabs": true,
+      "allSevenSettingsSections": true,
+      "scope": "1440/390, selected360; long pages, branding, filters, field/questionnaire/criteria previews and editors, assignments, expanded results, selection, team/history/case dialog, 3 certificate steps",
+      "runtimeProvenance": "provenance-correction.json corrects helper metadata at known sequential preview restart; original pixels unchanged"
+    },
+    "codeChecks": {
+      "source": "ffe677f5cefb4f2412f4b513954269ee1d846a10",
+      "existingTests": 13,
+      "files": 2,
+      "stylelint": "PASS",
+      "prettier": "PASS",
+      "productionBuildExitCode": 0,
+      "originalBudgets": true,
+      "fullSuiteRepeated": false,
+      "priorVisualRuns": [
+        {
+          "source": "9c92cd7fa274477575163ec0443205d47d51b591",
+          "tests": 68,
+          "files": 3
+        },
+        {
+          "source": "20ea3590756d8053479dd3fca318bc4ea68233ca",
+          "tests": 12,
+          "files": 2,
+          "overlapWithPrior": 5
+        }
+      ]
+    },
+    "browserStop": {
+      "active": false,
+      "recovered": true,
+      "mechanism": "Visible authenticated QA Chrome profiles and ordinary local UI; no native Chrome window workaround after a current safeguard stop"
+    },
+    "team25": {
+      "captainUserId": 84,
+      "status": "draft",
+      "createStatus": 201,
+      "saveStatus": 200,
+      "number": 0,
+      "boolean": false,
+      "members": [84, 341],
+      "role341": "PR517 QA участник",
+      "invitationId": 37,
+      "inviteStatus": 201,
+      "acceptStatus": 200,
+      "pending": 0,
+      "registrationProfile341": 352,
+      "reloadConfirmedBothAccounts": true
+    },
+    "pureMember341": {
+      "management49": 403,
+      "foreign19": 404,
+      "own25": 200,
+      "canEdit": false,
+      "canManageTeam": false,
+      "canInvite": false,
+      "canSubmit": false,
+      "canLeave": true
+    },
+    "activeChanges": {
+      "creationFlag49": false,
+      "restoreRequired": false,
+      "quota39": 3,
+      "quota49": 1,
+      "calendar49KeptByApproval": true,
+      "solution21Archived": true,
+      "solution25DraftKept": true,
+      "registrationProfile352Added": true
+    },
+    "mail": {
+      "oneSolutionInvitationCreated": 37,
+      "recipientUserId": 341,
+      "sentOnce": true,
+      "accepted": true,
+      "resend": false,
+      "adminMail": false,
+      "smtpInboxDeliveryVerified": false
+    },
+    "openDefects": [
+      {
+        "id": "R9",
+        "severity": "P2",
+        "status": "OPEN",
+        "server": true,
+        "draft25ActualTeamRows": [84, 84, 341],
+        "expected": [84, 341],
+        "proposedPatch": "private R9-backend-proposed.patch",
+        "pureMethodCheck": "PASS",
+        "djangoDbTestsRun": false,
+        "backendModified": false,
+        "regressionOfPRProven": false
+      },
+      {
+        "id": "R11",
+        "severity": "P1",
+        "status": "OPEN",
+        "server": true,
+        "program49EligibleCounts": {
+          "all": 5,
+          "submitted": 0
+        },
+        "expectedSubmittedAtLeast": 3,
+        "source": "backend recipients() only Project membership",
+        "issuanceAttempted": false,
+        "regressionOfPRProven": false
+      }
+    ],
+    "open": [
+      "Backend R9/R11 fix and real retest",
+      "Every-settings-section write not tested: locked criteria and organizer changes excluded",
+      "Extra expert invitation resend not authorized",
+      "Real V2 pagination >20 works absent",
+      "V1 form concurrency and whole-program automatic apply/stale plan not exercised",
+      "Direct forbidden grade writes not exercised",
+      "50/51 write/evaluation negative scenarios read-only scope",
+      "Original Play station reset-confirm root cause not captured",
+      "Participant bulk mail and certificate issuance not authorized"
     ],
     "credentialsRecorded": false,
     "certificateDelivery": false,

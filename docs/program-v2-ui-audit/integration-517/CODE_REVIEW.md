@@ -6,7 +6,7 @@
 
 Последний source/runtime `ffe677f5cefb4f2412f4b513954269ee1d846a10`:5 CSS-строк убирают разрывы слов в мобильных итогах оценивания и горизонтальную полосу tooltip. Обе версии 360px, нижняя подсказка 390px, Enter/Escape/outside проверены.13 существующих tests/2files, scoped stylelint/Prettier и штатный prod build PASS. Ранее 68/3 и 12/2 (5 пересекаются) не суммируются.
 
-Браузер восстановлен, draft25/приглашение 37/вступление завершены обычными интерфейсами; flag49=false. Итоговый вердикт NOT READY обусловлен серверными R9/R11 и явно ограниченными NOT TESTED, а не прежней остановкой браузера.
+Draft25/приглашение37/вступление завершены обычными интерфейсами; flag49=false. R9/R11 теперь CLOSED: backend PR854 смержен и опубликован, повтор на текущем dev912dedc пройден. Текущая приемка IN PROGRESS:65 PASS/7 NOT TESTED/0 FAIL; новые письма, выдача и прямые отрицательные записи ожидают отдельного согласия, свежий сброс — ручного ввода.
 
 ### R8 — отправитель Project invitation, исправлен
 
@@ -14,19 +14,15 @@
 
 Пройдены 15 существующих тестов InviteRepository/GetMyInvites/AcceptInvite, ESLint, Prettier и обычный prod build с прежними budgets. Реальный reload pending 126 показал sender84; затем обычное принятие POST 200 и команда 403 из 84/59. Повторного письма ради ретеста не было.
 
-### R9 — P2, OPEN: дубль капитана в backend XLSX draft
+### R9 — P2, CLOSED: дубль капитана в backend XLSX draft
 
-Повтор на реальном draft25 после вступления 341: UI2 участника, workbook Решения teamSize2, Команды 3 строки с userIds84/84/341. Ранее 21/84 давал две строки при размере 1. Frontend сохраняет готовый Blob, строк не создает.
+До исправления реальный draft25 давал teamSize2, но строки команды84/84/341. Backend PR854 исключает капитана из membership-компрехеншена, сохраняя submitted snapshot. Реальные workbook после deploy32d1f92 и повтор после912dedc:84/341, размер2, обе роли сохранены. Регрессия открывает настоящий XLSX, проверяет строки и состав; это дополнение к исторической pure-method проверке, а не замена Django/DB тестов.
 
-Доступный backend `SolutionAnalyticsContext.team()` явно добавляет капитана, затем все `solution.members.all()`, где captain уже существует. `solution_program_report.write_solutions()` считает размер через множество ID, но пишет все строки команды. Три релевантных файла совпадают с ранее сообщенным dev image cf48cd7; свежий image этого цикла не запрашивался. Доступный backend checkout не изменялся.
+### R11 — P1, CLOSED: аудитория сертификатов Solution
 
-Приватный `R9-backend-proposed.patch` добавляет исключение captain из membership-компрехеншена. Pure Python method regression на настоящем извлеченном методе: до 84/84/341, после 84/341; роль участника, отсутствие membership капитана и submitted snapshot сохраняются. Это не Django/DB suite и не исправление dev. Нужны отдельное backend изменение и реальный повтор.
+Backend PR854 добавляет в общий `recipients()` состав snapshot сданных активных Solution и фильтр регистрации. Счетчик и инициализация batch используют один service; legacy Project ветка сохранена. Регрессии проверяют API counts, actual batch recipient rows, snapshot/live drift, draft/archive/чужую программу и dedup. Вместе с R9 и смежными сценариями прошел81 Django/PostgreSQL тест; полные PostgreSQL/SQLite CI прошли. На реальном49 GET200 после32d1f92 и912dedc дает all5/submitted3 вместо0. Выдача49 не запускалась.
 
-### R11 — P1, OPEN: аудитория сертификатов игнорирует Solution
-
-На ffe6 реальный GET49/management/certificates/200 вернул eligible_counts all5/submitted0 и draft.audience=submitted. В 49 сданы Solution7/19/20, но UI показывает 0 получателей. Выдача/отправка не запускались.
-
-Backend `services/certificates.py:recipients()` фильтрует участников через submitted PartnerProgramProject и Project Collaborator, без ветки Solution. Клиент отображает серверный счетчик. Нужен серверный расчет по сданным Solution с проверкой состава/snapshot и admin-интерфейса по backend AGENTS; подмена числа только в клиенте не исправляет аудиторию. Принадлежность R9/R11 к изменениям frontend PR не установлена.
+Сопутствующий PR855 добавляет только preview-first dev QA-operation и ее тесты: четыре закрытые программы79–82,23 Solution,4 Project,18 synthetic `.invalid` аккаунтов без пригодных паролей. Creation flags закрываются в той же транзакции; hash-проверка43 моделей подтверждает неизменность прежних строк. Три локальных PostgreSQL теста и полный CI PASS; текущий backend dev912dedc успешно опубликован.
 
 ### Серверные отрицательные сценарии
 
@@ -70,7 +66,9 @@ R2–R6 и реальные R1/assignment/version/grade conflicts описаны
 
 Иных конкретно воспроизведенных actionable findings в изменениях PR не найдено. Это ограниченный результат review: нельзя утверждать отсутствие серверных проблем или полную неизменность поведения по одним unit-тестам. Локальный checkout API не содержит весь актуальный Solution-management контур deployed dev; его старые Application/Submission-модели не использованы вместо C00 и реального dev. Backend не изменялся.
 
-## Verification и ограничения
+## Исторические проверки облачного этапа и ограничения
+
+Этот подраздел сохраняет результат облачного этапа до авторизованных desktop E2E. Актуальные результаты и оставшиеся ограничения приведены выше и в README/MATRIX.
 
 - Checked by source: перечисленные цепочки, base/head diff, handlers, ID, payload, cancellation и revision. Новая product-правка — только guard неизмененного фильтра V2.
 - Checked by tests: 75 passed в шести релевантных файлах, включая четыре добавленных сценария. V1 41, V2 14, allocation 4, export 2, progress 9, Solution analytics 5. Это unit-тесты с doubles, не интеграция dev. Полный 3089-набор предыдущего этапа повторно не запускался.
