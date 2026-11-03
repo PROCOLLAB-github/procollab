@@ -2,6 +2,7 @@
 @use "styles/program-management-controls";
 
 :host {
+  position: relative;
   display: block;
   min-width: 0;
   font-size: 12px;

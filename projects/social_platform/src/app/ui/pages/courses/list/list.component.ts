@@ -4,8 +4,8 @@ import { DesktopLayoutService, StateComponent } from "@uilib";
 /** @format */
 
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { RouterModule } from "@angular/router";
+import { CommonModule, Location } from "@angular/common";
+import { Router, RouterModule } from "@angular/router";
 import { CourseComponent } from "./course/course.component";
 import { LoaderComponent } from "@ui/primitives/loader/loader.component";
 import { CoursesListInfoService } from "@api/courses/facades/courses-list-info.service";
@@ -22,6 +22,9 @@ import { AppRoutes } from "@api/paths/app-routes";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoursesListComponent implements OnInit {
+  protected readonly courseUnavailable =
+    (inject(Router).getCurrentNavigation()?.extras.state?.["courseUnavailable"] ??
+      (inject(Location).getState() as { courseUnavailable?: boolean })?.courseUnavailable) === true;
   protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   private readonly coursesListInfoService = inject(CoursesListInfoService);
   private readonly coursesListUIInfoService = inject(CoursesListUIInfoService);

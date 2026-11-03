@@ -76,14 +76,6 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   /** Флаг отображения анимированной полосы */
   showBar = true;
 
-  /**
-   * Перенаправляет пользователя на главную страницу приложения
-   * Используется при клике на логотип
-   */
-  redirectToHome(): void {
-    window.location.href = "https://app.procollab.ru/office/feed";
-  }
-
   initializeBarPosition(): void {
     if (!this.navItemElements()) return;
 

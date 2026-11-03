@@ -2,8 +2,8 @@
 
 import { inject } from "@angular/core";
 import type { ActivatedRouteSnapshot } from "@angular/router";
-import { Router } from "@angular/router";
-import { EMPTY, map, switchMap } from "rxjs";
+import { RedirectCommand, Router } from "@angular/router";
+import { map, of, switchMap } from "rxjs";
 import { GetCourseDetailUseCase } from "@api/courses/use-cases/get-course-detail.use-case";
 import { GetCourseStructureUseCase } from "@api/courses/use-cases/get-course-structure.use-case";
 import { AppRoutes } from "@api/paths/app-routes";
@@ -20,8 +20,11 @@ export const CoursesDetailResolver = (route: ActivatedRouteSnapshot) => {
       const detail = detailResult.ok ? detailResult.value : null;
 
       if (!detail?.isAvailable) {
-        router.navigateByUrl(AppRoutes.courses.list());
-        return EMPTY;
+        return of(
+          new RedirectCommand(router.parseUrl(AppRoutes.courses.list()), {
+            state: { courseUnavailable: true },
+          }),
+        );
       }
 
       return getCourseStructureUseCase

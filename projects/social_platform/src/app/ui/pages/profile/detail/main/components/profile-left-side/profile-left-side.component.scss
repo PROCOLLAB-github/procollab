@@ -107,7 +107,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent);
+    color: var(--accent-text);
     background-color: var(--accent-light);
   }
 
@@ -139,16 +139,16 @@
   }
 
   &__icon {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   &__title {
     margin-bottom: 8px;
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   &__index {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   &__logo {
@@ -168,7 +168,7 @@
     }
 
     &--more {
-      color: var(--accent) !important;
+      color: var(--accent-text) !important;
     }
 
     img {
@@ -205,7 +205,7 @@
 
     &--more {
       margin-top: 8px;
-      color: var(--accent);
+      color: var(--accent-text);
     }
 
     i,
@@ -222,7 +222,7 @@
     }
 
     p {
-      color: var(--accent);
+      color: var(--accent-text);
     }
 
     span {
@@ -241,7 +241,7 @@
 
 .read-more {
   margin-top: 12px;
-  color: var(--accent);
+  color: var(--accent-text);
   cursor: pointer;
   transition: color 0.2s;
 

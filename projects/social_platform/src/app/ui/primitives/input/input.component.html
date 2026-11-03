@@ -16,6 +16,7 @@
     <input
       appChoice
       type="radio"
+      [attr.id]="inputId() || null"
       [name]="name()"
       [value]="appValue()"
       [checked]="checked()"
@@ -26,6 +27,7 @@
     @if (dateInputMode() === "text") {
       <input
         #nativeInput
+        [attr.id]="inputId() || null"
         [ngModel]="value"
         [ngModelOptions]="{ standalone: true }"
         (input)="onInput($event)"
@@ -67,6 +69,7 @@
         [value]="dateValue"
         (dateChange)="onDateChange($event)"
         (click)="picker.open()"
+        [id]="inputId()"
         [placeholder]="placeholder()"
         class="field__input"
         [class.field__input--error]="error()"
@@ -83,6 +86,7 @@
     @if (mask()) {
       <input
         #nativeInput
+        [attr.id]="inputId() || null"
         [ngModel]="value"
         [ngModelOptions]="{ standalone: true }"
         (input)="onInput($event)"
@@ -106,6 +110,7 @@
     } @else {
       <input
         #nativeInput
+        [attr.id]="inputId() || null"
         [value]="value"
         (input)="onInput($event)"
         (keydown.enter)="onEnter($event)"

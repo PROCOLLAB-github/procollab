@@ -28,6 +28,7 @@ import { IconComponent } from "../icon/icon.component";
 /** Примитив: текстовое поле ввода с ControlValueAccessor. */
 @Component({
   selector: "app-input",
+  host: { "[attr.id]": "null" },
   templateUrl: "./input.component.html",
   styleUrl: "./input.component.scss",
   providers: [
@@ -72,6 +73,7 @@ export class InputComponent implements ControlValueAccessor {
   mask = input("");
   dropSpecialCharacters = input(true);
   dateInputMode = input<"picker" | "text">("picker");
+  readonly inputId = input("", { alias: "id" });
   name = input("");
   autocomplete = input("");
   checked = input(false);

@@ -68,13 +68,13 @@
     border-bottom: 0.5px solid var(--accent);
 
     &--icon {
-      color: var(--accent);
+      color: var(--accent-text);
     }
   }
 
   &__title {
     margin-bottom: 8px;
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   &__text {
@@ -84,7 +84,7 @@
     }
 
     ::ng-deep a {
-      color: var(--accent);
+      color: var(--accent-text);
       text-decoration: underline;
       text-decoration-color: transparent;
       text-underline-offset: 3px;
@@ -98,7 +98,7 @@
 
   &__read-full {
     margin-top: 2px;
-    color: var(--accent);
+    color: var(--accent-text);
     cursor: pointer;
   }
 }

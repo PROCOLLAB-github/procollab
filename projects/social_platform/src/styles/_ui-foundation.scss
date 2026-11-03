@@ -1,8 +1,8 @@
 /** @format */
 
 @mixin button($layout: true) {
-  --button-color: var(--ui-accent);
-  --button-hover: var(--accent-medium);
+  --button-color: var(--accent-text);
+  --button-hover: var(--accent-dark);
   --button-text: var(--light-white);
 
   @if $layout {
@@ -143,6 +143,7 @@
 
   &--text {
     padding-inline: 12px;
+    color: var(--accent-text);
   }
 
   @media (max-width: 749px) {

@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<ul class="snackbar">
+<ul class="snackbar" aria-live="polite" aria-relevant="additions" aria-label="Уведомления">
   @for (snack of snacks; track snack.id) {
     <li
       class="snackbar__item item text-body-12"
@@ -26,6 +26,7 @@
           appIcon
           [icon]="snack.type === 'success' ? 'check' : snack.type === 'info' ? '' : 'error'"
           appSquare="12"
+          aria-hidden="true"
         ></i>
       }
     </li>

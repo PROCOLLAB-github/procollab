@@ -102,11 +102,17 @@
   }
 }
 
-@media screen and (max-width: 999px) {
-  @media (prefers-reduced-motion: reduce) {
-    .dot-wave__dot,
-    .lds-ring div {
-      animation-duration: 2s;
-    }
+@keyframes loading-opacity {
+  0%,
+  100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot-wave .dot-wave__dot,
+  .lds-ring div {
+    animation-name: loading-opacity;
+    animation-duration: 2s;
+    will-change: opacity;
   }
 }

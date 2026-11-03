@@ -21,18 +21,20 @@
         >
           <img
             class="avatar__framed-image"
-            [src]="url() || placeholderUrl"
-            [appImageFraming]="imageFraming()"
-            alt="avatar"
+            [src]="imageUrl()"
+            (error)="onImageError()"
+            [appImageFraming]="imageFailed() ? null : imageFraming()"
+            alt="Аватар"
           />
         </div>
       } @else {
         <img
-          [src]="url() || placeholderUrl"
+          [src]="imageUrl()"
+          (error)="onImageError()"
           [style.width]="size() + 'px'"
           [style.height]="size() + 'px'"
           [style.border-color]="'var(--' + borderColor() + ')'"
-          alt="avatar"
+          alt="Аватар"
         />
       }
 
@@ -76,18 +78,20 @@
         >
           <img
             class="avatar__framed-image"
-            [src]="url() || placeholderUrl"
-            [appImageFraming]="imageFraming()"
-            alt="avatar"
+            [src]="imageUrl()"
+            (error)="onImageError()"
+            [appImageFraming]="imageFailed() ? null : imageFraming()"
+            alt="Аватар"
           />
         </div>
       } @else {
         <img
-          [src]="url() || placeholderUrl"
+          [src]="imageUrl()"
+          (error)="onImageError()"
           [style.width]="size() + 'px'"
           [style.height]="size() + 'px'"
           [style.border-color]="'var(--' + borderColor() + ')'"
-          alt="avatar"
+          alt="Аватар"
         />
       }
 

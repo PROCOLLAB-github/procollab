@@ -4,7 +4,8 @@
   @if (profile()) {
     <div class="office__wrapper">
       <img
-        alt="background-image"
+        alt=""
+        aria-hidden="true"
         src="/assets/images/office/shared/backgorund-image-rocket-main.svg"
         class="office__background-image"
       />
@@ -19,9 +20,9 @@
             >
               <div class="office__sidebar--text">
                 <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
-                <span class="text-body-6 office__policy-link" (click)="downloadPolicy($event)">
+                <button type="button" class="office__policy-link" (click)="downloadPolicy($event)">
                   Политика обработки персональных данных
-                </span>
+                </button>
                 <p class="text-body-6">{{ currentYear() }}</p>
               </div>
 

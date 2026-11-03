@@ -41,6 +41,22 @@ describe("AvatarComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("recovers from a failed URL and retries when the user changes the image", () => {
+    fixture = TestBed.createComponent(AvatarComponent);
+    fixture.componentRef.setInput("url", "https://example.com/broken.png");
+    fixture.detectChanges();
+    const img = fixture.nativeElement.querySelector("img") as HTMLImageElement;
+    img.dispatchEvent(new Event("error"));
+    fixture.detectChanges();
+    expect(img.getAttribute("src")).toBe("/assets/images/shared/avatar-placeholder.svg");
+    img.dispatchEvent(new Event("error"));
+    fixture.detectChanges();
+    expect(img.getAttribute("src")).toBe("/assets/images/shared/avatar-placeholder.svg");
+    fixture.componentRef.setInput("url", "https://example.com/new.png");
+    fixture.detectChanges();
+    expect(img.getAttribute("src")).toBe("https://example.com/new.png");
+  });
+
   it("should display placeholder image if no URL is provided", () => {
     fixture = TestBed.createComponent(AvatarComponent);
     component = fixture.componentInstance;

@@ -1,8 +1,8 @@
 <!-- @format -->
 
 <div class="sidebar">
-  <a (click)="redirectToHome()" class="sidebar__logo">
-    <img [src]="logoSrc()" alt="logo" loading="lazy" decoding="async" />
+  <a routerLink="/office/feed" class="sidebar__logo" aria-label="PROCOLLAB — лента">
+    <img [src]="logoSrc()" alt="PROCOLLAB" loading="lazy" decoding="async" />
   </a>
   <nav class="sidebar-nav sidebar__nav">
     <div class="sidebar-nav__list" (mouseenter)="showBar = true" (mouseleave)="showBar = false">

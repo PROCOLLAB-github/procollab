@@ -39,7 +39,6 @@
       text-overflow: ellipsis;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 5;
-      transition: all 0.7s ease-in-out;
 
       &.expanded {
         -webkit-line-clamp: unset;

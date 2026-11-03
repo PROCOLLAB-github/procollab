@@ -30,4 +30,10 @@ describe("SidebarComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("keeps the logo as a keyboard reachable link within the current environment", () => {
+    const logo = fixture.nativeElement.querySelector(".sidebar__logo") as HTMLAnchorElement;
+    expect(logo.getAttribute("href")).toBe("/office/feed");
+    expect(logo.tabIndex).toBe(0);
+  });
 });

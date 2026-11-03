@@ -7,6 +7,9 @@
   --gradient: linear-gradient(90deg, #242424 0%, #8a63e6 50%);
   --gradient-mild: linear-gradient(90deg, #501d53 0.3%, #3b1f72 22%, #8a63e6 100%);
   --accent: #8a63e6;
+
+  // Text/control role: retains the brand hue on white and accent-light surfaces.
+  --accent-text: #744bc6;
   --accent-dark: #{color.adjust(#8a63e6, $blackness: 20%)};
   --accent-mild: #{color.adjust(#6c27ff, $alpha: -0.4)};
   --accent-light: #e8e0fa;
@@ -21,12 +24,12 @@
   --light-white: #fff;
   --white: #fafafa;
   --black: #333;
-  --dark-grey: #a59fb9;
+  --dark-grey: #655f74;
   --gray: #d3d3d3;
   --light-gray: #f9f9f9;
   --grey-button: #e5e5e5e5;
   --medium-grey-for-outline: #eee;
-  --grey-for-text: #827e80;
+  --grey-for-text: #706a73;
 
   // FUNCTIONAL
   --green: #88c9a1;

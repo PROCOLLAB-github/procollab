@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, input, signal } from "@angular/core";
 import { ImageFraming, ImageFramingDirective } from "../image-framing/image-framing.directive";
 
 export const AVATAR_PLACEHOLDER_URL =
@@ -34,6 +34,18 @@ export const AVATAR_PLACEHOLDER_URL =
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvatarComponent {
+  private readonly failedUrl = signal<string | null>(null);
+  protected readonly imageFailed = computed(() => this.failedUrl() === (this.url() || ""));
+  protected readonly imageUrl = computed(() =>
+    this.imageFailed()
+      ? "/assets/images/shared/avatar-placeholder.svg"
+      : this.url() || this.placeholderUrl,
+  );
+
+  protected onImageError(): void {
+    this.failedUrl.set(this.url() || "");
+  }
+
   /** Optional framing; existing avatars keep their original rendering. */
   readonly imageFraming = input<ImageFraming | null>(null);
   /** URL изображения аватара */

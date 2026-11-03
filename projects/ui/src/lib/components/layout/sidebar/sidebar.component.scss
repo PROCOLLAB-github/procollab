@@ -53,7 +53,7 @@
     height: 4px;
     background-color: var(--accent);
     border-radius: 50%;
-    transition: all 0.2s;
+    transition: opacity 0.15s ease;
   }
 
   &__item,
@@ -73,7 +73,13 @@
     }
 
     &--active {
-      color: var(--accent);
+      color: var(--accent-text);
     }
   }
+}
+
+.sidebar__logo:focus-visible,
+.sidebar-nav__item:focus-visible {
+  outline: 2px solid var(--accent-dark);
+  outline-offset: 3px;
 }

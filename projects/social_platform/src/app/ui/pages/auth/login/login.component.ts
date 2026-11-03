@@ -3,10 +3,10 @@
 import { ButtonDirective, FormLayoutDirective } from "@uilib";
 /** @format */
 
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, inject } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { ControlErrorPipe, TokenService } from "@corelib";
+import { ControlErrorPipe } from "@corelib";
 import { RouterLink } from "@angular/router";
 import { ButtonComponent, IconComponent, InputComponent } from "@ui/primitives";
 import { CommonModule } from "@angular/common";
@@ -38,10 +38,9 @@ import { AppRoutes } from "@api/paths/app-routes";
   ],
   providers: [AuthLoginService, AuthUIInfoService, TooltipInfoService],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   private readonly authLoginService = inject(AuthLoginService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
-  private readonly tokenService = inject(TokenService);
   private readonly tooltipInfoService = inject(TooltipInfoService);
 
   protected readonly loginForm = this.authUIInfoService.loginForm;
@@ -56,10 +55,6 @@ export class LoginComponent implements OnInit {
     this.tooltipInfoService.isVisible("login"),
   );
   protected readonly AppRoutes = AppRoutes;
-
-  ngOnInit(): void {
-    this.tokenService.clearTokens();
-  }
 
   toggleTooltip(): void {
     this.tooltipInfoService.toggleTooltip("login");

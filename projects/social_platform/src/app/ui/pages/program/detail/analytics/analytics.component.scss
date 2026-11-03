@@ -35,7 +35,7 @@
 
   &__eyebrow {
     margin-bottom: 4px;
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   &__title {
@@ -113,7 +113,7 @@
 
 .summary {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 
   @media screen and (min-width: 600px) {
@@ -169,13 +169,41 @@
   min-height: 92px;
   padding: 16px;
 
+  @media (max-width: 599px) {
+    position: relative;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 12px;
+
+    .summary-card__content {
+      width: 100%;
+    }
+
+    .summary-card__icon {
+      flex-basis: 28px;
+      width: 28px;
+      height: 28px;
+    }
+
+    .analytics__heading-row {
+      position: static;
+    }
+
+    .analytics__heading-row app-tooltip {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+    }
+  }
+
   &__icon {
     display: grid;
     flex: 0 0 44px;
     place-items: center;
     width: 44px;
     height: 44px;
-    color: var(--accent);
+    color: var(--accent-text);
     background: var(--accent-light);
     border-radius: 12px;
   }
@@ -688,7 +716,7 @@
   height: 32px;
   padding: 0;
   margin-left: auto;
-  color: var(--accent);
+  color: var(--accent-text);
   cursor: pointer;
   background: transparent;
   border: 1px solid var(--medium-grey-for-outline);
@@ -726,7 +754,7 @@
   border-radius: 15px;
 
   i {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   &--compact {

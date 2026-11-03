@@ -44,3 +44,7 @@ testem.log
 Thumbs.db
 
 *storybook.log
+
+# Local design-review evidence can contain test-account data and browser captures.
+/.impeccable/
+/.taste-skill/

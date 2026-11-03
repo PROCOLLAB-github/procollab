@@ -1,9 +1,9 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { initial } from "@domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ControlErrorPipe, TokenService } from "@corelib";
+import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { RouterLink } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/primitives";
@@ -35,15 +35,10 @@ import { AppRoutes } from "@api/paths/app-routes";
   providers: [AuthRegisterService, AuthUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   private readonly authRegisterService = inject(AuthRegisterService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
-  private readonly tokenService = inject(TokenService);
   protected readonly AppRoutes = AppRoutes;
-
-  ngOnInit(): void {
-    this.tokenService.clearTokens();
-  }
 
   protected readonly registerForm = this.authUIInfoService.registerForm;
   protected readonly registerIsSubmitting = this.authUIInfoService.registerIsSubmitting;

@@ -3,6 +3,7 @@
 <main class="page">
   <div class="page__bar">
     @if (desktopLayout()) {
+      <h1 class="ui-sr-only">проекты</h1>
       <app-back
         namespace="проекты"
         [path]="isDashboard() ? '/office/feed' : '/office/projects/dashboard'"
@@ -114,8 +115,18 @@
               [state]="projectCountState()"
             ></app-project-activity-card>
           }
-          @if (isAll()) {
-            <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
+          @if (isAll() && (desktopLayout() || isFilterOpen())) {
+            <div
+              id="project-filters"
+              class="filter page__filter"
+              [class.page__filter--open]="isFilterOpen()"
+              [attr.role]="desktopLayout() ? null : 'dialog'"
+              [attr.aria-modal]="desktopLayout() ? null : true"
+              aria-label="Фильтры проектов"
+              [cdkTrapFocus]="!desktopLayout()"
+              [cdkTrapFocusAutoCapture]="!desktopLayout()"
+              (keydown.escape)="$event.stopPropagation(); closeFilter()"
+            >
               <div class="filter__overlay" (click)="isFilterOpen.set(false)"></div>
               <div class="filter__body" #filterBody>
                 <div

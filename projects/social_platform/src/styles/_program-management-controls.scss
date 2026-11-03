@@ -6,7 +6,7 @@
   height: 32px;
   min-height: 32px;
   padding: 5px;
-  color: var(--accent);
+  color: var(--accent-text);
   background: var(--light-white);
   border: 1px solid var(--medium-grey-for-outline);
   border-radius: 8px;
@@ -38,10 +38,10 @@
     border-bottom: 1px solid transparent;
 
     &[aria-current] {
-      color: var(--accent);
+      color: var(--accent-text);
       border-bottom-color: var(--accent);
     }
-    &:hover { color: var(--accent); }
+    &:hover { color: var(--accent-text); }
 
     &:focus-visible {
       outline: 2px solid var(--accent);

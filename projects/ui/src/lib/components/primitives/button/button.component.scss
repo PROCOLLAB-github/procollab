@@ -98,7 +98,7 @@
   }
 
   @media screen and (min-width: 1000px) {
-    transition: all 0.2s;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
   }
 
   @media screen and (min-width: 1000px) {
@@ -112,12 +112,12 @@
     &.button--inline {
       font-weight: 400;
       color: var(--white);
-      background: var(--accent);
+      background: var(--accent-text);
       border: 0.5px solid transparent;
       outline: none;
 
       &:hover {
-        background-color: var(--accent-medium);
+        background-color: var(--accent-dark);
         box-shadow: -2px 3px 3px rgb(51 51 51 / 20%);
       }
 
@@ -161,7 +161,7 @@
       }
 
       &.button--white {
-        color: var(--accent);
+        color: var(--accent-text);
         background: var(--white);
       }
 
@@ -173,13 +173,13 @@
 
   @media screen and (min-width: 1000px) {
     &.button--outline {
-      color: var(--accent);
+      color: var(--accent-text);
       background: transparent;
       border: 0.5px solid var(--accent);
 
       &:hover {
-        color: var(--accent-medium);
-        border-color: var(--accent-medium);
+        color: var(--accent-dark);
+        border-color: var(--accent-dark);
         box-shadow: -2px 3px 3px rgb(51 51 51 / 20%);
       }
 
