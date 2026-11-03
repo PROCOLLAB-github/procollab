@@ -5,9 +5,7 @@
     <div class="project__grid project__grid--assets">
       @if (imageAddress; as imageAddress) {
         <div class="project__image">
-          <label class="field-label text-body-12" style="text-align: center" for="name"
-            >логотип</label
-          >
+          <span class="field-label text-body-12" style="text-align: center">логотип</span>
           <app-avatar-control
             id="imageAddress"
             [haveHint]="true"
@@ -28,9 +26,7 @@
       }
       @if (presentationAddress; as presentationAddress) {
         <fieldset class="project__file">
-          <label class="field-label text-body-12" style="text-align: center" for="name"
-            >презентация</label
-          >
+          <span class="field-label text-body-12" style="text-align: center">презентация</span>
           <app-upload-file
             formControlName="presentationAddress"
             accept=".pdf,.pptx"
@@ -51,9 +47,7 @@
       }
       @if (coverImageAddress; as coverImageAddress) {
         <fieldset class="project__file">
-          <label class="field-label text-body-12" for="name" style="text-align: center"
-            >обложка</label
-          >
+          <span class="field-label text-body-12" style="text-align: center">обложка</span>
           <app-upload-file
             formControlName="coverImageAddress"
             accept=".jpg,.png,.jpeg"
