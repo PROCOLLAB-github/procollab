@@ -256,13 +256,14 @@ describe("ProjectMainStepComponent", () => {
   });
 
   it("blur exposes a real required error but not an optional blank field", async () => {
-    for (const selector of ["app-input#name input", "app-textarea#actuality textarea"]) {
+    const nameInput = fixture.nativeElement.querySelector("input#name") as HTMLInputElement;
+    expect(nameInput.labels?.length).toBe(1);
+    expect(nameInput.labels?.[0]?.textContent?.trim()).toBe("название");
+    for (const selector of ["input#name", "app-textarea#actuality textarea"]) {
       fixture.nativeElement.querySelector(selector).dispatchEvent(new Event("blur"));
     }
     await fixture.whenStable();
-    expect(
-      fixture.nativeElement.querySelector("app-input#name .project__input-error"),
-    ).not.toBeNull();
+    expect(nameInput.closest("app-input")!.querySelector(".project__input-error")).not.toBeNull();
     expect(
       fixture.nativeElement.querySelector("app-textarea#actuality .field__error-icon"),
     ).toBeNull();
