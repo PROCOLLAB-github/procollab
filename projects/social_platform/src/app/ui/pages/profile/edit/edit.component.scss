@@ -39,7 +39,14 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    color: inherit;
+    text-decoration: none;
     cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
   }
 
   &__form {

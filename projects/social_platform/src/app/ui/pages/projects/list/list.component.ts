@@ -12,7 +12,9 @@ import {
   OnInit,
   viewChild,
 } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { map } from "rxjs";
 import { NgTemplateOutlet } from "@angular/common";
 import { IconComponent } from "@ui/primitives";
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
@@ -39,11 +41,16 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
     ProgramDetailListUIInfoService,
     OfficeInfoService,
     OfficeUIInfoService,
-    SwipeService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit {
+  protected readonly hasSearch = toSignal(
+    inject(ActivatedRoute).queryParamMap.pipe(
+      map(params => !!params.get("name__contains")?.trim()),
+    ),
+    { initialValue: false },
+  );
   readonly filterBody = viewChild<ElementRef<HTMLElement>>("filterBody");
   readonly listRoot = viewChild<ElementRef<HTMLUListElement>>("listRoot");
 

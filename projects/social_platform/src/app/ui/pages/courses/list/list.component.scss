@@ -1,6 +1,16 @@
 @use "styles/responsive";
 
 .courses {
+  &__notice {
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--black);
+    background: var(--accent-light);
+    border-radius: var(--rounded-lg);
+  }
+
   &__list {
     display: grid;
     grid-template-columns: 1fr;

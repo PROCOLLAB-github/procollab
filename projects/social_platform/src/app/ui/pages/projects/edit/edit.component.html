@@ -1,10 +1,10 @@
 <!-- @format -->
 <div>
   <div class="project__top">
-    <div class="project__back" [routerLink]="AppRoutes.projects.detail(profileId())">
+    <a class="project__back" [routerLink]="AppRoutes.projects.detail(profileId())">
       <i appIcon icon="left-arrow" appSquare="24"></i>
       <h1 class="project__title">редактировать проект</h1>
-    </div>
+    </a>
     <div class="project__save">
       <app-button
         size="medium"

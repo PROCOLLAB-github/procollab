@@ -357,7 +357,7 @@ $detail-bar-mb: 12px;
 
     i {
       margin-left: 15px;
-      color: var(--accent);
+      color: var(--accent-text);
     }
 
     app-tooltip {
@@ -382,12 +382,12 @@ $detail-bar-mb: 12px;
   }
 
   &__icon {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   &__title {
     margin-bottom: 8px;
-    color: var(--accent);
+    color: var(--accent-text);
   }
 }
 

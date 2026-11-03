@@ -23,6 +23,7 @@ import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { ProjectsUIInfoService } from "@api/project/facades/ui/projects-ui-info.service";
 import { ProjectsInfoService } from "@api/project/facades/projects-info.service";
 import { SwipeService } from "@api/swipe/swipe.service";
+import { CdkTrapFocus } from "@angular/cdk/a11y";
 import { ProjectsFilterComponent } from "@ui/widgets/projects-filter/projects-filter.component";
 import { OfficeInfoService } from "@api/office/facades/office-info.service";
 import { ProjectActivityCardComponent } from "./project-activity-card/project-activity-card.component";
@@ -33,6 +34,7 @@ import { ProjectActivityCardComponent } from "./project-activity-card/project-ac
   templateUrl: "./projects.component.html",
   styleUrl: "./projects.component.scss",
   imports: [
+    CdkTrapFocus,
     StateComponent,
     PageHeaderComponent,
     FormLayoutDirective,

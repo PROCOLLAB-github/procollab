@@ -1,6 +1,14 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input, output } from "@angular/core";
+import {
+  afterEveryRender,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  output,
+} from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { IconComponent } from "../icon/icon.component";
 
@@ -63,6 +71,27 @@ export interface TabItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabsComponent {
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  private lastActive: Element | null = null;
+  private lastWidth = 0;
+
+  constructor() {
+    afterEveryRender(() => {
+      const nav = this.element.nativeElement.querySelector<HTMLElement>(".tabs");
+      const active = nav?.querySelector<HTMLElement>(
+        "[aria-current='page'], [aria-pressed='true']",
+      );
+      if (!nav || !active || !nav.clientWidth) return;
+      if (active === this.lastActive && nav.clientWidth === this.lastWidth) return;
+      this.lastActive = active;
+      this.lastWidth = nav.clientWidth;
+      const bounds = nav.getBoundingClientRect();
+      const item = active.getBoundingClientRect();
+      if (item.left < bounds.left) nav.scrollLeft += item.left - bounds.left;
+      else if (item.right > bounds.right) nav.scrollLeft += item.right - bounds.right;
+    });
+  }
+
   readonly items = input.required<TabItem[]>();
   readonly showCounts = input(false);
   readonly label = input("Разделы");

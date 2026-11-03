@@ -49,7 +49,7 @@
   }
 
   a {
-    color: var(--accent);
+    color: var(--accent-text);
     text-decoration: none;
   }
 
@@ -88,7 +88,7 @@
 
     a[aria-current] {
       color: var(--white);
-      background: var(--accent);
+      background: var(--accent-text);
     }
   }
 
@@ -137,7 +137,7 @@
     }
 
     a[aria-current] {
-      color: var(--accent);
+      color: var(--accent-text);
       border-color: var(--accent);
     }
   }
@@ -520,7 +520,7 @@
 
   .management__sort-check {
     margin-inline-start: auto;
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   &:hover,

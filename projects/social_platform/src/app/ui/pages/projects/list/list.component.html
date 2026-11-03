@@ -2,10 +2,16 @@
 
 <section class="page">
   @if (isAll()) {
-    <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen.set(!isFilterOpen())">
+    <button
+      type="button"
+      class="filter-toggle page__filter-toggle"
+      [attr.aria-expanded]="isFilterOpen()"
+      aria-controls="project-filters"
+      (click)="isFilterOpen.set(!isFilterOpen())"
+    >
       <span>Фильтр</span>
       <i appIcon icon="filter" appSquare="34"></i>
-    </div>
+    </button>
   }
   <ul class="page__list" #listRoot>
     @for (project of projects(); track isInvites() ? project.inviteId : project.id) {
@@ -32,7 +38,28 @@
         </ng-template>
       </li>
     } @empty {
-      <li><app-state title="Ничего не найдено" /></li>
+      <li class="page__empty">
+        @if (hasSearch()) {
+          <app-state
+            title="Ничего не найдено"
+            description="Попробуйте изменить поисковый запрос."
+          />
+        } @else if (isSubs()) {
+          <app-state
+            title="Нет подписок на проекты"
+            description="Подпишитесь на интересный проект в общем списке, чтобы он появился здесь."
+          >
+            <a [routerLink]="AppRoutes.projects.all()">Найти проект</a>
+          </app-state>
+        } @else if (isInvites()) {
+          <app-state
+            title="Нет приглашений в проекты"
+            description="Когда команда пригласит вас в проект, приглашение появится здесь."
+          />
+        } @else {
+          <app-state title="Ничего не найдено" />
+        }
+      </li>
     }
   </ul>
 </section>

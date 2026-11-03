@@ -13,7 +13,8 @@
   }
 
   @media screen and (min-width: 1000px) {
-    min-width: 95vw;
+    width: calc(100vw - 200px);
+    min-width: 0;
     min-height: 100vh;
   }
 
@@ -122,7 +123,7 @@
     color: var(--grey-for-text);
 
     a {
-      color: var(--accent);
+      color: var(--accent-text);
     }
   }
 }

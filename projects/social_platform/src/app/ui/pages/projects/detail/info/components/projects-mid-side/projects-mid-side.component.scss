@@ -24,6 +24,12 @@
     grid-gap: 10px;
     align-items: center;
     margin-top: 24px;
+
+    @media (max-width: 599px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px 10px;
+      justify-items: center;
+    }
   }
 }
 

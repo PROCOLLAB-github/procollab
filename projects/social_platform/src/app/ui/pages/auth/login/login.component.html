@@ -15,7 +15,7 @@
           <img
             class="login__logo"
             src="/assets/images/shared/logo.svg"
-            alt="logo"
+            alt="PROCOLLAB"
             loading="lazy"
             decoding="async"
           />
@@ -28,6 +28,8 @@
                 [error]="email | controlError"
                 id="email"
                 type="email"
+                name="email"
+                autocomplete="username"
                 formControlName="email"
                 placeholder="example@example.com"
               ></app-input>
@@ -62,7 +64,7 @@
                 formControlName="password"
                 name="password"
                 autocomplete="current-password"
-                placeholder="GJiwoeuhbn120="
+                placeholder="Введите пароль"
               >
                 <button
                   appButton="icon"

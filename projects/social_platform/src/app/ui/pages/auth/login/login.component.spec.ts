@@ -12,7 +12,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 import { of } from "rxjs";
-import { API_URL, PRODUCTION } from "@corelib";
+import { API_URL, PRODUCTION, TokenService } from "@corelib";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 describe("LoginComponent", () => {
@@ -62,6 +62,14 @@ describe("LoginComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+  it("does not sign out another tab when the login form is opened", () => {
+    const clear = vi.spyOn(TestBed.inject(TokenService), "clearTokens");
+    const anotherForm = TestBed.createComponent(LoginComponent);
+    anotherForm.detectChanges();
+    expect(clear).not.toHaveBeenCalled();
+    anotherForm.destroy();
+    clear.mockRestore();
+  });
   it("не называет неизвестный сбой входа неверными учетными данными", () => {
     const ui = fixture.debugElement.injector.get(AuthUIInfoService);
     ui.login$.set({ status: "failure", error: { kind: "unknown" } });
@@ -89,6 +97,12 @@ describe("LoginComponent", () => {
     const emailField = email.closest("app-input") as HTMLElement;
 
     expect(password.autocomplete).toBe("current-password");
+    expect(email.id).toBe("email");
+    expect(password.id).toBe("password");
+    expect(email.labels?.[0]?.textContent).toContain("почта");
+    expect(password.labels?.[0]?.textContent).toContain("пароль");
+    expect(emailField.id).toBe("");
+    expect(passwordField.id).toBe("");
     expect(passwordField.classList).toContain("auth__password-input");
     const field = passwordField.querySelector(".field") as HTMLElement;
     const eyeSlot = field.querySelector(".field__right-icon") as HTMLElement;

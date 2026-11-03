@@ -49,18 +49,25 @@
   }
 
   &--success {
-    color: var(--white);
+    color: var(--black);
     background-color: var(--green);
   }
 
   &--error {
-    color: var(--white);
+    color: var(--black);
     background-color: var(--red);
   }
 
   &--info {
     color: var(--black);
     background-color: var(--lime);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    // Angular writes transform inline; retain its opacity feedback without travel.
+    transform: none !important;
   }
 }
 

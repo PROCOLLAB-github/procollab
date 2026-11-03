@@ -9,6 +9,7 @@
   width: 70px;
   height: 50px;
   padding: 20px 6px 12px;
+  font: inherit;
   text-align: center;
   cursor: pointer;
   background-color: var(--light-white);
@@ -20,13 +21,9 @@
     box-shadow: 1px 3px 5px var(--medium-grey-for-outline);
   }
 
-  &--skills {
-    font: inherit;
-
-    &:focus-visible {
-      outline: 2px solid var(--accent-dark);
-      outline-offset: 3px;
-    }
+  &:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 3px;
   }
 
   &__icon {
@@ -50,7 +47,7 @@
 .cancel {
   display: flex;
   flex-direction: column;
-  width: 350px;
+  width: min(350px, calc(100vw - 64px));
   max-width: 500px;
   height: 200px;
   max-height: calc(100vh - 40px);
@@ -94,6 +91,17 @@
     color: var(--accent);
   }
 
+  &__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  button:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 2px;
+  }
+
   &__text {
     color: var(--black);
     word-break: break-word;
@@ -120,6 +128,7 @@
       justify-content: space-between;
       width: 100%;
       padding: 10px;
+      font: inherit;
       cursor: pointer;
       background-color: var(--white);
       border: 0.5px solid var(--medium-grey-for-outline);
@@ -146,8 +155,12 @@
       display: flex;
       gap: 10px;
       align-items: center;
+      padding: 0;
+      font: inherit;
       color: var(--grey-for-text);
       cursor: pointer;
+      background: transparent;
+      border: 0;
 
       i {
         transform: rotate(-90deg);

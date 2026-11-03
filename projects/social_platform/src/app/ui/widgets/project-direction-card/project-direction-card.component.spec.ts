@@ -115,12 +115,23 @@ describe("Навыки в карточке направления профиля
     expect(dialog.querySelector(".profile-skills__count")?.textContent?.trim()).toBe("1");
   });
 
-  it.each(["achievements", "goals"] as const)("сохраняет прежнюю оболочку для %s", async kind => {
-    await setup(kind);
-    await open();
-    expect(fixture.nativeElement.querySelector("app-profile-skills-dialog")).toBeNull();
-    expect(overlay.querySelector(".cancel")).not.toBeNull();
-    expect(overlay.querySelector(".profile-skills-modal")).toBeNull();
-    expect(overlay.querySelector('[role="dialog"]')).toBeNull();
-  });
+  it.each(["achievements", "goals"] as const)(
+    "сохраняет вид и добавляет доступный диалог для %s",
+    async kind => {
+      await setup(kind);
+      const dialog = await open();
+      expect(fixture.nativeElement.querySelector("app-profile-skills-dialog")).toBeNull();
+      expect(overlay.querySelector(".cancel")).not.toBeNull();
+      expect(overlay.querySelector(".profile-skills-modal")).toBeNull();
+      expect(dialog).not.toBeNull();
+      const titleId = dialog.getAttribute("aria-labelledby");
+      expect(dialog.querySelector(`[id="${titleId}"]`)?.textContent).toContain("достижения");
+      expect(dialog.querySelector('button[aria-label="Закрыть"]')).not.toBeNull();
+      dialog.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      await fixture.whenStable();
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await fixture.whenStable();
+      expect(overlay.querySelector('[role="dialog"]')).toBeNull();
+    },
+  );
 });

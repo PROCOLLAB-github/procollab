@@ -1,6 +1,11 @@
 <!-- @format -->
 
 <div class="courses">
+  @if (courseUnavailable) {
+    <p class="courses__notice" role="status">
+      Курс сейчас недоступен. Выберите другой курс в каталоге.
+    </p>
+  }
   @if (loading()) {
     @if (desktopLayout()) {
       <div class="loading"><app-loader size="125px" color="var(--accent)"></app-loader></div>

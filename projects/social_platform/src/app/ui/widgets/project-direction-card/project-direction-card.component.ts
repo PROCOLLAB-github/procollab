@@ -13,7 +13,7 @@ import {
   signal,
 } from "@angular/core";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { IconComponent } from "@uilib";
+import { ButtonDirective, IconComponent } from "@uilib";
 import { ProfileSkillsDialogComponent } from "./profile-skills-dialog/profile-skills-dialog.component";
 import { Skill } from "@domain/skills/skill.model";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -28,6 +28,8 @@ import { Goal } from "@domain/project/goals.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { UpdateGoalUseCase } from "@api/project/use-cases/update-goal.use-case";
 
+let nextDirectionDialogId = 0;
+
 /** Универсальная карточка направлений профиля/проекта: навыки, достижения, цели и партнёры. */
 @Component({
   selector: "app-project-direction-card",
@@ -36,6 +38,7 @@ import { UpdateGoalUseCase } from "@api/project/use-cases/update-goal.use-case";
   imports: [
     CommonModule,
     IconComponent,
+    ButtonDirective,
     ModalComponent,
     ProfileSkillsDialogComponent,
     FileItemComponent,
@@ -47,6 +50,7 @@ import { UpdateGoalUseCase } from "@api/project/use-cases/update-goal.use-case";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectDirectionCard implements OnInit, OnDestroy {
+  protected readonly dialogTitleId = `direction-dialog-title-${nextDirectionDialogId++}`;
   readonly direction = input.required<string>();
   readonly icon = input.required<string>();
   readonly about = input.required<string | any[]>();
@@ -105,8 +109,8 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
       this.listType = data["listType"];
     });
 
-    if (this.profileInfoType() === "achievements" && Array.isArray(this.about)) {
-      this.allAchievements = this.about as Achievement[];
+    if (this.profileInfoType() === "achievements" && Array.isArray(this.about())) {
+      this.allAchievements = this.about() as Achievement[];
       this.years = Array.from(
         new Map(this.allAchievements.map(a => [a.year, { id: a.id, year: a.year }])).values(),
       );

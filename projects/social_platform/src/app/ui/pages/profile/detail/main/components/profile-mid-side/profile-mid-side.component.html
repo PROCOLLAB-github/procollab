@@ -5,7 +5,7 @@
     @if (user()!.personal.aboutMe; as about) {
       <div class="about profile__about">
         <div class="about__head">
-          <h3 class="text-body-12 about__title">обо мне</h3>
+          <h2 class="text-body-12 about__title">обо мне</h2>
           <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
         </div>
 
@@ -57,7 +57,7 @@
             <li>
               <app-news-card
                 class="news__item"
-                [resourceLink]="[AppRoutes.profile.detail(n.id)]"
+                [resourceLink]="[AppRoutes.profile.detail(user()!.id)]"
                 [attr.data-id]="n.id"
                 [feedItem]="n"
                 [isOwner]="loggedUserId() === user()!.id"

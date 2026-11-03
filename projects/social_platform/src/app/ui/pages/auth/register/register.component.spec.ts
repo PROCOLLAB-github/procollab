@@ -11,7 +11,7 @@ import { provideRouter } from "@angular/router";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { of } from "rxjs";
-import { API_URL, PRODUCTION } from "@corelib";
+import { API_URL, PRODUCTION, TokenService } from "@corelib";
 import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 describe("RegisterComponent", () => {
@@ -58,6 +58,15 @@ describe("RegisterComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("does not sign out another tab when registration is opened", () => {
+    const clear = vi.spyOn(TestBed.inject(TokenService), "clearTokens");
+    const anotherForm = TestBed.createComponent(RegisterComponent);
+    anotherForm.detectChanges();
+    expect(clear).not.toHaveBeenCalled();
+    anotherForm.destroy();
+    clear.mockRestore();
+  });
+
   it("keeps native password inputs and visibility controls in adjacent sibling slots", () => {
     const password = fixture.nativeElement.querySelector(
       'input[name="new-password"]',
@@ -65,9 +74,10 @@ describe("RegisterComponent", () => {
     const repeatedPassword = fixture.nativeElement.querySelector(
       'input[name="new-password-confirmation"]',
     ) as HTMLInputElement;
-    const birthdayField = fixture.nativeElement.querySelector(
-      'app-input[id="birthday"]',
-    ) as HTMLElement;
+    const birthday = fixture.nativeElement.querySelector(
+      'input[id="birthday"]',
+    ) as HTMLInputElement;
+    const birthdayField = birthday.closest("app-input") as HTMLElement;
 
     expect(password.autocomplete).toBe("new-password");
     expect(repeatedPassword.autocomplete).toBe("new-password");
@@ -82,6 +92,7 @@ describe("RegisterComponent", () => {
       expect(field.lastElementChild).toBe(eyeSlot);
     }
     expect(birthdayField.classList).not.toContain("auth__password-input");
+    expect(birthday.labels?.length).toBe(1);
     expect((fixture.nativeElement.querySelector("form") as HTMLFormElement).noValidate).toBe(true);
   });
 

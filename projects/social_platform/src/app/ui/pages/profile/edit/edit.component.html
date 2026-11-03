@@ -3,10 +3,10 @@
 @if (profileForm.get("userType"); as currentType) {
   <div class="profile__top">
     @if (desktopLayout()) {
-      <div class="profile__back" [routerLink]="AppRoutes.profile.detail(profileId()!)">
+      <a class="profile__back" [routerLink]="AppRoutes.profile.detail(profileId()!)">
         <i appIcon icon="left-arrow" appSquare="24"></i>
         <h1 class="profile__title">редактирование профиля</h1>
-      </div>
+      </a>
       <ng-container [ngTemplateOutlet]="saveButton" />
     } @else {
       <app-page-header
@@ -55,7 +55,7 @@
           customTypographyClass="text-body-12"
           (click)="saveProfile()"
         >
-          cохранить</app-button
+          сохранить</app-button
         >
       </div>
     </ng-template>
