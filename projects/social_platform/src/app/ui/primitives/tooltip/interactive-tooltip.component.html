@@ -1,0 +1,49 @@
+<!-- @format -->
+
+<button
+  #trigger
+  #origin="cdkOverlayOrigin"
+  cdkOverlayOrigin
+  class="interactive-tooltip__trigger"
+  type="button"
+  [attr.aria-label]="label()"
+  [attr.aria-expanded]="opened()"
+  [attr.aria-controls]="opened() ? panelId : null"
+  aria-haspopup="dialog"
+  (pointerenter)="enterTrigger($event)"
+  (pointerleave)="leave()"
+  (click)="toggle($event)"
+  (keydown)="escape($event)"
+>
+  <i appIcon icon="hint" appSquare="16" aria-hidden="true"></i>
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="origin"
+  [cdkConnectedOverlayOpen]="opened()"
+  [cdkConnectedOverlayPositions]="positions"
+  [cdkConnectedOverlayPush]="true"
+  [cdkConnectedOverlayViewportMargin]="12"
+  [cdkConnectedOverlayDisableClose]="true"
+  (positionChange)="reposition($event)"
+  (overlayOutsideClick)="closeOutside($event)"
+  (overlayKeydown)="escape($event)"
+>
+  <div
+    #panel
+    class="tooltip__content tooltip__content--overlay interactive-tooltip__panel text-body-10"
+    [class.tooltip__content--overlay-left]="placement() === 'left'"
+    [class.tooltip__content--overlay-right]="placement() === 'right'"
+    [id]="panelId"
+    role="dialog"
+    [attr.aria-label]="label()"
+    tabindex="-1"
+    (pointerenter)="cancelHide()"
+    (pointerleave)="leave()"
+    (pointerdown)="pin()"
+    (focusin)="pin()"
+  >
+    <ng-content />
+  </div>
+</ng-template>

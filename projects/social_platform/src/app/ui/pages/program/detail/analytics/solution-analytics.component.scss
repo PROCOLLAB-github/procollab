@@ -26,13 +26,6 @@
   @include ui-foundation.choice;
 }
 
-.analytics__header-actions {
-  display: flex;
-  gap: var(--ui-space-sm);
-  align-items: center;
-  margin-left: auto;
-}
-
 .evaluation--not-applicable,
 .solution-analytics__materials {
   min-height: 0;
@@ -103,7 +96,7 @@
   }
 }
 
-.analytics__header-actions .ui-button.ui-button,
+.analytics__export-trigger.ui-button.ui-button,
 .solution-analytics__dialog .regions__export.ui-button.ui-button {
   @include program-management-controls.export-trigger;
 }

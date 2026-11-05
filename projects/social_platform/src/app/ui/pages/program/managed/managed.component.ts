@@ -7,7 +7,7 @@ import {
   signal,
   computed,
 } from "@angular/core";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
@@ -25,20 +25,20 @@ import { AlertDirective, ButtonDirective, PaginationComponent } from "@uilib";
 import { SearchComponent } from "@ui/primitives/search/search.component";
 import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-case";
 import { ManagedProgramsPage } from "@domain/program/program-launch.model";
-import { AppRoutes } from "@api/paths/app-routes";
 import { evaluationError } from "@utils/evaluation-workspace";
 import { ProgramCardComponent } from "../main/program-card/program-card.component";
+import { ProgramCatalogToolbarComponent } from "../catalog-toolbar/catalog-toolbar.component";
 
 @Component({
   selector: "app-managed-programs",
   imports: [
-    RouterLink,
     ReactiveFormsModule,
     SearchComponent,
     AlertDirective,
     ButtonDirective,
     PaginationComponent,
     ProgramCardComponent,
+    ProgramCatalogToolbarComponent,
   ],
   templateUrl: "./managed.component.html",
   styleUrl: "./managed.component.scss",
@@ -49,20 +49,14 @@ export class ManagedProgramsComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroy = inject(DestroyRef);
-  readonly paths = AppRoutes;
   readonly search = new FormControl("", { nonNullable: true });
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
   readonly data = signal<ManagedProgramsPage | null>(null);
-  readonly canCreate = signal(false);
   readonly offset = signal(0);
   readonly rangeEnd = computed(() => this.offset() + (this.data()?.results.length ?? 0));
   private readonly refresh = new BehaviorSubject(0);
   constructor() {
-    this.api
-      .capabilities()
-      .pipe(takeUntilDestroyed(this.destroy))
-      .subscribe({ next: d => this.canCreate.set(d.canCreateProgram), error: () => {} });
     combineLatest([this.route.queryParamMap, this.refresh])
       .pipe(
         switchMap(([params]) =>

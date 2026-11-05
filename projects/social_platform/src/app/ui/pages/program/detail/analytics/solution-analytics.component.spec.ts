@@ -76,6 +76,21 @@ function setup() {
   };
 }
 describe("Solution organizer analytics integration", () => {
+  it("uses the Project team ratio rather than the count of participants in teams", () => {
+    const { component } = setup();
+    const data = value<SolutionManagerAnalytics>("getSolutionManagerAnalytics");
+    component.data.set({
+      ...data,
+      summary: { ...data.summary, participants: { total: 8 }, solutions: { total: 3 } },
+      participantFunnel: { ...data.participantFunnel, withTeam: 1 },
+      solutionFunnel: { ...data.solutionFunnel, submissionApplicable: false, submitted: null },
+    });
+    const cards = component.summaryCards();
+    expect(cards.map(card => card.label)).toEqual(["Участники", "Заявки", "Сдано", "Команда"]);
+    expect(cards.find(card => card.label === "Сдано")?.value).toBeNull();
+    expect(cards.find(card => card.label === "Команда")?.value).toBe(2.7);
+  });
+
   it("reads the authoritative solution overview and preserves null applicability", () => {
     const { component, overview } = setup();
     expect(overview.execute).toHaveBeenCalledExactlyOnceWith(12);

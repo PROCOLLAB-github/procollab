@@ -3,47 +3,32 @@
   <header class="analytics__header">
     <div class="analytics__title-row">
       <h2 id="solution-analytics-title" class="analytics__title text-heading-3">Аналитика</h2>
-      <div class="analytics__header-actions">
+      @if (data()) {
         <button
           appButton="icon"
           type="button"
-          class="analytics__refresh"
-          [disabled]="pending()"
-          (click)="load()"
-          aria-label="Обновить аналитику"
-          title="Обновить аналитику"
+          class="regions__export analytics__export-trigger"
+          [cdkMenuTriggerFor]="solutionExports"
+          [disabled]="exporting()"
+          [attr.aria-busy]="exporting()"
+          aria-label="Выгрузить данные программы"
+          title="Выгрузить данные программы"
         >
-          <i appIcon icon="reload" appSquare="16" aria-hidden="true"></i>
+          <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
         </button>
-        @if (data()) {
-          <button
-            appButton="icon"
-            type="button"
-            class="regions__export analytics__export-trigger"
-            [cdkMenuTriggerFor]="solutionExports"
-            [disabled]="exporting()"
-            [attr.aria-busy]="exporting()"
-            aria-label="Выгрузить данные программы"
-            title="Выгрузить данные программы"
-          >
-            <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
-          </button>
-          <ng-template #solutionExports
-            ><div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
-              <button cdkMenuItem type="button" (click)="download('program')">Вся программа</button>
-              <button cdkMenuItem type="button" (click)="download('solutions')">Все заявки</button>
-              @if (data()?.solutionFunnel?.submissionApplicable) {
-                <button cdkMenuItem type="button" (click)="download('submitted')">
-                  Сданные решения
-                </button>
-                <button cdkMenuItem type="button" (click)="download('scores')">
-                  Оценки решений
-                </button>
-              }
-            </div></ng-template
-          >
-        }
-      </div>
+        <ng-template #solutionExports
+          ><div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
+            <button cdkMenuItem type="button" (click)="download('program')">Вся программа</button>
+            <button cdkMenuItem type="button" (click)="download('solutions')">Все заявки</button>
+            @if (data()?.solutionFunnel?.submissionApplicable) {
+              <button cdkMenuItem type="button" (click)="download('submitted')">
+                Сданные решения
+              </button>
+              <button cdkMenuItem type="button" (click)="download('scores')">Оценки решений</button>
+            }
+          </div></ng-template
+        >
+      }
     </div>
     @if (exporting()) {
       <p class="text-body-10" role="status">Подготавливаем Excel…</p>

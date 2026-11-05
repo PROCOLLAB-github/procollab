@@ -140,14 +140,8 @@ export class SolutionAnalyticsComponent {
   readonly summaryCards = computed(() => {
     const overview = this.data();
     if (!overview) return [];
-    const { summary, solutionFunnel, participantFunnel } = overview;
-    const team = {
-      key: "team",
-      label: "В командах",
-      value: participantFunnel.withTeam,
-      icon: "analytics-team",
-      tooltip: "Участники в командах активных заявок, включая капитанов.",
-    };
+    const { summary, solutionFunnel } = overview;
+    const solutionCount = summary.solutions.total;
     return [
       {
         key: "participants",
@@ -159,31 +153,29 @@ export class SolutionAnalyticsComponent {
       {
         key: "solutions",
         label: "Заявки",
-        value: summary.solutions.total,
+        value: solutionCount,
         icon: "folder",
         tooltip: "Все заявки, связанные с программой.",
       },
-      ...(solutionFunnel.submissionApplicable
-        ? [
-            {
-              key: "submitted-projects",
-              label: "Сдано",
-              value: solutionFunnel.submitted,
-              icon: "analytics-submitted",
-              tooltip: "Заявки программы с отправленным решением.",
-            },
-            team,
-          ]
-        : [
-            team,
-            {
-              key: "experts",
-              label: "Эксперты",
-              value: summary.experts.total,
-              icon: "analytics-team",
-              tooltip: "Эксперты, которым предоставлен доступ к программе.",
-            },
-          ]),
+      {
+        key: "submitted-projects",
+        label: "Сдано",
+        value: solutionFunnel.submissionApplicable ? solutionFunnel.submitted : null,
+        icon: "analytics-submitted",
+        tooltip: solutionFunnel.submissionApplicable
+          ? "Заявки программы с отправленным решением."
+          : "В этой программе сдача решений не предусмотрена.",
+      },
+      {
+        key: "participants-per-project",
+        label: "Команда",
+        value:
+          solutionCount > 0
+            ? Math.round((summary.participants.total / solutionCount) * 10) / 10
+            : 0,
+        icon: "analytics-team",
+        tooltip: "Среднее количество зарегистрированных участников программы на одну заявку.",
+      },
     ];
   });
   readonly attentionRows = computed(() => {

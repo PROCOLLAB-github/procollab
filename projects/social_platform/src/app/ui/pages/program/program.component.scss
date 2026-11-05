@@ -1,107 +1,19 @@
 /** @format */
 
-@use "styles/ui-foundation";
-
 .page {
   padding-bottom: 100px;
   margin: 30px 20px 0;
 
   @media (min-width: 1000px) {
     &__bar {
-      --ui-back-margin-block: var(--ui-space-sm) 0;
+      --ui-back-margin-block: var(--ui-space-sm) var(--ui-space-md);
 
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--ui-space-md);
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: var(--ui-space-md);
-    }
-
-    .program-creation-help__trigger {
-      margin-inline-start: auto;
+      display: flow-root;
     }
   }
 }
 
-.ui-button.ui-button {
-  @include ui-foundation.button;
-
-  &.program-create-action {
-    font-size: var(--ui-font-body);
-  }
-}
-
-.program-navigation,
-.page__search {
+.program-navigation {
   display: block;
   margin-bottom: var(--ui-space-md);
-}
-
-.page__search {
-  width: min(100%, 360px);
-}
-
-.program-creation-help {
-  max-width: min(100%, 360px);
-  font-size: var(--ui-font-body);
-  line-height: 1.5;
-
-  &__trigger {
-    display: flex;
-    gap: var(--ui-space-sm);
-    align-items: center;
-    width: fit-content;
-    min-height: var(--ui-control-height);
-    padding: var(--ui-space-sm) var(--ui-space-md);
-    font-weight: 600;
-    color: var(--accent-text);
-    list-style: none;
-    cursor: pointer;
-    background: var(--ui-surface);
-    border: 1px solid var(--ui-border-subtle);
-    border-radius: var(--ui-radius-control);
-
-    &::-webkit-details-marker {
-      display: none;
-    }
-
-    &:hover,
-    &:focus-visible {
-      border-color: var(--accent-text);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--accent-text);
-      outline-offset: 2px;
-    }
-  }
-
-  &[open] &__trigger {
-    background: var(--accent-light);
-  }
-
-  &__content {
-    display: grid;
-    gap: var(--ui-space-sm);
-    padding: var(--ui-space-md);
-    margin-top: var(--ui-space-sm);
-    color: var(--ui-text);
-    background: var(--ui-surface);
-    border: 1px solid var(--ui-border-subtle);
-    border-radius: var(--ui-radius-card);
-  }
-
-  &__contacts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--ui-space-xs) var(--ui-space-md);
-
-    a {
-      color: var(--accent-text);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      overflow-wrap: anywhere;
-    }
-  }
 }

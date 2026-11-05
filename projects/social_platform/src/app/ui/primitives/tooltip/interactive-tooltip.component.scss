@@ -1,0 +1,43 @@
+/** @format */
+
+:host {
+  display: inline-flex;
+}
+
+.interactive-tooltip {
+  &__trigger {
+    display: grid;
+    place-items: center;
+    width: var(--ui-control-height);
+    height: var(--ui-control-height);
+    padding: 0;
+    color: var(--accent);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+
+    &:hover,
+    &[aria-expanded="true"] {
+      color: var(--accent-dark);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: -3px;
+    }
+  }
+
+  &__panel {
+    box-sizing: border-box;
+    width: min(300px, calc(100vw - 32px));
+    user-select: text;
+  }
+}
+
+@media (min-width: 1000px) {
+  .interactive-tooltip__trigger {
+    width: 32px;
+    height: 32px;
+  }
+}

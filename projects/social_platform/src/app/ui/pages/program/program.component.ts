@@ -8,22 +8,16 @@ import {
   OnInit,
   signal,
 } from "@angular/core";
-import { NavigationEnd, Router, RouterLink, RouterOutlet } from "@angular/router";
+import { NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { filter, startWith } from "rxjs";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/primitives/search/search.component";
-import {
-  ButtonDirective,
-  FormLayoutDirective,
-  IconComponent,
-  PageHeaderComponent,
-  TabsComponent,
-} from "@uilib";
+import { FormLayoutDirective, PageHeaderComponent, TabsComponent } from "@uilib";
 import { AppRoutes } from "@api/paths/app-routes";
-import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-case";
 import { ProgramInfoService } from "@api/program/facades/program-info.service";
 import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-ui-info.service";
+import { ProgramCatalogToolbarComponent } from "./catalog-toolbar/catalog-toolbar.component";
 
 /** Контейнер модуля программ с поиском и навигацией. */
 @Component({
@@ -36,24 +30,19 @@ import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-u
     ReactiveFormsModule,
     SearchComponent,
     RouterOutlet,
-    RouterLink,
     TabsComponent,
-    ButtonDirective,
-    IconComponent,
+    ProgramCatalogToolbarComponent,
   ],
   providers: [ProgramInfoService, ProgramMainUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramComponent implements OnInit {
-  private readonly launch = inject(ProgramLaunchUseCase);
   private readonly destroy = inject(DestroyRef);
   private readonly router = inject(Router);
-  readonly paths = AppRoutes;
   readonly programTabs = [
     { link: AppRoutes.program.list(), linkText: "Все программы", isRouterLinkActiveOptions: true },
     { link: AppRoutes.program.managed(), linkText: "Я организую", isRouterLinkActiveOptions: true },
   ];
-  readonly canCreate = signal<boolean | null>(null);
   readonly isManaged = signal(false);
   private readonly programInfoService = inject(ProgramInfoService);
   private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
@@ -69,12 +58,5 @@ export class ProgramComponent implements OnInit {
         takeUntilDestroyed(this.destroy),
       )
       .subscribe(() => this.isManaged.set(this.router.url.split("?")[0].endsWith("/managed")));
-    this.launch
-      .capabilities()
-      .pipe(takeUntilDestroyed(this.destroy))
-      .subscribe({
-        next: value => this.canCreate.set(value.canCreateProgram),
-        error: () => {},
-      });
   }
 }

@@ -1,0 +1,24 @@
+<!-- @format -->
+
+<div class="catalog-toolbar">
+  <div class="catalog-toolbar__search"><ng-content /></div>
+  <div class="catalog-toolbar__action">
+    @if (canCreate()) {
+      <app-button size="medium" customTypographyClass="text-body-12" (click)="createProgram()">
+        <span class="text-body-12">создать программу</span>
+        <i appIcon icon="plus" appSquare="10" aria-hidden="true"></i>
+      </app-button>
+    } @else if (canCreate() === false) {
+      <app-interactive-tooltip label="Как создать программу?">
+        <div class="creation-help">
+          <strong>Как создать программу?</strong>
+          <p>Чтобы получить доступ к созданию программы, обратитесь к администратору платформы.</p>
+          <div class="creation-help__contacts">
+            <a href="https://t.me/evsfed" draggable="false">Telegram: @evsfed</a>
+            <a href="mailto:partners@procollab.ru" draggable="false">partners@procollab.ru</a>
+          </div>
+        </div>
+      </app-interactive-tooltip>
+    }
+  </div>
+</div>
