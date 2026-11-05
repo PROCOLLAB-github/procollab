@@ -20,6 +20,12 @@
     align-items: center;
   }
 
+  @media (max-width: 479px) {
+    &--with-create {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
   @media (min-width: 1000px) {
     grid-template-columns: minmax(0, 1fr) var(--ui-compact-sidebar-width);
     gap: var(--ui-space-lg);
