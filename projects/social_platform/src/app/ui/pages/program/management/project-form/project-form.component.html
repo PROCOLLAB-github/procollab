@@ -50,7 +50,12 @@
             <article class="project-form__row">
               <div>
                 <h4>{{ item.name }}</h4>
-                <p>Проектов: {{ item.projectsCount }}</p>
+                <p>
+                  Проектов: {{ item.projectsCount }}
+                  @if (item.projectsCount) {
+                    <span> · Кейс уже выбран командой. Переименование и удаление недоступны.</span>
+                  }
+                </p>
               </div>
               <div class="project-form__actions">
                 <button
@@ -108,9 +113,6 @@
             Добавить кейс
           </button>
         }
-        <p appAlert="warning">
-          Если кейс уже выбран командой, его нельзя переименовать или удалить.
-        </p>
       </section>
       <section class="project-form__card" aria-labelledby="fields-heading">
         <div class="project-form__section-heading">
@@ -132,6 +134,9 @@
               </p>
               @if (field.helpText) {
                 <p>{{ field.helpText }}</p>
+              }
+              @if (field.answersCount) {
+                <p>Есть ответы. Удаление и смена типа недоступны.</p>
               }
             </div>
             <div class="project-form__actions">
@@ -165,20 +170,16 @@
         >
           Добавить поле
         </button>
-        <p appAlert="warning">
-          Обязательные поля проверяются перед сдачей решения. Черновик можно сохранить
-          незаполненным.
-        </p>
-        @if (snapshot()?.hasProjects) {
-          <p appAlert="warning">
-            Новые обязательные поля заполняют только еще не сдавшие решение команды. Уже сданные
-            проекты не меняются.
+        <div class="project-form__note project-form__notice">
+          <h4>Черновик и сдача</h4>
+          <p>
+            Обязательные поля нужно заполнить при сдаче решения. Черновик можно сохранить без
+            ответов на них.
           </p>
-        }
-        <p appAlert="warning">
-          Поле с ответами нельзя удалить или изменить его тип. Использованные варианты ответа также
-          сохраняются.
-        </p>
+          @if (snapshot()?.hasProjects) {
+            <p>Новые обязательные поля заполняют только команды, которые еще не сдали решение.</p>
+          }
+        </div>
       </section>
       <footer class="project-form__footer">
         <p aria-live="polite">

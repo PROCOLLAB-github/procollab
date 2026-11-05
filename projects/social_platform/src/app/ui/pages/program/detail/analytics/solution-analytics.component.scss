@@ -28,9 +28,27 @@
 
 .analytics__header-actions {
   display: flex;
-  gap: 12px;
+  gap: var(--ui-space-sm);
   align-items: center;
   margin-left: auto;
+}
+
+.evaluation--not-applicable,
+.solution-analytics__materials {
+  min-height: 0;
+}
+
+.evaluation--not-applicable {
+  gap: var(--ui-space-xs);
+}
+
+.regions-grid > .regions:only-child {
+  grid-column: 1 / -1;
+}
+
+.analytics-grid--priority .program-deadlines__list {
+  grid-auto-rows: minmax(68px, max-content);
+  align-content: start;
 }
 
 .solution-analytics__actions {
@@ -85,7 +103,7 @@
   }
 }
 
-.analytics__header-actions .regions__export.ui-button.ui-button,
+.analytics__header-actions .ui-button.ui-button,
 .solution-analytics__dialog .regions__export.ui-button.ui-button {
   @include program-management-controls.export-trigger;
 }

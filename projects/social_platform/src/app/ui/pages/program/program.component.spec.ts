@@ -1,46 +1,49 @@
 /** @format */
 
-// import { ComponentFixture, TestBed } from "@angular/core/testing";
-//
-// import { ProjectsComponent } from "./projects.component";
-// import { RouterTestingModule } from "@angular/router/testing";
-// import { HttpClientTestingModule } from "@angular/common/http/testing";
-// import { ReactiveFormsModule } from "@angular/forms";
-// import { of } from "rxjs";
-// import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
-// import { ProjectRepository } from "../services/project.service";
-// import { User } from "../../auth/models/user.model";
-// import { Project } from "../models/project.model";
-//
-// describe("ProjectsComponent", () => {
-//   let component: ProjectsComponent;
-//   let fixture: ComponentFixture<ProjectsComponent>;
-//
-//   beforeEach(async () => {
-//     const projectSpy = {
-//       create: of({}),
-//     };
-//     const authSpy = {
-//       profile: of({}),
-//     };
-//
-//     await TestBed.configureTestingModule({
-//       imports: [RouterTestingModule, HttpClientTestingModule, ReactiveFormsModule],
-//       providers: [
-//         { providers: ProjectRepository, useValue: projectSpy },
-//         { providers: AuthRepository, useValue: authSpy },
-//       ],
-//       declarations: [ProjectsComponent],
-//     }).compileComponents();
-//   });
-//
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(ProjectsComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
-//
-//   it("should create", () => {
-//     expect(component).toBeTruthy();
-//   });
-// });
+import { TestBed } from "@angular/core/testing";
+import { provideRouter } from "@angular/router";
+import { Subject } from "rxjs";
+import { ProgramInfoService } from "@api/program/facades/program-info.service";
+import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-case";
+import { ProgramComponent } from "./program.component";
+
+describe("Program creation access in the catalog", () => {
+  it("offers contact details only after a denial and replaces them with creation when allowed", () => {
+    const capability = new Subject<{ canCreateProgram: boolean }>();
+    TestBed.configureTestingModule({
+      imports: [ProgramComponent],
+      providers: [
+        provideRouter([]),
+        {
+          provide: ProgramLaunchUseCase,
+          useValue: { capabilities: () => capability.asObservable() },
+        },
+      ],
+    });
+    TestBed.overrideComponent(ProgramComponent, {
+      remove: { providers: [ProgramInfoService] },
+      add: {
+        providers: [{ provide: ProgramInfoService, useValue: { initializationPrograms: vi.fn() } }],
+      },
+    });
+    const fixture = TestBed.createComponent(ProgramComponent);
+    const page: HTMLElement = fixture.nativeElement;
+    const creationLink = () => page.querySelector('a[href="/office/program/create"]');
+    fixture.detectChanges();
+    expect(creationLink()).toBeNull();
+    expect(page.querySelector("details")).toBeNull();
+
+    capability.next({ canCreateProgram: false });
+    fixture.detectChanges();
+    const help = page.querySelector("details");
+    expect(creationLink()).toBeNull();
+    expect(help?.querySelector("summary")?.textContent).toContain("Как создать программу?");
+    expect(help?.querySelector('a[href="https://t.me/evsfed"]')).not.toBeNull();
+    expect(help?.querySelector('a[href="mailto:partners@procollab.ru"]')).not.toBeNull();
+
+    capability.next({ canCreateProgram: true });
+    fixture.detectChanges();
+    expect(creationLink()?.textContent).toContain("Создать программу");
+    expect(page.querySelector("details")).toBeNull();
+  });
+});

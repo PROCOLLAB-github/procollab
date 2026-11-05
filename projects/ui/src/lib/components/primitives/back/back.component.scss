@@ -5,8 +5,7 @@
 .back {
   display: flex;
   align-items: center;
-  margin-top: 20px;
-  margin-bottom: 45px;
+  margin-block: var(--ui-back-margin-block, 20px 45px);
   cursor: pointer;
 
   @media screen and (max-width: 999px) {

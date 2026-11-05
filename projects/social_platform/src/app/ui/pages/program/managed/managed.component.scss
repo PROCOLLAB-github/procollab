@@ -32,8 +32,8 @@
   }
 
   &__search {
-    width: 100%;
-    margin-bottom: 24px;
+    width: min(100%, 360px);
+    margin-bottom: var(--ui-space-lg);
   }
 
   &__list {

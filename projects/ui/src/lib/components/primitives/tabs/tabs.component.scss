@@ -39,33 +39,31 @@
   }
 }
 
-// Opt-in route navigation matching the UI kit's Tabs / Underline.
+// Keep the underline close to the route label, even in a wide content area.
 .tabs.tabs--underline {
-  box-sizing: border-box;
   display: flex;
-  gap: 0;
-  width: 100%;
-  min-height: 63px;
-  overflow: hidden;
-  background: var(--white);
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: var(--ui-radius-card);
+  gap: var(--ui-space-md);
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
 
   .tabs__item {
-    display: flex;
-    flex: 1 1 0;
-    gap: 8px;
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: var(--ui-space-sm);
     align-items: center;
-    justify-content: flex-start;
-    min-width: 0;
-    min-height: 61px;
-    padding: 18px 20px;
+    justify-content: center;
+    min-height: var(--ui-control-height);
+    padding: var(--ui-space-sm);
     margin: 0;
     font: inherit;
-    font-size: 12px;
-    line-height: 16px;
-    color: var(--grey-for-text);
-    white-space: normal;
+    font-size: var(--ui-font-h3);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--ui-text-muted);
+    text-decoration: none;
+    white-space: nowrap;
     background: transparent;
     border: 0;
     border-bottom: 2px solid transparent;
@@ -73,17 +71,25 @@
 
     &--active,
     &:hover:not(:disabled) {
-      color: var(--black);
+      color: var(--accent-text);
       background: transparent;
     }
 
     &--active {
-      border-bottom-color: var(--black);
+      border-bottom-color: var(--accent-text);
     }
 
     &:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: -3px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    gap: var(--ui-space-sm);
+
+    .tabs__item {
+      padding-inline: var(--ui-space-xs);
     }
   }
 }

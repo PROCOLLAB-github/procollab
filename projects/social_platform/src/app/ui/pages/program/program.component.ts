@@ -14,7 +14,6 @@ import { filter, startWith } from "rxjs";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/primitives/search/search.component";
 import {
-  BackComponent,
   ButtonDirective,
   FormLayoutDirective,
   IconComponent,
@@ -37,7 +36,6 @@ import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-u
     ReactiveFormsModule,
     SearchComponent,
     RouterOutlet,
-    BackComponent,
     RouterLink,
     TabsComponent,
     ButtonDirective,
@@ -55,7 +53,7 @@ export class ProgramComponent implements OnInit {
     { link: AppRoutes.program.list(), linkText: "Все программы", isRouterLinkActiveOptions: true },
     { link: AppRoutes.program.managed(), linkText: "Я организую", isRouterLinkActiveOptions: true },
   ];
-  readonly canCreate = signal(false);
+  readonly canCreate = signal<boolean | null>(null);
   readonly isManaged = signal(false);
   private readonly programInfoService = inject(ProgramInfoService);
   private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
