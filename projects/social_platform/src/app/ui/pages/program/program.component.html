@@ -2,29 +2,7 @@
 
 <main class="page">
   <div class="page__bar">
-    <app-page-header title="программы" backRoute="/office/feed">
-      @if (canCreate()) {
-        <a appButton="primary" class="program-create-action" [routerLink]="paths.program.create()"
-          ><i appIcon icon="plus" appSquare="12"></i>Создать программу</a
-        >
-      } @else if (canCreate() === false) {
-        <details class="program-creation-help">
-          <summary class="program-creation-help__trigger">
-            <i appIcon icon="hint" appSquare="16" aria-hidden="true"></i>
-            Как создать программу?
-          </summary>
-          <div class="program-creation-help__content">
-            <p>
-              Чтобы получить доступ к созданию программы, обратитесь к администратору платформы.
-            </p>
-            <div class="program-creation-help__contacts">
-              <a href="https://t.me/evsfed">Telegram: @evsfed</a>
-              <a href="mailto:partners@procollab.ru">partners@procollab.ru</a>
-            </div>
-          </div>
-        </details>
-      }
-    </app-page-header>
+    <app-page-header title="программы" backRoute="/office/feed" />
   </div>
 
   <app-tabs
@@ -34,15 +12,17 @@
     [items]="programTabs"
   />
   @if (!isManaged()) {
-    <form appFormLayout class="page__search" [formGroup]="searchForm">
-      <app-search
-        formControlName="search"
-        [openable]="false"
-        appearance="inline"
-        placeholder="Поиск"
-        ariaLabel="Поиск по названию программы"
-      />
-    </form>
+    <app-program-catalog-toolbar>
+      <form appFormLayout [formGroup]="searchForm">
+        <app-search
+          formControlName="search"
+          [openable]="false"
+          appearance="inline"
+          placeholder="Поиск"
+          ariaLabel="Поиск по названию программы"
+        />
+      </form>
+    </app-program-catalog-toolbar>
   }
   <router-outlet></router-outlet>
 </main>

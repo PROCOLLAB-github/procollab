@@ -42,8 +42,9 @@ describe("ManagedProgramsComponent", () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl("/managed", ManagedProgramsComponent);
     expect(harness.routeNativeElement?.textContent).toContain("Программы пока не созданы");
+    expect(harness.routeNativeElement?.querySelector(".catalog-toolbar app-button")).toBeNull();
     expect(
-      harness.routeNativeElement?.querySelector('a[href="/office/program/create"]'),
-    ).toBeNull();
+      harness.routeNativeElement?.querySelector('button[aria-label="Как создать программу?"]'),
+    ).not.toBeNull();
   });
 });

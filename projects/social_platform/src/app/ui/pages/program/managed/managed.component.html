@@ -1,6 +1,6 @@
 <!-- @format -->
 <section class="managed" aria-label="Мои программы" [attr.aria-busy]="loading()">
-  <div class="managed__search">
+  <app-program-catalog-toolbar>
     <app-search
       [formControl]="search"
       [openable]="false"
@@ -8,7 +8,7 @@
       placeholder="Поиск"
       ariaLabel="Поиск по названию программы"
     />
-  </div>
+  </app-program-catalog-toolbar>
   @if (loading()) {
     <p role="status">Загружаем программы…</p>
   } @else if (error()) {
@@ -33,9 +33,6 @@
             <p>
               Здесь появятся программы, которыми вы управляете, включая незавершенные черновики.
             </p>
-            @if (canCreate()) {
-              <a appButton="secondary" [routerLink]="paths.program.create()">Создать программу</a>
-            }
           }
         </div>
       }

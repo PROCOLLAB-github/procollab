@@ -31,11 +31,6 @@
     color: var(--grey-for-text);
   }
 
-  &__search {
-    width: min(100%, 360px);
-    margin-bottom: var(--ui-space-lg);
-  }
-
   &__list {
     display: grid;
     gap: 24px;

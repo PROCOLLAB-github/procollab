@@ -1,0 +1,48 @@
+/** @format */
+
+:host {
+  display: block;
+  margin-bottom: var(--ui-space-md);
+}
+
+.catalog-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--ui-space-sm);
+  align-items: center;
+
+  &__search {
+    min-width: 0;
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+  }
+
+  @media (min-width: 1000px) {
+    grid-template-columns: minmax(0, 1fr) var(--ui-compact-sidebar-width);
+    gap: var(--ui-space-lg);
+  }
+}
+
+.creation-help {
+  display: grid;
+  gap: var(--ui-space-sm);
+
+  strong {
+    color: var(--ui-text);
+  }
+
+  &__contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ui-space-xs) var(--ui-space-sm);
+
+    a {
+      color: var(--accent-text);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  }
+}

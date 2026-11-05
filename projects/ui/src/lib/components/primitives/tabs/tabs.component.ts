@@ -9,7 +9,7 @@ import {
   input,
   output,
 } from "@angular/core";
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { IsActiveMatchOptions, RouterLink, RouterLinkActive } from "@angular/router";
 import { IconComponent } from "../icon/icon.component";
 
 export interface TabItem {
@@ -38,7 +38,11 @@ export interface TabItem {
             class="tabs__item"
             [routerLink]="item.link"
             routerLinkActive="tabs__item--active"
-            [routerLinkActiveOptions]="{ exact: !!item.isRouterLinkActiveOptions }"
+            [routerLinkActiveOptions]="
+              appearance() === 'underline' && item.isRouterLinkActiveOptions
+                ? exactPath
+                : { exact: !!item.isRouterLinkActiveOptions }
+            "
             ariaCurrentWhenActive="page"
           >
             @if (item.iconName) {
@@ -72,6 +76,12 @@ export interface TabItem {
 })
 export class TabsComponent {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  protected readonly exactPath: IsActiveMatchOptions = {
+    paths: "exact",
+    queryParams: "ignored",
+    fragment: "ignored",
+    matrixParams: "ignored",
+  };
   private lastActive: Element | null = null;
   private lastWidth = 0;
 
