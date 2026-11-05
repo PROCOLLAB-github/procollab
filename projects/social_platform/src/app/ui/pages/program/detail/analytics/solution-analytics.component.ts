@@ -69,6 +69,15 @@ type View =
   | "assignments"
   | "participants-without-team"
   | "participants-without-visit";
+type AttentionKind = "without-visit" | "without-team" | "awaiting-evaluation" | "not-submitted";
+type AttentionRow = {
+  key: AttentionKind;
+  label: string;
+  value: number | null;
+  icon: string;
+  tooltip: string;
+};
+
 @Component({
   selector: "app-solution-analytics",
   imports: [
@@ -128,11 +137,109 @@ export class SolutionAnalyticsComponent {
   private readonly cancelExport = new Subject<void>();
   private trigger: HTMLElement | null = null;
   readonly data = signal<SolutionManagerAnalytics | null>(null);
-  readonly caseMaximum = computed(() => {
+  readonly summaryCards = computed(() => {
+    const overview = this.data();
+    if (!overview) return [];
+    const { summary, solutionFunnel, participantFunnel } = overview;
+    const team = {
+      key: "team",
+      label: "В командах",
+      value: participantFunnel.withTeam,
+      icon: "analytics-team",
+      tooltip: "Участники в командах активных заявок, включая капитанов.",
+    };
+    return [
+      {
+        key: "participants",
+        label: "Участники",
+        value: summary.participants.total,
+        icon: "person",
+        tooltip: "Уникальные пользователи, зарегистрированные в программе.",
+      },
+      {
+        key: "solutions",
+        label: "Заявки",
+        value: summary.solutions.total,
+        icon: "folder",
+        tooltip: "Все заявки, связанные с программой.",
+      },
+      ...(solutionFunnel.submissionApplicable
+        ? [
+            {
+              key: "submitted-projects",
+              label: "Сдано",
+              value: solutionFunnel.submitted,
+              icon: "analytics-submitted",
+              tooltip: "Заявки программы с отправленным решением.",
+            },
+            team,
+          ]
+        : [
+            team,
+            {
+              key: "experts",
+              label: "Эксперты",
+              value: summary.experts.total,
+              icon: "analytics-team",
+              tooltip: "Эксперты, которым предоставлен доступ к программе.",
+            },
+          ]),
+    ];
+  });
+  readonly attentionRows = computed(() => {
+    const overview = this.data();
+    if (!overview) return [];
+    const { attention } = overview;
+    const rows: AttentionRow[] = [
+      {
+        key: "without-visit",
+        label: "Участники еще не заходили на платформу",
+        value: attention.participantsWithoutVisit,
+        icon: "person",
+        tooltip: "Зарегистрированные участники без зафиксированных посещений платформы.",
+      },
+      {
+        key: "without-team",
+        label: "Участники без команды",
+        value: attention.participantsWithoutTeam,
+        icon: "analytics-team",
+        tooltip: "Зарегистрированные участники, которые не состоят в команде заявки программы.",
+      },
+    ];
+    if (overview.solutionFunnel.submissionApplicable) {
+      rows.push(
+        {
+          key: "awaiting-evaluation",
+          label: "Работы ожидают оценивания",
+          value: attention.solutionsAwaitingEvaluation,
+          icon: "pen",
+          tooltip: "Сданные решения, которые ожидают оценивания.",
+        },
+        {
+          key: "not-submitted",
+          label: "Решения не сданы",
+          value: attention.solutionsNotSubmitted,
+          icon: "folder",
+          tooltip: "Заявки, по которым команды еще не сдали решения.",
+        },
+      );
+    }
+    return rows.filter(row => row.value !== null);
+  });
+  readonly hasAttention = computed(() => this.hasValues(this.attentionRows()));
+  readonly casesExpanded = signal(false);
+  readonly caseRows = computed(() => {
     const cases = this.data()?.cases;
-    return cases
-      ? Math.max(0, cases.withoutCase.solutionsTotal, ...cases.items.map(row => row.solutionsTotal))
-      : 0;
+    if (!cases) return [];
+    return [
+      ...cases.items.map(row => ({ ...row, withoutCase: false })),
+      ...(cases.withoutCase.solutionsTotal
+        ? [{ ...cases.withoutCase, name: "Без выбранного кейса", withoutCase: true }]
+        : []),
+    ];
+  });
+  readonly caseMaximum = computed(() => {
+    return Math.max(0, ...this.caseRows().map(row => row.solutionsTotal));
   });
   readonly pending = signal(false);
   readonly activeTooltip = signal<string | null>(null);
@@ -173,6 +280,9 @@ export class SolutionAnalyticsComponent {
       ...point,
       submittedSolutions: point.submittedSolutions ?? 0,
     })),
+  );
+  readonly hasActivity = computed(() =>
+    this.activityPoints().some(point => point.registrations > 0 || point.submittedSolutions > 0),
   );
   readonly statusLabel = assignmentStatusLabels;
   readonly criterionValue = assignmentCriterionValue;
@@ -264,6 +374,7 @@ export class SolutionAnalyticsComponent {
       this.programId();
       untracked(() => {
         this.close(true);
+        this.casesExpanded.set(false);
         this.load();
       });
     });
@@ -291,6 +402,36 @@ export class SolutionAnalyticsComponent {
   }
   hideTooltip(key: string): void {
     if (this.activeTooltip() === key) this.activeTooltip.set(null);
+  }
+  hasValues(metrics: readonly { value: number | null }[]): boolean {
+    return metrics.some(metric => (metric.value ?? 0) > 0);
+  }
+  openAttention(key: AttentionKind, trigger: HTMLElement): void {
+    switch (key) {
+      case "without-visit":
+        this.openParticipants("participants-without-visit", trigger);
+        break;
+      case "without-team":
+        this.openParticipants("participants-without-team", trigger);
+        break;
+      case "awaiting-evaluation":
+        this.openSolutions("Решения ожидают оценивания", { scope: "awaiting_evaluation" }, trigger);
+        break;
+      case "not-submitted":
+        this.openSolutions("Несданные решения", { scope: "not_submitted" }, trigger);
+        break;
+    }
+  }
+  openCase(row: { name: string; withoutCase: boolean }, trigger: HTMLElement): void {
+    if (row.withoutCase) {
+      this.openSolutions(row.name, { caseScope: "without_case" }, trigger);
+    } else {
+      this.openSolutions(
+        "Кейс: " + row.name,
+        { caseScope: "selected", caseName: row.name },
+        trigger,
+      );
+    }
   }
   download(kind: "program" | "solutions" | "submitted" | "scores", filtered = false): void {
     if (this.exporting()) return;

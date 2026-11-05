@@ -42,7 +42,6 @@ export default defineConfig({
     ],
     exclude: [
       "projects/social_platform/src/app/ui/pages/projects/projects.component.spec.ts",
-      "projects/social_platform/src/app/ui/pages/program/program.component.spec.ts",
       "projects/social_platform/src/app/ui/pages/profile/edit/editor-submit-button.directive.spec.ts",
     ],
   },

@@ -91,7 +91,7 @@
 }
 
 .project-form__section-heading {
-  margin-bottom: 20px;
+  margin-bottom: var(--ui-space-sm);
 }
 
 .project-form__section-heading .ui-button {
@@ -106,7 +106,7 @@
 }
 
 .project-form__row:last-of-type {
-  margin-bottom: 20px;
+  margin-bottom: var(--ui-space-md);
   border-bottom: 1px solid var(--medium-grey-for-outline);
 }
 
@@ -122,7 +122,7 @@
 }
 
 .project-form__notice {
-  margin-top: 16px !important;
+  margin-top: var(--ui-space-md);
 }
 
 .project-form__empty {

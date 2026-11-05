@@ -7,6 +7,7 @@
         <button
           appButton="icon"
           type="button"
+          class="analytics__refresh"
           [disabled]="pending()"
           (click)="load()"
           aria-label="Обновить аналитику"
@@ -21,6 +22,7 @@
             class="regions__export analytics__export-trigger"
             [cdkMenuTriggerFor]="solutionExports"
             [disabled]="exporting()"
+            [attr.aria-busy]="exporting()"
             aria-label="Выгрузить данные программы"
             title="Выгрузить данные программы"
           >
@@ -44,7 +46,7 @@
       </div>
     </div>
     @if (exporting()) {
-      <p role="status">Подготавливаем Excel…</p>
+      <p class="text-body-10" role="status">Подготавливаем Excel…</p>
     }
     @if (exportError()) {
       <p appAlert="error" role="alert">{{ exportError() }}</p>
@@ -69,97 +71,31 @@
     </section>
   } @else if (data(); as overview) {
     <section class="summary" aria-label="Основные показатели">
-      <article class="summary-card" data-metric="participants">
-        <div class="summary-card__icon">
-          <i appIcon icon="person" appSquare="24" aria-hidden="true"></i>
-        </div>
-        <div class="summary-card__content">
-          <div class="analytics__heading-row">
-            <h2 class="summary-card__label text-body-10">Участники</h2>
-            <app-tooltip
-              text="Уникальные пользователи, зарегистрированные в программе."
-              [isVisible]="activeTooltip() === 'participants'"
-              [useOverlay]="true"
-              (show)="showTooltip('participants')"
-              (hide)="hideTooltip('participants')"
-            />
+      @for (card of summaryCards(); track card.key) {
+        <article class="summary-card" [attr.data-metric]="card.key">
+          <div class="summary-card__icon">
+            <i appIcon [icon]="card.icon" appSquare="24" aria-hidden="true"></i>
           </div>
-          <strong class="summary-card__value" data-testid="solution-participants">{{
-            overview.summary.participants.total
-          }}</strong>
-        </div>
-      </article>
-      <article class="summary-card" data-metric="solutions">
-        <div class="summary-card__icon">
-          <i appIcon icon="folder" appSquare="24" aria-hidden="true"></i>
-        </div>
-        <div class="summary-card__content">
-          <div class="analytics__heading-row">
-            <h2 class="summary-card__label text-body-10">Заявки</h2>
-            <app-tooltip
-              text="Все заявки, связанные с программой."
-              [isVisible]="activeTooltip() === 'solutions'"
-              [useOverlay]="true"
-              (show)="showTooltip('solutions')"
-              (hide)="hideTooltip('solutions')"
-            />
+          <div class="summary-card__content">
+            <div class="analytics__heading-row">
+              <h2 class="summary-card__label text-body-10">{{ card.label }}</h2>
+              <app-tooltip
+                [text]="card.tooltip"
+                [isVisible]="activeTooltip() === card.key"
+                [useOverlay]="true"
+                (show)="showTooltip(card.key)"
+                (hide)="hideTooltip(card.key)"
+              />
+            </div>
+            <strong class="summary-card__value">{{ card.value ?? "—" }}</strong>
           </div>
-          <strong class="summary-card__value" data-testid="solution-total">{{
-            overview.summary.solutions.total
-          }}</strong>
-        </div>
-      </article>
-      <article class="summary-card" data-metric="submitted-projects">
-        <div class="summary-card__icon">
-          <i appIcon icon="analytics-submitted" appSquare="24" aria-hidden="true"></i>
-        </div>
-        <div class="summary-card__content">
-          <div class="analytics__heading-row">
-            <h2 class="summary-card__label text-body-10">
-              {{ overview.solutionFunnel.submissionApplicable ? "Сдано" : "В командах" }}
-            </h2>
-            <app-tooltip
-              [text]="
-                overview.solutionFunnel.submissionApplicable
-                  ? 'Заявки программы с отправленным решением.'
-                  : 'Участники, состоящие в командах заявок программы.'
-              "
-              [isVisible]="activeTooltip() === 'submitted'"
-              [useOverlay]="true"
-              (show)="showTooltip('submitted')"
-              (hide)="hideTooltip('submitted')"
-            />
-          </div>
-          <strong class="summary-card__value">{{
-            overview.solutionFunnel.submissionApplicable
-              ? overview.solutionFunnel.submitted
-              : overview.participantFunnel.withTeam
-          }}</strong>
-        </div>
-      </article>
-      <article class="summary-card" data-metric="experts">
-        <div class="summary-card__icon">
-          <i appIcon icon="analytics-team" appSquare="24" aria-hidden="true"></i>
-        </div>
-        <div class="summary-card__content">
-          <div class="analytics__heading-row">
-            <h2 class="summary-card__label text-body-10">Эксперты</h2>
-            <app-tooltip
-              text="Эксперты, которым предоставлен доступ к программе."
-              [isVisible]="activeTooltip() === 'experts'"
-              [useOverlay]="true"
-              (show)="showTooltip('experts')"
-              (hide)="hideTooltip('experts')"
-            />
-          </div>
-          <strong class="summary-card__value">{{ overview.summary.experts.total }}</strong>
-        </div>
-      </article>
+        </article>
+      }
     </section>
     <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
-      <article class="attention">
+      <article class="attention" [class.attention--empty]="!hasAttention()">
         <div class="analytics__heading-row">
-          <h2 class="analytics-card__title">Требует внимания</h2>
+          <h2 class="text-body-12">Требует внимания</h2>
           <app-tooltip
             text="Показатели, которые могут потребовать действия организатора."
             [isVisible]="activeTooltip() === 'attention'"
@@ -168,106 +104,81 @@
             (hide)="hideTooltip('attention')"
           />
         </div>
-        <ul class="attention__list">
-          <li data-attention-kind="without-visit">
-            <button
-              #visit
-              appButton="primary"
-              class="attention__action"
-              type="button"
-              [disabled]="!overview.attention.participantsWithoutVisit"
-              (click)="openParticipants('participants-without-visit', visit)"
-            >
-              <span class="attention__icon"
-                ><i appIcon icon="person" appSquare="20" aria-hidden="true"></i></span
-              ><span class="text-body-10">Участники еще не заходили на платформу</span
-              ><strong>{{ overview.attention.participantsWithoutVisit }}</strong>
-            </button>
-          </li>
-          <li data-attention-kind="without-team">
-            <button
-              #team
-              appButton="primary"
-              class="attention__action"
-              type="button"
-              [disabled]="!overview.attention.participantsWithoutTeam"
-              (click)="openParticipants('participants-without-team', team)"
-            >
-              <span class="attention__icon"
-                ><i appIcon icon="analytics-team" appSquare="20" aria-hidden="true"></i></span
-              ><span class="text-body-10">Участники без команды</span
-              ><strong>{{ overview.attention.participantsWithoutTeam }}</strong>
-            </button>
-          </li>
-          @if (overview.solutionFunnel.submissionApplicable) {
-            <li data-attention-kind="awaiting-evaluation">
-              <button
-                #awaiting
-                appButton="primary"
-                class="attention__action"
-                type="button"
-                [disabled]="!overview.attention.solutionsAwaitingEvaluation"
-                (click)="
-                  openSolutions(
-                    'Решения ожидают оценивания',
-                    { scope: 'awaiting_evaluation' },
-                    awaiting
-                  )
-                "
+        @if (hasAttention() || overview.solutionFunnel.submissionApplicable) {
+          <ul class="attention__list">
+            @for (row of attentionRows(); track row.key) {
+              <li
+                [class.attention__row--disabled]="!row.value"
+                [attr.data-attention-kind]="row.key"
               >
-                <span class="attention__icon"
-                  ><i appIcon icon="pen" appSquare="20" aria-hidden="true"></i></span
-                ><span class="text-body-10">Работы ожидают оценивания</span
-                ><strong>{{ overview.attention.solutionsAwaitingEvaluation }}</strong>
-              </button>
-            </li>
-            <li data-attention-kind="not-submitted">
-              <button
-                #drafts
-                appButton="primary"
-                class="attention__action"
-                type="button"
-                [disabled]="!overview.attention.solutionsNotSubmitted"
-                (click)="openSolutions('Несданные решения', { scope: 'not_submitted' }, drafts)"
-              >
-                <span class="attention__icon"
-                  ><i appIcon icon="folder" appSquare="20" aria-hidden="true"></i></span
-                ><span class="text-body-10">Решения не сданы</span
-                ><strong>{{ overview.attention.solutionsNotSubmitted }}</strong>
-              </button>
-            </li>
-          }
-        </ul>
+                <button
+                  #trigger
+                  appButton="primary"
+                  class="attention__action"
+                  type="button"
+                  [disabled]="!row.value"
+                  aria-haspopup="dialog"
+                  (click)="openAttention(row.key, trigger)"
+                >
+                  <span class="attention__icon">
+                    <i appIcon [icon]="row.icon" appSquare="20" aria-hidden="true"></i>
+                  </span>
+                  <span class="text-body-10">{{ row.label }}</span>
+                  <strong>{{ row.value }}</strong>
+                </button>
+                <app-tooltip
+                  [text]="row.tooltip"
+                  [isVisible]="activeTooltip() === row.key"
+                  [useOverlay]="true"
+                  position="left"
+                  (show)="showTooltip(row.key)"
+                  (hide)="hideTooltip(row.key)"
+                />
+              </li>
+            }
+          </ul>
+        }
+        @if (!hasAttention()) {
+          <p class="analytics-empty-state attention__empty text-body-10">
+            Ничего не требует внимания
+          </p>
+        }
       </article>
       <article class="analytics-card program-deadlines">
         <div class="analytics__heading-row">
           <h2 class="analytics-card__title">Сроки программы</h2>
           <app-tooltip
-            text="Текущие этапы и сроки программы."
+            text="Текущий этап выделен. Даты из настроек программы, по времени вашего устройства. Если отдельный срок приема решений не задан, действует срок регистрации."
             [isVisible]="activeTooltip() === 'deadlines'"
             [useOverlay]="true"
             (show)="showTooltip('deadlines')"
             (hide)="hideTooltip('deadlines')"
           />
         </div>
-        <ul class="program-deadlines__list">
-          @for (deadline of deadlines(); track deadline.key) {
-            <li
-              class="program-deadlines__row"
-              [class.program-deadlines__row--active]="deadline.active"
-            >
-              <div>
-                <h3 class="program-deadlines__label">{{ deadline.label }}</h3>
-                <time class="program-deadlines__date" [attr.datetime]="deadline.datetime">{{
-                  deadline.dateLabel
-                }}</time>
-              </div>
-              <span class="program-deadlines__status">{{ deadline.status }}</span>
-            </li>
-          }
-        </ul>
-        @if (!deadlines().length) {
-          <p class="analytics-empty-state">Сроки программы пока не заданы</p>
+        @if (deadlines().length) {
+          <ul class="program-deadlines__list">
+            @for (deadline of deadlines(); track deadline.key) {
+              <li
+                class="program-deadlines__row"
+                [class.program-deadlines__row--active]="deadline.active"
+                [class.program-deadlines__row--ended]="deadline.ended"
+                [attr.data-deadline]="deadline.key"
+              >
+                <div class="program-deadlines__content">
+                  <h3 class="program-deadlines__label">{{ deadline.label }}</h3>
+                  <time class="program-deadlines__date" [attr.datetime]="deadline.datetime">
+                    {{ deadline.dateLabel }}
+                  </time>
+                  @if (deadline.usesRegistrationDeadline) {
+                    <span class="program-deadlines__hint">По сроку регистрации</span>
+                  }
+                </div>
+                <span class="program-deadlines__status">{{ deadline.status }}</span>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="analytics-empty-state text-body-10">Сроки программы пока не заданы</p>
         }
       </article>
     </section>
@@ -283,11 +194,15 @@
             (hide)="hideTooltip('participant-funnel')"
           />
         </div>
-        <app-analytics-funnel-chart
-          [items]="participantFunnel()"
-          label="Воронка участников"
-          kind="participants"
-        />
+        @if (hasValues(participantFunnel())) {
+          <app-analytics-funnel-chart
+            [items]="participantFunnel()"
+            label="Воронка участников"
+            kind="participants"
+          />
+        } @else {
+          <p class="analytics-empty-state text-body-10">Пока нет данных по участникам</p>
+        }
       </article>
       <article class="analytics-card">
         <div class="analytics__heading-row">
@@ -300,13 +215,14 @@
             (hide)="hideTooltip('solution-funnel')"
           />
         </div>
-        <app-analytics-funnel-chart
-          [items]="solutionFunnel()"
-          label="Воронка заявок"
-          kind="projects"
-        />
-        @if (!overview.solutionFunnel.submissionApplicable) {
-          <p class="analytics-empty-state">Для этой программы сдача и оценивание не требуются.</p>
+        @if (hasValues(solutionFunnel())) {
+          <app-analytics-funnel-chart
+            [items]="solutionFunnel()"
+            label="Воронка заявок"
+            kind="projects"
+          />
+        } @else {
+          <p class="analytics-empty-state text-body-10">Нет заявок для отображения</p>
         }
       </article>
     </section>
@@ -322,6 +238,7 @@
                     ? "Распределенное оценивание"
                     : "Открытое оценивание"
                 }}
+                · экспертов: {{ overview.summary.experts.total }}
               </p>
             </div>
             <app-tooltip
@@ -358,11 +275,18 @@
           }
         </article>
       </section>
+    } @else {
+      <section class="analytics-grid analytics-grid--evaluation" aria-label="Ход оценивания">
+        <article class="analytics-card evaluation evaluation--not-applicable">
+          <h2 class="analytics-card__title">Ход оценивания</h2>
+          <p class="analytics-card__subtitle">Оценивание в этой программе не предусмотрено.</p>
+        </article>
+      </section>
     }
-    <section class="analytics-bottom" aria-label="Кейсы и материалы">
+    <section class="analytics-bottom" aria-label="Кейсы и динамика">
       <article class="analytics-card cases-card">
         <div class="analytics__heading-row">
-          <h2 class="cases-card__title">Кейсы</h2>
+          <h2 class="cases-card__title" id="solution-analytics-cases-title">Кейсы</h2>
           <app-tooltip
             text="Распределение заявок и участников по кейсам программы."
             [isVisible]="activeTooltip() === 'cases'"
@@ -372,9 +296,13 @@
           />
         </div>
         @if (!overview.cases.configured) {
-          <p class="analytics-empty-state">Кейсы не настроены для этой программы</p>
+          <p class="analytics-empty-state text-body-10">Кейсы не настроены для этой программы</p>
+        } @else if (!overview.cases.items.length) {
+          <p class="analytics-empty-state text-body-10">
+            Для программы пока не настроены варианты кейсов
+          </p>
         }
-        @if (overview.cases.items.length || overview.cases.withoutCase.solutionsTotal) {
+        @if (caseRows().length) {
           <div
             class="cases-card__columns"
             [class.cases-card__columns--without-submission]="!overview.cases.submissionApplicable"
@@ -386,89 +314,122 @@
             }
             <span>Участники</span>
           </div>
+          <ul
+            class="cases-card__list"
+            id="solution-analytics-cases-list"
+            aria-labelledby="solution-analytics-cases-title"
+          >
+            @for (
+              row of casesExpanded() ? caseRows() : caseRows().slice(0, 8);
+              track row.withoutCase ? "without-case" : "case:" + row.name
+            ) {
+              <li>
+                <button
+                  #caseTrigger
+                  type="button"
+                  class="case-row"
+                  [class.case-row--without-case]="row.withoutCase"
+                  [class.case-row--without-submission]="!overview.cases.submissionApplicable"
+                  aria-haspopup="dialog"
+                  (click)="openCase(row, caseTrigger)"
+                >
+                  <span class="case-row__name">{{ row.name }}</span>
+                  <span class="case-row__projects">
+                    <strong>{{ row.solutionsTotal }}</strong>
+                    <span class="case-row__mobile-label">Заявки</span>
+                    <span class="case-row__bar" aria-hidden="true">
+                      <span
+                        class="case-row__volume"
+                        [style.width.%]="
+                          caseMaximum() ? (row.solutionsTotal / caseMaximum()) * 100 : 0
+                        "
+                      ></span>
+                    </span>
+                  </span>
+                  @if (overview.cases.submissionApplicable) {
+                    <span class="case-row__metric">
+                      <span class="case-row__mobile-label">Сдано</span>
+                      <strong>{{ row.submitted }}</strong>
+                    </span>
+                  }
+                  <span class="case-row__metric">
+                    <span class="case-row__mobile-label">Участники</span>
+                    <strong>{{ row.participantsTotal }}</strong>
+                  </span>
+                </button>
+              </li>
+            }
+          </ul>
+          @if (caseRows().length > 8) {
+            <button
+              appButton="secondary"
+              type="button"
+              class="cases-card__expand"
+              aria-controls="solution-analytics-cases-list"
+              [attr.aria-expanded]="casesExpanded()"
+              (click)="casesExpanded.set(!casesExpanded())"
+            >
+              {{ casesExpanded() ? "Свернуть" : "Показать все кейсы (" + caseRows().length + ")" }}
+            </button>
+          }
         }
-        <ul class="cases-card__list">
-          @for (row of overview.cases.items; track row.name) {
-            <li>
-              <button
-                #caseTrigger
-                type="button"
-                class="case-row"
-                [class.case-row--without-submission]="!overview.cases.submissionApplicable"
-                (click)="
-                  openSolutions(
-                    'Кейс: ' + row.name,
-                    { caseScope: 'selected', caseName: row.name },
-                    caseTrigger
-                  )
-                "
-              >
-                <span class="case-row__name">{{ row.name }}</span
-                ><span class="case-row__projects"
-                  ><strong>{{ row.solutionsTotal }}</strong
-                  ><span class="case-row__mobile-label">Заявки</span
-                  ><span class="case-row__bar" aria-hidden="true"
-                    ><span
-                      class="case-row__volume"
-                      [style.width.%]="
-                        caseMaximum() ? (row.solutionsTotal / caseMaximum()) * 100 : 0
-                      "
-                    ></span></span
-                ></span>
-                @if (overview.cases.submissionApplicable) {
-                  <span class="case-row__metric"
-                    ><span class="case-row__mobile-label">Сдано</span
-                    ><strong>{{ row.submitted }}</strong></span
-                  >
-                }
-                <span class="case-row__metric"
-                  ><span class="case-row__mobile-label">Участники</span
-                  ><strong>{{ row.participantsTotal }}</strong></span
-                >
-              </button>
-            </li>
-          }
-          @if (overview.cases.withoutCase.solutionsTotal) {
-            <li>
-              <button
-                #withoutCase
-                type="button"
-                class="case-row case-row--without-case"
-                [class.case-row--without-submission]="!overview.cases.submissionApplicable"
-                (click)="
-                  openSolutions('Без выбранного кейса', { caseScope: 'without_case' }, withoutCase)
-                "
-              >
-                <span>Без выбранного кейса</span
-                ><span class="case-row__projects"
-                  ><strong>{{ overview.cases.withoutCase.solutionsTotal }}</strong
-                  ><span class="case-row__mobile-label">Заявки</span
-                  ><span class="case-row__bar" aria-hidden="true"
-                    ><span
-                      class="case-row__volume"
-                      [style.width.%]="
-                        caseMaximum()
-                          ? (overview.cases.withoutCase.solutionsTotal / caseMaximum()) * 100
-                          : 0
-                      "
-                    ></span></span
-                ></span>
-                @if (overview.cases.submissionApplicable) {
-                  <span class="case-row__metric"
-                    ><span class="case-row__mobile-label">Сдано</span
-                    ><strong>{{ overview.cases.withoutCase.submitted }}</strong></span
-                  >
-                }
-                <span class="case-row__metric"
-                  ><span class="case-row__mobile-label">Участники</span
-                  ><strong>{{ overview.cases.withoutCase.participantsTotal }}</strong></span
-                >
-              </button>
-            </li>
-          }
-        </ul>
       </article>
-      <article class="analytics-card">
+      <article class="activity">
+        <div class="analytics__heading-row">
+          <div>
+            <h2 class="analytics-card__title">Динамика активности</h2>
+            @if (hasActivity()) {
+              <p class="activity__note analytics-card__subtitle">Последние 30 дней</p>
+            }
+          </div>
+          <app-tooltip
+            [text]="
+              overview.solutionFunnel.submissionApplicable
+                ? 'Ежедневные новые регистрации и отправленные решения за последние 30 дней.'
+                : 'Ежедневные новые регистрации за последние 30 дней.'
+            "
+            [isVisible]="activeTooltip() === 'activity'"
+            [useOverlay]="true"
+            position="left"
+            (show)="showTooltip('activity')"
+            (hide)="hideTooltip('activity')"
+          />
+        </div>
+        @if (hasActivity()) {
+          <app-analytics-activity-chart
+            [points]="activityPoints()"
+            [submissionApplicable]="overview.solutionFunnel.submissionApplicable"
+          />
+        } @else {
+          <p class="analytics-empty-state text-body-12">За последние 30 дней активности не было</p>
+        }
+      </article>
+    </section>
+    <section class="regions-grid" aria-label="География программы">
+      <article class="regions">
+        <div class="analytics__heading-row">
+          <h2 class="text-body-12">Регионы участников</h2>
+          <app-tooltip
+            text="Количество участников программы по региону, указанному в профиле."
+            [isVisible]="activeTooltip() === 'participant-regions'"
+            [useOverlay]="true"
+            (show)="showTooltip('participant-regions')"
+            (hide)="hideTooltip('participant-regions')"
+          />
+        </div>
+        @if (overview.summary.participantRegions.items.length) {
+          <app-analytics-region-chart
+            [items]="overview.summary.participantRegions.items"
+            label="Регионы участников"
+            kind="participants"
+          />
+        } @else {
+          <p class="analytics-empty-state text-body-10">У участников пока не указаны регионы</p>
+        }
+      </article>
+    </section>
+    <section aria-label="Материалы решений">
+      <article class="analytics-card solution-analytics__materials">
         <div class="analytics__heading-row">
           <h2 class="analytics-card__title">Материалы решений</h2>
           <app-tooltip
@@ -516,55 +477,6 @@
           </table>
         } @else {
           <p class="analytics-empty-state">Поля формы пока не настроены</p>
-        }
-      </article>
-    </section>
-    <section class="regions-grid" aria-label="География и динамика программы">
-      <article class="regions">
-        <div class="analytics__heading-row">
-          <h2 class="analytics-card__title">Регионы участников</h2>
-          <app-tooltip
-            text="Количество участников программы по региону, указанному в профиле."
-            [isVisible]="activeTooltip() === 'participant-regions'"
-            [useOverlay]="true"
-            (show)="showTooltip('participant-regions')"
-            (hide)="hideTooltip('participant-regions')"
-          />
-        </div>
-        @if (overview.summary.participantRegions.items.length) {
-          <app-analytics-region-chart
-            [items]="overview.summary.participantRegions.items"
-            label="Регионы участников"
-            kind="participants"
-          />
-        } @else {
-          <p class="analytics-empty-state">У участников пока не указаны регионы</p>
-        }
-      </article>
-      <article class="activity">
-        <div class="analytics__heading-row">
-          <div>
-            <h2 class="analytics-card__title">Динамика активности</h2>
-            @if (activityPoints().length) {
-              <p class="activity__note analytics-card__subtitle">Последние 30 дней</p>
-            }
-          </div>
-          <app-tooltip
-            text="Ежедневные новые регистрации и отправленные решения за последние 30 дней."
-            [isVisible]="activeTooltip() === 'activity'"
-            [useOverlay]="true"
-            position="left"
-            (show)="showTooltip('activity')"
-            (hide)="hideTooltip('activity')"
-          />
-        </div>
-        @if (activityPoints().length) {
-          <app-analytics-activity-chart
-            [points]="activityPoints()"
-            [submissionApplicable]="overview.solutionFunnel.submissionApplicable"
-          />
-        } @else {
-          <p class="analytics-empty-state">За последние 30 дней активности не было</p>
         }
       </article>
     </section>
