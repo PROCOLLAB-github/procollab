@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="catalog-toolbar">
+<div class="catalog-toolbar" [class.catalog-toolbar--with-create]="canCreate() === true">
   <div class="catalog-toolbar__search"><ng-content /></div>
   <div class="catalog-toolbar__action">
     @if (canCreate()) {
