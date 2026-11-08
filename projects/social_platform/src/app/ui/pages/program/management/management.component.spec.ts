@@ -564,7 +564,9 @@ describe("Списки управления программой в DOM", () => 
     expect(save).not.toHaveBeenCalled();
     expect(preview().textContent).toContain("Компьютер");
     expect(preview().textContent).toContain("Телефон");
-    const input = element().querySelector<HTMLInputElement>(".management__image input[type=file]")!;
+    const input = preview().querySelector<HTMLInputElement>(
+      'input[type=file][aria-describedby="program-image-hint-coverImageAddress"]',
+    )!;
     Object.defineProperty(input, "files", {
       value: [new File(["image"], "cover.png", { type: "image/png" })],
     });

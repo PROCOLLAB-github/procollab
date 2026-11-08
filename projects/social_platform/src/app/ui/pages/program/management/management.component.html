@@ -796,17 +796,22 @@
                     Настроить кадр
                   </button>
                   <div class="management__branding-actions">
+                    <span class="management__sr" [id]="'program-image-hint-' + field.key">
+                      {{ field.dimensions }}
+                    </span>
                     <input
                       #coverInput
                       type="file"
                       accept="image/*"
                       hidden
+                      [attr.aria-describedby]="'program-image-hint-' + field.key"
                       (change)="upload($event, field.key)"
                     />
                     <button
                       type="button"
                       appButton="text"
                       [attr.title]="field.dimensions"
+                      [attr.aria-describedby]="'program-image-hint-' + field.key"
                       [disabled]="!!uploading() || saving()"
                       (click)="coverInput.click()"
                     >

@@ -13,7 +13,7 @@
           <button
             appButton="icon"
             type="button"
-            class="regions__export analytics__export-trigger"
+            class="analytics__download analytics__export-trigger"
             [cdkMenuTriggerFor]="analyticsExports"
             [disabled]="loadingExports()"
             [attr.aria-busy]="loadingExports()"
@@ -101,7 +101,11 @@
       </section>
 
       <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
-        <article class="attention" data-testid="attention-block">
+        <article
+          class="attention"
+          [class.attention--empty]="!hasValues(attention())"
+          data-testid="attention-block"
+        >
           <div class="analytics__heading-row">
             <h2 class="text-body-12">Требует внимания</h2>
             <app-tooltip
@@ -293,7 +297,7 @@
             <button
               appButton="icon"
               type="button"
-              class="regions__export"
+              class="analytics__download"
               aria-label="Скачать сводку по кейсам в Excel"
               title="Скачать сводку по кейсам в Excel"
               [disabled]="!caseRows().length || caseExportState().pending"
@@ -433,7 +437,7 @@
               <button
                 appButton="icon"
                 type="button"
-                class="regions__export"
+                class="analytics__download regions__export"
                 [attr.aria-label]="'Выгрузить ' + card.title.toLowerCase() + ' в Excel'"
                 [attr.title]="card.items.length ? 'Скачать XLSX' : 'Нет данных для выгрузки'"
                 [disabled]="!card.items.length || regionExportState()[card.key].pending"
