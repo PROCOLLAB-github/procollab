@@ -4,6 +4,7 @@ import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { getFeedFilter } from "@core/consts/filters/feed-filter.const";
 
 @Injectable()
 export class FeedFilterInfoService {
@@ -15,57 +16,25 @@ export class FeedFilterInfoService {
   // Состояние выпадающего меню фильтров
   readonly filterOpen = signal(false);
 
-  // Массив активных фильтров
+  // Активная категория ленты
   readonly includedFilters = signal<string>("");
 
   initializationFeedFilter(): void {
     this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(queries => {
-      if (queries["includes"]) {
-        this.includedFilters.set(queries["includes"]);
-      } else {
-        this.includedFilters.set("");
-      }
+      this.includedFilters.set(getFeedFilter(queries["includes"]).value);
     });
   }
 
-  /** Переключает фильтр (добавляет/удаляет) с мгновенным обновлением URL. */
+  /** Выбирает категорию и обновляет URL. */
   setFilter(keyword: string): void {
-    this.includedFilters.update(included => {
-      if (keyword.startsWith("project/")) {
-        // Если уже активен этот же вложенный фильтр - сбрасываем к "projects"
-        if (included === keyword) {
-          return "project";
-        }
-        return keyword;
-      }
-
-      // Если кликнули на "projects"
-      if (keyword === "project") {
-        if (included.startsWith("project/")) {
-          return "project";
-        }
-
-        if (included === "project") {
-          return "";
-        }
-
-        return "project";
-      }
-
-      if (included === keyword) {
-        return "";
-      }
-      return keyword;
-    });
-
-    // Мгновенно обновляем URL
+    this.includedFilters.set(keyword);
+    this.filterOpen.set(false);
     this.updateUrl();
   }
 
   /** Сбрасывает все фильтры. */
   resetFilter(): void {
-    this.includedFilters.set("");
-    this.updateUrl();
+    this.setFilter("");
   }
 
   /** Закрывает выпадающее меню (ClickOutside). */

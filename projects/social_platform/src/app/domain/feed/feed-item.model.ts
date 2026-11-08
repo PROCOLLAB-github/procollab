@@ -34,12 +34,12 @@ export type FeedItem =
 
 /** Счётчики всех доступных категорий, независимо от выбранной страницы. */
 export interface FeedCategoryCounts {
-  all: number;
-  project: number;
+  allNews: number;
+  projectNews: number;
+  newProject: number;
   vacancy: number;
   news: number;
   partnerprogram: number;
-  education: number;
 }
 
 /** Страница ленты с метаданными категорий. */

@@ -10,7 +10,14 @@ describe("FeedUIInfoService: единый input карточки и окна", (
       typeModel: "news",
       content: { ...FeedNews.default(), id, isUserLiked: false, likesCount: 0 },
     }));
-    const counts = { all: 86, project: 56, vacancy: 3, news: 27, partnerprogram: 0, education: 0 };
+    const counts = {
+      allNews: 86,
+      projectNews: 59,
+      newProject: 56,
+      vacancy: 3,
+      news: 27,
+      partnerprogram: 0,
+    };
     ui.applyInitializationFeedNewsEvent({ count: 86, results, counts });
     ui.applyLikeNews(1);
     expect(ui.feedItems().map(item => item.content.id)).toEqual([1, 2, 3, 4, 5, 6]);

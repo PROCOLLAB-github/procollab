@@ -3,7 +3,7 @@
 import { ElementRef } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
-import { of } from "rxjs";
+import { BehaviorSubject, of, Subject } from "rxjs";
 import { FeedInfoService } from "./feed-info.service";
 import { FeedUIInfoService } from "./ui/feed-ui-info.service";
 import { FetchFeedUseCase } from "../use-cases/fetch-feed.use-case";
@@ -26,8 +26,9 @@ describe("FeedInfoService", () => {
     },
   });
 
-  function setup(nextIds: number[]) {
+  function setup(nextIds: number[], includes?: string) {
     const fetch = { execute: vi.fn() };
+    const queryParams = new BehaviorSubject<{ includes?: string }>({ includes });
     const toggle = { execute: vi.fn().mockReturnValue(of(ok(undefined))) };
     fetch.execute.mockReturnValue(
       of(
@@ -43,7 +44,7 @@ describe("FeedInfoService", () => {
       providers: [
         FeedInfoService,
         FeedUIInfoService,
-        { provide: ActivatedRoute, useValue: {} },
+        { provide: ActivatedRoute, useValue: { queryParams, data: of() } },
         { provide: FetchFeedUseCase, useValue: fetch },
         { provide: ReadFeedNewsUseCase, useValue: {} },
         { provide: ToggleFeedLikeUseCase, useValue: toggle },
@@ -62,9 +63,10 @@ describe("FeedInfoService", () => {
     target.getBoundingClientRect = () => ({ bottom: 600 }) as DOMRect;
     root.getBoundingClientRect = () => ({ bottom: 700 }) as DOMRect;
     const service = TestBed.inject(FeedInfoService);
-    service.initScroll(target, new ElementRef(root));
+    const feedRoot = new ElementRef(root);
+    service.initScroll(target, feedRoot);
 
-    return { ui, fetch, toggle, service, target };
+    return { ui, fetch, toggle, service, target, feedRoot, queryParams };
   }
 
   it("догружает шесть элементов в конец в исходном порядке", () => {
@@ -73,7 +75,7 @@ describe("FeedInfoService", () => {
     target.dispatchEvent(new Event("scroll"));
 
     expect(fetch.execute).toHaveBeenCalledOnce();
-    expect(fetch.execute.mock.calls[0].slice(0, 2)).toEqual([6, 6]);
+    expect(fetch.execute).toHaveBeenCalledWith(6, 6, "all_news");
     expect(ui.feedItems().map(entry => entry.content.id)).toEqual([
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
     ]);
@@ -89,6 +91,22 @@ describe("FeedInfoService", () => {
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
     ]);
     expect(ui.feedPage()).toBe(12);
+  });
+
+  it("отменяет догрузку старой вкладки и запрашивает первую страницу новой", () => {
+    const { ui, fetch, target, service, feedRoot, queryParams } = setup([21], "new_project");
+    const oldPage = new Subject();
+    fetch.execute.mockReturnValueOnce(oldPage);
+    service.initializationFeedNews(feedRoot);
+    target.dispatchEvent(new Event("scroll"));
+    expect(fetch.execute).toHaveBeenNthCalledWith(1, 6, 6, "new_project");
+
+    queryParams.next({ includes: "project" });
+    expect(fetch.execute).toHaveBeenNthCalledWith(2, 0, 6, "project_news");
+
+    oldPage.next(ok({ count: 12, results: [item(7)] }));
+    expect(ui.feedItems().map(entry => entry.content.id)).toEqual([21]);
+    expect(ui.feedPage()).toBe(1);
   });
 
   it("обрабатывает лайк новости при совпадении ее id с id проекта", () => {
