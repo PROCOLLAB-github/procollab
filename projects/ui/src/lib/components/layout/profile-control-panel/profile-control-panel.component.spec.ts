@@ -225,13 +225,21 @@ describe("ProfileControlPanelComponent notification center", () => {
     expect(logout).toHaveBeenCalledOnce();
   });
 
-  it("сохраняет переход по аватару в профиль", () => {
+  it("сохраняет переход в профиль через меню аватара", () => {
     fixture.componentRef.setInput("user", { id: 42, personal: {} } as User);
     fixture.detectChanges();
 
-    const link: HTMLAnchorElement = fixture.nativeElement.querySelector(
-      ".control-panel__profile .user",
+    const trigger: HTMLButtonElement = fixture.nativeElement.querySelector(
+      '.control-panel__profile button[aria-haspopup="menu"]',
     );
+    trigger.click();
+    fixture.detectChanges();
+
+    expect(trigger.getAttribute("aria-expanded")).toBe("true");
+    const link: HTMLAnchorElement = fixture.nativeElement.querySelector(
+      '.control-panel__profile [role="menu"] a[role="menuitem"]',
+    );
+    expect(link.textContent?.trim()).toBe("Мой профиль");
     expect(link.getAttribute("href")).toBe("/office/profile/42");
   });
 
