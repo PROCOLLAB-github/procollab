@@ -1,6 +1,10 @@
 /** @format */
 @use "styles/responsive";
 
+.auth__title {
+  overflow-wrap: anywhere;
+}
+
 .page {
   position: relative;
   padding-bottom: 130px;
