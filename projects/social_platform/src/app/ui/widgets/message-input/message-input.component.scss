@@ -43,7 +43,7 @@ $button-size: 40px;
 
   &__send-button {
     padding: 8px;
-    color: var(--white);
+    color: var(--ui-on-accent);
     cursor: pointer;
     background-color: var(--accent);
     border-radius: var(--rounded-xl);
@@ -202,7 +202,7 @@ $button-size: 40px;
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: var(--black);
+    background-color: var(--ui-dark-ink);
     opacity: 0.5;
   }
 

@@ -87,8 +87,8 @@
     }
 
     a[aria-current] {
-      color: var(--white);
-      background: var(--accent-text);
+      color: var(--ui-on-accent);
+      background: var(--ui-primary, var(--accent-text));
     }
   }
 

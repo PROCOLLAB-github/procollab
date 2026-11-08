@@ -30,7 +30,7 @@
       opacity: 1;
 
       @include responsive.apply-desktop {
-        opacity: 0.5;
+        opacity: var(--ui-header-icon-opacity, 0.5);
       }
     }
 
@@ -82,7 +82,7 @@
     }
 
     @media screen and (min-width: 1000px) {
-      color: var(--light-white);
+      color: var(--ui-nav-icon-on-gradient);
     }
 
     @include responsive.apply-desktop {

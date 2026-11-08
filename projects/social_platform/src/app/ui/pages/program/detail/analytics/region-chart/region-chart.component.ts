@@ -12,6 +12,7 @@ import {
   NgZone,
   viewChild,
 } from "@angular/core";
+import { ThemeService, type ThemeScheme } from "@uilib";
 import { ProgramAnalyticsRegion } from "@domain/program/program-analytics.model";
 import {
   BarController,
@@ -79,10 +80,18 @@ export class AnalyticsRegionChartComponent {
   protected readonly unit = computed(() => (this.kind() === "projects" ? "Проекты" : "Участники"));
   private readonly canvas = viewChild.required<ElementRef<HTMLCanvasElement>>("canvas");
   private readonly zone = inject(NgZone);
+  private readonly theme = inject(ThemeService);
+  private chartScheme?: ThemeScheme;
   private chart?: Chart<"bar", number[], string | string[]>;
 
   constructor() {
     afterRenderEffect(() => {
+      const scheme = this.theme.colorScheme();
+      if (this.chartScheme !== scheme) {
+        this.chart?.destroy();
+        this.chart = undefined;
+        this.chartScheme = scheme;
+      }
       const items = this.sortedItems();
       const kind = this.kind();
       const unit = this.unit();
@@ -96,6 +105,7 @@ export class AnalyticsRegionChartComponent {
     const style = getComputedStyle(canvas);
     const color = style.getPropertyValue(kind === "projects" ? "--accent" : "--green-dark").trim();
     const textColor = style.getPropertyValue("--black").trim();
+    const tooltipText = style.getPropertyValue("--light-white").trim();
     const mutedColor = style.getPropertyValue("--grey-for-text").trim();
     const gridColor = style.getPropertyValue("--medium-grey-for-outline").trim();
     const labels = items.map(item => item.name);
@@ -161,6 +171,8 @@ export class AnalyticsRegionChartComponent {
         plugins: {
           tooltip: {
             backgroundColor: textColor,
+            titleColor: tooltipText,
+            bodyColor: tooltipText,
             padding: 12,
             cornerRadius: 8,
             displayColors: false,

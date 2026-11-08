@@ -1,9 +1,9 @@
 /** @format */
 
 @mixin button($layout: true) {
-  --button-color: var(--accent-text);
+  --button-color: var(--ui-primary, var(--accent-text));
   --button-hover: var(--accent-dark);
-  --button-text: var(--light-white);
+  --button-text: var(--ui-on-primary);
 
   @if $layout {
     display: inline-flex;
@@ -56,6 +56,8 @@
 
   &--secondary,
   &--outline {
+    --button-color: var(--accent-text);
+
     color: var(--button-color);
     background: transparent;
 

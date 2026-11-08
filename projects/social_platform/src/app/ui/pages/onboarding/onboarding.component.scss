@@ -84,7 +84,7 @@
 
   &--active {
     .step__number {
-      color: var(--white);
+      color: var(--ui-on-accent);
       background-color: var(--accent);
       border-color: var(--accent);
     }

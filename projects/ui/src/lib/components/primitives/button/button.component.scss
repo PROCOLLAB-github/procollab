@@ -111,8 +111,8 @@
   @media screen and (min-width: 1000px) {
     &.button--inline {
       font-weight: 400;
-      color: var(--white);
-      background: var(--accent-text);
+      color: var(--ui-on-accent);
+      background: var(--ui-primary, var(--accent-text));
       border: 0.5px solid transparent;
       outline: none;
 
@@ -151,12 +151,10 @@
       }
 
       &.button--green {
-        color: var(--white);
         background-color: var(--green);
       }
 
       &.button--gold {
-        color: var(--white);
         background: var(--gold-dark);
       }
 
@@ -199,8 +197,8 @@
       }
 
       &.button--white {
-        color: var(--white);
-        border: 0.5px solid var(--white);
+        color: var(--ui-on-dark);
+        border: 0.5px solid var(--ui-on-dark);
       }
 
       &.button--green {

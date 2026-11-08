@@ -356,7 +356,7 @@
 .attention-reminder__email-button {
   justify-self: start;
   padding: 12px 18px;
-  color: var(--light-white);
+  color: var(--ui-on-primary);
   background: var(--accent);
   border-radius: 8px;
 }
@@ -429,7 +429,7 @@
   .ui-button.ui-button.attention-actions__send {
     min-height: 40px;
     padding: 9px 16px;
-    color: var(--light-white);
+    color: var(--ui-on-primary);
     background: var(--accent);
     border: 1px solid var(--accent);
     border-radius: 8px;

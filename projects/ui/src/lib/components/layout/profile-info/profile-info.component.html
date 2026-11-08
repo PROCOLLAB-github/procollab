@@ -1,13 +1,55 @@
 <!-- @format -->
 
 @if (user()) {
-  <a class="user" aria-label="Мой профиль" [routerLink]="['/office/profile', user().id]">
-    <div class="user__row">
+  <div
+    (clickOutside)="closeMenu()"
+    (focusout)="onFocusOut($event)"
+    (keydown.escape)="onEscape($event)"
+  >
+    <button
+      #trigger
+      type="button"
+      class="user"
+      aria-label="Меню профиля"
+      aria-haspopup="menu"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu()"
+      (keydown.arrowdown)="openMenu($event)"
+    >
       <app-avatar
         class="user__avatar"
         [size]="avatarSize"
         [url]="user().personal.avatar"
       ></app-avatar>
-    </div>
-  </a>
+    </button>
+    @if (menuOpen()) {
+      <div cdkMenu class="profile-menu" aria-label="Меню профиля">
+        <a
+          cdkMenuItem
+          class="profile-menu__item"
+          [routerLink]="['/office/profile', user().id]"
+          (cdkMenuItemTriggered)="closeMenu(true)"
+        >
+          Мой профиль
+        </a>
+        <div cdkMenuGroup class="profile-menu__group" aria-label="Тема оформления">
+          <p class="profile-menu__label" aria-hidden="true">Тема оформления</p>
+          @for (option of themeOptions; track option.value) {
+            <button
+              type="button"
+              cdkMenuItemRadio
+              class="profile-menu__item"
+              [cdkMenuItemChecked]="theme.preference() === option.value"
+              (cdkMenuItemTriggered)="selectTheme(option.value)"
+            >
+              <span>{{ option.label }}</span>
+              @if (theme.preference() === option.value) {
+                <i appIcon icon="check" appSquare="16" aria-hidden="true"></i>
+              }
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
 }

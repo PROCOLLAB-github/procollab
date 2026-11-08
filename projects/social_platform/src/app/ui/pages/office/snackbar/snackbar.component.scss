@@ -49,17 +49,17 @@
   }
 
   &--success {
-    color: var(--black);
+    color: var(--ui-dark-ink);
     background-color: var(--green);
   }
 
   &--error {
-    color: var(--black);
+    color: var(--ui-dark-ink);
     background-color: var(--red);
   }
 
   &--info {
-    color: var(--black);
+    color: var(--ui-dark-ink);
     background-color: var(--lime);
   }
 }
