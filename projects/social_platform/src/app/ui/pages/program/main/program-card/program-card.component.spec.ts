@@ -62,7 +62,7 @@ describe("ProgramCardComponent", () => {
     expect(element().querySelector(".card__registration")?.textContent).toContain("Регистрация до");
     expect(element().textContent).toContain("Опубликована");
     expect(element().querySelector("a")?.getAttribute("href")).toBe(
-      "/office/program/7/management/participants",
+      "/office/program/7/management/analytics",
     );
   });
   it("uses the saved image and keeps the native mobile avatar", () => {
