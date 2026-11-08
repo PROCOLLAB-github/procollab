@@ -3,8 +3,10 @@
 import {
   ApplicationConfig,
   ErrorHandler,
+  inject,
   importProvidersFrom,
   LOCALE_ID,
+  provideAppInitializer,
   provideZonelessChangeDetection,
 } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
@@ -50,6 +52,7 @@ import { SPECIALIZATIONS_PROVIDERS } from "./infrastructure/di/specializations.p
 import { VACANCY_PROVIDERS } from "./infrastructure/di/vacancy.providers";
 import { COURSES_PROVIDERS } from "./infrastructure/di/courses/courses.providers";
 import { CHAT_PROVIDERS } from "./infrastructure/di/chat.providers";
+import { ThemeService } from "@uilib";
 
 registerLocaleData(localeRu, "ru-RU");
 
@@ -59,6 +62,9 @@ export const APP_CONFIG: ApplicationConfig = {
     importProvidersFrom(BrowserModule, ReactiveFormsModule, MatProgressBarModule),
     provideNgxMask(),
     provideZonelessChangeDetection(),
+    provideAppInitializer(() => {
+      inject(ThemeService);
+    }),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CamelcaseInterceptor,

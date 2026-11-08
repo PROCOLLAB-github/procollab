@@ -69,7 +69,7 @@
     }
 
     @media screen and (min-width: 1000px) {
-      background: linear-gradient(var(--accent), #4d3780);
+      background: linear-gradient(var(--ui-nav-gradient-start), var(--ui-nav-gradient-end));
     }
 
     @media screen and (max-width: 999px) {

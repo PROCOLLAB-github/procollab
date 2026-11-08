@@ -1,90 +1,92 @@
 /** @format */
+
 @use "styles/responsive";
+
+:host {
+  position: relative;
+}
 
 .user {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
   cursor: pointer;
+  border-radius: 50%;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 2px;
+  }
 
   &__avatar {
     display: block;
-    margin-right: 12px;
-  }
-
-  &__row {
-    display: flex;
-    align-items: center;
-
-    i {
-      cursor: pointer;
-      transform: rotate(180deg);
-    }
-  }
-
-  &__logout {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    color: var(--red);
-    cursor: pointer;
-    transition: color 0.2s;
-
-    i {
-      margin-left: 5px;
-    }
-
-    &:hover {
-      color: var(--red-dark);
-    }
-
-    @include responsive.apply-desktop {
-      display: none;
-    }
-  }
-
-  &__name {
-    color: var(--black);
-  }
-
-  &__email,
-  &__verified,
-  &__not-verified {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-
-  &__email,
-  &__verified {
-    color: var(--gray);
-  }
-
-  &__not-verified {
-    color: var(--red);
   }
 }
 
 @include responsive.apply-below-desktop {
-  :host,
-  .user,
-  .user__row {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .user__name,
-  .user__email {
-    overflow-wrap: anywhere;
-  }
-
-  .user__avatar {
-    flex-shrink: 0;
-    margin-right: 0;
-  }
-
   .user {
-    align-items: center;
-    justify-content: center;
     min-width: var(--ui-control-height);
     min-height: var(--ui-control-height);
+    margin-right: 0;
+  }
+}
+
+.profile-menu {
+  position: absolute;
+  z-index: 30;
+  inset-block-start: calc(100% + 8px);
+  inset-inline-end: 0;
+  width: min(224px, calc(100vw - 32px));
+  max-height: min(320px, calc(var(--visual-viewport-height, 100dvh) - 80px));
+  padding: 6px;
+  overflow-y: auto;
+  color: var(--ui-text);
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: var(--ui-radius-card);
+  box-shadow: var(--ui-panel-shadow);
+
+  &__group {
+    padding-top: 6px;
+    margin-top: 4px;
+    border-top: 1px solid var(--ui-border-subtle);
+  }
+
+  &__label {
+    padding: 4px 10px;
+    font-size: var(--ui-font-small);
+    color: var(--ui-text-muted);
+  }
+
+  &__item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 44px;
+    padding: 6px 10px;
+    font: inherit;
+    font-size: var(--ui-font-body);
+    color: var(--ui-text);
+    text-align: start;
+    cursor: pointer;
+    border-radius: 8px;
+
+    &[aria-checked="true"] {
+      font-weight: 600;
+      color: var(--accent-text);
+    }
+
+    &:hover,
+    &:focus-visible {
+      background: var(--accent-light);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-text);
+      outline-offset: -2px;
+    }
   }
 }

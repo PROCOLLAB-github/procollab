@@ -3,6 +3,7 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use "@angular/material" as mat;
+@use "styles/dark-theme";
 
 // BASE
 
@@ -110,3 +111,5 @@ $procollab-theme: mat.m2-define-light-theme(
 
 @import "styles/ui-tokens.scss";
 @import "styles/ui-system.scss";
+
+@include dark-theme.apply;

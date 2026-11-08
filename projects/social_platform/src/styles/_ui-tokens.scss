@@ -3,6 +3,10 @@
 // Semantic aliases retain the existing PROCOLLAB palette.
 :root {
   --ui-accent: var(--accent);
+  --ui-on-accent: #fafafa;
+  --ui-on-primary: #fff;
+  --ui-on-dark: #fafafa;
+  --ui-dark-ink: #333;
   --accent-hover: var(--accent-medium);
   --ui-text: var(--black);
   --ui-text-muted: var(--grey-for-text);
@@ -10,6 +14,8 @@
   --ui-surface-subtle: var(--white);
   --ui-border: var(--gray);
   --ui-border-subtle: var(--medium-grey-for-outline);
+  --ui-nav-icon-on-gradient: #fff;
+  --ui-nav-gradient-start: var(--accent);
   --ui-danger: var(--red);
   --ui-success: var(--green);
   --ui-warning: var(--gold);
@@ -33,7 +39,7 @@
   --ui-error-ring: 0 0 0 3px color-mix(in srgb, var(--red) 25%, transparent);
   --ui-card-shadow: none;
   --ui-card-hover-shadow: 0 4px 12px color-mix(in srgb, var(--black) 8%, transparent);
-  --ui-backdrop: color-mix(in srgb, var(--black) 50%, transparent);
+  --ui-backdrop: color-mix(in srgb, var(--ui-dark-ink) 50%, transparent);
   --ui-font-h1: 24px;
   --ui-font-h2: 18px;
   --ui-font-h3: 16px;

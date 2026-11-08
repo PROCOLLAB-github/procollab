@@ -38,7 +38,7 @@
 
     .filter__name {
       margin-bottom: 5px;
-      color: var(--gray);
+      color: var(--ui-caption-text, var(--gray));
       cursor: pointer;
     }
 
