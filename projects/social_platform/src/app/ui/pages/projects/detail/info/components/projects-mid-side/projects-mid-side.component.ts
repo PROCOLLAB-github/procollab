@@ -21,6 +21,7 @@ import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
 import { NewsInfoService } from "@api/news/news-info.service";
 import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { Project } from "@domain/project/project.model";
+import { isTeamFrozen } from "@domain/project/team-policy";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProjectsDetailService } from "@api/project/facades/detail/projects-detail.service";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
@@ -97,6 +98,10 @@ export class ProjectsMidSideComponent {
 
   // Состояние компонента
   protected readonly profile = this.profileInfoService.profile;
+  protected readonly canEdit = computed(() => {
+    const project = this.project();
+    return !!project && project.leader === this.profile()?.id && !isTeamFrozen(project);
+  });
   protected readonly news = this.newsInfoService.news; // Массив новостей
   protected readonly newsPending = signal(false);
   protected readonly descriptionExpanded = signal(false);
