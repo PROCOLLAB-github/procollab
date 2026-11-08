@@ -419,7 +419,7 @@ export class ManagementExpertsComponent {
         this.selected.set(null);
         this.selectedExpertIds.set(new Set());
         this.selectedProjects.set(new Set());
-        this.tab.set("experts");
+        this.tab.set(this.initialTab());
         this.filtersOpen.set(null);
         this.exportSuccess.set(false);
         this.exportError.set(false);
