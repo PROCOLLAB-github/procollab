@@ -14,6 +14,7 @@ import {
   untracked,
   viewChildren,
 } from "@angular/core";
+import { ThemeService, type ThemeScheme } from "@uilib";
 import { ProgramAnalyticsActivityPoint } from "@domain/program/program-analytics.model";
 import {
   CategoryScale,
@@ -69,10 +70,18 @@ export class AnalyticsActivityChartComponent {
 
   private readonly canvases = viewChildren<ElementRef<HTMLCanvasElement>>("canvas");
   private readonly zone = inject(NgZone);
+  private readonly theme = inject(ThemeService);
+  private chartScheme?: ThemeScheme;
   private readonly charts: Chart<"line", number[], string>[] = [];
 
   constructor() {
     afterRenderEffect(() => {
+      const scheme = this.theme.colorScheme();
+      if (this.chartScheme !== scheme) {
+        this.charts.forEach(chart => chart.destroy());
+        this.charts.length = 0;
+        this.chartScheme = scheme;
+      }
       const points = this.points();
       const canvases = this.canvases();
       this.zone.runOutsideAngular(() => {

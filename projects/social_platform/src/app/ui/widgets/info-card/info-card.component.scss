@@ -56,8 +56,8 @@
     justify-content: center;
     width: 100%;
     padding: 4px 24px;
-    color: var(--white);
-    background: var(--accent);
+    color: var(--ui-on-accent);
+    background: var(--ui-primary, var(--accent));
     border: 0.5px solid transparent;
     border-radius: var(--rounded-xxl);
     transition: all 0.2s;
@@ -197,7 +197,7 @@
     border-radius: var(--rounded-xl);
 
     &--text {
-      color: var(--white);
+      color: var(--ui-on-accent);
     }
   }
 

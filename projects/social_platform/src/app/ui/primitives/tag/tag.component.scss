@@ -21,7 +21,7 @@
   }
 
   &--inline {
-    color: var(--white);
+    color: var(--ui-on-accent);
     border: 0.5px solid transparent;
 
     &.tag--secondary {
@@ -30,42 +30,35 @@
     }
 
     &.tag--accent {
-      color: var(--white);
       background-color: var(--accent);
     }
 
     &.tag--accent-medium {
-      color: var(--white);
       background-color: var(--accent-medium);
     }
 
     &.tag--blue-dark {
-      color: var(--white);
       background-color: var(--blue-dark);
     }
 
     &.tag--complete {
-      color: var(--white);
       background-color: var(--green);
     }
 
     &.tag--complete-dark {
-      color: var(--white);
       background-color: var(--green-dark);
     }
 
     &.tag--red {
-      color: var(--white);
       background-color: var(--red);
     }
 
     &.tag--cyan {
-      color: var(--white);
       background-color: var(--cyan);
     }
 
     &.tag--soft {
-      color: var(--light-white);
+      color: var(--ui-on-primary);
       background: var(--gold);
       border: transparent;
     }
@@ -110,13 +103,13 @@
     }
 
     &.tag--accent-medium {
-      color: var(--white);
+      color: var(--ui-on-dark);
       background: transparent;
       border: 0.5px solid var(--accent-medium);
     }
 
     &.tag--blue-dark {
-      color: var(--white);
+      color: var(--ui-on-dark);
       background: transparent;
       border: 0.5px solid var(--blue-dark);
     }
@@ -128,19 +121,19 @@
     }
 
     &.tag--complete-dark {
-      color: var(--white);
+      color: var(--ui-on-dark);
       background: transparent;
       border: 0.5px solid var(--green-dark);
     }
 
     &.tag--red {
-      color: var(--white);
+      color: var(--ui-on-dark);
       background: transparent;
       border: 0.5px solid var(--red);
     }
 
     &.tag--cyan {
-      color: var(--white);
+      color: var(--ui-on-dark);
       background: transparent;
       border: 0.5px solid var(--cyan);
     }

@@ -1,5 +1,16 @@
 /** @format */
 
+:root {
+  --accent-text: var(--accent);
+  --ui-on-accent: #fafafa;
+  --ui-on-primary: #fff;
+  --ui-on-dark: #fafafa;
+  --ui-dark-ink: #333;
+  --ui-nav-icon-on-gradient: #fff;
+  --ui-nav-gradient-start: var(--accent);
+  --ui-nav-gradient-end: #4d3780;
+}
+
 // Адаптив из dev применяется только ниже desktop breakpoint.
 @media screen and (max-width: 999px) {
   :root {
@@ -34,7 +45,7 @@
     --ui-error-ring: 0 0 0 3px color-mix(in srgb, var(--red) 25%, transparent);
     --ui-card-shadow: none;
     --ui-card-hover-shadow: 0 4px 12px color-mix(in srgb, var(--black) 8%, transparent);
-    --ui-backdrop: color-mix(in srgb, var(--black) 50%, transparent);
+    --ui-backdrop: color-mix(in srgb, var(--ui-dark-ink) 50%, transparent);
     --ui-font-h1: 24px;
     --ui-font-h2: 18px;
     --ui-font-h3: 16px;

@@ -26,17 +26,17 @@
   border-radius: 10px;
 
   &--success {
-    color: var(--white);
+    color: var(--ui-on-accent);
     background-color: var(--green);
   }
 
   &--error {
-    color: var(--white);
+    color: var(--ui-on-accent);
     background-color: var(--red);
   }
 
   &--info {
-    color: var(--black);
+    color: var(--ui-dark-ink);
     background-color: var(--lime);
   }
 }

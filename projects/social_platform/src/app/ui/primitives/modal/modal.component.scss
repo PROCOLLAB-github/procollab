@@ -38,7 +38,7 @@
     }
 
     &--gradient {
-      background: var(--gradient);
+      background: var(--ui-dialog-gradient, var(--gradient));
     }
 
     &--no-flex {

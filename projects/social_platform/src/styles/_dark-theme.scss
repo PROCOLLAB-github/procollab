@@ -1,0 +1,123 @@
+/** @format */
+
+@use "@angular/material" as mat;
+
+$brand: #8a63e6;
+$on-brand: #110a20;
+
+@function material-theme($base, $soft, $strong, $on-accent) {
+  $palette: mat.m2-define-palette(
+    (
+      100: $soft,
+      500: $base,
+      700: $strong,
+      contrast: (
+        100: $on-accent,
+        500: $on-accent,
+        700: $on-accent,
+      ),
+    )
+  );
+
+  @return mat.m2-define-dark-theme(
+    (
+      color: (
+        primary: $palette,
+        accent: $palette,
+        warn: mat.m2-define-palette(mat.$m2-red-palette, 200, 100, 300),
+      ),
+    )
+  );
+}
+
+@mixin apply {
+  html[data-theme="dark"] {
+    --green: #8bd3a7;
+    --green-light: #20372c;
+    --green-dark: #91dcb6;
+    --gold: #e5b96f;
+    --gold-light: #3a3020;
+    --gold-dark: #f0c583;
+    --red: #f0a3b0;
+    --red-light: #3c2730;
+    --red-dark: #ffb3bf;
+    --blue-dark: #abb8ff;
+    --purple: #bda8fa;
+    --ui-text: var(--black);
+    --ui-text-muted: var(--grey-for-text);
+    --ui-surface: var(--light-white);
+    --ui-surface-subtle: var(--white);
+    --ui-border: var(--gray);
+    --ui-border-subtle: var(--medium-grey-for-outline);
+    --ui-on-primary: var(--ui-on-accent);
+    --ui-caption-text: var(--ui-text-muted);
+    --accent-hover: var(--accent-medium);
+    --ui-nav-icon-on-gradient: var(--ui-text-muted);
+    --ui-nav-gradient-start: var(--light-white);
+    --ui-nav-gradient-end: var(--light-white);
+    --ui-dialog-gradient: linear-gradient(115deg, var(--white), var(--accent-light));
+    --ui-error-text: var(--red);
+    --ui-crop-surface: var(--light-gray);
+    --ui-panel-shadow: 0 8px 24px rgb(0 0 0 / 30%);
+    --ui-header-shadow: var(--ui-panel-shadow);
+    --ui-composer-shadow: 0 -4px 12px rgb(0 0 0 / 25%);
+    --ui-message-shadow: none;
+    --ui-chart-shadow: none;
+    --ui-card-hover-shadow: 0 4px 12px rgb(0 0 0 / 25%);
+    --ui-scrim: rgb(0 0 0 / 65%);
+    --ui-backdrop: var(--ui-scrim);
+
+    // Brighter variants of the brand hue keep links and outlines legible.
+    --white: #171223;
+    --light-white: #211a30;
+    --light-gray: #2c223e;
+    --black: #f1eafa;
+    --dark-grey: #cec0e1;
+    --grey-for-text: #c0b3d1;
+    --gray: #756487;
+    --grey-button: #372b4b;
+    --medium-grey-for-outline: #493a5d;
+    --ui-primary: #{$brand};
+    --accent: #a886f7;
+    --accent-text: #c5acff;
+    --accent-dark: #a782f4;
+    --accent-mild: rgb(168 134 247 / 60%);
+    --accent-medium: #d6c3ff;
+    --accent-light: #3a2b55;
+    --gradient: linear-gradient(90deg, var(--ui-primary) 0%, var(--accent) 100%);
+    --gradient-mild: linear-gradient(90deg, #a782f4 0%, #c5acff 100%);
+    --ui-on-accent: #{$on-brand};
+    --ui-board-surface: #1c162a;
+    --ui-message-surface: #302343;
+    --ui-accent-tint-subtle: rgb(168 134 247 / 7%);
+    --ui-accent-tint-hover: rgb(168 134 247 / 13%);
+    --ui-accent-tint-chart: rgb(168 134 247 / 9%);
+    --ui-accent-gradient-end: rgb(168 134 247 / 17%);
+    --ui-wordmark-filter: invert(1) hue-rotate(180deg);
+
+    color-scheme: dark;
+    accent-color: var(--accent);
+    background: var(--ui-surface-subtle);
+
+    body {
+      color: var(--ui-text);
+      background: var(--ui-surface-subtle);
+    }
+
+    ::selection {
+      color: var(--ui-on-accent);
+      background: var(--accent);
+    }
+
+    // The SVG wordmark has a fixed dark fill.
+    img[src$="/images/shared/logo.svg"] {
+      filter: var(--ui-wordmark-filter, invert(1));
+    }
+
+    .office__background-image {
+      opacity: 0.22;
+    }
+
+    @include mat.all-component-colors(material-theme($brand, #c5acff, #a782f4, $on-brand));
+  }
+}

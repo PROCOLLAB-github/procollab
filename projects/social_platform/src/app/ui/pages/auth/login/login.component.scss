@@ -4,8 +4,12 @@
 
 .login {
   display: flex;
-  min-width: 95vw;
   min-height: 100vh;
+
+  @include responsive.apply-desktop {
+    width: calc(100vw - 200px);
+    min-width: 0;
+  }
 
   &__left {
     display: flex;

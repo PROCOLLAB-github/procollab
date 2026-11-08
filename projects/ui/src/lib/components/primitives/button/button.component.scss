@@ -20,8 +20,8 @@
 
   &.button--inline {
     font-weight: 400;
-    color: var(--white);
-    background: var(--accent);
+    color: var(--ui-on-accent);
+    background: var(--ui-primary, var(--accent));
     border: 0.5px solid transparent;
     outline: none;
 
@@ -60,12 +60,12 @@
     }
 
     &.button--green {
-      color: var(--white);
+      color: var(--ui-on-accent);
       background-color: var(--green);
     }
 
     &.button--gold {
-      color: var(--white);
+      color: var(--ui-on-accent);
       background: var(--gold-dark);
     }
 
@@ -106,8 +106,8 @@
     }
 
     &.button--white {
-      color: var(--white);
-      border: 0.5px solid var(--white);
+      color: var(--ui-on-dark);
+      border: 0.5px solid var(--ui-on-dark);
     }
 
     &.button--green {

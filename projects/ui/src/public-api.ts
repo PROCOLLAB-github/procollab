@@ -19,3 +19,4 @@
 // Экспортируем все компоненты из папки components
 export * from "./lib/components";
 export * from "./lib/services/desktop-layout.service";
+export * from "./lib/services/theme.service";
