@@ -900,6 +900,14 @@ describe("Списки управления программой в DOM", () => 
     expect(state.openTeam).toHaveBeenCalledOnce();
     expect(state.selected()?.id).toBe(11);
   });
+  it("из списка участников можно открыть сертификаты этой программы", async () => {
+    const { element } = await setup();
+    const link = element().querySelector<HTMLAnchorElement>(
+      'a[href="/office/program/1/management/certificates"]',
+    );
+    expect(link?.textContent?.trim()).toBe("Сертификаты");
+  });
+
   it("имя участника ведет в его профиль, а анкета остается отдельной командой", async () => {
     const { component, element } = await setup();
     const link = element().querySelector<HTMLAnchorElement>('td[data-label="Участник"] a')!;

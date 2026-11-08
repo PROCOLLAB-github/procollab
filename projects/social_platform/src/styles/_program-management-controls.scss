@@ -7,9 +7,13 @@
   min-height: 32px;
   padding: 5px;
   color: var(--accent-text);
-  background: var(--light-white);
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: 8px;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+
+  &:hover:not(:disabled) {
+    background: var(--accent-light);
+  }
 }
 
 @mixin section-title {

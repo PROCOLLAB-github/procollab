@@ -8,7 +8,7 @@
   <main class="analytics" aria-labelledby="program-analytics-title">
     <header class="analytics__header">
       <div class="analytics__title-row">
-        <h2 id="program-analytics-title" class="analytics__title text-heading-3">Аналитика</h2>
+        <h2 id="program-analytics-title" class="analytics__title">Аналитика</h2>
         @if (data()) {
           <button
             appButton="icon"
@@ -20,7 +20,7 @@
             aria-label="Выгрузить данные программы"
             title="Выгрузить данные программы"
           >
-            <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+            <i appIcon icon="download" appSquare="16" aria-hidden="true"></i>
           </button>
           <ng-template #analyticsExports>
             <div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
@@ -77,33 +77,31 @@
             [attr.data-testid]="'summary-' + card.key"
           >
             <div class="summary-card__icon">
-              <i appIcon [icon]="card.icon!" appSquare="24" aria-hidden="true"></i>
+              <i appIcon [icon]="card.icon!" appSquare="20" aria-hidden="true"></i>
             </div>
             <div class="summary-card__content">
-              <div class="analytics__heading-row">
-                <h2 class="summary-card__label text-body-10">{{ card.label }}</h2>
-                <app-tooltip
-                  data-testid="metric-tooltip"
-                  [text]="card.tooltip"
-                  [isVisible]="isTooltipVisible(card.key)"
-                  [useOverlay]="true"
-                  (click)="toggleTooltip(card.key)"
-                  (show)="showTooltip(card.key)"
-                  (hide)="hideTooltip(card.key)"
-                ></app-tooltip>
-              </div>
-              <strong class="summary-card__value">{{ card.value }}</strong>
+              <h2 class="summary-card__label">{{ card.label }}</h2>
+              <strong class="summary-card__value">{{
+                card.key === "participants-per-project"
+                  ? teamSizeFormat.format(card.value)
+                  : card.value
+              }}</strong>
             </div>
+            <app-tooltip
+              data-testid="metric-tooltip"
+              [text]="card.tooltip"
+              [isVisible]="isTooltipVisible(card.key)"
+              [useOverlay]="true"
+              (click)="toggleTooltip(card.key)"
+              (show)="showTooltip(card.key)"
+              (hide)="hideTooltip(card.key)"
+            ></app-tooltip>
           </article>
         }
       </section>
 
       <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
-        <article
-          class="attention"
-          [class.attention--empty]="!hasValues(attention())"
-          data-testid="attention-block"
-        >
+        <article class="attention" data-testid="attention-block">
           <div class="analytics__heading-row">
             <h2 class="text-body-12">Требует внимания</h2>
             <app-tooltip
@@ -123,10 +121,10 @@
                   [attr.data-attention-kind]="item.key"
                 >
                   <button
-                    appButton="primary"
                     #attentionTrigger
                     type="button"
                     class="attention__action"
+                    aria-haspopup="dialog"
                     [disabled]="item.value === 0"
                     (click)="
                       drilldown.openAttention(
@@ -139,20 +137,6 @@
                       )
                     "
                   >
-                    <span class="attention__icon"
-                      ><i
-                        appIcon
-                        [icon]="
-                          item.key === 'without-visit'
-                            ? 'person'
-                            : item.key === 'without-team'
-                              ? 'analytics-team'
-                              : 'pen'
-                        "
-                        appSquare="20"
-                        aria-hidden="true"
-                      ></i
-                    ></span>
                     <span class="text-body-10">{{ item.label }}</span
                     ><strong>{{ item.value }}</strong>
                   </button>
@@ -188,7 +172,7 @@
           <div class="analytics__heading-row">
             <h2 class="analytics-card__title">Сроки программы</h2>
             <app-tooltip
-              text="Текущий этап выделен. Даты из настроек программы, по времени вашего устройства. Если отдельный срок приема решений не задан, действует срок регистрации."
+              [text]="deadlinesHint()"
               [isVisible]="isTooltipVisible('program-deadlines')"
               [useOverlay]="true"
               (click)="toggleTooltip('program-deadlines')"
@@ -204,17 +188,17 @@
                   [class.program-deadlines__row--active]="deadline.active"
                   [class.program-deadlines__row--ended]="deadline.ended"
                   [attr.data-deadline]="deadline.key"
+                  [attr.title]="deadline.status"
+                  [attr.aria-current]="deadline.active ? 'step' : null"
                 >
-                  <div class="program-deadlines__content">
-                    <h3 class="program-deadlines__label">{{ deadline.label }}</h3>
-                    <time class="program-deadlines__date" [attr.datetime]="deadline.datetime">
-                      {{ deadline.dateLabel }}
-                    </time>
-                    @if (deadline.usesRegistrationDeadline) {
-                      <span class="program-deadlines__hint">По сроку регистрации</span>
-                    }
-                  </div>
+                  <h3 class="program-deadlines__label">{{ deadline.label }}</h3>
+                  <time class="program-deadlines__date" [attr.datetime]="deadline.datetime">
+                    {{ deadline.dateLabel }}
+                  </time>
                   <span class="program-deadlines__status">{{ deadline.status }}</span>
+                  @if (deadline.usesRegistrationDeadline) {
+                    <span class="program-deadlines__hint">По сроку регистрации</span>
+                  }
                 </li>
               }
             </ul>
@@ -275,10 +259,7 @@
       <section class="analytics-grid analytics-grid--evaluation" aria-label="Ход оценивания">
         <article class="analytics-card evaluation" data-testid="evaluation-statuses">
           <div class="analytics__heading-row">
-            <div>
-              <h2 class="analytics-card__title">Ход оценивания</h2>
-              <p class="evaluation__mode analytics-card__subtitle">{{ evaluationModeLabel() }}</p>
-            </div>
+            <h2 class="analytics-card__title">Ход оценивания</h2>
             <app-tooltip
               text="Доля выполненных назначений экспертов. Назначение выполнено, когда эксперт заполнил все критерии сданного проекта."
               [isVisible]="isTooltipVisible('evaluation-status')"
@@ -288,6 +269,7 @@
               (hide)="hideTooltip('evaluation-status')"
             ></app-tooltip>
           </div>
+          <p class="evaluation__mode analytics-card__subtitle">{{ evaluationModeLabel() }}</p>
           <app-analytics-evaluation-progress
             [programId]="programId()"
             [status]="overview.evaluationStatus"
@@ -308,7 +290,27 @@
               (show)="showTooltip('cases')"
               (hide)="hideTooltip('cases')"
             ></app-tooltip>
+            <button
+              appButton="icon"
+              type="button"
+              class="regions__export"
+              aria-label="Скачать сводку по кейсам в Excel"
+              title="Скачать сводку по кейсам в Excel"
+              [disabled]="!caseRows().length || caseExportState().pending"
+              [attr.aria-busy]="caseExportState().pending"
+              (click)="downloadCases()"
+            >
+              <i appIcon icon="download" appSquare="16" aria-hidden="true"></i>
+            </button>
           </div>
+          @if (caseExportState().failed) {
+            <app-state
+              class="exports__error"
+              [compact]="true"
+              kind="error"
+              title="Не удалось выгрузить кейсы. Повторите попытку."
+            />
+          }
           @if (caseEmptyMessage(); as message) {
             <p class="analytics-empty-state text-body-10">{{ message }}</p>
           }
@@ -389,12 +391,7 @@
 
         <article class="activity" data-testid="activity-dynamics">
           <div class="analytics__heading-row">
-            <div>
-              <h2 class="analytics-card__title">Динамика активности</h2>
-              @if (hasActivity()) {
-                <p class="activity__note analytics-card__subtitle">Последние 30 дней</p>
-              }
-            </div>
+            <h2 class="analytics-card__title">Динамика активности</h2>
             <app-tooltip
               text="Ежедневные новые регистрации и отправленные решения за последние 30 дней."
               [isVisible]="isTooltipVisible('activity')"
@@ -406,6 +403,7 @@
             ></app-tooltip>
           </div>
           @if (hasActivity()) {
+            <p class="activity__note analytics-card__subtitle">Последние 30 дней</p>
             <app-analytics-activity-chart [points]="overview.activity" />
           } @else {
             <p class="analytics-empty-state text-body-12">
@@ -424,6 +422,14 @@
           >
             <div class="analytics__heading-row">
               <h2 [id]="card.key + '-title'" class="text-body-12">{{ card.title }}</h2>
+              <app-tooltip
+                [text]="card.tooltip"
+                [isVisible]="isTooltipVisible(card.key)"
+                [useOverlay]="true"
+                (click)="toggleTooltip(card.key)"
+                (show)="showTooltip(card.key)"
+                (hide)="hideTooltip(card.key)"
+              ></app-tooltip>
               <button
                 appButton="icon"
                 type="button"
@@ -434,16 +440,8 @@
                 [attr.aria-busy]="regionExportState()[card.key].pending"
                 (click)="downloadRegions(card.key)"
               >
-                <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+                <i appIcon icon="download" appSquare="16" aria-hidden="true"></i>
               </button>
-              <app-tooltip
-                [text]="card.tooltip"
-                [isVisible]="isTooltipVisible(card.key)"
-                [useOverlay]="true"
-                (click)="toggleTooltip(card.key)"
-                (show)="showTooltip(card.key)"
-                (hide)="hideTooltip(card.key)"
-              ></app-tooltip>
             </div>
             @if (regionExportState()[card.key].pending) {
               <app-state

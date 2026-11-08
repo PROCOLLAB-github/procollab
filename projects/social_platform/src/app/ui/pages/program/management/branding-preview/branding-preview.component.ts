@@ -10,6 +10,7 @@ import {
   ElementRef,
   inject,
   input,
+  model,
   output,
   signal,
   viewChild,
@@ -42,7 +43,7 @@ export class ProgramBrandingPreviewComponent {
   readonly disabled = input(false);
   readonly framingChange = output<ProgramImageFraming>();
   readonly busy = input(false);
-  readonly device = signal<"desktop" | "mobile">(window.innerWidth < 1000 ? "mobile" : "desktop");
+  readonly device = model<"desktop" | "mobile">(window.innerWidth < 1000 ? "mobile" : "desktop");
   readonly target = signal<"cover" | "logo">("cover");
   readonly frames = computed(() => programImageFraming(this.framing()));
   readonly coverKey = computed<ProgramImageKey>(() =>

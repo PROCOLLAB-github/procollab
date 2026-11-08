@@ -844,6 +844,23 @@
   flex: 1;
 }
 
+.experts__roster-heading {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+
+  h2 {
+    padding-bottom: 16px;
+    color: var(--accent-text);
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .experts__heading-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
 .experts__filter-trigger.ui-button {
   flex-shrink: 0;
   gap: 8px;

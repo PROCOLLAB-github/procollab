@@ -649,6 +649,27 @@
     gap: 12px;
     margin-block: 12px;
     h4 { margin: 0 0 8px; }
+
+    @media (max-width: 520px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  &-frame.ui-button {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  &-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+
+    .ui-button {
+      padding-inline: 0;
+      text-align: left;
+      white-space: normal;
+    }
   }
   &-sample {
     height: 152px;

@@ -18,6 +18,7 @@ import {
 } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { DOCUMENT } from "@angular/common";
+import type { SheetData } from "write-excel-file/browser";
 import { ExportFileInfoService } from "@api/export-file/facades/export-file-info.service";
 import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
 import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program-analytics-info.service";
@@ -113,9 +114,20 @@ export class ProgramAnalyticsComponent implements OnInit {
       new Date(this.currentTime()),
     ),
   );
+  protected readonly deadlinesHint = computed(() =>
+    [
+      "Текущий этап выделен. Даты показаны по времени вашего устройства.",
+      ...this.deadlines().map(deadline => `${deadline.label} — ${deadline.status.toLowerCase()}.`),
+    ].join(" "),
+  );
   protected readonly activeTooltip = signal<string | null>(null);
   protected readonly pinnedTooltip = signal<string | null>(null);
   protected readonly casesExpanded = signal(false);
+  protected readonly caseExportState = signal({ pending: false, failed: false });
+  protected readonly teamSizeFormat = new Intl.NumberFormat("ru-RU", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
   protected readonly regionExportState = signal<Record<RegionExportKind, RegionExportState>>({
     "project-regions": { pending: false, failed: false },
     "participant-regions": { pending: false, failed: false },
@@ -321,6 +333,36 @@ export class ProgramAnalyticsComponent implements OnInit {
       point => point.registrations > 0 || point.submittedSolutions > 0,
     ),
   );
+
+  protected async downloadCases(): Promise<void> {
+    const programId = this.programId();
+    const overview = this.data();
+    const rows = this.caseRows();
+    if (programId === null || !overview || !rows.length || this.caseExportState().pending) return;
+
+    const includeSubmitted = overview.cases.submissionApplicable;
+    const headers = ["Кейс", "Проекты", ...(includeSubmitted ? ["Сдано"] : []), "Участники"];
+    const sheetData: SheetData = [
+      headers.map(value => ({ type: String, value, fontWeight: "bold" })),
+      ...rows.map(row => [
+        { type: String, value: row.name },
+        { type: Number, value: row.projectsTotal },
+        ...(includeSubmitted ? [{ type: Number, value: row.submitted }] : []),
+        { type: Number, value: row.participantsTotal },
+      ]),
+    ];
+    this.caseExportState.set({ pending: true, failed: false });
+    try {
+      const { default: writeExcelFile } = await import("write-excel-file/browser");
+      await writeExcelFile(sheetData, {
+        sheet: "Кейсы",
+        columns: headers.map((_, index) => ({ width: index === 0 ? 48 : 16 })),
+      }).toFile(`program-${programId}-cases.xlsx`);
+      this.caseExportState.set({ pending: false, failed: false });
+    } catch {
+      this.caseExportState.set({ pending: false, failed: true });
+    }
+  }
 
   protected async downloadRegions(kind: RegionExportKind): Promise<void> {
     const card = this.regionCards().find(item => item.key === kind);

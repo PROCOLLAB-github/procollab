@@ -47,23 +47,6 @@
     line-height: 20px;
   }
 
-  .experts__table--people th:nth-child(1) {
-    width: 34%;
-  }
-
-  .experts__table--people th:nth-child(2) {
-    width: 22%;
-  }
-
-  .experts__table--people th:nth-child(3) {
-    width: 22%;
-  }
-
-  .experts__table--people th:nth-child(4),
-  .experts__table--people th:nth-child(5) {
-    width: 11%;
-  }
-
   .experts__table--people .ui-button--text {
     justify-content: flex-start;
     padding-inline: 0;
@@ -215,30 +198,34 @@
     }
   }
 
-  // Row actions and bulk selection.
-  .experts__table--people thead th:nth-child(1) {
-    width: 36px;
-  }
+  .experts__table--people thead th {
+    padding-block: 10px;
+    overflow-wrap: anywhere;
+    background: var(--background-grey);
 
-  .experts__table--people thead th:nth-child(2) {
-    width: 30%;
-  }
+    &:first-child {
+      width: 52px;
+    }
 
-  .experts__table--people thead th:nth-child(3) {
-    width: 18%;
-  }
+    &:nth-child(2) {
+      width: 26%;
+    }
 
-  .experts__table--people thead th:nth-child(4) {
-    width: 20%;
-  }
+    &:nth-child(4) {
+      width: 17%;
+    }
 
-  .experts__table--people thead th:nth-child(5),
-  .experts__table--people thead th:nth-child(6) {
-    width: 9%;
-  }
+    &:nth-child(5) {
+      width: 80px;
+    }
 
-  .experts__table--people thead th:nth-child(7) {
-    width: 64px;
+    &:nth-child(6) {
+      width: 68px;
+    }
+
+    &:last-child {
+      width: 44px;
+    }
   }
 
   .experts__row-actions {
