@@ -583,7 +583,7 @@ describe("Списки управления программой в DOM", () => 
     ).toBe("https://example.com/unsaved-cover.png");
     component.resetForms();
     harness.detectChanges();
-    expect(draftCover().getAttribute("src")).toContain("/cover.png");
+    expect(preview().querySelector<HTMLImageElement>('img[src*="unsaved-cover.png"]')).toBeNull();
     expect(component.basicForm.pristine).toBe(true);
     expect(element().textContent).toContain("Высоту можно выбрать любую");
     expect(element().textContent).not.toContain("Высота — по содержимому");

@@ -201,7 +201,7 @@ describe("ProjectEditComponent", () => {
     fixture.detectChanges();
     expect(
       fixture.nativeElement.querySelectorAll(".project__save app-button")[2].textContent,
-    ).toContain("отправить заявку");
+    ).toContain("сдать проект");
     (facade.submitted as ReturnType<typeof signal<boolean>>).set(true);
     fixture.detectChanges();
     expect(
