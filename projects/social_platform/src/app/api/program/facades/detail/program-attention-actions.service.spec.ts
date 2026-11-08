@@ -28,10 +28,15 @@ const preview: ProgramAttentionPreview = {
 describe("Attention bulk actions", () => {
   let state: ProgramAnalyticsDrilldownService;
   const actions = { preview: vi.fn(), send: vi.fn(), export: vi.fn() };
-  const repo = { getManagerParticipantsWithoutTeam: vi.fn(), getCaseProjects: vi.fn() };
+  const repo = {
+    getManagerParticipantsWithoutTeam: vi.fn(),
+    getManagerParticipantsWithoutVisit: vi.fn(),
+    getCaseProjects: vi.fn(),
+  };
   beforeEach(() => {
     vi.clearAllMocks();
     repo.getManagerParticipantsWithoutTeam.mockReturnValue(of(participantsPage({ count: 51 })));
+    repo.getManagerParticipantsWithoutVisit.mockReturnValue(of(participantsPage({ count: 51 })));
     actions.preview.mockReturnValue(of(ok(preview)));
     actions.send.mockReturnValue(of(ok({ createdCount: 1, skippedCount: 0 })));
     actions.export.mockReturnValue(of(ok(new Blob(["xlsx"]))));
@@ -43,7 +48,7 @@ describe("Attention bulk actions", () => {
       ],
     });
     state = TestBed.inject(ProgramAnalyticsDrilldownService);
-    state.openAttention(12, "participants-without-team");
+    state.openAttention(12, "participants-without-visit");
   });
 
   it("selects all matching pages with exclusions and preserves explicit row selection on pagination", () => {
@@ -55,7 +60,7 @@ describe("Attention bulk actions", () => {
     expect(state.isSelected(124)).toBe(true);
     expect(state.isSelected(123)).toBe(false);
     state.previewReminder();
-    expect(actions.preview).toHaveBeenCalledWith(12, "participants-without-team", {
+    expect(actions.preview).toHaveBeenCalledWith(12, "participants-without-visit", {
       search: "",
       selection: { mode: "all", ids: [], excludedIds: [123] },
     });
@@ -79,7 +84,7 @@ describe("Attention bulk actions", () => {
     state.sendReminder();
     expect(actions.send).toHaveBeenCalledExactlyOnceWith(
       12,
-      "participants-without-team",
+      "participants-without-visit",
       "signed-preview",
     );
     expect(state.actionSuccess()).toContain("Напоминания созданы: 1");
@@ -166,13 +171,16 @@ describe("Attention bulk actions", () => {
     expect(actions.export).toHaveBeenCalled();
   });
 
-  it("exports all found without selection and only selected when rows are checked", () => {
+  it("exports all or selected participants without a team and skips reminders for this list", () => {
+    state.openAttention(12, "participants-without-team");
     state.exportAttention();
     expect(actions.export).toHaveBeenLastCalledWith(12, "participants-without-team", {
       search: "",
       selection: { mode: "all", ids: [], excludedIds: [] },
     });
     state.toggleSelection(123);
+    state.previewReminder();
+    expect(actions.preview).not.toHaveBeenCalled();
     state.exportAttention();
     expect(actions.export).toHaveBeenLastCalledWith(12, "participants-without-team", {
       search: "",
@@ -190,7 +198,7 @@ describe("Attention bulk actions", () => {
     state.toggleSelection(123);
     state.previewReminder();
     state.close();
-    state.openAttention(24, "participants-without-team");
+    state.openAttention(24, "participants-without-visit");
     pending.next(ok(preview));
     expect(state.preview()).toBeNull();
     expect(state.selectedCount()).toBe(0);
