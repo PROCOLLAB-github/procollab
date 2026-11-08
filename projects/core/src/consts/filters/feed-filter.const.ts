@@ -2,39 +2,49 @@
 
 export const feedFilter = [
   {
-    id: 0,
     name: "все новости",
     value: "",
     icon: "feed",
+    apiType: "all_news",
+    countKey: "allNews",
   },
   {
-    id: 1,
     name: "новости проектов",
     value: "project",
     icon: "projects",
+    apiType: "project_news",
+    countKey: "projectNews",
   },
   {
-    id: 2,
-    name: "свежие вакансии",
-    value: "vacancy",
-    icon: "suitcase",
-  },
-  {
-    id: 3,
     name: "новости сообщества",
     value: "news",
     icon: "people-bold",
+    apiType: "news",
+    countKey: "news",
   },
   {
-    id: 4,
+    name: "свежие вакансии",
+    value: "vacancy",
+    icon: "suitcase",
+    apiType: "vacancy",
+    countKey: "vacancy",
+  },
+  {
+    name: "новые проекты",
+    value: "new_project",
+    icon: "projects",
+    apiType: "new_project",
+    countKey: "newProject",
+  },
+  {
     name: "новости программ",
     value: "partnerprogram",
     icon: "procollab",
+    apiType: "partnerprogram",
+    countKey: "partnerprogram",
   },
-  {
-    id: 5,
-    name: "образование",
-    value: "education",
-    icon: "trajectories",
-  },
-];
+] as const;
+
+export function getFeedFilter(includes: unknown) {
+  return feedFilter.find(filter => filter.value === includes) ?? feedFilter[0];
+}

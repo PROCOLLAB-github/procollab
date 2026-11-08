@@ -32,25 +32,21 @@
 
   <ng-template #filter>
     <div class="filter">
-      @for (filterItem of feedFilterOptions; track $index) {
+      @for (filterItem of feedFilterOptions; track filterItem.value) {
+        @let count = categoryCounts()[filterItem.countKey] ?? 0;
         <button
           type="button"
           class="filter__option"
-          [disabled]="filterItem.id === 5"
           [attr.aria-pressed]="filterItem.value === includedFilters()"
-          [class.filter__option--disable]="filterItem.id === 5"
           [class.filter__option--active]="filterItem.value === includedFilters()"
-          (click)="filterItem.id !== 5 && setFilter(filterItem.value)"
+          (click)="setFilter(filterItem.value)"
         >
           <span class="filter__option--icon" aria-hidden="true">
             <i appIcon [icon]="filterItem.icon" appSquare="18"></i>
           </span>
           <span class="filter__title">{{ filterItem.name }}</span>
-          <span
-            class="filter__count"
-            [attr.aria-label]="'Количество: ' + categoryCount(filterItem.value)"
-          >
-            {{ categoryCount(filterItem.value) }}
+          <span class="filter__count" [attr.aria-label]="'Количество: ' + count">
+            {{ count }}
           </span>
         </button>
       }
@@ -63,26 +59,22 @@
 
   <ng-template #filter>
     <div class="filter">
-      @for (filterItem of feedFilterOptions; track $index) {
+      @for (filterItem of feedFilterOptions; track filterItem.value) {
+        @let count = categoryCounts()[filterItem.countKey] ?? 0;
         <button
           appButton="secondary"
           type="button"
           class="filter__option"
-          [disabled]="filterItem.id === 5"
           [attr.aria-pressed]="filterItem.value === includedFilters()"
-          [class.filter__option--disable]="filterItem.id === 5"
           [class.filter__option--active]="filterItem.value === includedFilters()"
-          (click)="filterItem.id !== 5 && setFilter(filterItem.value)"
+          (click)="setFilter(filterItem.value)"
         >
           <span class="filter__option--icon" aria-hidden="true">
             <i appIcon [icon]="filterItem.icon" appSquare="18"></i>
           </span>
           <span class="filter__title">{{ filterItem.name }}</span>
-          <span
-            class="filter__count"
-            [attr.aria-label]="'Количество: ' + categoryCount(filterItem.value)"
-          >
-            {{ categoryCount(filterItem.value) }}
+          <span class="filter__count" [attr.aria-label]="'Количество: ' + count">
+            {{ count }}
           </span>
         </button>
       }

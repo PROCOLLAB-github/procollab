@@ -25,24 +25,33 @@ describe("FeedComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("показывает счётчики всех шести категорий независимо от фильтра", () => {
+  it("показывает шесть категорий в новом порядке с отдельными счетчиками", () => {
     TestBed.inject(FeedUIInfoService).categoryCounts.set({
-      all: 12,
-      project: 5,
+      allNews: 6,
+      projectNews: 2,
+      newProject: 5,
       vacancy: 3,
       news: 4,
       partnerprogram: 0,
-      education: 0,
     });
     fixture.detectChanges();
 
     const options = Array.from(
       fixture.nativeElement.querySelectorAll(".desktop .filter__option"),
     ) as HTMLElement[];
-    expect(options).toHaveLength(6);
+    expect(
+      options.map(option => option.querySelector(".filter__title")?.textContent?.trim()),
+    ).toEqual([
+      "все новости",
+      "новости проектов",
+      "новости сообщества",
+      "свежие вакансии",
+      "новые проекты",
+      "новости программ",
+    ]);
     expect(
       options.map(option => option.querySelector(".filter__count")?.textContent?.trim()),
-    ).toEqual(["12", "5", "3", "4", "0", "0"]);
+    ).toEqual(["6", "2", "4", "3", "5", "0"]);
     for (const option of options) {
       expect(option.tagName).toBe("BUTTON");
       expect(Array.from(option.children).map(child => child.className)).toEqual([
@@ -54,10 +63,10 @@ describe("FeedComponent", () => {
         "true",
       );
     }
-    expect((options[5] as HTMLButtonElement).disabled).toBe(true);
+    expect((options[4] as HTMLButtonElement).disabled).toBe(false);
     expect(options[0].getAttribute("aria-pressed")).toBe("true");
     const setFilter = vi.spyOn(component, "setFilter");
-    options[1].click();
-    expect(setFilter).toHaveBeenCalledExactlyOnceWith("project");
+    options[4].click();
+    expect(setFilter).toHaveBeenCalledExactlyOnceWith("new_project");
   });
 });

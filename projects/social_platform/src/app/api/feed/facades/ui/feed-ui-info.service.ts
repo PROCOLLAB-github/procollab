@@ -18,12 +18,12 @@ export class FeedUIInfoService {
 
   readonly totalItemsCount = signal(0);
   readonly categoryCounts = signal<FeedCategoryCounts>({
-    all: 0,
-    project: 0,
+    allNews: 0,
+    projectNews: 0,
+    newProject: 0,
     vacancy: 0,
     news: 0,
     partnerprogram: 0,
-    education: 0,
   });
   readonly feedPage = signal(0);
   readonly perFetchTake = signal(6);

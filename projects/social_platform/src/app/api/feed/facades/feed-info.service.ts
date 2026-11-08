@@ -1,9 +1,10 @@
 /** @format */
 
-import { DestroyRef, ElementRef, inject, Injectable, signal } from "@angular/core";
+import { DestroyRef, ElementRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   concatMap,
+  distinctUntilChanged,
   EMPTY,
   fromEvent,
   map,
@@ -13,16 +14,14 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { FeedItem, FeedItemType, FeedPage } from "@domain/feed/feed-item.model";
+import { FeedItem, FeedPage } from "@domain/feed/feed-item.model";
 import { FeedUIInfoService } from "./ui/feed-ui-info.service";
 import { FetchFeedUseCase } from "../use-cases/fetch-feed.use-case";
 import { ReadFeedNewsUseCase } from "../use-cases/read-feed-news.use-case";
 import { ToggleFeedLikeUseCase } from "../use-cases/toggle-feed-like.use-case";
 import { isSuccess, loading, success } from "@domain/shared/async-state";
-import { FILTER_SPLIT_SYMBOL } from "@core/consts/other/filter-split-symbol.const";
+import { getFeedFilter } from "@core/consts/filters/feed-filter.const";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-
-const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
 
 /** Координирует глобальную ленту: данные резолвера, фильтры, пагинация, просмотры, лайки. */
 @Injectable()
@@ -40,7 +39,10 @@ export class FeedInfoService {
 
   readonly feedItems = this.feedUIInfoService.feedItems;
 
-  private readonly includes = signal<FeedItemType[] | string>([]);
+  private readonly feedType$ = this.route.queryParams.pipe(
+    map(params => getFeedFilter(params["includes"]).apiType),
+    distinctUntilChanged(),
+  );
 
   initializationFeedNews(feedRoot: ElementRef<HTMLElement>): void {
     this.route.data
@@ -61,25 +63,17 @@ export class FeedInfoService {
         queueMicrotask(() => this.observeFeedItems());
       });
 
-    this.route.queryParams
+    this.feedType$
       .pipe(
-        map(params => params["includes"]),
-        tap(includes => {
-          this.includes.set(includes);
-        }),
         skip(1),
-        switchMap(includes => {
+        switchMap(type => {
           this.feedUIInfoService.totalItemsCount.set(0);
           this.feedUIInfoService.feedPage.set(0);
 
           const prev = this.feedUIInfoService.feedItems();
           this.feedUIInfoService.feedItems$.set(loading(prev));
 
-          return this.onFetch(
-            0,
-            this.feedUIInfoService.perFetchTake(),
-            includes ?? DEFAULT_FEED_TYPES,
-          );
+          return this.onFetch(0, this.feedUIInfoService.perFetchTake(), type);
         }),
         takeUntilDestroyed(this.destroyRef),
       )
@@ -89,12 +83,16 @@ export class FeedInfoService {
         queueMicrotask(() => this.observeFeedItems());
 
         setTimeout(() => {
-          feedRoot?.nativeElement.children[0].scrollIntoView({ behavior: "smooth" });
+          feedRoot.nativeElement.children[0]?.scrollIntoView({ behavior: "smooth" });
         });
       });
   }
 
-  private onScroll(target: HTMLElement, feedRoot: ElementRef<HTMLElement>): Observable<FeedItem[]> {
+  private onScroll(
+    target: HTMLElement,
+    feedRoot: ElementRef<HTMLElement>,
+    type: string,
+  ): Observable<FeedItem[]> {
     if (
       !this.feedUIInfoService.totalItemsCount() ||
       this.feedUIInfoService.feedPage() >= this.feedUIInfoService.totalItemsCount()
@@ -109,11 +107,7 @@ export class FeedInfoService {
     if (diff < 400) {
       const currentOffset = this.feedUIInfoService.feedPage();
 
-      return this.onFetch(
-        currentOffset,
-        this.feedUIInfoService.perFetchTake(),
-        this.includes(),
-      ).pipe(
+      return this.onFetch(currentOffset, this.feedUIInfoService.perFetchTake(), type).pipe(
         tap((feedChunk: FeedItem[]) => {
           this.feedUIInfoService.feedPage.set(currentOffset + feedChunk.length);
           const keyOf = (item: FeedItem) => `${item.typeModel}:${item.content.id}`;
@@ -137,28 +131,21 @@ export class FeedInfoService {
 
   initScroll(target: HTMLElement, feedRoot: ElementRef<HTMLElement>): void {
     if (target) {
-      fromEvent(target, "scroll")
+      this.feedType$
         .pipe(
-          throttleTime(100),
-          concatMap(() => this.onScroll(target, feedRoot)),
+          switchMap(type =>
+            fromEvent(target, "scroll").pipe(
+              throttleTime(100),
+              concatMap(() => this.onScroll(target, feedRoot, type)),
+            ),
+          ),
           takeUntilDestroyed(this.destroyRef),
         )
         .subscribe();
     }
   }
 
-  private onFetch(
-    offset: number,
-    limit: number,
-    includes: FeedItemType[] | string = DEFAULT_FEED_TYPES,
-  ) {
-    const type =
-      typeof includes === "string"
-        ? includes || DEFAULT_FEED_TYPES.join(FILTER_SPLIT_SYMBOL)
-        : includes.length === 0
-          ? DEFAULT_FEED_TYPES.join(FILTER_SPLIT_SYMBOL)
-          : includes.join(FILTER_SPLIT_SYMBOL);
-
+  private onFetch(offset: number, limit: number, type: string) {
     return this.fetchFeedUseCase.execute(offset, limit, type).pipe(
       tap(result => {
         this.feedUIInfoService.totalItemsCount.set(result.ok ? result.value.count : 0);
