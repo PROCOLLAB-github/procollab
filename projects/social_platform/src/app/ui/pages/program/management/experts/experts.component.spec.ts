@@ -160,6 +160,26 @@ describe("Управление экспертами", () => {
     expect(component.attentionProjects()).toEqual([]);
     expect(component.pendingAutoGroups()).toEqual([]);
   });
+  it("открывает распределение сразу и фильтрует проекты без единого назначения", () => {
+    const { fixture, component } = setup();
+    fixture.componentRef.setInput("initialTab", "distribution");
+    fixture.detectChanges();
+
+    const panel = (fixture.nativeElement as HTMLElement).querySelector(".experts__distribution")!;
+    const filter = Array.from(panel.querySelectorAll("button")).find(
+      button => button.textContent?.trim() === "Без экспертов",
+    )!;
+    expect(component.tab()).toBe("distribution");
+    expect(filter.getAttribute("aria-pressed")).toBe("false");
+
+    filter.click();
+    fixture.detectChanges();
+    expect(filter.getAttribute("aria-pressed")).toBe("true");
+    expect(component.filteredDistribution()).toEqual(
+      component.allProjects().filter(project => !project.experts.length),
+    );
+    expect(component.filteredDistribution().length).toBeLessThan(component.allProjects().length);
+  });
   it("в предпросмотре показывает существующих экспертов вместе с добавляемыми", async () => {
     const { component, fixture } = setup();
     component.plan.set({
