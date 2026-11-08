@@ -67,7 +67,9 @@ export class ProgramAnalyticsDrilldownService {
   readonly selectedWithoutExpert = computed(
     () =>
       this.projectsPage()?.results.some(
-        row => this.isSelected(row.programProjectId) && row.reason === "no_assignments",
+        row =>
+          this.isSelected(row.programProjectId) &&
+          (row.reason === "no_assignments" || !(row.experts?.length ?? row.assignmentsTotal)),
       ) ?? false,
   );
   excludeRecipient(id: number): void {

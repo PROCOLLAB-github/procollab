@@ -561,6 +561,33 @@ describe("Attention views: real overlay", () => {
     expect(dialog().textContent).toContain("Письма поставлены в очередь");
   });
 
+  it("блокирует напоминание для выбранной работы без экспертов при открытом оценивании", async () => {
+    projects.execute.mockReturnValue(
+      of(
+        ok(
+          projectsPage({
+            mode: "open",
+            results: [
+              attentionProject({
+                reason: "awaiting_first_evaluation",
+                assignmentsTotal: null,
+                assignmentsCompleted: null,
+                experts: [],
+              }),
+            ],
+          }),
+        ),
+      ),
+    );
+    await open("projects-awaiting-evaluation");
+    dialog().querySelector<HTMLInputElement>('tbody input[type="checkbox"]')!.click();
+    await fixture.whenStable();
+
+    expect(button("Напомнить").disabled).toBe(true);
+    expect(dialog().querySelector('[aria-label="О напоминании"]')).not.toBeNull();
+    expect(actions.preview).not.toHaveBeenCalled();
+  });
+
   it.each([
     "participants-without-visit",
     "participants-without-team",
