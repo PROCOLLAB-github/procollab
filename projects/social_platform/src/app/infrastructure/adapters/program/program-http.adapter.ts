@@ -58,10 +58,11 @@ export class ProgramHttpAdapter {
     programId: number,
     category: ProgramAttentionCategory,
     token: string,
+    excludedRecipientIds?: number[],
   ): Observable<ProgramAttentionSendResult> {
     return this.apiService.post(
       `/programs/${programId}/manager-overview/attention/${category}/reminders/`,
-      { token },
+      { token, ...(excludedRecipientIds?.length ? { excludedRecipientIds } : {}) },
     );
   }
   exportAttention(

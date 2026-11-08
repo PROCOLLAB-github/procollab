@@ -185,7 +185,7 @@ describe("ProjectMainStepComponent", () => {
     expect(files.deleteFile).not.toHaveBeenCalled();
   });
 
-  it("пустая обложка показывает zero state, не записывая фиктивный URL в обязательный control", async () => {
+  it("пустая обложка показывает состояние по умолчанию без фиктивного URL", async () => {
     const form = TestBed.inject(ProjectFormService);
     form.isDefaultCover.set(null);
     form.coverImageAddress?.setValue("");
@@ -195,13 +195,13 @@ describe("ProjectMainStepComponent", () => {
     expect(cover.querySelector(".file__replace").textContent.trim()).toBe("Загрузить файл");
     expect(cover.textContent).not.toContain("Файл успешно загружен");
     expect(form.coverImageAddress?.value).toBe("");
-    expect(form.coverImageAddress?.hasError("required")).toBe(true);
+    expect(form.coverImageAddress?.valid).toBe(true);
     expect(files.uploadFile).not.toHaveBeenCalled();
     expect(resetCover.execute).not.toHaveBeenCalled();
   });
 
   it("untouched fields are quiet; submit exposes matching borders, warning icons and required messages", async () => {
-    const required = ["name", "region", "industry", "problem", "description", "targetAudience"];
+    const required = ["name"];
     for (const id of required) {
       expect(
         fixture.nativeElement.querySelector(`#${id}`)?.closest("fieldset")?.querySelector(".error"),
@@ -217,12 +217,21 @@ describe("ProjectMainStepComponent", () => {
       expect(fieldset.querySelector('[class*="--error"]')).not.toBeNull();
       expect(fieldset.querySelector('[icon="error"]')).not.toBeNull();
     }
-    const optional: HTMLElement = fixture.nativeElement
-      .querySelector("#actuality")
-      .closest("fieldset");
-    expect(optional.querySelector(".error")).toBeNull();
-    expect(optional.querySelector('[icon="error"]')).toBeNull();
-    expect(optional.querySelector(".field--error")).toBeNull();
+    for (const id of [
+      "region",
+      "industry",
+      "problem",
+      "description",
+      "targetAudience",
+      "actuality",
+    ]) {
+      const optional: HTMLElement = fixture.nativeElement
+        .querySelector(`#${id}`)
+        .closest("fieldset");
+      expect(optional.querySelector(".error")).toBeNull();
+      expect(optional.querySelector('[icon="error"]')).toBeNull();
+      expect(optional.querySelector(".field--error")).toBeNull();
+    }
   });
 
   it("valid fields do not become required errors after a submit attempt", async () => {

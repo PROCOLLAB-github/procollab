@@ -3,45 +3,33 @@
 <main
   #managementLayout
   class="management"
+  [class.management--subnav]="
+    !!state.program() && (activeGroup() === 'settings' || activeGroup() === 'evaluation')
+  "
   [class.management--projects]="section() === 'projects'"
   [class.management--lists]="section() === 'participants' || section() === 'projects'"
 >
-  <a class="management__back" [routerLink]="paths.program.detail(state.context?.programId ?? '')"
-    >На страницу программы</a
-  >
-  <header class="management__heading">
-    <h1>Управление программой</h1>
-    @if (state.program() && !state.teamOpen()) {
-      <p>{{ state.program()?.name }}</p>
-    }
-  </header>
-  @if (state.program()?.draft) {
-    <p class="management__muted">Черновик · Не виден участникам</p>
-    <a
-      id="program-launch-link"
-      class="management__back"
-      [routerLink]="paths.program.launch(state.program()!.id)"
-      >К подготовке к запуску</a
-    >
-  }
   @if (state.program(); as program) {
-    <nav class="management__tabs" aria-label="Разделы управления программой">
-      @for (tab of tabs; track tab.id) {
-        <a
-          [routerLink]="paths.program.management(program.id, tab.id)"
-          [attr.aria-current]="
-            section() === tab.id || (section() === 'evaluation' && tab.id === 'projects')
-              ? 'page'
-              : null
-          "
-          >{{
-            tab.id === "projects" && program.solutionStorageMode === "solution"
-              ? "Заявки"
-              : tab.label
-          }}</a
-        >
-      }
-    </nav>
+    <app-program-management-header
+      [programId]="program.id"
+      [name]="program.name"
+      [draft]="!!program.draft"
+      [active]="activeGroup()"
+      [status]="registrationStatusLabel(program.datetimeRegistrationEnds, program.datetimeFinished)"
+    />
+    @if (activeGroup() === "evaluation") {
+      <nav class="management__settings-tabs" aria-label="Разделы оценивания">
+        @for (tab of evaluationTabs; track tab.key) {
+          <a
+            [routerLink]="paths.program.management(program.id, tab.section)"
+            [queryParams]="tab.query"
+            [attr.aria-current]="activeEvaluation() === tab.key ? 'page' : null"
+          >
+            {{ tab.label }}
+          </a>
+        }
+      </nav>
+    }
   }
   @if (state.error()) {
     <section class="management__card" appAlert="error">
@@ -103,7 +91,15 @@
       <section class="management__card" [attr.aria-busy]="state.pending()">
         <div class="management__list-heading">
           <div>
-            <h2>{{ section() === "participants" ? "Участники" : "Проекты" }}</h2>
+            <h2>
+              {{
+                section() === "participants"
+                  ? "Участники"
+                  : allocation()
+                    ? "Распределение"
+                    : "Проекты"
+              }}
+            </h2>
             @if (section() === "participants") {
               <p class="management__participant-count" aria-live="polite">
                 Всего участников: <strong>{{ state.participants()?.totalCount ?? count() }}</strong>
@@ -608,7 +604,7 @@
                   [disabled]="!state.program()?.isCompetitive"
                   (click)="openProjectAction('submit')"
                 >
-                  Сдать решения
+                  Сдать проекты
                 </button>
                 <button
                   appButton="primary"
@@ -658,16 +654,18 @@
         }
       </section>
     } @else if (section() === "settings") {
-      <nav class="management__settings-tabs" aria-label="Разделы настроек">
-        @for (tab of settingsTabs; track tab.id) {
-          <a
-            [routerLink]="[]"
-            [queryParams]="{ tab: tab.id }"
-            [attr.aria-current]="settingsTab() === tab.id ? 'page' : null"
-            >{{ tab.label }}</a
-          >
-        }
-      </nav>
+      @if (activeGroup() === "settings") {
+        <nav class="management__settings-tabs" aria-label="Разделы настроек">
+          @for (tab of settingsTabs; track tab.id) {
+            <a
+              [routerLink]="[]"
+              [queryParams]="{ tab: tab.id }"
+              [attr.aria-current]="settingsTab() === tab.id ? 'page' : null"
+              >{{ tab.label }}</a
+            >
+          }
+        </nav>
+      }
       @if (formError()) {
         <div appAlert="error">
           {{ formError() }}
@@ -736,8 +734,87 @@
               rows="7"
             ></textarea>
           </label>
-          <h3>Изображения</h3>
-          <p class="management__muted">Обложка, логотип и баннер регистрации.</p>
+          <section class="management__branding" aria-labelledby="program-branding-title">
+            <h3 id="program-branding-title">Оформление программы</h3>
+            <div class="management__branding-previews">
+              @for (device of ["Компьютер", "Телефон"]; track device) {
+                <article>
+                  <h4>{{ device }}</h4>
+                  <div
+                    class="management__branding-sample"
+                    [class.management__branding-sample--mobile]="device === 'Телефон'"
+                  >
+                    @if (
+                      href(
+                        (device === "Телефон" &&
+                          basicForm.controls.mobileCoverImageAddress.value) ||
+                          basicForm.controls.coverImageAddress.value
+                      );
+                      as cover
+                    ) {
+                      <img
+                        class="management__branding-cover"
+                        [src]="cover"
+                        [appImageFraming]="
+                          basicForm.controls.imageFraming.value?.[
+                            device === 'Телефон' ? 'mobileCover' : 'cover'
+                          ]
+                        "
+                        alt=""
+                      />
+                    } @else {
+                      <div class="management__branding-cover"></div>
+                    }
+                    <span class="management__branding-avatar">
+                      @if (href(basicForm.controls.imageAddress.value); as avatar) {
+                        <img
+                          [src]="avatar"
+                          [appImageFraming]="basicForm.controls.imageFraming.value?.logo"
+                          alt=""
+                        />
+                      } @else {
+                        <i appIcon icon="program" appSquare="22" aria-hidden="true"></i>
+                      }
+                    </span>
+                    <p>{{ basicForm.controls.name.value }}</p>
+                  </div>
+                </article>
+              }
+            </div>
+            <button type="button" appButton="secondary" (click)="brandingOpen.set(true)">
+              Настроить оформление
+            </button>
+          </section>
+          <app-modal
+            [open]="brandingOpen()"
+            (openChange)="brandingOpen.set($event)"
+            labelledBy="program-framing-heading"
+          >
+            <section class="management__framing">
+              <div class="management__inline">
+                <h2 id="program-framing-heading">Настроить оформление</h2>
+                <button
+                  type="button"
+                  appButton="icon"
+                  aria-label="Закрыть оформление"
+                  (click)="brandingOpen.set(false)"
+                >
+                  <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
+                </button>
+              </div>
+              @if (brandingOpen()) {
+                <app-program-branding-preview
+                  [cover]="href(basicForm.controls.coverImageAddress.value)"
+                  [logo]="href(basicForm.controls.imageAddress.value)"
+                  [mobileCover]="href(basicForm.controls.mobileCoverImageAddress.value)"
+                  [framing]="basicForm.controls.imageFraming.value"
+                  [disabled]="saving() || !!uploading()"
+                  [busy]="!!uploading()"
+                  (framingChange)="changeFraming($event)"
+                />
+              }
+            </section>
+          </app-modal>
           @for (image of images; track image.key) {
             <div class="management__image">
               <strong>{{ image.label }}</strong>
@@ -763,7 +840,13 @@
                   [disabled]="!!uploading() || saving()"
                   (click)="imageInput.click()"
                 >
-                  {{ uploading() === image.key ? "Загружаем…" : "Загрузить изображение" }}
+                  {{
+                    uploading() === image.key
+                      ? "Загружаем…"
+                      : basicForm.get(image.key)?.value
+                        ? "Заменить файл"
+                        : "Загрузить файл"
+                  }}
                 </button>
                 @if (basicForm.get(image.key)?.value) {
                   <button
@@ -777,17 +860,6 @@
                 }
               </div>
             </div>
-            @if (image.key === "imageAddress") {
-              <app-program-branding-preview
-                [cover]="href(basicForm.controls.coverImageAddress.value)"
-                [logo]="href(basicForm.controls.imageAddress.value)"
-                [mobileCover]="href(basicForm.controls.mobileCoverImageAddress.value)"
-                [framing]="basicForm.controls.imageFraming.value"
-                [disabled]="saving() || !!uploading()"
-                [busy]="!!uploading()"
-                (framingChange)="changeFraming($event)"
-              />
-            }
           }
           <label for="presentation-link"
             >Презентация или положение<input

@@ -37,6 +37,7 @@ import {
   AlertDirective,
   IconComponent,
   AvatarComponent,
+  ImageFramingDirective,
 } from "@uilib";
 import { FileService } from "@corelib";
 import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
@@ -58,6 +59,7 @@ import { ProgramManagementService } from "@api/program/facades/detail/program-ma
 import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { ProgramManagementHeaderComponent } from "./management-header.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import {
   RowAction,
@@ -101,6 +103,8 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     "./management-list.scss",
   ],
   imports: [
+    ProgramManagementHeaderComponent,
+    ImageFramingDirective,
     TransientNoticeComponent,
     RouterLink,
     ReactiveFormsModule,
@@ -300,24 +304,53 @@ export class ProgramManagementComponent implements OnInit {
   readonly mobile = signal(window.innerWidth < 1000);
   private confirmationCallback: ((yes: boolean) => void) | null = null;
   private teamTrigger: HTMLElement | null = null;
-  readonly tabs = [
-    { id: "participants", label: "Участники" },
-    { id: "projects", label: "Проекты" },
-    { id: "experts", label: "Эксперты" },
-    { id: "results", label: "Результаты" },
-    { id: "analytics", label: "Аналитика" },
-    { id: "settings", label: "Настройки" },
-    { id: "certificates", label: "Сертификаты" },
+  readonly allocation = signal(false);
+  readonly brandingOpen = signal(false);
+  readonly activeGroup = computed(() => {
+    const section = this.section();
+    if (section === "analytics") return "overview";
+    if (section === "certificates") return "participants";
+    if (
+      section === "experts" ||
+      section === "results" ||
+      section === "evaluation" ||
+      this.allocation() ||
+      (section === "settings" && this.settingsTab() === "criteria")
+    ) {
+      return "evaluation";
+    }
+    return section;
+  });
+  readonly activeEvaluation = computed(() => {
+    if (this.allocation()) return "allocation";
+    if (this.section() === "settings") return "criteria";
+    return this.section() === "evaluation" ? "results" : this.section();
+  });
+  readonly evaluationTabs = [
+    { key: "criteria", section: "settings", query: { tab: "criteria" }, label: "Критерии" },
+    { key: "experts", section: "experts", query: null, label: "Эксперты" },
+    {
+      key: "allocation",
+      section: "projects",
+      query: { tab: "allocation" },
+      label: "Распределение",
+    },
+    { key: "results", section: "results", query: null, label: "Результаты" },
   ];
   readonly settingsTabs = [
-    { id: "basic", label: "Основное" },
+    { id: "basic", label: "Страница" },
     { id: "dates", label: "Сроки" },
-    { id: "materials", label: "Материалы" },
-    { id: "project-form", label: "Кейсы и поля" },
-    { id: "criteria", label: "Оценивание" },
-    { id: "organizers", label: "Организаторы" },
     { id: "registration", label: "Регистрация" },
+    { id: "project-form", label: "Заявка проекта" },
+    { id: "materials", label: "Материалы" },
+    { id: "organizers", label: "Организаторы" },
   ];
+  registrationStatusLabel(registrationEnd: string | null, finish: string | null): string {
+    if (finish && Date.parse(finish) <= Date.now()) return "Завершена";
+    return registrationEnd && Date.parse(registrationEnd) > Date.now()
+      ? "Регистрация открыта"
+      : "Опубликована";
+  }
   readonly basicForm = this.fb.group({
     name: ["", [Validators.required, Validators.pattern(/\S/)]],
     city: [""],
@@ -351,7 +384,7 @@ export class ProgramManagementComponent implements OnInit {
   readonly images = [
     {
       key: "coverImageAddress",
-      label: "Обложка (шапка)",
+      label: "Обложка для компьютера",
       dimensions: "Рекомендуемый размер: 1800 × 320 px (примерно 5,6:1).",
       hint: "Размещайте важные детали вверху по центру: на узком экране края обрезаются, а снизу расположен логотип.",
     },
@@ -363,7 +396,7 @@ export class ProgramManagementComponent implements OnInit {
     },
     {
       key: "imageAddress",
-      label: "Логотип программы",
+      label: "Аватарка программы",
       dimensions: "Рекомендуемый размер: 512 × 512 px (1:1).",
       hint: "Изображение показывается в круге. Расположите знак по центру с отступами от краев.",
     },
@@ -486,6 +519,7 @@ export class ProgramManagementComponent implements OnInit {
             : "basic",
         );
         this.section.set(section);
+        this.allocation.set(section === "projects" && tab === "allocation");
         const selectionKey = JSON.stringify([
           section,
           this.route.parent?.snapshot.paramMap.get("programId"),

@@ -42,6 +42,7 @@ describe("ProjectEditComponent", () => {
       projectForm: fb.group({ name: [""] }),
       additionalForm: fb.group({}),
       profileId: signal(0),
+      invitationProject: signal(null),
       projSubmitInitiated: signal(false),
       projFormIsSubmittingAsPublished: signal(false),
       projFormIsSubmittingAsDraft: signal(false),
@@ -200,7 +201,7 @@ describe("ProjectEditComponent", () => {
     fixture.detectChanges();
     expect(
       fixture.nativeElement.querySelectorAll(".project__save app-button")[2].textContent,
-    ).toContain("отправить заявку");
+    ).toContain("сдать проект");
     (facade.submitted as ReturnType<typeof signal<boolean>>).set(true);
     fixture.detectChanges();
     expect(

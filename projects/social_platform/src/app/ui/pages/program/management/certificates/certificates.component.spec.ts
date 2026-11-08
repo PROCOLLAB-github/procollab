@@ -6,9 +6,22 @@ import { of, Subject, throwError } from "rxjs";
 import { describe, expect, it, vi } from "vitest";
 import { ProgramCertificatesRepositoryPort } from "@domain/program/ports/program-certificates.repository.port";
 import { ProgramCertificatesUseCase } from "@api/program/use-cases/program-certificates.use-case";
-import { CertificateDraft, CertificateSettings } from "@domain/program/program-certificates.model";
+import {
+  CertificateDelivery,
+  CertificateDraft,
+  CertificateSettings,
+} from "@domain/program/program-certificates.model";
 import { ManagementCertificatesComponent } from "./certificates.component";
 import { CertificateCanvasComponent } from "./certificate-canvas.component";
+const certificate: CertificateDelivery = {
+  id: "certificate-id",
+  name: "Анна Петрова",
+  email: "anna@example.com",
+  status: "ready",
+  pdfReady: true,
+  error: "",
+  sentAt: null,
+};
 const keys = [
   "title",
   "subtitle",
@@ -60,7 +73,7 @@ async function setup(data = settings()) {
     upload: vi.fn(),
     activate: vi.fn(() => of({ ...data, revision: 2 })),
     queue: vi.fn(),
-    pdf: vi.fn(),
+    pdf: vi.fn(() => of(new Blob(["%PDF"]))),
     currentPdf: vi.fn(() => of(new Blob(["%PDF"]))),
     selection: vi.fn(() => of({ count: 1, skipped: 0 })),
     archive: vi.fn(),
@@ -138,13 +151,16 @@ describe("Program certificates", () => {
     expect(component.selectedCount()).toBe(0);
     fixture.destroy();
   });
-  it("saves changes before downloading a participant PDF and uses the current template endpoint", async () => {
+  it("downloads the issued participant PDF without updating the certificate or template", async () => {
     const { fixture, component, repository } = await setup();
     component.patch({ director: "Новый директор" });
-    await component.pdf("certificate-id");
+    await component.pdf(certificate);
+    expect(repository.pdf).toHaveBeenCalledWith(9, "certificate-id");
+    expect(repository.save).not.toHaveBeenCalled();
+    expect(repository.currentPdf).not.toHaveBeenCalled();
+    await component.updateOnPlatform(certificate.id);
     expect(repository.save).toHaveBeenCalled();
-    expect(repository.currentPdf).toHaveBeenCalledWith(9, "certificate-id", 2);
-    expect(repository.pdf).not.toHaveBeenCalled();
+    expect(repository.currentPdf).toHaveBeenCalledWith(9, certificate.id, 2);
     fixture.destroy();
   });
   it("keeps selection on a rejected action and exposes the failure in its confirmation", async () => {
@@ -168,10 +184,8 @@ describe("Program certificates", () => {
     const error = Object.assign(new Blob([text], { type: "application/json" }), {
       text: async () => text,
     });
-    repository.currentPdf.mockReturnValue(
-      throwError(() => new HttpErrorResponse({ status: 400, error })),
-    );
-    await component.pdf("certificate-id");
+    repository.pdf.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 400, error })));
+    await component.pdf(certificate);
     expect(component.error()).toBe("Дождитесь завершения обработки.");
     fixture.destroy();
   });

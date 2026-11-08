@@ -84,10 +84,7 @@ export class ProjectFormService {
     this.projectId.set(Number.isSafeInteger(project.id) && project.id > 0 ? project.id : null);
     const rawRegion = typeof project.region === "string" ? project.region.trim() : "";
     const canonicalRegion = findCanonicalRussianRegion(rawRegion);
-    this.region?.setValidators([
-      Validators.required,
-      projectRegionValidator(canonicalRegion ? "" : rawRegion),
-    ]);
+    this.region?.setValidators([projectRegionValidator(canonicalRegion ? "" : rawRegion)]);
 
     // Заполняем простые поля
     this.projectForm.patchValue({

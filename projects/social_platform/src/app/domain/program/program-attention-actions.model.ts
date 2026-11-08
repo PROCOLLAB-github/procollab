@@ -22,7 +22,7 @@ export interface ProgramAttentionPreview {
   withoutAssignmentsCount: number;
   unavailableCount: number;
   previewText: string;
-  recipients: { userId: number; fullName: string }[];
+  recipients: { userId: number; fullName: string; email?: string; avatar?: string | null }[];
   expiresIn: number;
 }
 

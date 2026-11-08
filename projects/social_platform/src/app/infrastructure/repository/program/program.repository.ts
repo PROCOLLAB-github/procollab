@@ -61,8 +61,14 @@ export class ProgramRepository implements ProgramRepositoryPort {
     programId: number,
     category: ProgramAttentionCategory,
     token: string,
+    excludedRecipientIds?: number[],
   ): Observable<ProgramAttentionSendResult> {
-    return this.programAdapter.sendAttentionReminder(programId, category, token);
+    return this.programAdapter.sendAttentionReminder(
+      programId,
+      category,
+      token,
+      excludedRecipientIds,
+    );
   }
   exportAttention(
     programId: number,

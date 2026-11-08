@@ -15,8 +15,6 @@ import { fail, ok, Result } from "@domain/shared/result.type";
 import { GetMyProjectsUseCase } from "@api/project/use-cases/get-my-projects.use-case";
 import { GetProjectUseCase } from "@api/project/use-cases/get-project.use-case";
 import { PartnerProgramInfo, Project } from "@domain/project/project.model";
-import { programLinkFields } from "@domain/project/program-link-fields.fixture";
-import { ApplyToProgramResponse } from "@domain/program/results/apply-to-program";
 import { GetSolutionContextUseCase } from "@api/solution/use-cases/solution.use-cases";
 import { SolutionContext } from "@domain/solution/solution-contract.model";
 
@@ -31,11 +29,6 @@ const legacyContext: SolutionContext = {
   blockedReason: "legacy_mode",
   currentApplication: null,
 };
-
-type ApplyResult = Result<
-  ApplyToProgramResponse,
-  { kind: "apply_project_to_program_error"; cause?: unknown }
->;
 
 describe("DetailProgramInfoService", () => {
   let service: DetailProgramInfoService;
@@ -79,6 +72,7 @@ describe("DetailProgramInfoService", () => {
   }
 
   it("uses the explicit solution mode without creating a Project", () => {
+    programUI.program.set(program({ id: 12, isUserMember: true, solutionStorageMode: "solution" }));
     vi.mocked(TestBed.inject(GetSolutionContextUseCase).execute).mockReturnValue(
       of(ok({ ...legacyContext, storageMode: "solution", canCreate: true, blockedReason: null })),
     );
@@ -89,6 +83,7 @@ describe("DetailProgramInfoService", () => {
   });
 
   it("opens an existing solution with its own program ID and never creates again", () => {
+    programUI.program.set(program({ id: 12, isUserMember: true, solutionStorageMode: "solution" }));
     vi.mocked(TestBed.inject(GetSolutionContextUseCase).execute).mockReturnValue(
       of(
         ok({
@@ -154,6 +149,7 @@ describe("DetailProgramInfoService", () => {
   });
 
   it("context failure does not silently fall back to legacy creation", () => {
+    programUI.program.set(program({ id: 12, isUserMember: true, solutionStorageMode: "solution" }));
     vi.mocked(TestBed.inject(GetSolutionContextUseCase).execute).mockReturnValue(
       of(fail({ code: "network", detail: "Нет сети", errors: [], meta: {} })),
     );
@@ -187,6 +183,7 @@ describe("DetailProgramInfoService", () => {
   });
 
   it("ignores stale program context and guards double clicks", () => {
+    programUI.program.set(program({ id: 12, isUserMember: true, solutionStorageMode: "solution" }));
     const response = new Subject<Result<SolutionContext, never>>();
     const getContext = vi
       .mocked(TestBed.inject(GetSolutionContextUseCase).execute)
@@ -201,24 +198,12 @@ describe("DetailProgramInfoService", () => {
     expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
   });
 
-  it("omits only system case from apply, preserves generic defaults and navigates with exact link", () => {
-    const fields = programLinkFields().fields;
-    const file = { ...fields[2], id: 20, name: "attachment", fieldType: "file" as const };
-    vi.mocked(TestBed.inject(GetProgramProjectAdditionalFieldsUseCase).execute).mockReturnValue(
-      of(ok({ programFields: [...fields, file] })) as never,
-    );
-    const apply = vi.mocked(TestBed.inject(ApplyProjectToProgramUseCase).execute);
-    apply.mockReturnValue(of(ok({ projectId: 55, programLinkId: 700 })));
+  it("opens the project chooser without making a draft or requesting the V2 context", () => {
     service.addNewProject(12);
-    const body = apply.mock.calls[0][1];
-    expect(body.programFieldValues).toEqual([
-      { fieldId: 6, valueText: "X" },
-      { fieldId: 7, valueText: "-" },
-      { fieldId: 8, valueText: "false" },
-    ]);
-    expect(router.navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/55/edit"], {
-      queryParams: { editingStep: "additional", fromProgram: true, programLinkId: 700 },
-    });
+    expect(service.legacyEntryProgramId()).toBe(12);
+    expect(TestBed.inject(GetSolutionContextUseCase).execute).not.toHaveBeenCalled();
+    expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 
   function clickEvent(): Event {
@@ -233,59 +218,29 @@ describe("DetailProgramInfoService", () => {
   }
 
   it("currentApplication=null offers application creation", () => {
-    expect(service.applicationLabel()).toBe("создать заявку");
+    expect(service.applicationLabel()).toBe("подать проект");
     expect(service.application()).toBeNull();
-  });
-
-  it("successful create sets a local draft and subsequent click opens it without a second POST", () => {
-    vi.mocked(TestBed.inject(GetProgramProjectAdditionalFieldsUseCase).execute).mockReturnValue(
-      of(ok({ programFields: [] })) as never,
-    );
-    const response = new Subject<ApplyResult>();
-    const create = vi
-      .mocked(TestBed.inject(ApplyProjectToProgramUseCase).execute)
-      .mockReturnValue(response);
-    service.addNewProject(12);
-    service.addNewProject(12);
-    expect(create).toHaveBeenCalledTimes(1);
-    expect(service.applicationPending()).toBe(true);
-    response.next(ok({ projectId: 55, programLinkId: 700 }));
-    response.complete();
-    expect(service.applicationPending()).toBe(false);
-    expect(service.application()).toEqual({
-      projectId: 55,
-      programLinkId: 700,
-      submitted: false,
-    });
-    expect(programUI.program()?.currentApplication).toEqual(service.application());
-    expect(service.applicationLabel()).toBe("перейти в заявку");
-    service.addNewProject(12);
-    expect(create).toHaveBeenCalledTimes(1);
-    expect(router.navigate).toHaveBeenCalledTimes(2);
-    expect(router.navigate).toHaveBeenLastCalledWith(["/office/projects/55/edit"], {
-      queryParams: { editingStep: "additional", fromProgram: true, programLinkId: 700 },
-    });
   });
 
   it("backend draft immediately offers navigation with backend IDs and does not create", () => {
     setCurrentApplication({ projectId: 10, programLinkId: 44, submitted: false });
 
-    expect(service.applicationLabel()).toBe("перейти в заявку");
+    expect(service.applicationLabel()).toBe("открыть черновик");
     service.addNewProject(12);
     expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
     expect(TestBed.inject(GetProgramProjectAdditionalFieldsUseCase).execute).not.toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/10/edit"], {
-      queryParams: { editingStep: "additional", fromProgram: true, programLinkId: 44 },
+      queryParams: { editingStep: "additional", programLinkId: 44 },
     });
   });
 
-  it("backend submitted application keeps the existing disabled state", () => {
+  it("opens the submitted project in its read-only detail route", () => {
     setCurrentApplication({ projectId: 10, programLinkId: 44, submitted: true });
 
-    expect(service.applicationLabel()).toBe("вы подали проект");
+    expect(service.applicationLabel()).toBe("открыть сданный проект");
     service.addNewProject(12);
     expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
-    expect(router.navigate).not.toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/10"]);
   });
 
   it("reload reads an existing application directly from Program without project requests", () => {
@@ -296,36 +251,9 @@ describe("DetailProgramInfoService", () => {
       programLinkId: 700,
       submitted: false,
     });
-    expect(service.applicationLabel()).toBe("перейти в заявку");
+    expect(service.applicationLabel()).toBe("открыть черновик");
     expect(TestBed.inject(GetMyProjectsUseCase).execute).not.toHaveBeenCalled();
     expect(TestBed.inject(GetProjectUseCase).execute).not.toHaveBeenCalled();
-  });
-
-  it("create error keeps application empty and allows retry", () => {
-    vi.mocked(TestBed.inject(GetProgramProjectAdditionalFieldsUseCase).execute).mockReturnValue(
-      of(ok({ programFields: [] })) as never,
-    );
-    const create = vi.mocked(TestBed.inject(ApplyProjectToProgramUseCase).execute);
-    create
-      .mockReturnValueOnce(
-        of(
-          fail({
-            kind: "apply_project_to_program_error" as const,
-            cause: { status: 500 },
-          }),
-        ),
-      )
-      .mockReturnValueOnce(of(ok({ projectId: 55, programLinkId: 700 })));
-
-    service.addNewProject(12);
-    expect(service.application()).toBeNull();
-    expect(service.applicationLabel()).toBe("создать заявку");
-    expect(service.applicationPending()).toBe(false);
-    expect(router.navigate).not.toHaveBeenCalled();
-
-    service.addNewProject(12);
-    expect(create).toHaveBeenCalledTimes(2);
-    expect(service.application()?.projectId).toBe(55);
   });
 
   it("multi-program state trusts Program B currentApplication instead of legacy project Program A", () => {
@@ -346,10 +274,10 @@ describe("DetailProgramInfoService", () => {
     );
     setCurrentApplication({ projectId: 100, programLinkId: 202, submitted: false });
 
-    expect(service.applicationLabel()).toBe("перейти в заявку");
+    expect(service.applicationLabel()).toBe("открыть черновик");
     service.addNewProject(12);
     expect(router.navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/100/edit"], {
-      queryParams: { editingStep: "additional", fromProgram: true, programLinkId: 202 },
+      queryParams: { editingStep: "additional", programLinkId: 202 },
     });
     expect(TestBed.inject(GetMyProjectsUseCase).execute).not.toHaveBeenCalled();
     expect(TestBed.inject(GetProjectUseCase).execute).not.toHaveBeenCalled();

@@ -23,7 +23,7 @@ export class ProgramCertificatesHttpAdapter implements ProgramCertificatesReposi
   save(id: number, revision: number, draft: CertificateDraft) {
     return this.api.put<CertificateSettings>(this.root(id), { revision, draft });
   }
-  upload(id: number, kind: "background" | "signature", file: File) {
+  upload(id: number, kind: "background" | "signature" | "font", file: File) {
     const body = new FormData();
     body.append("file", file);
     body.append("kind", kind);
@@ -78,7 +78,11 @@ export class ProgramCertificatesHttpAdapter implements ProgramCertificatesReposi
     return this.api.getFile(this.root(id) + "archive/", this.query(status, search));
   }
   currentArchive(id: number, revision: number, selection: CertificateSelection) {
-    return this.api.postFile(this.root(id) + "archive/", { revision, ...selection });
+    return this.api.postFile(this.root(id) + "archive/", {
+      revision,
+      ...selection,
+      publishedOnly: true,
+    });
   }
   mine(id: number) {
     return this.api.get<{ id: string; issuedAt: string; url: string }[]>(

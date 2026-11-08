@@ -14,8 +14,11 @@ export class CreateProjectUseCase {
   private readonly projectRepositoryPort = inject(ProjectRepositoryPort);
   private readonly eventBus = inject(EventBus);
 
-  execute(): Observable<Result<Project, { kind: "unknown" }>> {
-    return this.projectRepositoryPort.postOne().pipe(
+  execute(name?: string): Observable<Result<Project, { kind: "unknown" }>> {
+    const project = name
+      ? this.projectRepositoryPort.postOne(name)
+      : this.projectRepositoryPort.postOne();
+    return project.pipe(
       tap(project => this.eventBus.emit(projectCreated(project))),
       map(project => ok<Project>(project)),
       catchError(() => of(fail({ kind: "unknown" as const }))),

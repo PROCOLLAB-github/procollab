@@ -9,6 +9,7 @@ import { Collaborator } from "./collaborator.model";
 import { Goal } from "./goals.model";
 import { Partner } from "./partner.model";
 import { Resource } from "./resource.model";
+import { ProjectSections } from "../program/program-project-form.model";
 
 /** Основная модель проекта и связанные классы */
 
@@ -22,6 +23,16 @@ export class PartnerProgramInfo {
   canSubmit!: boolean;
   programFields!: PartnerProgramFields[];
   programFieldValues!: PartnerProgramFieldsValues[];
+  sourceProjectId?: number | null;
+  sections?: ProjectSections;
+}
+
+export interface ProgramProjectCopy {
+  projectId: number;
+  programId: number;
+  programLinkId: number;
+  name: string;
+  submitted: boolean;
 }
 
 export interface TeamPolicy {
@@ -64,6 +75,7 @@ export class Project {
   leaderInfo?: { firstName: string; lastName: string };
   partnerProgramsTags?: string[];
   partnerProgram!: PartnerProgramInfo | null;
+  programCopies?: ProgramProjectCopy[];
   vacancies!: Vacancy[];
   isCompany!: boolean;
   inviteId!: number;

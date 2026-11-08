@@ -24,7 +24,7 @@
           }
         </div>
       }
-      @if (presentationAddress; as presentationAddress) {
+      @if (showPresentation() && presentationAddress; as presentationAddress) {
         <fieldset class="project__file">
           <span class="field-label text-body-12" style="text-align: center">презентация</span>
           <app-upload-file
@@ -222,7 +222,7 @@
       }
     </fieldset>
   }
-  @if (description; as description) {
+  @if (showDescription() && description; as description) {
     <fieldset class="project__description">
       <label for="description" class="field-label text-body-12">информация</label>
       <app-textarea

@@ -1,4 +1,21 @@
 @use "styles/responsive";
+@use "styles/ui-foundation";
+@use "styles/program-management-controls";
+
+.ui-button.ui-button {
+  @include ui-foundation.button;
+  @include program-management-controls.compact-action;
+}
+
+.lists__contact {
+  overflow-wrap: anywhere;
+}
+
+.lists__program-hint {
+  margin: 8px 0 0;
+  color: var(--grey-for-text);
+  font-size: 10px;
+}
 
 @mixin expandable-list {
   &__remaining {

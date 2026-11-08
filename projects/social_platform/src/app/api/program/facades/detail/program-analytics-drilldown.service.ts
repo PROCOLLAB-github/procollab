@@ -59,6 +59,21 @@ export class ProgramAnalyticsDrilldownService {
   });
   private readonly allSelectionCount = signal(0);
   readonly preview = signal<ProgramAttentionPreview | null>(null);
+  readonly excludedRecipients = signal<number[]>([]);
+  readonly remainingRecipients = computed(() =>
+    Math.max(0, (this.preview()?.recipientCount ?? 0) - this.excludedRecipients().length),
+  );
+  readonly canRemind = computed(() => this.view() !== "participants-without-team");
+  readonly selectedWithoutExpert = computed(
+    () =>
+      this.projectsPage()?.results.some(
+        row => this.isSelected(row.programProjectId) && row.reason === "no_assignments",
+      ) ?? false,
+  );
+  excludeRecipient(id: number): void {
+    if (!this.actionPending())
+      this.excludedRecipients.update(ids => (ids.includes(id) ? ids : [...ids, id]));
+  }
   readonly actionPending = signal<"preview" | "send" | "export" | null>(null);
   readonly actionError = signal("");
   readonly actionSuccess = signal("", { equal: () => false });
@@ -128,6 +143,8 @@ export class ProgramAnalyticsDrilldownService {
     if (
       this.programId === null ||
       !category ||
+      !this.canRemind() ||
+      this.selectedWithoutExpert() ||
       !this.selectedCount() ||
       this.actionPending() ||
       this.attentionPending() ||
@@ -145,19 +162,32 @@ export class ProgramAnalyticsDrilldownService {
       .pipe(takeUntil(this.cancelActions), takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         this.actionPending.set(null);
-        if (result.ok) this.preview.set(result.value);
-        else this.setActionError(result.error.kind);
+        if (result.ok) {
+          this.excludedRecipients.set([]);
+          this.preview.set(result.value);
+        } else this.setActionError(result.error.kind);
       });
   }
 
   sendReminder(): void {
     const category = this.actionCategory();
     const token = this.preview()?.token;
-    if (this.programId === null || !category || !token || this.actionPending()) return;
+    if (
+      this.programId === null ||
+      !category ||
+      !token ||
+      this.actionPending() ||
+      !this.remainingRecipients() ||
+      this.preview()?.withoutAssignmentsCount
+    )
+      return;
     this.actionPending.set("send");
     this.actionError.set("");
-    this.actions
-      .send(this.programId, category, token)
+    const excluded = this.excludedRecipients();
+    (excluded.length
+      ? this.actions.send(this.programId, category, token, excluded)
+      : this.actions.send(this.programId, category, token)
+    )
       .pipe(takeUntil(this.cancelActions), takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         this.actionPending.set(null);
@@ -173,7 +203,7 @@ export class ProgramAnalyticsDrilldownService {
       });
   }
 
-  exportAttention(): void {
+  exportAttention(selected = this.selectedCount() > 0): void {
     const category = this.actionCategory();
     if (
       this.programId === null ||
@@ -189,9 +219,7 @@ export class ProgramAnalyticsDrilldownService {
     this.actions
       .export(this.programId, category, {
         search: this.appliedSearch(),
-        selection: this.selectedCount()
-          ? this.selection()
-          : { mode: "all", ids: [], excludedIds: [] },
+        selection: selected ? this.selection() : { mode: "all", ids: [], excludedIds: [] },
       })
       .pipe(takeUntil(this.cancelActions), takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {

@@ -26,6 +26,7 @@ import { ProgramCertificatesHttpAdapter } from "@infrastructure/adapters/program
 import {
   CertificateAsset,
   CertificateDraft,
+  CertificateDelivery,
   CertificateFilter,
   CertificateJournal,
   CertificateSettings,
@@ -95,6 +96,18 @@ export class ManagementCertificatesComponent {
   readonly error = signal<string | null>(null);
   readonly message = signal<string | null>(null, { equal: () => false });
   readonly step = signal(1);
+  readonly uploadedFonts = signal<CertificateAsset[]>([]);
+  readonly fontOptions = computed(() =>
+    this.uploadedFonts().map(asset => ({
+      key: `custom-${asset.id}` as const,
+      label: asset.name,
+    })),
+  );
+  readonly fontRevision = signal(0);
+  private readonly fontFaces = document.fonts as FontFaceSet &
+    Pick<Set<FontFace>, "add" | "delete">;
+  private readonly loadedFaces = new Map<string, FontFace>();
+  private readonly loadingFaces = new Set<string>();
   readonly editorOpen = signal(false);
   readonly confirmOpen = signal(false);
   readonly longName = signal(false);
@@ -153,7 +166,7 @@ export class ManagementCertificatesComponent {
   readonly scheduleInput = computed(() =>
     this.draft()?.scheduledAt ? toMoscowInput(this.draft()!.scheduledAt) : "",
   );
-  readonly steps = ["1. Шаблон", "2. Выдача", "3. Отправление"];
+  readonly steps = ["Шаблон", "Выдача", "Журнал"];
   readonly placeholders = "{name}, {program}, {date}, {number}";
   readonly labels = {
     pending: "В очереди",
@@ -177,9 +190,9 @@ export class ManagementCertificatesComponent {
           progress: "Отправляем",
         },
         refresh: {
-          title: "Обновить выданные PDF?",
+          title: "Обновить сертификаты на платформе?",
           hint: "Текущий шаблон. Ссылки сохранятся, письма не отправляем.",
-          button: "Обновить PDF",
+          button: "Обновить на платформе",
           progress: "Обновляем PDF",
         },
         retry: {
@@ -220,7 +233,19 @@ export class ManagementCertificatesComponent {
         this.currentTime.set(Date.now());
         if (this.step() === 3 && !this.journalLoading() && !this.busy()) void this.loadJournal();
       });
-    this.destroy.onDestroy(() => this.objectUrls.forEach(url => URL.revokeObjectURL(url)));
+    effect(() => {
+      const draft = this.draft();
+      const fonts = this.fontOptions();
+      for (const { key } of fonts) {
+        if (Object.values(draft?.layout ?? {}).some(box => box.fontFamily === key)) {
+          void this.loadFont(key);
+        }
+      }
+    });
+    this.destroy.onDestroy(() => {
+      this.objectUrls.forEach(url => URL.revokeObjectURL(url));
+      this.loadedFaces.forEach(face => this.fontFaces.delete(face));
+    });
   }
   private observe<T>(request: Observable<T>): Promise<T> {
     return firstValueFrom(request.pipe(takeUntilDestroyed(this.destroy)));
@@ -233,6 +258,7 @@ export class ManagementCertificatesComponent {
     this.redoStack.set([]);
     if (!this.visibleElements().includes(this.selected())) this.selected.set("name");
     this.assets.set(settings.assets);
+    this.uploadedFonts.set(settings.fonts ?? []);
     void this.loadAssets();
   }
   async reload(): Promise<void> {
@@ -409,6 +435,44 @@ export class ManagementCertificatesComponent {
       () => this.api.upload(this.programId(), kind, file),
       asset => this.setAsset(kind, asset),
     );
+  }
+  async uploadTypeface(file: File): Promise<void> {
+    const element = this.selected();
+    if (element === "signature") return;
+    if (file.size > 2 * 1024 * 1024) {
+      this.error.set("Размер шрифта не должен превышать 2 МБ.");
+      return;
+    }
+    await this.run(
+      () => this.api.upload(this.programId(), "font", file),
+      asset => {
+        this.uploadedFonts.update(fonts => [...fonts, asset]);
+        const draft = this.draft();
+        if (!draft) return;
+        this.patch({
+          layout: {
+            ...draft.layout,
+            [element]: { ...draft.layout[element], fontFamily: `custom-${asset.id}` },
+          },
+        });
+      },
+    );
+  }
+  private async loadFont(key: string): Promise<void> {
+    if (this.loadedFaces.has(key) || this.loadingFaces.has(key)) return;
+    this.loadingFaces.add(key);
+    try {
+      const blob = await this.observe(this.api.asset(this.programId(), Number(key.slice(7))));
+      const face = await new FontFace(key, await blob.arrayBuffer()).load();
+      if (this.destroy.destroyed) return;
+      this.fontFaces.add(face);
+      this.loadedFaces.set(key, face);
+      this.fontRevision.update(revision => revision + 1);
+    } catch {
+      if (!this.destroy.destroyed) this.error.set("Не удалось загрузить шрифт для предпросмотра.");
+    } finally {
+      this.loadingFaces.delete(key);
+    }
   }
   private setAsset(kind: "background" | "signature", asset: CertificateAsset): void {
     this.remember();
@@ -603,12 +667,18 @@ export class ManagementCertificatesComponent {
       },
     );
   }
-  async pdf(id: string): Promise<void> {
+  async pdf(row: CertificateDelivery): Promise<void> {
+    await this.run(
+      () => this.api.pdf(this.programId(), row.id),
+      blob => saveAs(blob, row.name + ".pdf"),
+    );
+  }
+  async updateOnPlatform(id: string): Promise<void> {
     if (!(await this.save())) return;
-    return this.run(
+    await this.run(
       () => this.api.currentPdf(this.programId(), id, this.snapshot()!.revision),
-      blob => {
-        saveAs(blob, `certificate-${id.slice(0, 8)}.pdf`);
+      () => {
+        this.message.set("Сертификат на платформе обновлен.");
         void this.loadJournal();
       },
     );
@@ -623,16 +693,19 @@ export class ManagementCertificatesComponent {
     this.selectionAction.set("retry");
   }
   async archive(): Promise<void> {
-    const selection = this.selectedCount()
-      ? this.selectionPayload()
-      : { allMatching: true, status: this.filter(), search: this.search() };
-    if (!(await this.save())) return;
-    return this.run(
-      () => this.api.currentArchive(this.programId(), this.snapshot()!.revision, selection),
-      blob => {
-        saveAs(blob, "certificates.zip");
-        void this.loadJournal();
-      },
+    if (!this.selectedCount()) {
+      await this.run(
+        () => this.api.archive(this.programId(), this.filter(), this.search()),
+        blob => saveAs(blob, "certificates.zip"),
+      );
+      return;
+    }
+    const selection = this.selectionPayload();
+    const revision = this.snapshot()?.revision;
+    if (!revision) return;
+    await this.run(
+      () => this.api.currentArchive(this.programId(), revision, selection),
+      blob => saveAs(blob, "certificates.zip"),
     );
   }
 }

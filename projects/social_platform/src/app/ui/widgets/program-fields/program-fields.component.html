@@ -31,6 +31,17 @@
               [attr.aria-describedby]="'hint-' + field.name"
             ></textarea>
           }
+          @case ("url") {
+            <input
+              appField
+              type="url"
+              [id]="'answer-' + field.name"
+              [formControlName]="field.name"
+              placeholder="https://"
+              [attr.aria-invalid]="error(field) ? 'true' : null"
+              [attr.aria-describedby]="'hint-' + field.name"
+            />
+          }
           @case ("checkbox") {
             <input
               appChoice
@@ -105,9 +116,6 @@
         <div [id]="'hint-' + field.name" class="program-fields__hint">
           @if (field.helpText) {
             <p>{{ field.helpText }}</p>
-          }
-          @if (field.isRequired || field.name === "case") {
-            <p>Обязательно перед сдачей решения. В черновике можно оставить пустым.</p>
           }
           @if (error(field); as message) {
             <p class="program-fields__error" role="alert">{{ message }}</p>

@@ -50,6 +50,7 @@ export abstract class ProgramRepositoryPort {
     programId: number,
     category: ProgramAttentionCategory,
     token: string,
+    excludedRecipientIds?: number[],
   ): Observable<ProgramAttentionSendResult>;
   abstract exportAttention(
     programId: number,

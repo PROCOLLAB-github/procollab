@@ -569,26 +569,28 @@
             @if (isInProject()) {
               @if (profile()) {
                 @if (profile()?.id === info().leader) {
-                  <a
-                    class="info__edit"
-                    [routerLink]="
-                      isEditDisable()
-                        ? AppRoutes.projects.detail(info().id)
-                        : AppRoutes.projects.edit(info().id)
-                    "
-                    [queryParams]="isEditDisable() ? {} : { editingStep: 'main' }"
-                  >
-                    <app-button
-                      appearance="outline"
-                      size="medium"
-                      customTypographyClass="text-body-12"
-                      (click)="onUnableEditingProject()"
-                      [ngStyle]="{ opacity: isEditDisable() ? '0.5' : '1' }"
-                      [color]="isEditDisable() ? 'grey' : 'primary'"
+                  @if (!info().teamPolicy?.isFrozen) {
+                    <a
+                      class="info__edit"
+                      [routerLink]="
+                        isEditDisable()
+                          ? AppRoutes.projects.detail(info().id)
+                          : AppRoutes.projects.edit(info().id)
+                      "
+                      [queryParams]="isEditDisable() ? {} : { editingStep: 'main' }"
                     >
-                      редактировать
-                    </app-button>
-                  </a>
+                      <app-button
+                        appearance="outline"
+                        size="medium"
+                        customTypographyClass="text-body-12"
+                        (click)="onUnableEditingProject()"
+                        [ngStyle]="{ opacity: isEditDisable() ? '0.5' : '1' }"
+                        [color]="isEditDisable() ? 'grey' : 'primary'"
+                      >
+                        редактировать
+                      </app-button>
+                    </a>
+                  }
                 } @else {
                   <app-button
                     appearance="outline"
@@ -888,3 +890,11 @@
     }
   </div>
 </div>
+
+@if (legacyEntryProgramId(); as programId) {
+  <app-project-entry
+    [programId]="programId"
+    [leaderId]="profile()?.id ?? null"
+    (close)="legacyEntryProgramId.set(null)"
+  />
+}

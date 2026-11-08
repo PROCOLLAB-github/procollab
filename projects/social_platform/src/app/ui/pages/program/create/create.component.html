@@ -1,9 +1,8 @@
 <!-- @format -->
 <main class="program-create">
-  <a [routerLink]="paths.program.managed()">К программам</a>
+  <a [routerLink]="paths.program.managed()">Я организую</a>
   <header>
-    <h1>Создание программы</h1>
-    <p>Начните с названия и формата. Остальное можно заполнить позже.</p>
+    <h1>Создать программу</h1>
   </header>
   @if (error()) {
     <div appAlert="error" role="alert">
@@ -41,12 +40,10 @@
         <p id="program-name-hint">
           @if (form.controls.name.touched && form.controls.name.invalid) {
             <span role="alert">Введите название программы до 255 символов.</span>
-          } @else {
-            Название увидят участники после публикации.
           }
         </p>
         <fieldset class="program-create__formats">
-          <legend>Формат программы *</legend>
+          <legend>Формат</legend>
           @for (format of formats; track format.id) {
             <label
               class="program-create__format"
@@ -61,13 +58,8 @@
             </label>
           }
         </fieldset>
-        <p>
-          Черновик будет доступен вам и организаторам программы. В каталоге он появится после
-          публикации.
-        </p>
         <div class="program-create__actions">
-          <button appButton="secondary" type="button" (click)="cancel()">Отмена</button
-          ><button
+          <button
             appButton="primary"
             type="submit"
             [disabled]="pending()"
@@ -75,7 +67,9 @@
           >
             Создать черновик
           </button>
+          <button appButton="secondary" type="button" (click)="cancel()">Отмена</button>
         </div>
+        <p>Черновик виден только организаторам.</p>
       </fieldset>
     </form>
   }

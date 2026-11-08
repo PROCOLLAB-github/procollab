@@ -21,6 +21,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { HttpErrorResponse } from "@angular/common/http";
+import { CdkMenuModule } from "@angular/cdk/menu";
 import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { finalize } from "rxjs";
@@ -37,6 +38,7 @@ import {
   ManagementFormField,
   ManagementProjectForm,
   ManagementProjectFormWrite,
+  ProjectSections,
 } from "@domain/program/program-project-form.model";
 import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
@@ -59,6 +61,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     IconComponent,
     ModalComponent,
     ProgramFieldsComponent,
+    CdkMenuModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -74,6 +77,21 @@ export class ManagementProjectFormComponent {
   readonly snapshot = signal<ManagementProjectForm | null>(null);
   readonly cases = signal<ManagementCase[]>([]);
   readonly fields = signal<ManagementFormField[]>([]);
+  readonly sectionRows: { key: keyof ProjectSections; label: string }[] = [
+    { key: "partners", label: "Партнеры и ресурсы" },
+    { key: "achievements", label: "Достижения" },
+    { key: "vacancies", label: "Вакансии" },
+    { key: "programData", label: "Данные для программы" },
+  ];
+  readonly sections = signal<ProjectSections>({
+    partners: true,
+    achievements: true,
+    vacancies: true,
+    programData: true,
+  });
+  readonly team = signal<{ min: number | null; max: number | null }>({ min: null, max: null });
+  readonly casesOpen = signal(false);
+  readonly removed = signal<{ field: ManagementFormField; index: number } | null>(null);
   readonly loading = signal(false);
   readonly saving = signal(false);
   readonly error = signal<string | null>(null);
@@ -133,11 +151,15 @@ export class ManagementProjectFormComponent {
       expectedUpdatedAt: snapshot?.updatedAt ?? "",
       expectedRevision: snapshot?.revision ?? "",
       cases: (source?.cases ?? this.cases()).map(c => c.name),
+      sections: source ? source.sections : snapshot?.sections ? this.sections() : undefined,
+      teamMinSize: source ? source.teamMinSize : snapshot?.sections ? this.team().min : undefined,
+      teamMaxSize: source ? source.teamMaxSize : snapshot?.sections ? this.team().max : undefined,
       fields: (source?.fields ?? this.fields()).map(f => ({
         id: f.id > 0 ? f.id : null,
         label: f.label,
         fieldType: f.fieldType,
         isRequired: f.isRequired,
+        isVisible: snapshot?.sections ? f.isVisible !== false : undefined,
         helpText: f.helpText,
         options: f.options,
       })),
@@ -172,6 +194,9 @@ export class ManagementProjectFormComponent {
     const snapshot = this.snapshot();
     this.cases.set(snapshot?.cases.map(c => ({ ...c })) ?? []);
     this.fields.set(snapshot?.fields.map(f => ({ ...f, options: [...f.options] })) ?? []);
+    if (snapshot?.sections) this.sections.set(snapshot.sections);
+    this.team.set({ min: snapshot?.teamMinSize ?? null, max: snapshot?.teamMaxSize ?? null });
+    this.removed.set(null);
     this.caseIndex.set(null);
     this.editing.set(null);
     this.editorDirty.set(false);
@@ -305,8 +330,32 @@ export class ManagementProjectFormComponent {
     this.editorDirty.set(false);
   }
   deleteField(field: ManagementFormField): void {
-    if (!field.answersCount && !this.saving())
-      this.fields.update(fields => fields.filter(f => f.id !== field.id));
+    if (field.answersCount || field.standard || this.saving()) return;
+    this.removed.set({ field, index: this.fields().findIndex(row => row.id === field.id) });
+    this.fields.update(fields => fields.filter(f => f.id !== field.id));
+  }
+  undoDelete(): void {
+    const removed = this.removed();
+    if (!removed) return;
+    this.fields.update(fields => [
+      ...fields.slice(0, removed.index),
+      removed.field,
+      ...fields.slice(removed.index),
+    ]);
+    this.removed.set(null);
+  }
+  toggleSection(key: keyof ProjectSections): void {
+    this.sections.update(sections => ({ ...sections, [key]: !sections[key] }));
+  }
+  updateTeam(key: "min" | "max", event: Event): void {
+    const value = (event.target as HTMLInputElement).valueAsNumber;
+    this.team.update(team => ({ ...team, [key]: Number.isFinite(value) ? value : null }));
+  }
+  toggleField(field: ManagementFormField, key: "isVisible" | "isRequired"): void {
+    const value = key === "isVisible" ? field.isVisible === false : !field.isRequired;
+    this.fields.update(fields =>
+      fields.map(row => (row.id === field.id ? { ...row, [key]: value } : row)),
+    );
   }
   save(): void {
     if (
@@ -341,12 +390,12 @@ export class ManagementProjectFormComponent {
   }
   openPreview(): void {
     const fields: PartnerProgramFields[] = [
-      ...(this.cases().length
+      ...(this.cases().length || this.snapshot()?.caseRequired
         ? [
             {
               id: -1,
               name: "case",
-              label: "Кейс",
+              label: this.snapshot()?.caseLabel || "Кейс",
               fieldType: "select" as const,
               isRequired: true,
               helpText: "",
@@ -354,7 +403,11 @@ export class ManagementProjectFormComponent {
             },
           ]
         : []),
-      ...this.fields(),
+      ...this.fields().filter(
+        field =>
+          field.isVisible !== false &&
+          (this.sections().programData || field.name === "project_description"),
+      ),
     ];
     for (const name of Object.keys(this.previewForm.controls)) this.previewForm.removeControl(name);
     for (const field of fields) this.previewForm.addControl(field.name, programFieldControl(field));

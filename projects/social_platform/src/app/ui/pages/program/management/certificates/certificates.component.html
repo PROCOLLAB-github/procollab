@@ -1,7 +1,6 @@
 <!-- @format -->
 <header class="certificates__heading">
   <h2>Сертификаты</h2>
-  <p>Выдача и доставка сертификатов участникам программы.</p>
 </header>
 <nav class="certificates__steps" aria-label="Настройка сертификатов">
   @for (label of steps; track label; let index = $index) {
@@ -88,6 +87,9 @@
       <div class="certificates__workspace">
         <app-certificate-canvas
           [draft]="d"
+          [uploadedFonts]="fontOptions()"
+          [fontRevision]="fontRevision()"
+          (uploadFont)="uploadTypeface($event)"
           [programName]="programName()"
           [background]="backgroundUrl()"
           [signature]="signatureUrl()"
@@ -407,7 +409,9 @@
         }
       }
       @if (snapshot()?.batch?.active) {
-        <p class="certificates__muted">Выдача работает. Очередь доступна на шаге «Отправление».</p>
+        <p class="certificates__muted">
+          Сертификаты готовятся по расписанию. Статусы видны в журнале.
+        </p>
       }
     </fieldset>
   }
@@ -478,7 +482,7 @@
             [disabled]="busy() || journalLoading() || !selectedCount()"
             (click)="selectionAction.set('refresh')"
           >
-            Обновить PDF
+            Обновить на платформе
           </button>
           <button
             type="button"
@@ -593,10 +597,20 @@
                         row.status === 'generating' ||
                         row.status === 'sending'
                       "
-                      (click)="pdf(row.id)"
+                      (click)="pdf(row)"
                     >
-                      {{ row.outdated || dirty() ? "Обновить и скачать" : "Скачать PDF" }}
+                      Скачать PDF
                     </button>
+                    @if (row.outdated || dirty()) {
+                      <button
+                        type="button"
+                        appButton="text"
+                        [disabled]="busy()"
+                        (click)="updateOnPlatform(row.id)"
+                      >
+                        Обновить на платформе
+                      </button>
+                    }
                   }
                 </td>
               </tr>
@@ -650,13 +664,7 @@
             "
             (click)="archive()"
           >
-            {{
-              journal()?.summary?.outdated || dirty()
-                ? "Обновить и скачать PDF"
-                : selectedCount()
-                  ? "Скачать выбранные PDF"
-                  : "Скачать PDF по фильтру"
-            }}</button
+            {{ selectedCount() ? "Скачать архив выбранных" : "Скачать архив по фильтру" }}</button
           ><button
             type="button"
             appButton="primary"
@@ -680,7 +688,9 @@
               : "Все изменения сохранены"
         }}
         @if (snapshot()?.batch) {
-          <small>Для выданных сертификатов: «Обновить PDF» в отправлении.</small>
+          <small
+            >Чтобы заменить выданные сертификаты, выберите «Обновить на платформе» в журнале.</small
+          >
         }
       </span>
       <div class="certificates__actions">

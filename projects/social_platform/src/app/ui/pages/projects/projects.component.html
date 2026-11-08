@@ -1,4 +1,7 @@
 <!-- @format -->
+@if (createOpen()) {
+  <app-project-entry (close)="createOpen.set(false)" />
+}
 
 <main class="page">
   <div class="page__bar">

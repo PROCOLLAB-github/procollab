@@ -7,6 +7,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   OnDestroy,
   OnInit,
@@ -141,7 +142,29 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly projFormIsSubmittingAsDraft =
     this.projectsEditInfoService.projFormIsSubmittingAsDraft;
 
-  protected readonly navProjectItems = navProjectItems;
+  protected readonly programSections = computed(
+    () => this.projectsEditInfoService.invitationProject()?.partnerProgram?.sections,
+  );
+  protected readonly isProgramCopy = computed(
+    () => !!this.projectsEditInfoService.invitationProject()?.partnerProgram?.sourceProjectId,
+  );
+  protected readonly navProjectItems = computed(() => {
+    const sections = this.programSections();
+    return navProjectItems.filter(item => {
+      switch (item.step) {
+        case "contacts":
+          return sections?.partners !== false;
+        case "achievements":
+          return sections?.achievements !== false;
+        case "vacancies":
+          return sections?.vacancies !== false;
+        case "additional":
+          return this.isProjectAssignToProgram() && sections?.programData !== false;
+        default:
+          return true;
+      }
+    });
+  });
   protected readonly errorMessage = ErrorMessage;
 
   ngOnInit(): void {

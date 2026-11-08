@@ -1,0 +1,90 @@
+/** @format */
+@use "styles/ui-foundation";
+@use "styles/program-management-controls";
+
+:host {
+  display: block;
+  min-width: 0;
+  grid-column: 1 / -1;
+}
+
+.ui-button.ui-button {
+  @include ui-foundation.button;
+  @include program-management-controls.compact-action;
+}
+
+.program-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-block: 22px 20px;
+  h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+  &__back { color: var(--accent); }
+  &__status {
+    width: fit-content;
+    margin: 6px 0 0;
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    background: var(--medium-grey-for-outline);
+    color: var(--grey-for-text);
+  }
+  &__status--live { background: #e0eee6; color: #206264; }
+  &__actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  &__tabs {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+    margin-bottom: 20px;
+    padding: 4px;
+    background: var(--medium-grey-for-outline);
+    border-radius: 20px;
+    overflow-x: auto;
+    a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      color: var(--black);
+      white-space: nowrap;
+      border-radius: 6px;
+      &[aria-current="page"] { color: var(--accent); background: var(--accent-light); }
+      i { color: inherit; }
+    }
+  }
+  &__coach {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: var(--light-white);
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgb(38 27 52 / 14%);
+    h2 { margin: 4px 0; font-size: 16px; }
+    p { margin: 0; }
+    small { color: var(--grey-for-text); }
+  }
+  &__training {
+    width: min(580px, calc(100vw - 32px));
+    padding: 24px;
+    h2, h3, p { margin: 0; }
+    article { display: grid; gap: 6px; justify-items: start; padding-block: 12px; }
+    p { color: var(--grey-for-text); }
+  }
+  &__training-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+}
+
+@media (max-width: 680px) {
+  .program-heading { align-items: flex-start; flex-direction: column; }
+  .program-heading__tabs a { min-height: 44px; }
+}

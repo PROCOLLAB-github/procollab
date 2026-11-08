@@ -56,9 +56,13 @@ export class CertificateCanvasComponent {
   readonly interactionStart = output<void>();
   readonly removeElement = output<CertificateElement>();
   readonly downloadPreview = output<void>();
+  readonly uploadedFonts = input<{ key: `custom-${number}`; label: string }[]>([]);
+  readonly fontRevision = input(0);
+  readonly uploadFont = output<File>();
   readonly keys = CERTIFICATE_ELEMENTS;
   readonly labels = CERTIFICATE_LABELS;
   readonly fonts = CERTIFICATE_FONTS;
+  readonly fontOptions = computed(() => [...this.fonts, ...this.uploadedFonts()]);
   readonly fontLoadError = signal(false);
   readonly dragging = signal(false);
   readonly viewport = viewChild<ElementRef<HTMLElement>>("viewport");
@@ -85,6 +89,7 @@ export class CertificateCanvasComponent {
   });
   readonly fits = computed(() => {
     this.fontsReady();
+    this.fontRevision();
     const result = {} as Record<CertificateElement, { fontSize: number; text: string }>;
     const cache = new Map<string, number>();
     for (const key of this.keys) {
@@ -201,10 +206,16 @@ export class CertificateCanvasComponent {
   }
   familyChanged(value: string): void {
     if (this.disabled() || this.preview() || this.selected() === "signature") return;
-    const font = this.fonts.find(font => font.key === value);
+    const font = this.fontOptions().find(font => font.key === value);
     if (!font || font.key === certificateFont(this.box().fontFamily).key) return;
     this.interactionStart.emit();
     this.update(this.selected(), { ...this.box(), fontFamily: font.key });
+  }
+  fontFileChanged(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = "";
+    if (file) this.uploadFont.emit(file);
   }
   visible(key: CertificateElement): boolean {
     return !hiddenCertificateElements(this.draft()).includes(

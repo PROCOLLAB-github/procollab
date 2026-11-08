@@ -24,163 +24,240 @@
       >
     }
     @if (snapshot()) {
-      <header class="project-form__heading">
-        <div>
-          <h2>Кейсы и поля проекта</h2>
-          <p>Настройте выбор кейса и общую форму для всех проектов программы.</p>
-        </div>
-        <button type="button" appButton="secondary" (click)="openPreview()">
-          Предпросмотр формы
-        </button>
-      </header>
-      <section class="project-form__card" aria-labelledby="cases-heading">
-        <div class="project-form__section-heading">
-          <div>
-            <h3 id="cases-heading">Кейсы программы</h3>
-            <p>
-              У кейса только название. Задания и описание разместите в
-              <button type="button" appButton="text" (click)="materials.emit()">
-                материалах программы</button
-              >.
-            </p>
-          </div>
-        </div>
-        @for (item of cases(); track $index; let i = $index) {
-          @if (caseIndex() !== i) {
-            <article class="project-form__row">
-              <div>
-                <h4>{{ item.name }}</h4>
-                <p>
-                  Проектов: {{ item.projectsCount }}
-                  @if (item.projectsCount) {
-                    <span> · Кейс уже выбран командой. Переименование и удаление недоступны.</span>
-                  }
-                </p>
-              </div>
-              <div class="project-form__actions">
-                <button
-                  type="button"
-                  appButton="text"
-                  [disabled]="!!item.projectsCount || saving()"
-                  (click)="editCase(i)"
-                >
-                  Изменить</button
-                ><button
-                  type="button"
-                  appButton="text"
-                  [disabled]="!!item.projectsCount || saving()"
-                  (click)="deleteCase(i)"
-                >
-                  Удалить
-                </button>
-              </div>
-            </article>
-          }
-        } @empty {
-          <p class="project-form__empty">
-            Кейсов пока нет. Добавьте названия, если командам нужно выбрать кейс.
-          </p>
-        }
-        @if (caseIndex() !== null) {
-          <form class="project-form__case-editor" (submit)="$event.preventDefault(); saveCase()">
-            <label for="case-name">Название кейса *</label>
+      <section class="project-form__card" aria-labelledby="application-heading">
+        <h2 id="application-heading" class="project-form__panel-title">Заявка проекта</h2>
+        <button type="button" appButton="secondary" (click)="openPreview()">Вид участника</button>
+        <dl class="project-form__basics">
+          <dt>Название проекта</dt>
+          <dd>Обязательно для любого проекта</dd>
+          <dt>Команда и новостная лента</dt>
+          <dd>Сохраняются у каждого проекта</dd>
+        </dl>
+        <div class="project-form__team">
+          <label
+            >Участников от
             <input
               appField
-              id="case-name"
-              [formControl]="caseName"
-              maxlength="1000"
-              [attr.aria-invalid]="caseError() ? 'true' : null"
-              aria-describedby="case-error"
+              type="number"
+              min="1"
+              step="1"
+              [value]="team().min ?? ''"
+              (input)="updateTeam('min', $event)"
             />
-            @if (caseError()) {
-              <p id="case-error" class="project-form__error" role="alert">{{ caseError() }}</p>
-            }
-            <div class="project-form__actions">
-              <button appButton="primary">
-                {{ caseIndex() === -1 ? "Добавить кейс" : "Применить" }}</button
-              ><button type="button" appButton="secondary" (click)="caseIndex.set(null)">
-                Отмена
+          </label>
+          <label
+            >До
+            <input
+              appField
+              type="number"
+              min="1"
+              step="1"
+              [value]="team().max ?? ''"
+              (input)="updateTeam('max', $event)"
+            />
+          </label>
+        </div>
+      </section>
+      <section class="project-form__card" aria-labelledby="sections-heading">
+        <h3 id="sections-heading" class="project-form__panel-title">Разделы проекта</h3>
+        <div class="project-form__row">
+          <span>Основные данные</span>
+          <span class="project-form__muted">Всегда есть</span>
+        </div>
+        @for (section of sectionRows; track section.key) {
+          <div class="project-form__row">
+            <span>{{ section.label }}</span>
+            <button
+              type="button"
+              appButton="secondary"
+              [attr.aria-pressed]="sections()[section.key]"
+              [attr.aria-label]="'Показывать раздел «' + section.label + '»'"
+              [disabled]="saving()"
+              (click)="toggleSection(section.key)"
+            >
+              {{ sections()[section.key] ? "Показывать" : "Не показывать" }}
+            </button>
+          </div>
+        }
+        <p class="project-form__muted">Скрытые данные сохраняются.</p>
+      </section>
+      <section class="project-form__card" aria-labelledby="fields-heading">
+        <h3 id="fields-heading" class="project-form__panel-title">Поля для сдачи</h3>
+        @if (snapshot()?.caseRequired || cases().length) {
+          <div class="project-form__field-row">
+            <strong>{{ snapshot()?.caseLabel || "Кейс" }}</strong>
+            <span class="project-form__muted">Всегда в форме</span>
+            <span class="project-form__muted">Обязательно</span>
+          </div>
+        }
+        @for (field of fields(); track field.id) {
+          @if (sections().programData || field.name === "project_description") {
+            <div class="project-form__field-row">
+              <div>
+                <strong>{{ field.label }}</strong>
+                @if (field.answersCount) {
+                  <p class="project-form__muted">Есть ответы</p>
+                }
+              </div>
+              <button
+                type="button"
+                appButton="secondary"
+                [disabled]="saving()"
+                [attr.aria-label]="'Показывать поле «' + field.label + '»'"
+                [attr.aria-pressed]="field.isVisible !== false"
+                (click)="toggleField(field, 'isVisible')"
+              >
+                {{ field.isVisible === false ? "Не показывать" : "Показывать" }}
               </button>
+              @if (field.isVisible !== false) {
+                <button
+                  type="button"
+                  appButton="secondary"
+                  [disabled]="saving()"
+                  [attr.aria-pressed]="field.isRequired"
+                  [attr.aria-label]="'Обязательное поле «' + field.label + '»'"
+                  (click)="toggleField(field, 'isRequired')"
+                >
+                  {{ field.isRequired ? "Обязательно" : "Необязательно" }}
+                </button>
+              } @else {
+                <span class="project-form__muted" aria-label="Поле скрыто">—</span>
+              }
+              <button
+                type="button"
+                appButton="icon"
+                [cdkMenuTriggerFor]="fieldMenu"
+                [attr.aria-label]="'Действия с полем «' + field.label + '»'"
+                [disabled]="saving()"
+              >
+                <i appIcon icon="dots" appSquare="16" aria-hidden="true"></i>
+              </button>
+              <ng-template #fieldMenu>
+                <div cdkMenu class="project-form__menu">
+                  <button type="button" cdkMenuItem (cdkMenuItemTriggered)="editField(field)">
+                    Изменить
+                  </button>
+                  @if (!field.standard && !field.answersCount) {
+                    <button type="button" cdkMenuItem (cdkMenuItemTriggered)="deleteField(field)">
+                      Удалить поле
+                    </button>
+                  }
+                </div>
+              </ng-template>
             </div>
-          </form>
-        } @else {
+          }
+        }
+        @if (removed()) {
+          <div class="project-form__row" appAlert="success" role="status">
+            Поле убрано из формы
+            <button type="button" appButton="text" (click)="undoDelete()">Вернуть</button>
+          </div>
+        }
+        <div class="project-form__actions project-form__field-actions">
           <button
             type="button"
             appButton="secondary"
-            [disabled]="saving() || cases().length >= 200"
-            (click)="editCase()"
+            [disabled]="saving() || fields().length >= 100"
+            (click)="editField('new')"
           >
-            Добавить кейс
+            Добавить поле
           </button>
-        }
-      </section>
-      <section class="project-form__card" aria-labelledby="fields-heading">
-        <div class="project-form__section-heading">
-          <div>
-            <h3 id="fields-heading">Поля проекта</h3>
-            <p>
-              Одна форма для всех кейсов. Название проекта и другие стандартные поля остаются без
-              изменений.
-            </p>
-          </div>
+          <button
+            type="button"
+            appButton="secondary"
+            [attr.aria-expanded]="casesOpen()"
+            (click)="casesOpen.set(!casesOpen())"
+          >
+            Настроить кейсы
+          </button>
         </div>
-        @for (field of fields(); track field.name) {
-          <article class="project-form__row">
+        <p class="project-form__muted">Новые требования применятся к несданным копиям.</p>
+      </section>
+      @if (casesOpen()) {
+        <section class="project-form__card" aria-labelledby="cases-heading">
+          <div class="project-form__section-heading">
             <div>
-              <h4>{{ field.label }}</h4>
+              <h3 id="cases-heading">Кейсы программы</h3>
               <p>
-                {{ typeLabels[field.fieldType] }} ·
-                {{ field.isRequired ? "обязательно для сдачи" : "необязательно" }}
+                У кейса только название. Задания и описание разместите в
+                <button type="button" appButton="text" (click)="materials.emit()">
+                  материалах программы</button
+                >.
               </p>
-              @if (field.helpText) {
-                <p>{{ field.helpText }}</p>
-              }
-              @if (field.answersCount) {
-                <p>Есть ответы. Удаление и смена типа недоступны.</p>
-              }
             </div>
-            <div class="project-form__actions">
-              <button
-                type="button"
-                appButton="text"
-                [disabled]="saving()"
-                (click)="editField(field)"
-              >
-                Изменить</button
-              ><button
-                type="button"
-                appButton="text"
-                [disabled]="!!field.answersCount || saving()"
-                (click)="deleteField(field)"
-              >
-                Удалить
-              </button>
-            </div>
-          </article>
-        } @empty {
-          <p class="project-form__empty">
-            Дополнительных полей пока нет. Добавьте то, что командам нужно указать перед сдачей.
-          </p>
-        }
-        <button
-          type="button"
-          appButton="secondary"
-          [disabled]="saving() || fields().length >= 100"
-          (click)="editField('new')"
-        >
-          Добавить поле
-        </button>
-        <div class="project-form__note project-form__notice">
-          <h4>Черновик и сдача</h4>
-          <p>
-            Обязательные поля нужно заполнить при сдаче решения. Черновик можно сохранить без
-            ответов на них.
-          </p>
-          @if (snapshot()?.hasProjects) {
-            <p>Новые обязательные поля заполняют только команды, которые еще не сдали решение.</p>
+          </div>
+          @for (item of cases(); track $index; let i = $index) {
+            @if (caseIndex() !== i) {
+              <article class="project-form__row">
+                <div>
+                  <h4>{{ item.name }}</h4>
+                  <p>
+                    Проектов: {{ item.projectsCount }}
+                    @if (item.projectsCount) {
+                      <span>
+                        · Кейс уже выбран командой. Переименование и удаление недоступны.</span
+                      >
+                    }
+                  </p>
+                </div>
+                <div class="project-form__actions">
+                  <button
+                    type="button"
+                    appButton="text"
+                    [disabled]="!!item.projectsCount || saving()"
+                    (click)="editCase(i)"
+                  >
+                    Изменить</button
+                  ><button
+                    type="button"
+                    appButton="text"
+                    [disabled]="!!item.projectsCount || saving()"
+                    (click)="deleteCase(i)"
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </article>
+            }
+          } @empty {
+            <p class="project-form__empty">
+              Кейсов пока нет. Добавьте названия, если командам нужно выбрать кейс.
+            </p>
           }
-        </div>
-      </section>
+          @if (caseIndex() !== null) {
+            <form class="project-form__case-editor" (submit)="$event.preventDefault(); saveCase()">
+              <label for="case-name">Название кейса *</label>
+              <input
+                appField
+                id="case-name"
+                [formControl]="caseName"
+                maxlength="1000"
+                [attr.aria-invalid]="caseError() ? 'true' : null"
+                aria-describedby="case-error"
+              />
+              @if (caseError()) {
+                <p id="case-error" class="project-form__error" role="alert">{{ caseError() }}</p>
+              }
+              <div class="project-form__actions">
+                <button appButton="primary">
+                  {{ caseIndex() === -1 ? "Добавить кейс" : "Применить" }}</button
+                ><button type="button" appButton="secondary" (click)="caseIndex.set(null)">
+                  Отмена
+                </button>
+              </div>
+            </form>
+          } @else {
+            <button
+              type="button"
+              appButton="secondary"
+              [disabled]="saving() || cases().length >= 200"
+              (click)="editCase()"
+            >
+              Добавить кейс
+            </button>
+          }
+        </section>
+      }
       <footer class="project-form__footer">
         <p aria-live="polite">
           {{

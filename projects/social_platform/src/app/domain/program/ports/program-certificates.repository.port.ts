@@ -17,7 +17,7 @@ export abstract class ProgramCertificatesRepositoryPort {
   ): Observable<CertificateSettings>;
   abstract upload(
     id: number,
-    kind: "background" | "signature",
+    kind: "background" | "signature" | "font",
     file: File,
   ): Observable<CertificateAsset>;
   abstract asset(id: number, assetId: number): Observable<Blob>;

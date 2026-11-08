@@ -499,3 +499,19 @@ small {
     transition: none;
   }
 }
+.results__score--ready,
+.results__score--pending {
+  justify-self: start;
+  padding: 3px 8px;
+  border-radius: 8px;
+}
+
+.results__score--ready {
+  color: #206264;
+  background: #e0eee6;
+}
+
+.results__score--pending {
+  color: #704b10;
+  background: #f7edcf;
+}

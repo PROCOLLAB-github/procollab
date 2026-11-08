@@ -17,11 +17,13 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
 import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-case";
 import { ProgramLaunch } from "@domain/program/program-launch.model";
 import { AppRoutes } from "@api/paths/app-routes";
+import { ProgramManagementHeaderComponent } from "../management/management-header.component";
 import { evaluationError } from "@utils/evaluation-workspace";
 
 @Component({
   selector: "app-program-launch",
   imports: [
+    ProgramManagementHeaderComponent,
     RouterLink,
     AlertDirective,
     ButtonDirective,
@@ -49,15 +51,9 @@ export class ProgramLaunchComponent {
   readonly publishError = signal<string | null>(null);
   readonly message = signal<string | null>(null, { equal: () => false });
   readonly confirmOpen = signal(false);
-  readonly tabs = [
-    { id: "participants", label: "Участники" },
-    { id: "projects", label: "Проекты" },
-    { id: "experts", label: "Эксперты" },
-    { id: "results", label: "Результаты" },
-    { id: "analytics", label: "Аналитика" },
-    { id: "settings", label: "Настройки" },
-    { id: "certificates", label: "Сертификаты" },
-  ];
+  readyCount(): number {
+    return this.state()?.checks.filter(check => check.ready).length ?? 0;
+  }
   constructor() {
     combineLatest([this.route.paramMap, this.refresh])
       .pipe(

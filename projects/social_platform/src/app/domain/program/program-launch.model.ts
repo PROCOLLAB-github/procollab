@@ -8,17 +8,17 @@ export const PROGRAM_FORMATS: { id: ProgramFormat; label: string; description: s
   {
     id: "case_championship",
     label: "Кейс-чемпионат",
-    description: "Команды решают кейс и сдают решение на оценку.",
+    description: "Кейс, описание решения и презентация",
   },
   {
     id: "hackathon",
     label: "Хакатон",
-    description: "Команды создают продукт. В форме предусмотрены репозиторий и демо.",
+    description: "Задача, репозиторий и инструкция запуска",
   },
   {
     id: "noncompetitive",
-    label: "Неконкурсная программа",
-    description: "Регистрация, материалы и работа с участниками без конкурсной сдачи.",
+    label: "Без конкурса",
+    description: "Регистрация и материалы без конкурсной сдачи",
   },
 ];
 export interface ManagedProgram {
