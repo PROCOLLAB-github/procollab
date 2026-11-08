@@ -161,9 +161,7 @@ describe("Управление экспертами", () => {
     expect(component.pendingAutoGroups()).toEqual([]);
   });
   it("открывает распределение сразу и фильтрует проекты без единого назначения", () => {
-    const { fixture, component } = setup();
-    fixture.componentRef.setInput("initialTab", "distribution");
-    fixture.detectChanges();
+    const { fixture, component } = setup("distribution");
 
     const panel = (fixture.nativeElement as HTMLElement).querySelector(".experts__distribution")!;
     const filter = Array.from(panel.querySelectorAll("button")).find(
@@ -476,7 +474,7 @@ describe("Управление экспертами", () => {
     { id: 11, name: "Маршрут", caseName: "Сбер", leaderId: 91, teamUserIds: [], experts: [] },
     { id: 12, name: "Финплан", caseName: "Т-Банк", leaderId: 92, teamUserIds: [], experts: [] },
   ];
-  function setup() {
+  function setup(initialTab: "experts" | "distribution" = "experts") {
     const api = {
       workspace: vi.fn(() =>
         of({
@@ -501,6 +499,7 @@ describe("Управление экспертами", () => {
     });
     const fixture = TestBed.createComponent(ManagementExpertsComponent);
     fixture.componentRef.setInput("programId", 42);
+    fixture.componentRef.setInput("initialTab", initialTab);
     fixture.componentRef.setInput("confirmDiscard", () => Promise.resolve(false));
     fixture.detectChanges();
     return { fixture, component: fixture.componentInstance, api };
