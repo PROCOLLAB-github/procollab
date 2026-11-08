@@ -54,7 +54,7 @@
 
   &__name {
     margin-bottom: 6px;
-    color: var(--gray);
+    color: var(--ui-caption-text, var(--gray));
   }
 
   &__switch {

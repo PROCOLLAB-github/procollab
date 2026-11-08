@@ -38,7 +38,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 30px 5px 30px 17px;
-    background: linear-gradient(var(--accent), #4d3780);
+    background: linear-gradient(var(--ui-nav-gradient-start), var(--ui-nav-gradient-end));
 
     @include responsive.apply-desktop {
       position: static;

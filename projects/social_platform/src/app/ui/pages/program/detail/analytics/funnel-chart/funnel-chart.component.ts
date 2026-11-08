@@ -11,6 +11,7 @@ import {
   NgZone,
   viewChild,
 } from "@angular/core";
+import { ThemeService, type ThemeScheme } from "@uilib";
 import {
   BarController,
   BarElement,
@@ -48,10 +49,18 @@ export class AnalyticsFunnelChartComponent {
 
   private readonly canvas = viewChild.required<ElementRef<HTMLCanvasElement>>("canvas");
   private readonly zone = inject(NgZone);
+  private readonly theme = inject(ThemeService);
+  private chartScheme?: ThemeScheme;
   private chart?: Chart<"bar", (number | null)[], string | string[]>;
 
   constructor() {
     afterRenderEffect(() => {
+      const scheme = this.theme.colorScheme();
+      if (this.chartScheme !== scheme) {
+        this.chart?.destroy();
+        this.chart = undefined;
+        this.chartScheme = scheme;
+      }
       const items = this.items();
       const kind = this.kind();
       this.zone.runOutsideAngular(() => this.renderChart(items, kind));
@@ -77,6 +86,7 @@ export class AnalyticsFunnelChartComponent {
         : color,
     );
     const textColor = style.getPropertyValue("--black").trim();
+    const tooltipText = style.getPropertyValue("--light-white").trim();
     const mutedColor = style.getPropertyValue("--grey-for-text").trim();
     const gridColor = style.getPropertyValue("--medium-grey-for-outline").trim();
     const labels = items.map(item => item.axisLabel ?? item.label);
@@ -145,6 +155,8 @@ export class AnalyticsFunnelChartComponent {
           legend: { display: false },
           tooltip: {
             backgroundColor: textColor,
+            titleColor: tooltipText,
+            bodyColor: tooltipText,
             padding: 12,
             cornerRadius: 8,
             displayColors: false,

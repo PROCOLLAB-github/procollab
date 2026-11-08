@@ -26,6 +26,9 @@
   }
 
   &__title {
+    overflow: hidden;
     color: var(--black);
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

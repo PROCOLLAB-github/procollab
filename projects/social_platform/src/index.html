@@ -7,6 +7,22 @@
     <title>Procollab</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script>
+      (() => {
+        let preference;
+        try {
+          preference = localStorage.getItem("procollab-theme");
+        } catch {
+          // Follow the system when storage is unavailable.
+        }
+        const explicit = preference === "light" || preference === "dark";
+        document.documentElement.dataset.theme = explicit
+          ? preference
+          : window.matchMedia?.("(prefers-color-scheme: dark)")?.matches
+            ? "dark"
+            : "light";
+      })();
+    </script>
     <link rel="prefetch" href="assets/icons/symbol/svg/sprite.css.svg" as="image" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
