@@ -41,7 +41,12 @@ describe("Organizer cases and common fields", () => {
     expect(fixture.nativeElement.textContent).toContain("Загружаем кейсы");
     pending.next(initial());
     await fixture.whenStable();
-    expect(fixture.nativeElement.querySelector(".project-form__row button").disabled).toBe(true);
+    component.casesOpen.set(true);
+    await fixture.whenStable();
+    const remove = Array.from(
+      fixture.nativeElement.querySelectorAll("button") as NodeListOf<HTMLButtonElement>,
+    ).find(button => button.textContent?.trim() === "Удалить");
+    expect(remove?.disabled).toBe(true);
     component.editCase();
     await fixture.whenStable();
     const input = fixture.nativeElement.querySelector("#case-name");

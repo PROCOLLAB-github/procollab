@@ -92,6 +92,7 @@ describe("Detail cleanup actions", () => {
                 isProgramSubmissionProjectsEndedModalOpen: signal(false),
                 applicationLabel: label,
                 applicationPending: pending,
+                legacyEntryProgramId: signal(null),
                 addNewProject: create,
                 getRegistrationLink: (program: Program) => program.registrationLink,
               },

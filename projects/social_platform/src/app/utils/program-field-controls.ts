@@ -20,6 +20,7 @@ export function programFieldControl(field: PartnerProgramFields, value: unknown 
           : { choiceUnavailable: true },
     );
   if (field.fieldType === "text") validators.push(Validators.maxLength(500));
+  if (field.fieldType === "url") validators.push(Validators.pattern(/^https?:\/\/[^\s]+$/i));
   if (field.fieldType === "textarea") validators.push(Validators.maxLength(300));
   if (field.fieldType === "checkbox")
     value = value === true || (typeof value === "string" && value.toLowerCase() === "true");
@@ -31,6 +32,7 @@ export const PROGRAM_FIELD_TYPE_LABELS: Record<PartnerProgramFields["fieldType"]
   textarea: "Развернутый текст",
   select: "Выбор из списка",
   file: "Файл",
+  url: "Ссылка",
   checkbox: "Флажок",
   radio: "Один вариант",
 };

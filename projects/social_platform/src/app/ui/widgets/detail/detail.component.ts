@@ -26,6 +26,7 @@ import { Program } from "@domain/program/program.model";
 import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ChatStateService } from "@domain/shared/chat-state.service";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
+import { ProjectEntryComponent } from "@ui/widgets/project-entry/project-entry.component";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProfileProjectInviteModalComponent } from "@ui/widgets/project-invite/profile-project-invite-modal.component";
 import { PROGRAM_DEFAULT_COVER, PROGRAM_LOGO_SIZES } from "@utils/program-branding";
@@ -37,6 +38,7 @@ import { ProgramPreviewToolbarComponent } from "@ui/pages/program/launch/preview
   templateUrl: "./detail.component.html",
   styleUrl: "./detail.component.scss",
   imports: [
+    ProjectEntryComponent,
     PageHeaderComponent,
     ImageFramingDirective,
     CommonModule,
@@ -209,6 +211,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.detailProfileInfoService.acknowledgeProfileFillPrompt(continueFilling);
   }
 
+  protected readonly legacyEntryProgramId = this.detailProgramInfoService.legacyEntryProgramId;
   addNewProject(programId: number): void {
     this.detailProgramInfoService.addNewProject(programId);
   }

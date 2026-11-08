@@ -162,8 +162,10 @@ export class ProjectRepository implements ProjectRepositoryPort {
       .pipe(map(page => ({ ...page, results: plainToInstance(Project, page.results) })));
   }
 
-  postOne(): Observable<Project> {
-    return this.projectAdapter.postCreate().pipe(map(dto => plainToInstance(Project, dto)));
+  postOne(name?: string): Observable<Project> {
+    return (name ? this.projectAdapter.postCreate(name) : this.projectAdapter.postCreate()).pipe(
+      map(dto => plainToInstance(Project, dto)),
+    );
   }
 
   deleteOne(id: number): Observable<void> {

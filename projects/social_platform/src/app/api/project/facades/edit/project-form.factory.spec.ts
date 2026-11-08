@@ -6,16 +6,12 @@ import { createProjectAchievementGroup, createProjectForm } from "./project-form
 describe("project-form.factory", () => {
   const fb = new FormBuilder();
 
-  it("создаёт основную форму проекта с ожидаемыми обязательными полями", () => {
+  it("требует только название для основной формы проекта", () => {
     const form = createProjectForm(fb);
 
     expect(form.get("name")?.hasError("required")).toBe(true);
-    expect(form.get("region")?.hasError("required")).toBe(true);
-    expect(form.get("industryId")?.hasError("required")).toBe(true);
-    expect(form.get("description")?.hasError("required")).toBe(true);
-    expect(form.get("coverImageAddress")?.hasError("required")).toBe(true);
-    expect(form.get("targetAudience")?.hasError("required")).toBe(true);
-    expect(form.get("problem")?.hasError("required")).toBe(true);
+    form.get("name")?.setValue("Проект");
+    expect(form.valid).toBe(true);
     expect(form.get("links")).toEqual(expect.any(FormArray));
     expect(form.get("achievements")).toEqual(expect.any(FormArray));
   });

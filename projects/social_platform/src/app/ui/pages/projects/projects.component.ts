@@ -9,6 +9,7 @@ import {
   ElementRef,
   inject,
   OnInit,
+  signal,
   viewChild,
   ViewChild,
 } from "@angular/core";
@@ -27,6 +28,7 @@ import { CdkTrapFocus } from "@angular/cdk/a11y";
 import { ProjectsFilterComponent } from "@ui/widgets/projects-filter/projects-filter.component";
 import { OfficeInfoService } from "@api/office/facades/office-info.service";
 import { ProjectActivityCardComponent } from "./project-activity-card/project-activity-card.component";
+import { ProjectEntryComponent } from "@ui/widgets/project-entry/project-entry.component";
 
 /** Контейнер модуля проектов с поиском, фильтрацией и навигацией по разделам. */
 @Component({
@@ -46,6 +48,7 @@ import { ProjectActivityCardComponent } from "./project-activity-card/project-ac
     BarNewComponent,
     BackComponent,
     ProjectActivityCardComponent,
+    ProjectEntryComponent,
     ProjectsFilterComponent,
     InfoCardComponent,
   ],
@@ -53,6 +56,7 @@ import { ProjectActivityCardComponent } from "./project-activity-card/project-ac
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit {
+  readonly createOpen = signal(false);
   protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
 
   readonly filterBody = viewChild<ElementRef<HTMLElement>>("filterBody");
@@ -97,7 +101,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   addProject(): void {
-    this.projectsInfoService.addProject();
+    this.createOpen.set(true);
   }
 
   onAcceptInvite(inviteId: number): void {

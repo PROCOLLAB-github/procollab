@@ -1,7 +1,5 @@
 <!-- @format -->
 <main class="launch">
-  <a class="launch__back" [routerLink]="paths.program.managed()">К моим программам</a>
-  <h1>Управление программой</h1>
   @if (loading()) {
     <p role="status">Проверяем настройки программы…</p>
   }
@@ -22,28 +20,17 @@
     }}</app-transient-notice>
   }
   @if (state(); as state) {
-    <p class="launch__name">{{ state.program.name }}</p>
+    <app-program-management-header
+      [programId]="state.program.id"
+      [name]="state.program.name"
+      [draft]="state.program.draft"
+      [active]="'overview'"
+      [status]="'Опубликована'"
+    />
     @if (state.program.draft) {
-      <p class="launch__status">Черновик · Не виден участникам</p>
-      <p class="launch__label">Подготовка к запуску</p>
-      <nav class="launch__tabs" aria-label="Разделы управления программой">
-        @for (tab of tabs; track tab.id) {
-          <a [routerLink]="paths.program.management(state.program.id, tab.id)">{{
-            tab.id === "projects" && state.program.solutionStorageMode === "solution"
-              ? "Заявки"
-              : tab.label
-          }}</a>
-        }
-      </nav>
       <section class="launch__card">
         <h2>Подготовка к запуску</h2>
-        <p>
-          {{
-            state.canPublish
-              ? "Все обязательные настройки готовы. Можно открыть регистрацию."
-              : "Завершите три настройки, чтобы открыть регистрацию."
-          }}
-        </p>
+        <p>{{ readyCount() }} из {{ state.checks.length }} шагов готово</p>
         @for (check of state.checks; track check.code) {
           <div class="launch__check">
             <div>
@@ -69,35 +56,19 @@
             </div>
           </div>
         }
+        <div class="launch__actions">
+          <a appButton="secondary" [routerLink]="paths.program.preview(state.program.id)"
+            >Предпросмотр</a
+          ><button
+            appButton="primary"
+            [disabled]="!state.canPublish || busy()"
+            [appButtonLoading]="busy()"
+            (click)="confirm($event)"
+          >
+            Опубликовать программу
+          </button>
+        </div>
       </section>
-      <section class="launch__later">
-        <h2>Можно настроить после публикации</h2>
-        @for (warning of state.warnings; track warning) {
-          <p>{{ warning }}</p>
-        } @empty {
-          <p>Материалы, организаторов и сертификаты можно добавить позже.</p>
-        }
-      </section>
-      <div class="launch__actions">
-        <a appButton="secondary" [routerLink]="paths.program.preview(state.program.id)"
-          >Предпросмотр</a
-        ><button
-          appButton="primary"
-          [disabled]="!state.canPublish || busy()"
-          [appButtonLoading]="busy()"
-          aria-describedby="launch-publish-hint"
-          (click)="confirm($event)"
-        >
-          Опубликовать программу
-        </button>
-      </div>
-      <p id="launch-publish-hint">
-        {{
-          state.canPublish
-            ? "Откроются страница программы и регистрация участников."
-            : "Публикация станет доступна после обязательных настроек."
-        }}
-      </p>
     } @else {
       <div appAlert="success" role="status">
         <strong>Программа опубликована</strong>

@@ -63,7 +63,7 @@ describe("Attention views: real overlay", () => {
           unavailableCount: 0,
           previewText: "Анна, здравствуйте!",
           expiresIn: 900,
-          recipients: [{ userId: 123, fullName: "Анна Петрова" }],
+          recipients: [{ userId: 123, fullName: "Анна Петрова", email: "anna@example.com" }],
         }),
       ),
     );
@@ -512,44 +512,42 @@ describe("Attention views: real overlay", () => {
   });
 
   it("checkbox selection opens an inline reviewed reminder and returns keyboard focus", async () => {
-    await open();
-    expect(dialog().textContent).not.toContain("Зарегистрированные участники, которые");
-    expect(button("Отправить напоминание").disabled).toBe(true);
+    await open("participants-without-visit");
+    expect(button("Напомнить")).toBeUndefined();
     dialog().querySelector<HTMLInputElement>('input[type="checkbox"]')!.click();
     await fixture.whenStable();
     expect(state.selectedCount()).toBe(1);
-    button("Отправить напоминание").click();
+    button("Напомнить").click();
     await fixture.whenStable();
     expect(dialog().textContent).toContain("Получателей: 1");
-    expect(dialog().textContent).toContain("Пример уведомления");
-    expect(dialog().textContent).toContain("Пример письма на почту");
-    expect(dialog().textContent).toContain("Открыть на платформе");
+    expect(dialog().textContent).toContain("Отправить следующим людям");
+    expect(dialog().textContent).toContain("Анна Петрова");
+    expect(dialog().textContent).toContain("anna@example.com");
     expect(dialog().textContent).not.toContain("Выбрано:");
     expect(dialog().querySelector(".attention-list-tools__export")).toBeNull();
     expect(
       Array.from(dialog().querySelectorAll("footer button"), item => item.textContent?.trim()),
-    ).toEqual(["Назад", "Отправить"]);
-    expect(dialog().textContent).toContain("Анна, здравствуйте!");
+    ).toEqual(["Отмена", "Отправить"]);
     expect(document.querySelectorAll('[role="dialog"]')).toHaveLength(1);
     expect(document.activeElement).toBe(dialog().querySelector("h2"));
     expect(dialog().querySelector("h2")?.textContent).toBe("Отправить напоминание");
     expect(actions.send).not.toHaveBeenCalled();
-    button("Назад").click();
+    button("Отмена").click();
     await fixture.whenStable();
     expect(dialog().querySelector<HTMLInputElement>('input[type="checkbox"]')!.checked).toBe(true);
     expect(document.activeElement?.tagName).toBe("H2");
   });
 
   it("select all found selects beyond the visible page, send requires confirmation", async () => {
-    participants.execute.mockReturnValue(of(ok(participantsPage({ count: 75 }))));
-    await open();
+    visit.execute.mockReturnValue(of(ok(participantsPage({ count: 75 }))));
+    await open("participants-without-visit");
     const header = dialog().querySelector<HTMLInputElement>('thead input[type="checkbox"]')!;
     expect(header.getAttribute("aria-label")).toBe("Выбрать все строки таблицы");
     expect(dialog().textContent).not.toContain("Выбрать все найденные");
     header.click();
     await fixture.whenStable();
     expect(state.selectedCount()).toBe(75);
-    button("Отправить напоминание").click();
+    button("Напомнить").click();
     await fixture.whenStable();
     expect(actions.preview.mock.lastCall[2].selection.mode).toBe("all");
     expect(actions.send).not.toHaveBeenCalled();
@@ -557,10 +555,10 @@ describe("Attention views: real overlay", () => {
     await fixture.whenStable();
     expect(actions.send).toHaveBeenCalledExactlyOnceWith(
       12,
-      "participants-without-team",
+      "participants-without-visit",
       "preview",
     );
-    expect(dialog().textContent).toContain("Напоминания созданы: 1");
+    expect(dialog().textContent).toContain("Письма поставлены в очередь");
   });
 
   it.each([

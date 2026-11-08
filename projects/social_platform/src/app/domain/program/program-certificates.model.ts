@@ -37,14 +37,30 @@ export interface CertificateBox {
   width: number;
   height: number;
   fontSize: number;
-  fontFamily?: "mont" | "pt-serif" | "lobster";
+  fontFamily?:
+    | "mont"
+    | "mont-regular"
+    | "mont-light"
+    | "mont-bold"
+    | "pt-serif"
+    | "lobster"
+    | `custom-${number}`;
 }
 export const CERTIFICATE_FONTS = [
   { key: "mont", label: "Mont", family: "Mont", boldWeight: 600 },
+  {
+    key: "mont-regular",
+    label: "Mont Regular",
+    family: "Certificate Mont Regular",
+    boldWeight: 400,
+  },
+  { key: "mont-light", label: "Mont Light", family: "Certificate Mont Light", boldWeight: 400 },
+  { key: "mont-bold", label: "Mont Bold", family: "Certificate Mont Bold", boldWeight: 400 },
   { key: "pt-serif", label: "PT Serif", family: "Certificate PT Serif", boldWeight: 700 },
   { key: "lobster", label: "Lobster", family: "Certificate Lobster", boldWeight: 400 },
 ] as const;
 export function certificateFont(key: CertificateBox["fontFamily"]) {
+  if (key?.startsWith("custom-")) return { key, label: key, family: key, boldWeight: 400 };
   return CERTIFICATE_FONTS.find(font => font.key === key) ?? CERTIFICATE_FONTS[0];
 }
 export interface CertificateAsset {
@@ -73,6 +89,7 @@ export interface CertificateSettings {
   revision: number;
   draft: CertificateDraft;
   assets: { background: CertificateAsset | null; signature: CertificateAsset | null };
+  fonts?: CertificateAsset[];
   eligibleCounts: { all: number; submitted: number };
   batch: { id: number; active: boolean; issueAt: string; initializedAt: string | null } | null;
 }

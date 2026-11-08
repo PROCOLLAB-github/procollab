@@ -32,7 +32,7 @@
         [disabled]="onEditClicked() || coverReset.pending()"
         [style.opacity]="onEditClicked() ? '0.5' : '1'"
       >
-        {{ isCompetitive() && !submitted() ? "отправить заявку" : "сохранить" }}
+        {{ isCompetitive() && !submitted() ? "сдать проект" : "сохранить" }}
       </app-button>
     </div>
   </div>
@@ -40,7 +40,7 @@
   <main class="project">
     <form appFormLayout [formGroup]="projectForm" class="project__form">
       <app-project-navigation
-        [navItems]="navProjectItems"
+        [navItems]="navProjectItems()"
         style="width: 100%"
         (stepChange)="navigateStep($event)"
       ></app-project-navigation>
@@ -51,7 +51,12 @@
             <app-project-main-step
               style="width: 100%"
               [projSubmitInitiated]="projSubmitInitiated()"
+              [showDescription]="!isProgramCopy() && !additionalForm.get('project_description')"
+              [showPresentation]="!isProgramCopy() && !additionalForm.get('project_presentation')"
             ></app-project-main-step>
+          }
+          @if (isProjectAssignToProgram() && programSections()?.programData === false) {
+            <app-project-additional-step />
           }
         } @else if (editingStep() === "contacts") {
           @defer {

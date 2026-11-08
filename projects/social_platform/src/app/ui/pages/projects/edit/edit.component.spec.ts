@@ -42,6 +42,7 @@ describe("ProjectEditComponent", () => {
       projectForm: fb.group({ name: [""] }),
       additionalForm: fb.group({}),
       profileId: signal(0),
+      invitationProject: signal(null),
       projSubmitInitiated: signal(false),
       projFormIsSubmittingAsPublished: signal(false),
       projFormIsSubmittingAsDraft: signal(false),

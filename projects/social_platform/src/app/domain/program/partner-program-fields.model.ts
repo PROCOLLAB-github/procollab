@@ -8,7 +8,7 @@ export class PartnerProgramFields {
   id!: number;
   name!: string;
   label!: string;
-  fieldType!: "text" | "textarea" | "checkbox" | "select" | "radio" | "file";
+  fieldType!: "text" | "textarea" | "checkbox" | "select" | "radio" | "file" | "url";
   isRequired!: boolean;
   helpText!: string;
   options!: string[];

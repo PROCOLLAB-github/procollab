@@ -14,7 +14,7 @@ export abstract class ProjectRepositoryPort {
   abstract getAll(params?: HttpParams): Observable<ApiPagination<Project>>;
   abstract getOne(id: number): Observable<Project>;
   abstract getMy(params?: HttpParams): Observable<ApiPagination<Project>>;
-  abstract postOne(): Observable<Project>;
+  abstract postOne(name?: string): Observable<Project>;
   abstract update(id: number, data: Partial<Project>): Observable<Project>;
   abstract deleteOne(id: number): Observable<void>;
   abstract refreshCount(): Observable<ProjectCount>;

@@ -89,7 +89,7 @@
         [routerLink]="
           program().draft
             ? paths.program.launch(program().id)
-            : paths.program.management(program().id)
+            : paths.program.management(program().id, 'analytics')
         "
         [attr.aria-label]="
           (program().draft ? 'Продолжить настройку: ' : 'Управлять: ') + program().name

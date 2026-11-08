@@ -1,23 +1,13 @@
 /** @format */
 
-import { userErrorMessage } from "@core/lib/models/error/user-error-message";
-
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
-import { ApplyProjectToProgramUseCase } from "@api/program/use-cases/apply-project-to-program.use-case";
-import { GetProgramProjectAdditionalFieldsUseCase } from "@api/program/use-cases/get-program-project-additional-fields.use-case";
-import {
-  PartnerProgramFields,
-  ProjectNewAdditionalProgramFields,
-} from "@domain/program/partner-program-fields.model";
+import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
 
 import { Router } from "@angular/router";
-import { finalize, switchMap } from "rxjs";
-import { ProjectFormService } from "@api/project/project-form.service";
-import { Program, ProgramCurrentApplication } from "@domain/program/program.model";
+import { Program } from "@domain/program/program.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AppRoutes } from "@api/paths/app-routes";
-import { PROGRAM_CASE_FIELD_NAME } from "@domain/program/program-case-field.const";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { GetSolutionContextUseCase } from "@api/solution/use-cases/solution.use-cases";
 import {
@@ -34,14 +24,8 @@ export class DetailProgramInfoService {
   private readonly logger = inject(LoggerService);
   private readonly destroyRef = inject(DestroyRef);
 
-  private readonly projectFormService = inject(ProjectFormService);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
-
-  private readonly applyProjectToProgramUseCase = inject(ApplyProjectToProgramUseCase);
   private readonly getSolutionContext = inject(GetSolutionContextUseCase);
-  private readonly getProgramProjectAdditionalFieldsUseCase = inject(
-    GetProgramProjectAdditionalFieldsUseCase,
-  );
 
   readonly isProjectsPage = signal<boolean>(false);
   readonly isMembersPage = signal<boolean>(false);
@@ -55,7 +39,7 @@ export class DetailProgramInfoService {
   readonly assignProjectToProgramModalMessage = signal<string | null>(null);
   readonly registerDateExpired = this.programDetailMainUIInfoService.registerDateExpired;
 
-  private readonly projectForm = this.projectFormService.getForm();
+  readonly legacyEntryProgramId = signal<number | null>(null);
 
   readonly application = computed(
     () => this.programDetailMainUIInfoService.program()?.currentApplication ?? null,
@@ -65,10 +49,10 @@ export class DetailProgramInfoService {
     this.programDetailMainUIInfoService.program()?.solutionStorageMode === "solution"
       ? "мое решение"
       : this.application()?.submitted
-        ? "вы подали проект"
+        ? "открыть сданный проект"
         : this.application()
-          ? "перейти в заявку"
-          : "создать заявку",
+          ? "открыть черновик"
+          : "подать проект",
   );
 
   addNewProject(programId: number): void {
@@ -76,10 +60,8 @@ export class DetailProgramInfoService {
     if (this.applicationPending()) return;
     const solutionMode =
       this.programDetailMainUIInfoService.program()?.solutionStorageMode === "solution";
-    if (!solutionMode && this.application()?.submitted) return;
-    // Existing legacy references already carry the exact project and program-link IDs.
-    if (!solutionMode && this.application()) {
-      this.openApplication();
+    if (!solutionMode) {
+      this.addLegacyProject(programId);
       return;
     }
     this.applicationPending.set(true);
@@ -112,77 +94,20 @@ export class DetailProgramInfoService {
   }
 
   private addLegacyProject(programId: number): void {
-    if (this.applicationPending() || this.application()?.submitted) return;
-    if (this.application()) {
-      this.openApplication();
+    const application = this.application();
+    if (!application) {
+      this.legacyEntryProgramId.set(programId);
       return;
     }
-    this.applicationPending.set(true);
-    this.getProgramProjectAdditionalFieldsUseCase
-      .execute(programId)
-      .pipe(
-        switchMap(filtersResult => {
-          if (this.programDetailMainUIInfoService.program()?.id !== programId) return [];
-          const fields = filtersResult.ok ? filtersResult.value.programFields : [];
-          const newFieldsFormValues = fields
-            .filter(field => field.fieldType !== "file" && field.name !== PROGRAM_CASE_FIELD_NAME)
-            .map(field =>
-              ProjectNewAdditionalProgramFields.fromField(field, this.placeholderFor(field)),
-            );
-          const body = { project: this.projectForm.value, programFieldValues: newFieldsFormValues };
-          return this.applyProjectToProgramUseCase.execute(programId, body);
-        }),
-        finalize(() => this.applicationPending.set(false)),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe({
-        next: result => {
-          if (this.programDetailMainUIInfoService.program()?.id !== programId) return;
-          if (!result.ok) {
-            const error = result.error.cause as
-              | { status?: number; error?: { detail?: string } }
-              | undefined;
-            if (error?.status === 400) {
-              this.isAssignProjectToProgramModalOpen.set(true);
-              this.assignProjectToProgramModalMessage.set(
-                userErrorMessage(
-                  error.error?.detail,
-                  "Не удалось добавить проект в программу. Проверьте заполненные поля.",
-                ),
-              );
-            }
-            return;
-          }
-
-          const response = result.value;
-          const application: ProgramCurrentApplication = { ...response, submitted: false };
-          this.programDetailMainUIInfoService.program.update(program =>
-            program
-              ? Object.assign(new Program(), program, { currentApplication: application })
-              : program,
-          );
-          this.openApplication(application);
-        },
-      });
-  }
-
-  private openApplication(application = this.application()): void {
-    if (!application || application.submitted) return;
-    this.router
+    if (application.submitted) {
+      void this.router.navigate([AppRoutes.projects.detail(application.projectId)]);
+      return;
+    }
+    void this.router
       .navigate([AppRoutes.projects.edit(application.projectId)], {
-        queryParams: {
-          editingStep: "additional",
-          fromProgram: true,
-          programLinkId: application.programLinkId,
-        },
+        queryParams: { editingStep: "additional", programLinkId: application.programLinkId },
       })
       .then(() => this.logger.debug("Route change from ProjectsComponent"));
-  }
-
-  private placeholderFor(field: PartnerProgramFields): string {
-    if (field.fieldType === "checkbox") return "false";
-    if (field.options.length > 0) return field.options[0];
-    return "-";
   }
 
   /**

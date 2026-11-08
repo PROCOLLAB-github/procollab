@@ -293,7 +293,7 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     expect(service.isCompetitive()).toBe(true);
     expect(update.execute).toHaveBeenCalledWith({
       id: 55,
-      data: { name: "Project", draft: false },
+      data: { name: "Project", draft: true },
     });
   });
 
@@ -399,7 +399,7 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     });
   });
 
-  it("single-link happy path: validation, confirmation, PUT, submit, main save and success exactly once", () => {
+  it("saves project content and program fields before freezing the copy", () => {
     const single = project();
     single.partnerProgram.programId = 12;
     single.partnerProgram.programLinkId = 700;
@@ -419,17 +419,20 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     expect(repo.updateProgramLinkFields).toHaveBeenCalledTimes(1);
     expect(repo.updateProgramLinkFields.mock.calls[0][0]).toBe(700);
     expect(programRepo.submitCompettetiveProject).not.toHaveBeenCalled();
-    expect(update.execute).not.toHaveBeenCalled();
+    expect(update.execute).toHaveBeenCalledExactlyOnceWith({
+      id: 55,
+      data: { name: "Project", draft: true },
+    });
+    expect(update.execute.mock.invocationCallOrder[0]).toBeLessThan(
+      repo.updateProgramLinkFields.mock.invocationCallOrder[0],
+    );
     put.next();
     put.complete();
     expect(programRepo.submitCompettetiveProject).toHaveBeenCalledExactlyOnceWith(700);
-    expect(update.execute).not.toHaveBeenCalled();
+    expect(update.execute).toHaveBeenCalledOnce();
     submission.next({});
     submission.complete();
-    expect(update.execute).toHaveBeenCalledExactlyOnceWith({
-      id: 55,
-      data: { name: "Project", draft: false },
-    });
+    expect(update.execute).toHaveBeenCalledOnce();
     expect(service.projectForm.get("partnerProgramId")?.value).toBe(12);
     expect(additional.submitted()).toBe(true);
     expect(additional.canSubmit()).toBe(false);
@@ -608,7 +611,7 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     expect(repo.updateProgramLinkFields).toHaveBeenCalledOnce();
     expect(programRepo.submitCompettetiveProject).toHaveBeenCalledExactlyOnceWith(700);
     expect(ui.applyOpenSendDescisionLateModal).toHaveBeenCalledOnce();
-    expect(update.execute).not.toHaveBeenCalled();
+    expect(update.execute).toHaveBeenCalledOnce();
     expect(TestBed.inject(SnackbarService).success).not.toHaveBeenCalled();
     expect(service.projFormIsSubmitting$().status).toBe("failure");
     expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [700]]);
@@ -625,7 +628,7 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     expect(ui.applySendDescision).toHaveBeenCalledOnce();
     expect(repo.updateProgramLinkFields).toHaveBeenCalledOnce();
     expect(programRepo.submitCompettetiveProject).toHaveBeenCalledExactlyOnceWith(700);
-    expect(update.execute).not.toHaveBeenCalled();
+    expect(update.execute).toHaveBeenCalledOnce();
     expect(TestBed.inject(SnackbarService).success).not.toHaveBeenCalled();
   });
 
@@ -633,7 +636,7 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
     ["submit", "Проект уже был сдан на проверку."],
     ["put", "Нельзя изменять значения полей программы после сдачи проекта на проверку."],
   ])(
-    "already-submitted %s race refreshes read-only state without main save or success",
+    "already-submitted %s race refreshes read-only state without further writes or success",
     (source, detail) => {
       service.loadProgramTagsAndProject();
       service.additionalForm.get("case")?.setValue("B");
@@ -657,7 +660,7 @@ describe("ProjectsEditInfoService canonical relation integration", () => {
       expect(repo.getProgramLinkFields.mock.calls).toEqual([[700], [700]]);
       expect(service.additionalForm.disabled).toBe(true);
       expect(additional.submitted()).toBe(true);
-      expect(update.execute).not.toHaveBeenCalled();
+      expect(update.execute).toHaveBeenCalledOnce();
       expect(TestBed.inject(SnackbarService).success).not.toHaveBeenCalled();
       expect(service.projFormIsSubmitting$().status).toBe("failure");
       expect(repo.updateProgramLinkFields).toHaveBeenCalledOnce();

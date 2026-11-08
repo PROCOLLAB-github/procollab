@@ -46,6 +46,7 @@ export interface ProgramAnalyticsAttentionProject {
   reasonLabel: string;
   assignmentsTotal: number | null;
   assignmentsCompleted: number | null;
+  experts?: { id: number; fullName: string; completed: boolean }[];
 }
 
 /** Режим берём из ответа списка, не из потенциально устаревшей сводки. */

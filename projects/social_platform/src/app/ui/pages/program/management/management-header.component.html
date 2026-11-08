@@ -1,0 +1,73 @@
+<!-- @format -->
+<a class="program-heading__back" [routerLink]="paths.program.managed()">Я организую</a>
+<header class="program-heading">
+  <div>
+    <h1>{{ name() }}</h1>
+    @if (draft()) {
+      <p class="program-heading__status">Черновик · виден организаторам</p>
+    } @else if (status()) {
+      <p class="program-heading__status program-heading__status--live">{{ status() }}</p>
+    }
+  </div>
+  <div class="program-heading__actions">
+    <a appButton="secondary" [routerLink]="paths.program.detail(programId())">Страница программы</a>
+    <button type="button" appButton="text" (click)="training.set(true)">Пройти обучение</button>
+  </div>
+</header>
+<nav class="program-heading__tabs" aria-label="Разделы управления программой">
+  @for (tab of tabs; track tab.key) {
+    <a
+      [routerLink]="tabPath(tab.key)"
+      [queryParams]="tab.key === 'evaluation' ? { tab: 'criteria' } : null"
+      [attr.aria-current]="active() === tab.key ? 'page' : null"
+    >
+      <i appIcon [icon]="tab.icon" appSquare="16" aria-hidden="true"></i>
+      {{ tab.label }}
+    </a>
+  }
+</nav>
+@if (tour(); as topic) {
+  @if (step(); as current) {
+    <section class="program-heading__coach" aria-live="polite">
+      <div>
+        <small>{{ index() + 1 }} из {{ topic.steps.length }}</small>
+        <h2>{{ current.title }}</h2>
+        <p>{{ current.text }}</p>
+      </div>
+      <div class="program-heading__actions">
+        @if (index() > 0) {
+          <button type="button" appButton="text" (click)="showStep(topic.key, index() - 1)">
+            Назад
+          </button>
+        }
+        @if (index() + 1 < topic.steps.length) {
+          <button type="button" appButton="primary" (click)="showStep(topic.key, index() + 1)">
+            Далее
+          </button>
+        } @else {
+          <button type="button" appButton="primary" (click)="finishTour()">Завершить тур</button>
+        }
+        <button type="button" appButton="icon" aria-label="Закрыть обучение" (click)="finishTour()">
+          <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+        </button>
+      </div>
+    </section>
+  }
+}
+<app-modal [open]="training()" (openChange)="training.set($event)" labelledBy="program-training">
+  <section class="program-heading__training">
+    <div class="program-heading__training-title">
+      <h2 id="program-training">Обучение</h2>
+      <button type="button" appButton="secondary" (click)="training.set(false)">Закрыть</button>
+    </div>
+    @for (topic of topics; track topic.key) {
+      <article>
+        <h3>{{ topic.title }}</h3>
+        <p>{{ topic.steps.length }} шагов</p>
+        <button type="button" appButton="secondary" (click)="showStep(topic.key, 0)">
+          Начать тур
+        </button>
+      </article>
+    }
+  </section>
+</app-modal>

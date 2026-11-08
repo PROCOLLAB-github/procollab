@@ -306,3 +306,20 @@
     height: 20px;
   }
 }
+@font-face {
+  font-family: "Certificate Mont Regular";
+  src: url("/assets/font/Mont-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Certificate Mont Light";
+  src: url("/assets/font/Mont-Light.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Certificate Mont Bold";
+  src: url("/assets/font/Mont-Bold.woff2") format("woff2");
+  font-display: swap;
+}

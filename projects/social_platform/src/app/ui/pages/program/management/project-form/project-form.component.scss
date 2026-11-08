@@ -3,6 +3,84 @@
 @use "styles/ui-foundation";
 @use "styles/program-management-controls";
 
+.project-form__panel-title {
+  width: 100%;
+  margin: 0 0 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.project-form__muted {
+  color: var(--grey-for-text);
+  font-size: 12px;
+}
+
+.project-form__basics {
+  margin-block: 12px;
+  dt { font-weight: 700; }
+  dd { margin: 4px 0 12px; color: var(--grey-for-text); }
+}
+
+.project-form__team {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  label { display: grid; gap: 6px; }
+}
+
+.project-form__field-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(116px, 150px) minmax(116px, 157px) 36px;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--medium-grey-for-outline);
+  strong { font-weight: 600; overflow-wrap: anywhere; }
+  p { margin: 3px 0 0; }
+}
+
+.project-form__field-row,
+.project-form__row {
+  button[aria-pressed="true"] { background: var(--accent-light); }
+}
+
+.project-form__field-actions {
+  justify-content: flex-start;
+  margin-block: 16px 10px;
+}
+
+.project-form__menu {
+  min-width: 164px;
+  padding: 6px;
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 8px;
+  background: var(--light-white);
+  box-shadow: 0 6px 20px rgb(38 27 52 / 14%);
+  button {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    color: var(--black);
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    &:focus-visible, &:hover { background: var(--white); }
+  }
+}
+
+@media (max-width: 680px) {
+  .project-form__field-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 32px;
+    > :first-child { grid-column: 1 / 3; }
+    > button:last-of-type { grid-column: 3; grid-row: 1; }
+  }
+}
+
 :host {
   display: block;
   min-width: 0;

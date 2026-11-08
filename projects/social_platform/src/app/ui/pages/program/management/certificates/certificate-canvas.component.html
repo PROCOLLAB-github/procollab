@@ -1,18 +1,27 @@
 <!-- @format -->
 <div class="canvas__selection-tools" aria-label="Инструменты выбранного элемента">
   <label class="canvas__family">
-    <span>Шрифт</span>
+    <span>Шрифт элемента</span>
     <select
       appField
       [ngModel]="font(selected()).key"
       [disabled]="selected() === 'signature' || preview() || disabled() || fontLoadError()"
       (ngModelChange)="familyChanged($event)"
     >
-      @for (font of fonts; track font.key) {
+      @for (font of fontOptions(); track font.key) {
         <option [value]="font.key">{{ font.label }}</option>
       }
     </select>
   </label>
+  <input #customFont type="file" hidden accept=".ttf,.otf" (change)="fontFileChanged($event)" />
+  <button
+    type="button"
+    appButton="secondary"
+    [disabled]="selected() === 'signature' || preview() || disabled()"
+    (click)="customFont.click()"
+  >
+    Загрузить шрифт
+  </button>
   <label class="canvas__font"
     >Размер текста
     <input

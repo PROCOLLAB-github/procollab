@@ -2,6 +2,42 @@
 
 <div class="project__right">
   <aside class="project__aside">
+    @if (project(); as item) {
+      @if (leader() || item.partnerProgram) {
+        <section class="lists project__section">
+          <div class="lists__section">
+            <h3 class="text-body-12 lists__title">программы</h3>
+            <i appIcon icon="program" class="lists__icon" appSquare="12" aria-hidden="true"></i>
+          </div>
+          @if (item.partnerProgram; as program) {
+            <a class="lists__contact" [routerLink]="paths.program.detail(program.programId)">{{
+              program.name
+            }}</a>
+            <p>{{ program.isSubmitted ? "Проект сдан" : "Черновик для программы" }}</p>
+            @if (leader() && program.sourceProjectId) {
+              <a
+                class="lists__contact"
+                [routerLink]="paths.projects.detail(program.sourceProjectId)"
+                >Исходный проект</a
+              >
+            }
+          } @else {
+            @for (copy of item.programCopies ?? []; track copy.programLinkId) {
+              <a class="lists__contact" [routerLink]="paths.projects.detail(copy.projectId)">
+                {{ copy.name }} · {{ copy.submitted ? "Сдан" : "Черновик" }}
+              </a>
+            }
+            <button type="button" appButton="primary" (click)="entryOpen.set(true)">
+              Подать в программу
+            </button>
+            <p class="lists__program-hint">Для участия создается копия.</p>
+          }
+        </section>
+      }
+      @if (entryOpen()) {
+        <app-project-entry [projectId]="item.id" (close)="entryOpen.set(false)" />
+      }
+    }
     @if (project()!.links.length) {
       <div class="lists project__section">
         <div class="lists__section">
@@ -23,7 +59,7 @@
         </ul>
       </div>
     }
-    @if (project()!.resources.length) {
+    @if (project()!.partnerProgram?.sections?.partners !== false && project()!.resources.length) {
       <div class="lists project__section">
         <div class="lists__section">
           <h3 class="text-body-12 lists__title">в поиске</h3>
@@ -64,7 +100,9 @@
         }
       </div>
     }
-    @if (project()!.achievements.length) {
+    @if (
+      project()!.partnerProgram?.sections?.achievements !== false && project()!.achievements.length
+    ) {
       <div class="lists project__section">
         <div class="lists__section">
           <h3 class="text-body-12 lists__title">достижения</h3>

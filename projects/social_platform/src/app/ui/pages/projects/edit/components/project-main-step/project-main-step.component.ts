@@ -60,6 +60,8 @@ import { ProjectCoverResetService } from "@api/project/facades/edit/project-cove
 })
 export class ProjectMainStepComponent implements OnInit {
   readonly projSubmitInitiated = input<boolean>(false);
+  readonly showDescription = input(true);
+  readonly showPresentation = input(true);
 
   private readonly fb = inject(FormBuilder);
   private readonly projectFormService = inject(ProjectFormService);

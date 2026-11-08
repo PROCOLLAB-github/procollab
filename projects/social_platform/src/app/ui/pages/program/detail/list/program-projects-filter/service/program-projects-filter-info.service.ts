@@ -65,7 +65,7 @@ export class ProgramProjectsFilterInfoService {
    * @param fieldName - имя поля
    */
   toggleAdditionalFormValues(
-    fieldType: "text" | "textarea" | "checkbox" | "select" | "radio" | "file",
+    fieldType: "text" | "textarea" | "checkbox" | "select" | "radio" | "file" | "url",
     fieldName: string,
   ): void {
     if (fieldType === "checkbox" || fieldType === "radio") {
@@ -179,7 +179,7 @@ export class ProgramProjectsFilterInfoService {
 
   private shouldAddToQueryParams(
     value: any,
-    fieldType?: "text" | "textarea" | "checkbox" | "select" | "radio" | "file",
+    fieldType?: "text" | "textarea" | "checkbox" | "select" | "radio" | "file" | "url",
   ): boolean {
     if (fieldType === "checkbox" || fieldType === "radio") {
       return value === true;

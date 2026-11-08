@@ -27,8 +27,8 @@ export class ProjectHttpAdapter {
     return this.apiService.get<ProjectCountDto>(`${this.PROJECTS_URL}/count/`);
   }
 
-  postCreate(): Observable<ProjectDto> {
-    return this.apiService.post<ProjectDto>(`${this.PROJECTS_URL}/`, {});
+  postCreate(name?: string): Observable<ProjectDto> {
+    return this.apiService.post<ProjectDto>(`${this.PROJECTS_URL}/`, name ? { name } : {});
   }
 
   putUpdate(id: number, data: Partial<ProjectDto>): Observable<ProjectDto> {

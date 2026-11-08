@@ -22,8 +22,16 @@ export class ProgramAttentionActionsUseCase {
     return this.safe(this.repository.previewAttentionReminder(programId, category, query));
   }
 
-  send(programId: number, category: ProgramAttentionCategory, token: string) {
-    return this.safe(this.repository.sendAttentionReminder(programId, category, token));
+  send(
+    programId: number,
+    category: ProgramAttentionCategory,
+    token: string,
+    excludedRecipientIds?: number[],
+  ) {
+    const request = excludedRecipientIds?.length
+      ? this.repository.sendAttentionReminder(programId, category, token, excludedRecipientIds)
+      : this.repository.sendAttentionReminder(programId, category, token);
+    return this.safe(request);
   }
 
   export(

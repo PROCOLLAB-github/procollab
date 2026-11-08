@@ -210,13 +210,14 @@
             >
             @if (data.hasNumericCriteria) {
               <span class="results__score">
-                @if (!project.ready && project.score !== null) {
-                  <small>Предварительно</small>
-                } @else {
-                  <small class="results__score-mobile-label">Балл</small>
-                }
-                <strong>{{ format(project.score) }}</strong></span
-              >
+                <small class="results__score-mobile-label">Балл</small>
+                <strong
+                  [class.results__score--ready]="project.score !== null && project.ready"
+                  [class.results__score--pending]="project.score !== null && !project.ready"
+                >
+                  {{ format(project.score) }}
+                </strong>
+              </span>
             }
             <i
               appIcon

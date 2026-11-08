@@ -10,6 +10,8 @@ import {
 } from "@uilib";
 /** @format */
 import { A11yModule, CdkTrapFocus } from "@angular/cdk/a11y";
+import { CdkMenuModule } from "@angular/cdk/menu";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { ProgramCaseProjectsService } from "@api/program/facades/detail/program-case-projects.service";
 import { ProgramCaseSelection } from "@domain/program/program-case-analytics.model";
 import { ProgramAnalyticsCaseMetrics } from "@domain/program/program-analytics.model";
@@ -73,6 +75,8 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     TableDirective,
     FormLayoutDirective,
     A11yModule,
+    CdkMenuModule,
+    MatTooltipModule,
     ModalComponent,
     AvatarComponent,
     NgTemplateOutlet,

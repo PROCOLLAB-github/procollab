@@ -294,24 +294,35 @@
             [attr.aria-labelledby]="'analytics-dialog-' + state.view()"
             aria-live="polite"
           >
+            <h3>Отправить следующим людям</h3>
             <p class="attention-reminder__recipient-count">
-              Получателей: <strong>{{ preview.recipientCount }}</strong>
+              Получателей: <strong>{{ state.remainingRecipients() }}</strong>
             </p>
-            @if (preview.previewText) {
-              <h4>Пример уведомления</h4>
-              <p class="attention-reminder__message">{{ preview.previewText }}</p>
-              <h4>Пример письма на почту</h4>
-              <div class="attention-reminder__email">
-                <strong>Напоминание по программе</strong>
-                <p>{{ preview.previewText }}</p>
-                <span class="attention-reminder__email-button">Открыть на платформе</span>
-                <small>PROCOLLAB</small>
-              </div>
-            }
+            <ul class="attention-reminder__people">
+              @for (person of preview.recipients; track person.userId) {
+                @if (!state.excludedRecipients().includes(person.userId)) {
+                  <li>
+                    <app-avatar [url]="person.avatar || ''" [size]="32" />
+                    <div>
+                      <strong>{{ person.fullName }}</strong
+                      ><small>{{ person.email }}</small>
+                    </div>
+                    <button
+                      type="button"
+                      appButton="icon"
+                      [disabled]="!!state.actionPending()"
+                      [attr.aria-label]="'Убрать из получателей: ' + person.fullName"
+                      (click)="state.excludeRecipient(person.userId)"
+                    >
+                      <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
+                    </button>
+                  </li>
+                }
+              }
+            </ul>
             @if (preview.withoutAssignmentsCount) {
               <p role="status">
-                Работ без незавершенных назначений: {{ preview.withoutAssignmentsCount }}. Они
-                доступны для выгрузки.
+                Снимите выбор с работ без незавершенных назначений, чтобы отправить напоминание.
               </p>
             }
             @if (preview.unavailableCount) {
@@ -383,24 +394,45 @@
                 Найдено: {{ state.attentionCount() }}
               </p>
               @if (state.supportsActions()) {
-                <button
-                  appButton="icon"
-                  type="button"
-                  class="attention-list-tools__export"
-                  (click)="state.exportAttention()"
-                  [disabled]="!!state.actionPending() || !state.attentionCount()"
-                  [attr.aria-busy]="state.actionPending() === 'export'"
-                  [attr.aria-label]="
-                    state.selectedCount()
-                      ? 'Выгрузить выбранные записи в Excel'
-                      : 'Выгрузить найденные записи в Excel'
-                  "
-                  [attr.title]="
-                    state.selectedCount() ? 'Выгрузить выбранные' : 'Выгрузить найденные'
-                  "
-                >
-                  <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
-                </button>
+                @if (state.selectedCount()) {
+                  <button
+                    type="button"
+                    appButton="icon"
+                    aria-label="Варианты выгрузки в Excel"
+                    [cdkMenuTriggerFor]="attentionExport"
+                    [disabled]="!!state.actionPending()"
+                  >
+                    <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+                  </button>
+                  <ng-template #attentionExport>
+                    <div cdkMenu class="attention-export-menu">
+                      <button
+                        type="button"
+                        cdkMenuItem
+                        (cdkMenuItemTriggered)="state.exportAttention(true)"
+                      >
+                        Выгрузить выбранные
+                      </button>
+                      <button
+                        type="button"
+                        cdkMenuItem
+                        (cdkMenuItemTriggered)="state.exportAttention(false)"
+                      >
+                        Выгрузить все по фильтру
+                      </button>
+                    </div>
+                  </ng-template>
+                } @else {
+                  <button
+                    type="button"
+                    appButton="icon"
+                    aria-label="Выгрузить найденные записи в Excel"
+                    [disabled]="!!state.actionPending() || !state.attentionCount()"
+                    (click)="state.exportAttention(false)"
+                  >
+                    <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+                  </button>
+                }
               }
             </div>
             @if (!state.attentionPage()?.results?.length) {
@@ -432,7 +464,6 @@
                       <th scope="col">Участник</th>
                       <th scope="col">Город</th>
                       <th scope="col">Дата регистрации</th>
-                      <th scope="col">Действие</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -452,11 +483,14 @@
                           /></label>
                         </td>
                         <td data-label="Участник">
-                          <span class="analytics-drilldown__identity"
-                            ><app-avatar [url]="item.avatar || ''" [size]="36" /><span>{{
-                              item.fullName
-                            }}</span></span
+                          <a
+                            class="analytics-drilldown__identity"
+                            [routerLink]="['/office/profile', item.userId]"
+                            (click)="leaveAnalytics()"
                           >
+                            <app-avatar [url]="item.avatar || ''" [size]="36" />
+                            {{ item.fullName }}
+                          </a>
                         </td>
                         <td data-label="Город">{{ item.city || "Не указано" }}</td>
                         <td data-label="Дата регистрации">
@@ -465,14 +499,6 @@
                               ? (item.registeredAt | date: "dd.MM.yyyy")
                               : "Нет данных"
                           }}
-                        </td>
-                        <td data-label="Действие">
-                          <a
-                            class="analytics-drilldown__action"
-                            [routerLink]="['/office/profile', item.userId]"
-                            (click)="leaveAnalytics()"
-                            >Открыть профиль</a
-                          >
                         </td>
                       </tr>
                     }
@@ -507,7 +533,7 @@
                       <th scope="col">Дата сдачи</th>
                       <th scope="col">Причина</th>
                       <th scope="col">Прогресс</th>
-                      <th scope="col">Действие</th>
+                      <th scope="col">Эксперты</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -526,7 +552,13 @@
                               [attr.aria-label]="'Выбрать работу: ' + item.project.name"
                           /></label>
                         </td>
-                        <td data-label="Проект">{{ item.project.name }}</td>
+                        <td data-label="Проект">
+                          <a
+                            [routerLink]="['/office/projects', item.project.id]"
+                            (click)="leaveAnalytics()"
+                            >{{ item.project.name }}</a
+                          >
+                        </td>
                         <td data-label="Руководитель">
                           @if (item.leader; as leader) {
                             <span class="analytics-drilldown__identity"
@@ -566,13 +598,19 @@
                             Нет данных
                           }
                         </td>
-                        <td data-label="Действие">
-                          <a
-                            class="analytics-drilldown__action"
-                            [routerLink]="['/office/projects', item.project.id]"
-                            (click)="leaveAnalytics()"
-                            >Открыть проект</a
-                          >
+                        <td data-label="Эксперты">
+                          <ul class="attention-project-experts">
+                            @for (expert of item.experts ?? []; track expert.id) {
+                              <li>
+                                <span>{{ expert.fullName }}</span>
+                                <small [class.attention-project-experts__done]="expert.completed">
+                                  {{ expert.completed ? "Оценено" : "Нет оценки" }}
+                                </small>
+                              </li>
+                            } @empty {
+                              <li class="analytics-drilldown__secondary">Эксперты не назначены</li>
+                            }
+                          </ul>
                         </td>
                       </tr>
                     }
@@ -648,7 +686,7 @@
                 >{{ state.actionSuccess() }}</app-transient-notice
               >
             }
-            @if (!state.preview()) {
+            @if (!state.preview() && state.selectedCount()) {
               <span class="attention-actions__count" role="status"
                 >Выбрано: {{ state.selectedCount() }}</span
               >
@@ -662,35 +700,59 @@
                   (click)="state.backToAttentionList()"
                   [disabled]="!!state.actionPending()"
                 >
-                  Назад
+                  Отмена
                 </button>
                 <button
                   appButton="primary"
                   type="button"
                   class="attention-actions__send"
                   (click)="state.sendReminder()"
-                  [disabled]="!preview.token || !!state.actionPending()"
+                  [disabled]="
+                    !preview.token ||
+                    !state.remainingRecipients() ||
+                    !!preview.withoutAssignmentsCount ||
+                    !!state.actionPending()
+                  "
                 >
                   {{ state.actionPending() === "send" ? "Создаем напоминания…" : "Отправить" }}
                 </button>
-              } @else {
+              } @else if (state.canRemind() && state.selectedCount()) {
+                <div class="attention-actions__reminder">
+                  <button
+                    type="button"
+                    appButton="text"
+                    (click)="state.previewReminder()"
+                    [disabled]="
+                      state.selectedWithoutExpert() ||
+                      !!state.actionPending() ||
+                      state.attentionPending() ||
+                      !!state.attentionError()
+                    "
+                  >
+                    {{ state.actionPending() === "preview" ? "Проверяем…" : "Напомнить" }}
+                  </button>
+                  <button
+                    type="button"
+                    appButton="icon"
+                    aria-label="О напоминании"
+                    [matTooltip]="
+                      state.view() === 'projects-awaiting-evaluation'
+                        ? 'На платформу и почту экспертам без оценки. Доступно для работ с назначенными экспертами.'
+                        : 'На платформу и почту участникам, которые еще не заходили.'
+                    "
+                  >
+                    <i appIcon icon="hint" appSquare="16" aria-hidden="true"></i>
+                  </button>
+                </div>
+              }
+              @if (!state.preview() && state.selectedCount()) {
                 <button
-                  appButton="primary"
                   type="button"
-                  class="attention-actions__send"
-                  (click)="state.previewReminder()"
-                  [disabled]="
-                    !state.selectedCount() ||
-                    !!state.actionPending() ||
-                    state.attentionPending() ||
-                    !!state.attentionError()
-                  "
+                  appButton="icon"
+                  aria-label="Снять выбор"
+                  (click)="state.clearSelection()"
                 >
-                  {{
-                    state.actionPending() === "preview"
-                      ? "Проверяем получателей…"
-                      : "Отправить напоминание"
-                  }}
+                  <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
                 </button>
               }
             </div>

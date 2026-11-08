@@ -341,8 +341,10 @@ describe("Списки управления программой в DOM", () => 
     expect(component.basicForm.enabled).toBe(true);
     expect(component.returningToDraft()).toBe(false);
     expect(state.program().draft).toBe(true);
-    expect(element().textContent).toContain("Черновик · Не виден участникам");
-    expect(element().textContent).toContain("К подготовке к запуску");
+    expect(element().textContent).toContain("Черновик · виден организаторам");
+    expect(element().querySelector('a[href="/office/program/1/launch"]')?.textContent).toContain(
+      "Обзор",
+    );
     expect(element().querySelector("#program-publication-title")).toBeNull();
   });
 
@@ -401,7 +403,9 @@ describe("Списки управления программой в DOM", () => 
     state.program.set({ ...program, draft: true });
     harness.detectChanges();
     expect(element().querySelector("#program-publication-title")).toBeNull();
-    expect(element().textContent).toContain("К подготовке к запуску");
+    expect(element().querySelector('a[href="/office/program/1/launch"]')?.textContent).toContain(
+      "Обзор",
+    );
   });
 
   it("действия строки используют ID связи, а массовая сдача включает другие страницы", async () => {
@@ -493,7 +497,9 @@ describe("Списки управления программой в DOM", () => 
     const { state, harness, element } = await setup();
     state.error.set(new HttpErrorResponse({ status: 500 }));
     harness.detectChanges();
-    element().querySelector<HTMLButtonElement>("button.ui-button")!.click();
+    Array.from(element().querySelectorAll<HTMLButtonElement>("button.ui-button"))
+      .find(button => button.textContent?.trim() === "Повторить")!
+      .click();
     expect(state.retry).toHaveBeenCalledOnce();
   });
 
@@ -548,23 +554,23 @@ describe("Списки управления программой в DOM", () => 
     expect(component.basicForm.controls.mobileCoverImageAddress.value).toBe("");
   });
 
-  it("предпросмотр использует несохранённую загрузку; переключение не сохраняет и не меняет dirty", async () => {
+  it("предпросмотры компьютера и телефона используют несохраненную обложку", async () => {
     const { component, harness, element, state, uploaded } = await setup("settings", "?tab=basic");
     const save = vi.spyOn(component, "save");
-    const preview = () => element().querySelector("app-program-branding-preview")!;
+    const preview = () => element().querySelector(".management__branding")!;
     const draftCover = () =>
-      preview().querySelector<HTMLImageElement>(".branding-preview__cover-image")!;
-    preview().querySelectorAll<HTMLButtonElement>("button")[1].click();
-    harness.detectChanges();
+      preview().querySelector<HTMLImageElement>("img.management__branding-cover")!;
     expect(component.basicForm.pristine).toBe(true);
     expect(save).not.toHaveBeenCalled();
+    expect(preview().textContent).toContain("Компьютер");
+    expect(preview().textContent).toContain("Телефон");
     const input = element().querySelector<HTMLInputElement>(".management__image input[type=file]")!;
     Object.defineProperty(input, "files", {
       value: [new File(["image"], "cover.png", { type: "image/png" })],
     });
     input.dispatchEvent(new Event("change", { bubbles: true }));
     harness.detectChanges();
-    expect(preview().textContent).toContain("Загружаем изображение");
+    expect(element().textContent).toContain("Загружаем…");
     uploaded.next({ url: "https://example.com/unsaved-cover.png" });
     uploaded.complete();
     harness.detectChanges();
@@ -572,7 +578,9 @@ describe("Списки управления программой в DOM", () => 
     expect(component.basicForm.dirty).toBe(true);
     expect(state.program().coverImageAddress).not.toBe("https://example.com/unsaved-cover.png");
     expect(save).not.toHaveBeenCalled();
-    expect(preview().textContent).toContain("экрана 360 px");
+    expect(
+      preview().querySelector<HTMLImageElement>(".management__branding-sample--mobile img")?.src,
+    ).toBe("https://example.com/unsaved-cover.png");
     component.resetForms();
     harness.detectChanges();
     expect(draftCover().getAttribute("src")).toContain("/cover.png");
@@ -900,15 +908,16 @@ describe("Списки управления программой в DOM", () => 
     link.click();
     await vi.waitFor(() => expect(TestBed.inject(Router).url).toBe("/office/profile/51"));
   });
-  it("скрывает название программы при открытии команды и восстанавливает после закрытия", async () => {
+  it("сохраняет название программы и навигацию при открытии команды", async () => {
     const { state, harness, element } = await setup("projects");
-    expect(element().querySelector(".management__heading p")?.textContent).toContain(program.name);
+    expect(element().querySelector(".program-heading h1")?.textContent).toContain(program.name);
     state.teamOpen.set(true);
     harness.detectChanges();
-    expect(element().querySelector(".management__heading p")).toBeNull();
+    expect(element().querySelector(".program-heading h1")?.textContent).toContain(program.name);
+    expect(element().querySelector(".management__team")).not.toBeNull();
     state.teamOpen.set(false);
     harness.detectChanges();
-    expect(element().querySelector(".management__heading p")?.textContent).toContain(program.name);
+    expect(element().querySelector(".management__team")).toBeNull();
   });
   it("фильтры наличия активности и сортировка сохраняются в URL и запросах всех страниц", async () => {
     const { component, state, element } = await setup("participants", "?activity=never&offset=20");

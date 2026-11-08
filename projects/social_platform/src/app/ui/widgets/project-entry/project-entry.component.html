@@ -1,0 +1,79 @@
+<!-- @format -->
+<app-modal
+  [open]="true"
+  labelledBy="project-entry-heading"
+  (openChange)="!$event && !pending() && close.emit()"
+>
+  <form
+    class="project-entry"
+    (submit)="$event.preventDefault(); submit()"
+    [attr.aria-busy]="pending() || loading()"
+  >
+    <h2 id="project-entry-heading">{{ heading() }}</h2>
+    @if (error()) {
+      <p appAlert="error" role="alert">{{ error() }}</p>
+    }
+    @if (showName()) {
+      <label class="project-entry__label"
+        >Название проекта *
+        <input
+          appField
+          [formControl]="name"
+          maxlength="256"
+          [attr.aria-invalid]="name.touched && name.invalid"
+        />
+      </label>
+      @if (name.touched && name.invalid) {
+        <p role="alert">Введите название проекта.</p>
+      }
+    } @else if (loading()) {
+      <p role="status">Загружаем список…</p>
+    } @else {
+      <fieldset class="project-entry__choices">
+        <legend>{{ projectId() ? "Программы с открытой сдачей" : "Мои проекты" }}</legend>
+        @for (choice of choices(); track choice.id) {
+          <label [class.project-entry__chosen]="selection() === choice.id">
+            <input
+              appChoice
+              type="radio"
+              name="project-choice"
+              [checked]="selection() === choice.id"
+              (change)="selection.set(choice.id)"
+            />
+            {{ choice.name }}
+          </label>
+        } @empty {
+          @if (projectId()) {
+            <p>После регистрации в программе с открытой сдачей она появится здесь.</p>
+            <a routerLink="/office/program">Все программы</a>
+          } @else {
+            <p>Можно создать новый проект.</p>
+          }
+        }
+      </fieldset>
+    }
+    <div class="project-entry__actions">
+      @if (!showName() && programId()) {
+        <button
+          type="button"
+          appButton="secondary"
+          [disabled]="pending()"
+          (click)="creating.set(true)"
+        >
+          Создать новый проект
+        </button>
+      }
+      <button
+        type="submit"
+        appButton="primary"
+        [appButtonLoading]="pending()"
+        [disabled]="pending() || (!showName() && !selection())"
+      >
+        {{ showName() ? "Создать проект" : "Продолжить" }}
+      </button>
+      <button type="button" appButton="text" [disabled]="pending()" (click)="close.emit()">
+        Отмена
+      </button>
+    </div>
+  </form>
+</app-modal>
