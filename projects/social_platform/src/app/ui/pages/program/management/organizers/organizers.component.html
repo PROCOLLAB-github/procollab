@@ -11,26 +11,25 @@
     </div>
   }
   <section class="organizers__card" [attr.aria-busy]="loading()">
-    <header class="organizers__heading">
-      <div>
-        <h2 tabindex="-1">Организаторы</h2>
-        <p>
-          {{ snapshot()?.organizerCount ?? "—" }} {{ organizerCountLabel() }}
-          @if (snapshot()?.invitationCount) {
-            · <span class="organizers__count">Приглашений: {{ snapshot()!.invitationCount }}</span>
-          }
-        </p>
-      </div>
+    <h2 class="organizers__title" tabindex="-1">Организаторы</h2>
+    <div class="organizers__toolbar">
       <button
         type="button"
         appButton="primary"
         [disabled]="busy() || !snapshot()"
         (click)="open('invite', $event)"
       >
-        <span class="organizers__desktop-label">Пригласить организатора</span
-        ><span class="organizers__mobile-label">Пригласить</span>
+        Пригласить
       </button>
-    </header>
+      @if (snapshot(); as list) {
+        <p>
+          {{ list.organizerCount }} {{ organizerCountLabel() }}
+          @if (list.invitationCount) {
+            · <span class="organizers__count">Приглашений: {{ list.invitationCount }}</span>
+          }
+        </p>
+      }
+    </div>
     <div class="organizers__filters">
       <label
         >Поиск по имени или почте<input
@@ -45,7 +44,7 @@
           <option value="all">Все статусы</option>
           <option value="joined">Организаторы</option>
           <option value="pending">Приглашенные</option>
-          <option value="expired">Ссылка истекла</option>
+          <option value="expired">Приглашение истекло</option>
         </select></label
       >
     </div>
@@ -62,7 +61,7 @@
       <thead>
         <tr>
           <th>Организатор</th>
-          <th>Email</th>
+          <th>Почта</th>
           <th>Статус</th>
           <th><span class="organizers__sr">Действия</span></th>
         </tr>
@@ -84,8 +83,8 @@
                 </span>
               </div>
             </td>
-            <td class="organizers__email">{{ row.email }}</td>
-            <td>
+            <td class="organizers__email" data-label="Почта">{{ row.email }}</td>
+            <td data-label="Статус">
               <span
                 class="organizers__badge"
                 [class.organizers__badge--ready]="row.status === 'joined' && row.active !== false"

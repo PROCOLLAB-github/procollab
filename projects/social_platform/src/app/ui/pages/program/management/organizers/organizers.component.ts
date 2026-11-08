@@ -286,8 +286,8 @@ export class ManagementOrganizersComponent {
     this.selectedId.set(null);
   }
   label(row: OrganizerRow): string {
-    if (row.status === "joined") return row.active === false ? "Аккаунт отключен" : "Организатор";
-    if (row.status === "expired") return "Ссылка истекла";
+    if (row.status === "joined") return row.active === false ? "Аккаунт отключен" : "Есть доступ";
+    if (row.status === "expired") return "Приглашение истекло";
     return row.deliveryStatus === "failed"
       ? "Не отправлено"
       : row.deliveryStatus === "queued"

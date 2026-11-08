@@ -64,6 +64,30 @@ function setup() {
   return { fixture, component: fixture.componentInstance, api };
 }
 describe("Организаторы программы", () => {
+  it("показывает статус доступа отдельно от состояния приглашения и доставки", () => {
+    const { fixture, component } = setup();
+    const [active, inactive, invited] = snapshot.organizers;
+    component.snapshot.set({
+      ...snapshot,
+      organizers: [
+        active,
+        { ...inactive, active: false },
+        invited,
+        { ...invited, id: "invite:4", status: "expired" },
+        { ...invited, id: "invite:5", deliveryStatus: "failed" },
+      ],
+    });
+    fixture.detectChanges();
+    const badges = (fixture.nativeElement as HTMLElement).querySelectorAll(".organizers__badge");
+    expect([...badges].map(badge => badge.textContent?.trim())).toEqual([
+      "Есть доступ",
+      "Аккаунт отключен",
+      "Приглашен",
+      "Приглашение истекло",
+      "Не отправлено",
+    ]);
+  });
+
   it("меню своей строки открывается без плашки и без повторного запроса списка", () => {
     const { fixture, component, api } = setup();
     const calls = api.list.mock.calls.length;

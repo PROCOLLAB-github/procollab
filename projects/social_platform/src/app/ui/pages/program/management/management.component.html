@@ -89,7 +89,7 @@
       (section() === "projects" && program.solutionStorageMode !== "solution")
     ) {
       <section class="management__card" [attr.aria-busy]="state.pending()">
-        <div class="management__list-heading">
+        <div class="management__list-heading management__list-heading--program">
           <div>
             <h2>
               {{
@@ -116,35 +116,6 @@
               </p>
             }
           </div>
-          @if (section() === "participants") {
-            <button
-              appButton="icon"
-              class="management__export"
-              type="button"
-              aria-label="Выгрузить участников в Excel"
-              title="Выгрузить участников в Excel"
-              [appButtonLoading]="exportingParticipants()"
-              [disabled]="
-                state.pending() || exportingParticipants() || !!participantFilterError() || !count()
-              "
-              (click)="exportParticipants()"
-            >
-              <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
-            </button>
-          } @else {
-            <button
-              appButton="icon"
-              class="management__export"
-              type="button"
-              aria-label="Выгрузить проекты в Excel"
-              title="Выгрузить проекты в Excel"
-              [appButtonLoading]="exportingProjects()"
-              [disabled]="state.pending() || exportingProjects() || !count()"
-              (click)="exportProjects()"
-            >
-              <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
-            </button>
-          }
         </div>
         <div
           class="management__toolbar"
@@ -204,6 +175,23 @@
                   ></i>
                 </button>
               </div>
+              <button
+                appButton="icon"
+                class="management__export"
+                type="button"
+                aria-label="Выгрузить участников в Excel"
+                title="Выгрузить участников в Excel"
+                [appButtonLoading]="exportingParticipants()"
+                [disabled]="
+                  state.pending() ||
+                  exportingParticipants() ||
+                  !!participantFilterError() ||
+                  !count()
+                "
+                (click)="exportParticipants()"
+              >
+                <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+              </button>
             </div>
           } @else {
             <div class="management__toolbar-actions management__toolbar-actions--projects">
@@ -221,9 +209,30 @@
                   }}
                 </button>
               </div>
+              <button
+                appButton="icon"
+                class="management__export"
+                type="button"
+                aria-label="Выгрузить проекты в Excel"
+                title="Выгрузить проекты в Excel"
+                [appButtonLoading]="exportingProjects()"
+                [disabled]="state.pending() || exportingProjects() || !count()"
+                (click)="exportProjects()"
+              >
+                <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+              </button>
             </div>
           }
         </div>
+        @if (section() === "participants") {
+          <a
+            class="management__certificates"
+            appButton="secondary"
+            [routerLink]="paths.program.management(program.id, 'certificates')"
+          >
+            Сертификаты
+          </a>
+        }
         <ng-template #activitySortMenu>
           <div
             cdkMenu
@@ -737,17 +746,16 @@
           <section class="management__branding" aria-labelledby="program-branding-title">
             <h3 id="program-branding-title">Оформление программы</h3>
             <div class="management__branding-previews">
-              @for (device of ["Компьютер", "Телефон"]; track device) {
+              @for (field of coverFields; track field.key) {
                 <article>
-                  <h4>{{ device }}</h4>
+                  <h4>{{ field.label }}</h4>
                   <div
                     class="management__branding-sample"
-                    [class.management__branding-sample--mobile]="device === 'Телефон'"
+                    [class.management__branding-sample--mobile]="field.device === 'mobile'"
                   >
                     @if (
                       href(
-                        (device === "Телефон" &&
-                          basicForm.controls.mobileCoverImageAddress.value) ||
+                        basicForm.controls[field.key].value ||
                           basicForm.controls.coverImageAddress.value
                       );
                       as cover
@@ -757,7 +765,7 @@
                         [src]="cover"
                         [appImageFraming]="
                           basicForm.controls.imageFraming.value?.[
-                            device === 'Телефон' ? 'mobileCover' : 'cover'
+                            field.device === 'mobile' ? 'mobileCover' : 'cover'
                           ]
                         "
                         alt=""
@@ -778,32 +786,77 @@
                     </span>
                     <p>{{ basicForm.controls.name.value }}</p>
                   </div>
+                  <button
+                    class="management__branding-frame"
+                    type="button"
+                    appButton="secondary"
+                    [attr.aria-label]="'Настроить кадр: ' + field.label"
+                    (click)="framingDevice.set(field.device)"
+                  >
+                    Настроить кадр
+                  </button>
+                  <div class="management__branding-actions">
+                    <input
+                      #coverInput
+                      type="file"
+                      accept="image/*"
+                      hidden
+                      (change)="upload($event, field.key)"
+                    />
+                    <button
+                      type="button"
+                      appButton="text"
+                      [attr.title]="field.dimensions"
+                      [disabled]="!!uploading() || saving()"
+                      (click)="coverInput.click()"
+                    >
+                      {{
+                        uploading() === field.key
+                          ? "Загружаем…"
+                          : basicForm.controls[field.key].value
+                            ? field.replaceLabel
+                            : field.uploadLabel
+                      }}
+                    </button>
+                    @if (basicForm.controls[field.key].value) {
+                      <button
+                        type="button"
+                        appButton="text"
+                        [attr.aria-label]="'Убрать обложку: ' + field.label"
+                        [disabled]="!!uploading() || saving()"
+                        (click)="clearImage(field.key)"
+                      >
+                        Убрать
+                      </button>
+                    }
+                  </div>
+                  @if (field.device === "mobile" && !basicForm.controls[field.key].value) {
+                    <p class="management__muted">Показывается основная обложка</p>
+                  }
                 </article>
               }
             </div>
-            <button type="button" appButton="secondary" (click)="brandingOpen.set(true)">
-              Настроить оформление
-            </button>
           </section>
           <app-modal
-            [open]="brandingOpen()"
-            (openChange)="brandingOpen.set($event)"
+            [open]="!!framingDevice()"
+            (openChange)="!$event && framingDevice.set(null)"
             labelledBy="program-framing-heading"
           >
             <section class="management__framing">
               <div class="management__inline">
-                <h2 id="program-framing-heading">Настроить оформление</h2>
+                <h2 id="program-framing-heading">Настроить кадр</h2>
                 <button
                   type="button"
                   appButton="icon"
                   aria-label="Закрыть оформление"
-                  (click)="brandingOpen.set(false)"
+                  (click)="framingDevice.set(null)"
                 >
                   <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
                 </button>
               </div>
-              @if (brandingOpen()) {
+              @if (framingDevice(); as device) {
                 <app-program-branding-preview
+                  [device]="device"
                   [cover]="href(basicForm.controls.coverImageAddress.value)"
                   [logo]="href(basicForm.controls.imageAddress.value)"
                   [mobileCover]="href(basicForm.controls.mobileCoverImageAddress.value)"

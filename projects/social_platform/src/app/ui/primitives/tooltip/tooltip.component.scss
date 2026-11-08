@@ -9,7 +9,7 @@
     z-index: 10;
     display: inline-block;
     cursor: pointer;
-    opacity: 0.5;
+    opacity: var(--ui-tooltip-icon-opacity, 0.5);
     transition: opacity 0.3s ease-in-out;
 
     &:hover {
@@ -17,7 +17,7 @@
     }
 
     @include responsive.apply-desktop {
-      opacity: 0.5;
+      opacity: var(--ui-tooltip-icon-opacity, 0.5);
     }
   }
 

@@ -305,7 +305,7 @@ export class ProgramManagementComponent implements OnInit {
   private confirmationCallback: ((yes: boolean) => void) | null = null;
   private teamTrigger: HTMLElement | null = null;
   readonly allocation = signal(false);
-  readonly brandingOpen = signal(false);
+  readonly framingDevice = signal<"desktop" | "mobile" | null>(null);
   readonly activeGroup = computed(() => {
     const section = this.section();
     if (section === "analytics") return "overview";
@@ -381,24 +381,30 @@ export class ProgramManagementComponent implements OnInit {
     { key: "city", label: "Город" },
     { key: "tag", label: "Тег" },
   ];
-  readonly images = [
+  readonly coverFields = [
     {
       key: "coverImageAddress",
-      label: "Обложка для компьютера",
+      device: "desktop",
+      label: "Компьютер",
+      uploadLabel: "Загрузить обложку",
+      replaceLabel: "Заменить обложку",
       dimensions: "Рекомендуемый размер: 1800 × 320 px (примерно 5,6:1).",
-      hint: "Размещайте важные детали вверху по центру: на узком экране края обрезаются, а снизу расположен логотип.",
     },
     {
       key: "mobileCoverImageAddress",
-      label: "Обложка для телефона",
+      device: "mobile",
+      label: "Телефон",
+      uploadLabel: "Загрузить обложку для телефона",
+      replaceLabel: "Заменить обложку для телефона",
       dimensions: "Рекомендуемый размер: 960 × 400 px (примерно 2,4:1).",
-      hint: "Необязательно. Без отдельного файла используется основная обложка. Кадр для телефона можно настроить независимо.",
     },
+  ] as const;
+  readonly images = [
     {
       key: "imageAddress",
-      label: "Аватарка программы",
+      label: "Аватар программы",
       dimensions: "Рекомендуемый размер: 512 × 512 px (1:1).",
-      hint: "Изображение показывается в круге. Расположите знак по центру с отступами от краев.",
+      hint: "В карточке программы и в шапке ее страницы.",
     },
     {
       key: "advertisementImageAddress",

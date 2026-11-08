@@ -17,18 +17,6 @@
       }}
     </h2>
     <div class="results__heading-actions">
-      @if (snapshot()?.hasNumericCriteria) {
-        <button
-          type="button"
-          appButton="icon"
-          class="results__icon results__formula-mobile"
-          aria-label="Как считается балл"
-          title="Как считается балл"
-          (click)="openModal('formula')"
-        >
-          <i appIcon icon="hint" appSquare="16" aria-hidden="true"></i>
-        </button>
-      }
       <button
         type="button"
         appButton="icon"
@@ -167,26 +155,12 @@
           @if (data.hasNumericCriteria) {
             <span>Место</span>
           }
-          <span>{{ solutionMode() ? "Решение" : "Проект" }}</span
-          ><span>Оценивание</span>
+          <span>{{ solutionMode() ? "Решение" : "Проект" }}</span>
           @if (data.hasNumericCriteria) {
-            <span class="results__number"
-              >Балл{{ data.maximum === null ? "" : " из " + data.maximum }}</span
-            ><span></span>
+            <span>Балл{{ data.maximum === null ? "" : " из " + data.maximum }}</span>
           }
+          <span>Оценки</span>
         </div>
-        @if (data.hasNumericCriteria) {
-          <button
-            class="results__formula"
-            type="button"
-            appButton="text"
-            aria-label="Как считается балл"
-            title="Как считается балл"
-            (click)="openModal('formula')"
-          >
-            <i appIcon icon="hint" appSquare="16" aria-hidden="true"></i>
-          </button>
-        }
         @for (project of group.projects; track project.id) {
           <button
             class="results__row"
@@ -200,33 +174,29 @@
               <span class="results__place">{{ project.place ?? "—" }}</span>
             }
             <strong class="results__name">{{ project.name }}</strong>
-            <span class="results__count"
-              ><span
-                >Оценили {{ project.completed }} из {{ project.required }}
-                {{ project.required | pluralize: ["эксперта", "экспертов", "экспертов"] }}</span
-              ><small class="results__badge" [class.results__badge--ready]="isComplete(project)">{{
-                isComplete(project) ? "Оценивание завершено" : "Ожидает оценок"
-              }}</small></span
-            >
             @if (data.hasNumericCriteria) {
               <span class="results__score">
                 <small class="results__score-mobile-label">Балл</small>
                 <strong
                   [class.results__score--ready]="project.score !== null && project.ready"
                   [class.results__score--pending]="project.score !== null && !project.ready"
+                  [attr.title]="isComplete(project) ? 'Оценивание завершено' : 'Ожидает оценок'"
                 >
                   {{ format(project.score) }}
                 </strong>
               </span>
             }
-            <i
-              appIcon
-              icon="chevron-down"
-              appSquare="16"
-              class="results__arrow"
-              [class.results__arrow--open]="expanded().has(project.id)"
-              aria-hidden="true"
-            ></i>
+            <span class="results__count">
+              <span>{{ project.completed }} из {{ project.required }}</span>
+              @if (!data.hasNumericCriteria || project.score === null) {
+                <small class="results__badge" [class.results__badge--ready]="isComplete(project)">{{
+                  isComplete(project) ? "Оценивание завершено" : "Ожидает оценок"
+                }}</small>
+              }
+            </span>
+            <span class="results__view">{{
+              expanded().has(project.id) ? "Свернуть" : "Смотреть"
+            }}</span>
           </button>
           @if (expanded().has(project.id)) {
             <section
@@ -245,6 +215,16 @@
           }
         }
       </section>
+    }
+    @if (data.hasNumericCriteria) {
+      <button
+        class="results__formula"
+        type="button"
+        appButton="text"
+        (click)="openModal('formula')"
+      >
+        Как считается балл
+      </button>
     }
     @if (projectCount()) {
       <nav class="results__pagination" aria-label="Страницы результатов">

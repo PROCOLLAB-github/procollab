@@ -61,6 +61,17 @@
     justify-content: space-between;
   }
 
+  &__list-heading--program {
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--accent);
+
+    h2 { color: var(--accent-text); }
+  }
+
+  &__certificates.ui-button {
+    min-width: min(196px, 100%);
+  }
+
   &__participant-count span {
     color: var(--grey-for-text);
   }
@@ -429,13 +440,18 @@
 
   .management__toolbar-actions {
     display: grid;
-    grid-template-columns: 104px minmax(0, 1fr);
+    grid-template-columns: minmax(88px, auto) minmax(0, 1fr) 32px;
     gap: 8px;
+    align-items: center;
   }
 
   .management__toolbar-slot .ui-button {
     width: 100%;
     padding-inline: 8px;
+  }
+
+  .management__toolbar-slot .management__sort-trigger {
+    white-space: normal;
   }
 }
 

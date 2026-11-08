@@ -28,8 +28,13 @@
   }
   @if (tab() === "experts") {
     <section class="experts__card" [attr.aria-busy]="loading()">
-      <header class="experts__heading experts__people-heading">
-        <h2>Эксперты программы</h2>
+      <header class="experts__roster-heading">
+        <h2>
+          Эксперты
+          @if (snapshot(); as list) {
+            · {{ list.experts.length }}
+          }
+        </h2>
         <div class="experts__heading-actions">
           <button
             class="experts__invite"

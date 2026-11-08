@@ -47,6 +47,19 @@
   border-radius: 15px;
 }
 
+.organizers__title {
+  padding-bottom: 16px;
+  color: var(--accent-text);
+  border-bottom: 1px solid var(--accent);
+}
+
+.organizers__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
 .organizers h2,
 .organizers__dialog h2 {
   margin: 0;
@@ -79,10 +92,6 @@
 
 .organizers__heading > button {
   flex-shrink: 0;
-}
-
-.organizers__mobile-label {
-  display: none;
 }
 
 .organizers__count {
@@ -233,13 +242,8 @@
 }
 
 @media (max-width: 999px) {
-  .organizers__description,
-  .organizers__desktop-label {
-    display: none;
-  }
-
-  .organizers__mobile-label {
-    display: inline;
+  .organizers__toolbar button {
+    width: 100%;
   }
 
   .organizers__filters {
@@ -267,18 +271,23 @@
     display: none;
   }
 
-  .organizers__table tbody tr {
-    height: auto;
-    min-height: 124px;
-    padding: 12px 0;
-  }
+  .organizers__table tbody tr { height: auto; padding: 12px 0; }
 
   .organizers__table td {
     padding: 3px 0;
   }
 
-  .organizers__table td:nth-child(n + 2) {
-    padding-left: 28px;
+  .organizers__table td[data-label] {
+    display: grid;
+    grid-template-columns: minmax(60px, 1fr) minmax(0, 2fr);
+    gap: 8px;
+    align-items: baseline;
+
+    &::before {
+      font-size: 11px;
+      color: var(--grey-for-text);
+      content: attr(data-label);
+    }
   }
 
   .organizers__person {
@@ -344,7 +353,10 @@
 }
 
 .organizers__badge {
-  @include program-management-controls.status-badge;
+  color: var(--grey-for-text);
+
+  &--ready { color: var(--green-dark); }
+  &--error { color: var(--red-dark); }
 }
 
 // Row actions and bulk selection.

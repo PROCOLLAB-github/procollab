@@ -38,6 +38,12 @@
             <li [attr.data-expert-id]="expert.id">
               <span>{{ expert.name }}</span
               ><strong>{{ expert.completed }} из {{ expert.total }}</strong>
+              <div class="evaluation-progress__track" aria-hidden="true">
+                <span
+                  class="evaluation-progress__fill"
+                  [style.width.%]="expert.total > 0 ? (100 * expert.completed) / expert.total : 0"
+                ></span>
+              </div>
             </li>
           }
         </ul>
