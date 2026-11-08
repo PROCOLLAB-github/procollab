@@ -18,9 +18,9 @@ describe("Управление экспертами", () => {
     component.switchTab("distribution");
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector(".experts__quota").textContent).toContain(
-      "Количество экспертов на каждый проект: 2",
+      "Экспертов на проект: 2",
     );
-    expect(fixture.nativeElement.textContent).toContain("Проекты на оценку");
+    expect(fixture.nativeElement.textContent).toContain("Распределение экспертов");
   });
   it("обновляет отправку письма без сброса поиска и прекращает проверку после sent", async () => {
     vi.useFakeTimers();
