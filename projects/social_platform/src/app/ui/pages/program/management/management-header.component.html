@@ -63,7 +63,7 @@
     @for (topic of topics; track topic.key) {
       <article>
         <h3>{{ topic.title }}</h3>
-        <p>{{ topic.steps.length }} шагов</p>
+        <p>{{ stepCount(topic.steps.length) }}</p>
         <button type="button" appButton="secondary" (click)="showStep(topic.key, 0)">
           Начать тур
         </button>

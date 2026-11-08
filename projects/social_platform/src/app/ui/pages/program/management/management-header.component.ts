@@ -7,6 +7,8 @@ import { AppRoutes } from "@api/paths/app-routes";
 import { ButtonDirective, IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
+const STEP_PLURAL = new Intl.PluralRules("ru-RU");
+
 const MAIN_TABS = [
   { key: "overview", label: "Обзор", icon: "additional" },
   { key: "participants", label: "Участники", icon: "team" },
@@ -150,6 +152,11 @@ export class ProgramManagementHeaderComponent {
     return Number.isInteger(value) && value >= 0 ? value : 0;
   });
   readonly step = computed(() => this.tour()?.steps[this.index()]);
+
+  protected stepCount(count: number): string {
+    const form = STEP_PLURAL.select(count);
+    return `${count} ${form === "one" ? "шаг" : form === "few" ? "шага" : "шагов"}`;
+  }
 
   tabPath(section: string): string {
     if (section === "overview") {
