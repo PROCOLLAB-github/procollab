@@ -13,14 +13,12 @@
         try {
           preference = localStorage.getItem("procollab-theme");
         } catch {
-          // Follow the system when storage is unavailable.
+          // Keep the light default when storage is unavailable.
         }
-        const explicit = preference === "light" || preference === "dark";
-        document.documentElement.dataset.theme = explicit
-          ? preference
-          : window.matchMedia?.("(prefers-color-scheme: dark)")?.matches
-            ? "dark"
-            : "light";
+        const useDark =
+          preference === "dark" ||
+          (preference === "system" && window.matchMedia?.("(prefers-color-scheme: dark)")?.matches);
+        document.documentElement.dataset.theme = useDark ? "dark" : "light";
       })();
     </script>
     <link rel="prefetch" href="assets/icons/symbol/svg/sprite.css.svg" as="image" />

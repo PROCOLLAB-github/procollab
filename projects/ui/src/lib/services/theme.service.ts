@@ -10,7 +10,7 @@ export type ThemePreference = "system" | ThemeScheme;
 const STORAGE_KEY = "procollab-theme";
 
 function parsePreference(value: string | null | undefined): ThemePreference {
-  return value === "light" || value === "dark" ? value : "system";
+  return value === "system" || value === "dark" ? value : "light";
 }
 
 @Injectable({ providedIn: "root" })
@@ -19,7 +19,7 @@ export class ThemeService {
   private readonly browser = this.document.defaultView;
   private readonly systemTheme = this.browser?.matchMedia?.("(prefers-color-scheme: dark)");
   private readonly storage = this.getStorage();
-  private readonly selected = signal<ThemePreference>("system");
+  private readonly selected = signal<ThemePreference>("light");
   private readonly resolved = signal<ThemeScheme>("light");
 
   readonly preference = this.selected.asReadonly();
@@ -71,7 +71,7 @@ export class ThemeService {
     try {
       return parsePreference(this.storage?.getItem(STORAGE_KEY));
     } catch {
-      return "system";
+      return "light";
     }
   }
 }
