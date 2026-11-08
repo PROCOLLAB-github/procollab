@@ -214,11 +214,6 @@
   border-radius: 15px;
 }
 
-.experts__card.experts__quota {
-  display: flex;
-  padding: 16px;
-}
-
 .experts__quota p {
   margin-top: 4px;
 }
@@ -858,6 +853,29 @@
   .experts__heading-actions {
     display: flex;
     justify-content: space-between;
+  }
+}
+
+.experts__heading-actions.experts__allocation-actions {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.experts__table--allocation.experts__table--projects {
+  th:last-child {
+    width: 84px;
+  }
+
+  td:last-child .ui-button {
+    width: auto;
+    padding-inline: 0;
+  }
+
+  @media (max-width: 999px) {
+    td:last-child:not([colspan]) {
+      position: static;
+      width: auto;
+    }
   }
 }
 

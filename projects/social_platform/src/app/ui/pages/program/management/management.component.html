@@ -61,7 +61,7 @@
         [submissionApplicable]="program.isCompetitive"
       />
     }
-    @if (section() === "experts") {
+    @if (section() === "experts" || (allocation() && program.solutionStorageMode !== "solution")) {
       @if (program.solutionStorageMode === "solution") {
         <app-solution-experts
           [floatingPosition]="floatingPosition()"
@@ -72,6 +72,7 @@
       } @else {
         <app-management-experts
           [programId]="program.id"
+          [initialTab]="allocation() ? 'distribution' : 'experts'"
           [confirmDiscard]="confirmProjectFormDiscard"
           (statusChange)="expertsStatus.set($event)"
         />
@@ -86,7 +87,7 @@
     }
     @if (
       section() === "participants" ||
-      (section() === "projects" && program.solutionStorageMode !== "solution")
+      (section() === "projects" && !allocation() && program.solutionStorageMode !== "solution")
     ) {
       <section class="management__card" [attr.aria-busy]="state.pending()">
         <div class="management__list-heading management__list-heading--program">

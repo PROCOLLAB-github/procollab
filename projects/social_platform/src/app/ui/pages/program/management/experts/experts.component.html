@@ -1,21 +1,8 @@
 <!-- @format -->
 <div class="experts" [class.experts--people]="tab() === 'experts'">
-  <nav class="experts__tabs" aria-label="Управление экспертами">
-    <button
-      type="button"
-      [attr.aria-current]="tab() === 'experts' ? 'page' : null"
-      (click)="switchTab('experts')"
-    >
-      Эксперты
-    </button>
-    <button
-      type="button"
-      [attr.aria-current]="tab() === 'distribution' ? 'page' : null"
-      (click)="switchTab('distribution')"
-    >
-      Распределение экспертов
-    </button>
-  </nav>
+  @if (initialTab() === "experts" && tab() === "distribution") {
+    <button type="button" appButton="text" (click)="switchTab('experts')">К экспертам</button>
+  }
   @if (message()) {
     <app-transient-notice [source]="message" (dismissed)="message.set(null)">{{
       message()
@@ -124,21 +111,30 @@
     </section>
   } @else {
     @if (snapshot(); as state) {
-      <section class="experts__card experts__quota">
-        <div>
-          <strong>Количество экспертов на каждый проект: {{ state.requiredEvaluators }}</strong>
-        </div>
-        <button type="button" appButton="secondary" [disabled]="busy()" (click)="open('quota')">
-          Изменить
-        </button>
-      </section>
-      <section class="experts__card" [attr.aria-busy]="loading()">
-        <header class="experts__heading">
-          <h2>Проекты на оценку</h2>
-          <button type="button" appButton="primary" [disabled]="busy()" (click)="open('method')">
-            Распределить проекты
-          </button>
+      <section class="experts__card experts__distribution" [attr.aria-busy]="loading()">
+        <header class="experts__roster-heading">
+          <h2>Распределение экспертов</h2>
         </header>
+        <div class="experts__quota">
+          <strong>Экспертов на проект: {{ state.requiredEvaluators }}</strong>
+          <button type="button" appButton="secondary" [disabled]="busy()" (click)="open('quota')">
+            Изменить
+          </button>
+        </div>
+        <div class="experts__heading-actions experts__allocation-actions">
+          <button type="button" appButton="primary" [disabled]="busy()" (click)="open('method')">
+            Распределить
+          </button>
+          <button
+            type="button"
+            [appButton]="unassignedOnly() ? 'primary' : 'secondary'"
+            [attr.aria-pressed]="unassignedOnly()"
+            [disabled]="busy()"
+            (click)="toggleUnassigned()"
+          >
+            Без экспертов
+          </button>
+        </div>
         @if (attentionProjects().length) {
           <button
             type="button"
@@ -196,7 +192,7 @@
             Все проекты
           </label>
         </div>
-        <table class="experts__table experts__table--projects">
+        <table class="experts__table experts__table--projects experts__table--allocation">
           <thead>
             <tr>
               <th>
@@ -214,7 +210,7 @@
               <th>Кейс</th>
               <th>Эксперты и статус оценки</th>
               <th>Оценки</th>
-              <th><span class="experts__sr">Действия</span></th>
+              <th scope="col" aria-label="Действия"></th>
             </tr>
           </thead>
           <tbody>
@@ -254,12 +250,18 @@
                   {{ completed(project) }} из {{ state.requiredEvaluators }}
                 </td>
                 <td>
-                  <app-row-actions
-                    [label]="'Действия проекта: ' + project.name"
-                    [actions]="distributionActions(project)"
+                  <button
+                    type="button"
+                    appButton="text"
+                    [attr.aria-label]="
+                      (project.experts.length ? 'Изменить экспертов: ' : 'Назначить экспертов: ') +
+                      project.name
+                    "
                     [disabled]="busy()"
-                    (action)="openProject(project)"
-                  />
+                    (click)="openProject(project)"
+                  >
+                    {{ project.experts.length ? "Изменить" : "Назначить" }}
+                  </button>
                 </td>
               </tr>
             } @empty {

@@ -19,6 +19,7 @@ import {
   effect,
   inject,
   input,
+  linkedSignal,
   output,
   signal,
   untracked,
@@ -208,7 +209,8 @@ export class ManagementExpertsComponent {
   readonly exporting = signal(false);
   readonly exportError = signal(false);
   readonly exportSuccess = signal(false, { equal: () => false });
-  readonly tab = signal<"experts" | "distribution">("experts");
+  readonly initialTab = input<"experts" | "distribution">("experts");
+  readonly tab = linkedSignal(() => this.initialTab());
   readonly distributionSearch = this.fb.control("");
   readonly distributionCase = this.fb.control("all");
   readonly distributionStatus = this.fb.control("all");
@@ -265,6 +267,7 @@ export class ManagementExpertsComponent {
     this.allProjects().filter(p => p.experts.length < (this.snapshot()?.requiredEvaluators ?? 1)),
   );
   readonly attentionActive = computed(() => this.distributionStatusValue() === "missing");
+  readonly unassignedOnly = computed(() => this.distributionStatusValue() === "unassigned");
   readonly selection = computed(() =>
     this.allProjects().filter(p => this.selectedProjects().has(p.id)),
   );
@@ -701,13 +704,8 @@ export class ManagementExpertsComponent {
       },
     );
   }
-  distributionActions(project: DistributionProject): RowAction[] {
-    return [
-      {
-        id: "assign",
-        label: project.experts.length ? "Изменить экспертов" : "Назначить экспертов",
-      },
-    ];
+  toggleUnassigned(): void {
+    this.distributionStatus.setValue(this.unassignedOnly() ? "all" : "unassigned");
   }
   clearExpertSelection(): void {
     const id = this.selected()?.id;
