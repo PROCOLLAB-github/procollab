@@ -12,13 +12,18 @@
         (keyup.enter)="onSubmit()"
       >
         <div class="auth__wrapper">
-          <img
-            class="login__logo"
-            src="/assets/images/shared/logo.svg"
-            alt="PROCOLLAB"
-            loading="lazy"
-            decoding="async"
-          />
+          @if (instance.logo()) {
+            <img
+              class="login__logo"
+              [src]="instance.logo()"
+              [alt]="instance.name()"
+              [class.instance-logo--dark]="instance.logoBackground() === 'dark'"
+              loading="lazy"
+              decoding="async"
+            />
+          } @else {
+            <strong>{{ instance.name() }}</strong>
+          }
 
           @if (loginForm.get("email"); as email) {
             <fieldset class="auth__field">
@@ -117,7 +122,12 @@
           <div class="login__additional">
             <p class="login__reg text-body-12">
               нет аккаунта?
-              <a [routerLink]="AppRoutes.auth.register()">зарегистрируйтесь</a>
+              <a
+                [routerLink]="
+                  instance.enabled() ? instance.registrationUrl() : AppRoutes.auth.register()
+                "
+                >зарегистрируйтесь</a
+              >
             </p>
 
             <hr />
@@ -131,40 +141,43 @@
       </form>
     </div>
 
-    <div class="login__left-footer">
-      <div class="tooltip">
-        <app-tooltip
-          color="grey"
-          iconSize="40"
-          (click)="$event.stopPropagation(); toggleTooltip()"
-        ></app-tooltip>
+    @if (!instance.enabled()) {
+      <div class="login__left-footer">
+        <div class="tooltip">
+          <app-tooltip
+            color="grey"
+            iconSize="40"
+            (click)="$event.stopPropagation(); toggleTooltip()"
+          ></app-tooltip>
 
-        @if (isHintLoginVisible()) {
-          <div class="tooltip__wrapper" (clickOutside)="toggleTooltip()">
-            <p class="tooltip__text text-body-10">
-              Возникли технические сложности или остались вопросы?
-            </p>
-            <p class="tooltip__text text-body-10">
-              Все ответы в нашем боте поддержки
-              <a href="https://t.me/procollab_bot">{{ "@procollab_bot" }}</a>
-            </p>
+          @if (isHintLoginVisible()) {
+            <div class="tooltip__wrapper" (clickOutside)="toggleTooltip()">
+              <p class="tooltip__text text-body-10">
+                Возникли технические сложности или остались вопросы?
+              </p>
+              <p class="tooltip__text text-body-10">
+                Все ответы в нашем боте поддержки
+                <a href="https://t.me/procollab_bot">{{ "@procollab_bot" }}</a>
+              </p>
 
-            <br />
+              <br />
 
-            <p class="tooltip__text text-body-10">
-              Для уникальных кейсов или нерешаемых сложностей на связи наша техническая поддержка –
-              <a href="https://t.me/procollab_support">{{ "@procollab_support" }}</a>
-            </p>
+              <p class="tooltip__text text-body-10">
+                Для уникальных кейсов или нерешаемых сложностей на связи наша техническая поддержка
+                –
+                <a href="https://t.me/procollab_support">{{ "@procollab_support" }}</a>
+              </p>
 
-            <br />
+              <br />
 
-            <p class="tooltip__text text-body-10">
-              Время работы оператора:  пн-пт, 10:00-19:00 по московскому времени
-            </p>
-          </div>
-        }
+              <p class="tooltip__text text-body-10">
+                Время работы оператора:  пн-пт, 10:00-19:00 по московскому времени
+              </p>
+            </div>
+          }
+        </div>
       </div>
-    </div>
+    }
   </div>
 
   <div class="login__right">

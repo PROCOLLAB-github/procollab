@@ -20,6 +20,8 @@ import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { LoadingService } from "@api/shared/loading.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AppRoutes } from "@api/paths/app-routes";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
+import { AlertDirective, ButtonDirective } from "@uilib";
 
 /**
  * Корневой компонент приложения
@@ -31,10 +33,18 @@ import { AppRoutes } from "@api/paths/app-routes";
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
-  imports: [MatProgressBarModule, RouterOutlet, AsyncPipe, CookieConsentComponent],
+  imports: [
+    MatProgressBarModule,
+    RouterOutlet,
+    AsyncPipe,
+    CookieConsentComponent,
+    AlertDirective,
+    ButtonDirective,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
+  readonly instance = inject(InstanceInfoService);
   private readonly logger = inject(LoggerService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -46,6 +56,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.instance.error()) return;
     const showLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveStart),
       map(() => true),
@@ -70,15 +81,23 @@ export class AppComponent implements OnInit {
     this.isLoading$ = this.loadingService.isLoading$;
 
     if (location.pathname === "/") {
-      if (this.tokenService.getTokens() === null) {
-        this.router
-          .navigateByUrl(AppRoutes.auth.login())
-          .then(() => this.logger.debug("Route changed from AppComponent"));
+      if (this.instance.enabled()) {
+        void this.router.navigateByUrl(
+          this.tokenService.getTokens()
+            ? this.instance.programUrl()
+            : this.instance.registrationUrl(),
+        );
       } else {
-        this.logger.debug("Route start changing from AppComponent");
-        this.router
-          .navigateByUrl(AppRoutes.office.root())
-          .then(() => this.logger.debug("Route changed From AppComponent"));
+        if (this.tokenService.getTokens() === null) {
+          this.router
+            .navigateByUrl(AppRoutes.auth.login())
+            .then(() => this.logger.debug("Route changed from AppComponent"));
+        } else {
+          this.logger.debug("Route start changing from AppComponent");
+          this.router
+            .navigateByUrl(AppRoutes.office.root())
+            .then(() => this.logger.debug("Route changed From AppComponent"));
+        }
       }
     }
 
@@ -113,4 +132,7 @@ export class AppComponent implements OnInit {
   }
 
   isLoading$?: Observable<boolean>;
+  reload() {
+    location.reload();
+  }
 }

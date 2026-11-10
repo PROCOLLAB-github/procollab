@@ -1,8 +1,22 @@
 <!-- @format -->
 
 <div class="sidebar">
-  <a routerLink="/office/feed" class="sidebar__logo" aria-label="PROCOLLAB — лента">
-    <img [src]="logoSrc()" alt="PROCOLLAB" loading="lazy" decoding="async" />
+  <a
+    [routerLink]="logoLink()"
+    class="sidebar__logo"
+    [attr.aria-label]="logoName() + (logoLink() === '/office/feed' ? ' — лента' : ' — главная')"
+  >
+    @if (logoSrc()) {
+      <img
+        [src]="logoSrc()"
+        [alt]="logoName()"
+        [class.instance-logo--dark]="logoDark()"
+        loading="lazy"
+        decoding="async"
+      />
+    } @else {
+      <strong>{{ logoName() }}</strong>
+    }
   </a>
   <nav class="sidebar-nav sidebar__nav">
     <div class="sidebar-nav__list" (mouseenter)="showBar = true" (mouseleave)="showBar = false">

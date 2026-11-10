@@ -5,7 +5,12 @@
     <a routerLink="/" [attr.aria-label]="brandName() + ' — главная'">
       @if (data.branding; as brand) {
         @if (brand.logoUrl) {
-          <img class="enrollment__logo" [src]="brand.logoUrl" [alt]="brand.name" />
+          <img
+            class="enrollment__logo"
+            [src]="brand.logoUrl"
+            [alt]="brand.name"
+            [class.instance-logo--dark]="brand.logoBackground === 'dark'"
+          />
         } @else {
           <strong>{{ brand.name }}</strong>
         }
@@ -47,6 +52,11 @@
   }
   @if (program(); as data) {
     <section class="enrollment__card">
+      @if (instance.demoMode()) {
+        <p appAlert="warning">
+          Демонстрационный стенд. Используйте тестовый адрес вида participant&#64;example.test.
+        </p>
+      }
       @if (mode() === "confirm") {
         <p>Анкета сохранена. Подтвердите почту, чтобы перейти к программе.</p>
         <button appButton="primary" type="button" [disabled]="busy()" (click)="confirm()">

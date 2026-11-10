@@ -53,6 +53,9 @@ import { VACANCY_PROVIDERS } from "./infrastructure/di/vacancy.providers";
 import { COURSES_PROVIDERS } from "./infrastructure/di/courses/courses.providers";
 import { CHAT_PROVIDERS } from "./infrastructure/di/chat.providers";
 import { ThemeService } from "@uilib";
+import { InstanceRepositoryPort } from "@domain/instance/ports/instance.repository.port";
+import { InstanceHttpAdapter } from "@infrastructure/adapters/instance/instance-http.adapter";
+import { InstanceBrandService } from "@ui/services/instance-brand.service";
 
 registerLocaleData(localeRu, "ru-RU");
 
@@ -65,6 +68,8 @@ export const APP_CONFIG: ApplicationConfig = {
     provideAppInitializer(() => {
       inject(ThemeService);
     }),
+    { provide: InstanceRepositoryPort, useClass: InstanceHttpAdapter },
+    provideAppInitializer(() => inject(InstanceBrandService).initialize()),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CamelcaseInterceptor,

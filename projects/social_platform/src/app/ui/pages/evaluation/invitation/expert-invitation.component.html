@@ -1,14 +1,20 @@
 <!-- @format -->
 
 <main class="expert-invitation" [class.expert-invitation--organizer]="isOrganizer">
-  <a routerLink="/auth/login" aria-label="PROCOLLAB — вход"
-    ><img
-      class="expert-invitation__logo"
-      src="/assets/images/shared/logo.svg"
-      alt="PROCOLLAB"
-      width="120"
-      height="23"
-  /></a>
+  <a routerLink="/auth/login" [attr.aria-label]="instance.name() + ' — вход'">
+    @if (instance.logo()) {
+      <img
+        class="expert-invitation__logo"
+        [src]="instance.logo()"
+        [alt]="instance.name()"
+        [class.instance-logo--dark]="instance.logoBackground() === 'dark'"
+        width="120"
+        height="23"
+      />
+    } @else {
+      <strong>{{ instance.name() }}</strong>
+    }
+  </a>
   <section class="expert-invitation__card" [attr.aria-busy]="loading() || busy()">
     @if (loading()) {
       <p role="status">Загружаем приглашение…</p>

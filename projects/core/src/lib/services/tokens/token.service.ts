@@ -44,11 +44,11 @@ export class TokenService {
   }
 
   private get accessTokenKey(): string {
-    return this.isDevStage ? "devAccessToken" : "accessToken";
+    return environment.cookiePrefix + (this.isDevStage ? "devAccessToken" : "accessToken");
   }
 
   private get refreshTokenKey(): string {
-    return this.isDevStage ? "devRefreshToken" : "refreshToken";
+    return environment.cookiePrefix + (this.isDevStage ? "devRefreshToken" : "refreshToken");
   }
 
   constructor(
@@ -94,7 +94,7 @@ export class TokenService {
       const hostname = this.document.location?.hostname;
       const platformHost = hostname === "procollab.ru" || hostname?.endsWith(".procollab.ru");
       return {
-        ...(platformHost ? { domain: ".procollab.ru" } : {}),
+        ...(platformHost && !environment.instanceMode ? { domain: ".procollab.ru" } : {}),
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 дней
         secure: true,
         sameSite: "None",

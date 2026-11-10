@@ -16,6 +16,7 @@ import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 import { AuthLoginService } from "@api/auth/facades/auth-login.service";
 import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 
 /** Форма входа пользователя в систему. */
 @Component({
@@ -39,6 +40,7 @@ import { AppRoutes } from "@api/paths/app-routes";
   providers: [AuthLoginService, AuthUIInfoService, TooltipInfoService],
 })
 export class LoginComponent {
+  readonly instance = inject(InstanceInfoService);
   private readonly authLoginService = inject(AuthLoginService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
   private readonly tooltipInfoService = inject(TooltipInfoService);

@@ -1,13 +1,18 @@
 <!-- @format -->
 
 <main class="auth verification">
-  <img
-    class="auth__logo"
-    src="/assets/images/shared/logo.svg"
-    alt="procollab"
-    loading="lazy"
-    decoding="async"
-  />
+  @if (instance.logo()) {
+    <img
+      class="auth__logo"
+      [src]="instance.logo()"
+      [alt]="instance.name()"
+      [class.instance-logo--dark]="instance.logoBackground() === 'dark'"
+      loading="lazy"
+      decoding="async"
+    />
+  } @else {
+    <strong>{{ instance.name() }}</strong>
+  }
   <div class="verification__inner">
     <div class="verification__body">
       <div class="auth__greeting">

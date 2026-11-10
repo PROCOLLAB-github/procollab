@@ -31,6 +31,7 @@ import { NotificationService } from "@ui/services/notification/notification.serv
 import { NotificationListComponent } from "@ui/widgets/notification-list/notification-list.component";
 import { SolutionInvitationInboxComponent } from "@ui/widgets/solution-invitation-inbox/solution-invitation-inbox.component";
 import { SolutionInvitationInboxService } from "@api/solution/facades/solution-invitation-inbox.service";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 
 /** Корневой компонент рабочего пространства с навигацией и управлением состоянием. */
 @Component({
@@ -62,6 +63,7 @@ import { SolutionInvitationInboxService } from "@api/solution/facades/solution-i
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OfficeComponent implements OnInit {
+  readonly instance = inject(InstanceInfoService);
   readonly notificationService = inject(NotificationService);
   readonly solutionInbox = inject(SolutionInvitationInboxService);
   private readonly destroyRef = inject(DestroyRef);

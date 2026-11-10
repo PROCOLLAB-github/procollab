@@ -7,6 +7,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { API_URL, PRODUCTION } from "../../providers";
 import { ApiService } from "../api/api.service";
 import Cookies from "js-cookie";
+import { environment } from "@environment";
 
 describe("TokenService", () => {
   let service: TokenService;
@@ -26,6 +27,39 @@ describe("TokenService", () => {
 
   it("should be created", () => {
     expect(service).toBeTruthy();
+  });
+  it("пилот на поддомене имеет отдельную сессию и не меняет cookies платформы", () => {
+    const before = {
+      instanceMode: environment.instanceMode,
+      cookiePrefix: environment.cookiePrefix,
+    };
+    const set = vi.spyOn(Cookies, "set").mockImplementation(() => undefined);
+    const get = vi.spyOn(Cookies, "get");
+    const remove = vi.spyOn(Cookies, "remove").mockImplementation(() => undefined);
+    try {
+      environment.instanceMode = true;
+      environment.cookiePrefix = "pilot_";
+      const pilot = new TokenService(TestBed.inject(ApiService), true, {
+        location: { hostname: "pilot.procollab.ru" },
+      } as Document);
+      pilot.memTokens({ access: "pilot-access", refresh: "pilot-refresh" });
+      expect(set).toHaveBeenCalledWith(
+        "pilot_accessToken",
+        "pilot-access",
+        expect.not.objectContaining({ domain: expect.anything() }),
+      );
+      pilot.getTokens();
+      expect(get).not.toHaveBeenCalledWith("accessToken");
+      expect(get).not.toHaveBeenCalledWith("refreshToken");
+      pilot.clearTokens();
+      expect(remove).toHaveBeenCalledWith("pilot_accessToken", expect.any(Object));
+      expect(remove).not.toHaveBeenCalledWith("accessToken", expect.anything());
+    } finally {
+      Object.assign(environment, before);
+      set.mockRestore();
+      get.mockRestore();
+      remove.mockRestore();
+    }
   });
   it.each(["procollab.ru", "app.procollab.ru", "dev.procollab.ru"])(
     "сохраняет общий production cookie domain на %s",

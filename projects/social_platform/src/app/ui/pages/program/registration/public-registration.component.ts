@@ -33,6 +33,7 @@ import { LoginUseCase } from "@api/auth/use-cases/login.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { evaluationError } from "@utils/evaluation-workspace";
 import { userErrorMessage } from "@core/lib/models/error/user-error-message";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 @Component({
   selector: "app-public-program-registration",
   imports: [
@@ -54,6 +55,7 @@ import { userErrorMessage } from "@core/lib/models/error/user-error-message";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PublicRegistrationComponent {
+  readonly instance = inject(InstanceInfoService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly api = inject(ProgramRegistrationUseCase);

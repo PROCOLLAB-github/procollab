@@ -14,15 +14,29 @@
           <div class="office__inner--wrapper">
             <ui-sidebar
               class="office__sidebar"
-              logoSrc="/assets/images/shared/logo.svg"
+              [logoSrc]="instance.logo()"
+              [logoName]="instance.name()"
+              [logoLink]="instance.enabled() ? instance.programUrl() : '/office/feed'"
+              [logoDark]="instance.logoBackground() === 'dark'"
               [navItems]="navItems()"
               style="align-self: flex-start"
             >
               <div class="office__sidebar--text">
-                <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
-                <button type="button" class="office__policy-link" (click)="downloadPolicy($event)">
-                  Политика обработки персональных данных
-                </button>
+                @if (instance.enabled()) {
+                  <p class="text-body-6">{{ instance.name() }}</p>
+                  @if (instance.demoMode()) {
+                    <p class="text-body-6">Демонстрационный стенд</p>
+                  }
+                } @else {
+                  <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
+                  <button
+                    type="button"
+                    class="office__policy-link"
+                    (click)="downloadPolicy($event)"
+                  >
+                    Политика обработки персональных данных
+                  </button>
+                }
                 <p class="text-body-6">{{ currentYear() }}</p>
               </div>
 

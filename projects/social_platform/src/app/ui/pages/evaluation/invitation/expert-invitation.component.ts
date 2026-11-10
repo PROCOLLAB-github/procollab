@@ -22,6 +22,7 @@ import { evaluationError } from "@utils/evaluation-workspace";
 import { AppRoutes } from "@api/paths/app-routes";
 import { EventBus } from "@domain/shared/event-bus";
 import { loggedOut } from "@domain/auth/events/logged-out.event";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 
 @Component({
   selector: "app-expert-invitation",
@@ -39,6 +40,7 @@ import { loggedOut } from "@domain/auth/events/logged-out.event";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpertInvitationComponent {
+  readonly instance = inject(InstanceInfoService);
   private readonly expertApi = inject(EvaluationUseCase);
   private readonly login = inject(LoginUseCase);
   private readonly events = inject(EventBus);

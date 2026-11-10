@@ -40,7 +40,7 @@ export interface RegistrationPublic {
   programUrl: string;
   registrationEnds: string;
   accountMode?: "email_password";
-  branding?: { name: string; logoUrl: string };
+  branding?: { name: string; logoUrl: string; logoBackground?: "transparent" | "dark" };
 }
 export interface RegistrationImport {
   options: string[];

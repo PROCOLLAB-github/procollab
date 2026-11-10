@@ -1,6 +1,8 @@
 /** @format */
 
-import { Routes } from "@angular/router";
+import { Router, Routes } from "@angular/router";
+import { inject } from "@angular/core";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 import { AuthComponent } from "../../pages/auth/auth.component";
 import { ResetPasswordComponent } from "@ui/pages/auth/reset-password/reset-password.component";
 import { SetPasswordComponent } from "@ui/pages/auth/set-password/set-password.component";
@@ -28,6 +30,12 @@ export const AUTH_ROUTES: Routes = [
       {
         path: "register",
         component: RegisterComponent,
+        canActivate: [
+          () => {
+            const instance = inject(InstanceInfoService);
+            return instance.enabled() ? inject(Router).parseUrl(instance.registrationUrl()) : true;
+          },
+        ],
       },
       {
         path: "verification/email",
