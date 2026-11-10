@@ -23,6 +23,20 @@ describe("Контракт регистрации программы", () => {
     http = TestBed.inject(HttpTestingController);
   });
   afterEach(() => http.verify());
+  it("читает короткий режим и вложенный логотип из snake_case ответа API", () => {
+    adapter.publicForm(4).subscribe(result => {
+      expect(result.accountMode).toBe("email_password");
+      expect(result.branding).toEqual({
+        name: "Чемпионат клиента",
+        logoUrl: "https://client.example.test/logo.svg",
+      });
+    });
+    const request = http.expectOne("https://local.test/programs/4/registration/");
+    request.flush({
+      account_mode: "email_password",
+      branding: { name: "Чемпионат клиента", logo_url: "https://client.example.test/logo.svg" },
+    });
+  });
   it("не меняет динамические идентификаторы ответов при snake/camel преобразовании", () => {
     const key = "f0123456789abcdef0123456789abcdef";
     adapter

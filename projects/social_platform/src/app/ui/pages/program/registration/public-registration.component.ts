@@ -2,13 +2,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   HostListener,
   inject,
   signal,
 } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { Meta } from "@angular/platform-browser";
+import { Meta, Title } from "@angular/platform-browser";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { debounceTime, finalize, Subscription } from "rxjs";
@@ -61,8 +62,12 @@ export class PublicRegistrationComponent {
   private readonly tokens = inject(TokenService);
   private readonly destroy = inject(DestroyRef);
   private readonly meta = inject(Meta);
+  private readonly title = inject(Title);
+  private readonly previousTitle = this.title.getTitle();
   private readonly fb = inject(FormBuilder).nonNullable;
   readonly program = signal<RegistrationPublic | null>(null);
+  readonly shortAccount = computed(() => this.program()?.accountMode === "email_password");
+  readonly brandName = computed(() => this.program()?.branding?.name ?? "PROCOLLAB");
   readonly loading = signal(false);
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
@@ -101,6 +106,7 @@ export class PublicRegistrationComponent {
       this.answersSubscription?.unsubscribe();
       if (previous !== undefined) this.meta.updateTag({ name: "referrer", content: previous });
       else this.meta.removeTag('name="referrer"');
+      this.title.setTitle(this.previousTitle);
     });
     this.route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
       this.answersSubscription?.unsubscribe();
@@ -188,6 +194,14 @@ export class PublicRegistrationComponent {
               }
             });
           this.program.set(data);
+          this.title.setTitle(
+            data.branding ? `${data.name} | ${data.branding.name}` : this.previousTitle,
+          );
+          for (const key of ["firstName", "lastName", "birthday"] as const) {
+            const control = this.account.controls[key];
+            control.setValidators(this.shortAccount() ? [] : [Validators.required]);
+            control.updateValueAndValidity({ emitEvent: false });
+          }
           this.authenticated.set(data.authenticated);
         },
         error: e => {
@@ -217,6 +231,8 @@ export class PublicRegistrationComponent {
       return;
     }
     const account = this.account.getRawValue();
+    const { firstName, lastName, birthday, ...credentials } = account;
+    const signupAccount = this.shortAccount() ? credentials : account;
     if (!this.authenticated() && account.password !== account.repeatPassword) {
       this.error.set("Пароли не совпадают.");
       return;
@@ -227,7 +243,7 @@ export class PublicRegistrationComponent {
     const payload = {
       version: data.version,
       answers: this.answers.getRawValue(),
-      ...(!this.authenticated() ? account : {}),
+      ...(!this.authenticated() ? signupAccount : {}),
     };
     this.api
       .submit(this.id, payload, !this.authenticated())

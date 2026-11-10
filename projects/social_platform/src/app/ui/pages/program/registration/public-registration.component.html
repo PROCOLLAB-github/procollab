@@ -1,9 +1,19 @@
 <!-- @format -->
 
 <main class="enrollment">
-  <a routerLink="/" aria-label="PROCOLLAB — главная"
-    ><img class="enrollment__logo" src="/assets/images/shared/logo.svg" alt="PROCOLLAB"
-  /></a>
+  @if (program(); as data) {
+    <a routerLink="/" [attr.aria-label]="brandName() + ' — главная'">
+      @if (data.branding; as brand) {
+        @if (brand.logoUrl) {
+          <img class="enrollment__logo" [src]="brand.logoUrl" [alt]="brand.name" />
+        } @else {
+          <strong>{{ brand.name }}</strong>
+        }
+      } @else {
+        <img class="enrollment__logo" src="/assets/images/shared/logo.svg" alt="PROCOLLAB" />
+      }
+    </a>
+  }
   @if (loading()) {
     <p aria-busy="true" aria-live="polite">Загружаем программу…</p>
   }
@@ -15,7 +25,7 @@
     <h1>
       {{
         mode() === "login"
-          ? "Вход в PROCOLLAB"
+          ? "Вход в " + brandName()
           : mode() === "reset"
             ? "Восстановление пароля"
             : mode() === "sent" || mode() === "confirm" || mode() === "expired"
@@ -122,22 +132,24 @@
               Уже есть аккаунт? Войти
             </button>
             <div [formGroup]="account" class="enrollment__form">
-              <h3>Аккаунт PROCOLLAB</h3>
-              <div class="enrollment__columns">
-                <label
-                  >Имя *<input
-                    appField
-                    formControlName="firstName"
-                    autocomplete="given-name"
-                    maxlength="255" /></label
-                ><label
-                  >Фамилия *<input
-                    appField
-                    formControlName="lastName"
-                    autocomplete="family-name"
-                    maxlength="255"
-                /></label>
-              </div>
+              <h3>Аккаунт {{ brandName() }}</h3>
+              @if (!shortAccount()) {
+                <div class="enrollment__columns">
+                  <label
+                    >Имя *<input
+                      appField
+                      formControlName="firstName"
+                      autocomplete="given-name"
+                      maxlength="255" /></label
+                  ><label
+                    >Фамилия *<input
+                      appField
+                      formControlName="lastName"
+                      autocomplete="family-name"
+                      maxlength="255"
+                  /></label>
+                </div>
+              }
               <label
                 >Email *<input
                   appField
@@ -146,13 +158,15 @@
                   autocomplete="email"
                   maxlength="254"
               /></label>
-              <label
-                >Дата рождения *<input
-                  appField
-                  formControlName="birthday"
-                  type="date"
-                  autocomplete="bday"
-              /></label>
+              @if (!shortAccount()) {
+                <label
+                  >Дата рождения *<input
+                    appField
+                    formControlName="birthday"
+                    type="date"
+                    autocomplete="bday"
+                /></label>
+              }
               <label
                 >Пароль *<span class="enrollment__password"
                   ><input
@@ -204,7 +218,9 @@
             </div>
             <hr />
           }
-          <h3>Анкета участника</h3>
+          @if (data.fields.length || !shortAccount()) {
+            <h3>Анкета участника</h3>
+          }
           <app-registration-fields
             [fields]="data.fields"
             [group]="answers"
