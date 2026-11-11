@@ -17,7 +17,7 @@ import { ConnectedPosition } from "@angular/cdk/overlay";
 import { PluralizePipe } from "@corelib";
 import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
-import { Subject, finalize, switchMap, catchError, of, tap, takeUntil } from "rxjs";
+import { Observable, Subject, finalize, switchMap, catchError, of, tap, takeUntil } from "rxjs";
 import { saveAs } from "file-saver";
 import {
   AlertDirective,
@@ -204,7 +204,7 @@ export class ManagementResultsComponent {
         switchMap(id => {
           this.loading.set(true);
           this.error.set(false);
-          const request = this.solutionMode()
+          const request: Observable<ProgramResults> = this.solutionMode()
             ? this.injector
                 .get(GetSolutionResultsUseCase)
                 .execute(id)

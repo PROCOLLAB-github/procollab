@@ -18,6 +18,7 @@ describe("Shared expert form lifecycle", () => {
       type: "int",
       minValue: 0,
       maxValue: 10,
+      weightPercent: 40,
       value: 0,
       expertId: 0,
     };
@@ -33,6 +34,7 @@ describe("Shared expert form lifecycle", () => {
     expect(root.querySelector("details")?.textContent).toContain(criterion.description);
     expect(root.querySelector("details")?.open).toBe(false);
     expect(root.querySelector(".field__scale")?.textContent).toContain("/ 10");
+    expect(root.textContent).toContain("Вес в итоговой оценке кейса: 40%");
     expect(root.querySelector("textarea")?.rows).toBe(2);
     const answers = fixture.componentInstance.form.getRawValue();
     expect(answers).toEqual({ 1: 0, 2: false, 3: "Хорошее решение" });
