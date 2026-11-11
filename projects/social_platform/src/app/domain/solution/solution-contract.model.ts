@@ -1,6 +1,6 @@
 /** @format */
 
-// Сгенерировано tools/generate-solution-contract.py из C00 1.21.0.
+// Сгенерировано tools/generate-solution-contract.py из C00 1.22.0.
 // camelCase соответствует CamelcaseInterceptor; значения ID и revision не преобразуются.
 
 export type SolutionUser = {
@@ -379,6 +379,7 @@ export type SolutionRatingCriterion = {
   minValue: number | null;
   maxValue: number | null;
   value: string | null;
+  weightPercent?: number | null;
 };
 
 export type SolutionRatingValue = {
@@ -537,6 +538,7 @@ export type SolutionResultCriterion = {
   type: "int" | "float" | "bool" | "str";
   minValue: number | null;
   maxValue: number | null;
+  weightPercent?: number | null;
 };
 
 export type SolutionResultExpert = {
@@ -562,6 +564,7 @@ export type SolutionResult = {
   place: number | null;
   averages: Record<string, number>;
   experts: Array<SolutionResultExpert>;
+  contributions?: Record<string, number>;
 };
 
 export type SolutionResultGroup = {
@@ -579,6 +582,7 @@ export type SolutionResults = {
   caseOptions: Array<string>;
   groups: Array<SolutionResultGroup>;
   criteria: Array<SolutionResultCriterion>;
+  scoringMode?: "legacy" | "weighted_percent";
 };
 
 export type SolutionCabinetApplication = {
