@@ -3,6 +3,7 @@ import { teamOperationErrorMessage } from "@api/project/team-operation-error";
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
   input,
@@ -29,6 +30,13 @@ export class CollaboratorCardComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
   readonly collaborator = input.required<Collaborator>();
+  readonly displayName = computed(
+    () =>
+      [this.collaborator().firstName, this.collaborator().lastName]
+        .filter(Boolean)
+        .join(" ")
+        .trim() || `Участник №${this.collaborator().userId}`,
+  );
   readonly isCurrentUser = input(false);
   readonly frozen = input(false);
   readonly programLinkId = input<number>();

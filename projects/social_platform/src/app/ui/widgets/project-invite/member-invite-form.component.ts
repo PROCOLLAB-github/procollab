@@ -36,6 +36,7 @@ export class MemberInviteFormComponent {
   readonly query = input.required<FormControl<string>>();
   readonly role = input.required<FormControl<string>>();
   readonly state = input.required<InviteSearchState>();
+  readonly emailSearch = input(false);
   readonly selected = input<User | null>(null);
   readonly unavailableReason = input.required<(id: number) => string | null>();
   readonly busy = input(false);
