@@ -572,9 +572,9 @@
 
   &__action {
     display: grid;
+    grid-template-columns: subgrid;
     grid-row: 1;
     grid-column: 1 / -1;
-    grid-template-columns: subgrid;
     align-items: center;
     min-width: 0;
     min-height: 36px;
@@ -604,6 +604,10 @@
     span {
       min-width: 0;
       overflow-wrap: anywhere;
+    }
+
+    > .text-body-10 {
+      color: inherit;
     }
 
     strong {
