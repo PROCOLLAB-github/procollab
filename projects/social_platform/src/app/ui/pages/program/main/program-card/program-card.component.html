@@ -1,5 +1,38 @@
 <!-- @format -->
 <div class="program-card" [class.program-card--managed]="management()">
+  @if (management() && !program().draft) {
+    <a
+      class="program-card__link"
+      [routerLink]="paths.program.detail(program().id)"
+      [attr.aria-label]="program().name"
+    >
+      <ng-container [ngTemplateOutlet]="cardContent" />
+    </a>
+  } @else {
+    <ng-container [ngTemplateOutlet]="cardContent" />
+  }
+  @if (management()) {
+    <div class="program-card__actions">
+      <p class="program-card__publication">
+        {{ program().draft ? "Не виден участникам" : "Опубликована" }}
+      </p>
+      <a
+        appButton="secondary"
+        [class.program-card__continue]="program().draft"
+        [routerLink]="
+          program().draft
+            ? paths.program.launch(program().id)
+            : paths.program.management(program().id, 'analytics')
+        "
+        [attr.aria-label]="
+          (program().draft ? 'Продолжить настройку: ' : 'Управлять: ') + program().name
+        "
+        >{{ program().draft ? "Продолжить настройку" : "Управлять" }}</a
+      >
+    </div>
+  }
+</div>
+<ng-template #cardContent>
   @if (desktopLayout()) {
     <div class="card">
       <div class="card__photo">
@@ -78,27 +111,7 @@
       </div>
     </div>
   }
-  @if (management()) {
-    <div class="program-card__actions">
-      <p class="program-card__publication">
-        {{ program().draft ? "Не виден участникам" : "Опубликована" }}
-      </p>
-      <a
-        appButton="secondary"
-        [class.program-card__continue]="program().draft"
-        [routerLink]="
-          program().draft
-            ? paths.program.launch(program().id)
-            : paths.program.management(program().id, 'analytics')
-        "
-        [attr.aria-label]="
-          (program().draft ? 'Продолжить настройку: ' : 'Управлять: ') + program().name
-        "
-        >{{ program().draft ? "Продолжить настройку" : "Управлять" }}</a
-      >
-    </div>
-  }
-</div>
+</ng-template>
 <ng-template #registrationText>
   @switch (registrationState()) {
     @case ("draft") {
