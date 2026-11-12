@@ -1,8 +1,9 @@
 /** @format */
 
-import { Router, Routes } from "@angular/router";
+import { CanActivateFn, Router, Routes } from "@angular/router";
 import { inject } from "@angular/core";
 import { InstanceInfoService } from "@api/instance/instance-info.service";
+import { authReturnUrl } from "@core/lib/models/auth/auth-return-url";
 import { AuthComponent } from "../../pages/auth/auth.component";
 import { ResetPasswordComponent } from "@ui/pages/auth/reset-password/reset-password.component";
 import { SetPasswordComponent } from "@ui/pages/auth/set-password/set-password.component";
@@ -11,6 +12,18 @@ import { LoginComponent } from "@ui/pages/auth/login/login.component";
 import { RegisterComponent } from "@ui/pages/auth/register/register.component";
 import { EmailVerificationComponent } from "@ui/pages/auth/email-verification/email-verification.component";
 import { ConfirmEmailComponent } from "@ui/pages/auth/confirm-email/confirm-email.component";
+
+/** Общие ссылки входа в экземпляре открывают существующую клиентскую форму. */
+function instanceAuthForm(mode: "login" | "reset"): CanActivateFn {
+  return route => {
+    const instance = inject(InstanceInfoService);
+    if (!instance.enabled()) return true;
+    const returnUrl = authReturnUrl(route.queryParamMap.get("returnUrl"));
+    return inject(Router).createUrlTree([instance.registrationUrl()], {
+      queryParams: { mode, ...(returnUrl ? { returnUrl } : {}) },
+    });
+  };
+}
 
 /** Конфигурация маршрутов для модуля аутентификации. */
 export const AUTH_ROUTES: Routes = [
@@ -26,6 +39,7 @@ export const AUTH_ROUTES: Routes = [
       {
         path: "login",
         component: LoginComponent,
+        canActivate: [instanceAuthForm("login")],
       },
       {
         path: "register",
@@ -44,6 +58,7 @@ export const AUTH_ROUTES: Routes = [
       {
         path: "reset_password/send_email",
         component: ResetPasswordComponent,
+        canActivate: [instanceAuthForm("reset")],
       },
       {
         path: "reset_password",

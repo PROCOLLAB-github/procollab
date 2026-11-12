@@ -34,6 +34,7 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { evaluationError } from "@utils/evaluation-workspace";
 import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import { InstanceInfoService } from "@api/instance/instance-info.service";
+import { authReturnUrl } from "@core/lib/models/auth/auth-return-url";
 @Component({
   selector: "app-public-program-registration",
   imports: [
@@ -134,9 +135,11 @@ export class PublicRegistrationComponent {
           ? "confirm"
           : this.route.snapshot.queryParamMap.get("mode") === "login"
             ? "login"
-            : this.receipt
-              ? "sent"
-              : "form",
+            : this.route.snapshot.queryParamMap.get("mode") === "reset"
+              ? "reset"
+              : this.receipt
+                ? "sent"
+                : "form",
       );
       this.load();
     });
@@ -333,6 +336,10 @@ export class PublicRegistrationComponent {
           this.profile.invalidateProfile();
           this.authenticated.set(true);
           this.credentials.controls.password.reset("");
+          if (this.instance.enabled() && this.instance.programId() === this.id) {
+            this.openProgram();
+            return;
+          }
           this.mode.set("form");
           this.load();
         },
@@ -444,7 +451,11 @@ export class PublicRegistrationComponent {
     this.answers.markAsPristine();
     this.account.markAsPristine();
     this.profile.invalidateProfile();
-    void this.router.navigateByUrl(`/office/program/${this.id}`);
+    const returnUrl =
+      this.instance.enabled() && this.instance.programId() === this.id
+        ? authReturnUrl(this.route.snapshot.queryParamMap.get("returnUrl"))
+        : null;
+    void this.router.navigateByUrl(returnUrl ?? `/office/program/${this.id}`);
   }
   @HostListener("window:beforeunload", ["$event"]) beforeUnload(event: BeforeUnloadEvent) {
     if (this.busy()) {

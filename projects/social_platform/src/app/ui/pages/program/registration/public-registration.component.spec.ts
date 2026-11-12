@@ -10,6 +10,7 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { ProgramRegistrationUseCase } from "@api/program/use-cases/program-registration.use-case";
 import { PublicRegistrationComponent } from "./public-registration.component";
 import { RegistrationPublic } from "@domain/program/program-registration.model";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 const field = {
   id: "f" + "a".repeat(32),
   label: "Город",
@@ -20,7 +21,11 @@ const field = {
   options: [],
   allowOther: false,
 };
-function setup(authenticated = false, overrides: Partial<RegistrationPublic> = {}) {
+function setup(
+  authenticated = false,
+  overrides: Partial<RegistrationPublic> = {},
+  options: { instance?: boolean; query?: Record<string, string> } = {},
+) {
   const fragment = new Subject<string | null>();
   sessionStorage.clear();
   const api = {
@@ -50,14 +55,22 @@ function setup(authenticated = false, overrides: Partial<RegistrationPublic> = {
         provide: ActivatedRoute,
         useValue: {
           paramMap: of(convertToParamMap({ id: "42" })),
-          queryParamMap: of(convertToParamMap({})),
+          queryParamMap: of(convertToParamMap(options.query ?? {})),
           fragment,
-          snapshot: { queryParamMap: convertToParamMap({}) },
+          snapshot: { queryParamMap: convertToParamMap(options.query ?? {}) },
         },
       },
       { provide: TokenService, useValue: tokens },
       { provide: LoginUseCase, useValue: login },
       { provide: ProfileInfoService, useValue: { invalidateProfile: vi.fn() } },
+      {
+        provide: InstanceInfoService,
+        useValue: {
+          enabled: () => options.instance === true,
+          demoMode: () => false,
+          programId: () => 42,
+        },
+      },
     ],
   });
   TestBed.overrideComponent(PublicRegistrationComponent, {
@@ -215,6 +228,76 @@ describe("Публичная регистрация участника", () => {
     component.answers.controls[field.id].setValue("Москва");
     component.changeMode("login");
     expect(component.answers.getRawValue()[field.id]).toBe("Москва");
+  });
+  it.each([false, true])(
+    "после входа в экземпляре сразу открывает программу, enrolled=%s",
+    enrolled => {
+      const { component, api, login, tokens } = setup(false, { enrolled }, { instance: true });
+      const navigate = vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
+      const credentials = { email: "test@example.test", password: "Secret-pass-2030" };
+      const session = { access: "test-access", refresh: "test-refresh" };
+      login.execute.mockReturnValue(of({ ok: true, value: { tokens: session } }));
+      component.credentials.setValue(credentials);
+      component.signIn();
+      expect(login.execute).toHaveBeenCalledWith(credentials);
+      expect(tokens.memTokens).toHaveBeenCalledWith(session);
+      expect(navigate).toHaveBeenCalledWith("/office/program/42");
+      expect(component.credentials.controls.password.value).toBe("");
+      expect(api.submit).not.toHaveBeenCalled();
+      expect(api.publicForm).toHaveBeenCalledTimes(1);
+    },
+  );
+  it.each([
+    [
+      "/office/program/42/management/settings?tab=criteria#weights",
+      "/office/program/42/management/settings?tab=criteria#weights",
+    ],
+    ["https://other.example.test/office", "/office/program/42"],
+    ["//other.example.test/office", "/office/program/42"],
+  ])("сохраняет только безопасный маршрут после входа: %s", (returnUrl, expected) => {
+    const { component, login } = setup(false, {}, { instance: true, query: { returnUrl } });
+    const navigate = vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
+    login.execute.mockReturnValue(
+      of({ ok: true, value: { tokens: { access: "test-access", refresh: "test-refresh" } } }),
+    );
+    component.credentials.setValue({ email: "test@example.test", password: "Secret-pass-2030" });
+    component.signIn();
+    expect(navigate).toHaveBeenCalledWith(expected);
+  });
+  it("сохраняет заполнение анкеты после входа в обычную программу", () => {
+    const { component, login, api } = setup();
+    const navigate = vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
+    login.execute.mockReturnValue(
+      of({ ok: true, value: { tokens: { access: "test-access", refresh: "test-refresh" } } }),
+    );
+    component.changeMode("login");
+    component.credentials.setValue({ email: "test@example.test", password: "Secret-pass-2030" });
+    component.signIn();
+    expect(navigate).not.toHaveBeenCalled();
+    expect(component.mode()).toBe("form");
+    expect(api.publicForm).toHaveBeenCalledTimes(2);
+  });
+  it("открывает восстановление по ссылке", () => {
+    const { component } = setup(false, {}, { query: { mode: "reset" } });
+    expect(component.mode()).toBe("reset");
+  });
+  it("открывает подтверждение, даже если ссылка содержит режим восстановления", () => {
+    const { component } = setup(false, {}, { query: { mode: "reset", confirmation: "proof" } });
+    expect(component.mode()).toBe("confirm");
+    expect(component.confirmToken()).toBe("proof");
+  });
+  it("оставляет ошибку входа на той же форме без перехода", () => {
+    const { component, login, tokens } = setup(false, {}, { instance: true });
+    const navigate = vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
+    login.execute.mockReturnValue(of({ ok: false, error: "invalid" }));
+    component.changeMode("login");
+    component.credentials.setValue({ email: "test@example.test", password: "Secret-pass-2030" });
+    component.signIn();
+    expect(navigate).not.toHaveBeenCalled();
+    expect(tokens.memTokens).not.toHaveBeenCalled();
+    expect(component.mode()).toBe("login");
+    expect(component.error()).toContain("Не удалось войти");
+    expect(component.busy()).toBe(false);
   });
   it("не выдает локальную сессию на основе ошибки подтверждения", () => {
     const { component, api, tokens } = setup();
