@@ -54,17 +54,29 @@ describe("ProgramCardComponent", () => {
     expect(element().querySelector(".card__registration")?.textContent).toContain("Черновик");
     expect(element().querySelector(".card__dates")?.textContent).toContain("Сроки не заданы");
     expect(element().textContent).toContain("Не виден участникам");
-    expect(element().querySelector("a")?.getAttribute("href")).toBe("/office/program/7/launch");
-  });
-  it("routes a published program to management with its own publication status", () => {
-    fixture.componentRef.setInput("management", true);
-    setProgram({ draft: false });
-    expect(element().querySelector(".card__registration")?.textContent).toContain("Регистрация до");
-    expect(element().textContent).toContain("Опубликована");
-    expect(element().querySelector("a")?.getAttribute("href")).toBe(
-      "/office/program/7/management/analytics",
+    expect(element().querySelector(".card")?.closest("a")).toBeNull();
+    expect(element().querySelector(".program-card__actions a")?.getAttribute("href")).toBe(
+      "/office/program/7/launch",
     );
   });
+  it.each([true, false])(
+    "links a published card to program details and keeps management separate (desktop: %s)",
+    desktopLayout => {
+      desktop.set(desktopLayout);
+      fixture.componentRef.setInput("management", true);
+      setProgram({ draft: false });
+      expect(element().querySelector(".card__registration")?.textContent).toContain(
+        "Регистрация до",
+      );
+      expect(element().textContent).toContain("Опубликована");
+      expect(element().querySelector(".card")?.closest("a")?.getAttribute("href")).toBe(
+        "/office/program/7",
+      );
+      expect(element().querySelector(".program-card__actions a")?.getAttribute("href")).toBe(
+        "/office/program/7/management/analytics",
+      );
+    },
+  );
   it("uses the saved image and keeps the native mobile avatar", () => {
     desktop.set(false);
     setProgram({

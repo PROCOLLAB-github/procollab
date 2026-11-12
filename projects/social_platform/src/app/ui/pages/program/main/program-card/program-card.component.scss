@@ -10,6 +10,16 @@
 }
 
 .program-card {
+  &__link {
+    display: block;
+    border-radius: var(--rounded-lg);
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
+  }
+
   &__actions {
     display: flex;
     gap: 12px;
