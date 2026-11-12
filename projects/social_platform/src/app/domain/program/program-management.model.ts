@@ -9,6 +9,7 @@ export type ManagementSection =
   | "projects"
   | "experts"
   | "results"
+  | "overall-results"
   | "analytics"
   | "certificates"
   | "settings"
