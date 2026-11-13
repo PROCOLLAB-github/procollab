@@ -154,7 +154,7 @@ describe("ProgramRoleWidgetComponent", () => {
     expect(f.nativeElement.textContent).toContain("Все решения оценены");
     expect(f.nativeElement.textContent).not.toContain("Срок оценивания истек");
     expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
-      "/office/program/12/solutions-rating",
+      "/office/evaluation?program=12",
     );
   });
   it("opens the exact project from both name and action and retains full accessible names", () => {
@@ -276,10 +276,10 @@ describe("ProgramRoleWidgetComponent", () => {
     expect(f.nativeElement.querySelectorAll("dd")).toHaveLength(2);
     expect(f.nativeElement.textContent).toContain("Нет назначенных проектов");
     expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
-      "/office/program/12/projects-rating",
+      "/office/evaluation?program=12",
     );
   });
-  it("opens solution evaluation only for the explicit solution program format", () => {
+  it("opens the cabinet with the program selected in either storage mode", () => {
     program.update(value => ({ ...value, solutionStorageMode: "solution" }));
     const f = render({
       role: "expert",
@@ -288,12 +288,12 @@ describe("ProgramRoleWidgetComponent", () => {
       expert: { mode: "distributed", assigned: 1, remaining: 1, evaluationEnds: null },
     });
     expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
-      "/office/program/12/solutions-rating",
+      "/office/evaluation?program=12",
     );
     program.update(value => ({ ...value, solutionStorageMode: "legacy_project" }));
     f.detectChanges();
     expect(f.nativeElement.querySelector("a").getAttribute("href")).toBe(
-      "/office/program/12/projects-rating",
+      "/office/evaluation?program=12",
     );
   });
   it("renders open counters as inapplicable", () => {

@@ -18,6 +18,11 @@
     }
   }
 
+  &__program-answers {
+    display: block;
+    margin-top: 16px;
+  }
+
   &__directions {
     display: grid;
     grid-template-columns: repeat(5, 1fr);

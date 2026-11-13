@@ -66,7 +66,7 @@ import {
   DistributionProject,
   CaseExpertPool,
 } from "@domain/program/evaluation-workspace.model";
-import { evaluationError } from "@utils/evaluation-workspace";
+import { canAssignAutomatically, evaluationError } from "@utils/evaluation-workspace";
 import { presentationHref } from "@utils/program-case-analytics";
 
 import { ExpertRosterComponent } from "./expert-roster.component";
@@ -227,9 +227,7 @@ export class ManagementExpertsComponent {
   readonly scopeCases = signal(new Set<string | null>());
   readonly casePools = signal<CaseExpertPool[]>([]);
   readonly poolCase = signal<string | null>(null);
-  readonly poolCandidates = computed(() =>
-    this.joined().filter(e => this.eligibleFor(e, this.poolCase())),
-  );
+  readonly poolCandidates = computed(() => this.automaticExpertsFor(this.poolCase()));
   readonly emptySelection = new Set<number>();
   readonly allProjects = computed(() => this.snapshot()?.projects ?? []);
   readonly caseNames = computed(() => this.snapshot()?.cases ?? []);
@@ -312,16 +310,19 @@ export class ManagementExpertsComponent {
         .every(g => this.poolExperts(g.name).length),
   );
   readonly pendingAutoGroups = computed(() => this.autoGroups().filter(g => g.missing));
-  readonly candidateExperts = computed(() =>
-    (this.snapshot()?.experts ?? []).filter(
-      e =>
-        (this.modal() !== "pool" || this.eligibleFor(e, this.poolCase())) &&
-        (!this.expertQuery().trim() ||
-          `${e.name ?? ""} ${e.email}`
-            .toLocaleLowerCase("ru")
-            .includes(this.expertQuery().trim().toLocaleLowerCase("ru"))),
-    ),
-  );
+  readonly candidateExperts = computed(() => {
+    const modal = this.modal();
+    const experts = modal === "pool" ? this.poolCandidates() : (this.snapshot()?.experts ?? []);
+    const query = this.expertQuery().trim().toLocaleLowerCase("ru");
+    const existing = this.allocationProject()?.experts;
+    return experts.filter(
+      expert =>
+        (modal !== "allocation-project" ||
+          !expert.isOrganizer ||
+          existing?.some(e => e.expertId === expert.id)) &&
+        `${expert.name ?? ""} ${expert.email}`.toLocaleLowerCase("ru").includes(query),
+    );
+  });
   readonly projectDirty = computed(
     () =>
       this.modal() === "project" &&
@@ -743,9 +744,7 @@ export class ManagementExpertsComponent {
       this.casePools.set(
         this.autoGroups().map(g => ({
           caseName: g.name,
-          expertIds: this.joined()
-            .filter(e => this.eligibleFor(e, g.name))
-            .map(e => Number(e.id)),
+          expertIds: this.automaticExpertsFor(g.name).map(e => e.id),
         })),
       );
     }
@@ -816,8 +815,10 @@ export class ManagementExpertsComponent {
   startAutomaticAllocation(): void {
     if (this.busy()) return;
     this.open("auto");
+    const groups = this.pendingAutoGroups();
+    if (groups.length && !groups.some(group => this.poolExperts(group.name).length)) return;
     this.allocationSettings.set(false);
-    if (this.pendingAutoGroups().length) this.calculateAllocation(new Map(), 0);
+    if (groups.length) this.calculateAllocation(new Map(), 0);
   }
   configureAllocation(): void {
     if (this.busy()) return;
@@ -851,7 +852,7 @@ export class ManagementExpertsComponent {
     }
   }
   selectAllPool(): void {
-    if (!this.busy()) this.chosenExperts.set(new Set(this.poolCandidates().map(e => Number(e.id))));
+    if (!this.busy()) this.chosenExperts.set(new Set(this.poolCandidates().map(e => e.id)));
   }
   rerollAllocation(): void {
     if (this.busy() || !this.plan()?.canReroll) return;
@@ -862,7 +863,15 @@ export class ManagementExpertsComponent {
     seed: number,
     reroll = false,
   ): void {
-    const pools = this.casePools();
+    const organizerIds = new Set(
+      this.joined()
+        .filter(e => e.isOrganizer)
+        .map(e => Number(e.id)),
+    );
+    const pools = this.casePools().map(pool => ({
+      ...pool,
+      expertIds: pool.expertIds.filter(id => !organizerIds.has(id)),
+    }));
     this.request(
       this.api.allocation(
         this.programId(),
@@ -877,12 +886,12 @@ export class ManagementExpertsComponent {
                 ? {
                     assignmentOverrides: [...overrides].map(([projectId, expertIds]) => ({
                       projectId,
-                      expertIds,
+                      expertIds: expertIds.filter(id => !organizerIds.has(id)),
                     })),
                   }
                 : {}),
             }
-          : { expertIds: [...this.chosenExperts()] },
+          : { expertIds: [...this.chosenExperts()].filter(id => !organizerIds.has(id)) },
       ),
       plan => {
         this.allocationBeforeSettings = null;
@@ -1034,6 +1043,7 @@ export class ManagementExpertsComponent {
       const project = this.allocationProject();
       if (!project) return "Проект не найден";
       if (project.experts.some(e => e.expertId === id)) return "Уже назначен — останется в составе";
+      if (expert.isOrganizer) return "Организатора можно назначить вручную";
       if (!this.poolExperts(project.caseName).some(e => Number(e.id) === id))
         return "Не выбран для этого кейса";
       if (
@@ -1066,8 +1076,10 @@ export class ManagementExpertsComponent {
         return targets.length === 1
           ? "Достигнут лимит экспертов"
           : "У одного из проектов нет свободных мест";
-    } else if (this.modal() === "pool" && !this.eligibleFor(expert, this.poolCase()))
-      return "Эксперт другого кейса";
+    } else if (this.modal() === "pool") {
+      if (expert.isOrganizer) return "Организатора можно назначить вручную";
+      if (!this.eligibleFor(expert, this.poolCase())) return "Эксперт другого кейса";
+    }
     return null;
   }
   toggleCandidate(expert: ExpertRow): void {
@@ -1135,9 +1147,14 @@ export class ManagementExpertsComponent {
       },
     );
   }
-  poolExperts(name: string | null): ExpertRow[] {
+  automaticExpertsFor(name: string | null) {
+    return this.joined()
+      .filter(canAssignAutomatically)
+      .filter(e => this.eligibleFor(e, name));
+  }
+  poolExperts(name: string | null) {
     const ids = this.casePools().find(p => p.caseName === name)?.expertIds ?? [];
-    return this.joined().filter(e => ids.includes(Number(e.id)));
+    return this.automaticExpertsFor(name).filter(e => ids.includes(e.id));
   }
   poolNames(name: string | null): string {
     return (
@@ -1149,9 +1166,7 @@ export class ManagementExpertsComponent {
   openPool(name: string | null): void {
     if (this.busy()) return;
     this.poolCase.set(name);
-    this.chosenExperts.set(
-      new Set(this.casePools().find(p => p.caseName === name)?.expertIds ?? []),
-    );
+    this.chosenExperts.set(new Set(this.poolExperts(name).map(e => e.id)));
     this.expertSearch.reset("");
     this.dialogError.set(null);
     this.modal.set("pool");

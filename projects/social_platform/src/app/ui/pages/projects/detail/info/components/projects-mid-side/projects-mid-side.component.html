@@ -23,6 +23,14 @@
     }
   </div>
 
+  @if (programAnswers().length) {
+    <app-program-field-answers
+      class="project__program-answers about"
+      [fields]="programAnswers()"
+      [includeProjectMaterials]="true"
+    />
+  }
+
   @if (profile()) {
     <div #newsEl class="project__news news">
       @if (canEdit()) {

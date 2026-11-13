@@ -76,4 +76,39 @@ describe("ProjectsMidSideComponent", () => {
     expect(paragraph.textContent).not.toContain(tail);
     expect(button.textContent).toContain("Подробнее");
   });
+
+  it("shows read-only submitted answers only while the project has an authorized program context", () => {
+    fixture.componentRef.setInput("project", { id: 1, description: "Текущее описание" } as Project);
+    fixture.detectChanges();
+
+    const page = fixture.nativeElement as HTMLElement;
+    expect(page.querySelector("app-program-field-answers")).toBeNull();
+
+    fixture.componentRef.setInput("programAnswers", [
+      {
+        id: 1,
+        name: "project_description",
+        label: "Описание проекта",
+        fieldType: "textarea",
+        value: "Сданное описание",
+      },
+      {
+        id: 2,
+        name: "brief",
+        label: "Бриф",
+        fieldType: "file",
+        value: "https://example.com/brief.pdf",
+      },
+    ]);
+    fixture.detectChanges();
+
+    const answers = page.querySelector("app-program-field-answers");
+    expect(answers?.textContent).toContain("Сданное описание");
+    expect(answers?.querySelector("a")?.getAttribute("href")).toBe("https://example.com/brief.pdf");
+    expect(answers?.querySelector("input, textarea")).toBeNull();
+
+    fixture.componentRef.setInput("programAnswers", []);
+    fixture.detectChanges();
+    expect(page.querySelector("app-program-field-answers")).toBeNull();
+  });
 });

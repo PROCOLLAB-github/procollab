@@ -7,6 +7,7 @@ export interface ExpertRow {
   email: string;
   avatar?: string | null;
   status: "joined" | "pending" | "expired" | "revoked";
+  isOrganizer?: boolean;
   deliveryStatus?: "queued" | "sent" | "failed";
   assigned: number | null;
   completed: number | null;
@@ -139,6 +140,8 @@ export interface EvaluationProgram {
   assigned?: number;
   completed?: number;
   remaining?: number;
+  canExportRates?: boolean;
+  storageMode?: "legacy_project" | "solution";
 }
 export interface EvaluationPrograms {
   results: EvaluationProgram[];

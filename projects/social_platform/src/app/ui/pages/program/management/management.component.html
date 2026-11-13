@@ -31,7 +31,7 @@
           }
         }
         @if (pilotEvaluationAvailable()) {
-          <a [routerLink]="paths.program.rating(program.id, program.solutionStorageMode)"
+          <a [routerLink]="paths.office.evaluation()" [queryParams]="{ program: program.id }"
             >Оценка проектов</a
           >
         }

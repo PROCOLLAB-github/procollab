@@ -3,20 +3,31 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  ElementRef,
   computed,
   effect,
   inject,
   signal,
   untracked,
-  viewChild,
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { debounceTime, distinctUntilChanged, finalize, forkJoin } from "rxjs";
-import { AlertDirective, AvatarComponent, ButtonDirective, FieldDirective } from "@uilib";
+import {
+  AlertDirective,
+  AvatarComponent,
+  ButtonDirective,
+  CardDirective,
+  DialogBodyDirective,
+  DialogFooterDirective,
+  DialogHeaderComponent,
+  FieldDirective,
+  IconComponent,
+  PaginationComponent,
+  StateComponent,
+  TabsComponent,
+} from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
@@ -33,6 +44,10 @@ import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { evaluationError } from "@utils/evaluation-workspace";
 import { presentationHref } from "@utils/program-case-analytics";
 import { EvaluationNavigationService } from "@api/program/evaluation-navigation.service";
+import { GetProgramFiltersUseCase } from "@api/program/use-cases/get-program-filters.use-case";
+import { ExportFileService } from "@api/export-file/export-file.service";
+import { saveFile } from "@utils/export-file";
+import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
 
 type CabinetTab = "pending" | "completed" | "invitations";
 type CabinetData = EvaluationPrograms & { applications: SolutionCabinetApplications };
@@ -50,8 +65,16 @@ const positive = (value: string | null) => {
     AlertDirective,
     AvatarComponent,
     ButtonDirective,
+    CardDirective,
+    DialogBodyDirective,
+    DialogFooterDirective,
+    DialogHeaderComponent,
     FieldDirective,
+    IconComponent,
     ModalComponent,
+    PaginationComponent,
+    StateComponent,
+    TabsComponent,
     TransientNoticeComponent,
   ],
   templateUrl: "./evaluation-programs.component.html",
@@ -62,6 +85,8 @@ export class EvaluationProgramsComponent {
   readonly navigation = inject(EvaluationNavigationService);
   private readonly api = inject(EvaluationUseCase);
   private readonly applications = inject(GetCabinetApplicationsUseCase);
+  private readonly getFilters = inject(GetProgramFiltersUseCase);
+  private readonly exports = inject(ExportFileService);
   private readonly profile = inject(ProfileInfoService);
   private readonly auth = inject(AuthInfoService);
   private readonly route = inject(ActivatedRoute);
@@ -81,11 +106,24 @@ export class EvaluationProgramsComponent {
     const tab = this.params().get("tab");
     return tab === "completed" || tab === "invitations" ? tab : "pending";
   });
+  readonly selectedProgramId = computed(() => positive(this.params().get("program")));
+  readonly activeFilters = computed(
+    () =>
+      Object.fromEntries(
+        this.params()
+          .keys.filter(key => key.startsWith("filter."))
+          .map(key => [key.slice("filter.".length), this.params().getAll(key).filter(Boolean)])
+          .filter(([, values]) => values.length),
+      ) as Record<string, string[]>,
+  );
   readonly query = computed(
     () => ({
       status: this.tab() === "completed" ? ("completed" as const) : ("pending" as const),
       q: (this.params().get("q") ?? "").trim().slice(0, 200),
-      programId: positive(this.params().get("program")),
+      programId: this.selectedProgramId(),
+      ...(this.selectedProgramId() && Object.keys(this.activeFilters()).length
+        ? { filters: JSON.stringify(this.activeFilters()) }
+        : {}),
       limit: 20,
       offset: ((positive(this.params().get("page")) ?? 1) - 1) * 20,
     }),
@@ -93,8 +131,15 @@ export class EvaluationProgramsComponent {
   );
   readonly search = new FormControl("", { nonNullable: true });
   readonly program = new FormControl("", { nonNullable: true });
-  readonly searchExpanded = signal(false);
-  readonly searchInput = viewChild<ElementRef<HTMLInputElement>>("searchInput");
+  readonly filtersOpen = signal(false);
+  readonly fields = signal<PartnerProgramFields[]>([]);
+  readonly filterError = signal(false);
+  readonly draftFilters = signal<Record<string, string[]>>({});
+  readonly tooManyFilters = computed(
+    () => Object.values(this.draftFilters()).filter(values => values.length).length > 3,
+  );
+  readonly exporting = signal(false);
+  readonly exportError = signal(false);
   readonly selected = signal<EvaluationProgram | null>(null);
   readonly loading = signal(true);
   readonly failed = signal<string | null>(null);
@@ -105,10 +150,28 @@ export class EvaluationProgramsComponent {
   readonly paths = AppRoutes;
   readonly href = presentationHref;
   readonly programs = computed(() => this.data()?.results.filter(p => p.status === "joined") ?? []);
+  readonly selectedProgram = computed(() =>
+    this.programs().find(program => program.id === this.selectedProgramId()),
+  );
+  readonly filtersProgramId = computed(() => {
+    const program = this.selectedProgram();
+    return program?.storageMode !== "solution" ? program?.id : undefined;
+  });
   readonly invitations = computed(
     () => this.data()?.results.filter(p => p.status === "pending") ?? [],
   );
-  readonly filtered = computed(() => !!this.query().q || !!this.query().programId);
+  readonly tabs = computed(() => [
+    {
+      id: "pending",
+      linkText: `Осталось оценить · ${(this.selectedProgramId() ? this.selectedProgram()?.remaining : this.data()?.applications.pending) ?? "—"}`,
+    },
+    {
+      id: "completed",
+      linkText: `Оцененные · ${(this.selectedProgramId() ? this.selectedProgram()?.completed : this.data()?.applications.completed) ?? "—"}`,
+    },
+    { id: "invitations", linkText: `Приглашения · ${this.invitations().length}` },
+  ]);
+  readonly filtered = computed(() => !!this.query().q || !!this.query().filters);
   readonly rangeStart = computed(() =>
     this.data()?.applications.results.length ? this.query().offset + 1 : 0,
   );
@@ -134,6 +197,8 @@ export class EvaluationProgramsComponent {
   });
   readonly allCompleted = computed(() => {
     const p = this.data()?.applications;
+    const program = this.selectedProgram();
+    if (this.selectedProgramId()) return !!program?.completed && !program.remaining;
     return !!p && !p.pending && !!p.completed && !p.unavailable;
   });
 
@@ -143,7 +208,28 @@ export class EvaluationProgramsComponent {
       .subscribe(q => this.navigate({ q: q.trim() || null, page: null }));
     this.program.valueChanges
       .pipe(takeUntilDestroyed())
-      .subscribe(program => this.navigate({ program: program || null, page: null }));
+      .subscribe(program =>
+        this.navigate({ ...this.clearFieldFilters(), program: program || null, page: null }),
+      );
+    effect(onCleanup => {
+      const programId = this.filtersProgramId();
+      this.filtersOpen.set(false);
+      this.fields.set([]);
+      this.filterError.set(false);
+      this.exportError.set(false);
+      if (!programId) return;
+      const request = this.getFilters.execute(programId).subscribe(result => {
+        this.filterError.set(!result.ok);
+        this.fields.set(
+          result.ok
+            ? result.value.filter(field =>
+                ["select", "radio", "checkbox"].includes(field.fieldType),
+              )
+            : [],
+        );
+      });
+      onCleanup(() => request.unsubscribe());
+    });
     effect(() => {
       const q = this.query();
       untracked(() => {
@@ -219,25 +305,65 @@ export class EvaluationProgramsComponent {
           this.open(invitation);
         });
     });
-    effect(() => {
-      if (this.searchExpanded()) this.searchInput()?.nativeElement.focus();
-    });
   }
   reload(): void {
     this.revision.update(n => n + 1);
   }
-  navigate(queryParams: Record<string, string | number | null>): void {
+  navigate(queryParams: Record<string, string | string[] | number | null>): void {
     void this.router.navigate([], {
       relativeTo: this.route,
       queryParams,
       queryParamsHandling: "merge",
     });
   }
-  setTab(tab: CabinetTab): void {
-    this.navigate({ tab: tab === "pending" ? null : tab, page: null });
+  setTab(tab: string): void {
+    if (tab === "pending" || tab === "completed" || tab === "invitations") {
+      this.navigate({ tab: tab === "pending" ? null : tab, page: null });
+    }
   }
   resetFilters(): void {
-    this.navigate({ q: null, program: null, page: null });
+    this.navigate({ ...this.clearFieldFilters(), q: null, page: null });
+  }
+  private clearFieldFilters() {
+    return Object.fromEntries(
+      this.params()
+        .keys.filter(key => key.startsWith("filter."))
+        .map(key => [key, null]),
+    );
+  }
+  openFilters(): void {
+    this.draftFilters.set(this.activeFilters());
+    this.filtersOpen.set(true);
+  }
+  setFieldFilter(name: string, event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
+    this.draftFilters.update(filters => ({ ...filters, [name]: value ? [value] : [] }));
+  }
+  applyFilters(): void {
+    if (this.tooManyFilters()) return;
+    const filters = Object.entries(this.draftFilters()).filter(([, values]) => values.length);
+    this.filtersOpen.set(false);
+    this.navigate({
+      ...this.clearFieldFilters(),
+      ...Object.fromEntries(filters.map(([name, values]) => [`filter.${name}`, values])),
+      page: null,
+    });
+  }
+  exportRates(): void {
+    const program = this.selectedProgram();
+    if (!program?.canExportRates || this.exporting()) return;
+    this.exportError.set(false);
+    this.exporting.set(true);
+    this.exports
+      .exportProgramRates(program.id)
+      .pipe(
+        finalize(() => this.exporting.set(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: blob => saveFile(blob, "rates", program.name),
+        error: () => this.exportError.set(true),
+      });
   }
   page(delta: number): void {
     this.navigate({ page: Math.max(1, this.query().offset / 20 + 1 + delta) });
@@ -245,7 +371,7 @@ export class EvaluationProgramsComponent {
   evaluationPath(application: SolutionApplicationRef): string {
     return application.kind === "solution"
       ? `/office/program/${application.programId}/solutions/${application.solutionId}/evaluation`
-      : `${AppRoutes.program.projectsRating(application.programId)}/${application.projectId}`;
+      : AppRoutes.office.projectEvaluation(application.programId, application.projectId);
   }
   initials(name: string): string {
     return name

@@ -20,6 +20,7 @@ import {
 import { solutionError } from "@api/solution/solution-error";
 import { ExpertRow } from "@domain/program/evaluation-workspace.model";
 import { SolutionAllocationPlan } from "@domain/solution/solution-contract.model";
+import { canAssignAutomatically } from "@utils/evaluation-workspace";
 import { ButtonDirective, ChoiceDirective, AlertDirective, IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
@@ -48,6 +49,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
         Выбрано заявок: {{ request()?.ids?.length }}. Назначения проверяются по кейсам, командам и
         сохраненным оценкам.
       </p>
+      <p>Организаторам можно назначить решения вручную на вкладке «Эксперты».</p>
       @if (loading()) {
         <p role="status">Загружаем экспертов…</p>
       }
@@ -63,7 +65,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
         >
       }
       @if (!loading() && !experts().length && !error()) {
-        <p>В программе пока нет принявших приглашение экспертов.</p>
+        <p>В программе пока нет экспертов для автоматического распределения.</p>
       }
       @if (error()) {
         <p appAlert="error" role="alert">{{ error() }}</p>
@@ -159,9 +161,7 @@ export class SolutionAllocationComponent {
       .pipe(takeUntil(this.cancelled), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: data => {
-          this.experts.set(
-            data.experts.filter(e => e.status === "joined" && typeof e.id === "number"),
-          );
+          this.experts.set(data.experts.filter(canAssignAutomatically));
           this.revision.set(data.revision);
           this.loading.set(false);
           this.selected.update(
@@ -175,7 +175,7 @@ export class SolutionAllocationComponent {
       });
   }
   toggle(id: number): void {
-    if (this.busy()) return;
+    if (this.busy() || !this.experts().some(e => e.id === id)) return;
     this.cancelled.next();
     this.loading.set(false);
     this.plan.set(null);

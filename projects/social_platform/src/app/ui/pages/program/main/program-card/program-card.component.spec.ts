@@ -61,9 +61,22 @@ describe("ProgramCardComponent", () => {
     setProgram({ draft: false });
     expect(element().querySelector(".card__registration")?.textContent).toContain("Регистрация до");
     expect(element().textContent).toContain("Опубликована");
-    expect(element().querySelector("a")?.getAttribute("href")).toBe(
+    expect(element().querySelector(".program-card__actions a")?.getAttribute("href")).toBe(
       "/office/program/7/management/analytics",
     );
+  });
+  it("opens published cards separately from Manage on desktop and mobile", () => {
+    fixture.componentRef.setInput("management", true);
+    for (const wide of [true, false]) {
+      desktop.set(wide);
+      setProgram({ draft: false });
+      const card = element().querySelector<HTMLAnchorElement>(".program-card__link")!;
+      const manage = element().querySelector<HTMLAnchorElement>(".program-card__actions a")!;
+      expect(card.getAttribute("href")).toBe("/office/program/7");
+      expect(manage.getAttribute("href")).toBe("/office/program/7/management/analytics");
+      expect(card.contains(manage)).toBe(false);
+      expect(card.querySelector("a")).toBeNull();
+    }
   });
   it("uses the saved image and keeps the native mobile avatar", () => {
     desktop.set(false);

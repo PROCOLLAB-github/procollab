@@ -5,6 +5,7 @@ import { OfficeComponent } from "../../pages/office/office.component";
 import { ProfileEditComponent } from "../../pages/profile/edit/edit.component";
 import { MembersComponent } from "@ui/pages/members/members.component";
 import { MembersResolver } from "@ui/pages/members/members.resolver";
+import { canLeaveManagement } from "../program/management-leave.guard";
 
 /** Конфигурация маршрутов для модуля офиса. */
 export const OFFICE_ROUTES: Routes = [
@@ -16,6 +17,14 @@ export const OFFICE_ROUTES: Routes = [
     path: "",
     component: OfficeComponent,
     children: [
+      {
+        path: "evaluation/:programId/projects/:projectId",
+        canDeactivate: [canLeaveManagement],
+        loadComponent: () =>
+          import("../../pages/program/rating/rating-workspace.component").then(
+            c => c.RatingWorkspaceComponent,
+          ),
+      },
       {
         path: "evaluation",
         loadComponent: () =>

@@ -16,6 +16,7 @@ import { ProjectRate } from "@domain/project/project-rate";
 import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion";
 import { AppRoutes } from "@api/paths/app-routes";
 import { presentationHref } from "@utils/program-case-analytics";
+import { ProgramFieldAnswersComponent } from "@ui/widgets/program-field-answers/program-field-answers.component";
 import { ProjectRatingComponent } from "./project-rating/project-rating.component";
 import { RatingCardService } from "./services/rating-card.service";
 
@@ -32,6 +33,7 @@ import { RatingCardService } from "./services/rating-card.service";
     IconComponent,
     ModalComponent,
     ProjectRatingComponent,
+    ProgramFieldAnswersComponent,
   ],
   providers: [RatingCardService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,8 +45,20 @@ export class RatingCardComponent {
     const criteria = this.state.project()?.criterias ?? [];
     return [...criteria.filter(c => c.type !== "str"), ...criteria.filter(c => c.type === "str")];
   });
+  readonly hasSavedAnswers = computed(() =>
+    this.orderedCriteria().some(criterion => criterion.value != null && criterion.value !== ""),
+  );
+  readonly description = computed(() => {
+    const project = this.state.project();
+    const field = project?.programFields?.find(item => item.name === "project_description");
+    return field ? field.value : project?.description;
+  });
+  readonly presentation = computed(() => {
+    const project = this.state.project();
+    const field = project?.programFields?.find(item => item.name === "project_presentation");
+    return presentationHref(field ? field.value : (project?.presentationAddress ?? null));
+  });
   protected readonly AppRoutes = AppRoutes;
-  protected readonly presentationHref = presentationHref;
 
   @Input({ required: true }) set project(value: ProjectRate | null) {
     this.state.initProject(value);
@@ -61,8 +75,11 @@ export class RatingCardComponent {
   }
 
   protected handleRateButtonClick(): void {
-    if (!this.editor()?.validateAndFocus()) return;
-    if (this.state.canOpenModal() && !this.state.criteriaChanged())
+    if (
+      this.state.canOpenModal() &&
+      !this.state.criteriaChanged() &&
+      this.editor()?.validateAndFocus()
+    )
       this.state.showConfirmRateModal.set(true);
   }
   protected confirmRateProject(): void {

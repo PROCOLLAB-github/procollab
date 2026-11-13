@@ -329,26 +329,31 @@ describe("Списки управления программой в DOM", () => 
   }
 
   it("shows the real evaluation link only for the configured pilot and keeps the current mobile option", async () => {
-    const { state, harness, element, instance } = await setup("overall-results");
+    const { component, state, harness, element, instance } = await setup("overall-results");
     state.program.set({ ...program, solutionStorageMode: "legacy_project" });
     harness.detectChanges();
-    expect(element().querySelector('a[href$="/projects-rating"]')).toBeNull();
+    expect(element().querySelector('a[href="/office/evaluation?program=1"]')).toBeNull();
     instance.enabled.set(true);
     instance.programId.set(1);
     harness.detectChanges();
     await harness.fixture.whenStable();
     harness.detectChanges();
-    expect(element().querySelector('a[href$="/projects-rating"]')?.textContent).toContain(
-      "Оценка проектов",
-    );
+    expect(
+      element().querySelector('a[href="/office/evaluation?program=1"]')?.textContent,
+    ).toContain("Оценка проектов");
     const select = element().querySelector(
       ".management__evaluation-select select",
     ) as HTMLSelectElement;
     expect(select.value).toBe("overall-results");
     expect([...select.options].map(o => o.textContent)).toContain("Оценка проектов");
+    const navigation = vi.spyOn(TestBed.inject(Router), "navigate").mockResolvedValue(true);
+    component.changeEvaluationSection("projects-rating");
+    expect(navigation).toHaveBeenCalledWith(["/office/evaluation"], {
+      queryParams: { program: 1 },
+    });
     instance.programId.set(2);
     harness.detectChanges();
-    expect(element().querySelector('a[href$="/projects-rating"]')).toBeNull();
+    expect(element().querySelector('a[href="/office/evaluation?program=1"]')).toBeNull();
   });
 
   it("общий рейтинг входит в оценивание и не запускается для другого контура", async () => {

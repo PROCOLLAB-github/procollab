@@ -19,6 +19,8 @@ import { EventBus } from "@domain/shared/event-bus";
 import { loggedOut } from "@domain/auth/events/logged-out.event";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
 import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
+import { isEvaluationEntry } from "@utils/evaluation-entry";
 
 /** Стартовый сервис офисной оболочки: справочники, навигация, чат-статусы, приглашения. */
 @Injectable()
@@ -35,6 +37,7 @@ export class OfficeInfoService {
   private readonly programShellInfoService = inject(ProgramShellInfoService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
   private readonly profileInfoService = inject(ProfileInfoService);
+  private readonly instance = inject(InstanceInfoService);
 
   private readonly chatUnreadState = inject(ChatUnreadStateService);
   private readonly connectChatUseCase = inject(ConnectChatUseCase);
@@ -70,9 +73,7 @@ export class OfficeInfoService {
       )
       .subscribe(profile => {
         this.officeUIInfoService.applyCreateNavItems(profile!.id);
-        const expertRoute =
-          this.router.url.startsWith("/office/evaluation") ||
-          /^\/office\/program\/\d+\/projects-rating(?:[/?]|$)/.test(this.router.url);
+        const expertRoute = isEvaluationEntry(this.router.url, this.instance.enabled());
         const expertEntry = expertRoute && profile!.relations.hasEvaluationAccess === true;
         if (!profile!.doesCompleted() && !expertEntry) {
           this.router
