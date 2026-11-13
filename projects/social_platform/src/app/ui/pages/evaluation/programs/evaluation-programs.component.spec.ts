@@ -8,6 +8,8 @@ import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 import { EvaluationPrograms } from "@domain/program/evaluation-workspace.model";
 import { GetCabinetApplicationsUseCase } from "@api/solution/use-cases/solution-evaluation.use-cases";
+import { GetProgramFiltersUseCase } from "@api/program/use-cases/get-program-filters.use-case";
+import { ExportFileService } from "@api/export-file/export-file.service";
 import { SolutionCabinetApplications } from "@domain/solution/solution-contract.model";
 import { fail, ok } from "@domain/shared/result.type";
 import { EvaluationProgramsComponent } from "./evaluation-programs.component";
@@ -91,6 +93,8 @@ function setup(
       },
       { provide: EvaluationUseCase, useValue: api },
       { provide: GetCabinetApplicationsUseCase, useValue: applications },
+      { provide: GetProgramFiltersUseCase, useValue: { execute: () => of(ok([])) } },
+      { provide: ExportFileService, useValue: {} },
       { provide: ProfileInfoService, useValue: profiles },
       { provide: AuthInfoService, useValue: auth },
     ],
@@ -128,7 +132,7 @@ describe("Кабинет эксперта: только реальные наз�
       fixture.nativeElement.querySelectorAll(".cabinet__project a"),
     );
     expect(links.map(link => link.getAttribute("href"))).toEqual([
-      expect.stringContaining("/office/program/7/projects-rating/42?returnUrl="),
+      expect.stringContaining("/office/evaluation/7/projects/42?returnUrl="),
       expect.stringContaining("/office/program/9/solutions/42/evaluation?returnUrl="),
     ]);
     expect(fixture.nativeElement.textContent).toContain("Осталось оценить · 2");
@@ -214,7 +218,7 @@ describe("Кабинет эксперта: только реальные наз�
       offset: 0,
     });
     const link = fixture.nativeElement.querySelector(".cabinet__project a") as HTMLAnchorElement;
-    expect(link.getAttribute("href")).toContain("/office/program/7/projects-rating/42?returnUrl=");
+    expect(link.getAttribute("href")).toContain("/office/evaluation/7/projects/42?returnUrl=");
     expect(fixture.nativeElement.textContent).toContain("Осталось 1 из 2");
     expect(fixture.nativeElement.textContent).not.toContain("Продолжить");
   });

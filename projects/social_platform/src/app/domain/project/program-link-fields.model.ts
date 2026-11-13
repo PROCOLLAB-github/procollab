@@ -6,6 +6,11 @@ export class ProgramLinkField extends PartnerProgramFields {
   value!: string | null;
 }
 
+export type ProgramFieldAnswer = Pick<
+  ProgramLinkField,
+  "id" | "name" | "label" | "fieldType" | "value"
+>;
+
 /** Authoritative definitions and saved values for one Project × Program relation. */
 export class ProgramLinkFields {
   programLinkId!: number;

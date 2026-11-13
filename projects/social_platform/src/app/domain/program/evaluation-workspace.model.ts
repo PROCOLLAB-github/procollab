@@ -140,6 +140,8 @@ export interface EvaluationProgram {
   assigned?: number;
   completed?: number;
   remaining?: number;
+  canExportRates?: boolean;
+  storageMode?: "legacy_project" | "solution";
 }
 export interface EvaluationPrograms {
   results: EvaluationProgram[];

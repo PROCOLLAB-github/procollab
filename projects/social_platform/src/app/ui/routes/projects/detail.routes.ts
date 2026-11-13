@@ -2,7 +2,10 @@
 
 import { Routes } from "@angular/router";
 import { ProjectInfoComponent } from "../../pages/projects/detail/info/info.component";
-import { ProjectInfoResolver } from "../../pages/projects/detail/info/info.resolver";
+import {
+  ProjectInfoResolver,
+  ProjectProgramAnswersResolver,
+} from "../../pages/projects/detail/info/info.resolver";
 import { ProjectResponsesResolver } from "../../pages/projects/detail/work-section/responses.resolver";
 import { ProjectChatComponent } from "../../pages/projects/detail/chat/chat.component";
 import { ProjectTeamComponent } from "../../pages/projects/detail/team/team.component";
@@ -37,7 +40,9 @@ export const PROJECT_DETAIL_ROUTES: Routes = [
         component: ProjectInfoComponent,
         resolve: {
           data: ProjectInfoResolver,
+          programAnswers: ProjectProgramAnswersResolver,
         },
+        runGuardsAndResolvers: "paramsOrQueryParamsChange",
         children: [
           {
             path: "news/:newsId",

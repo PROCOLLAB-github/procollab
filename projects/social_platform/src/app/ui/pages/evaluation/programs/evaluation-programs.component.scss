@@ -56,6 +56,13 @@
 
     color: var(--ui-text-muted);
   }
+
+  a {
+    @include typography.body-12;
+
+    width: fit-content;
+    color: var(--accent-text);
+  }
 }
 
 .cabinet__tabs {
@@ -68,6 +75,22 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 220px);
   gap: var(--ui-space-sm);
   min-width: 0;
+}
+
+.cabinet__toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+  gap: var(--ui-space-sm);
+}
+
+.cabinet__filter {
+  display: grid;
+  gap: var(--ui-space-xs);
+
+  .ui-field {
+    @include ui-foundation.control;
+  }
 }
 
 .cabinet__search {

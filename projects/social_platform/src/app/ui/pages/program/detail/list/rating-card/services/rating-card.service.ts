@@ -75,18 +75,18 @@ export class RatingCardService {
 
   readonly isLimitReached = computed(() => {
     const p = this.project();
-    return !!p && !p.managedEvaluation && p.ratedCount >= p.maxRates;
+    return !!p && !p.managedEvaluation && p.maxRates > 0 && p.ratedCount >= p.maxRates;
   });
-
-  readonly canEdit = computed(() => !this.evaluationDateExpired());
 
   readonly canRate = computed(() => {
     const project = this.project();
-    if (project?.criteriaRevision && !project.criterias.length) return false;
-    if (this.evaluationDateExpired()) return false;
-    if (this.isLimitReached() && !this.userRatedThisProject()) return false;
-    return true;
+    if (!project || this.evaluationDateExpired()) return false;
+    if (typeof project.canRate === "boolean") return project.canRate;
+    if (project.criteriaRevision && !project.criterias.length) return false;
+    return !this.isLimitReached() || !!this.userRatedThisProject();
   });
+
+  readonly canEdit = this.canRate;
 
   readonly canOpenModal = computed(() => {
     if (this.projectConfirmed() && this.userRatedThisProject()) return false;
@@ -107,7 +107,7 @@ export class RatingCardService {
 
   readonly isRatingFormDisabled = computed(
     () =>
-      this.evaluationDateExpired() ||
+      !this.canRate() ||
       ((this.projectRated() || this.projectConfirmed()) && this.isRatedByCurrentUser()),
   );
 
@@ -117,11 +117,7 @@ export class RatingCardService {
     () => this.projectConfirmed() && this.canEdit() && this.userRatedThisProject(),
   );
 
-  readonly isButtonDisabled = computed(() => {
-    if (this.isLimitReached() && !this.userRatedThisProject()) return true;
-    if (this.evaluationDateExpired()) return true;
-    return !this.canRate();
-  });
+  readonly isButtonDisabled = computed(() => !this.canRate());
 
   readonly buttonColor = computed<"green" | "primary">(() =>
     this.projectConfirmed() && this.userRatedThisProject() ? "green" : "primary",
@@ -135,6 +131,8 @@ export class RatingCardService {
 
   readonly buttonTooltip = computed(() => {
     if (this.evaluationDateExpired()) return "Срок оценивания завершен";
+    if (this.project()?.canRate === false)
+      return this.project()?.blockedReason || "Оценка недоступна";
     if (this.isLimitReached() && !this.userRatedThisProject())
       return "Достигнут максимальный лимит оценок";
     if (this.userRatedThisProject()) return "Нажмите для переоценки";

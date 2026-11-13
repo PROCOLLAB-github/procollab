@@ -306,6 +306,7 @@ export type SolutionCabinetQuery = {
   status?: "pending" | "completed";
   q?: string;
   programId?: number;
+  filters?: string;
   limit?: number;
   offset?: number;
 };

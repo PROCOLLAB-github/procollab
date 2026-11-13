@@ -189,7 +189,7 @@ describe("Detail cleanup actions", () => {
     expect(
       actions.querySelector('a[href="/office/evaluation?invitation=34"]')?.textContent,
     ).toContain("Принять приглашение");
-    expect(actions.querySelector('a[href$="/projects-rating"]')?.textContent).toContain(
+    expect(actions.querySelector('a[href="/office/evaluation?program=12"]')?.textContent).toContain(
       "оценка проектов",
     );
     expect(actions.textContent).toContain("управление программой");

@@ -13,7 +13,7 @@ describe("NotificationListComponent", () => {
   it.each([
     ["participants-without-visit", "/office/program/2"],
     ["participants-without-team", "/office/program/2/members"],
-    ["projects-awaiting-evaluation", "/office/program/2/projects-rating"],
+    ["projects-awaiting-evaluation", "/office/evaluation?program=2"],
   ] as const)("reminder %s opens recipient action and marks it read", async (category, url) => {
     const notice: Notification = {
       id: "program_attention:1",

@@ -3,6 +3,9 @@
   <header class="cabinet__title">
     <h1>Кабинет эксперта</h1>
     <p>Все работы, назначенные вам для оценки</p>
+    @if (selectedProgram(); as current) {
+      <a [routerLink]="paths.program.detail(current.id)">На страницу программы</a>
+    }
   </header>
   <app-tabs
     class="cabinet__tabs"
@@ -31,7 +34,27 @@
           <option [value]="p.id">{{ p.name }}</option>
         }
       </select>
+      @if (filtersProgramId() || selectedProgram()?.canExportRates) {
+        <div class="cabinet__toolbar-actions">
+          @if (filtersProgramId()) {
+            <button type="button" appButton="secondary" (click)="openFilters()">Фильтры</button>
+          }
+          @if (selectedProgram()?.canExportRates) {
+            <button
+              type="button"
+              appButton="secondary"
+              [disabled]="exporting()"
+              (click)="exportRates()"
+            >
+              Выгрузить оценки
+            </button>
+          }
+        </div>
+      }
     </div>
+    @if (exportError()) {
+      <p appAlert="error" role="alert">Не удалось выгрузить оценки. Попробуйте еще раз.</p>
+    }
   }
   @if (accepted()) {
     <app-transient-notice [source]="accepted" (dismissed)="accepted.set(false)"
@@ -128,7 +151,13 @@
         }
       </section>
     } @empty {
-      @if (filtered()) {
+      @if (selectedProgramId() && !selectedProgram()) {
+        <app-state appCard title="Эта программа недоступна для оценки">
+          <button type="button" appButton="secondary" (click)="program.setValue('')">
+            Все программы
+          </button>
+        </app-state>
+      } @else if (filtered()) {
         <app-state
           appCard
           icon="search"
@@ -201,6 +230,64 @@
     }
   }
 </main>
+<app-modal
+  [open]="filtersOpen()"
+  (openChange)="filtersOpen.set(false)"
+  labelledBy="cabinet-filters-title"
+  bodyClass="modal__body--no-flex"
+>
+  <section class="cabinet__dialog">
+    <app-dialog-header
+      title="Фильтры проектов"
+      titleId="cabinet-filters-title"
+      [closable]="false"
+    />
+    <div appDialogBody class="cabinet__dialog-body">
+      @for (field of fields(); track field.id) {
+        <label class="cabinet__filter">
+          {{ field.label }}
+          <select appField (change)="setFieldFilter(field.name, $event)">
+            <option value="" [selected]="!draftFilters()[field.name]?.length">Все варианты</option>
+            @if (field.fieldType === "checkbox") {
+              <option value="true" [selected]="draftFilters()[field.name]?.includes('true')">
+                Да
+              </option>
+              <option value="false" [selected]="draftFilters()[field.name]?.includes('false')">
+                Нет
+              </option>
+            } @else {
+              @for (option of field.options; track option) {
+                <option [value]="option" [selected]="draftFilters()[field.name]?.includes(option)">
+                  {{ option }}
+                </option>
+              }
+            }
+          </select>
+        </label>
+      } @empty {
+        <p>
+          {{
+            filterError() ? "Не удалось загрузить фильтры." : "Дополнительные фильтры не настроены."
+          }}
+        </p>
+      }
+    </div>
+    <footer appDialogFooter class="cabinet__actions">
+      @if (tooManyFilters()) {
+        <p role="status">Выберите не больше трех фильтров.</p>
+      }
+      <button type="button" appButton="secondary" (click)="draftFilters.set({})">Сбросить</button>
+      <button
+        type="button"
+        appButton="primary"
+        [disabled]="tooManyFilters()"
+        (click)="applyFilters()"
+      >
+        Применить
+      </button>
+    </footer>
+  </section>
+</app-modal>
 <app-modal
   [open]="selected() !== null"
   (openChange)="close()"
