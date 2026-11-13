@@ -4,82 +4,47 @@
     <h1>Кабинет эксперта</h1>
     <p>Все работы, назначенные вам для оценки</p>
   </header>
-  <nav class="cabinet__tabs" aria-label="Работы эксперта">
-    <button
-      type="button"
-      [appButton]="tab() === 'pending' ? 'primary' : 'secondary'"
-      [attr.aria-current]="tab() === 'pending' ? 'page' : null"
-      (click)="setTab('pending')"
-    >
-      Осталось оценить · {{ data()?.applications?.pending ?? "—" }}
-    </button>
-    <button
-      type="button"
-      [appButton]="tab() === 'completed' ? 'primary' : 'secondary'"
-      [attr.aria-current]="tab() === 'completed' ? 'page' : null"
-      (click)="setTab('completed')"
-    >
-      Оцененные · {{ data()?.applications?.completed ?? "—" }}
-    </button>
-    <button
-      class="cabinet__invitations cabinet__invitations--desktop"
-      type="button"
-      appButton="secondary"
-      [attr.aria-current]="tab() === 'invitations' ? 'page' : null"
-      (click)="setTab('invitations')"
-    >
-      Приглашения · {{ invitations().length }}
-    </button>
-  </nav>
-  <div class="cabinet__toolbar">
-    @if (tab() !== "invitations") {
-      <button
-        class="cabinet__search-toggle"
-        type="button"
-        appButton="secondary"
-        [attr.aria-expanded]="searchExpanded()"
-        aria-controls="cabinet-search"
-        (click)="searchExpanded.set(!searchExpanded())"
-      >
-        Поиск
-      </button>
-      <label class="cabinet__search" [class.cabinet__search--expanded]="searchExpanded()"
-        ><span class="cabinet__sr-only">Поиск по названию работы</span
-        ><input
-          #searchInput
-          id="cabinet-search"
+  <app-tabs
+    class="cabinet__tabs"
+    label="Работы эксперта"
+    appearance="underline"
+    [items]="tabs()"
+    [active]="tab()"
+    (selected)="setTab($event)"
+  />
+  @if (tab() !== "invitations") {
+    <div class="cabinet__toolbar">
+      <div class="cabinet__search">
+        <i appIcon icon="search" appSquare="16" aria-hidden="true"></i>
+        <input
           appField
           type="search"
           [formControl]="search"
           maxlength="200"
           placeholder="Поиск по названию работы"
-      /></label>
+          aria-label="Поиск по названию работы"
+        />
+      </div>
       <select class="cabinet__program" appField [formControl]="program" aria-label="Программа">
         <option value="">Все программы</option>
         @for (p of programs(); track p.id) {
           <option [value]="p.id">{{ p.name }}</option>
         }
       </select>
-    }
-    <button
-      class="cabinet__invitations cabinet__invitations--mobile"
-      type="button"
-      appButton="secondary"
-      [attr.aria-current]="tab() === 'invitations' ? 'page' : null"
-      (click)="setTab('invitations')"
-    >
-      Приглашения · {{ invitations().length }}
-    </button>
-  </div>
+    </div>
+  }
   @if (accepted()) {
     <app-transient-notice [source]="accepted" (dismissed)="accepted.set(false)"
       >Приглашение принято</app-transient-notice
     >
   }
   @if (failed()) {
-    <section class="cabinet__empty" role="alert">
-      <h2>Не удалось загрузить кабинет</h2>
-      <p>{{ failed() }}</p>
+    <app-state
+      appCard
+      kind="error"
+      title="Не удалось загрузить кабинет"
+      [description]="failed() ?? ''"
+    >
       @if (unauthorized()) {
         <a appButton="secondary" routerLink="/auth/login" [queryParams]="{ returnUrl: router.url }"
           >Войти в аккаунт</a
@@ -87,12 +52,12 @@
       } @else {
         <button type="button" appButton="secondary" (click)="reload()">Повторить</button>
       }
-    </section>
+    </app-state>
   } @else if (loading()) {
-    <p class="cabinet__loading" role="status" aria-busy="true">Загружаем работы…</p>
+    <app-state appCard kind="loading" title="Загружаем работы…" />
   } @else if (tab() === "invitations") {
     @for (p of invitations(); track p.invitationId) {
-      <article class="cabinet__invitation">
+      <article appCard class="cabinet__invitation">
         <div class="cabinet__identity">
           <app-avatar
             [url]="href(p.imageAddress) ?? undefined"
@@ -108,16 +73,20 @@
         <button type="button" appButton="secondary" (click)="open(p)">Принять приглашение</button>
       </article>
     } @empty {
-      <section class="cabinet__empty">
-        <h2>Нет новых приглашений</h2>
-        <p>Приглашения от организаторов появятся здесь.</p>
-      </section>
+      <app-state
+        appCard
+        icon="empty-mail"
+        title="Нет новых приглашений"
+        description="Приглашения от организаторов появятся здесь."
+      />
     }
   } @else {
     @for (group of groups(); track group.program.id) {
-      <section class="cabinet__group" [attr.aria-label]="group.program.name">
+      <section appCard class="cabinet__group" [attr.aria-label]="group.program.name">
         <header class="cabinet__group-heading">
-          <a [routerLink]="paths.program.detail(group.program.id)">{{ group.program.name }}</a>
+          <h2>
+            <a [routerLink]="paths.program.detail(group.program.id)">{{ group.program.name }}</a>
+          </h2>
           <div class="cabinet__meta">
             <span
               >{{ tab() === "completed" ? "Оценено" : "Осталось" }}
@@ -146,76 +115,88 @@
             </div>
             @if (row.canRate || row.isCompleted) {
               <a
-                appButton="secondary"
+                [appButton]="row.isCompleted ? 'secondary' : 'primary'"
                 [routerLink]="evaluationPath(row.application)"
                 [queryParams]="{ returnUrl: router.url }"
                 (click)="navigation.remember(router.url)"
                 >{{ row.isCompleted ? "Посмотреть" : "Оценить" }}</a
               >
             } @else {
-              <button type="button" appButton="secondary" disabled>Оценить</button>
+              <button type="button" appButton="primary" disabled>Оценить</button>
             }
           </article>
         }
       </section>
     } @empty {
-      <section class="cabinet__empty">
-        @if (filtered()) {
-          <h2>Работы не найдены</h2>
-          <p>Попробуйте изменить поисковый запрос или программу.</p>
+      @if (filtered()) {
+        <app-state
+          appCard
+          icon="search"
+          title="Работы не найдены"
+          description="Попробуйте изменить поисковый запрос или программу."
+        >
           <button type="button" appButton="secondary" (click)="resetFilters()">
             Сбросить фильтры
           </button>
-        } @else if (query().offset > 0) {
-          <h2>На этой странице нет работ</h2>
+        </app-state>
+      } @else if (query().offset > 0) {
+        <app-state appCard title="На этой странице нет работ">
           <button type="button" appButton="secondary" (click)="navigate({ page: null })">
             На первую страницу
           </button>
-        } @else if (allCompleted() && tab() === "pending") {
-          <h2>Все работы оценены</h2>
-          <p>Спасибо за вашу работу!</p>
+        </app-state>
+      } @else if (allCompleted() && tab() === "pending") {
+        <app-state
+          appCard
+          icon="circle-check"
+          title="Все работы оценены"
+          description="Спасибо за вашу работу!"
+        >
           <button type="button" appButton="secondary" (click)="setTab('completed')">
             Посмотреть оценки
           </button>
-        } @else if (tab() === "completed") {
-          <h2>Пока нет оцененных работ</h2>
-          <p>После отправки оценки работа появится здесь.</p>
-        } @else if (!data()?.hasAccess) {
-          <h2>Пока нет программ для оценки</h2>
-          <p>Когда организатор пригласит вас экспертом, приглашение появится здесь.</p>
-        } @else if (data()?.applications?.unavailable) {
-          <h2>Пока нет доступных работ</h2>
-          <p>Некоторые назначения недоступны. Уточните у организатора программы.</p>
-        } @else {
-          <h2>Пока нет назначенных работ</h2>
-          <p>Когда организатор назначит вам работы, они появятся здесь.</p>
+        </app-state>
+      } @else if (tab() === "completed") {
+        <app-state
+          appCard
+          title="Пока нет оцененных работ"
+          description="После отправки оценки работа появится здесь."
+        />
+      } @else if (!data()?.hasAccess) {
+        <app-state
+          appCard
+          title="Пока нет программ для оценки"
+          description="Когда организатор пригласит вас экспертом, приглашение появится здесь."
+        />
+      } @else if (data()?.applications?.unavailable) {
+        <app-state
+          appCard
+          title="Пока нет доступных работ"
+          description="Некоторые назначения недоступны. Уточните у организатора программы."
+        />
+      } @else {
+        <app-state
+          appCard
+          title="Пока нет назначенных работ"
+          description="Когда организатор назначит вам работы, они появятся здесь."
+        >
           @if (invitations().length) {
             <button type="button" appButton="secondary" (click)="setTab('invitations')">
               Посмотреть приглашения
             </button>
           }
-        }
-      </section>
+        </app-state>
+      }
     }
     @if ((data()?.applications?.count ?? 0) > 20 || query().offset > 0) {
-      <nav class="cabinet__pagination" aria-label="Страницы работ">
-        <button
-          type="button"
-          appButton="secondary"
-          [disabled]="query().offset === 0"
-          (click)="page(-1)"
-        >
-          Назад</button
-        ><span>{{ rangeStart() }}–{{ rangeEnd() }} из {{ data()?.applications?.count }}</span
-        ><button
-          type="button"
-          appButton="secondary"
-          [disabled]="rangeEnd() >= (data()?.applications?.count ?? 0)"
-          (click)="page(1)"
-        >
-          Далее
-        </button>
-      </nav>
+      <app-pagination
+        [loading]="loading()"
+        [previousDisabled]="query().offset === 0"
+        [nextDisabled]="rangeEnd() >= (data()?.applications?.count ?? 0)"
+        (previous)="page(-1)"
+        (next)="page(1)"
+        >{{ rangeStart() }}–{{ rangeEnd() }} из {{ data()?.applications?.count }}</app-pagination
+      >
     }
   }
 </main>
@@ -223,20 +204,28 @@
   [open]="selected() !== null"
   (openChange)="close()"
   labelledBy="evaluation-accept-title"
-  bodyClass="modal__body--no-flex evaluation-accept-modal"
-  ><div class="cabinet__dialog">
-    <h2 id="evaluation-accept-title">Принять приглашение эксперта?</h2>
-    <strong>{{ selected()?.name }}</strong>
-    <p>Вы присоединитесь к программе как эксперт с почтой {{ selected()?.email }}.</p>
-    @if (error()) {
-      <p appAlert="error" role="alert">{{ error() }}</p>
-    }
-    <div class="cabinet__actions">
+  bodyClass="modal__body--no-flex"
+>
+  <section class="cabinet__dialog">
+    <app-dialog-header
+      title="Принять приглашение эксперта?"
+      titleId="evaluation-accept-title"
+      [closable]="false"
+    />
+    <div appDialogBody class="cabinet__dialog-body">
+      <strong>{{ selected()?.name }}</strong>
+      <p>Вы присоединитесь к программе как эксперт с почтой {{ selected()?.email }}.</p>
+      @if (error()) {
+        <p appAlert="error">{{ error() }}</p>
+      }
+    </div>
+    <footer appDialogFooter class="cabinet__actions">
       <button type="button" appButton="secondary" (click)="close()" [disabled]="busy()">
-        Отмена</button
-      ><button type="button" appButton="primary" (click)="accept()" [disabled]="busy()">
+        Отмена
+      </button>
+      <button type="button" appButton="primary" (click)="accept()" [disabled]="busy()">
         {{ busy() ? "Принимаем…" : "Принять приглашение" }}
       </button>
-    </div>
-  </div></app-modal
->
+    </footer>
+  </section>
+</app-modal>
