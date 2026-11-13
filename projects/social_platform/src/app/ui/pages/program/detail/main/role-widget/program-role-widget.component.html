@@ -164,13 +164,7 @@
           <a [routerLink]="routes.program.management(data.programId, 'analytics')">Открыть →</a>
         }
         @case ("expert") {
-          <a
-            [routerLink]="
-              routes.program.rating(
-                data.programId,
-                data.storageMode ?? program()?.solutionStorageMode
-              )
-            "
+          <a [routerLink]="routes.office.evaluation()" [queryParams]="{ program: data.programId }"
             >Открыть →</a
           >
         }

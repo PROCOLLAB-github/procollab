@@ -35,7 +35,7 @@
         <a
           appButton="primary"
           [routerLink]="destination(invite.program.id)"
-          [queryParams]="isOrganizer ? { tab: 'organizers' } : null"
+          [queryParams]="isOrganizer ? { tab: 'organizers' } : { program: invite.program.id }"
           >{{ isOrganizer ? "Открыть управление" : "Перейти к проектам" }}</a
         >
         @if (isOrganizer) {
@@ -60,7 +60,7 @@
           <a
             appButton="primary"
             [routerLink]="destination(invite.program.id)"
-            [queryParams]="isOrganizer ? { tab: 'organizers' } : null"
+            [queryParams]="isOrganizer ? { tab: 'organizers' } : { program: invite.program.id }"
             >{{ isOrganizer ? "Открыть управление" : "Перейти к проектам" }}</a
           >
         } @else {

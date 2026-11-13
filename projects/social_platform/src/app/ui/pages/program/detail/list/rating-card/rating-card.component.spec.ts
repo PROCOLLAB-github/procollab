@@ -29,7 +29,12 @@ describe("RatingCardComponent", () => {
   const past = "2026-09-01T00:00:00Z";
   const future = "2026-09-30T00:00:00Z";
 
-  function render(rated = false, evaluation = future, registration = past): void {
+  function render(
+    rated = false,
+    evaluation = future,
+    registration = past,
+    overrides: Partial<ProjectRate> = {},
+  ): void {
     TestBed.inject(ProgramDetailMainUIInfoService).applyFormatingProgramData({
       ...Program.default(),
       datetimeRegistrationEnds: registration,
@@ -82,6 +87,7 @@ describe("RatingCardComponent", () => {
           expertId: user.id,
         },
       ],
+      ...overrides,
     };
     fixture.componentRef.setInput("project", project);
     fixture.detectChanges();
@@ -182,6 +188,69 @@ describe("RatingCardComponent", () => {
     expect(cta().textContent).toContain("Сохранить оценку");
     expect(cta().disabled).toBe(false);
     expectReadonly(false);
+  });
+
+  it("uses submitted program materials and preserves exact project link and safe file links", () => {
+    render(false, future, past, {
+      programLinkId: 34,
+      description: "Текущее описание проекта",
+      presentationAddress: "https://files.test/current.pdf",
+      programFields: [
+        {
+          id: 1,
+          name: "project_description",
+          label: "Описание",
+          fieldType: "textarea",
+          value: "Описание при сдаче",
+        },
+        {
+          id: 2,
+          name: "project_presentation",
+          label: "Презентация",
+          fieldType: "file",
+          value: "https://files.test/submitted.pdf",
+        },
+        { id: 3, name: "track", label: "Направление", fieldType: "radio", value: "Робототехника" },
+        { id: 4, name: "tested", label: "Испытано", fieldType: "checkbox", value: "false" },
+        {
+          id: 5,
+          name: "spec",
+          label: "Спецификация",
+          fieldType: "file",
+          value: "https://files.test/spec.pdf",
+        },
+        { id: 6, name: "unsafe", label: "Ссылка", fieldType: "url", value: "javascript:void(0)" },
+      ],
+    });
+
+    const materials: HTMLElement = fixture.nativeElement.querySelector(".scoring__materials");
+    expect(materials.textContent).toContain("Описание при сдаче");
+    expect(materials.textContent).not.toContain("Текущее описание проекта");
+    expect(materials.textContent).toContain("Робототехника");
+    expect(materials.textContent).toContain("Нет");
+    const links = Array.from(materials.querySelectorAll("a"), link => link.getAttribute("href"));
+    expect(links).toEqual([
+      "/office/projects/12?programLinkId=34",
+      "https://files.test/submitted.pdf",
+      "https://files.test/spec.pdf",
+    ]);
+  });
+
+  it.each([false, true])("shows server block and preserves saved answers (rated=%s)", rated => {
+    render(rated, future, past, {
+      canRate: false,
+      blockedReason: "Проект еще не сдан.",
+    });
+
+    const form: HTMLElement = fixture.nativeElement.querySelector(".scoring__form");
+    expect(form.textContent).toContain("Проект еще не сдан.");
+    expect(form.textContent).toContain("Note");
+    expect(form.querySelector("app-project-rating")).toBeNull();
+    expect(form.querySelector("button")).toBeNull();
+    component.state.redoRating();
+    component.state.confirmRateProject();
+    expect(component.state.projectConfirmed()).toBe(rated);
+    expect(execute).not.toHaveBeenCalled();
   });
 
   it("allows editing an existing rating until the evaluation deadline, then returns to readonly on success", async () => {

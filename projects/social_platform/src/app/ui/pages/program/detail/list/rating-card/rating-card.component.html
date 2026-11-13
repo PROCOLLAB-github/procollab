@@ -6,11 +6,12 @@
       <a
         appButton="secondary"
         [routerLink]="AppRoutes.projects.detail(p.id)"
+        [queryParams]="p.programLinkId ? { programLinkId: p.programLinkId } : null"
         target="_blank"
         rel="noopener"
         >Открыть проект <span aria-hidden="true">↗</span></a
       >
-      @if (presentationHref(p.presentationAddress); as href) {
+      @if (presentation(); as href) {
         <a appButton="secondary" [href]="href" target="_blank" rel="noopener"
           >Презентация <i appIcon icon="download" appSquare="14"></i
         ></a>
@@ -18,7 +19,10 @@
         <p class="scoring__muted">Презентация не добавлена</p>
       }
       <h3>О проекте</h3>
-      <p class="scoring__description">{{ p.description || "Описание не добавлено" }}</p>
+      <p class="scoring__description">{{ description() || "Описание не добавлено" }}</p>
+      @if (p.programFields; as fields) {
+        <app-program-field-answers [fields]="fields" />
+      }
     </aside>
     <section class="scoring__form" aria-label="Форма оценки">
       <div class="scoring__heading">
@@ -35,12 +39,18 @@
               : "Срок оценивания завершен. Отправить оценку уже нельзя."
           }}
         </p>
-      } @else if (state.isLimitReached() && !state.userRatedThisProject()) {
+      } @else if (p.canRate === false) {
+        <p class="scoring__notice" role="status">{{ p.blockedReason || "Оценка недоступна." }}</p>
+      } @else if (
+        p.canRate === undefined && state.isLimitReached() && !state.userRatedThisProject()
+      ) {
         <p class="scoring__notice">Достигнут лимит оценок этого проекта.</p>
       }
       @if (!p.criterias.length) {
-        <p class="scoring__muted">Организатор еще не настроил критерии оценки.</p>
-      } @else if (state.projectConfirmed()) {
+        @if (p.canRate !== false) {
+          <p class="scoring__muted">Организатор еще не настроил критерии оценки.</p>
+        }
+      } @else if (state.projectConfirmed() || (!state.canRate() && hasSavedAnswers())) {
         <dl class="scoring__answers">
           @for (c of orderedCriteria(); track c.id) {
             <div [class.scoring__answer--text]="c.type === 'str'">
@@ -54,7 +64,7 @@
             Изменить оценку
           </button>
         }
-      } @else if (!state.evaluationDateExpired()) {
+      } @else if (p.canRate !== false && !state.evaluationDateExpired()) {
         <app-project-rating
           layout="full"
           [criteria]="p.criterias"
