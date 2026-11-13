@@ -629,6 +629,10 @@
   }
 }
 
+.management__evaluation-select {
+  display: none;
+}
+
 @media (max-width: 800px) {
   .management--subnav {
     display: block;
@@ -637,6 +641,17 @@
       overflow-x: auto;
       margin-bottom: 16px;
       a { flex: 0 0 auto; }
+    }
+
+    > .management__settings-tabs:has(.management__evaluation-select) {
+      display: block;
+      overflow: visible;
+      > a { display: none; }
+
+      .management__evaluation-select {
+        display: grid;
+        gap: 8px;
+      }
     }
   }
 }

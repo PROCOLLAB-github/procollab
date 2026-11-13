@@ -21,20 +21,13 @@
         class="results__icon results__export"
         aria-label="Скачать текущую выборку в Excel"
         [title]="exporting() ? 'Готовим файл…' : 'Скачать текущую выборку в Excel'"
-        [disabled]="
-          loading() ||
-          filtersPending() ||
-          exporting() ||
-          !snapshot()?.matchingCount ||
-          !snapshot()?.caseScoringConfigured
-        "
+        [disabled]="loading() || filtersPending() || exporting() || !snapshot()?.matchingCount"
         (click)="download()"
       >
         <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
       </button>
     </div>
   </header>
-  <p class="results__muted">Кейс до 100 баллов + квиз до 100 баллов. Максимум 200.</p>
   <div class="overall__tools">
     <label class="results__search"
       ><span class="results__sr">Поиск по названию команды</span
@@ -88,9 +81,9 @@
   } @else if (snapshot(); as data) {
     @if (!data.caseScoringConfigured) {
       <div class="overall__state">
-        <h3>Настройте оценку кейса из 100</h3>
+        <h3>Добавьте числовые критерии кейса</h3>
         <p class="results__muted">
-          Для общего итога нужны числовые критерии и их веса с суммой 100%.
+          Для расчета баллов за кейс нужен хотя бы один числовой критерий.
         </p>
         <a
           [routerLink]="paths.program.management(programId(), 'settings')"
@@ -98,84 +91,83 @@
           >Перейти к критериям</a
         >
       </div>
-    } @else {
-      <div class="results__summary" aria-live="polite">
-        <span>В рейтинге {{ data.readyCount }} из {{ data.matchingCount }} команд</span>
-        @if (updatedTime(); as time) {
-          <time [attr.datetime]="data.generatedAt">Обновлено {{ time }}</time>
+    }
+    <div class="results__summary" aria-live="polite">
+      <span>В рейтинге {{ data.readyCount }} из {{ data.matchingCount }} команд</span>
+      @if (updatedTime(); as time) {
+        <time [attr.datetime]="data.generatedAt">Обновлено {{ time }}</time>
+      }
+    </div>
+    <p id="overall-rule" class="results__muted">
+      Итог и место появляются после завершения обоих этапов. Равные итоги делят место.
+    </p>
+    @if (!data.projects.length) {
+      <div class="overall__state">
+        <h3>{{ data.totalCount ? "Команды не найдены" : "Команды пока не добавлены" }}</h3>
+        @if (hasFilters()) {
+          <button type="button" appButton="secondary" (click)="clearFilters()">
+            Сбросить фильтры
+          </button>
         }
       </div>
-      <p id="overall-rule" class="results__muted">
-        Итог и место появляются после завершения обоих этапов. Равные итоги делят место.
-      </p>
-      @if (!data.projects.length) {
-        <div class="overall__state">
-          <h3>{{ data.totalCount ? "Команды не найдены" : "Команды пока не добавлены" }}</h3>
-          @if (hasFilters()) {
-            <button type="button" appButton="secondary" (click)="clearFilters()">
-              Сбросить фильтры
-            </button>
-          }
-        </div>
-      } @else {
-        <table
-          class="overall__table"
-          role="table"
-          aria-label="Общий рейтинг команд"
-          aria-describedby="overall-rule"
-        >
-          <thead role="rowgroup">
-            <tr class="overall__row overall__row--head" role="row">
-              <th scope="col" role="columnheader">Место</th>
-              <th scope="col" role="columnheader">Команда</th>
-              <th scope="col" role="columnheader">Кейс</th>
-              <th scope="col" role="columnheader">Кейс<br />из 100</th>
-              <th scope="col" role="columnheader">Квиз<br />из 100</th>
-              <th scope="col" role="columnheader">Итог<br />из 200</th>
-              <th scope="col" role="columnheader">Статус</th>
+    } @else {
+      <table
+        class="overall__table"
+        role="table"
+        aria-label="Общий рейтинг команд"
+        aria-describedby="overall-rule"
+      >
+        <thead role="rowgroup">
+          <tr class="overall__row overall__row--head" role="row">
+            <th scope="col" role="columnheader">Место</th>
+            <th scope="col" role="columnheader">Команда</th>
+            <th scope="col" role="columnheader">Кейс</th>
+            <th scope="col" role="columnheader">Баллы за<br />кейс</th>
+            <th scope="col" role="columnheader">Баллы за<br />квиз</th>
+            <th scope="col" role="columnheader">Итог</th>
+            <th scope="col" role="columnheader">Статус</th>
+          </tr>
+        </thead>
+        <tbody role="rowgroup">
+          @for (row of data.projects; track row.id) {
+            <tr class="overall__row" role="row">
+              <td
+                class="overall__place"
+                role="cell"
+                [attr.aria-label]="
+                  row.place === null ? 'Место пока не определено' : 'Место ' + row.place
+                "
+              >
+                {{ row.place ?? "" }}
+              </td>
+              <th class="overall__team" scope="row" role="rowheader">
+                <a [routerLink]="paths.projects.detail(row.projectId)">{{ row.name }}</a>
+              </th>
+              <td class="overall__case" role="cell">
+                <span class="overall__mobile-label" aria-hidden="true">Кейс: </span
+                >{{ row.caseName ?? "Без кейса" }}
+              </td>
+              <td class="overall__metric overall__case-score" role="cell">
+                <span class="overall__mobile-label" aria-hidden="true">Баллы за кейс</span
+                >{{ format(row.caseScore) }}
+              </td>
+              <td class="overall__metric overall__quiz-score" role="cell">
+                <span class="overall__mobile-label" aria-hidden="true">Баллы за квиз</span
+                >{{ format(row.quizScore) }}
+              </td>
+              <td
+                class="overall__metric overall__total"
+                role="cell"
+                [class.overall__total--pending]="row.score === null"
+              >
+                <span class="overall__mobile-label" aria-hidden="true">Итог</span
+                >{{ format(row.score) }}
+              </td>
+              <td class="overall__status" role="cell">{{ statusLabel(row) }}</td>
             </tr>
-          </thead>
-          <tbody role="rowgroup">
-            @for (row of data.projects; track row.id) {
-              <tr class="overall__row" role="row">
-                <td
-                  class="overall__place"
-                  role="cell"
-                  [attr.aria-label]="
-                    row.place === null ? 'Место пока не определено' : 'Место ' + row.place
-                  "
-                >
-                  {{ row.place ?? "" }}
-                </td>
-                <th class="overall__team" scope="row" role="rowheader">
-                  <a [routerLink]="paths.projects.detail(row.projectId)">{{ row.name }}</a>
-                </th>
-                <td class="overall__case" role="cell">
-                  <span class="overall__mobile-label" aria-hidden="true">Кейс: </span
-                  >{{ row.caseName ?? "Без кейса" }}
-                </td>
-                <td class="overall__metric overall__case-score" role="cell">
-                  <span class="overall__mobile-label" aria-hidden="true">Кейс из 100</span
-                  >{{ format(row.caseScore) }}
-                </td>
-                <td class="overall__metric overall__quiz-score" role="cell">
-                  <span class="overall__mobile-label" aria-hidden="true">Квиз из 100</span
-                  >{{ format(row.quizScore) }}
-                </td>
-                <td
-                  class="overall__metric overall__total"
-                  role="cell"
-                  [class.overall__total--pending]="row.score === null"
-                >
-                  <span class="overall__mobile-label" aria-hidden="true">Итог из 200</span
-                  >{{ format(row.score) }}
-                </td>
-                <td class="overall__status" role="cell">{{ statusLabel(row) }}</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      }
+          }
+        </tbody>
+      </table>
     }
   }
 </section>

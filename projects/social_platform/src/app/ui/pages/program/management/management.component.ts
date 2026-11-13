@@ -18,7 +18,7 @@ import {
 } from "@angular/core";
 import { DatePipe, DOCUMENT } from "@angular/common";
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from "@angular/router";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { HttpErrorResponse } from "@angular/common/http";
 import { userErrorMessage } from "@core/lib/models/error/user-error-message";
@@ -59,6 +59,7 @@ import { ProgramManagementService } from "@api/program/facades/detail/program-ma
 import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 import { ProgramManagementHeaderComponent } from "./management-header.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import {
@@ -109,6 +110,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     TransientNoticeComponent,
     RouterLink,
     ReactiveFormsModule,
+    FormsModule,
     DatePipe,
     A11yModule,
     CdkMenuModule,
@@ -160,6 +162,7 @@ export class ProgramManagementComponent implements OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly injector = inject(Injector);
   readonly paths = AppRoutes;
+  readonly instance = inject(InstanceInfoService);
   signIn(): void {
     void this.router.navigateByUrl(authLoginUrl(this.router.url));
   }
@@ -348,6 +351,24 @@ export class ProgramManagementComponent implements OnInit {
       this.state.program()?.isCompetitive &&
       this.state.program()?.solutionStorageMode === "legacy_project",
   );
+  readonly pilotEvaluationAvailable = computed(
+    () => this.instance.enabled() && this.instance.programId() === this.state.program()?.id,
+  );
+  changeEvaluationSection(key: string): void {
+    const program = this.state.program();
+    if (!program) return;
+    if (key === "projects-rating" && this.pilotEvaluationAvailable()) {
+      void this.router.navigateByUrl(
+        AppRoutes.program.rating(program.id, program.solutionStorageMode),
+      );
+      return;
+    }
+    const tab = this.evaluationTabs.find(tab => tab.key === key);
+    if (!tab || (tab.key === "overall-results" && !this.overallAvailable())) return;
+    void this.router.navigate([AppRoutes.program.management(program.id, tab.section)], {
+      queryParams: tab.query,
+    });
+  }
   readonly settingsTabs = [
     { id: "basic", label: "Страница" },
     { id: "dates", label: "Сроки" },

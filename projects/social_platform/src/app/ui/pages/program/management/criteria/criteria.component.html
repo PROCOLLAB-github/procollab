@@ -24,15 +24,6 @@
       >
     }
     @if (snapshot()) {
-      <header class="criteria__heading">
-        <div>
-          <h2>Критерии оценки</h2>
-          <p>Один набор для всех кейсов программы.</p>
-        </div>
-        <button type="button" appButton="secondary" (click)="openPreview()">
-          Предпросмотр формы
-        </button>
-      </header>
       @if (locked()) {
         <div appAlert="warning">
           <strong>Критерии зафиксированы</strong>
@@ -40,28 +31,84 @@
         </div>
       }
       <section class="criteria__card" aria-labelledby="criteria-heading">
-        <h3 id="criteria-heading">Критерии программы</h3>
-        <p>Настройте форму до первой сохраненной оценки.</p>
-        <label for="criteria-scoring-mode">Способ расчета</label>
-        <select
-          appField
-          id="criteria-scoring-mode"
-          [value]="scoringMode()"
-          [disabled]="locked() || saving()"
-          (change)="changeScoringMode($event)"
-        >
-          <option value="legacy">Сумма исходных баллов</option>
-          <option value="weighted_percent">Веса критериев, 0–100</option>
-        </select>
+        <h2 id="criteria-heading">Критерии оценки</h2>
+        <label class="criteria__weights-toggle" for="criteria-scoring-mode">
+          <input
+            appChoice
+            type="checkbox"
+            id="criteria-scoring-mode"
+            [checked]="scoringMode() === 'weighted_percent'"
+            [disabled]="locked() || saving()"
+            (change)="changeScoringMode($event)"
+          />
+          Учитывать веса критериев
+        </label>
         @if (scoringMode() === "weighted_percent") {
           <p>
-            Минимум шкалы дает 0, максимум — полный вес критерия. Оценки экспертов учитываются
-            одинаково.
+            Вес определяет долю критерия в оценке кейса. Максимальная оценка кейса — 100 баллов.
           </p>
-          <p aria-live="polite">Сумма весов: {{ weightTotal() }}% из 100%</p>
+          <p class="criteria__weight-total" aria-live="polite">Сумма весов: {{ weightTotal() }}%</p>
           @if (weightsError(); as message) {
-            <p appAlert="warning" role="status">{{ message }}</p>
+            <p appAlert="warning" role="status" id="criteria-weights-error">{{ message }}</p>
           }
+        }
+        @for (criterion of criteria(); track criterion.id) {
+          <article class="criteria__row">
+            <div>
+              <h4>{{ criterion.name }}</h4>
+              <p>{{ summary(criterion) }}</p>
+              @if (criterion.description) {
+                <p>{{ criterion.description }}</p>
+              }
+            </div>
+            <div class="criteria__actions criteria__row-actions">
+              @if (
+                scoringMode() === "weighted_percent" &&
+                (criterion.type === "int" || criterion.type === "float")
+              ) {
+                <label class="criteria__weight">
+                  <span class="criteria__sr">Вес критерия «{{ criterion.name }}», %</span>
+                  <input
+                    appField
+                    type="number"
+                    min="0.01"
+                    max="100"
+                    step="0.01"
+                    inputmode="decimal"
+                    [ngModel]="criterion.weightPercent"
+                    (ngModelChange)="changeWeight(criterion, $event)"
+                    [disabled]="locked() || saving()"
+                    [attr.aria-invalid]="invalidWeight(criterion)"
+                    [attr.aria-describedby]="weightsError() ? 'criteria-weights-error' : null"
+                  />
+                  <span class="criteria__weight-unit" aria-hidden="true">%</span>
+                </label>
+              }
+              <button
+                type="button"
+                appButton="secondary"
+                [disabled]="
+                  locked() ||
+                  saving() ||
+                  (criterion.type === 'float' && scoringMode() !== 'weighted_percent')
+                "
+                (click)="edit(criterion)"
+              >
+                Изменить</button
+              ><button
+                type="button"
+                appButton="secondary"
+                [disabled]="locked() || saving()"
+                (click)="deleting.set(criterion)"
+              >
+                Удалить
+              </button>
+            </div>
+          </article>
+        } @empty {
+          <p class="criteria__empty">
+            Критериев пока нет. Добавьте критерий, чтобы настроить форму эксперта.
+          </p>
         }
         <button
           class="criteria__add"
@@ -72,74 +119,34 @@
         >
           Добавить критерий
         </button>
-        @for (criterion of criteria(); track criterion.id) {
-          <article class="criteria__row">
-            <div>
-              <h4>{{ criterion.name }}</h4>
-              <p>{{ summary(criterion) }}</p>
-              @if (criterion.description) {
-                <p>{{ criterion.description }}</p>
-              }
-            </div>
-            @if (!locked()) {
-              <div class="criteria__actions">
-                <button
-                  type="button"
-                  appButton="secondary"
-                  [disabled]="
-                    saving() || (criterion.type === 'float' && scoringMode() !== 'weighted_percent')
-                  "
-                  (click)="edit(criterion)"
-                >
-                  Изменить</button
-                ><button
-                  type="button"
-                  appButton="secondary"
-                  class="criteria__quiet"
-                  [disabled]="saving()"
-                  (click)="deleting.set(criterion)"
-                >
-                  Удалить
-                </button>
-              </div>
-            }
-          </article>
-        } @empty {
-          <p class="criteria__empty">
-            Критериев пока нет. Добавьте критерий, чтобы настроить форму эксперта.
-          </p>
+        @if (!locked()) {
+          <p>После первой сохраненной оценки эксперта критерии и веса нельзя будет изменить.</p>
         }
         @if (!locked()) {
-          <p appAlert="warning">
-            После первой сохраненной оценки весь набор критериев будет зафиксирован.
-          </p>
+          <footer class="criteria__footer">
+            <p aria-live="polite">
+              {{ dirty() ? "Есть несохраненные изменения" : "Нет несохраненных изменений" }}
+            </p>
+            <div class="criteria__actions">
+              <button
+                type="button"
+                appButton="primary"
+                [disabled]="!dirty() || saving() || !!conflict() || !!weightsError()"
+                (click)="save()"
+              >
+                {{ saving() ? "Сохраняем…" : "Сохранить изменения" }}</button
+              ><button
+                type="button"
+                appButton="secondary"
+                [disabled]="!dirty() || saving()"
+                (click)="cancel()"
+              >
+                Отменить изменения
+              </button>
+            </div>
+          </footer>
         }
       </section>
-      @if (!locked()) {
-        <footer class="criteria__footer">
-          <p aria-live="polite">
-            {{ dirty() ? "Есть несохраненные изменения" : "Нет несохраненных изменений" }}
-          </p>
-          <div class="criteria__actions">
-            <button
-              type="button"
-              appButton="primary"
-              [disabled]="!dirty() || saving() || !!conflict() || !!weightsError()"
-              (click)="save()"
-            >
-              {{ saving() ? "Сохраняем…" : "Сохранить изменения" }}</button
-            ><button
-              type="button"
-              appButton="secondary"
-              class="criteria__quiet"
-              [disabled]="!dirty() || saving()"
-              (click)="cancel()"
-            >
-              Отменить изменения
-            </button>
-          </div>
-        </footer>
-      }
     }
   }
 </div>
@@ -155,13 +162,13 @@
       <h2 id="criterion-editor-title">
         {{ editing() === "new" ? "Добавить критерий" : "Изменить критерий" }}
       </h2>
-      <button type="button" appButton="secondary" (click)="closeEditor()">Закрыть</button>
     </header>
     @if (editorError()) {
       <p appAlert="error" role="alert">{{ editorError() }}</p>
     }
     <label for="criterion-name"
       >Название критерия *<input
+        placeholder="Например, качество решения"
         appField
         id="criterion-name"
         formControlName="name"
@@ -170,13 +177,17 @@
     /></label>
     <label for="criterion-type"
       >Тип ответа<select appField id="criterion-type" formControlName="type">
-        <option value="int">Целые баллы</option>
+        <option value="int">Баллы</option>
+        @if (editorType() === "float") {
+          <option value="float">Дробные баллы (существующий критерий)</option>
+        }
         <option value="bool">Да / нет</option>
         <option value="str">Текстовый комментарий</option>
       </select></label
     >
     <label for="criterion-description"
-      >Описание для эксперта<textarea
+      >Описание для эксперта (необязательно)<textarea
+        placeholder="Что нужно проверить в решении команды"
         appField
         id="criterion-description"
         formControlName="description"
@@ -187,7 +198,7 @@
     @if (editorType() === "int") {
       <div class="criteria__range">
         <label for="criterion-min"
-          >Минимум *<input
+          >Минимум, баллы *<input
             appField
             type="number"
             step="1"
@@ -195,7 +206,7 @@
             formControlName="minValue"
             aria-required="true" /></label
         ><label for="criterion-max"
-          >Максимум *<input
+          >Максимум, баллы *<input
             appField
             type="number"
             step="1"
@@ -209,7 +220,7 @@
       scoringMode() === "weighted_percent" && (editorType() === "int" || editorType() === "float")
     ) {
       <label for="criterion-weight"
-        >Вес, % *<input
+        >Вес критерия, % *<input
           appField
           id="criterion-weight"
           type="number"
@@ -219,60 +230,17 @@
           formControlName="weightPercent"
           aria-required="true"
       /></label>
-      <p>Сумма весов всех числовых критериев должна быть ровно 100%.</p>
+      <p>Вес заполняется, когда включен учет весов критериев.</p>
     }
     <footer>
-      <p>
-        После {{ editing() === "new" ? "добавления" : "применения" }} сохраните изменения на
-        странице критериев.
-      </p>
       <div class="criteria__actions">
         <button type="submit" appButton="primary">
-          {{ editing() === "new" ? "Добавить критерий" : "Применить изменения" }}</button
-        ><button
-          type="button"
-          appButton="secondary"
-          class="criteria__quiet"
-          (click)="closeEditor()"
-        >
-          Отмена
-        </button>
+          {{ editing() === "new" ? "Добавить в список" : "Применить изменения" }}</button
+        ><button type="button" appButton="secondary" (click)="closeEditor()">Отмена</button>
       </div>
+      <p class="criteria__save-hint">Затем нажмите «Сохранить изменения» на странице критериев.</p>
     </footer>
   </form>
-</app-modal>
-<app-modal
-  bodyClass="criteria-modal"
-  [open]="previewOpen()"
-  (openChange)="previewOpen.set($event)"
-  labelledBy="criteria-preview-title"
->
-  <div class="criteria__dialog">
-    <header class="criteria__heading">
-      <h2 id="criteria-preview-title">Предпросмотр формы эксперта</h2>
-      <button type="button" appButton="secondary" (click)="previewOpen.set(false)">Закрыть</button>
-    </header>
-    <p>Так эксперт увидит критерии. Ответы в предпросмотре не сохраняются и не фиксируют набор.</p>
-    <app-project-rating
-      layout="full"
-      [criteria]="previewCriteria()"
-      [formControl]="previewControl"
-    />
-    <footer>
-      <p>
-        Целые баллы проверяются по заданной шкале. Ноль и «Нет» — допустимые ответы. Комментарий —
-        до 1000 символов.
-      </p>
-      <button
-        type="button"
-        appButton="secondary"
-        class="criteria__quiet"
-        (click)="previewOpen.set(false)"
-      >
-        Закрыть предпросмотр
-      </button>
-    </footer>
-  </div>
 </app-modal>
 <app-modal
   bodyClass="criteria-modal"
@@ -285,14 +253,7 @@
     <p>«{{ deleting()?.name }}» будет удален после сохранения изменений.</p>
     <div class="criteria__actions">
       <button type="button" appButton="primary" (click)="remove()">Удалить критерий</button
-      ><button
-        type="button"
-        appButton="secondary"
-        class="criteria__quiet"
-        (click)="deleting.set(null)"
-      >
-        Отмена
-      </button>
+      ><button type="button" appButton="secondary" (click)="deleting.set(null)">Отмена</button>
     </div>
   </div>
 </app-modal>
@@ -318,12 +279,7 @@
     <div class="criteria__actions">
       <button type="button" appButton="primary" (click)="reload()">
         Показать действующие критерии</button
-      ><button
-        type="button"
-        appButton="secondary"
-        class="criteria__quiet"
-        (click)="conflictOpen.set(false)"
-      >
+      ><button type="button" appButton="secondary" (click)="conflictOpen.set(false)">
         Закрыть
       </button>
     </div>
