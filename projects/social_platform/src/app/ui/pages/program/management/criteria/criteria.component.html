@@ -42,6 +42,27 @@
       <section class="criteria__card" aria-labelledby="criteria-heading">
         <h3 id="criteria-heading">Критерии программы</h3>
         <p>Настройте форму до первой сохраненной оценки.</p>
+        <label for="criteria-scoring-mode">Способ расчета</label>
+        <select
+          appField
+          id="criteria-scoring-mode"
+          [value]="scoringMode()"
+          [disabled]="locked() || saving()"
+          (change)="changeScoringMode($event)"
+        >
+          <option value="legacy">Сумма исходных баллов</option>
+          <option value="weighted_percent">Веса критериев, 0–100</option>
+        </select>
+        @if (scoringMode() === "weighted_percent") {
+          <p>
+            Минимум шкалы дает 0, максимум — полный вес критерия. Оценки экспертов учитываются
+            одинаково.
+          </p>
+          <p aria-live="polite">Сумма весов: {{ weightTotal() }}% из 100%</p>
+          @if (weightsError(); as message) {
+            <p appAlert="warning" role="status">{{ message }}</p>
+          }
+        }
         <button
           class="criteria__add"
           type="button"
@@ -65,7 +86,9 @@
                 <button
                   type="button"
                   appButton="secondary"
-                  [disabled]="saving() || criterion.type === 'float'"
+                  [disabled]="
+                    saving() || (criterion.type === 'float' && scoringMode() !== 'weighted_percent')
+                  "
                   (click)="edit(criterion)"
                 >
                   Изменить</button
@@ -101,7 +124,7 @@
             <button
               type="button"
               appButton="primary"
-              [disabled]="!dirty() || saving() || !!conflict()"
+              [disabled]="!dirty() || saving() || !!conflict() || !!weightsError()"
               (click)="save()"
             >
               {{ saving() ? "Сохраняем…" : "Сохранить изменения" }}</button
@@ -181,6 +204,22 @@
             aria-required="true"
         /></label>
       </div>
+    }
+    @if (
+      scoringMode() === "weighted_percent" && (editorType() === "int" || editorType() === "float")
+    ) {
+      <label for="criterion-weight"
+        >Вес, % *<input
+          appField
+          id="criterion-weight"
+          type="number"
+          min="0.01"
+          max="100"
+          step="0.01"
+          formControlName="weightPercent"
+          aria-required="true"
+      /></label>
+      <p>Сумма весов всех числовых критериев должна быть ровно 100%.</p>
     }
     <footer>
       <p>

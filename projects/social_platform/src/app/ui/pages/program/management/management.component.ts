@@ -82,6 +82,7 @@ import { SolutionExpertsComponent } from "./experts/solution-experts.component";
 import { SolutionRegistrationRemovalComponent } from "./solution-applications/solution-registration-removal.component";
 import { ResultProjectScoresComponent } from "./results/result-project-scores.component";
 import { ManagementResultsComponent } from "./results/results.component";
+import { ManagementOverallResultsComponent } from "./overall-results/overall-results.component";
 import { ManagementOrganizersComponent } from "./organizers/organizers.component";
 import { ManagementRegistrationComponent } from "./registration/registration.component";
 import { ManagementCertificatesComponent } from "./certificates/certificates.component";
@@ -132,6 +133,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     SolutionExpertsComponent,
     SolutionRegistrationRemovalComponent,
     ManagementResultsComponent,
+    ManagementOverallResultsComponent,
     ResultProjectScoresComponent,
     ManagementOrganizersComponent,
     ManagementRegistrationComponent,
@@ -264,6 +266,8 @@ export class ProgramManagementComponent implements OnInit {
   readonly projectForm = viewChild(ManagementProjectFormComponent);
   readonly solutionForm = viewChild(ManagementSolutionFormComponent);
   private readonly managementLayout = viewChild<ElementRef<HTMLElement>>("managementLayout");
+  private readonly evaluationNavigation =
+    viewChild<ElementRef<HTMLElement>>("evaluationNavigation");
   readonly floatingPosition = signal<{ center: number; width: number } | null>(null);
   readonly projectFormStatus = signal({ dirty: false, busy: false });
   readonly criteriaForm = viewChild(ManagementCriteriaComponent);
@@ -313,6 +317,7 @@ export class ProgramManagementComponent implements OnInit {
     if (
       section === "experts" ||
       section === "results" ||
+      section === "overall-results" ||
       section === "evaluation" ||
       this.allocation() ||
       (section === "settings" && this.settingsTab() === "criteria")
@@ -336,7 +341,13 @@ export class ProgramManagementComponent implements OnInit {
       label: "Распределение",
     },
     { key: "results", section: "results", query: null, label: "Результаты" },
+    { key: "overall-results", section: "overall-results", query: null, label: "Общий рейтинг" },
   ];
+  readonly overallAvailable = computed(
+    () =>
+      this.state.program()?.isCompetitive &&
+      this.state.program()?.solutionStorageMode === "legacy_project",
+  );
   readonly settingsTabs = [
     { id: "basic", label: "Страница" },
     { id: "dates", label: "Сроки" },
@@ -461,6 +472,18 @@ export class ProgramManagementComponent implements OnInit {
       const program = this.state.program();
       if (program) untracked(() => this.resetForms());
     });
+    effect(() => {
+      const navigation = this.evaluationNavigation()?.nativeElement;
+      if (this.section() === "overall-results" && this.mobile() && navigation) {
+        afterNextRender(
+          () =>
+            navigation
+              .querySelector('[aria-current="page"]')
+              ?.scrollIntoView({ block: "nearest", inline: "nearest" }),
+          { injector: this.injector },
+        );
+      }
+    });
     this.destroyRef.onDestroy(() => {
       this.confirmationCallback?.(false);
     });
@@ -505,6 +528,7 @@ export class ProgramManagementComponent implements OnInit {
           "projects",
           "experts",
           "results",
+          "overall-results",
           "analytics",
           "certificates",
           "settings",

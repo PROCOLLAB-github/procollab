@@ -29,6 +29,12 @@ export class ProgramManagementRepository implements ProgramManagementRepositoryP
   results(id: number) {
     return this.adapter.results(id);
   }
+  overallResults(id: number, query: ResultsQuery) {
+    return this.adapter.overallResults(id, query);
+  }
+  exportOverallResults(id: number, query: ResultsQuery) {
+    return this.adapter.exportOverallResults(id, query);
+  }
   exportResults(id: number, query: ResultsQuery) {
     return this.adapter.exportResults(id, query);
   }

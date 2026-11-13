@@ -18,15 +18,17 @@
       [status]="registrationStatusLabel(program.datetimeRegistrationEnds, program.datetimeFinished)"
     />
     @if (activeGroup() === "evaluation") {
-      <nav class="management__settings-tabs" aria-label="Разделы оценивания">
+      <nav #evaluationNavigation class="management__settings-tabs" aria-label="Разделы оценивания">
         @for (tab of evaluationTabs; track tab.key) {
-          <a
-            [routerLink]="paths.program.management(program.id, tab.section)"
-            [queryParams]="tab.query"
-            [attr.aria-current]="activeEvaluation() === tab.key ? 'page' : null"
-          >
-            {{ tab.label }}
-          </a>
+          @if (tab.key !== "overall-results" || overallAvailable()) {
+            <a
+              [routerLink]="paths.program.management(program.id, tab.section)"
+              [queryParams]="tab.query"
+              [attr.aria-current]="activeEvaluation() === tab.key ? 'page' : null"
+            >
+              {{ tab.label }}
+            </a>
+          }
         }
       </nav>
     }
@@ -60,6 +62,16 @@
         [solutionMode]="program.solutionStorageMode === 'solution'"
         [submissionApplicable]="program.isCompetitive"
       />
+    }
+    @if (section() === "overall-results") {
+      @if (overallAvailable()) {
+        <app-management-overall-results [programId]="program.id" />
+      } @else {
+        <section class="management__card" appAlert="info">
+          <h2>Общий рейтинг недоступен</h2>
+          <p>Он доступен для конкурсных программ с проектами.</p>
+        </section>
+      }
     }
     @if (section() === "experts" || (allocation() && program.solutionStorageMode !== "solution")) {
       @if (program.solutionStorageMode === "solution") {

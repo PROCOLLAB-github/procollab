@@ -1,6 +1,7 @@
 /** @format */
 
 import { Inject, Injectable } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
 import { map, Observable } from "rxjs";
 import { plainToInstance } from "class-transformer";
 import Cookies from "js-cookie";
@@ -13,7 +14,7 @@ import { RefreshResponse, Tokens } from "@core/public-api";
  * Сервис для управления JWT токенами аутентификации
  *
  * Основные функции:
- * - Хранение access и refresh токенов в HTTP-only cookies
+ * - Хранение access и refresh токенов в cookies
  * - Автоматическое обновление токенов при истечении срока действия
  * - Управление настройками cookies в зависимости от окружения
  * - Очистка токенов при выходе из системы
@@ -43,16 +44,17 @@ export class TokenService {
   }
 
   private get accessTokenKey(): string {
-    return this.isDevStage ? "devAccessToken" : "accessToken";
+    return environment.cookiePrefix + (this.isDevStage ? "devAccessToken" : "accessToken");
   }
 
   private get refreshTokenKey(): string {
-    return this.isDevStage ? "devRefreshToken" : "refreshToken";
+    return environment.cookiePrefix + (this.isDevStage ? "devRefreshToken" : "refreshToken");
   }
 
   constructor(
     private apiService: ApiService,
     @Inject(PRODUCTION) private production: boolean,
+    @Inject(DOCUMENT) private readonly document: Document,
   ) {}
 
   /**
@@ -80,7 +82,7 @@ export class TokenService {
    * @returns Объект с настройками для js-cookie
    *
    * Production настройки:
-   * - domain: ".procollab.ru" - cookies доступны на всех поддоменах
+   * - domain: ".procollab.ru" на доменах платформы; текущий host у клиента
    * - expires: 30 дней - автоматическое истечение
    *
    * Development настройки:
@@ -89,8 +91,10 @@ export class TokenService {
    */
   getCookieOptions(): Parameters<typeof Cookies.set>[2] {
     if (this.production) {
+      const hostname = this.document.location?.hostname;
+      const platformHost = hostname === "procollab.ru" || hostname?.endsWith(".procollab.ru");
       return {
-        domain: ".procollab.ru", // Домен для production окружения
+        ...(platformHost && !environment.instanceMode ? { domain: ".procollab.ru" } : {}),
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 дней
         secure: true,
         sameSite: "None",

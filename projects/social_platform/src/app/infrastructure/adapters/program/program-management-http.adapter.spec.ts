@@ -11,6 +11,54 @@ import { API_URL } from "@core/lib/providers";
 
 describe("Контракт HTTP панели организатора", () => {
   let adapter: ProgramManagementHttpAdapter, http: HttpTestingController;
+  it("общий рейтинг сохраняет ноль, null, ID проекта и глобальное место", () => {
+    const query = {
+      search: "Команда",
+      caseScope: "all",
+      order: "desc",
+      scope: "all",
+      status: "pending",
+    } as const;
+    adapter.overallResults(4, query).subscribe(data => {
+      expect(data.maximum).toBe(200);
+      expect(data.caseScoringConfigured).toBe(true);
+      expect(data.projects[0]).toMatchObject({
+        id: 15,
+        projectId: 91,
+        caseScore: 0,
+        quizScore: 0,
+        score: 0,
+        place: 8,
+        ready: true,
+      });
+      expect(data.projects[1]).toMatchObject({
+        score: null,
+        place: null,
+        status: "pending_quiz",
+        caseEvaluatorsRequired: 2,
+      });
+    });
+    const response = http.expectOne(r => r.url.endsWith("/programs/4/management/overall-results/"));
+    expect(response.request.method).toBe("GET");
+    expect(response.request.params.get("search")).toBe("Команда");
+    expect(response.request.params.get("status")).toBe("pending");
+    expect(response.request.params.get("scope")).toBe("current");
+    response.flush({
+      maximum: 200,
+      case_scoring_configured: true,
+      projects: [
+        { id: 15, project_id: 91, case_score: 0, quiz_score: 0, score: 0, place: 8, ready: true },
+        { score: null, place: null, status: "pending_quiz", case_evaluators_required: 2 },
+      ],
+    });
+    adapter.exportOverallResults(4, { ...query, scope: "current" }).subscribe();
+    const file = http.expectOne(r => r.url.endsWith("/overall-results/export/"));
+    expect(file.request.params.get("search")).toBe("Команда");
+    expect(file.request.params.get("status")).toBe("pending");
+    expect(file.request.params.get("scope")).toBe("current");
+    expect(file.request.responseType).toBe("blob");
+    file.flush(new Blob(["xlsx"]));
+  });
   it("возврат в черновик передает версию и получает новый статус через общий interceptor", () => {
     const updatedAt = "2026-10-30T10:00:00.123456Z";
     adapter.returnToDraft(4, updatedAt).subscribe(program => {

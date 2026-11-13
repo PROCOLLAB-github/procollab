@@ -25,6 +25,12 @@ export class ProgramManagementUseCase {
   results(id: number) {
     return this.repository.results(id);
   }
+  overallResults(id: number, query: ResultsQuery) {
+    return this.repository.overallResults(id, query);
+  }
+  exportOverallResults(id: number, query: ResultsQuery) {
+    return this.repository.exportOverallResults(id, query);
+  }
   exportResults(id: number, query: ResultsQuery) {
     return this.repository.exportResults(id, query);
   }

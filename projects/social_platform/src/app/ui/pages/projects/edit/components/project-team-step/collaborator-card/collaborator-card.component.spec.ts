@@ -41,6 +41,18 @@ describe("CollaboratorCardComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+  it("различает участников без ФИО по идентификатору", () => {
+    fixture.componentRef.setInput("collaborator", {
+      ...component.collaborator(),
+      firstName: "",
+      lastName: "",
+    });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector("h4").textContent).toBe("Участник №1");
+    expect(fixture.nativeElement.querySelector("button").getAttribute("aria-label")).toContain(
+      "Участник №1",
+    );
+  });
   it("сохраняет подтверждение и не удаляет участника при ошибке, блокирует повтор", () => {
     const confirm = vi.spyOn(window, "confirm").mockReturnValue(false);
     const execute = vi.mocked(TestBed.inject(RemoveProjectCollaboratorUseCase).execute);

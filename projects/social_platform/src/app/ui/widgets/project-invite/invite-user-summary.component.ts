@@ -13,7 +13,7 @@ import { User } from "@domain/auth/user.model";
       }
     </span>
     <span class="invite-copy">
-      <strong>{{ user().firstName }} {{ user().lastName }}</strong>
+      <strong>{{ displayName() }}</strong>
       <span class="invite-meta"
         >{{ age() }}{{ age() && user().personal.speciality ? " · " : ""
         }}{{ user().personal.speciality }}</span
@@ -64,8 +64,16 @@ import { User } from "@domain/auth/user.model";
 export class InviteUserSummaryComponent {
   readonly user = input.required<User>();
   readonly skills = computed(() => this.user().relations?.skills ?? []);
+  readonly displayName = computed(
+    () =>
+      [this.user().firstName, this.user().lastName].filter(Boolean).join(" ").trim() ||
+      this.user().email ||
+      `Участник №${this.user().id}`,
+  );
   readonly age = computed(() => {
-    const birthday = new Date(this.user().personal?.birthday);
+    const value = this.user().personal?.birthday;
+    if (!value) return "";
+    const birthday = new Date(value);
     if (Number.isNaN(birthday.getTime())) return "";
     const now = new Date();
     const beforeBirthday =

@@ -7,6 +7,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/cor
 import { IconComponent } from "@ui/primitives";
 import { AuthEmailService } from "@api/auth/facades/auth-email.service";
 import { CommonModule } from "@angular/common";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 
 /** Страница ожидания подтверждения email с возможностью повторной отправки. */
 @Component({
@@ -18,6 +19,7 @@ import { CommonModule } from "@angular/common";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailVerificationComponent implements OnInit {
+  readonly instance = inject(InstanceInfoService);
   private readonly authEmailService = inject(AuthEmailService);
 
   protected readonly counter = this.authEmailService.counter;

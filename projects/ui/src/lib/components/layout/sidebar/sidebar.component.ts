@@ -57,6 +57,9 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
   /** Путь к изображению логотипа (обязательный параметр) */
   readonly logoSrc = input.required<string>();
+  readonly logoName = input("PROCOLLAB");
+  readonly logoLink = input("/office/feed");
+  readonly logoDark = input(false);
 
   ngOnInit(): void {
     this.checkExternalActiveState();
