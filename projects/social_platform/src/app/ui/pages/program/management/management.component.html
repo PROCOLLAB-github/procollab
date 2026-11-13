@@ -30,6 +30,28 @@
             </a>
           }
         }
+        @if (pilotEvaluationAvailable()) {
+          <a [routerLink]="paths.program.rating(program.id, program.solutionStorageMode)"
+            >Оценка проектов</a
+          >
+        }
+        <label class="management__evaluation-select">
+          <span>Раздел</span>
+          <select
+            appField
+            [ngModel]="activeEvaluation()"
+            (ngModelChange)="changeEvaluationSection($event)"
+          >
+            @for (tab of evaluationTabs; track tab.key) {
+              @if (tab.key !== "overall-results" || overallAvailable()) {
+                <option [value]="tab.key">{{ tab.label }}</option>
+              }
+            }
+            @if (pilotEvaluationAvailable()) {
+              <option value="projects-rating">Оценка проектов</option>
+            }
+          </select>
+        </label>
       </nav>
     }
   }

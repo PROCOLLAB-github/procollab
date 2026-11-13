@@ -18,6 +18,13 @@
   width: 100%;
 }
 
+.ui-choice {
+  @include ui-foundation.choice;
+
+  width: 20px;
+  height: 20px;
+}
+
 .criteria,
 .criteria__dialog {
   display: grid;
@@ -30,10 +37,6 @@
 
 .criteria__dialog {
   width: 100%;
-}
-
-.criteria__dialog ::ng-deep app-project-rating .ui-button.ui-button {
-  @include program-management-controls.compact-action;
 }
 
 h2,
@@ -52,7 +55,7 @@ h3 {
 
 h4 {
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 p {
@@ -91,13 +94,39 @@ p {
   border-radius: 15px;
 }
 
+.criteria__card > h2 {
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.criteria__card > p,
+.criteria__row p {
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.criteria__weights-toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: fit-content;
+  min-height: 44px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.criteria__weight-total {
+  margin: 20px 0 8px;
+  font-weight: 600;
+  color: var(--black);
+}
+
 .criteria__add {
   margin: 16px 0;
 }
 
 .criteria__row {
   padding: 12px 0;
-  border-bottom: 1px solid var(--medium-grey-for-outline);
 }
 
 .criteria__actions {
@@ -106,15 +135,63 @@ p {
   justify-content: flex-start;
 }
 
-.criteria__quiet.ui-button {
-  color: var(--black);
-  background: var(--grey-button);
-  border-color: transparent;
+.criteria__row-actions {
+  flex-wrap: nowrap;
+  gap: 8px;
 }
+
+.criteria__row-actions .ui-button {
+  width: 96px;
+  height: 32px;
+  padding-inline: 12px;
+  white-space: nowrap;
+}
+
+.criteria__weight {
+  position: relative;
+  display: block;
+  flex: 0 0 80px;
+  width: 80px;
+}
+
+.criteria__weight .ui-field {
+  --ui-control-height: 32px;
+  --ui-control-padding: 5px 28px 5px 12px;
+
+  height: 32px;
+  min-height: 32px;
+  font-size: 12px;
+  appearance: textfield;
+}
+
+.criteria__weight .ui-field::-webkit-inner-spin-button,
+.criteria__weight .ui-field::-webkit-outer-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.criteria__weight-unit {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  line-height: 16px;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.criteria__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
 
 .criteria__footer {
   display: grid;
   gap: 12px;
+  margin-top: 20px;
 }
 
 .criteria__range {
@@ -135,8 +212,8 @@ p {
   border-radius: 15px;
 }
 
-.criteria__dialog footer p {
-  margin: 0 0 20px;
+.criteria__dialog footer .criteria__save-hint {
+  margin-top: 12px;
 }
 
 .criteria__notice {
@@ -167,8 +244,28 @@ p {
 
 // The shared overlay is attached outside this component's host.
 ::ng-deep .modal .modal__body.criteria-modal {
-  width: 648px;
+  width: 560px;
   max-width: calc(100vw - 40px);
+}
+
+@media (max-width: 999px) {
+  .criteria__row-actions .ui-button {
+    height: 44px;
+  }
+
+  .criteria__weight {
+    flex-basis: 94px;
+    width: 94px;
+  }
+
+  .criteria__weight .ui-field {
+    --ui-control-height: 44px;
+    --ui-control-padding: 8px 28px 8px 12px;
+
+    height: 44px;
+    min-height: 44px;
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 650px) {
@@ -181,6 +278,17 @@ p {
 
   .criteria__card {
     padding: 16px;
+  }
+
+  .criteria__row-actions {
+    width: 100%;
+  }
+
+  .criteria__row-actions .ui-button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-right: 8px;
+    padding-left: 8px;
   }
 
   .criteria__dialog .criteria__heading {

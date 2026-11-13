@@ -52,7 +52,7 @@ import { SPECIALIZATIONS_PROVIDERS } from "./infrastructure/di/specializations.p
 import { VACANCY_PROVIDERS } from "./infrastructure/di/vacancy.providers";
 import { COURSES_PROVIDERS } from "./infrastructure/di/courses/courses.providers";
 import { CHAT_PROVIDERS } from "./infrastructure/di/chat.providers";
-import { ThemeService } from "@uilib";
+import { FORCED_THEME_SCHEME, ThemeService } from "@uilib";
 import { InstanceRepositoryPort } from "@domain/instance/ports/instance.repository.port";
 import { InstanceHttpAdapter } from "@infrastructure/adapters/instance/instance-http.adapter";
 import { InstanceBrandService } from "@ui/services/instance-brand.service";
@@ -61,6 +61,7 @@ registerLocaleData(localeRu, "ru-RU");
 
 export const APP_CONFIG: ApplicationConfig = {
   providers: [
+    { provide: FORCED_THEME_SCHEME, useValue: environment.instanceMode ? "light" : null },
     { provide: LOCALE_ID, useValue: "ru-RU" },
     importProvidersFrom(BrowserModule, ReactiveFormsModule, MatProgressBarModule),
     provideNgxMask(),

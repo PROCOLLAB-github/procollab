@@ -19,6 +19,7 @@ import {
   ManagementTeam,
   ManagementEvaluation,
 } from "@domain/program/program-management.model";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 import { ProgramManagementComponent } from "./management.component";
 import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
@@ -296,6 +297,7 @@ describe("Списки управления программой в DOM", () => 
       select: vi.fn((row: ManagementProject) => state.selected.set(row)),
       clearSelection: vi.fn(() => state.selected.set(null)),
     };
+    const instance = { enabled: signal(false), programId: signal<number | null>(null) };
     TestBed.configureTestingModule({
       providers: [
         provideRouter([
@@ -306,6 +308,7 @@ describe("Списки управления программой в DOM", () => 
             children: [{ path: "management/:section", component: ProgramManagementComponent }],
           },
         ]),
+        { provide: InstanceInfoService, useValue: instance },
         { provide: FileService, useValue: { uploadFile } },
       ],
     }).overrideComponent(ProgramManagementComponent, {
@@ -322,8 +325,31 @@ describe("Списки управления программой в DOM", () => 
       ProgramManagementComponent,
     );
     const element = () => harness.routeNativeElement!;
-    return { harness, component, state, project, element, uploadFile, uploaded };
+    return { harness, component, state, project, element, uploadFile, uploaded, instance };
   }
+
+  it("shows the real evaluation link only for the configured pilot and keeps the current mobile option", async () => {
+    const { state, harness, element, instance } = await setup("overall-results");
+    state.program.set({ ...program, solutionStorageMode: "legacy_project" });
+    harness.detectChanges();
+    expect(element().querySelector('a[href$="/projects-rating"]')).toBeNull();
+    instance.enabled.set(true);
+    instance.programId.set(1);
+    harness.detectChanges();
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+    expect(element().querySelector('a[href$="/projects-rating"]')?.textContent).toContain(
+      "Оценка проектов",
+    );
+    const select = element().querySelector(
+      ".management__evaluation-select select",
+    ) as HTMLSelectElement;
+    expect(select.value).toBe("overall-results");
+    expect([...select.options].map(o => o.textContent)).toContain("Оценка проектов");
+    instance.programId.set(2);
+    harness.detectChanges();
+    expect(element().querySelector('a[href$="/projects-rating"]')).toBeNull();
+  });
 
   it("общий рейтинг входит в оценивание и не запускается для другого контура", async () => {
     const { component, state, harness, element } = await setup("overall-results");

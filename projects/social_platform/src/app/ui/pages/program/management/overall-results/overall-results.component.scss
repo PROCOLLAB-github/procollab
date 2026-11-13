@@ -12,11 +12,7 @@
 }
 
 .overall__filter .ui-field {
-  --ui-control-height: 36px;
-  --ui-control-padding: 6px 10px;
-  --ui-radius-control: 8px;
-
-  width: 168px;
+  width: 200px;
 }
 
 .overall__state {
@@ -106,7 +102,6 @@
 
   .overall__filter .ui-field {
     width: 100%;
-    min-height: 40px;
   }
 
   .overall__table thead {
@@ -169,5 +164,11 @@
     width: 44px;
     min-width: 44px;
     height: 44px;
+  }
+}
+
+@media (max-width: 749px) {
+  .overall__tools .ui-field {
+    font-size: 16px;
   }
 }

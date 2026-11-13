@@ -229,7 +229,23 @@ describe("Общий рейтинг кейса и квиза", () => {
     expect(fixture.nativeElement.textContent).toContain("Команды пока не добавлены");
   });
 
-  it("для legacy предлагает настроить критерии и не выгружает фиктивный итог", async () => {
+  it("shows raw case points plus quiz without requiring weights", async () => {
+    const { component, fixture, api } = await setup();
+    component.snapshot.set({
+      ...snapshot,
+      caseScoringMode: "legacy",
+      caseMaximum: 200,
+      maximum: 300,
+      projects: [{ ...snapshot.projects[0], caseScore: 170, quizScore: 90, score: 260 }],
+    });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain("260,00");
+    expect(fixture.nativeElement.textContent).not.toContain("из 200");
+    expect(fixture.nativeElement.textContent).not.toContain("веса");
+    component.download();
+    expect(api.exportOverallResults).toHaveBeenCalled();
+  });
+  it("keeps teams and export visible while numeric criteria are missing", async () => {
     const { component, fixture, api } = await setup();
     component.snapshot.set({
       ...snapshot,
@@ -237,10 +253,10 @@ describe("Общий рейтинг кейса и квиза", () => {
       caseScoringMode: "legacy",
     });
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain("Настройте оценку кейса из 100");
-    expect(fixture.nativeElement.querySelector("table")).toBeNull();
+    expect(fixture.nativeElement.textContent).toContain("Добавьте числовые критерии кейса");
+    expect(fixture.nativeElement.querySelector("table")).not.toBeNull();
     expect(fixture.nativeElement.querySelector('a[href*="tab=criteria"]')).not.toBeNull();
     component.download();
-    expect(api.exportOverallResults).not.toHaveBeenCalled();
+    expect(api.exportOverallResults).toHaveBeenCalled();
   });
 });

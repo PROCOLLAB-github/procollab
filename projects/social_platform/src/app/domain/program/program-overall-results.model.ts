@@ -34,9 +34,9 @@ export interface ProgramOverallResults {
   programName: string;
   generatedAt: string;
   formula: "case_plus_quiz";
-  caseMaximum: 100;
+  caseMaximum: number | null;
   quizMaximum: 100;
-  maximum: 200;
+  maximum: number | null;
   caseScoringMode: EvaluationScoringMode;
   caseScoringConfigured: boolean;
   caseOptions: string[];

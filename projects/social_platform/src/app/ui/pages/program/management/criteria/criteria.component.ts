@@ -14,7 +14,13 @@ import {
 } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { userErrorMessage } from "@core/lib/models/error/user-error-message";
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
+import {
+  FormBuilder,
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import {
@@ -24,10 +30,8 @@ import {
   ManagementCriteriaWrite,
   ManagementCriterion,
 } from "@domain/program/program-criteria.model";
-import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion";
-import { AlertDirective, ButtonDirective, FieldDirective } from "@uilib";
+import { AlertDirective, ButtonDirective, ChoiceDirective, FieldDirective } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { ProjectRatingComponent } from "../../detail/list/rating-card/project-rating/project-rating.component";
 
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 
@@ -36,11 +40,12 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
   imports: [
     TransientNoticeComponent,
     ReactiveFormsModule,
+    FormsModule,
+    ChoiceDirective,
     AlertDirective,
     ButtonDirective,
     FieldDirective,
     ModalComponent,
-    ProjectRatingComponent,
   ],
   templateUrl: "./criteria.component.html",
   styleUrl: "./criteria.component.scss",
@@ -100,9 +105,6 @@ export class ManagementCriteriaComponent {
       return "Для весов укажите конечный максимум строго больше минимума каждого числового критерия.";
     return this.weightTotal() === 100 ? null : "Сумма весов должна быть ровно 100%.";
   });
-  readonly previewOpen = signal(false);
-  readonly previewCriteria = signal<ProjectRatingCriterion[]>([]);
-  readonly previewControl = new FormControl();
   readonly deleting = signal<ManagementCriterion | null>(null);
   readonly labels: Record<CriterionType, string> = {
     int: "Целые баллы",
@@ -145,7 +147,10 @@ export class ManagementCriteriaComponent {
       criteria: (source?.criteria ?? this.criteria()).map(c => ({
         ...c,
         id: c.id > 0 ? c.id : null,
-        weightPercent: c.weightPercent ?? null,
+        weightPercent:
+          (source ? source.scoringMode : this.scoringMode()) === "weighted_percent"
+            ? (c.weightPercent ?? null)
+            : null,
       })),
     };
   }
@@ -304,36 +309,29 @@ export class ManagementCriteriaComponent {
         },
       });
   }
-  openPreview(): void {
-    this.previewCriteria.set(
-      this.criteria().map(c => ({
-        ...c,
-        weightPercent: this.scoringMode() === "weighted_percent" ? c.weightPercent : null,
-        description: c.description ?? "",
-        value: "",
-        expertId: 0,
-      })),
-    );
-    this.previewControl.reset();
-    this.previewOpen.set(true);
-  }
   summary(c: ManagementCriterion): string {
-    return (
-      this.labels[c.type] +
-      (c.type === "int" || c.type === "float"
-        ? ` · от ${c.minValue ?? "без минимума"} до ${c.maxValue ?? "без максимума"}`
-        : "") +
-      (this.scoringMode() === "weighted_percent" && c.weightPercent != null
-        ? ` · вес ${c.weightPercent}%`
-        : "")
-    );
+    if (c.type === "str") return "Текстовый ответ. Не влияет на баллы.";
+    if (c.type === "bool") return "Да / нет. Не влияет на баллы.";
+    return `${this.labels[c.type]} · от ${c.minValue ?? "без минимума"} до ${c.maxValue ?? "без максимума"}`;
   }
   changeScoringMode(event: Event): void {
     if (this.locked() || this.saving()) return;
-    const value = (event.target as HTMLSelectElement).value;
-    if (value === "legacy" || value === "weighted_percent") this.scoringMode.set(value);
+    this.scoringMode.set(
+      (event.target as HTMLInputElement).checked ? "weighted_percent" : "legacy",
+    );
     this.error.set(null);
     this.saved.set(false);
+  }
+  changeWeight(criterion: ManagementCriterion, weightPercent: number | null): void {
+    if (this.locked() || this.saving() || this.scoringMode() !== "weighted_percent") return;
+    this.criteria.update(rows =>
+      rows.map(c => (c.id === criterion.id ? { ...c, weightPercent } : c)),
+    );
+    this.error.set(null);
+    this.saved.set(false);
+  }
+  invalidWeight(criterion: ManagementCriterion): boolean {
+    return !this.validWeight(criterion.weightPercent);
   }
   private validWeight(value: number | null | undefined): value is number {
     return (

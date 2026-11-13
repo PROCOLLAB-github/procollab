@@ -225,7 +225,6 @@ export class ManagementOverallResultsComponent {
       this.filtersPending() ||
       this.exporting() ||
       !data?.matchingCount ||
-      !data.caseScoringConfigured ||
       !context
     )
       return;

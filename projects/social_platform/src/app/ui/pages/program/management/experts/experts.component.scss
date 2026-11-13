@@ -161,13 +161,7 @@
 
 @media (max-width: 999px) {
   .experts__tabs button {
-    margin-block: 6px;
-
-    &::after {
-      position: absolute;
-      inset: -6px 0;
-      content: "";
-    }
+    min-height: 44px;
   }
 }
 
@@ -374,24 +368,14 @@
   }
 
   .ui-button.ui-button {
-    min-height: 32px;
+    min-height: 44px;
     padding: 5px 16px;
   }
 
-  .ui-button::after {
-    position: absolute;
-    inset: -6px 0;
-    content: "";
-  }
-
   .ui-button.ui-button--icon {
-    width: 32px;
-    min-width: 32px;
+    width: 44px;
+    min-width: 44px;
     padding: 2px;
-  }
-
-  .ui-button--icon::after {
-    inset: -6px;
   }
 
   .experts {

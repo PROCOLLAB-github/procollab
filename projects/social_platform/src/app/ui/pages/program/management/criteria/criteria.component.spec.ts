@@ -92,22 +92,21 @@ describe("Organizer evaluation criteria", () => {
     component.discard();
     expect(component.locked()).toBe(true);
   });
-  it("locked snapshot stays readable; preview makes no API writes", async () => {
+  it("locked snapshot stays readable, disables actions and has no preview", async () => {
     const { fixture, component, pending } = await setup();
     pending.next({ ...initial(), locked: true });
     await fixture.whenStable();
     expect(fixture.nativeElement.textContent).toContain("Критерии зафиксированы");
-    expect(fixture.nativeElement.querySelector(".criteria__row button")).toBeNull();
-    component.openPreview();
-    expect(component.previewCriteria()[0].name).toBe("Качество");
+    expect(fixture.nativeElement.querySelector(".criteria__row button").disabled).toBe(true);
+    expect(fixture.nativeElement.textContent).not.toContain("Предпросмотр");
     expect(api.saveCriteria).not.toHaveBeenCalled();
   });
   it("mode change is dirty for an old API snapshot and invalid totals never write", async () => {
     const { component, fixture } = await setup();
     const select = fixture.nativeElement.querySelector(
       "#criteria-scoring-mode",
-    ) as HTMLSelectElement;
-    select.value = "weighted_percent";
+    ) as HTMLInputElement;
+    select.checked = true;
     select.dispatchEvent(new Event("change"));
     await fixture.whenStable();
     expect(component.dirty()).toBe(true);
@@ -169,7 +168,7 @@ describe("Organizer evaluation criteria", () => {
     component.apply();
     expect(component.criteria()[0]).toEqual({ ...criterion, weightPercent: 80 });
   });
-  it("locked weighted mode cannot be switched or edited and preview retains its weights", async () => {
+  it("locked weighted mode cannot be switched or edited", async () => {
     const { component, pending } = await setup();
     pending.next({
       ...initial(),
@@ -177,9 +176,48 @@ describe("Organizer evaluation criteria", () => {
       scoringMode: "weighted_percent",
       criteria: initial().criteria.map(c => ({ ...c, weightPercent: 100 })),
     });
-    component.changeScoringMode({ target: { value: "legacy" } } as unknown as Event);
+    component.changeScoringMode({ target: { checked: false } } as unknown as Event);
     expect(component.scoringMode()).toBe("weighted_percent");
-    component.openPreview();
-    expect(component.previewCriteria()[0].weightPercent).toBe(100);
+    component.changeWeight(component.criteria()[0], 50);
+    expect(component.criteria()[0].weightPercent).toBe(100);
+  });
+  it("edits percentages inline, rejects totals and ignores weights when disabled", async () => {
+    const { fixture, component } = await setup();
+    component.scoringMode.set("weighted_percent");
+    await fixture.whenStable();
+    const input = fixture.nativeElement.querySelector(
+      ".criteria__weight input",
+    ) as HTMLInputElement;
+    expect(input.getAttribute("type")).toBe("number");
+    input.value = "95";
+    input.dispatchEvent(new Event("input"));
+    await fixture.whenStable();
+    expect(component.weightTotal()).toBe(95);
+    expect(component.weightsError()).toContain("100%");
+    expect(component.dirty()).toBe(true);
+    component.save();
+    expect(api.saveCriteria).not.toHaveBeenCalled();
+    component.changeScoringMode({ target: { checked: false } } as unknown as Event);
+    component.edit();
+    component.editor.patchValue({ name: "Еще один", type: "bool" });
+    component.apply();
+    api.saveCriteria.mockReturnValue(of({ ...initial(), criteria: component.criteria() }));
+    component.save();
+    expect(api.saveCriteria).toHaveBeenCalledWith(
+      8,
+      expect.objectContaining({
+        scoringMode: "legacy",
+        criteria: expect.arrayContaining([expect.objectContaining({ id: 1, weightPercent: null })]),
+      }),
+    );
+  });
+  it("cancels inline changes back to the loaded weights and mode", async () => {
+    const { component } = await setup();
+    component.scoringMode.set("weighted_percent");
+    component.changeWeight(component.criteria()[0], 100);
+    await component.cancel();
+    expect(component.scoringMode()).toBe("legacy");
+    expect(component.criteria()[0].weightPercent).toBeUndefined();
+    expect(component.dirty()).toBe(false);
   });
 });
