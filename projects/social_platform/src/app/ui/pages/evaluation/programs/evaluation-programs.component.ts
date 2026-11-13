@@ -3,20 +3,31 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  ElementRef,
   computed,
   effect,
   inject,
   signal,
   untracked,
-  viewChild,
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { debounceTime, distinctUntilChanged, finalize, forkJoin } from "rxjs";
-import { AlertDirective, AvatarComponent, ButtonDirective, FieldDirective } from "@uilib";
+import {
+  AlertDirective,
+  AvatarComponent,
+  ButtonDirective,
+  CardDirective,
+  DialogBodyDirective,
+  DialogFooterDirective,
+  DialogHeaderComponent,
+  FieldDirective,
+  IconComponent,
+  PaginationComponent,
+  StateComponent,
+  TabsComponent,
+} from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
@@ -50,8 +61,16 @@ const positive = (value: string | null) => {
     AlertDirective,
     AvatarComponent,
     ButtonDirective,
+    CardDirective,
+    DialogBodyDirective,
+    DialogFooterDirective,
+    DialogHeaderComponent,
     FieldDirective,
+    IconComponent,
     ModalComponent,
+    PaginationComponent,
+    StateComponent,
+    TabsComponent,
     TransientNoticeComponent,
   ],
   templateUrl: "./evaluation-programs.component.html",
@@ -93,8 +112,6 @@ export class EvaluationProgramsComponent {
   );
   readonly search = new FormControl("", { nonNullable: true });
   readonly program = new FormControl("", { nonNullable: true });
-  readonly searchExpanded = signal(false);
-  readonly searchInput = viewChild<ElementRef<HTMLInputElement>>("searchInput");
   readonly selected = signal<EvaluationProgram | null>(null);
   readonly loading = signal(true);
   readonly failed = signal<string | null>(null);
@@ -108,6 +125,11 @@ export class EvaluationProgramsComponent {
   readonly invitations = computed(
     () => this.data()?.results.filter(p => p.status === "pending") ?? [],
   );
+  readonly tabs = computed(() => [
+    { id: "pending", linkText: `Осталось оценить · ${this.data()?.applications.pending ?? "—"}` },
+    { id: "completed", linkText: `Оцененные · ${this.data()?.applications.completed ?? "—"}` },
+    { id: "invitations", linkText: `Приглашения · ${this.invitations().length}` },
+  ]);
   readonly filtered = computed(() => !!this.query().q || !!this.query().programId);
   readonly rangeStart = computed(() =>
     this.data()?.applications.results.length ? this.query().offset + 1 : 0,
@@ -219,9 +241,6 @@ export class EvaluationProgramsComponent {
           this.open(invitation);
         });
     });
-    effect(() => {
-      if (this.searchExpanded()) this.searchInput()?.nativeElement.focus();
-    });
   }
   reload(): void {
     this.revision.update(n => n + 1);
@@ -233,8 +252,10 @@ export class EvaluationProgramsComponent {
       queryParamsHandling: "merge",
     });
   }
-  setTab(tab: CabinetTab): void {
-    this.navigate({ tab: tab === "pending" ? null : tab, page: null });
+  setTab(tab: string): void {
+    if (tab === "pending" || tab === "completed" || tab === "invitations") {
+      this.navigate({ tab: tab === "pending" ? null : tab, page: null });
+    }
   }
   resetFilters(): void {
     this.navigate({ q: null, program: null, page: null });
