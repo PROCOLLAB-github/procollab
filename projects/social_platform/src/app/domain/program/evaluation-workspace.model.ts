@@ -7,6 +7,7 @@ export interface ExpertRow {
   email: string;
   avatar?: string | null;
   status: "joined" | "pending" | "expired" | "revoked";
+  isOrganizer?: boolean;
   deliveryStatus?: "queued" | "sent" | "failed";
   assigned: number | null;
   completed: number | null;

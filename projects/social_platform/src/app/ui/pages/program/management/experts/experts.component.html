@@ -507,7 +507,8 @@
         </section>
         <section class="experts__method">
           <h3>Автоматически</h3>
-          <p>Все кейсы и все доступные эксперты, с учетом нагрузки.</p>
+          <p>Доступные эксперты распределяются по всем кейсам с учетом нагрузки.</p>
+          <p>Организаторам можно назначить проекты вручную.</p>
           <button type="button" appButton="primary" (click)="startAutomaticAllocation()">
             Распределить автоматически
           </button>
@@ -711,7 +712,13 @@
                   Эксперты · {{ poolExperts(group.name).length }}
                 </button>
                 @if (!poolExperts(group.name).length) {
-                  <p class="experts__allocation-shortage">Доступные эксперты не выбраны</p>
+                  <p class="experts__allocation-shortage">
+                    {{
+                      automaticExpertsFor(group.name).length
+                        ? "Доступные эксперты не выбраны"
+                        : "В этом кейсе нет экспертов для автоматического распределения"
+                    }}
+                  </p>
                 }
               </section>
             } @empty {
@@ -897,7 +904,7 @@
           [fallbackLabel]="initials(expert)"
         /><span
           ><strong>{{ expert.name || expert.email }}</strong
-          ><span>{{ expert.email }}</span
+          ><span>{{ expert.email }}{{ expert.isOrganizer ? " · Организатор" : "" }}</span
           ><span [class.experts__reason]="!!candidateReason(expert)">{{
             candidateReason(expert) ||
               scopeLabel(expert) + " · Осталось оценить: " + (expert.remaining ?? 0)
@@ -905,7 +912,11 @@
         ></label
       >
     } @empty {
-      <p>Эксперты не найдены. Измените поиск или пригласите эксперта.</p>
+      @if (modal() === "pool" && !poolCandidates().length) {
+        <p>В этом кейсе нет экспертов для автоматического распределения.</p>
+      } @else {
+        <p>Эксперты не найдены. Измените поиск или пригласите эксперта.</p>
+      }
     }
   </div>
 </ng-template>
