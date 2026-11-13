@@ -91,8 +91,7 @@
   &__viewport {
     max-width: 100%;
     padding: 12px;
-    overflow: auto;
-    overscroll-behavior: contain;
+    overflow: clip;
     background: var(--light-gray);
     border-radius: 12px;
   }
