@@ -49,11 +49,12 @@ import { IconComponent } from "../../primitives/icon/icon.component";
       color: var(--ui-danger);
     }
     .state__title {
-      font-size: var(--ui-font-body);
+      font-size: var(--state-title-size, var(--ui-font-body));
+      font-weight: var(--state-title-weight, inherit);
       line-height: 1.5;
     }
     .state__description {
-      font-size: var(--ui-font-small);
+      font-size: var(--state-description-size, var(--ui-font-small));
       line-height: 1.5;
     }
     .state--compact {
