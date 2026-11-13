@@ -172,8 +172,11 @@ export class ManagementCertificatesComponent {
   readonly dirty = computed(
     () => JSON.stringify(this.draft()) !== JSON.stringify(this.snapshot()?.draft ?? null),
   );
+  readonly eligibleCounts = computed(
+    () => this.snapshot()?.eligibleCounts ?? { all: 0, submitted: 0 },
+  );
   readonly recipients = computed(
-    () => this.snapshot()?.eligibleCounts[this.draft()?.audience ?? "submitted"] ?? 0,
+    () => this.eligibleCounts()[this.draft()?.audience ?? "submitted"],
   );
   readonly participantForms: [string, string, string] = ["участник", "участника", "участников"];
   readonly signatureRatio = computed(() => {

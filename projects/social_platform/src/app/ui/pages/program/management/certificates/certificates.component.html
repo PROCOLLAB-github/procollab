@@ -250,6 +250,7 @@
     </aside>
   </ng-template>
   @if (step() === 2) {
+    @let counts = eligibleCounts();
     <fieldset class="certificates__issuance" [disabled]="busy()">
       <div class="certificates__card certificates__rules">
         <section aria-labelledby="certificate-audience">
@@ -270,8 +271,7 @@
               />
               <span
                 >Всем зарегистрированным
-                @let allCount = snapshot()?.eligibleCounts.all ?? 0;
-                <small>{{ allCount }} {{ allCount | pluralize: participantForms }}</small>
+                <small>{{ counts.all }} {{ counts.all | pluralize: participantForms }}</small>
               </span>
             </label>
             <label class="certificates__option">
@@ -285,9 +285,9 @@
               />
               <span
                 >Только сдавшим решение
-                @let submittedCount = snapshot()?.eligibleCounts.submitted ?? 0;
                 <small
-                  >{{ submittedCount }} {{ submittedCount | pluralize: participantForms }}</small
+                  >{{ counts.submitted }}
+                  {{ counts.submitted | pluralize: participantForms }}</small
                 >
               </span>
             </label>
