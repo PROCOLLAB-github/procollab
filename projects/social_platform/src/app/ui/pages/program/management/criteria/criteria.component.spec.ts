@@ -102,4 +102,84 @@ describe("Organizer evaluation criteria", () => {
     expect(component.previewCriteria()[0].name).toBe("Качество");
     expect(api.saveCriteria).not.toHaveBeenCalled();
   });
+  it("mode change is dirty for an old API snapshot and invalid totals never write", async () => {
+    const { component, fixture } = await setup();
+    const select = fixture.nativeElement.querySelector(
+      "#criteria-scoring-mode",
+    ) as HTMLSelectElement;
+    select.value = "weighted_percent";
+    select.dispatchEvent(new Event("change"));
+    await fixture.whenStable();
+    expect(component.dirty()).toBe(true);
+    expect(component.weightsError()).toBeTruthy();
+    component.save();
+    expect(api.saveCriteria).not.toHaveBeenCalled();
+    component.edit(component.criteria()[0]);
+    component.editor.controls.weightPercent.setValue(100);
+    component.apply();
+    expect(component.weightTotal()).toBe(100);
+    expect(component.weightsError()).toBeNull();
+    api.saveCriteria.mockReturnValue(
+      of({ ...initial(), scoringMode: "weighted_percent", criteria: component.criteria() }),
+    );
+    component.save();
+    expect(api.saveCriteria).toHaveBeenCalledWith(
+      8,
+      expect.objectContaining({
+        scoringMode: "weighted_percent",
+        criteria: [expect.objectContaining({ weightPercent: 100 })],
+      }),
+    );
+    expect(component.dirty()).toBe(false);
+  });
+  it("validates fractional weights and counts cents without floating point sum errors", async () => {
+    const { component } = await setup();
+    component.scoringMode.set("weighted_percent");
+    component.edit(component.criteria()[0]);
+    for (const weight of [0, -2, 100.001, NaN, Infinity]) {
+      component.editor.controls.weightPercent.setValue(weight);
+      component.apply();
+      expect(component.editing()).not.toBeNull();
+    }
+    component.criteria.set(
+      [33.33, 33.33, 33.34].map((weightPercent, i) => ({
+        ...initial().criteria[0],
+        id: i + 1,
+        weightPercent,
+      })),
+    );
+    expect(component.weightTotal()).toBe(100);
+    expect(component.weightsError()).toBeNull();
+  });
+  it("keeps existing float definitions when only their weight changes", async () => {
+    const { component, pending } = await setup();
+    const criterion = {
+      ...initial().criteria[0],
+      type: "float" as const,
+      minValue: 0.1,
+      maxValue: 2.5,
+      description: null,
+      weightPercent: 100,
+    };
+    pending.next({ ...initial(), scoringMode: "weighted_percent", criteria: [criterion] });
+    component.edit(criterion);
+    expect(component.editor.controls.name.disabled).toBe(true);
+    expect(component.editor.controls.weightPercent.enabled).toBe(true);
+    component.editor.controls.weightPercent.setValue(80);
+    component.apply();
+    expect(component.criteria()[0]).toEqual({ ...criterion, weightPercent: 80 });
+  });
+  it("locked weighted mode cannot be switched or edited and preview retains its weights", async () => {
+    const { component, pending } = await setup();
+    pending.next({
+      ...initial(),
+      locked: true,
+      scoringMode: "weighted_percent",
+      criteria: initial().criteria.map(c => ({ ...c, weightPercent: 100 })),
+    });
+    component.changeScoringMode({ target: { value: "legacy" } } as unknown as Event);
+    expect(component.scoringMode()).toBe("weighted_percent");
+    component.openPreview();
+    expect(component.previewCriteria()[0].weightPercent).toBe(100);
+  });
 });

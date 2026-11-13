@@ -62,6 +62,55 @@ function setup() {
   return { fixture, component: fixture.componentInstance, api };
 }
 describe("Результаты программы", () => {
+  it("объясняет процентную формулу и вклад критерия в результат команды", async () => {
+    const { fixture, component } = setup();
+    component.snapshot.set({
+      ...snapshot,
+      scoringMode: "weighted_percent",
+      maximum: 100,
+      criteria: [
+        {
+          id: 1,
+          name: "Качество",
+          description: null,
+          type: "int",
+          minValue: 0,
+          maxValue: 10,
+          weightPercent: 100,
+        },
+      ],
+      groups: [
+        {
+          caseName: 'Кейс "А"',
+          projects: [
+            {
+              ...project(1, "Команда", 80, 1),
+              contributions: { "1": 80 },
+              experts: [
+                {
+                  userId: 1,
+                  name: "Эксперт",
+                  email: "expert@example.test",
+                  avatar: null,
+                  complete: true,
+                  total: 80,
+                  values: [{ criterionId: 1, value: "8" }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    component.openModal("formula");
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    expect(document.body.textContent).toContain("Итог кейса — от 0 до 100");
+    expect(document.body.textContent).toMatch(/вес\s+100%/);
+    expect(document.body.textContent).toMatch(/вклад\s+80,00/);
+  });
   it("не показывает нулевую оцененность и безбалльное оценивание, когда оценивание не применяется", async () => {
     const { fixture, component } = setup();
     fixture.componentRef.setInput("submissionApplicable", false);
