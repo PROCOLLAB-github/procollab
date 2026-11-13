@@ -14,10 +14,19 @@ import {
 import { DatePipe, NgTemplateOutlet } from "@angular/common";
 import { HttpErrorResponse } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
+import { RouterLink } from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Observable, Subject, debounceTime, firstValueFrom, interval } from "rxjs";
 import { saveAs } from "file-saver";
-import { AlertDirective, ButtonDirective, ChoiceDirective, FieldDirective } from "@uilib";
+import {
+  AlertDirective,
+  ButtonDirective,
+  ChoiceDirective,
+  FieldDirective,
+  IconComponent,
+} from "@uilib";
+import { PluralizePipe } from "@corelib";
+import { AppRoutes } from "@api/paths/app-routes";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 import { ProgramCertificatesUseCase } from "@api/program/use-cases/program-certificates.use-case";
@@ -55,10 +64,13 @@ interface CertificateEditState {
   selector: "app-management-certificates",
   imports: [
     FormsModule,
+    RouterLink,
+    PluralizePipe,
     DatePipe,
     NgTemplateOutlet,
     ButtonDirective,
     FieldDirective,
+    IconComponent,
     ChoiceDirective,
     AlertDirective,
     ModalComponent,
@@ -82,6 +94,7 @@ export class ManagementCertificatesComponent {
   readonly programId = input.required<number>();
   readonly programName = input.required<string>();
   readonly finishedAt = input<string | null>(null);
+  readonly floatingPosition = input<{ center: number; width: number } | null>(null);
   readonly confirmDiscard = input.required<() => Promise<boolean>>();
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
   private readonly api = inject(ProgramCertificatesUseCase);
@@ -96,6 +109,9 @@ export class ManagementCertificatesComponent {
   readonly error = signal<string | null>(null);
   readonly message = signal<string | null>(null, { equal: () => false });
   readonly step = signal(1);
+  readonly participantsRoute = computed(() =>
+    AppRoutes.program.management(this.programId(), "participants"),
+  );
   readonly uploadedFonts = signal<CertificateAsset[]>([]);
   readonly fontOptions = computed(() =>
     this.uploadedFonts().map(asset => ({
@@ -156,9 +172,13 @@ export class ManagementCertificatesComponent {
   readonly dirty = computed(
     () => JSON.stringify(this.draft()) !== JSON.stringify(this.snapshot()?.draft ?? null),
   );
-  readonly recipients = computed(
-    () => this.snapshot()?.eligibleCounts[this.draft()?.audience ?? "submitted"] ?? 0,
+  readonly eligibleCounts = computed(
+    () => this.snapshot()?.eligibleCounts ?? { all: 0, submitted: 0 },
   );
+  readonly recipients = computed(
+    () => this.eligibleCounts()[this.draft()?.audience ?? "submitted"],
+  );
+  readonly participantForms: [string, string, string] = ["участник", "участника", "участников"];
   readonly signatureRatio = computed(() => {
     const a = this.assets().signature;
     return a ? a.width / a.height : 2;
@@ -211,6 +231,16 @@ export class ManagementCertificatesComponent {
   readonly allChecked = computed(
     () => !!this.journal()?.count && this.allMatching() && !this.excludedIds().length,
   );
+  readonly hasDownloadableSelection = computed(() => {
+    const journal = this.journal();
+    const selected = this.selectedCount();
+    if (!selected || !journal || journal.summary.ready < selected) return false;
+    return journal.results.every(
+      row =>
+        !this.isSelected(row.id) ||
+        (row.pdfReady && !["pending", "generating", "sending"].includes(row.status)),
+    );
+  });
   private readonly searchChanges = new Subject<void>();
   private sequence = 0;
   private loadSequence = 0;
@@ -583,6 +613,13 @@ export class ManagementCertificatesComponent {
     this.step.set(step);
     if (step === 3) void this.loadJournal();
   }
+  viewJournal(): void {
+    this.clearSelection();
+    this.search.set("");
+    this.filter.set("all");
+    this.offset.set(0);
+    this.setStep(3);
+  }
   setFilter(filter: CertificateFilter): void {
     this.clearSelection();
     this.filter.set(filter);
@@ -692,14 +729,15 @@ export class ManagementCertificatesComponent {
     }
     this.selectionAction.set("retry");
   }
-  async archive(): Promise<void> {
-    if (!this.selectedCount()) {
+  async archive(selected: boolean): Promise<void> {
+    if (!selected) {
       await this.run(
         () => this.api.archive(this.programId(), this.filter(), this.search()),
         blob => saveAs(blob, "certificates.zip"),
       );
       return;
     }
+    if (!this.hasDownloadableSelection()) return;
     const selection = this.selectionPayload();
     const revision = this.snapshot()?.revision;
     if (!revision) return;

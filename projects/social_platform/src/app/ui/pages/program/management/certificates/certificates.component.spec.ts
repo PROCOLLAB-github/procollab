@@ -2,6 +2,7 @@
 import { TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 import { HttpErrorResponse } from "@angular/common/http";
+import { provideRouter } from "@angular/router";
 import { of, Subject, throwError } from "rxjs";
 import { describe, expect, it, vi } from "vitest";
 import { ProgramCertificatesRepositoryPort } from "@domain/program/ports/program-certificates.repository.port";
@@ -80,7 +81,10 @@ async function setup(data = settings()) {
     currentArchive: vi.fn(() => of(new Blob(["zip"]))),
     mine: vi.fn(),
   };
-  TestBed.configureTestingModule({ imports: [ManagementCertificatesComponent] });
+  TestBed.configureTestingModule({
+    imports: [ManagementCertificatesComponent],
+    providers: [provideRouter([])],
+  });
   TestBed.overrideComponent(ManagementCertificatesComponent, {
     set: {
       providers: [
@@ -161,6 +165,50 @@ describe("Program certificates", () => {
     await component.updateOnPlatform(certificate.id);
     expect(repository.save).toHaveBeenCalled();
     expect(repository.currentPdf).toHaveBeenCalledWith(9, certificate.id, 2);
+    fixture.destroy();
+  });
+  it("downloads the checked PDFs as one archive without changing the template or sending mail", async () => {
+    const { fixture, component, repository } = await setup();
+    component.step.set(3);
+    component.journal.set({
+      count: 3,
+      results: [
+        certificate,
+        { ...certificate, id: "second-id", name: "Иван Иванов" },
+        {
+          ...certificate,
+          id: "pending-id",
+          name: "Мария Орлова",
+          status: "pending",
+          pdfReady: false,
+        },
+      ],
+      summary: { total: 3, ready: 2, sent: 0, failed: 0 },
+    });
+    fixture.detectChanges();
+    const checks = fixture.nativeElement.querySelectorAll(
+      "tbody input[type=checkbox]",
+    ) as NodeListOf<HTMLInputElement>;
+    checks[0].click();
+    checks[1].click();
+    checks[2].click();
+    fixture.detectChanges();
+    const zip = fixture.nativeElement.querySelector(
+      'button[aria-label="Скачать ZIP выбранных сертификатов"]',
+    ) as HTMLButtonElement;
+    expect(zip.disabled).toBe(true);
+    checks[2].click();
+    fixture.detectChanges();
+    expect(zip.disabled).toBe(false);
+    zip.click();
+    await fixture.whenStable();
+
+    expect(repository.currentArchive).toHaveBeenCalledWith(9, 1, {
+      ids: [certificate.id, "second-id"],
+    });
+    expect(repository.archive).not.toHaveBeenCalled();
+    expect(repository.save).not.toHaveBeenCalled();
+    expect(repository.selection).not.toHaveBeenCalled();
     fixture.destroy();
   });
   it("keeps selection on a rejected action and exposes the failure in its confirmation", async () => {
@@ -273,9 +321,7 @@ describe("Program certificates", () => {
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
-    expect(
-      (fixture.nativeElement.querySelector(".canvas__family select") as HTMLSelectElement).disabled,
-    ).toBe(true);
+    expect(fixture.nativeElement.querySelector(".canvas__family select")).toBeNull();
     canvas.familyChanged("pt-serif");
     expect(component.draft()!.layout.signature.fontFamily).toBeUndefined();
     component.selected.set("name");

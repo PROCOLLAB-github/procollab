@@ -50,6 +50,7 @@
         [programId]="program.id"
         [programName]="program.name"
         [finishedAt]="program.datetimeFinished"
+        [floatingPosition]="floatingPosition()"
         [confirmDiscard]="confirmProjectFormDiscard"
         (statusChange)="certificatesStatus.set($event)"
       />

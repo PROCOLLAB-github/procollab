@@ -4,6 +4,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  TemplateRef,
   afterNextRender,
   computed,
   inject,
@@ -14,6 +15,7 @@ import {
 } from "@angular/core";
 import { ButtonDirective, ChoiceDirective, FieldDirective } from "@uilib";
 import { FormsModule } from "@angular/forms";
+import { NgTemplateOutlet } from "@angular/common";
 import {
   CERTIFICATE_ELEMENTS,
   CERTIFICATE_LABELS,
@@ -34,9 +36,10 @@ import {
 
 @Component({
   selector: "app-certificate-canvas",
-  imports: [FormsModule, ButtonDirective, ChoiceDirective, FieldDirective],
+  imports: [FormsModule, NgTemplateOutlet, ButtonDirective, ChoiceDirective, FieldDirective],
   templateUrl: "./certificate-canvas.component.html",
   styleUrl: "./certificate-canvas.component.scss",
+  host: { "[class.canvas-editor--expanded]": "expanded()" },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CertificateCanvasComponent {
@@ -52,10 +55,10 @@ export class CertificateCanvasComponent {
   readonly preview = input(false);
   readonly disabled = input(false);
   readonly expanded = input(false);
+  readonly settings = input<TemplateRef<{ $implicit: TemplateRef<unknown> }> | null>(null);
   readonly layoutChange = output<CertificateDraft["layout"]>();
   readonly interactionStart = output<void>();
   readonly removeElement = output<CertificateElement>();
-  readonly downloadPreview = output<void>();
   readonly uploadedFonts = input<{ key: `custom-${number}`; label: string }[]>([]);
   readonly fontRevision = input(0);
   readonly uploadFont = output<File>();
@@ -77,10 +80,16 @@ export class CertificateCanvasComponent {
   readonly paperWidth = computed(() => {
     const width = this.availableWidth();
     const page = this.page();
-    // Leave room for tools, the PDF action and the sticky save footer in the dialog.
+    // Keep the document and its preview controls within the viewport.
     const height = this.expanded()
       ? this.expandedPaperHeight()
-      : Math.max(this.draft().orientation === "portrait" ? 360 : 200, this.viewportHeight() - 320);
+      : Math.max(
+          240,
+          Math.min(
+            this.draft().orientation === "portrait" ? 408 : 360,
+            this.viewportHeight() - 320,
+          ),
+        );
     const fit =
       this.expanded() || this.draft().orientation === "portrait"
         ? Math.min(width, (height * page.widthMm) / page.heightMm)
@@ -144,15 +153,11 @@ export class CertificateCanvasComponent {
         );
         this.viewportHeight.set(window.innerHeight);
         if (this.expanded()) {
-          const footer = element
-            .closest(".certificates__editor")
-            ?.querySelector(".certificates__save");
           this.expandedPaperHeight.set(
             Math.max(
               120,
               window.innerHeight -
-                24 -
-                (footer?.getBoundingClientRect().height ?? 80) -
+                40 -
                 Math.max(0, element.getBoundingClientRect().top) -
                 (parseFloat(style.paddingTop) || 0) -
                 (parseFloat(style.paddingBottom) || 0) -
@@ -165,10 +170,6 @@ export class CertificateCanvasComponent {
       const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
       if (this.viewport()) observer?.observe(this.viewport()!.nativeElement);
       if (this.bottom()) observer?.observe(this.bottom()!.nativeElement);
-      const footer = this.viewport()
-        ?.nativeElement.closest(".certificates__editor")
-        ?.querySelector(".certificates__save");
-      if (footer) observer?.observe(footer);
       window.addEventListener("resize", measure);
       measure();
       if (document.fonts) {
@@ -325,7 +326,7 @@ export class CertificateCanvasComponent {
     );
   }
   center(vertical = false): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.preview()) return;
     this.interactionStart.emit();
     const box = this.box();
     this.update(
@@ -341,7 +342,19 @@ export class CertificateCanvasComponent {
       if (event.type === "change") target.value = String(this.box().fontSize);
       return;
     }
-    if (value === this.box().fontSize) return;
+    this.setFontSize(value);
+  }
+  adjustFontSize(delta: number): void {
+    this.setFontSize(Math.min(72, Math.max(8, this.box().fontSize + delta)));
+  }
+  private setFontSize(value: number): void {
+    if (
+      this.disabled() ||
+      this.preview() ||
+      this.selected() === "signature" ||
+      value === this.box().fontSize
+    )
+      return;
     const font = this.font(this.selected());
     const measure = (text: string) => {
       if (this.context)
