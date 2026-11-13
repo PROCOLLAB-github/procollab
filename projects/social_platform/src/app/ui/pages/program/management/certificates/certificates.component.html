@@ -191,7 +191,7 @@
           }
         </div>
         <details #elementMenu class="certificates__add">
-          <summary appButton="secondary">Добавить элемент</summary>
+          <summary class="ui-button ui-button--secondary">Добавить элемент</summary>
           <div>
             @for (key of hiddenElements(); track key) {
               <button type="button" (click)="addElement(key); elementMenu.open = false">
