@@ -1,0 +1,42 @@
+/** @format */
+:host([hidden]) {
+  display: none;
+}
+
+section {
+  display: grid;
+  gap: 8px;
+}
+
+h3,
+dl,
+dd {
+  margin: 0;
+}
+
+h3 {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+}
+
+dl {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+dt {
+  font-weight: 600;
+}
+
+dd {
+  white-space: pre-wrap;
+}
+
+a {
+  color: var(--accent-text);
+  text-decoration: underline;
+}

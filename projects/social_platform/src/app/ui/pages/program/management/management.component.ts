@@ -358,9 +358,9 @@ export class ProgramManagementComponent implements OnInit {
     const program = this.state.program();
     if (!program) return;
     if (key === "projects-rating" && this.pilotEvaluationAvailable()) {
-      void this.router.navigateByUrl(
-        AppRoutes.program.rating(program.id, program.solutionStorageMode),
-      );
+      void this.router.navigate([AppRoutes.office.evaluation()], {
+        queryParams: { program: program.id },
+      });
       return;
     }
     const tab = this.evaluationTabs.find(tab => tab.key === key);

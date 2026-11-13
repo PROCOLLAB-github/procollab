@@ -14,12 +14,16 @@ export function expertDialogBodyClass(kind: string | null): string {
 }
 
 export function expertStatusLabel(row: ExpertRow): string {
-  if (row.status === "joined") return "Доступ предоставлен";
+  if (row.status === "joined")
+    return row.isOrganizer ? "Доступ организатора" : "Доступ предоставлен";
   if (row.status === "expired") return "Приглашение истекло";
   if (row.status === "revoked") return "Приглашение отозвано";
   return "Ожидает принятия";
 }
 export function expertStatusDescription(row: ExpertRow, assignmentLabel = "Проекты"): string {
+  if (row.status === "joined" && row.isOrganizer) {
+    return `Организатору доступно оценивание. ${assignmentLabel} можно назначить ему вручную.`;
+  }
   return row.status === "joined"
     ? `Эксперт добавлен в программу. ${assignmentLabel} для оценки назначаются отдельно.`
     : row.status === "pending"

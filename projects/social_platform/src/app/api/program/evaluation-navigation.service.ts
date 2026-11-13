@@ -1,5 +1,12 @@
 /** @format */
 import { Injectable } from "@angular/core";
+import { AppRoutes } from "@api/paths/app-routes";
+
+export function cabinetReturnUrl(value: string | null, programId: number | string): string {
+  return value && /^\/office\/evaluation(?:\?[^#]*)?$/.test(value)
+    ? value
+    : `${AppRoutes.office.evaluation()}?program=${programId}`;
+}
 
 /** In-memory position only; assessment values are never persisted here. */
 @Injectable({ providedIn: "root" })

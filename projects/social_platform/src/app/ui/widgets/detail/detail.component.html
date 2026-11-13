@@ -216,7 +216,7 @@
                       <i appIcon icon="plus" appSquare="10"></i>
                     </app-button>
                   }
-                  @if (info().pendingExpertInvitationId && !isUserExpert()) {
+                  @if (info().pendingExpertInvitationId) {
                     <a
                       routerLink="/office/evaluation"
                       [queryParams]="{ invitation: info().pendingExpertInvitationId }"
@@ -230,7 +230,8 @@
                   }
                   @if (isUserExpert()) {
                     <a
-                      [routerLink]="AppRoutes.program.rating(info().id, info().solutionStorageMode)"
+                      [routerLink]="AppRoutes.office.evaluation()"
+                      [queryParams]="{ program: info().id }"
                     >
                       <app-button
                         [appearance]="

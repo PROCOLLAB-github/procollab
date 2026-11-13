@@ -10,6 +10,18 @@
 }
 
 .program-card {
+  &__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+
+    &:focus-visible {
+      border-radius: var(--rounded-lg);
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+  }
+
   &__actions {
     display: flex;
     gap: 12px;

@@ -30,6 +30,8 @@ import { Collaborator } from "@domain/project/collaborator.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { finalize } from "rxjs";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
+import type { ProgramFieldAnswer } from "@domain/project/program-link-fields.model";
+import { ProgramFieldAnswersComponent } from "@ui/widgets/program-field-answers/program-field-answers.component";
 
 const PROJECT_DESCRIPTION_PREVIEW_LENGTH = 420;
 
@@ -72,12 +74,14 @@ export function buildProjectDescriptionPreview(
     NewsCardComponent,
     ParseLinksPipe,
     ParseBreaksPipe,
+    ProgramFieldAnswersComponent,
   ],
   providers: [ProjectsDetailService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsMidSideComponent {
   readonly project = input.required<Project | undefined>();
+  readonly programAnswers = input<readonly ProgramFieldAnswer[]>([]);
 
   // Ссылки на элементы DOM
   readonly newsEl = viewChild<ElementRef>("newsEl");

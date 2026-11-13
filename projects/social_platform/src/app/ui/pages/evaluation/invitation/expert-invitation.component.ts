@@ -223,9 +223,9 @@ export class ExpertInvitationComponent {
         error: e => this.error.set(evaluationError(e)),
       });
   }
-  destination(programId: number): string {
+  destination(programId: number) {
     return this.isOrganizer
       ? this.paths.program.management(programId, "settings")
-      : this.paths.program.projectsRating(programId);
+      : this.paths.office.evaluation();
   }
 }

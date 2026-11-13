@@ -179,6 +179,21 @@ describe("Detail cleanup actions", () => {
     expect(actions.textContent).toContain("управление программой");
     expect(actions.querySelector('a[href*="published-solutions"]')).toBeNull();
   });
+  it("показывает организатору управление, оценку и отдельное приглашение эксперта", () => {
+    manager.set(true);
+    expert.set(true);
+    info.set({ ...Program.default(), id: 12, pendingExpertInvitationId: 34 });
+    const fixture = TestBed.createComponent(DeatilComponent);
+    fixture.detectChanges();
+    const actions: HTMLElement = fixture.nativeElement.querySelector(".info__actions");
+    expect(
+      actions.querySelector('a[href="/office/evaluation?invitation=34"]')?.textContent,
+    ).toContain("Принять приглашение");
+    expect(actions.querySelector('a[href="/office/evaluation?program=12"]')?.textContent).toContain(
+      "оценка проектов",
+    );
+    expect(actions.textContent).toContain("управление программой");
+  });
   it("participant has one public action replacing the disabled more placeholder", () => {
     member.set(false);
     info.set({

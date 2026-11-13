@@ -1,12 +1,17 @@
 /** @format */
 
 import { User } from "@domain/auth/user.model";
-import { ProjectRatingCriterion } from "./project-rating-criterion"; // Assuming this is where ProjectRatingCriterion is declared
+import type { ProgramFieldAnswer } from "./program-link-fields.model";
+import { ProjectRatingCriterion } from "./project-rating-criterion";
 
 /** Интерфейс проекта для оценки */
 export interface ProjectRate {
   managedEvaluation?: boolean;
   criteriaRevision?: string;
+  canRate?: boolean;
+  blockedReason?: string | null;
+  programLinkId?: number;
+  programFields?: ProgramFieldAnswer[];
   id: number;
   name: string;
   leader: number;

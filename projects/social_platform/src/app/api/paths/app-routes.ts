@@ -8,6 +8,9 @@
 export const AppRoutes = {
   office: {
     root: () => "/office",
+    evaluation: () => "/office/evaluation",
+    projectEvaluation: (programId: number | string, projectId: number | string) =>
+      `/office/evaluation/${programId}/projects/${projectId}`,
     feed: () => "/office/feed",
     chats: () => "/office/chats",
     members: () => "/office/members",
@@ -61,9 +64,6 @@ export const AppRoutes = {
     list: () => "/office/program/all",
     detail: (programId: number | string) => `/office/program/${programId}`,
     projects: (programId: number | string) => `/office/program/${programId}/projects`,
-    projectsRating: (programId: number | string) => `/office/program/${programId}/projects-rating`,
-    rating: (programId: number | string, storageMode?: "legacy_project" | "solution") =>
-      `/office/program/${programId}/${storageMode === "solution" ? "solutions-rating" : "projects-rating"}`,
     analytics: (programId: number | string) => `/office/program/${programId}/analytics`,
     members: (programId: number | string) => `/office/program/${programId}/members`,
     register: (programId: number | string) => `/office/program/${programId}/register`,

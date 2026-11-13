@@ -1,6 +1,8 @@
 /** @format */
 
-import { Routes } from "@angular/router";
+import { convertToParamMap, RedirectFunction, Router, Routes } from "@angular/router";
+import { inject } from "@angular/core";
+import { AppRoutes } from "@api/paths/app-routes";
 import { ProgramListComponent } from "../../pages/program/detail/list/list.component";
 import { ProgramDetailResolver } from "../../pages/program/detail/detail.resolver";
 import { DeatilComponent } from "@ui/widgets/detail/detail.component";
@@ -12,8 +14,28 @@ import { ProgramAnalyticsComponent } from "@ui/pages/program/detail/analytics/an
 import { ProgramManagementComponent } from "@ui/pages/program/management/management.component";
 import { canLeaveManagement } from "./management-leave.guard";
 import { canLeaveSolution } from "./solution-leave.guard";
-import { RatingWorkspaceComponent } from "@ui/pages/program/rating/rating-workspace.component";
 import { ProgramProjectsPageComponent } from "@ui/pages/program/published-solutions/published-projects.component";
+import { cabinetReturnUrl } from "@api/program/evaluation-navigation.service";
+
+const redirectProjectRating: RedirectFunction = ({ params, queryParams: query }) => {
+  const router = inject(Router);
+  const queryParamMap = convertToParamMap(query);
+  const programId = params["programId"];
+  const projectId = Number(params["projectId"] ?? queryParamMap.get("project_id"));
+  if (Number.isSafeInteger(projectId) && projectId > 0) {
+    return router.createUrlTree([AppRoutes.office.projectEvaluation(programId, projectId)], {
+      queryParams: { returnUrl: cabinetReturnUrl(queryParamMap.get("returnUrl"), programId) },
+    });
+  }
+  const queryParams: Record<string, string | string[]> = { program: programId };
+  if (queryParamMap.get("status") === "completed") queryParams["tab"] = "completed";
+  const search = queryParamMap.get("q") ?? queryParamMap.get("name__contains");
+  if (search) queryParams["q"] = search;
+  for (const key of queryParamMap.keys) {
+    if (key.startsWith("filter.")) queryParams[key] = queryParamMap.getAll(key);
+  }
+  return router.createUrlTree([AppRoutes.office.evaluation()], { queryParams });
+};
 
 /** Маршруты детальной страницы программы: информация, проекты и участники. */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
@@ -37,11 +59,8 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
   },
   ...["projects-rating", "projects-rating/:projectId"].map(path => ({
     path,
-    component: RatingWorkspaceComponent,
-    providers: [ProgramDetailMainUIInfoService],
-    resolve: { data: ProgramDetailResolver },
-    canDeactivate: [canLeaveManagement],
-    runGuardsAndResolvers: "pathParamsChange" as const,
+    pathMatch: "full" as const,
+    redirectTo: redirectProjectRating,
   })),
   {
     path: "solutions/new",
