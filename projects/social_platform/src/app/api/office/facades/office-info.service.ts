@@ -72,7 +72,9 @@ export class OfficeInfoService {
         this.officeUIInfoService.applyCreateNavItems(profile!.id);
         const expertRoute =
           this.router.url.startsWith("/office/evaluation") ||
-          /^\/office\/program\/\d+\/projects-rating(?:[/?]|$)/.test(this.router.url);
+          /^\/office\/program\/\d+\/(?:projects-rating|solutions-rating|solutions\/\d+\/evaluation)(?:[/?#]|$)/.test(
+            this.router.url,
+          );
         const expertEntry = expertRoute && profile!.relations.hasEvaluationAccess === true;
         if (!profile!.doesCompleted() && !expertEntry) {
           this.router

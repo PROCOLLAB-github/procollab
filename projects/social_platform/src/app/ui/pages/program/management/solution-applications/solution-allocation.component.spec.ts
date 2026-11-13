@@ -23,6 +23,7 @@ describe("Назначения из выбранных заявок решени
         revision: "solution-revision",
         experts: [
           { id: 11, status: "joined", name: "Эксперт", email: "expert@example.test" },
+          { id: 13, status: "joined", isOrganizer: true, name: "Организатор" },
           { id: "invite-12", status: "pending" },
         ],
         projects: [{ id: 999 }],
@@ -45,10 +46,11 @@ describe("Назначения из выбранных заявок решени
     await fixture.whenStable();
     return fixture.componentInstance;
   }
-  it("использует выбранные solution IDs и принятых экспертов, игнорирует Project IDs в общем roster", async () => {
+  it("использует выбранные решения и исключает организаторов из автоматического распределения", async () => {
     const component = await setup();
     expect(component.experts().map(e => e.id)).toEqual([11]);
     component.toggle(11);
+    component.toggle(13);
     component.preview();
     expect(preview.execute).toHaveBeenCalledExactlyOnceWith(12, {
       revision: "solution-revision",

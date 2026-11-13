@@ -237,7 +237,8 @@ describe("Управление экспертами", () => {
   it("обычный запуск сразу считает все кейсы со всеми подходящими экспертами", () => {
     const { component, api } = setup();
     const restricted = { ...snapshot.experts[0], id: 3, allCases: false, caseNames: ["Сбер"] };
-    component.snapshot.update(s => ({ ...s!, experts: [...s!.experts, restricted] }));
+    const organizer = { ...snapshot.experts[0], id: 4, isOrganizer: true };
+    component.snapshot.update(s => ({ ...s!, experts: [...s!.experts, restricted, organizer] }));
     api.allocation.mockReturnValue(
       of({
         revision: "v1",
@@ -274,6 +275,41 @@ describe("Управление экспертами", () => {
     component.chosenExperts.set(new Set());
     component.selectAllPool();
     expect([...component.chosenExperts()]).toEqual([1]);
+  });
+  it("исключает организатора из автоподбора и сохраняет его ручное назначение", () => {
+    const { component, api } = setup();
+    const organizer = { ...snapshot.experts[0], isOrganizer: true };
+    const otherOrganizer = { ...organizer, id: 4, userId: 104 };
+    component.snapshot.update(s => ({ ...s!, experts: [organizer, otherOrganizer] }));
+    component.startAutomaticAllocation();
+    expect(component.allocationSettings()).toBe(true);
+    expect(component.canPreviewAllocation()).toBe(false);
+    expect(api.allocation).not.toHaveBeenCalled();
+    component.openPool("Сбер");
+    expect(component.candidateExperts()).toEqual([]);
+    component.selectAllPool();
+    expect(component.chosenExperts().size).toBe(0);
+    component.savePool();
+    component.plan.set({
+      revision: "v1",
+      planToken: "signed",
+      assignments: [],
+      shortages: [],
+      load: [],
+    });
+    component.editAllocationProject(10);
+    expect(component.candidateExperts()).toEqual([organizer]);
+    expect(component.candidateReason(organizer)).toContain("Уже назначен");
+    component.openProject(projects[0]);
+    expect(component.candidateExperts()).toContain(otherOrganizer);
+    component.toggleCandidate(otherOrganizer);
+    component.saveProjectExperts();
+    expect(api.saveProjectExperts).toHaveBeenCalledWith(42, {
+      revision: "v1",
+      projectIds: [10],
+      expertIds: [1, 4],
+      mode: "replace",
+    });
   });
   it("Назад из настроек восстанавливает прежний предпросмотр и его параметры без запроса", async () => {
     const { component, fixture, api } = setup();

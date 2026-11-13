@@ -240,9 +240,11 @@ describe("Solution expert management", () => {
     expect(c.experts()[0]).toMatchObject({ assigned: 1, completed: 0, remaining: 1 });
     expect(c.counts(301)).toEqual({ assigned: 1, completed: 0 });
   });
-  it("retains scored assignments and saves explicit solution IDs exactly once", () => {
+  it("сохраняет оценки и ручное назначение решения организатору", () => {
     const { c, expert, save } = setup();
-    c.open("assignments", expert);
+    const organizer = { ...expert, isOrganizer: true };
+    expect(c.rowActions(organizer).some(action => action.id === "assignments")).toBe(true);
+    c.open("assignments", organizer);
     c.toggleSolution(301);
     c.toggleSolution(302);
     c.saveAssignments();

@@ -1,6 +1,12 @@
 /** @format */
 import { HttpErrorResponse } from "@angular/common/http";
 import { userErrorMessage } from "@core/lib/models/error/user-error-message";
+import { ExpertRow } from "@domain/program/evaluation-workspace.model";
+
+export function canAssignAutomatically(expert: ExpertRow): expert is ExpertRow & { id: number } {
+  return expert.status === "joined" && !expert.isOrganizer && typeof expert.id === "number";
+}
+
 export function evaluationError(error: unknown): string {
   if (error instanceof HttpErrorResponse) {
     if (error.status === 403) return "У вас нет доступа к этому разделу.";
