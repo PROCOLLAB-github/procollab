@@ -44,18 +44,6 @@
     .analytics-drilldown__header {
       align-items: center;
       margin-bottom: 24px;
-
-      h2 {
-        line-height: 30px;
-
-        @media screen and (max-width: 999px) {
-          font-size: var(--ui-font-h1);
-        }
-
-        @media screen and (min-width: 1000px) {
-          font-size: 24px;
-        }
-      }
     }
 
     .analytics-drilldown__close {

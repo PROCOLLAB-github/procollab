@@ -1,7 +1,6 @@
 /** @format */
 
 @use "styles/responsive";
-@use "styles/typography";
 
 .filters {
   display: flex;
@@ -63,16 +62,5 @@
     span {
       color: var(--dark-grey);
     }
-  }
-}
-
-@media screen and (min-width: 1000px) {
-  .filters__titles button.ui-button {
-    font-family: Mont, sans-serif;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 130%;
-    color: var(--accent);
   }
 }

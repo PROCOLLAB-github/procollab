@@ -9,6 +9,7 @@ import {
   OnInit,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { ButtonDirective } from "@uilib";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 import { animateContentHeight } from "@utils/animate-content-height";
@@ -21,7 +22,14 @@ import { TruncatePipe, TruncateHtmlPipe } from "@corelib";
 /** Информационный слайд задачи с видео и текстом. */
 @Component({
   selector: "app-info-task",
-  imports: [CommonModule, TruncateHtmlPipe, TruncatePipe, ImagePreviewDirective, FileItemComponent],
+  imports: [
+    ButtonDirective,
+    CommonModule,
+    TruncateHtmlPipe,
+    TruncatePipe,
+    ImagePreviewDirective,
+    FileItemComponent,
+  ],
   templateUrl: "./info-task.component.html",
   styleUrl: "./info-task.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

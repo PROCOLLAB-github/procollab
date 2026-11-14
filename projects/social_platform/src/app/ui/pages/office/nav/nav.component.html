@@ -160,7 +160,16 @@
                   matrixParams: 'ignored',
                   fragment: 'ignored',
                 }"
-                ><span class="text-body-14 nav__item">я организую</span></a
+                ><span class="text-body-14 nav__item">
+                  <i
+                    appIcon
+                    icon="settings"
+                    appSquare="24"
+                    appViewBox="0 0 13 13"
+                    class="nav-bar__icon"
+                  ></i
+                  >я организую
+                </span></a
               >
             }
             @if (authRepository.profile()?.relations?.hasEvaluationAccess) {

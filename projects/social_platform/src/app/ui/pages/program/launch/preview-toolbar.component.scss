@@ -26,13 +26,14 @@
 }
 
 .preview-dialog {
+  @include program-management-controls.body-copy;
+
   display: flex;
   flex-direction: column;
   gap: 24px;
   width: min(680px, calc(100vw - 32px));
   max-height: min(860px, calc(100dvh - 48px));
   padding: 24px;
-  font-size: 14px;
 
   header {
     display: flex;
@@ -42,16 +43,13 @@
     justify-content: space-between;
 
     button {
-      width: 32px;
+      flex-shrink: 0;
       padding: 0;
     }
   }
 
   h2 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
+    @include program-management-controls.section-title;
   }
 
   footer {

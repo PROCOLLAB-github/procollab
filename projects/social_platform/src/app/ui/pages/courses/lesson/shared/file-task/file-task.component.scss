@@ -182,19 +182,15 @@
   }
 
   .read-more {
-    align-items: start;
-    align-self: self-start;
-    margin-top: 0;
-    color: var(--accent);
-    cursor: pointer;
-    transition: color 0.2s;
+    align-self: flex-start;
 
     @include responsive.apply-desktop {
       margin-top: 12px;
-    }
+      color: var(--accent);
 
-    &:hover {
-      color: var(--accent-dark);
+      &:hover {
+        color: var(--accent-dark);
+      }
     }
   }
 

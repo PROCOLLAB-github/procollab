@@ -62,7 +62,12 @@
           </li>
         }
       </ul>
-      <div class="lists__remaining" [class.lists__remaining--show]="readAllPrograms()['programs']">
+      <div
+        id="profile-programs-remaining"
+        class="lists__remaining"
+        [class.lists__remaining--show]="readAllPrograms()['programs']"
+        [attr.inert]="readAllPrograms()['programs'] ? null : ''"
+      >
         @if (user()!.relations.programs) {
           <ul class="lists__program-list">
             @for (program of user()!.relations.programs.slice(3); track program.id) {
@@ -98,9 +103,15 @@
         </a>
       </ng-template>
       @if (programsLength > 3) {
-        <div class="read-more text-body-10" (click)="expandService.toggleReadAll('programs')">
+        <button
+          type="button"
+          class="read-more text-body-12"
+          aria-controls="profile-programs-remaining"
+          [attr.aria-expanded]="readAllPrograms()['programs']"
+          (click)="expandService.toggleReadAll('programs')"
+        >
           {{ readAllPrograms()["programs"] ? "скрыть" : "подробнее" }}
-        </div>
+        </button>
       }
     </div>
   }

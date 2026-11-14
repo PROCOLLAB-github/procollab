@@ -83,7 +83,13 @@
   &__training-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 }
 
-@media (max-width: 680px) {
-  .program-heading { align-items: flex-start; flex-direction: column; }
+@media (max-width: 999px) {
   .program-heading__tabs a { min-height: 44px; }
+}
+
+@media (max-width: 680px) {
+  .program-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

@@ -12,6 +12,7 @@ import {
   signal,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { ButtonDirective } from "@uilib";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { CheckboxComponent } from "@ui/primitives";
 import { Task } from "@domain/courses/courses.model";
@@ -24,7 +25,14 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 /** Задача на исключение лишнего с множественным выбором. */
 @Component({
   selector: "app-exclude-task",
-  imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, CheckboxComponent, ImagePreviewDirective],
+  imports: [
+    ButtonDirective,
+    CommonModule,
+    TruncatePipe,
+    TruncateHtmlPipe,
+    CheckboxComponent,
+    ImagePreviewDirective,
+  ],
   templateUrl: "./exclude-task.component.html",
   styleUrl: "./exclude-task.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

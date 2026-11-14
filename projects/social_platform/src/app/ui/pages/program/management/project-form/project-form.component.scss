@@ -3,14 +3,17 @@
 @use "styles/ui-foundation";
 @use "styles/program-management-controls";
 
+.project-form__preview-heading {
+  display: grid;
+  gap: var(--ui-space-sm);
+  justify-items: start;
+}
+
 .project-form__panel-title {
   width: 100%;
-  margin: 0 0 12px;
   padding-bottom: 16px;
-  border-bottom: 1px solid var(--accent);
   color: var(--accent);
-  font-size: 14px;
-  font-weight: 600;
+  border-bottom: 1px solid var(--accent);
 }
 
 .project-form__muted {
@@ -73,11 +76,24 @@
   }
 }
 
+@media (max-width: 999px) {
+  .project-form__menu button {
+    min-height: 44px;
+  }
+}
+
 @media (max-width: 680px) {
   .project-form__field-row {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 32px;
-    > :first-child { grid-column: 1 / 3; }
-    > button:last-of-type { grid-column: 3; grid-row: 1; }
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px;
+
+    > :first-child {
+      grid-column: 1 / 3;
+    }
+
+    > button:last-of-type {
+      grid-row: 1;
+      grid-column: 3;
+    }
   }
 }
 
@@ -173,12 +189,6 @@
   margin-bottom: var(--ui-space-sm);
 }
 
-.project-form__section-heading .ui-button {
-  min-height: 32px;
-  padding: 0;
-  font: inherit;
-}
-
 .project-form__row {
   padding: 12px 0;
   border-top: 1px solid var(--medium-grey-for-outline);
@@ -223,12 +233,12 @@
 }
 
 .project-form__dialog {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: 20px;
   width: 600px;
   max-width: 100%;
-  font-size: 12px;
-  line-height: 1.5;
   color: var(--black);
 }
 

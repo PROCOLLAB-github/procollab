@@ -7,14 +7,10 @@
   @include program-management-controls.compact-action;
 }
 
-.lists__contact {
-  overflow-wrap: anywhere;
-}
-
 .lists__program-hint {
   margin: 8px 0 0;
+  font-size: var(--ui-font-small);
   color: var(--grey-for-text);
-  font-size: 10px;
 }
 
 @mixin expandable-list {

@@ -42,9 +42,10 @@ describe("Создание программы", () => {
       item.textContent?.trim(),
     );
     expect(labels).toHaveLength(3);
-    expect(labels[0]).toContain("Акселератор");
+    expect(page.textContent).not.toContain("До 255 символов.");
+    expect(labels[0]).toContain("Кейс-чемпионат");
     expect(labels[1]).toContain("Хакатон");
-    expect(labels[2]).toContain("Кейс-чемпионат");
+    expect(labels[2]).toContain("Акселератор");
     expect(page.querySelector("app-page-header")?.textContent).toContain("создание программы");
     expect(page.querySelector('button[type="submit"]')?.textContent).toContain("Создать программу");
     const actionLabels = [...page.querySelectorAll(".program-create__actions button")].map(button =>

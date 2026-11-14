@@ -14,6 +14,14 @@
 
   .ui-button {
     @include ui-foundation.button;
+    @include program-management-controls.compact-action;
+  }
+
+  .ui-field {
+    @include ui-foundation.control;
+    @include program-management-controls.field-text;
+
+    width: 100%;
   }
 }
 
@@ -27,17 +35,6 @@
 
   > .ui-card {
     @include ui-foundation.card;
-  }
-
-  .ui-button {
-    @include program-management-controls.compact-action;
-  }
-
-  .ui-field {
-    @include ui-foundation.control;
-    @include program-management-controls.field-text;
-
-    width: 100%;
   }
 }
 
@@ -85,10 +82,6 @@
 .cabinet__filter {
   display: grid;
   gap: var(--ui-space-xs);
-
-  .ui-field {
-    @include ui-foundation.control;
-  }
 }
 
 .cabinet__search {
@@ -268,11 +261,6 @@
 
   .cabinet__group-heading {
     gap: var(--ui-space-xs);
-
-    h2 {
-      font-size: var(--ui-font-body);
-      line-height: 18px;
-    }
   }
 
   .cabinet__project {

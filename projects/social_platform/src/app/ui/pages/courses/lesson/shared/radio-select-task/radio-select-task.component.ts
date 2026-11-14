@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChoiceDirective } from "@uilib";
+import { ButtonDirective, ChoiceDirective } from "@uilib";
 /** @format */
 
 import {
@@ -30,6 +30,7 @@ import { TruncateHtmlPipe, TruncatePipe } from "@core/public-api";
 @Component({
   selector: "app-radio-select-task",
   imports: [
+    ButtonDirective,
     ChoiceDirective,
     CommonModule,
     TruncatePipe,

@@ -5,10 +5,10 @@
     <div class="course__cover">
       <app-avatar [size]="68" [url]="course().avatarUrl"></app-avatar>
       @if (desktopLayout()) {
-        <app-button
-          customTypographyClass="text-body-10"
-          [color]="isMember() ? 'primary' : isSubs() ? 'red' : 'green'"
-          size="big"
+        <span
+          class="course__access-label text-body-10"
+          [class.course__access-label--member]="isMember()"
+          [class.course__access-label--subscription]="isSubs()"
         >
           {{
             isMember()
@@ -17,7 +17,7 @@
                 ? "доступно по подписке"
                 : "доступно всем пользователям"
           }}
-        </app-button>
+        </span>
       } @else {
         <app-badge
           class="course__access"

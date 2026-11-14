@@ -44,7 +44,7 @@ describe("SidebarComponent", () => {
         name: "программы",
         link: "program/all",
         icon: "program",
-        children: [{ name: "я организую", link: "program/managed" }],
+        children: [{ name: "я организую", link: "program/managed", icon: "settings" }],
       },
     ]);
     fixture.detectChanges();
@@ -56,6 +56,10 @@ describe("SidebarComponent", () => {
     fixture.detectChanges();
     expect(toggle.getAttribute("aria-expanded")).toBe("true");
     expect(root.querySelector(".sidebar-nav__child")?.textContent).toContain("я организую");
+    expect(
+      root.querySelector(".sidebar-nav__child use")?.getAttribute("href") ??
+        root.querySelector(".sidebar-nav__child use")?.getAttribute("xlink:href"),
+    ).toContain("#settings");
     toggle.click();
     fixture.detectChanges();
     expect(root.querySelector(".sidebar-nav__child")).toBeNull();
