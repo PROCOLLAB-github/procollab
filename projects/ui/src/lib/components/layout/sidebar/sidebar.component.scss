@@ -35,6 +35,35 @@
 }
 
 .sidebar-nav {
+  &__row {
+    display: flex;
+    align-items: center;
+  }
+
+  &__row > &__item { flex: 1; }
+
+  &__expand {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    color: var(--dark-grey);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+  }
+
+  &__chevron {
+    width: 16px;
+    height: 16px;
+    background: url("/assets/images/office/shared/program-menu-chevron.svg") center no-repeat;
+    transform: rotate(-90deg);
+
+    &--open { transform: none; }
+  }
+
+  &__child { margin: 18px 24px 0 20px; }
+
   &__link {
     display: block;
   }
@@ -44,16 +73,6 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
-  }
-
-  &__bar {
-    position: absolute;
-    right: 0;
-    width: 4px;
-    height: 4px;
-    background-color: var(--accent);
-    border-radius: 50%;
-    transition: opacity 0.15s ease;
   }
 
   &__item,
@@ -74,6 +93,16 @@
 
     &--active {
       color: var(--accent-text);
+
+      &::after {
+        position: absolute;
+        right: 0;
+        width: 4px;
+        height: 4px;
+        content: "";
+        background: var(--accent);
+        border-radius: 50%;
+      }
     }
   }
 }

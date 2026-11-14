@@ -12,6 +12,30 @@
 .nav-bar {
   display: block;
 
+  &__program-row {
+    display: flex;
+    align-items: center;
+  }
+
+  &__program-toggle {
+    width: 44px;
+    height: 44px;
+    color: var(--dark-grey);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+  }
+
+  &__chevron {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url("/assets/images/office/shared/program-menu-chevron.svg") center no-repeat;
+    transform: rotate(-90deg);
+  }
+  &__chevron--open { transform: none; }
+  &__program-child { padding-left: 34px; }
+
   @include responsive.apply-desktop {
     display: none;
     padding: 20px 0;

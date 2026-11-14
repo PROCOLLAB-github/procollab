@@ -23,6 +23,12 @@
     grid-template-columns: 1fr;
     grid-gap: 24px;
 
+    > a {
+      min-width: 0;
+      color: inherit;
+      text-decoration: none;
+    }
+
     @include responsive.apply-desktop {
       grid-template-columns: 4fr 4fr;
     }

@@ -1,15 +1,16 @@
 /** @format */
 
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
-  ElementRef,
   input,
   type OnInit,
-  viewChildren,
+  inject,
+  effect,
 } from "@angular/core";
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { IconComponent } from "../../primitives/icon/icon.component";
 import { CommonModule } from "@angular/common";
 import { ClickOutsideModule } from "ng-click-outside";
@@ -28,13 +29,14 @@ export interface NavItem {
   isExternal?: boolean;
   /** Флаг активности для внешних ссылок */
   isActive?: boolean;
+  children?: { name: string; link: string }[];
 }
 
 /**
  * Компонент боковой панели навигации
  *
  * Отображает логотип, список навигационных элементов и дополнительный контент.
- * Поддерживает анимированную полосу при наведении на элементы навигации.
+ * Поддерживает вложенные пункты навигации.
  *
  * @example
  * \`\`\`html
@@ -51,7 +53,23 @@ export interface NavItem {
   imports: [RouterLink, RouterLinkActive, IconComponent, ClickOutsideModule, CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidebarComponent implements OnInit, AfterViewInit {
+export class SidebarComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly changeDetector = inject(ChangeDetectorRef);
+  expandedItem: string | null = null;
+
+  constructor() {
+    effect(() => {
+      this.navItems();
+      this.expandForUrl(this.router.url);
+    });
+    this.router.events.pipe(takeUntilDestroyed()).subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.expandForUrl(event.urlAfterRedirects);
+        this.changeDetector.markForCheck();
+      }
+    });
+  }
   /** Массив элементов навигации */
   readonly navItems = input<NavItem[]>([]);
 
@@ -60,40 +78,15 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.checkExternalActiveState();
+    this.expandForUrl(this.router.url);
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.initializeBarPosition();
-    });
-  }
-
-  readonly navItemElements = viewChildren<ElementRef<HTMLElement>>("navItem");
-
-  /** Позиция анимированной полосы (индекс элемента навигации) */
-  barPosition = 0;
-
-  /** Флаг отображения анимированной полосы */
-  showBar = true;
-
-  initializeBarPosition(): void {
-    if (!this.navItemElements()) return;
-
-    const navElements = this.navItemElements();
-
-    const activeRouterElement = navElements.find(elementRef =>
-      elementRef.nativeElement.classList.contains("sidebar-nav__item--active"),
+  private expandForUrl(url: string): void {
+    const path = url.split(/[?#]/)[0];
+    const item = this.navItems().find(entry =>
+      entry.children?.some(child => path.endsWith("/" + child.link.replace(/^\//, ""))),
     );
-
-    const activeExternalIndex = this.navItems().findIndex(item => item.isExternal && item.isActive);
-
-    if (activeRouterElement) {
-      this.barPosition = activeRouterElement.nativeElement.offsetTop;
-    } else if (activeExternalIndex !== -1 && navElements[activeExternalIndex]) {
-      this.barPosition = navElements[activeExternalIndex].nativeElement.offsetTop;
-    } else {
-      this.barPosition = navElements[0]?.nativeElement.offsetTop || 0;
-    }
+    if (item) this.expandedItem = item.link;
   }
 
   checkExternalActiveState(): void {
@@ -130,17 +123,6 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       } else {
         location.href = item.link;
       }
-    }
-  }
-
-  /**
-   * Обновляет позицию анимированной полосы на основе позиции элемента
-   * @param element - HTML элемент навигации
-   */
-  updateBarPosition(element: HTMLElement): void {
-    const parentElement = element.parentElement;
-    if (parentElement) {
-      this.barPosition = element.offsetTop + 5;
     }
   }
 }

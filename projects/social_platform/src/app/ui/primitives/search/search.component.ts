@@ -55,7 +55,7 @@ export class SearchComponent implements ControlValueAccessor, OnInit {
   /** Текст подсказки */
   placeholder = input("");
   readonly ariaLabel = input("Поиск");
-  readonly appearance = input<"default" | "inline">("default");
+  readonly appearance = input<"default" | "inline" | "outlined">("default");
 
   /** Тип поля ввода */
   type = input<"text" | "password" | "email">("text");

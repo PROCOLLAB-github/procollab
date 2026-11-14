@@ -27,8 +27,13 @@
   }
 
   @media (min-width: 1000px) {
-    grid-template-columns: minmax(0, 1fr) var(--ui-compact-sidebar-width);
-    gap: var(--ui-space-lg);
+    grid-template-columns: minmax(0, 1fr);
+
+    .catalog-toolbar__action {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
   }
 }
 

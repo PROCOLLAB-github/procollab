@@ -10,7 +10,14 @@ export class OfficeUIInfoService {
   readonly inviteErrorModal = signal<boolean>(false);
 
   readonly navItems = signal<
-    { name: string; link: string; icon: string; isExternal?: boolean; isActive?: boolean }[]
+    {
+      name: string;
+      link: string;
+      icon: string;
+      isExternal?: boolean;
+      isActive?: boolean;
+      children?: { name: string; link: string }[];
+    }[]
   >([]);
 
   applyOpenVerificationModal(): void {
@@ -31,7 +38,12 @@ export class OfficeUIInfoService {
       { name: "новости", icon: "feed", link: "feed" },
       { name: "проекты", icon: "projects", link: "projects" },
       { name: "участники", icon: "people-bold", link: "members" },
-      { name: "программы", icon: "program", link: "program" },
+      {
+        name: "программы",
+        icon: "program",
+        link: "program/all",
+        children: [{ name: "я организую", link: "program/managed" }],
+      },
       { name: "вакансии", icon: "search-sidebar", link: "vacancies" },
       { name: "курсы", icon: "trajectories", link: "courses" },
       // { name: "чаты", icon: "message", link: "chats" },

@@ -13,8 +13,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { filter, startWith } from "rxjs";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/primitives/search/search.component";
-import { FormLayoutDirective, PageHeaderComponent, TabsComponent } from "@uilib";
-import { AppRoutes } from "@api/paths/app-routes";
+import { FormLayoutDirective, PageHeaderComponent } from "@uilib";
 import { ProgramInfoService } from "@api/program/facades/program-info.service";
 import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-ui-info.service";
 import { ProgramCatalogToolbarComponent } from "./catalog-toolbar/catalog-toolbar.component";
@@ -30,7 +29,6 @@ import { ProgramCatalogToolbarComponent } from "./catalog-toolbar/catalog-toolba
     ReactiveFormsModule,
     SearchComponent,
     RouterOutlet,
-    TabsComponent,
     ProgramCatalogToolbarComponent,
   ],
   providers: [ProgramInfoService, ProgramMainUIInfoService],
@@ -39,10 +37,6 @@ import { ProgramCatalogToolbarComponent } from "./catalog-toolbar/catalog-toolba
 export class ProgramComponent implements OnInit {
   private readonly destroy = inject(DestroyRef);
   private readonly router = inject(Router);
-  readonly programTabs = [
-    { link: AppRoutes.program.list(), linkText: "Все программы", isRouterLinkActiveOptions: true },
-    { link: AppRoutes.program.managed(), linkText: "Я организую", isRouterLinkActiveOptions: true },
-  ];
   readonly isManaged = signal(false);
   private readonly programInfoService = inject(ProgramInfoService);
   private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);

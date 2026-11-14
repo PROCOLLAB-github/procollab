@@ -166,6 +166,7 @@ export class NavComponent implements OnInit, OnDestroy {
     }
     this.menuTrigger = event.currentTarget as HTMLElement;
     this.mobileMenuOpen = true;
+    this.programMenuOpen = this.router.url.split(/[?#]/)[0] === "/office/program/managed";
     this.notificationsOpen = false;
     this.menuScrollStrategy.enable();
   }
@@ -177,6 +178,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   mobileMenuOpen = false;
+  programMenuOpen = false;
   notificationsOpen = false;
   title = "";
   protected readonly AppRoutes = AppRoutes;

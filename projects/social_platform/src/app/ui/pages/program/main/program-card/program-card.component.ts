@@ -1,7 +1,7 @@
 /** @format */
 
-import { ButtonDirective, CardDirective, DesktopLayoutService } from "@uilib";
-import { ChangeDetectionStrategy, Component, computed, inject, input } from "@angular/core";
+import { ButtonDirective } from "@uilib";
+import { ChangeDetectionStrategy, Component, computed, input } from "@angular/core";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { DatePipe, NgClass, NgTemplateOutlet } from "@angular/common";
 import { RouterLink } from "@angular/router";
@@ -26,19 +26,10 @@ export interface ProgramCardData {
   selector: "app-program-card",
   templateUrl: "./program-card.component.html",
   styleUrl: "./program-card.component.scss",
-  imports: [
-    CardDirective,
-    AvatarComponent,
-    DatePipe,
-    NgClass,
-    NgTemplateOutlet,
-    ButtonDirective,
-    RouterLink,
-  ],
+  imports: [AvatarComponent, DatePipe, NgClass, NgTemplateOutlet, ButtonDirective, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramCardComponent {
-  protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   protected readonly paths = AppRoutes;
   readonly program = input.required<ProgramCardData>();
   readonly management = input(false);
