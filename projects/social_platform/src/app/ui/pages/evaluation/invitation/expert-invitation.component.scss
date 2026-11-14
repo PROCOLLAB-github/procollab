@@ -3,21 +3,19 @@
 @use "styles/ui-foundation";
 @use "styles/program-management-controls";
 
-.expert-invitation--organizer .ui-button.ui-button {
-  @include program-management-controls.compact-action;
-}
-
 :host {
   display: block;
   min-height: 100dvh;
 }
 
-.ui-button {
+.ui-button.ui-button {
   @include ui-foundation.button;
+  @include program-management-controls.compact-action;
 }
 
 .ui-field {
   @include ui-foundation.control;
+  @include program-management-controls.field-text;
 
   width: 100%;
 }
@@ -42,23 +40,26 @@
 }
 
 .expert-invitation__card {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: 16px;
   width: min(600px, 100%);
   min-width: 0;
   padding: 32px;
-  font-size: 14px;
   background: var(--light-white);
   border-radius: 15px;
 }
 
-.expert-invitation h1,
-.expert-invitation h2 {
+.expert-invitation h1 {
+  @include program-management-controls.page-title;
+
   margin: 0;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 27px;
   overflow-wrap: anywhere;
+}
+
+.expert-invitation h2 {
+  @include program-management-controls.section-title;
 }
 
 .expert-invitation p {

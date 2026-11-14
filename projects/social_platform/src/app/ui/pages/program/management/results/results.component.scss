@@ -371,6 +371,13 @@ small {
 }
 
 @media (max-width: 999px) {
+  .results__icon.ui-button.ui-button,
+  .results__close.ui-button.ui-button {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+  }
+
   .results__score-mobile-label {
     display: inline;
   }

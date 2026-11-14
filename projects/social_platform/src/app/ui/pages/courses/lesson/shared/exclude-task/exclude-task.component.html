@@ -33,9 +33,15 @@
         "
       ></p>
       @if (descriptionExpandable) {
-        <div class="read-more text-body-10" (click)="onToggleDescription(descEl)">
+        <button
+          appButton="text"
+          type="button"
+          class="read-more text-body-12"
+          [attr.aria-expanded]="readFullDescription"
+          (click)="onToggleDescription(descEl)"
+        >
           {{ readFullDescription ? "скрыть" : "подробнее" }}
-        </div>
+        </button>
       }
     </div>
   </div>

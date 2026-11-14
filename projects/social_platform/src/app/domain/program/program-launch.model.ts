@@ -6,9 +6,9 @@ import { ProgramImageFraming } from "./program-image-framing.model";
 export type ProgramFormat = "accelerator" | "case_championship" | "hackathon" | "noncompetitive";
 export const PROGRAM_FORMATS: { id: ProgramFormat; label: string; description: string }[] = [
   {
-    id: "accelerator",
-    label: "Акселератор",
-    description: "Развитие проектов с поддержкой и сопровождением.",
+    id: "case_championship",
+    label: "Кейс-чемпионат",
+    description: "Работа над задачами, предложенными организаторами.",
   },
   {
     id: "hackathon",
@@ -16,9 +16,9 @@ export const PROGRAM_FORMATS: { id: ProgramFormat; label: string; description: s
     description: "Создание и проверка решений за ограниченное время.",
   },
   {
-    id: "case_championship",
-    label: "Кейс-чемпионат",
-    description: "Работа над задачами, предложенными организаторами.",
+    id: "accelerator",
+    label: "Акселератор",
+    description: "Развитие проектов с поддержкой и сопровождением.",
   },
 ];
 export interface ManagedProgram {

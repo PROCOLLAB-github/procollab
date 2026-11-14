@@ -33,20 +33,6 @@
     border-radius: var(--rounded-lg);
 
     @media screen and (min-width: 1000px) {
-      app-button {
-        ::ng-deep {
-          .button {
-            position: absolute;
-            top: 15px;
-            right: 24px;
-            width: 166px;
-            padding: 0;
-          }
-        }
-      }
-    }
-
-    @media screen and (min-width: 1000px) {
       app-avatar {
         ::ng-deep {
           .avatar {
@@ -59,6 +45,29 @@
           }
         }
       }
+    }
+  }
+
+  &__access-label {
+    position: absolute;
+    top: 15px;
+    right: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 166px;
+    color: var(--ui-on-accent);
+    text-align: center;
+    background-color: var(--green);
+    border: 0.5px solid transparent;
+    border-radius: var(--rounded-xxl);
+
+    &--member {
+      background-color: var(--ui-primary, var(--accent-text));
+    }
+
+    &--subscription {
+      background-color: var(--red);
     }
   }
 

@@ -29,7 +29,7 @@ export interface NavItem {
   isExternal?: boolean;
   /** Флаг активности для внешних ссылок */
   isActive?: boolean;
-  children?: { name: string; link: string }[];
+  children?: { name: string; link: string; icon?: string; iconViewBox?: string }[];
 }
 
 /**

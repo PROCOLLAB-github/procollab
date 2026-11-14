@@ -58,7 +58,7 @@ import { evaluationError } from "@utils/evaluation-workspace";
       <section class="preview-dialog">
         <header>
           <h2 id="launch-preview-title">Предпросмотр анкеты</h2>
-          <button appButton="text" aria-label="Закрыть" (click)="close()">
+          <button appButton="icon" aria-label="Закрыть" (click)="close()">
             <i appIcon icon="cross" appSquare="24"></i>
           </button>
         </header>

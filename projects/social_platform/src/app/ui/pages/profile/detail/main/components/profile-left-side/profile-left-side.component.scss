@@ -1,31 +1,6 @@
 /** @format */
 
-@mixin expandable-list {
-  &__remaining {
-    display: grid;
-    grid-template-rows: 0fr;
-    overflow: hidden;
-    transition: all 0.5s ease-in-out;
-
-    &--show {
-      grid-template-rows: 1fr;
-    }
-
-    ul {
-      min-height: 0;
-    }
-
-    li {
-      &:first-child {
-        margin-top: 12px;
-      }
-
-      &:not(:last-child) {
-        margin-bottom: 12px;
-      }
-    }
-  }
-}
+@use "styles/responsive";
 
 .profile {
   &__left {
@@ -72,7 +47,30 @@
   &__program-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--ui-space-sm);
+  }
+
+  &__remaining {
+    display: grid;
+    grid-template-rows: 0fr;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
+
+    &--show {
+      grid-template-rows: 1fr;
+    }
+
+    .lists__program-list {
+      min-height: 0;
+    }
+
+    li:first-child {
+      margin-top: var(--ui-space-sm);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: grid-template-rows 0.5s ease-in-out;
+    }
   }
 
   &__program-card {
@@ -118,13 +116,12 @@
     overflow: hidden;
     color: var(--black);
     text-overflow: ellipsis;
+    overflow-wrap: anywhere;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
 
     &--compact {
       line-height: 14px;
-      word-break: normal;
-      overflow-wrap: normal;
 
       @media screen and (max-width: 999px) {
         font-size: var(--ui-font-caption);
@@ -211,6 +208,7 @@
     i,
     .lists__index {
       display: flex;
+      flex-shrink: 0;
       align-items: center;
       justify-content: center;
       width: 20px;
@@ -235,8 +233,6 @@
     word-break: break-word;
     overflow-wrap: anywhere;
   }
-
-  @include expandable-list;
 }
 
 .read-more {
@@ -247,5 +243,15 @@
 
   &:hover {
     color: var(--accent-dark);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 3px;
+  }
+
+  @include responsive.apply-below-desktop {
+    min-height: var(--ui-control-height);
+    margin-top: var(--ui-space-sm);
   }
 }

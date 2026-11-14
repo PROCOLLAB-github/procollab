@@ -14,6 +14,7 @@ import {
   signal,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { ButtonDirective } from "@uilib";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
 import { IconComponent } from "@ui/primitives";
@@ -31,6 +32,7 @@ import { TruncateHtmlPipe, TruncatePipe } from "@corelib";
 @Component({
   selector: "app-write-task",
   imports: [
+    ButtonDirective,
     CommonModule,
     TruncatePipe,
     TruncateHtmlPipe,

@@ -102,7 +102,9 @@ describe("Organizer cases and common fields", () => {
     const { fixture, component, pending } = await setup();
     pending.next(initial());
     await fixture.whenStable();
-    component.openPreview();
+    const preview = fixture.nativeElement.querySelector(".project-form__preview-heading button");
+    preview.click();
+    expect(component.previewOpen()).toBe(true);
     component.previewSubmit();
     expect(component.previewInvalid()).toBe(true);
     expect(component.previewForm.get("case")?.hasError("required")).toBe(true);

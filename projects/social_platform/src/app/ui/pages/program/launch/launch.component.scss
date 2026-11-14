@@ -33,12 +33,8 @@
   margin: 24px auto 48px;
   color: var(--black);
 
-  h1,
   h2 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
+    @include program-management-controls.section-title;
   }
 
   h3 {
@@ -147,17 +143,15 @@
   }
 
   &__dialog {
+    @include program-management-controls.body-copy;
+
     display: grid;
     gap: 20px;
     width: min(520px, calc(100vw - 72px));
-    font-size: 14px;
     color: var(--black);
 
     h2 {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 24px;
+      @include program-management-controls.section-title;
     }
 
     p {
@@ -172,8 +166,8 @@
       justify-content: space-between;
 
       button {
-        width: 32px;
-        padding: 5px;
+        flex-shrink: 0;
+        padding: 0;
       }
     }
   }

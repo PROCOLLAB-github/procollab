@@ -16,7 +16,7 @@ export class OfficeUIInfoService {
       icon: string;
       isExternal?: boolean;
       isActive?: boolean;
-      children?: { name: string; link: string }[];
+      children?: { name: string; link: string; icon?: string; iconViewBox?: string }[];
     }[]
   >([]);
 
@@ -42,7 +42,14 @@ export class OfficeUIInfoService {
         name: "программы",
         icon: "program",
         link: "program/all",
-        children: [{ name: "я организую", link: "program/managed" }],
+        children: [
+          {
+            name: "я организую",
+            link: "program/managed",
+            icon: "settings",
+            iconViewBox: "0 0 13 13",
+          },
+        ],
       },
       { name: "вакансии", icon: "search-sidebar", link: "vacancies" },
       { name: "курсы", icon: "trajectories", link: "courses" },

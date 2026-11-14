@@ -56,8 +56,17 @@
                   matrixParams: 'ignored',
                   fragment: 'ignored',
                 }"
-                >{{ child.name }}</a
               >
+                @if (child.icon) {
+                  <i
+                    appIcon
+                    [icon]="child.icon"
+                    appSquare="10"
+                    [appViewBox]="child.iconViewBox || '0 0 10 10'"
+                  ></i>
+                }
+                {{ child.name }}
+              </a>
             }
           }
         </div>

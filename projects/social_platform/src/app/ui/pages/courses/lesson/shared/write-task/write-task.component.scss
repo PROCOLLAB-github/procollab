@@ -85,15 +85,15 @@
   }
 
   .read-more {
-    align-items: start;
-    align-self: self-start;
-    margin-top: 12px;
-    color: var(--accent);
-    cursor: pointer;
-    transition: color 0.2s;
+    align-self: flex-start;
 
-    &:hover {
-      color: var(--accent-dark);
+    @include responsive.apply-desktop {
+      margin-top: 12px;
+      color: var(--accent);
+
+      &:hover {
+        color: var(--accent-dark);
+      }
     }
   }
 

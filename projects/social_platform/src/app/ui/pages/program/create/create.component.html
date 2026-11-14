@@ -35,15 +35,15 @@
             maxlength="255"
             placeholder="Введите название программы"
             [attr.aria-invalid]="form.controls.name.touched && form.controls.name.invalid"
-            aria-describedby="program-name-hint"
+            [attr.aria-describedby]="
+              form.controls.name.touched && form.controls.name.invalid ? 'program-name-error' : null
+            "
         /></label>
-        <p id="program-name-hint" class="program-create__hint">
-          @if (form.controls.name.touched && form.controls.name.invalid) {
-            <span role="alert">Введите название программы до 255 символов.</span>
-          } @else {
-            До 255 символов.
-          }
-        </p>
+        @if (form.controls.name.touched && form.controls.name.invalid) {
+          <p id="program-name-error" class="program-create__hint" role="alert">
+            Введите название программы до 255 символов.
+          </p>
+        }
         <fieldset
           #formatGroup
           class="program-create__formats"

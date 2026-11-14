@@ -67,6 +67,37 @@ describe("ProfileLeftSideComponent", () => {
     expect(name.classList).toContain("lists__program-name--compact");
   });
 
+  it("exposes additional program links only when the program list is expanded", () => {
+    fixture.componentRef.setInput("user", {
+      personal: { birthday: null, city: "", speciality: "" },
+      relations: {
+        userLanguages: [],
+        programs: [1, 2, 3, 4].map(id => ({ id, name: `Программа ${id}` })),
+      },
+    } as unknown as User);
+    fixture.detectChanges();
+
+    const host = fixture.nativeElement as HTMLElement;
+    const toggle = host.querySelector<HTMLButtonElement>("button[aria-controls]")!;
+    const more = host.querySelector<HTMLElement>(`#${toggle.getAttribute("aria-controls")}`)!;
+
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(more.hasAttribute("inert")).toBe(true);
+    expect(more.querySelector("a")?.textContent?.trim()).toBe("Программа 4");
+
+    toggle.click();
+    fixture.detectChanges();
+
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
+    expect(more.hasAttribute("inert")).toBe(false);
+
+    toggle.click();
+    fixture.detectChanges();
+
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(more.hasAttribute("inert")).toBe(true);
+  });
+
   it.each(["Санкт-Петербург", "Набережные Челны", "Мсква"])(
     "renders the complete user region %s without normalization",
     city => {
