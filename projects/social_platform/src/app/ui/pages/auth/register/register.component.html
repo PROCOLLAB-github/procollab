@@ -304,8 +304,8 @@
     }
 
     <div class="register__agreement">
-      <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
-      <span (click)="registerAgreement.set(!registerAgreement())">
+      <app-checkbox labelledBy="register-data-agreement" [(checked)]="registerAgreement" />
+      <span id="register-data-agreement" (click)="registerAgreement.set(!registerAgreement())">
         я прочитал соглашение и даю согласие на
         <span class="register__policy-link" (click)="downloadPolicy($event)"
           >обработку персональных данных</span
@@ -314,20 +314,20 @@
     </div>
 
     <div class="register__agreement">
-      <app-checkbox [(checked)]="ageAgreement"></app-checkbox>
-      <span (click)="ageAgreement.set(!ageAgreement())"
-        >нажимая на кнопку подтверждаете, что вам больше 14 лет</span
-      >
+      <app-checkbox labelledBy="register-age-agreement" [(checked)]="ageAgreement" />
+      <span id="register-age-agreement" (click)="ageAgreement.set(!ageAgreement())">
+        Подтверждаю, что мне больше 14 лет
+      </span>
     </div>
 
     <app-button
       size="big"
       [loader]="registerIsSubmitting()"
       [ngStyle]="{
-        opacity: !(ageAgreement() && registerAgreement) ? '0.6' : '1',
-        cursor: !(ageAgreement() && registerAgreement) ? 'not-allowed' : 'pointer',
+        opacity: !(ageAgreement() && registerAgreement()) ? '0.6' : '1',
+        cursor: !(ageAgreement() && registerAgreement()) ? 'not-allowed' : 'pointer',
       }"
-      [disabled]="!(ageAgreement() && registerAgreement)"
+      [disabled]="!(ageAgreement() && registerAgreement())"
       type="submit"
       customTypographyClass="text-body-12"
       class="auth__button"
@@ -335,9 +335,7 @@
       зарегистрироваться
     </app-button>
 
-    <p class="auth__toggle">
-      если есть аккаунт? - <a [routerLink]="AppRoutes.auth.login()">войдите</a>
-    </p>
+    <p class="auth__toggle">Уже есть аккаунт? <a [routerLink]="AppRoutes.auth.login()">Войти</a></p>
 
     <app-modal [open]="isUserCreationModalError()" (openChange)="dismissCreationError()">
       <div class="cancel">

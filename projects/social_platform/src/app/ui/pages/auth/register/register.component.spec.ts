@@ -58,6 +58,37 @@ describe("RegisterComponent", () => {
     expect(component).toBeTruthy();
   });
 
+  it("names each agreement and requires both confirmations before enabling registration", () => {
+    const root: HTMLElement = fixture.nativeElement;
+    const dataAgreement = root.querySelector<HTMLButtonElement>(
+      '[role="checkbox"][aria-labelledby="register-data-agreement"]',
+    )!;
+    const ageAgreement = root.querySelector<HTMLButtonElement>(
+      '[role="checkbox"][aria-labelledby="register-age-agreement"]',
+    )!;
+    const submit = root.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+
+    expect(root.querySelector("#register-data-agreement")?.textContent).toContain(
+      "обработку персональных данных",
+    );
+    expect(root.querySelector("#register-age-agreement")?.textContent?.trim()).toBe(
+      "Подтверждаю, что мне больше 14 лет",
+    );
+    expect(submit.disabled).toBe(true);
+
+    ageAgreement.click();
+    fixture.detectChanges();
+    expect(submit.disabled).toBe(true);
+
+    dataAgreement.click();
+    fixture.detectChanges();
+    expect(submit.disabled).toBe(false);
+
+    ageAgreement.click();
+    fixture.detectChanges();
+    expect(submit.disabled).toBe(true);
+  });
+
   it("does not sign out another tab when registration is opened", () => {
     const clear = vi.spyOn(TestBed.inject(TokenService), "clearTokens");
     const anotherForm = TestBed.createComponent(RegisterComponent);

@@ -30,6 +30,8 @@ export class CheckboxComponent {
   size = input<string>();
   disabled = input(false);
   label = input("Выбрать");
+  labelledBy = input<string>();
+
   protected toggle(): void {
     if (!this.disabled()) this.checked.set(!this.checked());
   }
