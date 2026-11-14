@@ -30,22 +30,23 @@
   font-size: 12px;
   color: var(--black);
 
-  > a {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: var(--accent);
-  }
-
-  header {
-    margin-bottom: 24px;
-  }
-
-  h1,
   h2 {
     margin: 0;
     font-size: 16px;
     font-weight: 600;
     line-height: 24px;
+  }
+
+  &__heading {
+    --ui-back-margin-block: 0 24px;
+
+    display: flow-root;
+  }
+
+  &__name-label {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
   }
 
   p {
@@ -67,20 +68,21 @@
   }
 
   &__card {
-    padding: 24px;
+    padding: 20px;
     background: var(--light-white);
     border-radius: 15px;
   }
 
   &__formats {
     display: grid;
-    gap: 12px;
-    margin-block: 16px !important;
+    gap: 24px;
+    margin-block: 24px !important;
 
     legend {
-      padding-bottom: 12px;
-      font-size: 14px;
+      padding-bottom: 24px;
+      font-size: 12px;
       font-weight: 600;
+      line-height: 16px;
     }
   }
 
@@ -88,7 +90,7 @@
     padding: 16px;
     cursor: pointer;
     background: var(--white);
-    border: 1px solid var(--medium-grey-for-outline);
+    border: 1px solid transparent;
     border-radius: 8px;
 
     span {
@@ -110,8 +112,8 @@
   &__actions {
     display: flex;
     gap: 12px;
-    justify-content: flex-start;
-    margin-top: 16px;
+    justify-content: flex-end;
+    margin-top: 24px;
   }
 }
 
