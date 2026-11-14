@@ -2,6 +2,7 @@
 @use "styles/typography";
 @use "styles/ui-foundation";
 @use "styles/solution-ui";
+@use "styles/program-management-controls";
 @include solution-ui.controls;
 
 :host {
@@ -11,12 +12,13 @@
 
 .published {
   @include typography.body-12;
+  @include program-management-controls.body-copy;
 
   min-width: 0;
   padding-block: 12px 40px;
 
   h2 {
-    @include typography.heading-1;
+    @include program-management-controls.page-title;
 
     margin-bottom: 20px;
     overflow-wrap: anywhere;
@@ -69,6 +71,8 @@
     text-decoration: none;
 
     h3 {
+      @include program-management-controls.card-title;
+
       color: var(--accent);
     }
   }

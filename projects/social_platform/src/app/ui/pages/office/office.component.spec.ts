@@ -147,4 +147,36 @@ describe("OfficeComponent", () => {
   it("не содержит дублирующее приветствие программы", () => {
     expect(fixture.nativeElement.textContent).not.toContain("Привет! Рады знакомству");
   });
+
+  it("размещает оценивание после программ только при наличии доступа", () => {
+    const navigation = fixture.debugElement.injector.get(OfficeUIInfoService).navItems;
+    const profile = fixture.debugElement.injector.get(ProfileInfoService).profile as any;
+    navigation.set([
+      { name: "новости", icon: "feed", link: "feed" },
+      { name: "программы", icon: "program", link: "program/all" },
+      { name: "вакансии", icon: "search-sidebar", link: "vacancies" },
+    ]);
+    profile.set({ id: 28, relations: { hasEvaluationAccess: true } });
+
+    expect(component["navItems"]().map(item => item.link)).toEqual([
+      "feed",
+      "program/all",
+      "evaluation",
+      "vacancies",
+    ]);
+
+    profile.set({ id: 28, relations: { hasEvaluationAccess: false } });
+    expect(component["navItems"]().map(item => item.link)).toEqual([
+      "feed",
+      "program/all",
+      "vacancies",
+    ]);
+  });
+
+  it("не показывает оценивание первым, пока меню еще загружается", () => {
+    const profile = fixture.debugElement.injector.get(ProfileInfoService).profile as any;
+    profile.set({ id: 28, relations: { hasEvaluationAccess: true } });
+
+    expect(component["navItems"]()).toEqual([]);
+  });
 });

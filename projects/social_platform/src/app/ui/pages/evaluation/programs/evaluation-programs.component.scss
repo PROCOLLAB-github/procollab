@@ -18,11 +18,12 @@
 }
 
 .cabinet {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: var(--ui-space-md);
   max-width: 863px;
   margin: var(--ui-space-lg) auto calc(2 * var(--ui-space-lg));
-  font-size: var(--ui-font-body);
 
   > .ui-card {
     @include ui-foundation.card;
@@ -34,12 +35,9 @@
 
   .ui-field {
     @include ui-foundation.control;
+    @include program-management-controls.field-text;
 
     width: 100%;
-
-    @media (min-width: 750px) {
-      font-size: var(--ui-font-small);
-    }
   }
 }
 
@@ -48,11 +46,11 @@
   gap: var(--ui-space-xs);
 
   h1 {
-    @include typography.heading-4;
+    @include program-management-controls.page-title;
   }
 
   p {
-    @include typography.body-14;
+    @include program-management-controls.body-copy;
 
     color: var(--ui-text-muted);
   }
@@ -189,7 +187,9 @@
 }
 
 .cabinet__project h3 {
-  @include typography.body-14;
+  @include program-management-controls.body-copy;
+
+  font-weight: 400;
 }
 
 .cabinet__identity {
@@ -217,9 +217,10 @@
 }
 
 .cabinet__dialog-body {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: var(--ui-space-sm);
-  font-size: var(--ui-font-body);
   overflow-wrap: anywhere;
 }
 

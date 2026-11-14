@@ -14,9 +14,9 @@
 
 .ui-field {
   @include ui-foundation.control;
+  @include program-management-controls.field-text;
 
   width: 100%;
-  font-size: 12px;
 }
 
 .ui-alert {
@@ -24,12 +24,13 @@
 }
 
 .launch {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: 20px;
   min-width: 0;
   max-width: 863px;
   margin: 24px auto 48px;
-  font-size: 12px;
   color: var(--black);
 
   h1,

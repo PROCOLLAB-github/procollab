@@ -3,6 +3,7 @@
 @use "styles/ui-foundation";
 @use "styles/typography";
 @use "styles/solution-ui";
+@use "styles/program-management-controls";
 @include solution-ui.controls;
 
 :host {
@@ -16,6 +17,7 @@
   margin: 28px auto 64px;
 
   @include typography.body-12;
+  @include program-management-controls.body-copy;
 
   color: var(--black);
 }

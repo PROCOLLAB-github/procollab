@@ -4,6 +4,8 @@
 @use "styles/ui-foundation";
 
 .rating-workspace {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: var(--ui-space-md);
   max-width: 863px;
@@ -27,7 +29,7 @@
   overflow-wrap: anywhere;
 
   h1 {
-    @include typography.heading-4;
+    @include program-management-controls.page-title;
   }
 
   p {
@@ -48,7 +50,7 @@
   width: min(var(--ui-dialog-sm), calc(100vw - 72px));
 
   h2 {
-    @include typography.heading-4;
+    @include program-management-controls.section-title;
   }
 
   footer {

@@ -5,6 +5,10 @@
   padding-bottom: 100px;
   margin: 30px 20px 0;
 
+  @media (max-width: 999px) {
+    --ui-font-h1: 16px;
+  }
+
   @media (min-width: 1000px) {
     &__bar {
       --ui-back-margin-block: var(--ui-space-sm) var(--ui-space-md);

@@ -9,6 +9,7 @@
 
 .ui-field {
   @include ui-foundation.control;
+  @include program-management-controls.field-text;
 
   box-sizing: border-box;
   width: 100%;
@@ -18,13 +19,13 @@
 .ui-alert { @include program-management-controls.status-notice; }
 
 .project-action {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: 20px;
   width: 432px;
   min-width: 0;
   max-width: 100%;
-  font-size: 12px;
-  line-height: 1.5;
   color: var(--black);
 
   header,
@@ -36,10 +37,9 @@
   }
 
   h2 {
+    @include program-management-controls.section-title;
+
     margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
   }
 
   p { margin: 0; }

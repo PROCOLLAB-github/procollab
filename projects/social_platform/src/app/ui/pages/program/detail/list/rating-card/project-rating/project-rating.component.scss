@@ -1,6 +1,7 @@
 /** @format */
 @use "styles/ui-foundation";
 @use "styles/responsive";
+@use "styles/program-management-controls";
 
 :host {
   display: block;
@@ -35,10 +36,10 @@
 }
 
 .rating {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: 20px;
-  font-size: 12px;
-  line-height: 1.5;
 }
 
 .rating__criterion {
@@ -154,8 +155,14 @@ p {
     }
 
     h4,
-    summary {
+    summary,
+    .rating__counter,
+    .rating__error {
       font-size: 12px;
+    }
+
+    textarea.ui-field {
+      font-size: 16px;
     }
 
     .rating__boolean .ui-button {

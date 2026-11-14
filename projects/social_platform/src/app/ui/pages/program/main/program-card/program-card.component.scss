@@ -112,18 +112,17 @@
   &__photo { flex: 0 0 48px; }
 
   &__name {
+    @include program-management-controls.card-title;
+
     min-width: 0;
     margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 24px;
     color: var(--black);
     overflow-wrap: anywhere;
   }
 
   &__dates {
     margin: 0;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 18px;
     color: var(--dark-grey);
     overflow-wrap: anywhere;

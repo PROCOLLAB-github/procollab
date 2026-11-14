@@ -87,8 +87,10 @@ export class OfficeComponent implements OnInit {
   protected readonly navItems = computed(() => {
     const items = [...this.officeUIInfoService.navItems()];
     if (this.profile()?.relations.hasEvaluationAccess) {
-      const index = items.findIndex(item => item.link === "program");
-      items.splice(index + 1, 0, { name: "оценивание", icon: "check", link: "evaluation" });
+      const index = items.findIndex(item => item.link === "program/all");
+      if (index !== -1) {
+        items.splice(index + 1, 0, { name: "оценивание", icon: "check", link: "evaluation" });
+      }
     }
     return items;
   });

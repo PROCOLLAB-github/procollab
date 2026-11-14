@@ -14,9 +14,9 @@
 
 .ui-field {
   @include ui-foundation.control;
+  @include program-management-controls.field-text;
 
   width: 100%;
-  font-size: 12px;
 }
 
 .ui-choice {
@@ -28,10 +28,11 @@
 .organizers,
 .organizers__dialog,
 .organizers__dialog form {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: 20px;
   min-width: 0;
-  font-size: 12px;
 }
 
 .organizers {
@@ -284,7 +285,7 @@
     align-items: baseline;
 
     &::before {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--grey-for-text);
       content: attr(data-label);
     }

@@ -14,10 +14,10 @@
 
 .ui-field {
   @include ui-foundation.control;
+  @include program-management-controls.field-text;
 
   width: 100%;
   min-height: 41px;
-  font-size: 14px;
 }
 
 .ui-choice {
@@ -25,9 +25,10 @@
 }
 
 .program-create {
+  @include program-management-controls.body-copy;
+
   max-width: 863px;
   margin: 24px auto 48px;
-  font-size: 12px;
   color: var(--black);
 
   h2 {
@@ -53,6 +54,10 @@
     margin: 8px 0 0;
     line-height: 1.5;
     color: var(--grey-for-text);
+  }
+
+  &__hint {
+    font-size: 12px;
   }
 
   fieldset {
@@ -119,6 +124,8 @@
 
 @media (max-width: 999px) {
   .program-create {
+    --ui-font-h1: 16px;
+
     margin: 24px 20px 40px;
 
     &__card {

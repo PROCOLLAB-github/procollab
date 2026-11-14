@@ -33,9 +33,10 @@
   }
 
   &__table {
+    @include program-management-controls.body-copy;
+
     width: 100%;
     margin: 20px 0 0;
-    font-size: 12px;
     table-layout: fixed;
     border-collapse: collapse;
 
