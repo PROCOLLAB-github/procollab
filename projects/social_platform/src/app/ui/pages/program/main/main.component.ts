@@ -1,9 +1,9 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { CheckboxComponent, SelectComponent } from "@ui/primitives";
-import { ClickOutsideModule } from "ng-click-outside";
+import { ButtonDirective, CardDirective } from "@uilib";
 import { ProgramCardComponent } from "./program-card/program-card.component";
 import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-ui-info.service";
 import { ProgramMainInfoService } from "@api/program/facades/program-main-info.service";
@@ -19,7 +19,8 @@ import { AppRoutes } from "@api/paths/app-routes";
     ProgramCardComponent,
     CheckboxComponent,
     SelectComponent,
-    ClickOutsideModule,
+    ButtonDirective,
+    CardDirective,
   ],
   providers: [ProgramMainInfoService, ProgramMainUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,6 +33,7 @@ export class ProgramMainComponent implements OnInit {
   protected readonly isPparticipating = this.programMainUIInfoService.isPparticipating;
   protected readonly programOptionsFilter = this.programMainUIInfoService.programOptionsFilter;
   protected readonly AppRoutes = AppRoutes;
+  protected readonly filtersOpen = signal(false);
 
   ngOnInit(): void {
     this.programMainInfoService.initializationMainPrograms();

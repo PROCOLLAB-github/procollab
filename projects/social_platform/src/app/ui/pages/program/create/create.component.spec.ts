@@ -47,6 +47,10 @@ describe("Создание программы", () => {
     expect(labels[2]).toContain("Кейс-чемпионат");
     expect(page.querySelector("app-page-header")?.textContent).toContain("создание программы");
     expect(page.querySelector('button[type="submit"]')?.textContent).toContain("Создать программу");
+    const actionLabels = [...page.querySelectorAll(".program-create__actions button")].map(button =>
+      button.textContent?.trim(),
+    );
+    expect(actionLabels).toEqual(["Создать программу", "Отмена"]);
     expect(page.textContent).toContain(
       "Программа будет создана как черновик и видна только организаторам.",
     );

@@ -10,17 +10,21 @@ import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-u
 describe("MainComponent", () => {
   let component: ProgramMainComponent;
   let fixture: ComponentFixture<ProgramMainComponent>;
+  const participating = signal(false);
+  const toggleParticipation = vi.fn(() => participating.update(checked => !checked));
 
   beforeEach(async () => {
+    participating.set(false);
+    toggleParticipation.mockClear();
     const programMainInfoServiceSpy = {
       initializationMainPrograms: vi.fn(),
       destroy: vi.fn(),
-      onTogglePparticipating: vi.fn(),
+      onTogglePparticipating: toggleParticipation,
     };
 
     const programMainUIInfoServiceSpy = {
       programs: signal([]),
-      isPparticipating: signal(false),
+      isPparticipating: participating,
       programOptionsFilter: [],
     };
 
@@ -48,5 +52,39 @@ describe("MainComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("opens the filters and toggles participation once from the checkbox or its label", () => {
+    const root: HTMLElement = fixture.nativeElement;
+    const trigger = root.querySelector<HTMLButtonElement>("[aria-controls]")!;
+    const panel = root.querySelector<HTMLElement>("#program-catalog-filters")!;
+    const checkbox = panel.querySelector<HTMLButtonElement>('[role="checkbox"]')!;
+    const label = panel.querySelector<HTMLElement>("#program-participation-filter")!;
+    expect(trigger.getAttribute("aria-expanded")).toBe("false");
+    expect(checkbox.getAttribute("aria-labelledby")).toBe(label.id);
+    expect(label.textContent?.trim()).toBe("участвую");
+
+    trigger.click();
+    fixture.detectChanges();
+    expect(trigger.getAttribute("aria-expanded")).toBe("true");
+
+    checkbox.click();
+    fixture.detectChanges();
+    expect(toggleParticipation).toHaveBeenCalledTimes(1);
+    expect(checkbox.getAttribute("aria-checked")).toBe("true");
+    expect(trigger.textContent?.trim()).toBe("Фильтры (1)");
+
+    trigger.click();
+    fixture.detectChanges();
+    expect(trigger.getAttribute("aria-expanded")).toBe("false");
+    expect(trigger.textContent?.trim()).toBe("Фильтры (1)");
+
+    trigger.click();
+    fixture.detectChanges();
+    label.click();
+    fixture.detectChanges();
+    expect(toggleParticipation).toHaveBeenCalledTimes(2);
+    expect(checkbox.getAttribute("aria-checked")).toBe("false");
+    expect(trigger.textContent?.trim()).toBe("Фильтры");
   });
 });
