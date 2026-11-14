@@ -66,6 +66,8 @@ describe("Program creation access in the catalog", () => {
     expect(helpTrigger()).toBeNull();
     const navigate = vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
     creationButton()!.click();
-    expect(navigate).toHaveBeenCalledExactlyOnceWith("/office/program/create");
+    expect(navigate).toHaveBeenCalledExactlyOnceWith("/office/program/create", {
+      state: { returnUrl: "/" },
+    });
   });
 });

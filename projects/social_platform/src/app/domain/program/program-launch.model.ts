@@ -3,22 +3,22 @@ import { Program } from "./program.model";
 import { ManagementPage } from "./program-management.model";
 import { ProgramImageFraming } from "./program-image-framing.model";
 
-export type ProgramFormat = "case_championship" | "hackathon" | "noncompetitive";
+export type ProgramFormat = "accelerator" | "case_championship" | "hackathon" | "noncompetitive";
 export const PROGRAM_FORMATS: { id: ProgramFormat; label: string; description: string }[] = [
   {
-    id: "case_championship",
-    label: "Кейс-чемпионат",
-    description: "Кейс, описание решения и презентация",
+    id: "accelerator",
+    label: "Акселератор",
+    description: "Развитие проектов с поддержкой и сопровождением.",
   },
   {
     id: "hackathon",
     label: "Хакатон",
-    description: "Задача, репозиторий и инструкция запуска",
+    description: "Создание и проверка решений за ограниченное время.",
   },
   {
-    id: "noncompetitive",
-    label: "Без конкурса",
-    description: "Регистрация и материалы без конкурсной сдачи",
+    id: "case_championship",
+    label: "Кейс-чемпионат",
+    description: "Работа над задачами, предложенными организаторами.",
   },
 ];
 export interface ManagedProgram {

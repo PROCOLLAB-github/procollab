@@ -50,7 +50,7 @@ export interface ManagementDates {
 }
 export interface ProgramManagement extends ManagementBasic, ManagementDates {
   draft?: boolean;
-  programFormat?: "case_championship" | "hackathon" | "noncompetitive" | null;
+  programFormat?: "accelerator" | "case_championship" | "hackathon" | "noncompetitive" | null;
   solutionStorageMode?: "legacy_project" | "solution";
   id: number;
   updatedAt: string;

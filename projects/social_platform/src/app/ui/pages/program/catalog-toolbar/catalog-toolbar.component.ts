@@ -30,6 +30,9 @@ export class ProgramCatalogToolbarComponent {
   }
 
   protected createProgram(): void {
-    if (this.canCreate() === true) void this.router.navigateByUrl(AppRoutes.program.create());
+    if (this.canCreate() === true)
+      void this.router.navigateByUrl(AppRoutes.program.create(), {
+        state: { returnUrl: this.router.url },
+      });
   }
 }
