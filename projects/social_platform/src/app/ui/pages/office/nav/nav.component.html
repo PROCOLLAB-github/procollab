@@ -111,18 +111,58 @@
                 участники
               </li>
             </a>
-            <a class="nav__link" routerLink="program" routerLinkActive="nav__link--active">
-              <li class="text-body-14 nav__item">
-                <i
-                  appIcon
-                  icon="program"
-                  appSquare="24"
-                  appViewBox="0 0 24 16"
-                  class="nav-bar__icon"
-                ></i>
-                программы
-              </li>
-            </a>
+            <div class="nav-bar__program-row">
+              <a
+                class="nav__link"
+                routerLink="program/all"
+                routerLinkActive="nav__link--active"
+                [routerLinkActiveOptions]="{
+                  paths: 'exact',
+                  queryParams: 'ignored',
+                  matrixParams: 'ignored',
+                  fragment: 'ignored',
+                }"
+              >
+                <li class="text-body-14 nav__item">
+                  <i
+                    appIcon
+                    icon="program"
+                    appSquare="24"
+                    appViewBox="0 0 24 16"
+                    class="nav-bar__icon"
+                  ></i>
+                  программы
+                </li>
+              </a>
+              <button
+                type="button"
+                class="nav-bar__program-toggle"
+                [attr.aria-expanded]="programMenuOpen"
+                [attr.aria-label]="
+                  programMenuOpen ? 'Свернуть раздел программы' : 'Развернуть раздел программы'
+                "
+                (click)="programMenuOpen = !programMenuOpen"
+              >
+                <span
+                  class="nav-bar__chevron"
+                  [class.nav-bar__chevron--open]="programMenuOpen"
+                ></span>
+              </button>
+            </div>
+            @if (programMenuOpen) {
+              <a
+                class="nav__link nav-bar__program-child"
+                routerLink="program/managed"
+                routerLinkActive="nav__link--active"
+                [routerLinkActiveOptions]="{
+                  paths: 'exact',
+                  queryParams: 'ignored',
+                  matrixParams: 'ignored',
+                  fragment: 'ignored',
+                }"
+                ><span class="text-body-14 nav__item">я организую</span></a
+              >
+            }
             @if (authRepository.profile()?.relations?.hasEvaluationAccess) {
               <a
                 class="nav__link"

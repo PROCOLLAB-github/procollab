@@ -5,6 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { SidebarComponent } from "./sidebar.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
+import { Router } from "@angular/router";
 import { API_URL } from "@corelib";
 
 describe("SidebarComponent", () => {
@@ -35,5 +36,46 @@ describe("SidebarComponent", () => {
     const logo = fixture.nativeElement.querySelector(".sidebar__logo") as HTMLAnchorElement;
     expect(logo.getAttribute("href")).toBe("/office/feed");
     expect(logo.tabIndex).toBe(0);
+  });
+
+  it("expands the program submenu without navigating away from the current page", () => {
+    fixture.componentRef.setInput("navItems", [
+      {
+        name: "программы",
+        link: "program/all",
+        icon: "program",
+        children: [{ name: "я организую", link: "program/managed" }],
+      },
+    ]);
+    fixture.detectChanges();
+    const root = fixture.nativeElement as HTMLElement;
+    const toggle = root.querySelector<HTMLButtonElement>(".sidebar-nav__expand")!;
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(root.querySelector(".sidebar-nav__child")).toBeNull();
+    toggle.click();
+    fixture.detectChanges();
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
+    expect(root.querySelector(".sidebar-nav__child")?.textContent).toContain("я организую");
+    toggle.click();
+    fixture.detectChanges();
+    expect(root.querySelector(".sidebar-nav__child")).toBeNull();
+  });
+
+  it("opens the submenu when navigation items arrive on the managed programs route", () => {
+    vi.spyOn(TestBed.inject(Router), "url", "get").mockReturnValue(
+      "/office/program/managed?search=проект&offset=10",
+    );
+    fixture.componentRef.setInput("navItems", [
+      {
+        name: "программы",
+        link: "program/all",
+        icon: "program",
+        children: [{ name: "я организую", link: "program/managed" }],
+      },
+    ]);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".sidebar-nav__child")?.textContent).toContain(
+      "я организую",
+    );
   });
 });

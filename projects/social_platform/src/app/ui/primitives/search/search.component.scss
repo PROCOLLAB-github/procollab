@@ -176,3 +176,11 @@
     }
   }
 }
+
+.search--outlined {
+  min-height: 48px;
+  padding: 0 16px;
+  background: var(--white);
+  border: 1px solid var(--gray);
+  border-radius: 10px;
+}

@@ -5,25 +5,62 @@
     <img [src]="logoSrc()" alt="PROCOLLAB" loading="lazy" decoding="async" />
   </a>
   <nav class="sidebar-nav sidebar__nav">
-    <div class="sidebar-nav__list" (mouseenter)="showBar = true" (mouseleave)="showBar = false">
-      <div
-        class="sidebar-nav__bar"
-        [style.opacity]="showBar ? 1 : 0"
-        [style.transform]="'translateY(' + barPosition + 'px)'"
-      ></div>
+    <div class="sidebar-nav__list">
       @for (item of navItems(); track $index) {
-        <a
-          #navItem
-          (click)="handleItemClick(item)"
-          class="sidebar-nav__item text-body-12"
-          [routerLink]="item.isExternal ? null : item.link"
-          (mouseenter)="updateBarPosition(navItem)"
-          [routerLinkActive]="item.isExternal ? '' : 'sidebar-nav__item--active'"
-          [class.sidebar-nav__item--active]="item.isExternal && item.isActive"
-        >
-          <i appIcon [icon]="item.icon" appSquare="10" appViewBox="0 0 10 10"></i>
-          {{ item.name }}
-        </a>
+        <div class="sidebar-nav__group">
+          <div class="sidebar-nav__row">
+            <a
+              (click)="handleItemClick(item)"
+              class="sidebar-nav__item text-body-12"
+              [routerLink]="item.isExternal ? null : item.link"
+              [routerLinkActive]="item.isExternal ? '' : 'sidebar-nav__item--active'"
+              [routerLinkActiveOptions]="{
+                paths: item.children ? 'exact' : 'subset',
+                queryParams: 'ignored',
+                matrixParams: 'ignored',
+                fragment: 'ignored',
+              }"
+              [class.sidebar-nav__item--active]="item.isExternal && item.isActive"
+            >
+              <i appIcon [icon]="item.icon" appSquare="10" appViewBox="0 0 10 10"></i>
+              {{ item.name }}
+            </a>
+            @if (item.children?.length) {
+              <button
+                type="button"
+                class="sidebar-nav__expand"
+                [attr.aria-expanded]="expandedItem === item.link"
+                [attr.aria-label]="
+                  expandedItem === item.link
+                    ? 'Свернуть раздел программы'
+                    : 'Развернуть раздел программы'
+                "
+                (click)="expandedItem = expandedItem === item.link ? null : item.link"
+              >
+                <span
+                  [class.sidebar-nav__chevron--open]="expandedItem === item.link"
+                  class="sidebar-nav__chevron"
+                ></span>
+              </button>
+            }
+          </div>
+          @if (item.children && expandedItem === item.link) {
+            @for (child of item.children; track child.link) {
+              <a
+                class="sidebar-nav__item sidebar-nav__child text-body-12"
+                [routerLink]="child.link"
+                routerLinkActive="sidebar-nav__item--active"
+                [routerLinkActiveOptions]="{
+                  paths: 'exact',
+                  queryParams: 'ignored',
+                  matrixParams: 'ignored',
+                  fragment: 'ignored',
+                }"
+                >{{ child.name }}</a
+              >
+            }
+          }
+        </div>
       }
       <ng-content select="[afterNavItems]"></ng-content>
     </div>

@@ -29,9 +29,9 @@ describe("ProgramCardComponent", () => {
     fixture = TestBed.createComponent(ProgramCardComponent);
     setProgram({});
   });
-  it("keeps the public card free of added actions", () => {
+  it("shows the public card as a single catalog link target", () => {
     expect(element().querySelector(".card__name")?.textContent).toContain(program.name);
-    expect(element().querySelector(".program-card__actions")).toBeNull();
+    expect(element().querySelector(".program-card__more")?.textContent).toContain("Подробнее");
     expect(element().querySelector("a")).toBeNull();
   });
   it("keeps expiry ahead of membership and updates reused inputs", () => {
@@ -39,7 +39,7 @@ describe("ProgramCardComponent", () => {
     expect(element().querySelector(".card__registration--participating")).not.toBeNull();
     setProgram({ isUserMember: true, datetimeRegistrationEnds: "2000-01-01T00:00:00Z" });
     expect(element().querySelector(".card__registration--ended")?.textContent).toContain(
-      "регистрация завершена",
+      "Регистрация завершена",
     );
     expect(element().querySelector(".card__registration--participating")).toBeNull();
   });
@@ -53,7 +53,7 @@ describe("ProgramCardComponent", () => {
     });
     expect(element().querySelector(".card__registration")?.textContent).toContain("Черновик");
     expect(element().querySelector(".card__dates")?.textContent).toContain("Сроки не заданы");
-    expect(element().textContent).toContain("Не виден участникам");
+    expect(element().textContent).not.toContain("Опубликована");
     expect(element().querySelector(".card")?.closest("a")).toBeNull();
     expect(element().querySelector(".program-card__actions a")?.getAttribute("href")).toBe(
       "/office/program/7/launch",
@@ -87,7 +87,7 @@ describe("ProgramCardComponent", () => {
       "https://example.com/logo.png",
     );
     expect(element().querySelector(".card__photo .avatar")?.getAttribute("style")).toContain(
-      "64px",
+      "48px",
     );
     expect(element().querySelector("h3")?.getAttribute("title")).toBe(program.name);
   });

@@ -5,20 +5,14 @@
     <app-page-header title="программы" backRoute="/office/feed" />
   </div>
 
-  <app-tabs
-    class="program-navigation"
-    label="Программы"
-    appearance="underline"
-    [items]="programTabs"
-  />
   @if (!isManaged()) {
     <app-program-catalog-toolbar>
       <form appFormLayout [formGroup]="searchForm">
         <app-search
           formControlName="search"
           [openable]="false"
-          appearance="inline"
-          placeholder="Поиск"
+          appearance="outlined"
+          placeholder="Поиск по названию"
           ariaLabel="Поиск по названию программы"
         />
       </form>

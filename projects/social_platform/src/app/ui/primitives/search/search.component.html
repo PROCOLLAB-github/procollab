@@ -2,7 +2,8 @@
 
 <div
   class="search"
-  [class.search--inline]="appearance() === 'inline'"
+  [class.search--inline]="appearance() === 'inline' || appearance() === 'outlined'"
+  [class.search--outlined]="appearance() === 'outlined'"
   (click)="onSwitchSearch(true)"
   (clickOutside)="onClickOutside($event)"
 >

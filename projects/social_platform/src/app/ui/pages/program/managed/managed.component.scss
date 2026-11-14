@@ -25,7 +25,7 @@
     overflow-wrap: anywhere;
   }
 
-  p {
+  &__empty p {
     margin: 8px 0 0;
     line-height: 1.5;
     color: var(--grey-for-text);
@@ -34,7 +34,7 @@
   &__list {
     display: grid;
     gap: 24px;
-    align-items: start;
+    align-items: stretch;
   }
 
   &__empty {
@@ -44,6 +44,6 @@
 
 @media (min-width: 1000px) {
   .managed__list {
-    grid-template-columns: repeat(2, minmax(0, 333px));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
