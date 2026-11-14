@@ -1,5 +1,27 @@
 /** @format */
 
+// Production Mont type roles for the newer program and evaluation screens.
+@mixin body-copy {
+  font-size: var(--program-type-body-size);
+  line-height: var(--program-type-body-line);
+}
+
+@mixin page-title {
+  font-size: var(--program-type-page-size);
+  font-weight: 400;
+  line-height: var(--program-type-page-line);
+}
+
+@mixin card-title {
+  font-size: var(--program-type-card-size);
+  font-weight: 600;
+  line-height: var(--program-type-card-line);
+}
+
+@mixin field-text {
+  font-size: var(--program-type-field-size);
+}
+
 @mixin export-trigger {
   width: 32px;
   min-width: 32px;
@@ -84,7 +106,7 @@
 @mixin status-badge {
   display: inline-block;
   padding: 3px 8px;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
   color: var(--black);
   background: color-mix(in srgb, var(--gold) 28%, var(--light-white));

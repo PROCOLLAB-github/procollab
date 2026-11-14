@@ -31,14 +31,15 @@
 }
 
 .solution-dialog {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: 16px;
   width: 100%;
   min-width: 0;
   padding: 4px;
-  font:
-    400 12px/1.5 Mont,
-    sans-serif;
+  font-family: Mont, sans-serif;
+  font-weight: 400;
 
   header,
   footer {
@@ -107,9 +108,10 @@
 }
 
 .management__card {
-  font:
-    400 12px/1.5 Mont,
-    sans-serif;
+  @include program-management-controls.body-copy;
+
+  font-family: Mont, sans-serif;
+  font-weight: 400;
 
   h2 {
     @include program-management-controls.section-title;

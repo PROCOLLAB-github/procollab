@@ -15,10 +15,10 @@
 
 .ui-field {
   @include ui-foundation.control;
+  @include program-management-controls.field-text;
 
   width: 100%;
   min-height: 41px;
-  font-size: 14px;
 }
 
 select.ui-field {
@@ -35,10 +35,11 @@ select.ui-field {
 
 .registration,
 .registration__form {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: 20px;
   min-width: 0;
-  font-size: 14px;
 }
 
 .registration__card {
@@ -90,11 +91,12 @@ label {
 }
 
 .registration__choice {
+  @include program-management-controls.body-copy;
+
   display: flex;
   gap: 12px;
   align-items: center;
   min-height: 32px;
-  font-size: 14px;
 }
 
 .registration__row {
@@ -143,13 +145,14 @@ label {
 }
 
 .registration__dialog {
+  @include program-management-controls.body-copy;
+
   display: flex;
   flex-direction: column;
   gap: 24px;
   width: min(680px, calc(100vw - 32px));
   max-height: min(860px, calc(100dvh - 48px));
   padding: 24px;
-  font-size: 14px;
 }
 
 .registration__dialog > header,

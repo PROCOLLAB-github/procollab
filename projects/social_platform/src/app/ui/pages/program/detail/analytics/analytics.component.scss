@@ -35,10 +35,9 @@
   }
 
   &__title {
+    @include program-management-controls.section-title;
+
     margin: 0;
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 28px;
   }
 
   &__title-row {
@@ -185,7 +184,7 @@
 
   &__label {
     margin: 0;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     line-height: 16px;
     color: var(--grey-for-text);
@@ -331,7 +330,7 @@
 
   &__hint {
     grid-column: 1 / -1;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 16px;
   }
 
@@ -496,7 +495,7 @@
 
   .cases-card__columns {
     padding: 10px 13px 0;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 18px;
     color: var(--dark-grey);
   }

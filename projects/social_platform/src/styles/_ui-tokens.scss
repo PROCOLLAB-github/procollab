@@ -46,6 +46,13 @@
   --ui-font-body: 14px;
   --ui-font-small: 12px;
   --ui-font-caption: 12px;
+  --program-type-page-size: 18px;
+  --program-type-page-line: 27px;
+  --program-type-body-size: 12px;
+  --program-type-body-line: 18px;
+  --program-type-card-size: 12px;
+  --program-type-card-line: 16px;
+  --program-type-field-size: 12px;
   --ui-disabled-opacity: 0.5;
   --ui-nav-gradient-end: #4d3780;
   --ui-board-surface: #d9d9d9;
@@ -74,6 +81,18 @@
   --ui-message-shadow: 5px 5px 25px rgb(159 159 159 / 15%);
   --ui-header-shadow: 5px 5px 50px rgb(196 196 196 / 15%);
   --ui-composer-shadow: 4px -4px 4px rgb(51 51 51 / 20%);
+}
+
+@media (max-width: 999px) {
+  :root {
+    --program-type-page-size: 16px;
+    --program-type-page-line: 21px;
+    --program-type-body-size: 14px;
+    --program-type-body-line: 20px;
+    --program-type-card-size: 14px;
+    --program-type-card-line: 20px;
+    --program-type-field-size: 16px;
+  }
 }
 
 @media (max-width: 749px) {

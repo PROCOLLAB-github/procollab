@@ -14,17 +14,18 @@
 
 .ui-field {
   @include ui-foundation.control;
+  @include program-management-controls.field-text;
 
   width: 100%;
 }
 
 .criteria,
 .criteria__dialog {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: 20px;
   min-width: 0;
-  font-size: 12px;
-  line-height: 1.5;
   color: var(--black);
 }
 

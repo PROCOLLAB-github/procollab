@@ -93,6 +93,7 @@
 
 .ui-field {
   @include ui-foundation.control;
+  @include program-management-controls.field-text;
 
   width: 100%;
 }
@@ -102,10 +103,10 @@
 }
 
 .project-form {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: 20px;
-  font-size: 12px;
-  line-height: 1.5;
   color: var(--black);
 }
 

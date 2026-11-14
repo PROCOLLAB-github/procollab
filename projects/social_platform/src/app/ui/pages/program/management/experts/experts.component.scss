@@ -33,10 +33,11 @@
 .experts,
 .experts__dialog,
 .experts__dialog form {
+  @include program-management-controls.body-copy;
+
   display: grid;
   gap: 16px;
   min-width: 0;
-  font-size: 12px;
 }
 
 .experts {

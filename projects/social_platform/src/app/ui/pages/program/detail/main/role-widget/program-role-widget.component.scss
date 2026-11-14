@@ -325,5 +325,11 @@
     .widget__badge {
       font-size: var(--ui-font-small);
     }
+
+    .widget__steps li,
+    .widget__footer span {
+      font-size: var(--ui-font-small);
+      line-height: 16px;
+    }
   }
 }

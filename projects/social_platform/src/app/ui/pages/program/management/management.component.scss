@@ -18,10 +18,11 @@
 }
 
 .management {
+  @include program-management-controls.body-copy;
+
   min-width: 0;
   max-width: 863px;
   margin: 24px auto 48px;
-  font-size: 12px;
   color: var(--black);
 
   &--lists {
