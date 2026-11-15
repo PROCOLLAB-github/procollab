@@ -16,7 +16,7 @@ import {
   untracked,
   viewChild,
 } from "@angular/core";
-import { DatePipe, DOCUMENT } from "@angular/common";
+import { DatePipe, DOCUMENT, NgTemplateOutlet } from "@angular/common";
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from "@angular/router";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
@@ -104,6 +104,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
   ],
   imports: [
     ProgramManagementHeaderComponent,
+    NgTemplateOutlet,
     ImageFramingDirective,
     TransientNoticeComponent,
     RouterLink,

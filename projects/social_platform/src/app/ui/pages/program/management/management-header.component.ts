@@ -13,6 +13,8 @@ import {
   input,
   signal,
   computed,
+  TemplateRef,
+  ViewChild,
   viewChild,
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -46,6 +48,7 @@ interface Tour {
 const TOURS: readonly Tour[] = [
   {
     title: "Участники",
+    description: "Поиск · фильтры · выгрузка",
     steps: [
       {
         section: "participants",
@@ -131,6 +134,7 @@ class ProgramManagementTourState {
   templateUrl: "./management-header.component.html",
 })
 export class ProgramManagementHeaderComponent {
+  @ViewChild("coachContent", { static: true }) readonly coachTemplate!: TemplateRef<unknown>;
   readonly programId = input.required<number>();
   readonly name = input.required<string>();
   readonly draft = input.required<boolean>();
@@ -158,7 +162,7 @@ export class ProgramManagementHeaderComponent {
       ? this.paths.program.preview(this.programId())
       : this.paths.program.detail(this.programId()),
   );
-  protected readonly activeStep = computed(() => {
+  readonly activeStep = computed(() => {
     const current = this.tourState.current();
     return current?.programId === this.programId() ? current : null;
   });

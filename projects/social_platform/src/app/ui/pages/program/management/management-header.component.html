@@ -41,55 +41,53 @@
     </a>
   }
 </nav>
-@if (activeStep(); as current) {
-  @let step = current.tour.steps[current.index];
-  @let total = current.tour.steps.length;
-  @let last = current.index + 1 === total;
-  <section
-    class="program-heading__coach"
-    [class.program-heading__coach--evaluation]="current.tour.title === 'Оценивание'"
-    aria-labelledby="program-coach-title"
-  >
-    <div class="program-heading__coach-head">
-      <div class="program-heading__coach-heading">
-        <small id="program-coach-step">{{ current.index + 1 }} из {{ total }}</small>
-        <span aria-hidden="true">·</span>
-        <h2
-          #coachTitle
-          id="program-coach-title"
-          tabindex="-1"
-          aria-describedby="program-coach-step program-coach-description"
-        >
-          {{ step.title }}
-        </h2>
+<ng-template #coachContent>
+  @if (activeStep(); as current) {
+    @let step = current.tour.steps[current.index];
+    @let total = current.tour.steps.length;
+    @let last = current.index + 1 === total;
+    <section class="program-heading__coach" aria-labelledby="program-coach-title">
+      <div class="program-heading__coach-head">
+        <div class="program-heading__coach-heading">
+          <small id="program-coach-step">{{ current.index + 1 }} из {{ total }}</small>
+          <span aria-hidden="true">·</span>
+          <h2
+            #coachTitle
+            id="program-coach-title"
+            tabindex="-1"
+            aria-describedby="program-coach-step program-coach-description"
+          >
+            {{ step.title }}
+          </h2>
+        </div>
+        <button type="button" appButton="icon" aria-label="Закрыть обучение" (click)="finishTour()">
+          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
+        </button>
       </div>
-      <button type="button" appButton="icon" aria-label="Закрыть обучение" (click)="finishTour()">
-        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-      </button>
-    </div>
-    <p id="program-coach-description">{{ step.text }}</p>
-    <div class="program-heading__actions">
-      @if (current.index > 0) {
+      <p id="program-coach-description">{{ step.text }}</p>
+      <div class="program-heading__actions">
+        @if (current.index > 0) {
+          <button
+            type="button"
+            appButton="secondary"
+            [disabled]="navigating()"
+            (click)="showStep(current.tour, current.index - 1)"
+          >
+            Назад
+          </button>
+        }
         <button
           type="button"
-          appButton="secondary"
+          appButton="primary"
           [disabled]="navigating()"
-          (click)="showStep(current.tour, current.index - 1)"
+          (click)="last ? finishTour() : showStep(current.tour, current.index + 1)"
         >
-          Назад
+          {{ last ? "Завершить" : "Далее" }}
         </button>
-      }
-      <button
-        type="button"
-        appButton="primary"
-        [disabled]="navigating()"
-        (click)="last ? finishTour() : showStep(current.tour, current.index + 1)"
-      >
-        {{ last ? "Завершить" : "Далее" }}
-      </button>
-    </div>
-  </section>
-}
+      </div>
+    </section>
+  }
+</ng-template>
 <app-modal [open]="helpOpen()" (openChange)="helpOpen.set($event)" labelledBy="program-help">
   <section class="program-heading__help">
     <div class="program-heading__help-title">
@@ -104,7 +102,7 @@
       </button>
     </div>
     @if (draft()) {
-      <article class="program-heading__topic program-heading__topic--checklist">
+      <article class="program-heading__topic">
         <div>
           <h3>Подготовка к запуску</h3>
           <p>Страница · сроки · регистрация</p>
@@ -130,10 +128,10 @@
         <button
           type="button"
           appButton="secondary"
-          [attr.aria-label]="'Посмотреть обучение «' + topic.title + '»'"
+          [attr.aria-label]="'Открыть обучение «' + topic.title + '»'"
           (click)="startTour(topic)"
         >
-          Посмотреть
+          Открыть
         </button>
       </article>
     }
