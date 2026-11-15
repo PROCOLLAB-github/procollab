@@ -18,12 +18,14 @@ import { Invite } from "@domain/invite/invite.model";
 import { Project } from "@domain/project/project.model";
 import { RemoveProjectCollaboratorUseCase } from "@api/project/use-cases/remove-project-collaborator.use-case";
 import { ProjectTeamStepComponent } from "./project-team-step.component";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 
 describe("Окно приглашения из редактора команды", () => {
   let fixture: ComponentFixture<ProjectTeamStepComponent>;
   let ui: ProjectTeamUIService;
   let request: Subject<Invite>;
   const repo = { sendForUser: vi.fn() };
+  const instance = { enabled: signal(false), programId: signal(27) };
   const users = [1, 2, 3, 13].map(id => ({
     id,
     firstName: "Иван",
@@ -38,6 +40,8 @@ describe("Окно приглашения из редактора команды
     },
   }));
   beforeEach(async () => {
+    instance.enabled.set(false);
+    instance.programId.set(27);
     request = new Subject<Invite>();
     repo.sendForUser.mockReset().mockReturnValue(request);
     await TestBed.configureTestingModule({
@@ -48,6 +52,7 @@ describe("Окно приглашения из редактора команды
         provideNgxMask(),
         ProjectTeamService,
         ProjectTeamUIService,
+        { provide: InstanceInfoService, useValue: instance },
         { provide: ProfileInfoService, useValue: { profile: signal({ id: 1 }) } },
         { provide: RemoveProjectCollaboratorUseCase, useValue: {} },
         { provide: InviteRepositoryPort, useValue: repo },
@@ -95,6 +100,16 @@ describe("Окно приглашения из редактора команды
     await new Promise(resolve => setTimeout(resolve, 330));
     await fixture.whenStable();
   }
+  it("предлагает поиск по полной почте только внутри программы экземпляра", async () => {
+    instance.enabled.set(true);
+    await open();
+    const input = dialog().querySelector('input[type="search"]') as HTMLInputElement;
+    expect(input.placeholder).toBe("Полная почта или имя участника…");
+    expect(dialog().textContent).toContain("Введите полную почту или имя участника");
+    instance.programId.set(28);
+    await fixture.whenStable();
+    expect(input.placeholder).toBe("Поиск по имени или фамилии…");
+  });
   it("CTA открывает окно с поиском, URL отсутствует, отправка неактивна до выбора и роли", async () => {
     await open();
     expect(ui.isInviteModalOpen()).toBe(true);

@@ -2,7 +2,7 @@
 <article class="member-row">
   <app-avatar [url]="collaborator().avatar" [size]="40" />
   <div class="member-row__identity">
-    <h4 class="member-row__name">{{ collaborator().firstName }} {{ collaborator().lastName }}</h4>
+    <h4 class="member-row__name">{{ displayName() }}</h4>
     <span class="member-row__role">{{ collaborator().role || "Роль не указана" }}</span>
     <p class="member-row__description">
       {{ isLeader() ? "Руководитель проекта" : "Участник проекта" }}
@@ -17,9 +17,7 @@
       appButton="danger"
       type="button"
       class="member-row__action member-row__action--danger"
-      [attr.aria-label]="
-        'Исключить участника: ' + collaborator().firstName + ' ' + collaborator().lastName
-      "
+      [attr.aria-label]="'Исключить участника: ' + displayName()"
       title="Исключить участника"
       [disabled]="removing() || frozen() || isLeader()"
       [attr.aria-busy]="removing()"

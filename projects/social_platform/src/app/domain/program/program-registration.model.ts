@@ -39,6 +39,8 @@ export interface RegistrationPublic {
   enrolled: boolean;
   programUrl: string;
   registrationEnds: string;
+  accountMode?: "email_password";
+  branding?: { name: string; logoUrl: string; logoBackground?: "transparent" | "dark" };
 }
 export interface RegistrationImport {
   options: string[];

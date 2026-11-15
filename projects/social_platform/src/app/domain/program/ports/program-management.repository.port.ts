@@ -2,6 +2,7 @@
 
 import { Observable } from "rxjs";
 import { ProgramResults, ResultsQuery } from "../program-results.model";
+import { ProgramOverallResults } from "../program-overall-results.model";
 import { ManagementCriteria, ManagementCriteriaWrite } from "../program-criteria.model";
 import { ManagementProjectForm, ManagementProjectFormWrite } from "../program-project-form.model";
 import {
@@ -31,6 +32,11 @@ export abstract class ProgramManagementRepositoryPort {
     body: ManagementProjectActionWrite & { previewToken: string },
   ): Observable<ManagementProjectActionResult>;
   abstract results(programId: number): Observable<ProgramResults>;
+  abstract overallResults(
+    programId: number,
+    query: ResultsQuery,
+  ): Observable<ProgramOverallResults>;
+  abstract exportOverallResults(programId: number, query: ResultsQuery): Observable<Blob>;
   abstract exportResults(programId: number, query: ResultsQuery): Observable<Blob>;
   abstract criteria(programId: number): Observable<ManagementCriteria>;
   abstract saveCriteria(

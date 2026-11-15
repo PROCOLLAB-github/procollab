@@ -2,13 +2,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   HostListener,
   inject,
   signal,
 } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { Meta } from "@angular/platform-browser";
+import { Meta, Title } from "@angular/platform-browser";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { debounceTime, finalize, Subscription } from "rxjs";
@@ -32,6 +33,8 @@ import { LoginUseCase } from "@api/auth/use-cases/login.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { evaluationError } from "@utils/evaluation-workspace";
 import { userErrorMessage } from "@core/lib/models/error/user-error-message";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
+import { authReturnUrl } from "@core/lib/models/auth/auth-return-url";
 @Component({
   selector: "app-public-program-registration",
   imports: [
@@ -53,6 +56,7 @@ import { userErrorMessage } from "@core/lib/models/error/user-error-message";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PublicRegistrationComponent {
+  readonly instance = inject(InstanceInfoService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly api = inject(ProgramRegistrationUseCase);
@@ -61,8 +65,12 @@ export class PublicRegistrationComponent {
   private readonly tokens = inject(TokenService);
   private readonly destroy = inject(DestroyRef);
   private readonly meta = inject(Meta);
+  private readonly title = inject(Title);
+  private readonly previousTitle = this.title.getTitle();
   private readonly fb = inject(FormBuilder).nonNullable;
   readonly program = signal<RegistrationPublic | null>(null);
+  readonly shortAccount = computed(() => this.program()?.accountMode === "email_password");
+  readonly brandName = computed(() => this.program()?.branding?.name ?? "PROCOLLAB");
   readonly loading = signal(false);
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
@@ -101,6 +109,7 @@ export class PublicRegistrationComponent {
       this.answersSubscription?.unsubscribe();
       if (previous !== undefined) this.meta.updateTag({ name: "referrer", content: previous });
       else this.meta.removeTag('name="referrer"');
+      this.title.setTitle(this.previousTitle);
     });
     this.route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
       this.answersSubscription?.unsubscribe();
@@ -126,9 +135,11 @@ export class PublicRegistrationComponent {
           ? "confirm"
           : this.route.snapshot.queryParamMap.get("mode") === "login"
             ? "login"
-            : this.receipt
-              ? "sent"
-              : "form",
+            : this.route.snapshot.queryParamMap.get("mode") === "reset"
+              ? "reset"
+              : this.receipt
+                ? "sent"
+                : "form",
       );
       this.load();
     });
@@ -188,6 +199,14 @@ export class PublicRegistrationComponent {
               }
             });
           this.program.set(data);
+          this.title.setTitle(
+            data.branding ? `${data.name} | ${data.branding.name}` : this.previousTitle,
+          );
+          for (const key of ["firstName", "lastName", "birthday"] as const) {
+            const control = this.account.controls[key];
+            control.setValidators(this.shortAccount() ? [] : [Validators.required]);
+            control.updateValueAndValidity({ emitEvent: false });
+          }
           this.authenticated.set(data.authenticated);
         },
         error: e => {
@@ -217,6 +236,8 @@ export class PublicRegistrationComponent {
       return;
     }
     const account = this.account.getRawValue();
+    const { firstName, lastName, birthday, ...credentials } = account;
+    const signupAccount = this.shortAccount() ? credentials : account;
     if (!this.authenticated() && account.password !== account.repeatPassword) {
       this.error.set("Пароли не совпадают.");
       return;
@@ -227,7 +248,7 @@ export class PublicRegistrationComponent {
     const payload = {
       version: data.version,
       answers: this.answers.getRawValue(),
-      ...(!this.authenticated() ? account : {}),
+      ...(!this.authenticated() ? signupAccount : {}),
     };
     this.api
       .submit(this.id, payload, !this.authenticated())
@@ -315,6 +336,10 @@ export class PublicRegistrationComponent {
           this.profile.invalidateProfile();
           this.authenticated.set(true);
           this.credentials.controls.password.reset("");
+          if (this.instance.enabled() && this.instance.programId() === this.id) {
+            this.openProgram();
+            return;
+          }
           this.mode.set("form");
           this.load();
         },
@@ -426,7 +451,11 @@ export class PublicRegistrationComponent {
     this.answers.markAsPristine();
     this.account.markAsPristine();
     this.profile.invalidateProfile();
-    void this.router.navigateByUrl(`/office/program/${this.id}`);
+    const returnUrl =
+      this.instance.enabled() && this.instance.programId() === this.id
+        ? authReturnUrl(this.route.snapshot.queryParamMap.get("returnUrl"))
+        : null;
+    void this.router.navigateByUrl(returnUrl ?? `/office/program/${this.id}`);
   }
   @HostListener("window:beforeunload", ["$event"]) beforeUnload(event: BeforeUnloadEvent) {
     if (this.busy()) {

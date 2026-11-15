@@ -4,6 +4,7 @@ import { inject, Injectable } from "@angular/core";
 import { HttpParams } from "@angular/common/http";
 import { ApiService } from "@corelib";
 import { ProgramResults, ResultsQuery } from "@domain/program/program-results.model";
+import { ProgramOverallResults } from "@domain/program/program-overall-results.model";
 import {
   ManagementCriteria,
   ManagementCriteriaWrite,
@@ -48,7 +49,19 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
   results(id: number) {
     return this.api.get<ProgramResults>(`${this.root(id)}/results/`);
   }
+  overallResults(id: number, query: ResultsQuery) {
+    return this.api.get<ProgramOverallResults>(
+      `${this.root(id)}/overall-results/`,
+      this.resultsParams({ ...query, scope: "current" }),
+    );
+  }
+  exportOverallResults(id: number, query: ResultsQuery) {
+    return this.api.getFile(`${this.root(id)}/overall-results/export/`, this.resultsParams(query));
+  }
   exportResults(id: number, query: ResultsQuery) {
+    return this.api.getFile(`${this.root(id)}/results/export/`, this.resultsParams(query));
+  }
+  private resultsParams(query: ResultsQuery): HttpParams {
     let params = new HttpParams()
       .set("search", query.search)
       .set("case_scope", query.caseScope)
@@ -56,7 +69,7 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
       .set("scope", query.scope);
     params = params.set("status", query.status ?? "all");
     if (query.caseName) params = params.set("case_name", query.caseName);
-    return this.api.getFile(`${this.root(id)}/results/export/`, params);
+    return params;
   }
   criteria(id: number) {
     return this.api.get<ManagementCriteria>(`${this.root(id)}/criteria/`);

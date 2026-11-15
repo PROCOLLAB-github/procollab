@@ -28,7 +28,13 @@ import { InviteUserSummaryComponent } from "./invite-user-summary.component";
     } @else {
       @switch (state().status) {
         @case ("initial") {
-          <p class="invite-helper">Введите имя или фамилию участника</p>
+          <p class="invite-helper">
+            {{
+              emailSearch()
+                ? "Введите полную почту или имя участника"
+                : "Введите имя или фамилию участника"
+            }}
+          </p>
         }
         @case ("loading") {
           <p class="invite-helper" role="status">
@@ -42,7 +48,13 @@ import { InviteUserSummaryComponent } from "./invite-user-summary.component";
         }
         @case ("success") {
           @if (!state().users.length) {
-            <p class="invite-helper" role="status">Участники не найдены. Попробуйте другое имя.</p>
+            <p class="invite-helper" role="status">
+              {{
+                emailSearch()
+                  ? "Участники не найдены. Проверьте имя или полную почту и участие в программе."
+                  : "Участники не найдены. Попробуйте другое имя."
+              }}
+            </p>
           }
           <div class="invite-rows" role="radiogroup" aria-label="Найденные участники">
             @for (user of state().users; track user.id) {
@@ -101,6 +113,7 @@ export class ParticipantPickerComponent {
   readonly collaborators = input<Collaborator[]>([]);
   readonly invites = input<Invite[]>([]);
   readonly busy = input(false);
+  readonly emailSearch = input(false);
   readonly unavailableReason = input<((id: number) => string | null) | null>(null);
   readonly chosen = output<User>();
   readonly cleared = output<void>();

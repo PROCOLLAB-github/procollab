@@ -237,6 +237,25 @@ describe("Списки управления программой в DOM", () => 
       team: signal<ManagementTeam | null>(null),
       context: null as ManagementContext | null,
       api: {
+        overallResults: vi.fn(() =>
+          of({
+            programId: 1,
+            programName: "Программа",
+            generatedAt: "2026-11-12T12:00:00Z",
+            formula: "case_plus_quiz",
+            caseMaximum: 100,
+            quizMaximum: 100,
+            maximum: 200,
+            caseScoringMode: "weighted_percent",
+            caseScoringConfigured: true,
+            caseOptions: [],
+            totalCount: 0,
+            totalReadyCount: 0,
+            matchingCount: 0,
+            readyCount: 0,
+            projects: [],
+          }),
+        ),
         returnToDraft: vi.fn<(id: number, version: string) => Observable<ProgramManagement>>(() =>
           of({ ...program, draft: true, updatedAt: "2026-10-30T10:01:00Z" }),
         ),
@@ -305,6 +324,35 @@ describe("Списки управления программой в DOM", () => 
     const element = () => harness.routeNativeElement!;
     return { harness, component, state, project, element, uploadFile, uploaded };
   }
+
+  it("общий рейтинг входит в оценивание и не запускается для другого контура", async () => {
+    const { component, state, harness, element } = await setup("overall-results");
+    expect(state.context?.section).toBe("overall-results");
+    expect(component.activeGroup()).toBe("evaluation");
+    for (const changes of [
+      { solutionStorageMode: "solution" as const, isCompetitive: true },
+      { solutionStorageMode: "legacy_project" as const, isCompetitive: false },
+    ]) {
+      state.program.set({ ...program, ...changes });
+      harness.detectChanges();
+      expect(element().querySelector("app-management-overall-results")).toBeNull();
+      expect(element().querySelector('a[href$="/overall-results"]')).toBeNull();
+      expect(state.api.overallResults).not.toHaveBeenCalled();
+    }
+    state.program.set({ ...program, solutionStorageMode: "legacy_project", isCompetitive: true });
+    harness.detectChanges();
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+    expect(
+      element().querySelector('a[href$="/overall-results"]')?.getAttribute("aria-current"),
+    ).toBe("page");
+    expect(element().querySelector('a[href$="/results"]')).not.toBeNull();
+    expect(element().querySelector("app-management-overall-results")).not.toBeNull();
+    expect(state.api.overallResults).toHaveBeenCalledWith(
+      1,
+      expect.objectContaining({ scope: "current" }),
+    );
+  });
 
   it("возврат в черновик открывает подтверждение; отмена не отправляет запрос", async () => {
     const { component, state, element, harness } = await setup("settings", "?tab=basic");

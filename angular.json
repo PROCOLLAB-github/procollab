@@ -65,6 +65,31 @@
               "extractLicenses": false,
               "sourceMap": true,
               "outputHashing": "all"
+            },
+            "pilot": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/social_platform/src/environments/environment.ts",
+                  "with": "projects/social_platform/src/environments/environment.pilot.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "2mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "15kb"
+                }
+              ],
+              "outputHashing": "all",
+              "index": {
+                "input": "projects/social_platform/src/index.pilot.html",
+                "output": "index.html"
+              }
             }
           },
           "defaultConfiguration": "production"

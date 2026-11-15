@@ -10,6 +10,7 @@ export interface ProjectRatingCriterion {
   type: ProjectRatingCriterionType;
   minValue: number | null;
   maxValue: number | null;
+  weightPercent?: number | null;
   value: string | number;
   expertId: number;
 }

@@ -3,6 +3,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   effect,
   inject,
@@ -24,6 +25,7 @@ import { createProjectInviteForm } from "@api/invite/project-invite-form";
 import { InviteParticipantSearchFacade } from "@api/invite/facades/invite-participant-search.facade";
 import { CreateSolutionInvitationUseCase } from "@api/solution/use-cases/solution-team.use-cases";
 import { MemberInviteFormComponent } from "./member-invite-form.component";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 
 @Component({
   selector: "app-solution-member-invite-modal",
@@ -33,6 +35,7 @@ import { MemberInviteFormComponent } from "./member-invite-form.component";
     [query]="query"
     [role]="form.controls.role"
     [state]="search.state()"
+    [emailSearch]="emailSearch()"
     [selected]="selected()"
     [unavailableReason]="reason"
     [busy]="busy()"
@@ -56,6 +59,10 @@ export class SolutionMemberInviteModalComponent {
   readonly created = output<SolutionInvitationCreated>();
   readonly refreshRequired = output<void>();
   readonly search = inject(InviteParticipantSearchFacade);
+  private readonly instance = inject(InstanceInfoService);
+  readonly emailSearch = computed(
+    () => this.instance.enabled() && this.solution().programId === this.instance.programId(),
+  );
   readonly form = createProjectInviteForm();
   readonly query = new FormControl("", { nonNullable: true });
   readonly selected = signal<User | null>(null);

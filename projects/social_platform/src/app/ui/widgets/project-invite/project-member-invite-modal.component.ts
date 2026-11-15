@@ -4,6 +4,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   effect,
   inject,
@@ -20,6 +21,7 @@ import { InviteParticipantSearchFacade } from "@api/invite/facades/invite-partic
 import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 import { ProjectTeamService } from "@api/project/facades/edit/project-team.service";
 import { MemberInviteFormComponent } from "./member-invite-form.component";
+import { InstanceInfoService } from "@api/instance/instance-info.service";
 
 @Component({
   selector: "app-project-member-invite-modal",
@@ -39,6 +41,10 @@ export class ProjectMemberInviteModalComponent {
   readonly search = inject(InviteParticipantSearchFacade);
   readonly query = new FormControl("", { nonNullable: true });
   readonly isLoading = isLoading;
+  private readonly instance = inject(InstanceInfoService);
+  readonly emailSearch = computed(
+    () => this.instance.enabled() && inviteProgramId(this.project()) === this.instance.programId(),
+  );
   readonly candidateReason = (id: number) =>
     inviteCandidateReason(id, this.project()?.leader, this.ui.collaborators(), this.ui.invites());
 
