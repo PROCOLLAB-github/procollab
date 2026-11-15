@@ -29,6 +29,8 @@ export interface NavItem {
   isExternal?: boolean;
   /** Флаг активности для внешних ссылок */
   isActive?: boolean;
+  /** Дополнительное правило выделения для разделов с вложенными страницами. */
+  isActiveRoute?: (url: string) => boolean;
   children?: { name: string; link: string; icon?: string; iconViewBox?: string }[];
 }
 
@@ -87,6 +89,10 @@ export class SidebarComponent implements OnInit {
       entry.children?.some(child => path.endsWith("/" + child.link.replace(/^\//, ""))),
     );
     if (item) this.expandedItem = item.link;
+  }
+
+  protected isCustomRouteActive(item: NavItem): boolean {
+    return item.isActiveRoute?.(this.router.url) ?? false;
   }
 
   checkExternalActiveState(): void {

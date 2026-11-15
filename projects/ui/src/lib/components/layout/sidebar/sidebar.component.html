@@ -13,14 +13,18 @@
               (click)="handleItemClick(item)"
               class="sidebar-nav__item text-body-12"
               [routerLink]="item.isExternal ? null : item.link"
-              [routerLinkActive]="item.isExternal ? '' : 'sidebar-nav__item--active'"
+              [routerLinkActive]="
+                item.isExternal || item.isActiveRoute ? '' : 'sidebar-nav__item--active'
+              "
               [routerLinkActiveOptions]="{
                 paths: item.children ? 'exact' : 'subset',
                 queryParams: 'ignored',
                 matrixParams: 'ignored',
                 fragment: 'ignored',
               }"
-              [class.sidebar-nav__item--active]="item.isExternal && item.isActive"
+              [class.sidebar-nav__item--active]="
+                (item.isExternal && item.isActive) || isCustomRouteActive(item)
+              "
             >
               <i appIcon [icon]="item.icon" appSquare="10" appViewBox="0 0 10 10"></i>
               {{ item.name }}

@@ -1,13 +1,26 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from "@angular/core";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { toSignal } from "@angular/core/rxjs-interop";
+import { DOCUMENT } from "@angular/common";
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  ElementRef,
+  inject,
+  Injectable,
+  Injector,
+  input,
+  signal,
+  computed,
+  viewChild,
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { NavigationEnd, Router, RouterLink, UrlTree } from "@angular/router";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ButtonDirective, IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-
-const STEP_PLURAL = new Intl.PluralRules("ru-RU");
+import { filter, firstValueFrom } from "rxjs";
 
 const MAIN_TABS = [
   { key: "overview", label: "Обзор", icon: "additional" },
@@ -17,113 +30,98 @@ const MAIN_TABS = [
   { key: "settings", label: "Настройки", icon: "settings" },
 ];
 
-const TOURS = [
+interface TourStep {
+  section: string;
+  tab?: string;
+  title: string;
+  text: string;
+}
+
+interface Tour {
+  title: string;
+  description?: string;
+  steps: readonly TourStep[];
+}
+
+const TOURS: readonly Tour[] = [
   {
-    key: "main",
-    title: "Основные вкладки",
+    title: "Участники",
     steps: [
       {
-        section: "overview",
-        title: "Обзор",
-        text: "В черновике здесь видно, что нужно для запуска. После публикации здесь аналитика программы.",
+        section: "participants",
+        title: "Список участников",
+        text: "Найдите участника по имени или почте. Используйте фильтры, чтобы сузить список.",
       },
       {
         section: "participants",
-        title: "Участники",
-        text: "Здесь регистрации и последняя активность. Выберите строки, чтобы выполнить действие сразу для нескольких участников.",
-      },
-      {
-        section: "projects",
-        title: "Проекты",
-        text: "Здесь проектные копии команд, их кейсы и статусы сдачи. Действия с отдельной работой доступны в меню строки.",
-      },
-      {
-        section: "settings",
-        tab: "criteria",
-        title: "Оценивание",
-        text: "Настройте критерии, добавьте экспертов и распределите между ними сданные проекты.",
-      },
-      {
-        section: "settings",
-        title: "Настройки",
-        text: "Здесь редактируются страница, сроки, анкета регистрации, требования к проекту и состав организаторов.",
+        title: "Выгрузка участников",
+        text: "Скачайте список участников в Excel с помощью кнопки рядом с фильтрами.",
       },
     ],
   },
   {
-    key: "settings",
-    title: "Настройки программы",
-    steps: [
-      {
-        section: "settings",
-        tab: "basic",
-        title: "Страница",
-        text: "Заполните название и описание. Проверьте, как обложка и аватар выглядят на компьютере и телефоне.",
-      },
-      {
-        section: "settings",
-        tab: "dates",
-        title: "Сроки",
-        text: "Здесь задаются даты программы, закрытия регистрации, сдачи работ и оценивания.",
-      },
-      {
-        section: "settings",
-        tab: "registration",
-        title: "Регистрация",
-        text: "Выберите способ регистрации и настройте анкету, которую заполнят участники.",
-      },
-      {
-        section: "settings",
-        tab: "project-form",
-        title: "Заявка проекта",
-        text: "Выберите разделы и поля для проектной копии. Перед сохранением проверьте форму глазами участника.",
-      },
-      {
-        section: "settings",
-        tab: "materials",
-        title: "Материалы",
-        text: "Добавьте ссылки и файлы, которые понадобятся участникам программы.",
-      },
-      {
-        section: "settings",
-        tab: "organizers",
-        title: "Организаторы",
-        text: "Пригласите коллег и управляйте доступом к программе из меню рядом с их именами.",
-      },
-    ],
-  },
-  {
-    key: "evaluation",
     title: "Оценивание",
+    description: "Критерии · эксперты · результаты",
     steps: [
       {
         section: "settings",
         tab: "criteria",
         title: "Критерии",
-        text: "Задайте, за что эксперты ставят баллы.",
+        text: "Настройте критерии до первой оценки.",
       },
       {
         section: "experts",
         title: "Эксперты",
-        text: "Пригласите экспертов и укажите, какие кейсы они оценивают.",
+        text: "Укажите, какие кейсы оценит каждый эксперт",
       },
       {
         section: "projects",
+        tab: "allocation",
         title: "Распределение",
-        text: "Выберите сданные проекты, чтобы назначить им экспертов.",
+        text: "Назначьте экспертов вручную или автоматически",
       },
       {
         section: "results",
         title: "Результаты",
-        text: "Откройте строку проекта, чтобы увидеть его оценки и прогресс.",
+        text: "Откройте проект, чтобы увидеть оценки экспертов",
       },
     ],
   },
-] satisfies {
-  key: string;
-  title: string;
-  steps: { section: string; tab?: string; title: string; text: string }[];
-}[];
+];
+
+interface ActiveStep {
+  programId: number;
+  tour: Tour;
+  index: number;
+  destination: UrlTree;
+}
+
+@Injectable({ providedIn: "root" })
+class ProgramManagementTourState {
+  private readonly router = inject(Router);
+  readonly current = signal<ActiveStep | null>(null);
+
+  constructor() {
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        const current = this.current();
+        if (current && !this.isAt(current.destination)) this.current.set(null);
+      });
+  }
+
+  isAt(destination: UrlTree): boolean {
+    return this.router.isActive(destination, {
+      paths: "exact",
+      queryParams: "subset",
+      matrixParams: "ignored",
+      fragment: "ignored",
+    });
+  }
+}
 
 @Component({
   selector: "app-program-management-header",
@@ -136,29 +134,49 @@ export class ProgramManagementHeaderComponent {
   readonly programId = input.required<number>();
   readonly name = input.required<string>();
   readonly draft = input.required<boolean>();
+  readonly isCompetitive = input(false);
   readonly active = input.required<string>();
   readonly status = input("");
-  readonly tabs = MAIN_TABS;
-  readonly topics = TOURS;
-  readonly paths = AppRoutes;
-  readonly training = signal(false);
-  private readonly router = inject(Router);
-  private readonly query = toSignal(inject(ActivatedRoute).queryParamMap);
-  readonly tour = computed(() =>
-    this.topics.find(topic => topic.key === this.query()?.get("tour")),
+  protected readonly tabs = MAIN_TABS;
+  protected readonly topics = computed(() =>
+    this.isCompetitive() ? TOURS : TOURS.filter(topic => topic.title !== "Оценивание"),
   );
-  readonly index = computed(() => {
-    const value = Number(this.query()?.get("step") ?? 0);
-    return Number.isInteger(value) && value >= 0 ? value : 0;
-  });
-  readonly step = computed(() => this.tour()?.steps[this.index()]);
+  protected readonly paths = AppRoutes;
+  protected readonly helpOpen = signal(false);
+  protected readonly navigating = signal(false);
 
-  protected stepCount(count: number): string {
-    const form = STEP_PLURAL.select(count);
-    return `${count} ${form === "one" ? "шаг" : form === "few" ? "шага" : "шагов"}`;
+  private readonly router = inject(Router);
+  private readonly tourState = inject(ProgramManagementTourState);
+  private readonly injector = inject(Injector);
+  private readonly document = inject(DOCUMENT);
+  private readonly helpDialog = viewChild(ModalComponent);
+  private readonly helpTrigger = viewChild<ElementRef<HTMLButtonElement>>("helpTrigger");
+  private readonly coachTitle = viewChild<ElementRef<HTMLElement>>("coachTitle");
+
+  protected readonly programPage = computed(() =>
+    this.draft()
+      ? this.paths.program.preview(this.programId())
+      : this.paths.program.detail(this.programId()),
+  );
+  protected readonly activeStep = computed(() => {
+    const current = this.tourState.current();
+    return current?.programId === this.programId() ? current : null;
+  });
+
+  constructor() {
+    effect(() => {
+      const current = this.activeStep();
+      if (!current) return;
+      afterNextRender(
+        () => {
+          if (this.activeStep() === current) this.coachTitle()?.nativeElement.focus();
+        },
+        { injector: this.injector },
+      );
+    });
   }
 
-  tabPath(section: string): string {
+  protected tabPath(section: string): string {
     if (section === "overview") {
       return this.draft()
         ? this.paths.program.launch(this.programId())
@@ -170,19 +188,53 @@ export class ProgramManagementHeaderComponent {
     );
   }
 
-  showStep(topicKey: string, index: number): void {
-    const step = this.topics.find(topic => topic.key === topicKey)?.steps[index];
-    if (!step) return;
-    this.training.set(false);
-    void this.router.navigate([this.tabPath(step.section)], {
-      queryParams: { tab: "tab" in step ? step.tab : null, tour: topicKey, step: index },
-    });
+  protected async openChecklist(): Promise<void> {
+    await this.closeHelp();
+    const destination = this.router.createUrlTree([this.paths.program.launch(this.programId())]);
+    if (this.tourState.isAt(destination)) {
+      this.document.getElementById("program-launch-checklist")?.focus();
+    } else {
+      await this.router.navigateByUrl(destination, { state: { focusLaunchChecklist: true } });
+    }
   }
 
-  finishTour(): void {
-    void this.router.navigate([], {
-      queryParams: { tour: null, step: null },
-      queryParamsHandling: "merge",
+  protected async startTour(tour: Tour): Promise<void> {
+    await this.closeHelp();
+    await this.showStep(tour, 0);
+  }
+
+  protected async showStep(tour: Tour, index: number): Promise<void> {
+    const step = tour.steps[index];
+    if (!step || this.navigating()) return;
+    const programId = this.programId();
+    const destination = this.router.createUrlTree([this.tabPath(step.section)], {
+      queryParams: step.tab ? { tab: step.tab } : undefined,
     });
+
+    if (this.tourState.isAt(destination)) {
+      this.tourState.current.set({ programId, tour, index, destination });
+      return;
+    }
+
+    this.navigating.set(true);
+    try {
+      if ((await this.router.navigateByUrl(destination)) && this.tourState.isAt(destination)) {
+        this.tourState.current.set({ programId, tour, index, destination });
+      }
+    } finally {
+      this.navigating.set(false);
+    }
+  }
+
+  protected finishTour(): void {
+    this.tourState.current.set(null);
+    this.helpTrigger()?.nativeElement.focus();
+  }
+
+  private async closeHelp(): Promise<void> {
+    const overlay = this.helpDialog()?.overlayRef;
+    const closed = overlay?.hasAttached() ? firstValueFrom(overlay.detachments()) : undefined;
+    this.helpOpen.set(false);
+    await closed;
   }
 }

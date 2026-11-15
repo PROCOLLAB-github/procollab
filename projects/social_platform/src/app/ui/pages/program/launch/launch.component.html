@@ -24,51 +24,62 @@
       [programId]="state.program.id"
       [name]="state.program.name"
       [draft]="state.program.draft"
+      [isCompetitive]="isCompetitive() === true"
       [active]="'overview'"
       [status]="'Опубликована'"
     />
     @if (state.program.draft) {
       <section class="launch__card">
-        <h2>Подготовка к запуску</h2>
-        <p>{{ readyCount() }} из {{ state.checks.length }} шагов готово</p>
+        <div class="launch__card-heading">
+          <h2 id="program-launch-checklist" tabindex="-1">Подготовка к запуску</h2>
+          <p>{{ readyCount() }} из {{ state.checks.length }} готово</p>
+        </div>
         @for (check of state.checks; track check.code) {
           <div class="launch__check">
             <div>
               <h3>{{ check.title }}</h3>
-              <p>{{ check.detail }}</p>
+              <p [class.launch__ready]="check.ready">{{ check.ready ? "Готово" : check.detail }}</p>
             </div>
             <div class="launch__check-action">
-              <span>{{ check.ready ? "Готово" : "Нужно настроить" }}</span
-              ><a
-                [appButton]="!check.ready && firstMissing(check.code) ? 'primary' : 'secondary'"
+              <a
+                appButton="secondary"
                 [routerLink]="paths.program.management(state.program.id, 'settings')"
                 [queryParams]="{ tab: check.section, return: 'launch' }"
+                [attr.aria-label]="
+                  check.ready
+                    ? 'Изменить: ' + check.title
+                    : check.code === 'registration'
+                      ? 'Настроить регистрацию'
+                      : null
+                "
                 >{{
                   check.code === "page"
                     ? check.ready
-                      ? "Редактировать"
+                      ? "Изменить"
                       : "Заполнить страницу"
                     : check.code === "dates"
-                      ? "Изменить сроки"
-                      : "К регистрации"
+                      ? check.ready
+                        ? "Изменить"
+                        : "Указать сроки"
+                      : check.ready
+                        ? "Изменить"
+                        : "Настроить"
                 }}</a
               >
             </div>
           </div>
         }
-        <div class="launch__actions">
-          <a appButton="secondary" [routerLink]="paths.program.preview(state.program.id)"
-            >Предпросмотр</a
-          ><button
-            appButton="primary"
-            [disabled]="!state.canPublish || busy()"
-            [appButtonLoading]="busy()"
-            (click)="confirm($event)"
-          >
-            Опубликовать программу
-          </button>
-        </div>
       </section>
+      <div class="launch__actions">
+        <button
+          appButton="primary"
+          [disabled]="!state.canPublish || busy()"
+          [appButtonLoading]="busy()"
+          (click)="confirm($event)"
+        >
+          Опубликовать программу
+        </button>
+      </div>
     } @else {
       <div appAlert="success" role="status">
         <strong>Программа опубликована</strong>

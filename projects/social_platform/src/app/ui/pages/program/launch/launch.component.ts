@@ -1,6 +1,15 @@
 /** @format */
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from "@angular/core";
-import { ActivatedRoute, RouterLink } from "@angular/router";
+import { DOCUMENT } from "@angular/common";
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  Injector,
+  signal,
+} from "@angular/core";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
   BehaviorSubject,
@@ -15,7 +24,11 @@ import { AlertDirective, ButtonDirective, FieldDirective, IconComponent } from "
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-case";
+import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import { ProgramLaunch } from "@domain/program/program-launch.model";
+import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
+import { ProgramManagementHttpAdapter } from "@infrastructure/adapters/program/program-management-http.adapter";
+import { ProgramManagementRepository } from "@infrastructure/repository/program/program-management.repository";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProgramManagementHeaderComponent } from "../management/management-header.component";
 import { evaluationError } from "@utils/evaluation-workspace";
@@ -34,17 +47,31 @@ import { evaluationError } from "@utils/evaluation-workspace";
   ],
   templateUrl: "./launch.component.html",
   styleUrl: "./launch.component.scss",
+  providers: [
+    ProgramManagementUseCase,
+    ProgramManagementHttpAdapter,
+    ProgramManagementRepository,
+    { provide: ProgramManagementRepositoryPort, useExisting: ProgramManagementRepository },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramLaunchComponent {
   private readonly api = inject(ProgramLaunchUseCase);
+  private readonly management = inject(ProgramManagementUseCase);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
+  private readonly injector = inject(Injector);
   private readonly destroy = inject(DestroyRef);
   private readonly refresh = new BehaviorSubject(0);
   private contextId = 0;
+  private metadataRequest = 0;
   private trigger: HTMLElement | null = null;
+  private focusChecklist =
+    this.router.getCurrentNavigation()?.extras.state?.["focusLaunchChecklist"] === true;
   readonly paths = AppRoutes;
   readonly state = signal<ProgramLaunch | null>(null);
+  readonly isCompetitive = signal<boolean | null>(null);
   readonly loading = signal(false);
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
@@ -60,6 +87,19 @@ export class ProgramLaunchComponent {
         switchMap(([params]) =>
           defer(() => {
             this.contextId = Number(params.get("programId"));
+            const id = this.contextId;
+            const request = ++this.metadataRequest;
+            this.isCompetitive.set(null);
+            this.management
+              .get(id)
+              .pipe(takeUntilDestroyed(this.destroy))
+              .subscribe({
+                next: program => {
+                  if (this.contextId === id && this.metadataRequest === request)
+                    this.isCompetitive.set(program.isCompetitive === true);
+                },
+                error: () => {},
+              });
             this.state.set(null);
             this.loading.set(true);
             this.error.set(null);
@@ -77,6 +117,12 @@ export class ProgramLaunchComponent {
       )
       .subscribe(state => {
         this.state.set(state);
+        if (state.program.draft && this.focusChecklist) {
+          this.focusChecklist = false;
+          afterNextRender(() => this.document.getElementById("program-launch-checklist")?.focus(), {
+            injector: this.injector,
+          });
+        }
         if (!state.program.draft) this.publishError.set(null);
       });
     if (this.route.snapshot.queryParamMap.has("previewError"))
@@ -86,9 +132,6 @@ export class ProgramLaunchComponent {
   }
   reload() {
     if (!this.busy()) this.refresh.next(this.refresh.value + 1);
-  }
-  firstMissing(code: string): boolean {
-    return this.state()?.checks.find(c => !c.ready)?.code === code;
   }
   confirm(event: Event) {
     if (!this.state()?.canPublish || this.busy()) return;

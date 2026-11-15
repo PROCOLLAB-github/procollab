@@ -19,7 +19,7 @@ import {
 import { DatePipe, DOCUMENT } from "@angular/common";
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from "@angular/router";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { HttpErrorResponse } from "@angular/common/http";
 import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import { authLoginUrl } from "@core/lib/models/auth/auth-return-url";
@@ -370,6 +370,12 @@ export class ProgramManagementComponent implements OnInit {
     datetimeEvaluationEnds: [""],
     datetimeFinished: ["", Validators.required],
   });
+  readonly submissionDeadline = toSignal(
+    this.datesForm.controls.datetimeProjectSubmissionEnds.valueChanges,
+    {
+      initialValue: this.datesForm.controls.datetimeProjectSubmissionEnds.value,
+    },
+  );
   readonly materialForm = this.fb.group({
     title: ["", Validators.required],
     mode: ["link"],
@@ -1360,18 +1366,31 @@ export class ProgramManagementComponent implements OnInit {
           this.saved.set(true);
         },
         error: (error: HttpErrorResponse) => {
-          if (error.error?.code === "reopen_confirmation_required")
+          if (error.error?.code === "reopen_confirmation_required") {
+            const changed = Object.keys(body).filter(
+              key => key !== "expectedUpdatedAt" && key !== "confirmReopen",
+            );
+            const submissionOnly =
+              section === "dates" &&
+              p.draft === false &&
+              p.isCompetitive &&
+              changed.length === 1 &&
+              changed[0] === "datetimeProjectSubmissionEnds";
             void this.confirm(
-              "Снова открыть прием?",
-              userErrorMessage(
-                error.error.detail,
-                "Изменение дат снова откроет прием. Подтвердите сохранение новых сроков.",
-              ),
-              "Подтвердить и сохранить",
+              submissionOnly
+                ? "Снова открыть прием решений?"
+                : "Снова открыть прием или оценивание?",
+              submissionOnly
+                ? "Сохранение снова откроет прием решений."
+                : userErrorMessage(
+                    error.error.detail,
+                    "Изменение сроков снова откроет прием или оценивание.",
+                  ),
+              submissionOnly ? "Открыть прием" : "Подтвердить и сохранить",
             ).then(yes => {
               if (yes) this.save(true);
             });
-          else this.formError.set(this.errorMessage(error));
+          } else this.formError.set(this.errorMessage(error));
         },
       });
   }

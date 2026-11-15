@@ -115,13 +115,7 @@
               <a
                 class="nav__link"
                 routerLink="program/all"
-                routerLinkActive="nav__link--active"
-                [routerLinkActiveOptions]="{
-                  paths: 'exact',
-                  queryParams: 'ignored',
-                  matrixParams: 'ignored',
-                  fragment: 'ignored',
-                }"
+                [class.nav__link--active]="programSectionActive()"
               >
                 <li class="text-body-14 nav__item">
                   <i
