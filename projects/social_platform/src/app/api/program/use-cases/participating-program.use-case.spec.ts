@@ -32,6 +32,14 @@ describe("ParticipatingProgramUseCase", () => {
     expect(repo.getAll).toHaveBeenCalledExactlyOnceWith(0, 20, filter);
   });
 
+  it("передает запрошенную страницу и поисковые фильтры", () => {
+    setup();
+    repo.getAll.mockReturnValue(of(page));
+    const filter = new HttpParams().set("search", "Первая").set("participating", "true");
+    useCase.execute(filter, 20, 20).subscribe();
+    expect(repo.getAll).toHaveBeenCalledExactlyOnceWith(20, 20, filter);
+  });
+
   it("при успехе возвращает ok с пагинацией", () =>
     new Promise<void>(done => {
       setup();

@@ -1,89 +1,94 @@
 /** @format */
 
-import { DestroyRef, inject, Injectable } from "@angular/core";
-import { ActivatedRoute, Params, Router } from "@angular/router";
-import { NavService } from "@api/shared/nav.service";
-import { combineLatest, distinctUntilChanged, map, switchMap } from "rxjs";
-import { Program } from "@domain/program/program.model";
 import { HttpParams } from "@angular/common/http";
-import { ProgramMainUIInfoService } from "./ui/program-main-ui-info.service";
-import { ApiPagination } from "@domain/other/api-pagination.model";
-import { ProgramShellInfoService } from "./program-shell-info.service";
+import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import Fuse from "fuse.js";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NavService } from "@api/shared/nav.service";
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, switchMap } from "rxjs";
+import { ParticipatingProgramUseCase } from "../use-cases/participating-program.use-case";
+import { ProgramMainUIInfoService } from "./ui/program-main-ui-info.service";
 
-/** Фасад главной вкладки программы: участие в программе (`ParticipatingProgramUseCase`). */
+/** Актуальная страница публичного каталога; поиск и фильтры применяются на сервере. */
 @Injectable()
 export class ProgramMainInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly navService = inject(NavService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly api = inject(ParticipatingProgramUseCase);
+  private readonly ui = inject(ProgramMainUIInfoService);
+  private readonly refresh = new BehaviorSubject(0);
 
-  private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
-  private readonly programShellInfoService = inject(ProgramShellInfoService);
-
-  readonly isPparticipating = this.programMainUIInfoService.isPparticipating;
-
-  readonly programs = this.programMainUIInfoService.programs;
+  readonly pageSize = 20;
+  readonly isPparticipating = this.ui.isPparticipating;
+  readonly programs = this.ui.programs;
+  readonly count = this.ui.programCount;
+  readonly loading = signal(false);
+  readonly error = signal(false);
+  readonly offset = signal(0);
+  readonly search = signal("");
+  readonly rangeEnd = computed(() => this.offset() + this.programs().length);
 
   initializationMainPrograms(): void {
     this.navService.setNavTitle("Программы");
-
-    combineLatest([
-      this.route.queryParams.pipe(
-        map(q => ({ filter: this.buildFilterQuery(q), search: q["search"] || "" })),
-        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
+    const query$ = this.route.queryParamMap.pipe(
+      map(params => {
+        const raw = Number(params.get("offset") ?? 0);
+        return {
+          offset: Number.isSafeInteger(raw) && raw >= 0 ? raw : 0,
+          search: (params.get("search") ?? "").trim().slice(0, 255),
+          participating: params.get("participating") === "true",
+        };
+      }),
+      distinctUntilChanged(
+        (a, b) =>
+          a.offset === b.offset && a.search === b.search && a.participating === b.participating,
       ),
-    ])
+    );
+    combineLatest([query$, this.refresh])
       .pipe(
-        switchMap(([{ filter, search }]) => {
-          this.isPparticipating.set(filter["participating"] === "true");
-
-          return this.programShellInfoService
-            .ensureProgramsLoaded(new HttpParams({ fromObject: filter }))
-            .pipe(map(result => ({ result, search })));
+        switchMap(([query]) => {
+          this.offset.set(query.offset);
+          this.search.set(query.search);
+          this.isPparticipating.set(query.participating);
+          this.loading.set(true);
+          this.error.set(false);
+          this.ui.applyPrograms([], 0);
+          let params = new HttpParams();
+          if (query.participating) params = params.set("participating", "true");
+          if (query.search) params = params.set("search", query.search);
+          return this.api.execute(params, query.offset, this.pageSize);
         }),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(({ result, search }) => {
+      .subscribe(result => {
+        this.loading.set(false);
         if (!result.ok) {
+          this.error.set(true);
           return;
         }
-
-        const programs = this.applySearch(result.value, search);
-
-        this.programMainUIInfoService.applyPrograms(programs, result.value.count);
+        this.ui.applyPrograms(result.value.results, result.value.count);
       });
   }
 
   onTogglePparticipating(): void {
-    const newValue = !this.isPparticipating();
-    this.isPparticipating.set(newValue);
-
-    this.router.navigate([], {
-      queryParams: {
-        participating: newValue ? "true" : null,
-      },
+    void this.router.navigate([], {
+      queryParams: { participating: this.isPparticipating() ? null : "true", offset: null },
       relativeTo: this.route,
       queryParamsHandling: "merge",
     });
   }
 
-  private buildFilterQuery(q: Params): Record<string, any> {
-    const reqQuery: Record<string, any> = {};
-
-    if (q["participating"]) {
-      reqQuery["participating"] = q["participating"];
-    }
-
-    return reqQuery;
+  page(delta: number): void {
+    void this.router.navigate([], {
+      queryParams: { offset: Math.max(0, this.offset() + delta * this.pageSize) || null },
+      relativeTo: this.route,
+      queryParamsHandling: "merge",
+    });
   }
 
-  private applySearch(response: ApiPagination<Program>, search: string): Program[] {
-    if (!search) return response.results;
-
-    const fuse = new Fuse(response.results, { keys: ["name"], threshold: 0.3 });
-    return fuse.search(search).map(r => r.item);
+  reload(): void {
+    this.refresh.next(this.refresh.value + 1);
   }
 }

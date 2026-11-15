@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { CheckboxComponent, SelectComponent } from "@ui/primitives";
-import { ButtonDirective, CardDirective } from "@uilib";
+import { AlertDirective, ButtonDirective, CardDirective, PaginationComponent } from "@uilib";
 import { ProgramCardComponent } from "./program-card/program-card.component";
 import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-ui-info.service";
 import { ProgramMainInfoService } from "@api/program/facades/program-main-info.service";
@@ -21,6 +21,8 @@ import { AppRoutes } from "@api/paths/app-routes";
     SelectComponent,
     ButtonDirective,
     CardDirective,
+    AlertDirective,
+    PaginationComponent,
   ],
   providers: [ProgramMainInfoService, ProgramMainUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,6 +34,7 @@ export class ProgramMainComponent implements OnInit {
   protected readonly programs = this.programMainUIInfoService.programs;
   protected readonly isPparticipating = this.programMainUIInfoService.isPparticipating;
   protected readonly programOptionsFilter = this.programMainUIInfoService.programOptionsFilter;
+  protected readonly catalog = this.programMainInfoService;
   protected readonly AppRoutes = AppRoutes;
   protected readonly filtersOpen = signal(false);
 

@@ -10,7 +10,7 @@ import { Program } from "@domain/program/program.model";
 export class ProgramMainUIInfoService {
   private readonly fb = inject(FormBuilder);
 
-  protected readonly programCount = signal<number>(0);
+  readonly programCount = signal<number>(0);
   readonly isPparticipating = signal<boolean>(false);
 
   readonly programs = signal<Program[]>([]);

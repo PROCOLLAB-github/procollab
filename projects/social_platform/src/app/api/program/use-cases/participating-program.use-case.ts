@@ -8,13 +8,17 @@ import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Program } from "@domain/program/program.model";
 
-/** Сценарий: программы, в которых участвует пользователь (первые 20 + фильтр); ошибка → `unknown`. */
+/** Страница программ с необязательными фильтрами; ошибка → `unknown`. */
 @Injectable({ providedIn: "root" })
 export class ParticipatingProgramUseCase {
   private readonly programRepositoryPort = inject(ProgramRepositoryPort);
 
-  execute(filter?: HttpParams): Observable<Result<ApiPagination<Program>, { kind: "unknown" }>> {
-    return this.programRepositoryPort.getAll(0, 20, filter).pipe(
+  execute(
+    filter?: HttpParams,
+    offset = 0,
+    limit = 20,
+  ): Observable<Result<ApiPagination<Program>, { kind: "unknown" }>> {
+    return this.programRepositoryPort.getAll(offset, limit, filter).pipe(
       map(response => ok<ApiPagination<Program>>(response)),
       catchError(() => of(fail({ kind: "unknown" as const }))),
     );
