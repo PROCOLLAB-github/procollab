@@ -19,6 +19,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import {
   CriterionType,
+  EvaluationScoringMode,
   ManagementCriteria,
   ManagementCriteriaWrite,
   ManagementCriterion,
@@ -70,8 +71,35 @@ export class ManagementCriteriaComponent {
     type: this.fb.control<CriterionType>("int"),
     minValue: new FormControl<number | null>(0),
     maxValue: new FormControl<number | null>(10),
+    weightPercent: new FormControl<number | null>(null),
   });
   readonly editorType = signal<CriterionType>("int");
+  readonly scoringMode = signal<EvaluationScoringMode>("legacy");
+  readonly weightTotal = computed(
+    () =>
+      this.criteria()
+        .filter(c => c.type === "int" || c.type === "float")
+        .reduce((total, c) => total + Math.round((c.weightPercent ?? 0) * 100), 0) / 100,
+  );
+  readonly weightsError = computed(() => {
+    if (this.scoringMode() !== "weighted_percent") return null;
+    const numeric = this.criteria().filter(c => c.type === "int" || c.type === "float");
+    if (!numeric.length) return "Добавьте числовой критерий и распределите 100% веса.";
+    if (numeric.some(c => !this.validWeight(c.weightPercent)))
+      return "Укажите вес каждого числового критерия: от 0,01 до 100%, до двух знаков после запятой.";
+    if (
+      numeric.some(
+        c =>
+          c.minValue === null ||
+          c.maxValue === null ||
+          !Number.isFinite(c.minValue) ||
+          !Number.isFinite(c.maxValue) ||
+          c.maxValue <= c.minValue,
+      )
+    )
+      return "Для весов укажите конечный максимум строго больше минимума каждого числового критерия.";
+    return this.weightTotal() === 100 ? null : "Сумма весов должна быть ровно 100%.";
+  });
   readonly previewOpen = signal(false);
   readonly previewCriteria = signal<ProjectRatingCriterion[]>([]);
   readonly previewControl = new FormControl();
@@ -113,9 +141,11 @@ export class ManagementCriteriaComponent {
     return {
       expectedUpdatedAt: snapshot?.updatedAt ?? "",
       expectedRevision: snapshot?.revision ?? "",
+      scoringMode: source ? (source.scoringMode ?? "legacy") : this.scoringMode(),
       criteria: (source?.criteria ?? this.criteria()).map(c => ({
         ...c,
         id: c.id > 0 ? c.id : null,
+        weightPercent: c.weightPercent ?? null,
       })),
     };
   }
@@ -145,6 +175,7 @@ export class ManagementCriteriaComponent {
     this.load();
   }
   discard(): void {
+    this.scoringMode.set(this.snapshot()?.scoringMode ?? "legacy");
     this.criteria.set(this.snapshot()?.criteria.map(c => ({ ...c })) ?? []);
     this.editing.set(null);
     this.editorDirty.set(false);
@@ -157,7 +188,12 @@ export class ManagementCriteriaComponent {
     if (!this.dirty() || (await this.confirmDiscard()())) this.discard();
   }
   edit(criterion?: ManagementCriterion): void {
-    if (this.locked() || this.saving() || criterion?.type === "float") return;
+    if (
+      this.locked() ||
+      this.saving() ||
+      (criterion?.type === "float" && this.scoringMode() !== "weighted_percent")
+    )
+      return;
     this.editing.set(criterion ?? "new");
     this.editor.reset({
       name: criterion?.name ?? "",
@@ -165,7 +201,13 @@ export class ManagementCriteriaComponent {
       type: criterion?.type ?? "int",
       minValue: criterion?.minValue ?? 0,
       maxValue: criterion?.maxValue ?? 10,
+      weightPercent: criterion?.weightPercent ?? null,
     });
+    for (const [key, control] of Object.entries(this.editor.controls)) {
+      if (criterion?.type === "float" && key !== "weightPercent")
+        control.disable({ emitEvent: false });
+      else control.enable({ emitEvent: false });
+    }
     this.editorType.set(this.editor.controls.type.value);
     this.editorDirty.set(false);
     this.editorError.set(null);
@@ -186,6 +228,14 @@ export class ManagementCriteriaComponent {
       return;
     }
     if (
+      this.scoringMode() === "weighted_percent" &&
+      (value.type === "int" || value.type === "float") &&
+      !this.validWeight(value.weightPercent)
+    ) {
+      this.editorError.set("Укажите вес от 0,01 до 100%, до двух знаков после запятой.");
+      return;
+    }
+    if (
       value.type === "int" &&
       (value.minValue === null ||
         value.maxValue === null ||
@@ -202,7 +252,10 @@ export class ManagementCriteriaComponent {
       id: editing === "new" ? this.nextId-- : editing.id,
       minValue: value.type === "int" ? value.minValue : null,
       maxValue: value.type === "int" ? value.maxValue : null,
+      weightPercent: value.type === "int" || value.type === "float" ? value.weightPercent : null,
     };
+    if (editing !== "new" && editing.type === "float")
+      Object.assign(criterion, editing, { weightPercent: value.weightPercent });
     this.criteria.update(rows =>
       editing === "new"
         ? [...rows, criterion]
@@ -220,6 +273,10 @@ export class ManagementCriteriaComponent {
   }
   save(): void {
     if (!this.snapshot() || this.locked() || this.saving() || !this.dirty()) return;
+    if (this.weightsError()) {
+      this.error.set(this.weightsError());
+      return;
+    }
     this.saving.set(true);
     this.error.set(null);
     this.saved.set(false);
@@ -251,6 +308,7 @@ export class ManagementCriteriaComponent {
     this.previewCriteria.set(
       this.criteria().map(c => ({
         ...c,
+        weightPercent: this.scoringMode() === "weighted_percent" ? c.weightPercent : null,
         description: c.description ?? "",
         value: "",
         expertId: 0,
@@ -264,7 +322,26 @@ export class ManagementCriteriaComponent {
       this.labels[c.type] +
       (c.type === "int" || c.type === "float"
         ? ` · от ${c.minValue ?? "без минимума"} до ${c.maxValue ?? "без максимума"}`
+        : "") +
+      (this.scoringMode() === "weighted_percent" && c.weightPercent != null
+        ? ` · вес ${c.weightPercent}%`
         : "")
+    );
+  }
+  changeScoringMode(event: Event): void {
+    if (this.locked() || this.saving()) return;
+    const value = (event.target as HTMLSelectElement).value;
+    if (value === "legacy" || value === "weighted_percent") this.scoringMode.set(value);
+    this.error.set(null);
+    this.saved.set(false);
+  }
+  private validWeight(value: number | null | undefined): value is number {
+    return (
+      value != null &&
+      Number.isFinite(value) &&
+      value >= 0.01 &&
+      value <= 100 &&
+      Math.abs(value - Math.round(value * 100) / 100) < 1e-9
     );
   }
   private errorText(e: HttpErrorResponse): string {
@@ -273,7 +350,9 @@ export class ManagementCriteriaComponent {
     if (e.status === 409)
       return userErrorMessage(e.error?.detail, "Критерии изменились. Обновите данные.");
     return e.status === 400
-      ? "Проверьте названия, типы и шкалы критериев. Изменения не сохранены."
+      ? this.scoringMode() === "weighted_percent"
+        ? "Проверьте названия, шкалы и веса критериев. Сумма весов должна быть 100%. Изменения не сохранены."
+        : "Проверьте названия, типы и шкалы критериев. Изменения не сохранены."
       : "Не удалось загрузить или сохранить критерии. Попробуйте еще раз.";
   }
 }

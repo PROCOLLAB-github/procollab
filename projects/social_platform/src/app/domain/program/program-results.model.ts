@@ -1,5 +1,5 @@
 /** @format */
-import { ManagementCriterion } from "./program-criteria.model";
+import { EvaluationScoringMode, ManagementCriterion } from "./program-criteria.model";
 import { SolutionRef } from "@domain/solution/solution-contract.model";
 
 export interface ResultExpert {
@@ -23,6 +23,7 @@ export interface ResultProject {
   score: number | null;
   place: number | null;
   averages: Record<string, number>;
+  contributions?: Record<string, number>;
   experts: ResultExpert[];
 }
 export interface ResultsGroup {
@@ -38,6 +39,7 @@ export interface ProgramResults {
   generatedAt: string;
   requiredEvaluators: number;
   maximum: number | null;
+  scoringMode?: EvaluationScoringMode;
   hasNumericCriteria: boolean;
   caseOptions: string[];
   criteria: ManagementCriterion[];

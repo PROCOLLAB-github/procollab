@@ -337,14 +337,30 @@
         ><button type="button" appButton="primary" (click)="applyFilters()">Применить</button>
       </footer>
     } @else if (modal() === "formula") {
-      <p>
-        Итог — среднее сумм баллов экспертов. Учитываются только полные оценки, вес экспертов
-        одинаковый.
-      </p>
+      @if (snapshot()?.scoringMode === "weighted_percent") {
+        <p>
+          Итог кейса — от 0 до 100. Вклад критерия: (балл − минимум) / (максимум − минимум) × вес в
+          процентах. Итог — среднее полных оценок экспертов.
+        </p>
+      } @else {
+        <p>
+          Итог — среднее сумм баллов экспертов. Учитываются только полные оценки, вес экспертов
+          одинаковый.
+        </p>
+      }
       @if (sampleFormula()) {
         <div class="results__sheet-info">
           <strong>{{ sample()?.name }}</strong>
           <p>{{ sampleFormula() }}</p>
+          @if (snapshot()?.scoringMode === "weighted_percent") {
+            @for (criterion of numericCriteria(); track criterion.id) {
+              <p>
+                {{ criterion.name }} · вес {{ criterion.weightPercent }}% · вклад
+                {{ format(sample()?.contributions?.[criterion.id]) }} из
+                {{ criterion.weightPercent }}
+              </p>
+            }
+          }
         </div>
       }
       <p>

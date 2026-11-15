@@ -19,6 +19,9 @@
         <h4>{{ criterion.name }}</h4>
       }
       @if (criterion.type === "int" || criterion.type === "float") {
+        @if (criterion.weightPercent != null) {
+          <p class="rating__hint">Вес в итоговой оценке кейса: {{ criterion.weightPercent }}%</p>
+        }
         <app-range-criterion-input
           [label]="criterion.name"
           [compact]="layout() === 'compact'"
