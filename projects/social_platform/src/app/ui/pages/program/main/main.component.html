@@ -42,13 +42,46 @@
     </div>
   </div>
 
-  @if (programs()) {
-    <div class="programs__list">
-      @for (p of programs(); track p.id) {
-        <a [routerLink]="AppRoutes.program.detail(p.id)">
-          <app-program-card [program]="p"></app-program-card>
-        </a>
-      }
-    </div>
-  }
+  <div class="programs__content" [attr.aria-busy]="catalog.loading()">
+    @if (catalog.loading()) {
+      <p role="status">Загружаем программы…</p>
+    } @else if (catalog.error()) {
+      <div appAlert="error" role="alert">
+        Не удалось загрузить программы.
+        <button appButton="secondary" type="button" (click)="catalog.reload()">Повторить</button>
+      </div>
+    } @else if (programs().length) {
+      <div class="programs__list">
+        @for (p of programs(); track p.id) {
+          <a [routerLink]="AppRoutes.program.detail(p.id)">
+            <app-program-card [program]="p"></app-program-card>
+          </a>
+        }
+      </div>
+    } @else if (catalog.offset()) {
+      <p>На этой странице программ нет.</p>
+    } @else if (catalog.search() || isPparticipating()) {
+      <p>Программы не найдены. Измените поиск или фильтры.</p>
+    } @else {
+      <p>Программ пока нет.</p>
+    }
+    @if (
+      !catalog.loading() &&
+      !catalog.error() &&
+      (catalog.count() > catalog.pageSize || catalog.offset())
+    ) {
+      <app-pagination
+        [previousDisabled]="catalog.offset() === 0"
+        [nextDisabled]="catalog.rangeEnd() >= catalog.count()"
+        (previous)="catalog.page(-1)"
+        (next)="catalog.page(1)"
+      >
+        @if (programs().length) {
+          {{ catalog.offset() + 1 }}–{{ catalog.rangeEnd() }} из {{ catalog.count() }}
+        } @else {
+          0 из {{ catalog.count() }}
+        }
+      </app-pagination>
+    }
+  </div>
 </div>

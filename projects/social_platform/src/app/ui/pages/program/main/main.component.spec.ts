@@ -20,6 +20,15 @@ describe("MainComponent", () => {
       initializationMainPrograms: vi.fn(),
       destroy: vi.fn(),
       onTogglePparticipating: toggleParticipation,
+      loading: signal(false),
+      error: signal(false),
+      count: signal(0),
+      offset: signal(0),
+      rangeEnd: signal(0),
+      search: signal(""),
+      pageSize: 20,
+      page: vi.fn(),
+      reload: vi.fn(),
     };
 
     const programMainUIInfoServiceSpy = {

@@ -28,6 +28,14 @@
     }
   }
 
+  &__content {
+    min-width: 0;
+
+    @include responsive.apply-desktop {
+      grid-area: 1 / 1;
+    }
+  }
+
   &__list {
     display: grid;
     grid-template-columns: 1fr;
@@ -40,7 +48,6 @@
     }
 
     @include responsive.apply-desktop {
-      grid-area: 1 / 1;
       grid-template-columns: 4fr 4fr;
     }
   }
