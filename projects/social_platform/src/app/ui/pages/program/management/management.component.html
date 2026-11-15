@@ -11,6 +11,7 @@
 >
   @if (state.program(); as program) {
     <app-program-management-header
+      #managementHeader
       [programId]="program.id"
       [name]="program.name"
       [draft]="!!program.draft"
@@ -30,6 +31,11 @@
           </a>
         }
       </nav>
+    }
+    @if (managementHeader.activeStep()) {
+      <div class="management__coach">
+        <ng-container [ngTemplateOutlet]="managementHeader.coachTemplate" />
+      </div>
     }
   }
   @if (state.error()) {

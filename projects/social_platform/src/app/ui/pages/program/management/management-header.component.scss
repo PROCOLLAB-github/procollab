@@ -120,8 +120,10 @@
     @include program-management-controls.body-copy;
 
     display: grid;
-    gap: 12px;
-    padding: 16px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 16px;
+    align-items: center;
+    padding: 12px 16px;
     margin-bottom: 20px;
     background: var(--light-white);
     border: 1px solid var(--accent);
@@ -154,6 +156,7 @@
   }
 
   &__coach-head {
+    grid-column: 1 / -1;
     justify-content: space-between;
   }
 
@@ -207,21 +210,11 @@
       min-width: 120px;
     }
 
-    &--checklist button {
-      min-width: 100px;
-    }
-
     & + & {
       padding-top: 16px;
       margin-top: 16px;
       border-top: 1px solid var(--medium-grey-for-outline);
     }
-  }
-}
-
-@media (min-width: 1000px) {
-  .program-heading__coach--evaluation {
-    margin-left: 170px;
   }
 }
 

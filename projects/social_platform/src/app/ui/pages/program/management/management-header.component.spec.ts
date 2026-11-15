@@ -1,5 +1,6 @@
 /** @format */
 
+import { NgTemplateOutlet } from "@angular/common";
 import { Component, signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { provideRouter, Router } from "@angular/router";
@@ -12,15 +13,19 @@ const program = AppRoutes.program;
 const programId = 12;
 
 @Component({
-  imports: [ProgramManagementHeaderComponent],
+  imports: [ProgramManagementHeaderComponent, NgTemplateOutlet],
   template: `
     <app-program-management-header
+      #header
       [programId]="programId"
       [name]="'Город будущего'"
       [draft]="draft()"
       [isCompetitive]="competitive()"
       [active]="'overview'"
     />
+    @if (header.activeStep()) {
+      <ng-container [ngTemplateOutlet]="header.coachTemplate" />
+    }
   `,
 })
 class HeaderPage {
@@ -108,6 +113,12 @@ describe(ProgramManagementHeaderComponent.name, () => {
     expect(
       Array.from(dialog.querySelectorAll("h3")).map(heading => heading.textContent?.trim()),
     ).toEqual(["Подготовка к запуску", "Участники", "Оценивание"]);
+    expect(dialog.textContent).toContain("Поиск · фильтры · выгрузка");
+    expect(
+      Array.from(dialog.querySelectorAll("article button")).map(button =>
+        button.textContent?.trim(),
+      ),
+    ).toEqual(["Открыть", "Открыть", "Открыть"]);
     click("Открыть чеклист «Подготовка к запуску»", dialog);
     await vi.waitFor(() => expect(router.url).toBe(program.launch(programId)));
     expect(host.canLeave).toHaveBeenCalledOnce();
@@ -144,7 +155,7 @@ describe(ProgramManagementHeaderComponent.name, () => {
   it("uses evaluation routes in order and retains the step when a guard cancels navigation", async () => {
     const host = await harness.navigateByUrl(program.launch(programId), HeaderPage);
     const dialog = await openHelp();
-    click("Посмотреть обучение «Оценивание»", dialog);
+    click("Открыть обучение «Оценивание»", dialog);
     const criteriaUrl = program.management(programId, "settings") + "?tab=criteria";
     await vi.waitFor(() => {
       expect(router.url).toBe(criteriaUrl);
@@ -197,7 +208,7 @@ describe(ProgramManagementHeaderComponent.name, () => {
     const activeHost = await harness.navigateByUrl(url, HeaderPage);
     activeHost.canLeave.mockReturnValue(false);
 
-    click("Посмотреть обучение «Участники»", await openHelp());
+    click("Открыть обучение «Участники»", await openHelp());
     await vi.waitFor(() => expectCoach("Список участников", "1 из 2"));
     click("Далее");
     expectCoach("Выгрузка участников", "2 из 2");
@@ -206,7 +217,7 @@ describe(ProgramManagementHeaderComponent.name, () => {
     expect(router.parseUrl(router.url).queryParamMap.get("q")).toBe("Аня");
     expect(activeHost.canLeave).not.toHaveBeenCalled();
 
-    click("Посмотреть обучение «Участники»", await openHelp());
+    click("Открыть обучение «Участники»", await openHelp());
     await vi.waitFor(() => expectCoach("Список участников", "1 из 2"));
   });
 
@@ -215,7 +226,7 @@ describe(ProgramManagementHeaderComponent.name, () => {
     const activeHost = await harness.navigateByUrl(datesUrl, HeaderPage);
     activeHost.canLeave.mockReturnValue(false);
 
-    click("Посмотреть обучение «Оценивание»", await openHelp());
+    click("Открыть обучение «Оценивание»", await openHelp());
     await vi.waitFor(() => expect(activeHost.canLeave).toHaveBeenCalledOnce());
     expect(router.url).toBe(datesUrl);
     expect(harness.routeNativeElement!.querySelector("#program-coach-title")).toBeNull();
