@@ -14,6 +14,7 @@
       [programId]="program.id"
       [name]="program.name"
       [draft]="!!program.draft"
+      [isCompetitive]="program.isCompetitive"
       [active]="activeGroup()"
       [status]="registrationStatusLabel(program.datetimeRegistrationEnds, program.datetimeFinished)"
     />
@@ -986,19 +987,29 @@
                 [id]="field.key"
                 [formControlName]="field.key"
                 [attr.aria-invalid]="dateError(field.key) ? 'true' : null"
-                [attr.aria-describedby]="dateError(field.key) ? field.key + '-error' : null"
+                [attr.aria-describedby]="
+                  dateError(field.key)
+                    ? field.key + '-error'
+                    : program.isCompetitive &&
+                        field.key === 'datetimeProjectSubmissionEnds' &&
+                        !submissionDeadline()
+                      ? 'submission-deadline-hint'
+                      : null
+                "
             /></label>
             @if (dateError(field.key); as error) {
               <p appAlert="error" role="alert" [id]="field.key + '-error'">{{ error }}</p>
             }
+            @if (
+              program.isCompetitive &&
+              field.key === "datetimeProjectSubmissionEnds" &&
+              !submissionDeadline()
+            ) {
+              <p class="management__muted" id="submission-deadline-hint">
+                Прием решений завершится вместе с регистрацией.
+              </p>
+            }
           }
-          <p class="management__muted">
-            Если отдельный срок сдачи не задан, действует срок окончания регистрации.
-          </p>
-          <p appAlert="warning">
-            Перенос завершенного срока на будущую дату снова откроет прием. Перед сохранением
-            появится подтверждение.
-          </p>
           <div class="management__inline">
             <button
               appButton="primary"

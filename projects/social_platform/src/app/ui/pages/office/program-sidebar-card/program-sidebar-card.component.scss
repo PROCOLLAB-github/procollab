@@ -26,7 +26,9 @@
   }
 
   &__title {
+    min-width: 0;
     color: var(--black);
+    overflow-wrap: anywhere;
   }
 }
 

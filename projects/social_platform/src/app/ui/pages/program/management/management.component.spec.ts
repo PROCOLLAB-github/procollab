@@ -31,6 +31,7 @@ class LoginNavigationTarget {}
 const program = {
   id: 1,
   name: "Программа",
+  draft: false,
   city: "Москва",
   tag: "кейс",
   description: "Описание",
@@ -155,6 +156,70 @@ describe("Сохранение настроек организатора", () =>
       confirmReopen: false,
       datetimeFinished: null,
     });
+  });
+  it("при повторном открытии срока решений называет именно прием решений и сохраняет значение при отмене", async () => {
+    const { component, save } = setup();
+    save.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({ status: 409, error: { code: "reopen_confirmation_required" } }),
+      ),
+    );
+    component.settingsTab.set("dates");
+    const deadline = component.datesForm.controls.datetimeProjectSubmissionEnds;
+    deadline.setValue("2026-10-22T18:00");
+    deadline.markAsDirty();
+    component.save();
+    expect(component.confirmation()?.title).toBe("Снова открыть прием решений?");
+    expect(component.confirmation()?.label).toBe("Открыть прием");
+    component.resolveConfirmation(false);
+    await Promise.resolve();
+    expect(deadline.value).toBe("2026-10-22T18:00");
+    expect(deadline.dirty).toBe(true);
+    expect(save).toHaveBeenCalledTimes(1);
+  });
+
+  it("после подтверждения повторно отправляет срок с серверным признаком подтверждения", async () => {
+    const { component, save } = setup();
+    save
+      .mockReturnValueOnce(
+        throwError(
+          () =>
+            new HttpErrorResponse({ status: 409, error: { code: "reopen_confirmation_required" } }),
+        ),
+      )
+      .mockReturnValueOnce(of(program));
+    component.settingsTab.set("dates");
+    const deadline = component.datesForm.controls.datetimeProjectSubmissionEnds;
+    deadline.setValue("2026-10-22T18:00");
+    deadline.markAsDirty();
+    component.save();
+    component.resolveConfirmation(true);
+    await Promise.resolve();
+    expect(save).toHaveBeenCalledTimes(2);
+    expect(save).toHaveBeenLastCalledWith(1, "dates", {
+      expectedUpdatedAt: program.updatedAt,
+      confirmReopen: true,
+      datetimeProjectSubmissionEnds: "2026-10-22T15:00:00.000Z",
+    });
+  });
+
+  it("не называет повторное открытие регистрации открытием приема решений", () => {
+    const { component, save } = setup();
+    save.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({ status: 409, error: { code: "reopen_confirmation_required" } }),
+      ),
+    );
+    component.settingsTab.set("dates");
+    const deadline = component.datesForm.controls.datetimeRegistrationEnds;
+    deadline.setValue("2026-10-22T18:00");
+    deadline.markAsDirty();
+    component.save();
+    expect(component.confirmation()?.title).toBe("Снова открыть прием или оценивание?");
+    expect(component.confirmation()?.label).toBe("Подтвердить и сохранить");
+    component.resolveConfirmation(false);
   });
   it("сохраняет mobile URL и полный framing; 409 оставляет кадр для повторной попытки", () => {
     const { component, save } = setup();
@@ -305,6 +370,26 @@ describe("Списки управления программой в DOM", () => 
     const element = () => harness.routeNativeElement!;
     return { harness, component, state, project, element, uploadFile, uploaded };
   }
+
+  it("показывает срок регистрации как запасной только для пустого срока приёма решений", async () => {
+    const { component, state, element, harness } = await setup("settings", "?tab=dates");
+    const hint = () => element().querySelector<HTMLElement>("#submission-deadline-hint");
+    const input = () =>
+      element().querySelector<HTMLInputElement>("#datetimeProjectSubmissionEnds")!;
+    expect(hint()?.textContent).toContain("Прием решений завершится вместе с регистрацией");
+    expect(input().getAttribute("aria-describedby")).toBe("submission-deadline-hint");
+    expect(element().textContent).not.toContain("Перенос завершенного срока");
+
+    component.datesForm.controls.datetimeProjectSubmissionEnds.setValue("2026-10-22T18:00");
+    harness.detectChanges();
+    expect(hint()).toBeNull();
+    expect(input().getAttribute("aria-describedby")).toBeNull();
+
+    component.datesForm.controls.datetimeProjectSubmissionEnds.setValue("");
+    state.program.set({ ...program, isCompetitive: false });
+    harness.detectChanges();
+    expect(hint()).toBeNull();
+  });
 
   it("возврат в черновик открывает подтверждение; отмена не отправляет запрос", async () => {
     const { component, state, element, harness } = await setup("settings", "?tab=basic");

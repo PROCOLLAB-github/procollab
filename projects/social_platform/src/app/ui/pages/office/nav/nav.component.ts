@@ -41,6 +41,11 @@ import { NotificationListComponent } from "@ui/widgets/notification-list/notific
 import { SolutionInvitationInboxComponent } from "@ui/widgets/solution-invitation-inbox/solution-invitation-inbox.component";
 import { SolutionInvitationInboxService } from "@api/solution/facades/solution-invitation-inbox.service";
 
+export function isProgramsSectionActive(url: string): boolean {
+  const path = url.split(/[?#]/)[0].replace(/;[^/]*/g, "");
+  return /^\/office\/program\/(?:all|create|\d+)(?:\/|$)/.test(path);
+}
+
 /**
  * Компонент навигационного меню
  *
@@ -182,6 +187,10 @@ export class NavComponent implements OnInit, OnDestroy {
   notificationsOpen = false;
   title = "";
   protected readonly AppRoutes = AppRoutes;
+
+  protected programSectionActive(): boolean {
+    return isProgramsSectionActive(this.router.url);
+  }
 
   /**
    * Проверка наличия непринятых приглашений

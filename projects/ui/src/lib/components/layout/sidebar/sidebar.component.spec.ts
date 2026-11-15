@@ -82,4 +82,20 @@ describe("SidebarComponent", () => {
       "я организую",
     );
   });
+
+  it("подсвечивает раздел на вложенной странице по переданному правилу", () => {
+    vi.spyOn(TestBed.inject(Router), "url", "get").mockReturnValue("/office/program/12/launch");
+    fixture.componentRef.setInput("navItems", [
+      {
+        name: "программы",
+        link: "program/all",
+        icon: "program",
+        isActiveRoute: (url: string) => /^\/office\/program\/\d+\//.test(url),
+        children: [{ name: "я организую", link: "program/managed" }],
+      },
+    ]);
+    fixture.detectChanges();
+    const item = fixture.nativeElement.querySelector(".sidebar-nav__row .sidebar-nav__item");
+    expect(item.classList.contains("sidebar-nav__item--active")).toBe(true);
+  });
 });

@@ -15,9 +15,9 @@ import { ProgramSidebarCardComponent } from "./program-sidebar-card/program-side
 import { ButtonComponent } from "@ui/primitives";
 import { DeleteConfirmComponent } from "./delete-confirm/delete-confirm.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { NavComponent } from "./nav/nav.component";
+import { isProgramsSectionActive, NavComponent } from "./nav/nav.component";
 import { SnackbarComponent } from "./snackbar/snackbar.component";
-import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
+import { ProfileControlPanelComponent, SidebarComponent, type NavItem } from "@uilib";
 import { OfficeInfoService } from "@api/office/facades/office-info.service";
 import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
@@ -85,7 +85,11 @@ export class OfficeComponent implements OnInit {
   protected readonly programs = this.programShellInfoService.actualPrograms;
 
   protected readonly navItems = computed(() => {
-    const items = [...this.officeUIInfoService.navItems()];
+    const items: NavItem[] = [...this.officeUIInfoService.navItems()];
+    const programIndex = items.findIndex(item => item.link === "program/all");
+    if (programIndex !== -1) {
+      items[programIndex] = { ...items[programIndex], isActiveRoute: isProgramsSectionActive };
+    }
     if (this.profile()?.relations.hasEvaluationAccess) {
       const index = items.findIndex(item => item.link === "program/all");
       if (index !== -1) {
