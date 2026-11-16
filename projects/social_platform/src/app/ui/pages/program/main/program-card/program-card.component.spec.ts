@@ -87,7 +87,7 @@ describe("ProgramCardComponent", () => {
       "https://example.com/logo.png",
     );
     expect(element().querySelector(".card__photo .avatar")?.getAttribute("style")).toContain(
-      "48px",
+      "40px",
     );
     expect(element().querySelector("h3")?.getAttribute("title")).toBe(program.name);
   });
@@ -96,5 +96,18 @@ describe("ProgramCardComponent", () => {
     expect(element().querySelector(".card__registration--not-set")?.textContent).toContain(
       "Срок регистрации не задан",
     );
+  });
+  it("shows only a nonempty catalog description and uses a program icon without an image", () => {
+    setProgram({ shortDescription: "  Описание программы  " });
+    expect(element().querySelector(".card__description")?.textContent).toBe("Описание программы");
+    expect(element().querySelector(".card__photo--placeholder [icon='folder']")).not.toBeNull();
+    expect(element().querySelector(".card__dates")?.textContent).not.toContain("для всей России");
+
+    setProgram({ shortDescription: "   " });
+    expect(element().querySelector(".card__description")).toBeNull();
+
+    fixture.componentRef.setInput("management", true);
+    setProgram({ shortDescription: "Описание программы" });
+    expect(element().querySelector(".card__description")).toBeNull();
   });
 });

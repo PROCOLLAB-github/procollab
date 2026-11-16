@@ -39,7 +39,8 @@
   &__list {
     display: grid;
     grid-template-columns: 1fr;
-    grid-gap: 24px;
+    gap: var(--ui-space-lg) var(--ui-space-md);
+    align-items: start;
 
     > a {
       min-width: 0;
@@ -48,7 +49,7 @@
     }
 
     @include responsive.apply-desktop {
-      grid-template-columns: 4fr 4fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
