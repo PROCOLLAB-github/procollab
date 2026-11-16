@@ -127,6 +127,15 @@
     border-radius: 50%;
   }
 
+  &__name,
+  &__description {
+    /* stylelint-disable-next-line value-no-vendor-prefix */
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
   &__name {
     @include program-management-controls.card-title;
 
@@ -145,13 +154,8 @@
   }
 
   &__description {
-    /* stylelint-disable-next-line value-no-vendor-prefix */
-    display: -webkit-box;
-    overflow: hidden;
     font-size: 12px;
     line-height: 16px;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
   }
 
   &__dates {
