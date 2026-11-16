@@ -42,6 +42,7 @@ interface TourStep {
 interface Tour {
   title: string;
   description?: string;
+  requiredTab?: string;
   steps: readonly TourStep[];
 }
 
@@ -65,6 +66,7 @@ const TOURS: readonly Tour[] = [
   {
     title: "Оценивание",
     description: "Критерии · эксперты · результаты",
+    requiredTab: "evaluation",
     steps: [
       {
         section: "settings",
@@ -138,12 +140,11 @@ export class ProgramManagementHeaderComponent {
   readonly programId = input.required<number>();
   readonly name = input.required<string>();
   readonly draft = input.required<boolean>();
-  readonly isCompetitive = input(false);
   readonly active = input.required<string>();
   readonly status = input("");
   protected readonly tabs = MAIN_TABS;
-  protected readonly topics = computed(() =>
-    this.isCompetitive() ? TOURS : TOURS.filter(topic => topic.title !== "Оценивание"),
+  protected readonly topics = TOURS.filter(
+    topic => !topic.requiredTab || this.tabs.some(tab => tab.key === topic.requiredTab),
   );
   protected readonly paths = AppRoutes;
   protected readonly helpOpen = signal(false);

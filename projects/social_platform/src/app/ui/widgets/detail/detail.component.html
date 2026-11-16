@@ -251,7 +251,13 @@
                 </div>
 
                 @if (isUserManager()) {
-                  <a [routerLink]="AppRoutes.program.management(info().id)">
+                  <a
+                    [routerLink]="
+                      info().draft
+                        ? AppRoutes.program.launch(info().id)
+                        : AppRoutes.program.management(info().id, 'analytics')
+                    "
+                  >
                     <app-button
                       [appearance]="isAnalyticsPage() ? 'inline' : 'outline'"
                       [size]="appWidth >= 1000 ? 'medium' : 'big'"

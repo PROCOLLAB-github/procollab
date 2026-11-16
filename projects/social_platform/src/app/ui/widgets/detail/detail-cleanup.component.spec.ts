@@ -179,6 +179,21 @@ describe("Detail cleanup actions", () => {
     expect(actions.textContent).toContain("управление программой");
     expect(actions.querySelector('a[href*="published-solutions"]')).toBeNull();
   });
+  it("opens the overview for a published program and launch preparation for a draft", () => {
+    manager.set(true);
+    info.set({ ...Program.default(), id: 12, draft: false });
+    const fixture = TestBed.createComponent(DeatilComponent);
+    fixture.detectChanges();
+    const page: HTMLElement = fixture.nativeElement;
+    const managementLink = () =>
+      [...page.querySelectorAll<HTMLAnchorElement>(".info__actions a")].find(a =>
+        a.textContent?.includes("управление программой"),
+      );
+    expect(managementLink()?.getAttribute("href")).toBe("/office/program/12/management/analytics");
+    info.set({ ...Program.default(), id: 12, draft: true });
+    fixture.detectChanges();
+    expect(managementLink()?.getAttribute("href")).toBe("/office/program/12/launch");
+  });
   it("показывает организатору управление, оценку и отдельное приглашение эксперта", () => {
     manager.set(true);
     expert.set(true);

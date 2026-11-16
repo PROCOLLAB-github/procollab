@@ -1,9 +1,8 @@
 /** @format */
 import { TestBed } from "@angular/core/testing";
 import { ActivatedRoute, convertToParamMap, provideRouter } from "@angular/router";
-import { of, Subject, throwError } from "rxjs";
+import { of, Subject } from "rxjs";
 import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-case";
-import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import { ProgramLaunch } from "@domain/program/program-launch.model";
 import { ProgramLaunchComponent } from "./launch.component";
 
@@ -57,15 +56,6 @@ describe("Подготовка программы к запуску", () => {
         },
         { provide: ProgramLaunchUseCase, useValue: { readiness: () => of(initial) } },
       ],
-    }).overrideComponent(ProgramLaunchComponent, {
-      set: {
-        providers: [
-          {
-            provide: ProgramManagementUseCase,
-            useValue: { get: () => of({ isCompetitive: true }) },
-          },
-        ],
-      },
     });
     const fixture = TestBed.createComponent(ProgramLaunchComponent);
     fixture.detectChanges();
@@ -94,14 +84,10 @@ describe("Подготовка программы к запуску", () => {
     expect(publish.disabled).toBe(false);
   });
 
-  it("не использует устаревший или ошибочный ответ о наличии оценивания", () => {
-    const first = new Subject<{ isCompetitive: boolean }>();
-    const second = new Subject<{ isCompetitive: boolean }>();
-    const get = vi
-      .fn()
-      .mockReturnValueOnce(first)
-      .mockReturnValueOnce(second)
-      .mockReturnValueOnce(throwError(() => new Error("Нет доступа")));
+  it("не заменяет свежие данные подготовки ответом устаревшего запроса", () => {
+    const first = new Subject<ProgramLaunch>();
+    const second = new Subject<ProgramLaunch>();
+    const readiness = vi.fn().mockReturnValueOnce(first).mockReturnValueOnce(second);
     const params = convertToParamMap({ programId: "1" });
     const query = convertToParamMap({});
     TestBed.configureTestingModule({
@@ -116,19 +102,14 @@ describe("Подготовка программы к запуску", () => {
             snapshot: { queryParamMap: query },
           },
         },
-        { provide: ProgramLaunchUseCase, useValue: { readiness: () => of(initial) } },
+        { provide: ProgramLaunchUseCase, useValue: { readiness } },
       ],
-    }).overrideComponent(ProgramLaunchComponent, {
-      set: { providers: [{ provide: ProgramManagementUseCase, useValue: { get } }] },
     });
     const fixture = TestBed.createComponent(ProgramLaunchComponent);
     fixture.detectChanges();
-    expect(fixture.componentInstance.isCompetitive()).toBeNull();
     fixture.componentInstance.reload();
-    second.next({ isCompetitive: false });
-    first.next({ isCompetitive: true });
-    expect(fixture.componentInstance.isCompetitive()).toBe(false);
-    fixture.componentInstance.reload();
-    expect(fixture.componentInstance.isCompetitive()).toBeNull();
+    second.next(initial);
+    first.next({ ...initial, program: { ...initial.program, name: "Устаревшие данные" } });
+    expect(fixture.componentInstance.state()?.program.name).toBe("Программа");
   });
 });

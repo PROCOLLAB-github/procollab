@@ -20,7 +20,6 @@ const programId = 12;
       [programId]="programId"
       [name]="'Город будущего'"
       [draft]="draft()"
-      [isCompetitive]="competitive()"
       [active]="'overview'"
     />
     @if (header.activeStep()) {
@@ -31,7 +30,6 @@ const programId = 12;
 class HeaderPage {
   readonly programId = programId;
   readonly draft = signal(true);
-  readonly competitive = signal(true);
   readonly canLeave = vi.fn(() => true);
 }
 
@@ -142,14 +140,15 @@ describe(ProgramManagementHeaderComponent.name, () => {
     await vi.waitFor(() => expect(document.body.contains(publishedDialog)).toBe(false));
   });
 
-  it("не предлагает обучение оцениванию, если оценивание для программы не предусмотрено", async () => {
-    const host = await harness.navigateByUrl(program.launch(programId), HeaderPage);
-    host.competitive.set(false);
-    harness.detectChanges();
+  it("предлагает обучение оцениванию, когда соответствующий раздел доступен", async () => {
+    await harness.navigateByUrl(program.management(programId), HeaderPage);
+    expect(harness.routeNativeElement!.textContent).toContain("Оценивание");
     const dialog = await openHelp();
     expect(
       Array.from(dialog.querySelectorAll("h3")).map(heading => heading.textContent?.trim()),
-    ).toEqual(["Подготовка к запуску", "Участники"]);
+    ).toEqual(["Подготовка к запуску", "Участники", "Оценивание"]);
+    click("Открыть обучение «Оценивание»", dialog);
+    await vi.waitFor(() => expectCoach("Критерии", "1 из 4"));
   });
 
   it("uses evaluation routes in order and retains the step when a guard cancels navigation", async () => {
