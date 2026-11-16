@@ -1,5 +1,5 @@
 <!-- @format -->
-<article class="program-card" [class.program-card--managed]="management()">
+<article class="program-card">
   @if (management() && !program().draft) {
     <a
       class="program-card__link"
@@ -11,28 +11,8 @@
   } @else {
     <ng-container [ngTemplateOutlet]="cardContent" />
   }
-  @if (management()) {
-    <div class="program-card__actions">
-      <a
-        appButton="secondary"
-        [routerLink]="
-          program().draft
-            ? paths.program.launch(program().id)
-            : paths.program.management(program().id, 'analytics')
-        "
-        [attr.aria-label]="
-          (program().draft ? 'Продолжить настройку: ' : 'Управлять: ') + program().name
-        "
-      >
-        {{ program().draft ? "Продолжить настройку" : "Управлять" }}
-      </a>
-    </div>
-  } @else {
-    <div class="program-card__actions"><span class="program-card__more">Подробнее</span></div>
-  }
-</article>
-<ng-template #cardContent>
-  <div class="card">
+
+  <div class="program-card__footer">
     <div class="card__statuses">
       @if (management() && !program().draft) {
         <span class="card__publication">Опубликована</span>
@@ -49,7 +29,7 @@
             Ты уже участвуешь
           }
           @case ("actual") {
-            Регистрация до {{ program().datetimeRegistrationEnds | date: "dd MMMM" }}
+            Регистрация до {{ program().datetimeRegistrationEnds | date: "d MMMM" }}
           }
           @default {
             Срок регистрации не задан
@@ -57,26 +37,52 @@
         }
       </span>
     </div>
+
+    <div class="program-card__actions">
+      @if (management()) {
+        <a
+          appButton="secondary"
+          [routerLink]="
+            program().draft
+              ? paths.program.launch(program().id)
+              : paths.program.management(program().id, 'analytics')
+          "
+          [attr.aria-label]="
+            (program().draft ? 'Продолжить настройку: ' : 'Управлять: ') + program().name
+          "
+        >
+          {{ program().draft ? "Продолжить настройку" : "Управлять" }}
+        </a>
+      } @else {
+        <span class="program-card__more">Подробнее</span>
+      }
+    </div>
+  </div>
+</article>
+
+<ng-template #cardContent>
+  <div class="card">
     <div class="card__identity">
-      <app-avatar
-        class="card__photo"
-        [url]="program().imageAddress || ''"
-        [imageFraming]="program().imageFraming?.logo ?? null"
-        [size]="48"
-      />
+      @if (program().imageAddress) {
+        <app-avatar
+          class="card__photo"
+          [url]="program().imageAddress || ''"
+          [imageFraming]="program().imageFraming?.logo ?? null"
+          [size]="40"
+          aria-hidden="true"
+        />
+      } @else {
+        <span class="card__photo card__photo--placeholder" aria-hidden="true">
+          <i appIcon icon="folder" appWidth="15" appHeight="13" appViewBox="0 0 15 13"></i>
+        </span>
+      }
       <h3 class="card__name" [title]="program().name">{{ program().name }}</h3>
     </div>
-    <p class="card__dates">
-      @if (program().datetimeStarted && program().datetimeFinished) {
-        {{ program().datetimeStarted | date: "dd.MM.yyyy" }} –
-        {{ program().datetimeFinished | date: "dd.MM.yyyy" }} · для всей России
-      } @else {
-        {{
-          program().datetimeStarted || program().datetimeFinished
-            ? "Сроки заполнены не полностью"
-            : "Сроки не заданы"
-        }}
-      }
-    </p>
+
+    @if (!management() && program().shortDescription?.trim(); as description) {
+      <p class="card__description">{{ description }}</p>
+    }
+
+    <p class="card__dates">{{ programDates() }}</p>
   </div>
 </ng-template>

@@ -5,19 +5,17 @@
 :host {
   display: block;
   min-width: 0;
-  height: 100%;
 }
 
 .program-card {
   display: flex;
   flex-direction: column;
+  gap: 10px;
   min-width: 0;
-  height: 100%;
-  min-height: 196px;
-  padding: 20px;
-  background: var(--white);
-  border: 1px solid var(--gray);
-  border-radius: 16px;
+  padding: 15px var(--ui-card-padding);
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
 
   &__link {
     color: inherit;
@@ -29,102 +27,135 @@
     outline-offset: 3px;
   }
 
-  &__actions {
+  &__footer {
     display: flex;
-    justify-content: flex-end;
-    padding-top: 10px;
-    margin-top: auto;
+    flex-wrap: wrap;
+    gap: var(--ui-space-sm);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__actions {
+    max-width: 100%;
+    margin-inline-start: auto;
   }
 
   .ui-button.ui-button {
     @include ui-foundation.button;
     @include program-management-controls.compact-action;
 
-    min-width: 157px;
+    min-width: min(116px, 100%);
     max-width: 100%;
+    text-align: center;
+    white-space: normal;
   }
 
   &__more {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 157px;
-    min-height: 25px;
+    min-width: 112px;
+    min-height: 30px;
     padding: 4px 12px;
     font-size: 12px;
     color: var(--accent-text);
     border: 1px solid var(--accent);
-    border-radius: 45px;
+    border-radius: var(--ui-radius-control);
   }
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
   min-width: 0;
 
   &__statuses {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-  }
-
-  &__registration,
-  &__publication {
-    padding: 5px 10px;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 17px;
-    border-radius: 12px;
-  }
-
-  &__publication {
-    color: #6543a9;
-    background: #ede7fa;
-  }
-
-  &__registration--draft,
-  &__registration--not-set {
-    color: #514b5c;
-    background: #eee;
-  }
-
-  &__registration--ended {
-    color: #934d63;
-    background: #f7e8ed;
-  }
-
-  &__registration--actual,
-  &__registration--participating {
-    color: #397451;
-    background: #e4f3e9;
-  }
-
-  &__identity {
-    display: flex;
-    gap: 12px;
+    gap: 5px;
     align-items: center;
     min-width: 0;
   }
 
-  &__photo { flex: 0 0 48px; }
+  &__registration,
+  &__publication {
+    padding: 4px 9px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 14px;
+    overflow-wrap: anywhere;
+    border-radius: 12px;
+  }
+
+  &__publication {
+    color: var(--accent-text);
+    background: var(--accent-light);
+  }
+
+  &__registration--draft,
+  &__registration--not-set,
+  &__registration--ended {
+    color: var(--dark-grey);
+    background: var(--medium-grey-for-outline);
+  }
+
+  &__registration--actual,
+  &__registration--participating {
+    color: var(--green-dark);
+    background: var(--green-light);
+  }
+
+  &__identity {
+    display: flex;
+    gap: 11px;
+    align-items: center;
+    min-width: 0;
+  }
+
+  &__photo {
+    flex: 0 0 40px;
+  }
+
+  &__photo--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    color: var(--accent-text);
+    background: var(--accent-light);
+    border-radius: 50%;
+  }
 
   &__name {
     @include program-management-controls.card-title;
 
     min-width: 0;
     margin: 0;
-    color: var(--black);
+    font-size: max(13px, var(--program-type-card-size));
+    color: var(--ui-text);
     overflow-wrap: anywhere;
   }
 
+  &__description,
   &__dates {
     margin: 0;
-    font-size: 12px;
-    line-height: 18px;
-    color: var(--dark-grey);
+    color: var(--ui-text-muted);
     overflow-wrap: anywhere;
+  }
+
+  &__description {
+    /* stylelint-disable-next-line value-no-vendor-prefix */
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 16px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  &__dates {
+    font-size: 11px;
+    line-height: 15px;
   }
 }
