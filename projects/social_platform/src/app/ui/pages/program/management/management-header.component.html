@@ -117,7 +117,7 @@
         </button>
       </article>
     }
-    @for (topic of topics(); track topic.title) {
+    @for (topic of topics; track topic.title) {
       <article class="program-heading__topic">
         <div>
           <h3>{{ topic.title }}</h3>
