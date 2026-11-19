@@ -29,6 +29,7 @@ import {
   ButtonDirective,
   ChoiceDirective,
   FieldDirective,
+  SectionHeaderComponent,
   TableDirective,
 } from "@uilib";
 import { AppRoutes } from "@api/paths/app-routes";
@@ -91,6 +92,7 @@ type AttentionRow = {
     ButtonDirective,
     ChoiceDirective,
     FieldDirective,
+    SectionHeaderComponent,
     TableDirective,
     ModalComponent,
     AnalyticsFunnelChartComponent,

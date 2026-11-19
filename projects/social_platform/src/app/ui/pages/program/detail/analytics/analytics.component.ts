@@ -3,7 +3,7 @@
 import { CdkMenuModule } from "@angular/cdk/menu";
 /** @format */
 
-import { ButtonDirective, StateComponent } from "@uilib";
+import { ButtonDirective, SectionHeaderComponent, StateComponent } from "@uilib";
 /** @format */
 
 import {
@@ -69,6 +69,7 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
   imports: [
     CdkMenuModule,
     StateComponent,
+    SectionHeaderComponent,
     ButtonDirective,
     ButtonComponent,
     IconComponent,
