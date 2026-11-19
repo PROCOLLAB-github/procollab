@@ -7,6 +7,10 @@
   @include program-management-controls.compact-action;
 }
 
+.example__export.ui-button.ui-button {
+  @include program-management-controls.export-trigger;
+}
+
 .ui-field {
   @include ui-foundation.control;
   @include program-management-controls.field-text;

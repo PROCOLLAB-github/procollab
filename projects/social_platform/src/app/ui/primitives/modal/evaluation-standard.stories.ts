@@ -169,6 +169,7 @@ export const UnsavedDialog: Story = {
 @Component({
   selector: "app-evaluation-screen-example",
   imports: [SectionHeaderComponent, ButtonDirective, FieldDirective, IconComponent],
+  styleUrls: ["./evaluation-standard.stories.scss"],
   template: ` <main class="example">
     <p class="example__notice">Демонстрационный экран. Действия и переходы не подключены.</p>
     <div class="example__back">
@@ -194,8 +195,14 @@ export const UnsavedDialog: Story = {
           ><div class="example__actions">
             <button appButton="primary" type="button" aria-disabled="true">
               Пригласить эксперта</button
-            ><button appButton="icon" type="button" disabled aria-label="Выгрузить экспертов">
-              <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+            ><button
+              appButton="icon"
+              class="example__export"
+              type="button"
+              disabled
+              aria-label="Выгрузить экспертов"
+            >
+              <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
             </button></div
         ></app-section-header>
         <div class="example__toolbar">

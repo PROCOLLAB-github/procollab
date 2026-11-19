@@ -421,6 +421,7 @@
 .management__toolbar-actions {
   display: flex;
   gap: 12px;
+  align-items: center;
 }
 
 .management__toolbar-slot {
@@ -448,7 +449,7 @@
 
   .management__toolbar-actions {
     display: grid;
-    grid-template-columns: minmax(88px, auto) minmax(0, 1fr) 32px;
+    grid-template-columns: minmax(88px, auto) minmax(0, 1fr) 44px;
     gap: 8px;
     align-items: center;
   }
