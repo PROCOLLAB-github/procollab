@@ -193,7 +193,10 @@
         }}
       </p>
       @if (modal() === "remove" && !row.canRemove) {
-        <p appAlert="warning">Сначала пригласите коллегу и дождитесь принятия.</p>
+        <p appAlert="warning">
+          В программе должен остаться хотя бы один организатор. Пригласите коллегу и дождитесь
+          принятия.
+        </p>
       }
       <footer class="organizers__actions">
         <button type="button" appButton="secondary" [disabled]="busy()" (click)="close()">

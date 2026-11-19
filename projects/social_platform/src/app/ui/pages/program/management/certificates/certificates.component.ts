@@ -22,6 +22,7 @@ import {
   AlertDirective,
   ButtonDirective,
   ChoiceDirective,
+  DialogHeaderComponent,
   FieldDirective,
   IconComponent,
 } from "@uilib";
@@ -72,6 +73,7 @@ interface CertificateEditState {
     FieldDirective,
     IconComponent,
     ChoiceDirective,
+    DialogHeaderComponent,
     AlertDirective,
     ModalComponent,
     TransientNoticeComponent,
@@ -580,6 +582,12 @@ export class ManagementCertificatesComponent {
         void this.loadJournal();
       },
     );
+  }
+  closeLaunchConfirmation(): void {
+    if (!this.busy()) this.confirmOpen.set(false);
+  }
+  closeSelectionConfirmation(): void {
+    if (!this.busy()) this.selectionAction.set(null);
   }
   async prepareLaunch(): Promise<void> {
     if (this.busy() || this.loading()) return;

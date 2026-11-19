@@ -5,7 +5,9 @@ import { signal } from "@angular/core";
 import { VacanciesListComponent } from "./list.component";
 import { VacancyInfoService } from "@api/vacancy/facades/vacancy-info.service";
 import { VacancyUIInfoService } from "@api/vacancy/facades/ui/vacancy-ui-info.service";
-import { provideRouter } from "@angular/router";
+import { provideRouter, Router, RouterLink } from "@angular/router";
+import { By } from "@angular/platform-browser";
+import { DesktopLayoutService } from "@uilib";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
 import { of } from "rxjs";
@@ -15,8 +17,10 @@ describe("VacanciesListComponent", () => {
   let fixture: ComponentFixture<VacanciesListComponent>;
   let vacancyInfoService: any;
   let vacancyUIInfoService: any;
+  let desktop: ReturnType<typeof signal<boolean>>;
 
   beforeEach(async () => {
+    desktop = signal(true);
     const infServiceSpy = { init: vi.fn(), initScroll: vi.fn(), destroy: vi.fn() };
 
     const uiServiceSpy = {
@@ -31,6 +35,7 @@ describe("VacanciesListComponent", () => {
       imports: [VacanciesListComponent],
       providers: [
         provideRouter([]),
+        { provide: DesktopLayoutService, useValue: { desktop } },
         {
           provide: AuthRepositoryPort,
           useValue: {
@@ -98,17 +103,64 @@ describe("VacanciesListComponent", () => {
 
   it("показывает отсутствие результатов только после успешного пустого ответа", () => {
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).not.toContain("Вакансии не найдены");
+    expect(fixture.nativeElement.textContent).not.toContain("Вакансий пока нет");
     vacancyUIInfoService.vacancies$.set({ status: "loading" });
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).not.toContain("Вакансии не найдены");
+    expect(fixture.nativeElement.textContent).not.toContain("Вакансий пока нет");
     vacancyUIInfoService.vacancies$.set({ status: "success", data: [] });
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain("Вакансии не найдены");
+    expect(fixture.nativeElement.textContent).toContain("Вакансий пока нет");
   });
 
-  it("не показывает empty-state при непустом списке моих откликов", () => {
+  for (const isDesktop of [true, false]) {
+    it(`не предлагает сброс для пустого списка без фильтров (${isDesktop ? "desktop" : "mobile"})`, async () => {
+      desktop.set(isDesktop);
+      await TestBed.inject(Router).navigate([], {
+        queryParams: { unrelated: "value", role_contains: "   " },
+      });
+      vacancyUIInfoService.vacancies$.set({ status: "success", data: [] });
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain("Вакансий пока нет");
+      expect(fixture.nativeElement.textContent).not.toContain("Сбросить фильтры");
+      expect(fixture.nativeElement.textContent).not.toContain("Измените поиск");
+    });
+
+    it(`показывает состояние активного поиска и сохраняет один путь сброса (${isDesktop ? "desktop" : "mobile"})`, async () => {
+      desktop.set(isDesktop);
+      await TestBed.inject(Router).navigate([], { queryParams: { role_contains: "аналитик" } });
+      vacancyUIInfoService.vacancies$.set({ status: "success", data: [] });
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain("Вакансии не найдены");
+      const reset = fixture.debugElement.query(By.directive(RouterLink));
+      if (isDesktop) {
+        expect(reset).toBeNull();
+      } else {
+        expect(reset.nativeElement.textContent).toContain("Сбросить фильтры");
+        expect(reset.injector.get(RouterLink).urlTree?.toString()).toBe("/office/vacancies/all");
+      }
+
+      await TestBed.inject(Router).navigate([], { queryParams: {} });
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain("Вакансий пока нет");
+      expect(fixture.nativeElement.textContent).not.toContain("Сбросить фильтры");
+    });
+  }
+
+  for (const key of ["required_experience", "work_format", "work_schedule", "salary"]) {
+    it(`учитывает примененный фильтр ${key} без поиска`, async () => {
+      desktop.set(false);
+      await TestBed.inject(Router).navigate([], { queryParams: { [key]: "0" } });
+      vacancyUIInfoService.vacancies$.set({ status: "success", data: [] });
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain("Вакансии не найдены");
+      expect(fixture.nativeElement.textContent).toContain("Сбросить фильтры");
+    });
+  }
+
+  it("не показывает empty-state вакансий при непустом списке моих откликов и активном query", async () => {
+    await TestBed.inject(Router).navigate([], { queryParams: { role_contains: "аналитик" } });
     vacancyUIInfoService.listType.set("my");
+    vacancyUIInfoService.vacancies$.set({ status: "success", data: [] });
     vacancyUIInfoService.responsesList.set([
       {
         id: 1,
@@ -130,14 +182,21 @@ describe("VacanciesListComponent", () => {
       "в данном разделе пока нет ваших откликов",
     );
     expect(fixture.nativeElement.textContent).toContain("Разработчик");
+    expect(fixture.nativeElement.textContent).not.toContain("Вакансий пока нет");
+    expect(fixture.nativeElement.textContent).not.toContain("Вакансии не найдены");
+    expect(fixture.nativeElement.textContent).not.toContain("Сбросить фильтры");
   });
 
-  it("показывает empty-state для пустого списка моих откликов", () => {
+  it("показывает только состояние откликов при пустом списке и активном query", async () => {
+    await TestBed.inject(Router).navigate([], { queryParams: { work_format: "remote" } });
     vacancyUIInfoService.listType.set("my");
+    vacancyUIInfoService.vacancies$.set({ status: "success", data: [] });
     vacancyUIInfoService.responsesList.set([]);
 
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain("У вас пока нет откликов");
+    expect(fixture.nativeElement.textContent).not.toContain("Вакансии не найдены");
+    expect(fixture.nativeElement.textContent).not.toContain("Вакансий пока нет");
   });
 });

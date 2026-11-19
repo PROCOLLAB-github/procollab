@@ -310,7 +310,9 @@ export class ManagementOrganizersComponent {
             label: row.isSelf ? "Выйти из организаторов" : "Убрать доступ",
             destructive: true,
             disabled: !row.canRemove,
-            reason: !row.canRemove ? "Сначала пригласите коллегу и дождитесь принятия." : undefined,
+            reason: !row.canRemove
+              ? "В программе должен остаться хотя бы один организатор. Пригласите коллегу и дождитесь принятия."
+              : undefined,
           },
         ]
       : [

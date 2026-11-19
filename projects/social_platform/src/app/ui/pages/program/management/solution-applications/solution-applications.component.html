@@ -298,12 +298,13 @@
   labelledBy="managed-solution-title"
   (openChange)="!$event && closeDetail()"
   ><section class="solution-dialog" [attr.aria-busy]="detailLoading()">
-    <header>
-      <h2 id="managed-solution-title">{{ detail()?.name || "Заявка" }}</h2>
-      <button appButton="icon" type="button" aria-label="Закрыть заявку" (click)="closeDetail()">
-        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-      </button>
-    </header>
+    <app-dialog-header
+      [title]="detail()?.name || 'Заявка'"
+      titleId="managed-solution-title"
+      closeLabel="Закрыть заявку"
+      [closeDisabled]="applying()"
+      (closed)="closeDetail()"
+    />
     @if (detailLoading()) {
       <p role="status">Загружаем заявку…</p>
     }

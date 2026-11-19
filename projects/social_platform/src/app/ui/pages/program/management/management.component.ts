@@ -39,6 +39,7 @@ import {
   AvatarComponent,
   ImageFramingDirective,
   DialogHeaderComponent,
+  SectionHeaderComponent,
 } from "@uilib";
 import { FileService } from "@corelib";
 import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
@@ -123,6 +124,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     AvatarComponent,
     ModalComponent,
     DialogHeaderComponent,
+    SectionHeaderComponent,
     RowActionsComponent,
     ProgramAnalyticsComponent,
     ProgramBrandingPreviewComponent,

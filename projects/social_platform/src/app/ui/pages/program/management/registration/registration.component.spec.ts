@@ -76,19 +76,52 @@ describe("Редактор анкеты регистрации", () => {
   });
   it("предпросмотр отключает поля и закрывается одним крестиком без публикации", async () => {
     const { component, api, fixture } = setup();
-    component.preview();
+    const trigger = Array.from(
+      fixture.nativeElement.querySelectorAll("button") as NodeListOf<HTMLButtonElement>,
+    ).find(button => button.textContent?.trim() === "Предпросмотр")!;
+    const focus = vi.spyOn(trigger, "focus");
+    component.preview({ currentTarget: trigger } as unknown as Event);
     await fixture.whenStable();
     await new Promise(resolve => setTimeout(resolve, 0));
     fixture.detectChanges();
     expect(component.previewGroup.disabled).toBe(true);
     const dialog = document.querySelector("#registration-dialog-heading")?.closest("section");
     expect(dialog).toBeTruthy();
+    expect(dialog?.querySelector("app-dialog-header")).toBeTruthy();
     expect(dialog?.querySelector("footer")).toBeNull();
     const close = dialog?.querySelector('button[aria-label="Закрыть"]') as HTMLButtonElement;
     expect(close).toBeTruthy();
     close.click();
     await fixture.whenStable();
     expect(component.dialog()).toBeNull();
+    expect(focus).toHaveBeenCalled();
+    expect(api.save).not.toHaveBeenCalled();
+  });
+  it("общий крестик сохраняет блокировку занятости и отказ от потери изменений поля", async () => {
+    const { component, fixture, api } = setup();
+    const confirm = vi.fn(() => Promise.resolve(false));
+    fixture.componentRef.setInput("confirmDiscard", confirm);
+    component.edit(field);
+    await fixture.whenStable();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    component.editor.controls.label.setValue("Новое название");
+    component.editor.markAsDirty();
+    component.busy.set(true);
+    fixture.detectChanges();
+    const dialog = document.querySelector("#registration-dialog-heading")?.closest("section");
+    const close = dialog?.querySelector('button[aria-label="Закрыть"]') as HTMLButtonElement;
+    expect(close.disabled).toBe(true);
+    close.click();
+    expect(component.dialog()).toBe("field");
+    expect(confirm).not.toHaveBeenCalled();
+    component.busy.set(false);
+    fixture.detectChanges();
+    close.click();
+    await fixture.whenStable();
+    expect(confirm).toHaveBeenCalledOnce();
+    expect(component.dialog()).toBe("field");
+    expect(component.editor.controls.label.value).toBe("Новое название");
     expect(api.save).not.toHaveBeenCalled();
   });
   it("запрос принимает сайт без необязательных деталей и передаёт контакт отдельно", () => {

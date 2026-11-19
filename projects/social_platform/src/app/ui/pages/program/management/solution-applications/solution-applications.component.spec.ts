@@ -100,10 +100,18 @@ describe("Таблица заявок решения", () => {
     fixture.detectChanges();
     const dialog = document.querySelector("#managed-solution-title")?.closest("section");
     expect(dialog).toBeTruthy();
+    expect(dialog?.querySelector("app-dialog-header")).toBeTruthy();
     const footerButtons = Array.from(dialog?.querySelectorAll("footer button") ?? []);
     expect(footerButtons.map(button => button.textContent?.trim())).toEqual(["История изменений"]);
     const close = dialog?.querySelector('button[aria-label="Закрыть заявку"]') as HTMLButtonElement;
     expect(close).toBeTruthy();
+    component.applying.set(true);
+    fixture.detectChanges();
+    expect(close.disabled).toBe(true);
+    close.click();
+    expect(component.detailOpen()).toBe(true);
+    component.applying.set(false);
+    fixture.detectChanges();
     close.click();
     await fixture.whenStable();
     expect(component.detailOpen()).toBe(false);

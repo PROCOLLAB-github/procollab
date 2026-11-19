@@ -14,20 +14,21 @@
     @if (hasNoResults()) {
       @if (desktopLayout()) {
         <section class="page__vacancies--no-items">
-          <h2>Вакансии не найдены</h2>
-          <p>Попробуйте изменить запрос или сбросить фильтры.</p>
-          <app-button appearance="outline" size="big" [routerLink]="AppRoutes.office.vacancies()"
-            >Сбросить фильтры</app-button
-          >
+          <h2>{{ hasFilters() ? "Вакансии не найдены" : "Вакансий пока нет" }}</h2>
+          @if (hasFilters()) {
+            <p>Измените поиск или фильтры.</p>
+          }
         </section>
       } @else {
         <app-state
-          title="Вакансии не найдены"
-          description="Попробуйте изменить запрос или сбросить фильтры."
+          [title]="hasFilters() ? 'Вакансии не найдены' : 'Вакансий пока нет'"
+          [description]="hasFilters() ? 'Измените поиск или фильтры.' : undefined"
         >
-          <app-button appearance="outline" size="big" [routerLink]="AppRoutes.office.vacancies()"
-            >Сбросить фильтры</app-button
-          >
+          @if (hasFilters()) {
+            <app-button appearance="outline" size="big" [routerLink]="AppRoutes.office.vacancies()"
+              >Сбросить фильтры</app-button
+            >
+          }
         </app-state>
       }
     }

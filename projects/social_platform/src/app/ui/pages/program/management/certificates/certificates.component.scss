@@ -565,6 +565,8 @@ h4 {
   }
 
   &__confirmation {
+    --ui-dialog-header-margin-bottom: 0;
+
     min-width: 0;
 
     > p {

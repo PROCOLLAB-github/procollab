@@ -147,6 +147,8 @@ label {
 .registration__dialog {
   @include program-management-controls.body-copy;
 
+  --ui-dialog-header-margin-bottom: 0;
+
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -155,14 +157,9 @@ label {
   padding: 24px;
 }
 
-.registration__dialog > header,
+.registration__dialog > app-dialog-header,
 .registration__dialog > footer {
   flex-shrink: 0;
-}
-
-.registration__dialog > header button {
-  width: 32px;
-  padding: 0;
 }
 
 .registration__dialog > footer {
@@ -246,10 +243,6 @@ label {
 
   .registration__row .registration__delete.ui-button {
     padding: 0;
-  }
-
-  .registration__dialog > header button::after {
-    inset: -6px;
   }
 
   .registration__dialog {

@@ -729,7 +729,7 @@
         />
       } @else if (settingsTab() === "basic") {
         <form [formGroup]="basicForm" (ngSubmit)="save()" class="management__card management__form">
-          <h2>Основная информация</h2>
+          <app-section-header title="Основная информация" />
           @for (field of basicFields; track field.key) {
             <label [for]="'program-' + field.key"
               >{{ field.label }}{{ field.required ? " *" : ""
@@ -978,7 +978,7 @@
         }
       } @else if (settingsTab() === "dates") {
         <form [formGroup]="datesForm" (ngSubmit)="save()" class="management__card management__form">
-          <h2>Календарь программы</h2>
+          <app-section-header title="Календарь программы" />
           <p class="management__muted">Даты и время указаны по Москве (UTC+3).</p>
           @for (field of dateFields; track field.key) {
             <label [for]="field.key"
@@ -1026,15 +1026,14 @@
         </form>
       } @else {
         <section class="management__card">
-          <header class="management__materials-heading">
-            <div>
-              <h2>Материалы программы</h2>
-              <p class="management__muted">Документы и полезные ссылки для участников.</p>
-            </div>
+          <app-section-header
+            title="Материалы программы"
+            description="Документы и полезные ссылки для участников."
+          >
             <button type="button" appButton="primary" (click)="editMaterial('new')">
               Добавить материал
             </button>
-          </header>
+          </app-section-header>
           @for (material of program.materials; track material.id) {
             <article class="management__material">
               <h3>
@@ -1314,7 +1313,11 @@
   (openChange)="!$event && participantAnswers.set(null)"
 >
   <section class="management__form management__participant-answers">
-    <h2 id="participant-answers-heading">Анкета участника</h2>
+    <app-dialog-header
+      title="Анкета участника"
+      titleId="participant-answers-heading"
+      (closed)="participantAnswers.set(null)"
+    />
     <p>{{ participantAnswers()?.name }}</p>
     @for (answer of participantAnswers()?.registrationAnswers ?? []; track $index) {
       <div>
@@ -1322,9 +1325,6 @@
         <p>{{ answer.value ?? "—" }}</p>
       </div>
     }
-    <button appButton="secondary" type="button" (click)="participantAnswers.set(null)">
-      Закрыть
-    </button>
   </section>
 </app-modal>
 

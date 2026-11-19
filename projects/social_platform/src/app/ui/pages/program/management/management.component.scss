@@ -2,6 +2,8 @@
 @use "styles/program-management-controls";
 
 .management__participant-answers {
+  --ui-dialog-header-margin-bottom: 0;
+
   width: 100%;
   max-height: 70dvh;
   overflow: auto;
