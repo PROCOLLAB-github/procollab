@@ -62,6 +62,7 @@
     display: grid;
     min-height: 0;
     padding: 2px;
+    margin-inline: -2px;
     overflow: auto;
     overscroll-behavior: contain;
   }

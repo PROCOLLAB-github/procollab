@@ -9,16 +9,16 @@ import { registrationControls, RegistrationFieldsComponent } from "./registratio
   selector: "app-registration-preview-content",
   imports: [ButtonDirective, RegistrationFieldsComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<div class="preview__devices">
+  template: `<div class="preview__devices" role="group" aria-label="Экран предпросмотра">
       <button
-        appButton="secondary"
+        [appButton]="mobile() ? 'secondary' : 'primary'"
         type="button"
         [attr.aria-pressed]="!mobile()"
         (click)="mobile.set(false)"
       >
         Компьютер</button
       ><button
-        appButton="secondary"
+        [appButton]="mobile() ? 'primary' : 'secondary'"
         type="button"
         [attr.aria-pressed]="mobile()"
         (click)="mobile.set(true)"
@@ -70,11 +70,12 @@ import { registrationControls, RegistrationFieldsComponent } from "./registratio
       display: grid;
       gap: 20px;
       width: 100%;
-      padding: 16px;
+      padding: 0;
       margin: auto;
     }
     .preview__form--mobile {
       max-width: 390px;
+      padding: 16px;
       background: var(--white);
       border-radius: 15px;
     }
