@@ -651,26 +651,12 @@
 }
 
 .analytics .analytics__download.ui-button.ui-button {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  margin-left: auto;
-  color: var(--accent-text);
-  cursor: pointer;
-  background: transparent;
-  border: 0;
-  border-radius: 50%;
+  @include program-management-controls.export-trigger;
 
-  &:hover:not(:disabled) {
-    background: var(--accent-light);
-  }
+  margin-left: auto;
+  cursor: pointer;
 
   &:disabled {
-    color: var(--dark-grey);
     cursor: not-allowed;
   }
 
