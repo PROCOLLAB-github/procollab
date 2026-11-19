@@ -199,6 +199,10 @@
 
     .ui-button--icon {
       color: var(--grey-for-text);
+
+      &:focus-visible {
+        outline: none;
+      }
     }
   }
 

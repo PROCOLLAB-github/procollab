@@ -199,21 +199,20 @@ describe(ProgramManagementHeaderComponent.name, () => {
     );
   });
 
-  it("opens the existing checklist and removes the action from published help", async () => {
-    const host = await harness.navigateByUrl(program.management(programId), HeaderPage);
+  it("показывает обучение без ссылки на текущий чеклист в черновике и после публикации", async () => {
+    await harness.navigateByUrl(program.launch(programId), HeaderPage);
     const dialog = await openHelp();
     expect(
       Array.from(dialog.querySelectorAll("h3")).map(heading => heading.textContent?.trim()),
-    ).toEqual(["Подготовка к запуску", "Участники", "Оценивание"]);
+    ).toEqual(["Участники", "Оценивание"]);
     expect(dialog.textContent).toContain("Поиск · фильтры · выгрузка");
     expect(
       Array.from(dialog.querySelectorAll("article button")).map(button =>
         button.textContent?.trim(),
       ),
-    ).toEqual(["Открыть", "Открыть", "Открыть"]);
-    click("Открыть чеклист «Подготовка к запуску»", dialog);
-    await vi.waitFor(() => expect(router.url).toBe(program.launch(programId)));
-    expect(host.canLeave).toHaveBeenCalledOnce();
+    ).toEqual(["Открыть", "Открыть"]);
+    click("Закрыть помощь", dialog);
+    await vi.waitFor(() => expect(document.body.contains(dialog)).toBe(false));
 
     const published = await harness.navigateByUrl(
       program.management(programId, "analytics"),
@@ -240,7 +239,7 @@ describe(ProgramManagementHeaderComponent.name, () => {
     const dialog = await openHelp();
     expect(
       Array.from(dialog.querySelectorAll("h3")).map(heading => heading.textContent?.trim()),
-    ).toEqual(["Подготовка к запуску", "Участники", "Оценивание"]);
+    ).toEqual(["Участники", "Оценивание"]);
     click("Открыть обучение «Оценивание»", dialog);
     await vi.waitFor(() => expectCoach("Критерии", "1 из 4"));
   });

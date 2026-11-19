@@ -101,22 +101,6 @@
         <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
       </button>
     </div>
-    @if (draft()) {
-      <article class="program-heading__topic">
-        <div>
-          <h3>Подготовка к запуску</h3>
-          <p>Страница · сроки · регистрация</p>
-        </div>
-        <button
-          type="button"
-          appButton="secondary"
-          aria-label="Открыть чеклист «Подготовка к запуску»"
-          (click)="openChecklist()"
-        >
-          Открыть
-        </button>
-      </article>
-    }
     @for (topic of topics; track topic.title) {
       <article class="program-heading__topic">
         <div>
