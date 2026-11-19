@@ -5,35 +5,36 @@
     <app-solution-analytics [programId]="id" [dates]="scheduleDates()" />
   }
 } @else {
-  <main class="analytics" aria-labelledby="program-analytics-title">
+  <main class="analytics" aria-label="Аналитика">
     <header class="analytics__header">
-      <div class="analytics__title-row">
-        <h2 id="program-analytics-title" class="analytics__title">Аналитика</h2>
-        @if (data()) {
-          <button
-            appButton="icon"
-            type="button"
-            class="analytics__download analytics__export-trigger"
-            [cdkMenuTriggerFor]="analyticsExports"
-            [disabled]="loadingExports()"
-            [attr.aria-busy]="loadingExports()"
-            aria-label="Выгрузить данные программы"
-            title="Выгрузить данные программы"
-          >
-            <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
-          </button>
-          <ng-template #analyticsExports>
-            <div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
-              <button cdkMenuItem type="button" (click)="downloadProgram()">Вся программа</button>
-              <button cdkMenuItem type="button" (click)="downloadProjects()">Все проекты</button>
-              <button cdkMenuItem type="button" (click)="downloadSubmittedProjects()">
-                Сданные проекты
-              </button>
-              <button cdkMenuItem type="button" (click)="downloadRates()">Оценки проектов</button>
-            </div>
-          </ng-template>
-        }
-      </div>
+      <app-section-header title="Аналитика">
+        <div class="analytics__title-actions">
+          @if (data()) {
+            <button
+              appButton="icon"
+              type="button"
+              class="analytics__download analytics__export-trigger"
+              [cdkMenuTriggerFor]="analyticsExports"
+              [disabled]="loadingExports()"
+              [attr.aria-busy]="loadingExports()"
+              aria-label="Выгрузить данные программы"
+              title="Выгрузить данные программы"
+            >
+              <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
+            </button>
+            <ng-template #analyticsExports>
+              <div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
+                <button cdkMenuItem type="button" (click)="downloadProgram()">Вся программа</button>
+                <button cdkMenuItem type="button" (click)="downloadProjects()">Все проекты</button>
+                <button cdkMenuItem type="button" (click)="downloadSubmittedProjects()">
+                  Сданные проекты
+                </button>
+                <button cdkMenuItem type="button" (click)="downloadRates()">Оценки проектов</button>
+              </div>
+            </ng-template>
+          }
+        </div>
+      </app-section-header>
       @if (loadingExports()) {
         <p class="text-body-10" role="status">Подготавливаем Excel…</p>
       }
