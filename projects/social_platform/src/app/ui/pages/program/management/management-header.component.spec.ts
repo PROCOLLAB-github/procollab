@@ -204,13 +204,13 @@ describe(ProgramManagementHeaderComponent.name, () => {
     const dialog = await openHelp();
     expect(
       Array.from(dialog.querySelectorAll("h3")).map(heading => heading.textContent?.trim()),
-    ).toEqual(["Участники", "Оценивание"]);
+    ).toEqual(["Участники", "Проекты", "Оценивание", "Настройки"]);
     expect(dialog.textContent).toContain("Поиск · фильтры · выгрузка");
     expect(
       Array.from(dialog.querySelectorAll("article button")).map(button =>
         button.textContent?.trim(),
       ),
-    ).toEqual(["Открыть", "Открыть"]);
+    ).toEqual(["Открыть", "Открыть", "Открыть", "Открыть"]);
     click("Закрыть помощь", dialog);
     await vi.waitFor(() => expect(document.body.contains(dialog)).toBe(false));
 
@@ -225,7 +225,7 @@ describe(ProgramManagementHeaderComponent.name, () => {
       Array.from(publishedDialog.querySelectorAll("h3")).map(heading =>
         heading.textContent?.trim(),
       ),
-    ).toEqual(["Участники", "Оценивание"]);
+    ).toEqual(["Участники", "Проекты", "Оценивание", "Настройки", "Аналитика"]);
     publishedDialog
       .querySelector<HTMLElement>("button")!
       .dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
@@ -239,7 +239,7 @@ describe(ProgramManagementHeaderComponent.name, () => {
     const dialog = await openHelp();
     expect(
       Array.from(dialog.querySelectorAll("h3")).map(heading => heading.textContent?.trim()),
-    ).toEqual(["Участники", "Оценивание"]);
+    ).toEqual(["Участники", "Проекты", "Оценивание", "Настройки"]);
     click("Открыть обучение «Оценивание»", dialog);
     await vi.waitFor(() => expectCoach("Критерии", "1 из 4"));
   });
@@ -290,7 +290,7 @@ describe(ProgramManagementHeaderComponent.name, () => {
     });
 
     activeHost.canLeave.mockClear();
-    click("Завершить");
+    click("Готово");
     expect(harness.routeNativeElement!.querySelector("#program-coach-title")).toBeNull();
     expect(activeHost.canLeave).not.toHaveBeenCalled();
   });
@@ -321,6 +321,118 @@ describe(ProgramManagementHeaderComponent.name, () => {
     click("Открыть обучение «Оценивание»", await openHelp());
     await vi.waitFor(() => expect(activeHost.canLeave).toHaveBeenCalledOnce());
     expect(router.url).toBe(datesUrl);
+    expect(harness.routeNativeElement!.querySelector("#program-coach-title")).toBeNull();
+  });
+
+  it("проходит настройки по вкладкам и сохраняет текущий шаг при отказе потерять изменения", async () => {
+    const base = program.management(programId, "settings");
+    const activeHost = await harness.navigateByUrl(base + "?tab=criteria", HeaderPage);
+    click("Открыть обучение «Настройки»", await openHelp());
+    await vi.waitFor(() => {
+      expect(router.url).toBe(base + "?tab=basic");
+      expectCoach("Страница", "1 из 6");
+    });
+
+    activeHost.canLeave.mockClear().mockReturnValue(false);
+    click("Далее");
+    await vi.waitFor(() => expect(activeHost.canLeave).toHaveBeenCalledOnce());
+    await vi.waitFor(() => {
+      harness.detectChanges();
+      expect(
+        harness.routeNativeElement!.querySelector(".program-heading__coach button[disabled]"),
+      ).toBeNull();
+    });
+    expect(router.url).toBe(base + "?tab=basic");
+    expectCoach("Страница", "1 из 6");
+
+    activeHost.canLeave.mockReturnValue(true);
+    const steps = [
+      ["dates", "Сроки"],
+      ["registration", "Регистрация"],
+      ["project-form", "Заявка проекта"],
+      ["materials", "Материалы"],
+      ["organizers", "Организаторы"],
+    ];
+    for (const [index, [tab, title]] of steps.entries()) {
+      click("Далее");
+      await vi.waitFor(() => {
+        expect(router.url).toBe(base + "?tab=" + tab);
+        expectCoach(title, `${index + 2} из 6`);
+      });
+    }
+    click("Назад");
+    await vi.waitFor(() => expectCoach("Материалы", "5 из 6"));
+    click("Далее");
+    await vi.waitFor(() => expectCoach("Организаторы", "6 из 6"));
+    activeHost.canLeave.mockClear();
+    click("Готово");
+    expect(harness.routeNativeElement!.querySelector("#program-coach-title")).toBeNull();
+    expect(activeHost.canLeave).not.toHaveBeenCalled();
+  });
+
+  it("не покидает открытую страницу настроек без tab и не сбрасывает ее параметры", async () => {
+    const url = program.management(programId, "settings") + "?source=launch";
+    const activeHost = await harness.navigateByUrl(url, HeaderPage);
+    activeHost.canLeave.mockReturnValue(false);
+    click("Открыть обучение «Настройки»", await openHelp());
+    await vi.waitFor(() => expectCoach("Страница", "1 из 6"));
+    expect(router.url).toBe(url);
+    expect(activeHost.canLeave).not.toHaveBeenCalled();
+  });
+
+  it("не запускает шаг страницы поверх сроков, если переход отменен", async () => {
+    const url = program.management(programId, "settings") + "?tab=dates";
+    const activeHost = await harness.navigateByUrl(url, HeaderPage);
+    activeHost.canLeave.mockReturnValue(false);
+    click("Открыть обучение «Настройки»", await openHelp());
+    await vi.waitFor(() => expect(activeHost.canLeave).toHaveBeenCalledOnce());
+    expect(router.url).toBe(url);
+    expect(harness.routeNativeElement!.querySelector("#program-coach-title")).toBeNull();
+  });
+
+  it("открывает список проектов из распределения и проходит обучение без сброса фильтров", async () => {
+    const base = program.management(programId, "projects");
+    const activeHost = await harness.navigateByUrl(base + "?tab=allocation", HeaderPage);
+    click("Открыть обучение «Проекты»", await openHelp());
+    await vi.waitFor(() => {
+      expect(router.url).toBe(base);
+      expectCoach("Список проектов", "1 из 4");
+    });
+    const filtered = base + "?search=Город&case_name=Экология&offset=20";
+    await router.navigateByUrl(filtered);
+    harness.detectChanges();
+    expectCoach("Список проектов", "1 из 4");
+    activeHost.canLeave.mockClear().mockReturnValue(false);
+    click("Далее");
+    expectCoach("Карточка проекта", "2 из 4");
+    click("Далее");
+    expectCoach("Действия с проектом", "3 из 4");
+    click("Далее");
+    expectCoach("Выгрузка", "4 из 4");
+    click("Готово");
+    expect(router.url).toBe(router.serializeUrl(router.parseUrl(filtered)));
+    expect(activeHost.canLeave).not.toHaveBeenCalled();
+  });
+
+  it("обучает аналитике опубликованной программы без переходов и закрывается при уходе", async () => {
+    const url = program.management(programId, "analytics") + "?case_name=Город";
+    const activeHost = await harness.navigateByUrl(url, HeaderPage);
+    activeHost.draft.set(false);
+    harness.detectChanges();
+    activeHost.canLeave.mockReturnValue(false);
+    click("Открыть обучение «Аналитика»", await openHelp());
+    await vi.waitFor(() => expectCoach("Показатели", "1 из 4"));
+    click("Далее");
+    expectCoach("Требует внимания", "2 из 4");
+    click("Далее");
+    expectCoach("Воронки и динамика", "3 из 4");
+    click("Далее");
+    expectCoach("Выгрузка", "4 из 4");
+    expect(router.url).toBe(router.serializeUrl(router.parseUrl(url)));
+    expect(activeHost.canLeave).not.toHaveBeenCalled();
+    activeHost.canLeave.mockReturnValue(true);
+    await router.navigateByUrl(program.management(programId, "projects"));
+    harness.detectChanges();
     expect(harness.routeNativeElement!.querySelector("#program-coach-title")).toBeNull();
   });
 });
