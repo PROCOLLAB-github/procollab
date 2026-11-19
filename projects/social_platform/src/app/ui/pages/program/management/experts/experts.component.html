@@ -38,7 +38,7 @@
             [disabled]="loading() || busy() || exporting() || !filtered().length"
             (click)="downloadExperts()"
           >
-            <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+            <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
           </button>
         </div>
       </app-section-header>
@@ -120,15 +120,6 @@
         <div class="experts__heading-actions experts__allocation-actions">
           <button type="button" appButton="primary" [disabled]="busy()" (click)="open('method')">
             Распределить
-          </button>
-          <button
-            type="button"
-            [appButton]="unassignedOnly() ? 'primary' : 'secondary'"
-            [attr.aria-pressed]="unassignedOnly()"
-            [disabled]="busy()"
-            (click)="toggleUnassigned()"
-          >
-            Без экспертов
           </button>
         </div>
         @if (attentionProjects().length) {
@@ -941,6 +932,15 @@
         </select></label
       >
     } @else {
+      <label class="experts__filter-checkbox">
+        <input
+          type="checkbox"
+          appChoice
+          formControlName="unassigned"
+          (change)="filterDraft.controls.expert.setValue('all')"
+        />
+        Без экспертов
+      </label>
       <label
         >Кейс<select appField aria-label="Кейс" formControlName="case">
           <option value="all">Все кейсы</option>
@@ -951,9 +951,13 @@
         </select></label
       >
       <label
-        >Эксперты<select appField aria-label="Эксперты" formControlName="expert">
+        >Эксперты<select
+          appField
+          aria-label="Эксперты"
+          formControlName="expert"
+          (change)="filterDraft.controls.unassigned.setValue(false)"
+        >
           <option value="all">Все проекты</option>
-          <option value="unassigned">Эксперты не назначены</option>
           <option value="missing">Не все эксперты назначены</option>
           <option value="completed">Полностью оценены</option>
           <optgroup label="Назначены эксперту">

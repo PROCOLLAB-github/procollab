@@ -20,7 +20,7 @@
             aria-label="Выгрузить данные программы"
             title="Выгрузить данные программы"
           >
-            <i appIcon icon="download" appSquare="16" aria-hidden="true"></i>
+            <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
           </button>
           <ng-template #analyticsExports>
             <div cdkMenu class="analytics-export-menu" aria-label="Выгрузки программы">
@@ -304,7 +304,7 @@
               [attr.aria-busy]="caseExportState().pending"
               (click)="downloadCases()"
             >
-              <i appIcon icon="download" appSquare="16" aria-hidden="true"></i>
+              <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
             </button>
           </div>
           @if (caseExportState().failed) {
@@ -444,7 +444,7 @@
                 [attr.aria-busy]="regionExportState()[card.key].pending"
                 (click)="downloadRegions(card.key)"
               >
-                <i appIcon icon="download" appSquare="16" aria-hidden="true"></i>
+                <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
               </button>
             </div>
             @if (regionExportState()[card.key].pending) {

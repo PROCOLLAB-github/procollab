@@ -30,7 +30,7 @@ import {
   evaluationCriterionControl,
   EvaluationCriterion,
 } from "@utils/evaluation-criterion-control";
-import { ButtonDirective, FieldDirective } from "@uilib";
+import { ChoiceDirective, FieldDirective } from "@uilib";
 
 /** Оценка проекта по числовым, булевым и текстовым критериям через ControlValueAccessor. */
 @Component({
@@ -40,7 +40,7 @@ import { ButtonDirective, FieldDirective } from "@uilib";
     RangeCriterionInputComponent,
     ReactiveFormsModule,
     FieldDirective,
-    ButtonDirective,
+    ChoiceDirective,
   ],
   templateUrl: "./project-rating.component.html",
   styleUrl: "./project-rating.component.scss",
@@ -59,6 +59,8 @@ import { ButtonDirective, FieldDirective } from "@uilib";
   ],
 })
 export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, Validator {
+  private static nextRadioGroupId = 0;
+  readonly radioGroupId = ProjectRatingComponent.nextRadioGroupId++;
   @Input({ required: true })
   set criteria(val: EvaluationCriterion[]) {
     if (!val) return;

@@ -117,6 +117,56 @@ function setup(
 }
 
 describe("Кабинет эксперта: только реальные назначения", () => {
+  it("resolves the selected program on a deep link after asynchronous loading", () => {
+    const response = new Subject<CabinetData>();
+    const { fixture } = setup({ program: "7" }, response);
+    const trigger: HTMLElement = fixture.nativeElement.querySelector(
+      "app-select [role='combobox']",
+    );
+    expect(trigger.textContent).toContain("Все программы");
+    response.next(payload());
+    response.complete();
+    fixture.detectChanges();
+    expect(trigger.textContent).toContain("Первая программа");
+    expect(trigger.getAttribute("aria-label")).toBe("Программа");
+  });
+
+  it("keeps pending deadlines and hides them in completed program groups", () => {
+    const data = payload();
+    data.results[0].datetimeEvaluationEnds = "2027-01-20T12:00:00Z";
+    const { fixture, params } = setup({}, of(data), data);
+    expect(fixture.nativeElement.querySelector(".cabinet__deadline")).not.toBeNull();
+    params.next(convertToParamMap({ tab: "completed" }));
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".cabinet__deadline")).toBeNull();
+  });
+
+  it("keeps program selection and search context through the UI Kit select", () => {
+    const { fixture, c, navigate } = setup({
+      program: "7",
+      q: "Альфа",
+      page: "2",
+      "filter.city": "Москва",
+    });
+    const trigger: HTMLElement = fixture.nativeElement.querySelector(
+      "app-select [role='combobox']",
+    );
+    expect(trigger.getAttribute("aria-label")).toBe("Программа");
+    expect(trigger.textContent).toContain("Первая программа");
+    trigger.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    fixture.detectChanges();
+    document.dispatchEvent(new KeyboardEvent("keydown", { code: "Enter", bubbles: true }));
+    fixture.detectChanges();
+    expect(c.program.value).toBe("");
+    expect(navigate).toHaveBeenLastCalledWith(
+      [],
+      expect.objectContaining({
+        queryParams: expect.objectContaining({ program: null, page: null, "filter.city": null }),
+        queryParamsHandling: "merge",
+      }),
+    );
+  });
+
   it("routes colliding solution/project and assignment IDs by their actual kind", () => {
     const data = payload();
     data.results.push({ ...data.results[0], id: 9, name: "Программа решений" });

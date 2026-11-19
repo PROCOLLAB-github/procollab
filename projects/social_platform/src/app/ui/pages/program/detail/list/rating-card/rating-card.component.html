@@ -1,24 +1,36 @@
 <!-- @format -->
 @if (state.project(); as p) {
   <div class="scoring">
+    @if (state.evaluationDateExpired()) {
+      <div class="scoring__notice scoring__notice--wide" role="status">
+        <strong>Срок оценки завершен</strong>
+        <p>
+          {{
+            state.projectConfirmed()
+              ? "Оценку можно только посмотреть."
+              : "Отправить оценку уже нельзя."
+          }}
+        </p>
+      </div>
+    }
     <aside class="scoring__materials">
       <h2>Материалы проекта</h2>
       <a
-        appButton="secondary"
+        class="scoring__link"
         [routerLink]="AppRoutes.projects.detail(p.id)"
         [queryParams]="p.programLinkId ? { programLinkId: p.programLinkId } : null"
         target="_blank"
         rel="noopener"
-        >Открыть проект <span aria-hidden="true">↗</span></a
+        >Карточка проекта <span aria-hidden="true">↗</span></a
       >
       @if (presentation(); as href) {
-        <a appButton="secondary" [href]="href" target="_blank" rel="noopener"
-          >Презентация <i appIcon icon="download" appSquare="14"></i
+        <a class="scoring__link" [href]="href" target="_blank" rel="noopener"
+          >Открыть презентацию <i appIcon icon="download" appSquare="14"></i
         ></a>
       } @else {
         <p class="scoring__muted">Презентация не добавлена</p>
       }
-      <h3>О проекте</h3>
+      <h3 class="scoring__description-title">Описание</h3>
       <p class="scoring__description">{{ description() || "Описание не добавлено" }}</p>
       @if (p.programFields; as fields) {
         <app-program-field-answers [fields]="fields" />
@@ -26,23 +38,18 @@
     </aside>
     <section class="scoring__form" aria-label="Форма оценки">
       <div class="scoring__heading">
-        <h2>Моя оценка</h2>
+        <h2>Ваша оценка</h2>
         @if (state.projectConfirmed()) {
           <span class="scoring__status">Оценка сохранена</span>
         }
       </div>
-      @if (state.evaluationDateExpired()) {
-        <p class="scoring__notice">
-          {{
-            state.projectConfirmed()
-              ? "Срок оценивания завершен. Оценка доступна для просмотра."
-              : "Срок оценивания завершен. Отправить оценку уже нельзя."
-          }}
-        </p>
-      } @else if (p.canRate === false) {
+      @if (p.canRate === false && !state.evaluationDateExpired()) {
         <p class="scoring__notice" role="status">{{ p.blockedReason || "Оценка недоступна." }}</p>
       } @else if (
-        p.canRate === undefined && state.isLimitReached() && !state.userRatedThisProject()
+        !state.evaluationDateExpired() &&
+        p.canRate === undefined &&
+        state.isLimitReached() &&
+        !state.userRatedThisProject()
       ) {
         <p class="scoring__notice">Достигнут лимит оценок этого проекта.</p>
       }
@@ -54,8 +61,26 @@
         <dl class="scoring__answers">
           @for (c of orderedCriteria(); track c.id) {
             <div [class.scoring__answer--text]="c.type === 'str'">
-              <dt>{{ c.name }}</dt>
-              <dd>{{ answer(c) }}</dd>
+              <dt>
+                {{ c.name }}
+                @if (c.description) {
+                  <span class="scoring__muted">{{ c.description }}</span>
+                }
+              </dt>
+              <dd>
+                {{ answer(c) }}
+                @if (c.type === "int" && (c.minValue !== null || c.maxValue !== null)) {
+                  <span class="scoring__muted scoring__scale">
+                    @if (c.minValue !== null && c.maxValue !== null) {
+                      От {{ c.minValue }} до {{ c.maxValue }} баллов
+                    } @else if (c.minValue !== null) {
+                      От {{ c.minValue }} баллов
+                    } @else {
+                      До {{ c.maxValue }} баллов
+                    }
+                  </span>
+                }
+              </dd>
             </div>
           }
         </dl>
@@ -117,18 +142,12 @@
     bodyClass="modal__body--no-flex"
   >
     <div class="scoring-dialog" [attr.aria-busy]="state.submitLoading()">
-      <header>
-        <h2 id="score-confirm-title">Проверьте оценку</h2>
-        <button
-          type="button"
-          class="scoring-dialog__close"
-          aria-label="Закрыть"
-          [disabled]="state.submitLoading()"
-          (click)="closeConfirmRateModal()"
-        >
-          ×
-        </button>
-      </header>
+      <app-dialog-header
+        title="Проверьте оценку"
+        titleId="score-confirm-title"
+        [closeDisabled]="state.submitLoading()"
+        (closed)="closeConfirmRateModal()"
+      />
       <div class="scoring-dialog__body">
         <h3>{{ p.name }}</h3>
         <dl class="scoring__answers">

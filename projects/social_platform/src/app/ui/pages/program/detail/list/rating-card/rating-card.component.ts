@@ -10,7 +10,7 @@ import {
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
-import { ButtonDirective, IconComponent } from "@uilib";
+import { ButtonDirective, DialogHeaderComponent, IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProjectRate } from "@domain/project/project-rate";
 import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion";
@@ -30,6 +30,7 @@ import { RatingCardService } from "./services/rating-card.service";
     ReactiveFormsModule,
     RouterLink,
     ButtonDirective,
+    DialogHeaderComponent,
     IconComponent,
     ModalComponent,
     ProjectRatingComponent,

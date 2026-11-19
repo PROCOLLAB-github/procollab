@@ -117,11 +117,15 @@ export class ExpertInvitationComponent {
     this.password.reset("");
   }
   switchAccount(): void {
+    if (this.busy() || this.loading()) return;
+    const accepted = this.invitation()?.status === "accepted";
     this.tokens.clearTokens();
     this.events.emit(loggedOut());
     this.profile.invalidateProfile();
     this.hasSession.set(false);
-    this.mode.set("login");
+    this.password.reset("");
+    this.showLoginPassword.set(false);
+    this.mode.set(accepted ? "login" : "intro");
     this.load();
   }
   signIn(): void {

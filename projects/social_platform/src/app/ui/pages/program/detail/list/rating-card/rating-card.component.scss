@@ -153,16 +153,6 @@ h3 {
   justify-content: space-between;
 }
 
-.scoring-dialog__close {
-  flex: 0 0 32px;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  background: var(--ui-border);
-  border: 0;
-  border-radius: 50%;
-}
-
 .scoring-dialog__body {
   min-height: 0;
   overflow-y: auto;
@@ -208,11 +198,6 @@ h3 {
     inset: -6px 0;
     content: "";
   }
-
-  .scoring-dialog__close {
-    min-width: 44px;
-    min-height: 44px;
-  }
 }
 
 .ui-button.ui-button {
@@ -221,4 +206,50 @@ h3 {
   padding: 0 16px;
   font-size: 12px;
   white-space: nowrap;
+}
+
+.scoring__notice--wide {
+  grid-column: 1 / -1;
+}
+
+.scoring__notice--wide strong {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.scoring__link {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  width: fit-content;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--accent-text);
+  text-decoration: none;
+}
+
+.scoring__link:focus-visible {
+  outline: 2px solid var(--accent-dark);
+  outline-offset: 3px;
+}
+
+.scoring__description-title {
+  padding-top: 16px;
+  border-top: 1px solid var(--ui-border);
+}
+
+.scoring__form > .scoring__answers > div {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  padding-block: 16px;
+}
+
+.scoring__form > .scoring__answers > div:first-child {
+  padding-top: 0;
+}
+
+.scoring__answers .scoring__muted {
+  display: block;
+  margin-top: 4px;
 }

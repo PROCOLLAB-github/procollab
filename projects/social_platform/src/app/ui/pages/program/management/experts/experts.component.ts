@@ -203,7 +203,12 @@ export class ManagementExpertsComponent {
   readonly href = presentationHref;
   readonly paths = AppRoutes;
   readonly filtersOpen = signal<"experts" | "distribution" | null>(null);
-  readonly filterDraft = this.fb.group({ status: "all", case: "all", expert: "all" });
+  readonly filterDraft = this.fb.group({
+    status: "all",
+    case: "all",
+    expert: "all",
+    unassigned: false,
+  });
   readonly filterCount = computed(() =>
     this.tab() === "experts"
       ? Number(this.statusValue() !== "all")
@@ -269,7 +274,6 @@ export class ManagementExpertsComponent {
     this.allProjects().filter(p => p.experts.length < (this.snapshot()?.requiredEvaluators ?? 1)),
   );
   readonly attentionActive = computed(() => this.distributionStatusValue() === "missing");
-  readonly unassignedOnly = computed(() => this.distributionStatusValue() === "unassigned");
   readonly selection = computed(() =>
     this.allProjects().filter(p => this.selectedProjects().has(p.id)),
   );
@@ -562,12 +566,14 @@ export class ManagementExpertsComponent {
     this.filterDraft.setValue({
       status: this.status.value,
       case: this.distributionCase.value,
-      expert: this.distributionStatus.value,
+      expert:
+        this.distributionStatus.value === "unassigned" ? "all" : this.distributionStatus.value,
+      unassigned: this.distributionStatus.value === "unassigned",
     });
     this.filtersOpen.set(this.tab());
   }
   resetFilterDraft(): void {
-    this.filterDraft.setValue({ status: "all", case: "all", expert: "all" });
+    this.filterDraft.setValue({ status: "all", case: "all", expert: "all", unassigned: false });
   }
   applyFilters(): void {
     const draft = this.filterDraft.getRawValue();
@@ -575,8 +581,8 @@ export class ManagementExpertsComponent {
       if (draft.status !== this.status.value) this.status.setValue(draft.status);
     } else if (this.filtersOpen() === "distribution") {
       if (draft.case !== this.distributionCase.value) this.distributionCase.setValue(draft.case);
-      if (draft.expert !== this.distributionStatus.value)
-        this.distributionStatus.setValue(draft.expert);
+      const expert = draft.unassigned ? "unassigned" : draft.expert;
+      if (expert !== this.distributionStatus.value) this.distributionStatus.setValue(expert);
     }
     this.filtersOpen.set(null);
   }
@@ -708,9 +714,6 @@ export class ManagementExpertsComponent {
         );
       },
     );
-  }
-  toggleUnassigned(): void {
-    this.distributionStatus.setValue(this.unassignedOnly() ? "all" : "unassigned");
   }
   clearExpertSelection(): void {
     const id = this.selected()?.id;

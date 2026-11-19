@@ -27,11 +27,15 @@
 .expert-invitation {
   display: flex;
   flex-direction: column;
-  gap: 92px;
+  gap: 24px;
   align-items: center;
   min-height: 100dvh;
   padding: 32px 20px 48px;
   color: var(--black);
+
+  > a {
+    width: min(400px, 100%);
+  }
 }
 
 .expert-invitation__logo {
@@ -44,15 +48,13 @@
 
   display: grid;
   gap: 16px;
-  width: min(600px, 100%);
+  width: min(400px, 100%);
   min-width: 0;
-  padding: 32px;
-  background: var(--light-white);
-  border-radius: 15px;
+  padding: 0;
 }
 
 .expert-invitation h1 {
-  @include program-management-controls.page-title;
+  @include program-management-controls.section-title;
 
   margin: 0;
   overflow-wrap: anywhere;
@@ -60,6 +62,9 @@
 
 .expert-invitation h2 {
   @include program-management-controls.section-title;
+
+  font-size: 20px;
+  line-height: 28px;
 }
 
 .expert-invitation p {
@@ -88,8 +93,8 @@
 
 .expert-invitation__names {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
 }
 
 .expert-invitation__password {
@@ -125,9 +130,9 @@
 
 .expert-invitation .expert-invitation__choice {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   align-items: center;
-  min-height: 44px;
+  min-height: 32px;
   font-weight: 400;
 }
 
@@ -145,22 +150,36 @@
 .expert-invitation__link {
   display: flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 32px;
   font-size: 12px;
   color: var(--accent);
 }
 
+.expert-invitation__text-action {
+  justify-self: start;
+  min-height: 32px;
+  padding: 0;
+  font: inherit;
+  font-size: 12px;
+  color: var(--accent-text);
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: var(--ui-disabled-opacity);
+  }
+}
+
 @media (max-width: 650px) {
   .expert-invitation {
-    gap: 40px;
     padding-top: 24px;
-  }
-
-  .expert-invitation__card {
-    padding: 20px;
-  }
-
-  .expert-invitation__names {
-    grid-template-columns: minmax(0, 1fr);
   }
 }

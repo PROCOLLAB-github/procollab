@@ -87,7 +87,7 @@ describe("ProgramCardComponent", () => {
       "https://example.com/logo.png",
     );
     expect(element().querySelector(".card__photo .avatar")?.getAttribute("style")).toContain(
-      "40px",
+      "72px",
     );
     expect(element().querySelector("h3")?.getAttribute("title")).toBe(program.name);
   });
@@ -96,6 +96,22 @@ describe("ProgramCardComponent", () => {
     expect(element().querySelector(".card__registration--not-set")?.textContent).toContain(
       "Срок регистрации не задан",
     );
+  });
+  it("reads the status before identity and keeps full long content available", () => {
+    const name = "Очень длинное название программы для команд и предпринимателей ".repeat(4);
+    const shortDescription = "Длинное описание программы с материалами и поддержкой ".repeat(4);
+    setProgram({ name, shortDescription });
+    const statuses = element().querySelector(".card__statuses")!;
+    const identity = element().querySelector(".card__identity")!;
+    expect(statuses.compareDocumentPosition(identity) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    expect(element().querySelector(".card__name")?.textContent).toBe(name);
+    expect(element().querySelector(".card__name")?.getAttribute("title")).toBe(name);
+    expect(element().querySelector(".card__description")?.textContent).toBe(
+      shortDescription.trim(),
+    );
+    expect(element().querySelector(".program-card__actions")?.textContent).toContain("Подробнее");
   });
   it("shows only a nonempty catalog description and uses a program icon without an image", () => {
     setProgram({ shortDescription: "  Описание программы  " });
