@@ -175,6 +175,10 @@ label {
   overscroll-behavior: contain;
 }
 
+.registration__scroll--preview {
+  margin-inline: -2px;
+}
+
 .registration__preview {
   display: grid;
   gap: 20px;

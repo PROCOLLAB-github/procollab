@@ -243,7 +243,11 @@
       [closeDisabled]="busy()"
       (closed)="close()"
     />
-    <div class="registration__scroll" [attr.aria-busy]="busy()">
+    <div
+      class="registration__scroll"
+      [class.registration__scroll--preview]="dialog() === 'preview'"
+      [attr.aria-busy]="busy()"
+    >
       @if (busy() && dialog() === "import") {
         <p role="status">Проверяем файл…</p>
       }
