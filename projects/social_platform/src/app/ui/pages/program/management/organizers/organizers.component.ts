@@ -23,7 +23,9 @@ import {
   AvatarComponent,
   ButtonDirective,
   ChoiceDirective,
+  DialogHeaderComponent,
   FieldDirective,
+  SectionHeaderComponent,
 } from "@uilib";
 import { ProgramOrganizersUseCase } from "@api/program/use-cases/program-organizers.use-case";
 import {
@@ -51,7 +53,9 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     AvatarComponent,
     ButtonDirective,
     ChoiceDirective,
+    DialogHeaderComponent,
     FieldDirective,
+    SectionHeaderComponent,
     ModalComponent,
     RowActionsComponent,
   ],
@@ -69,6 +73,9 @@ export class ManagementOrganizersComponent {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly fb = inject(FormBuilder).nonNullable;
   readonly snapshot = signal<ProgramOrganizers | null>(null);
+  readonly sectionTitle = computed(() =>
+    this.snapshot() ? `Организаторы · ${this.snapshot()!.organizerCount}` : "Организаторы",
+  );
   readonly loading = signal(false);
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
@@ -84,6 +91,7 @@ export class ManagementOrganizersComponent {
   ]);
   private readonly query = signal("");
   private readonly statusValue = signal("all");
+  readonly hasFilters = computed(() => !!this.query().trim() || this.statusValue() !== "all");
   readonly page = signal(0);
   readonly pageSize = 20;
   readonly selectedId = signal<string | null>(null);

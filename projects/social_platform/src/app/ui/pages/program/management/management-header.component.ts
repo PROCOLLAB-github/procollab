@@ -5,6 +5,7 @@ import {
   afterNextRender,
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   effect,
   ElementRef,
   inject,
@@ -154,6 +155,8 @@ export class ProgramManagementHeaderComponent {
   private readonly tourState = inject(ProgramManagementTourState);
   private readonly injector = inject(Injector);
   private readonly document = inject(DOCUMENT);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private tabsObserver?: ResizeObserver;
   private readonly helpDialog = viewChild(ModalComponent);
   private readonly helpTrigger = viewChild<ElementRef<HTMLButtonElement>>("helpTrigger");
   private readonly coachTitle = viewChild<ElementRef<HTMLElement>>("coachTitle");
@@ -169,6 +172,16 @@ export class ProgramManagementHeaderComponent {
   });
 
   constructor() {
+    inject(DestroyRef).onDestroy(() => this.tabsObserver?.disconnect());
+    effect(() => {
+      const active = this.active();
+      afterNextRender(
+        () => {
+          if (this.active() === active) this.observeActiveTab();
+        },
+        { injector: this.injector },
+      );
+    });
     effect(() => {
       const current = this.activeStep();
       if (!current) return;
@@ -179,6 +192,41 @@ export class ProgramManagementHeaderComponent {
         { injector: this.injector },
       );
     });
+  }
+
+  private observeActiveTab(): void {
+    const tabs = this.host.nativeElement.querySelector<HTMLElement>(".program-heading__tabs");
+    const active = tabs?.querySelector<HTMLElement>('[aria-current="page"]');
+    this.tabsObserver?.disconnect();
+    if (!tabs || !active) return;
+    if (typeof ResizeObserver !== "undefined") {
+      this.tabsObserver ??= new ResizeObserver(() => this.revealActiveTab());
+      this.tabsObserver.observe(tabs);
+      this.tabsObserver.observe(active);
+    }
+    this.revealActiveTab();
+  }
+
+  private revealActiveTab(): void {
+    const tabs = this.host.nativeElement.querySelector<HTMLElement>(".program-heading__tabs");
+    const active = tabs?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!tabs || !active || tabs.scrollWidth <= tabs.clientWidth) return;
+
+    const viewport = tabs.getBoundingClientRect();
+    const item = active.getBoundingClientRect();
+    const inset = 4;
+    const offset =
+      item.left < viewport.left + inset
+        ? item.left - viewport.left - inset
+        : item.right > viewport.right - inset
+          ? item.right - viewport.right + inset
+          : 0;
+    if (offset) {
+      tabs.scrollLeft = Math.max(
+        0,
+        Math.min(tabs.scrollLeft + offset, tabs.scrollWidth - tabs.clientWidth),
+      );
+    }
   }
 
   protected tabPath(section: string): string {

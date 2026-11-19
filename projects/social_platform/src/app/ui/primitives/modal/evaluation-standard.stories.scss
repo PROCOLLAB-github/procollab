@@ -1,0 +1,56 @@
+/** @format */
+@use "styles/ui-foundation";
+@use "styles/program-management-controls";
+
+.ui-button.ui-button {
+  @include ui-foundation.button;
+  @include program-management-controls.compact-action;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+  @include program-management-controls.field-text;
+
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.example-dialog {
+  @include program-management-controls.body-copy;
+
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-width: 680px;
+  padding: 24px;
+  color: var(--black);
+}
+
+.example-dialog__hint,
+.example-dialog__confirmation p {
+  margin: 0;
+  color: var(--grey-for-text);
+}
+
+.example-dialog__fields,
+.example-dialog__fields label {
+  display: grid;
+  gap: 8px;
+}
+
+.example-dialog__fields {
+  gap: 16px;
+}
+
+.example-dialog__fields textarea {
+  min-height: 120px;
+  resize: vertical;
+  border-radius: 15px;
+}
+
+.example-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}

@@ -38,6 +38,7 @@ import {
   IconComponent,
   AvatarComponent,
   ImageFramingDirective,
+  DialogHeaderComponent,
 } from "@uilib";
 import { FileService } from "@corelib";
 import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
@@ -121,6 +122,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     IconComponent,
     AvatarComponent,
     ModalComponent,
+    DialogHeaderComponent,
     RowActionsComponent,
     ProgramAnalyticsComponent,
     ProgramBrandingPreviewComponent,
@@ -1405,7 +1407,7 @@ export class ProgramManagementComponent implements OnInit {
   private uploadFile(file: File, target: string): void {
     if (this.saving() || this.uploading()) return;
     if (target === "material") {
-      this.materialForm.controls.mode.setValue("file");
+      if (!this.editingMaterial() || this.materialForm.controls.mode.value !== "file") return;
       this.materialForm.controls.mode.markAsDirty();
     }
     if (target !== "material" && !file.type.startsWith("image/")) {
@@ -1469,13 +1471,17 @@ export class ProgramManagementComponent implements OnInit {
   onMaterialDragEnter(event: DragEvent): void {
     if (!event.dataTransfer?.types.includes("Files")) return;
     event.preventDefault();
+    if (this.materialForm.controls.mode.value !== "file") return;
     this.materialDragDepth++;
     if (!this.saving() && !this.uploading()) this.materialDragActive.set(true);
   }
   onMaterialDragOver(event: DragEvent): void {
     if (!event.dataTransfer?.types.includes("Files")) return;
     event.preventDefault();
-    event.dataTransfer.dropEffect = this.saving() || this.uploading() ? "none" : "copy";
+    event.dataTransfer.dropEffect =
+      this.materialForm.controls.mode.value !== "file" || this.saving() || this.uploading()
+        ? "none"
+        : "copy";
   }
   onMaterialDragLeave(): void {
     this.materialDragDepth = Math.max(0, this.materialDragDepth - 1);
@@ -1487,7 +1493,13 @@ export class ProgramManagementComponent implements OnInit {
     if (!event.dataTransfer?.types.includes("Files")) return;
     event.preventDefault();
     event.stopPropagation();
-    if (!this.editingMaterial() || this.saving() || this.uploading()) return;
+    if (
+      !this.editingMaterial() ||
+      this.materialForm.controls.mode.value !== "file" ||
+      this.saving() ||
+      this.uploading()
+    )
+      return;
     if (files?.length !== 1) {
       this.formError.set("Добавляйте по одному файлу в каждый материал.");
       return;

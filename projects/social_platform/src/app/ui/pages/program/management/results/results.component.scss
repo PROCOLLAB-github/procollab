@@ -84,6 +84,8 @@ small {
 .results__heading-actions {
   flex-shrink: 0;
   gap: 8px;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .results__icon.ui-button.ui-button,
@@ -97,8 +99,7 @@ small {
 }
 
 .results__export.ui-button.ui-button {
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: 8px;
+  @include program-management-controls.export-trigger;
 }
 
 .results__search {
@@ -214,8 +215,8 @@ small {
 .results__score {
   display: grid;
   gap: 4px;
-  font-variant-numeric: tabular-nums;
   justify-items: start;
+  font-variant-numeric: tabular-nums;
 }
 
 .results__score small {

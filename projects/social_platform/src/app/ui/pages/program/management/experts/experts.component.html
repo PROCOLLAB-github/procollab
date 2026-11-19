@@ -15,13 +15,9 @@
   }
   @if (tab() === "experts") {
     <section class="experts__card" [attr.aria-busy]="loading()">
-      <header class="experts__roster-heading">
-        <h2>
-          Эксперты
-          @if (snapshot(); as list) {
-            · {{ list.experts.length }}
-          }
-        </h2>
+      <app-section-header
+        [title]="'Эксперты' + (snapshot() ? ' · ' + snapshot()!.experts.length : '')"
+      >
         <div class="experts__heading-actions">
           <button
             class="experts__invite"
@@ -45,7 +41,7 @@
             <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
           </button>
         </div>
-      </header>
+      </app-section-header>
       <div class="experts__toolbar">
         <label class="experts__search"
           ><span class="experts__sr">Поиск по имени или почте</span
@@ -84,37 +80,37 @@
           <button type="button" appButton="text" (click)="load()">Обновить статус</button>
         </p>
       }
-      @if (loading() && !snapshot()) {
+      @if (loading()) {
         <p role="status">Загружаем экспертов…</p>
       }
-      <app-expert-roster
-        [rows]="visible()"
-        [selectedIds]="selectedExpertIds()"
-        [allSelected]="allExpertsSelected()"
-        [busy]="busy()"
-        [loading]="loading()"
-        [page]="page()"
-        [pageSize]="pageSize"
-        [total]="filtered().length"
-        [actions]="rosterActions"
-        [emptyText]="
-          search.value || status.value !== 'all'
-            ? 'Эксперты не найдены. Измените поиск или статус.'
-            : 'Экспертов пока нет. Пригласите первого эксперта по email.'
-        "
-        (toggleAll)="selectAllExperts()"
-        (toggleRow)="toggleSelectedExpert($event)"
-        (rowClick)="expertRowClick($event.event, $event.expert)"
-        (action)="rowAction($event.expert, $event.event)"
-        (pageChange)="page.set($event); selected.set(null)"
-      />
+      @if (snapshot()) {
+        <app-expert-roster
+          [rows]="visible()"
+          [selectedIds]="selectedExpertIds()"
+          [allSelected]="allExpertsSelected()"
+          [busy]="busy()"
+          [loading]="loading()"
+          [page]="page()"
+          [pageSize]="pageSize"
+          [total]="filtered().length"
+          [actions]="rosterActions"
+          [emptyText]="
+            search.value.trim() || status.value !== 'all'
+              ? 'Эксперты не найдены'
+              : 'Экспертов пока нет'
+          "
+          (toggleAll)="selectAllExperts()"
+          (toggleRow)="toggleSelectedExpert($event)"
+          (rowClick)="expertRowClick($event.event, $event.expert)"
+          (action)="rowAction($event.expert, $event.event)"
+          (pageChange)="page.set($event); selected.set(null)"
+        />
+      }
     </section>
   } @else {
     @if (snapshot(); as state) {
       <section class="experts__card experts__distribution" [attr.aria-busy]="loading()">
-        <header class="experts__roster-heading">
-          <h2>Распределение экспертов</h2>
-        </header>
+        <app-section-header title="Распределение экспертов"> </app-section-header>
         <div class="experts__quota">
           <strong>Экспертов на проект: {{ state.requiredEvaluators }}</strong>
           <button type="button" appButton="secondary" [disabled]="busy()" (click)="open('quota')">
@@ -393,18 +389,13 @@
   [bodyClass]="dialogBodyClass(modal())"
 >
   <div class="experts__dialog" [attr.aria-busy]="busy()">
-    <header class="experts__heading">
-      <h2 id="experts-dialog-title">{{ dialogTitle() }}</h2>
-      <button
-        type="button"
-        appButton="icon"
-        aria-label="Закрыть окно"
-        (click)="close()"
-        [disabled]="busy()"
-      >
-        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-      </button>
-    </header>
+    <app-dialog-header
+      [title]="dialogTitle()"
+      titleId="experts-dialog-title"
+      (closed)="close()"
+      closeLabel="Закрыть окно"
+      [closeDisabled]="busy()"
+    />
     @if (dialogError()) {
       <div appAlert="error" role="alert">
         {{ dialogError() }}
@@ -427,7 +418,7 @@
           /></label>
           <p>Если аккаунта еще нет, эксперт сможет зарегистрироваться по ссылке из письма.</p>
           <fieldset class="experts__case-picker">
-            <legend>Какие кейсы будет оценивать эксперт</legend>
+            <legend>На какие кейсы можно назначить эксперта</legend>
             <ng-container [ngTemplateOutlet]="caseScopeChooser" />
           </fieldset>
           <p>Можно выбрать несколько кейсов. Изменить выбор можно позже в списке экспертов.</p>
@@ -933,19 +924,12 @@
     [formGroup]="filterDraft"
     (ngSubmit)="applyFilters()"
   >
-    <header class="experts__filter-heading">
-      <h2 id="experts-filter-title">
-        {{ filtersOpen() === "experts" ? "Фильтры экспертов" : "Фильтры распределения" }}
-      </h2>
-      <button
-        type="button"
-        appButton="icon"
-        aria-label="Закрыть фильтры"
-        (click)="filtersOpen.set(null)"
-      >
-        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-      </button>
-    </header>
+    <app-dialog-header
+      [title]="filtersOpen() === 'experts' ? 'Фильтры экспертов' : 'Фильтры распределения'"
+      titleId="experts-filter-title"
+      (closed)="filtersOpen.set(null)"
+      closeLabel="Закрыть фильтры"
+    />
     @if (filtersOpen() === "experts") {
       <label
         >Статус<select appField aria-label="Статус" formControlName="status">

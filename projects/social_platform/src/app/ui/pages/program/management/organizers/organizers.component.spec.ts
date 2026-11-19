@@ -1,7 +1,7 @@
 /** @format */
 import { TestBed } from "@angular/core/testing";
 import { HttpErrorResponse } from "@angular/common/http";
-import { of, throwError } from "rxjs";
+import { of, Subject, throwError } from "rxjs";
 import { ProgramOrganizersUseCase } from "@api/program/use-cases/program-organizers.use-case";
 import { ProgramOrganizers } from "@domain/program/program-organizers.model";
 import { ManagementOrganizersComponent } from "./organizers.component";
@@ -64,6 +64,86 @@ function setup() {
   return { fixture, component: fixture.componentInstance, api };
 }
 describe("Организаторы программы", () => {
+  it("показывает счетчик в общем заголовке, приглашения отдельно и диапазон текущей страницы", () => {
+    const { fixture, component } = setup();
+    const title = fixture.nativeElement.querySelector("app-section-header h2") as HTMLElement;
+    expect(title.textContent).toContain("Организаторы · 2");
+    expect(fixture.nativeElement.querySelector(".organizers__toolbar").textContent).toContain(
+      "Приглашений: 1",
+    );
+    component.snapshot.set({
+      ...snapshot,
+      organizerCount: 25,
+      invitationCount: 0,
+      organizers: Array.from({ length: 25 }, (_, i) => ({
+        ...snapshot.organizers[0],
+        id: `member:${i + 1}`,
+        userId: i + 1,
+      })),
+    });
+    fixture.detectChanges();
+    const footer = fixture.nativeElement.querySelector(".organizers__pagination") as HTMLElement;
+    expect(footer.textContent).toContain("1–20 из 25");
+    (footer.querySelectorAll("button")[1] as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(footer.textContent).toContain("21–25 из 25");
+    expect(footer.querySelectorAll("button")[1].disabled).toBe(true);
+  });
+
+  it("не показывает пустую таблицу при загрузке и отличает отсутствие данных от результата фильтра", () => {
+    const { fixture, component, api } = setup();
+    const response = new Subject<ProgramOrganizers>();
+    api.list.mockReturnValue(response as never);
+    component.snapshot.set(null);
+    component.load();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain("Загружаем организаторов");
+    expect(fixture.nativeElement.querySelector("table")).toBeNull();
+    expect(fixture.nativeElement.querySelector(".organizers__pagination")).toBeNull();
+    expect(fixture.nativeElement.textContent).not.toContain("Организаторы не найдены");
+    response.next({ ...snapshot, organizers: [], organizerCount: 0, invitationCount: 0 });
+    response.complete();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain("В программе пока нет организаторов");
+    expect(fixture.nativeElement.querySelector("table")).toBeNull();
+    component.search.setValue("коллега");
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain("Организаторы не найдены");
+    expect(fixture.nativeElement.textContent).not.toContain("0–0");
+  });
+
+  it("общий крестик сохраняет busy и подтверждение несохраненного приглашения", async () => {
+    const { fixture, component, api } = setup();
+    const confirmDiscard = vi.fn(() => Promise.resolve(false));
+    fixture.componentRef.setInput("confirmDiscard", confirmDiscard);
+    component.open("invite");
+    component.email.markAsDirty();
+    component.email.setValue("new@example.com");
+    component.busy.set(true);
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    const close = document.querySelector(
+      'app-dialog-header button[aria-label="Закрыть окно"]',
+    ) as HTMLButtonElement;
+    expect(close.disabled).toBe(true);
+    await component.close();
+    expect(component.modal()).toBe("invite");
+    expect(confirmDiscard).not.toHaveBeenCalled();
+    component.busy.set(false);
+    fixture.detectChanges();
+    close.click();
+    await Promise.resolve();
+    fixture.detectChanges();
+    expect(confirmDiscard).toHaveBeenCalledOnce();
+    expect(component.email.value).toBe("new@example.com");
+    expect(component.modal()).toBe("invite");
+    confirmDiscard.mockResolvedValue(true);
+    await component.close();
+    expect(component.modal()).toBeNull();
+    expect(api.invite).not.toHaveBeenCalled();
+  });
+
   it("показывает статус доступа отдельно от состояния приглашения и доставки", () => {
     const { fixture, component } = setup();
     const [active, inactive, invited] = snapshot.organizers;

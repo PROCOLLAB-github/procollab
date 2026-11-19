@@ -824,21 +824,10 @@
   flex: 1;
 }
 
-.experts__roster-heading {
-  display: grid;
-  gap: 16px;
-  min-width: 0;
-
-  h2 {
-    padding-bottom: 16px;
-    color: var(--accent-text);
-    border-bottom: 1px solid var(--accent);
-  }
-
-  .experts__heading-actions {
-    display: flex;
-    justify-content: space-between;
-  }
+.experts__heading-actions {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .experts__heading-actions.experts__allocation-actions {
@@ -886,25 +875,6 @@
     display: flex;
     justify-content: center;
     padding: 0 !important;
-  }
-
-  .experts__people-heading {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-  }
-
-  .experts__heading-actions { display: contents; }
-
-  .experts__invite {
-    grid-row: 2;
-    grid-column: 1 / -1;
-    justify-self: start;
-  }
-
-  .experts__export {
-    grid-row: 1;
-    grid-column: 2;
   }
 }
 

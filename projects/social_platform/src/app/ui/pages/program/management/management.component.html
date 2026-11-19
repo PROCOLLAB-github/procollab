@@ -98,32 +98,30 @@
     ) {
       <section class="management__card" [attr.aria-busy]="state.pending()">
         <div class="management__list-heading management__list-heading--program">
-          <div>
-            <h2>
-              {{
-                section() === "participants"
-                  ? "Участники"
-                  : allocation()
-                    ? "Распределение"
-                    : "Проекты"
-              }}
-            </h2>
-            @if (section() === "participants") {
-              <p class="management__participant-count" aria-live="polite">
-                Всего участников: <strong>{{ state.participants()?.totalCount ?? count() }}</strong>
-                @if (hasListFilters()) {
-                  <span> · По фильтрам: {{ count() }}</span>
-                }
-              </p>
-            } @else {
-              <p class="management__participant-count" aria-live="polite">
-                Всего проектов: <strong>{{ state.projects()?.totalCount ?? count() }}</strong>
-                @if (hasListFilters()) {
-                  <span> · По фильтрам: {{ count() }}</span>
-                }
-              </p>
-            }
-          </div>
+          <h2>
+            {{
+              section() === "participants"
+                ? "Участники"
+                : allocation()
+                  ? "Распределение"
+                  : "Проекты"
+            }}
+          </h2>
+          @if (section() === "participants") {
+            <p class="management__participant-count" aria-live="polite">
+              Всего участников: <strong>{{ state.participants()?.totalCount ?? count() }}</strong>
+              @if (hasListFilters()) {
+                <span> · По фильтрам: {{ count() }}</span>
+              }
+            </p>
+          } @else {
+            <p class="management__participant-count" aria-live="polite">
+              Всего проектов: <strong>{{ state.projects()?.totalCount ?? count() }}</strong>
+              @if (hasListFilters()) {
+                <span> · По фильтрам: {{ count() }}</span>
+              }
+            </p>
+          }
         </div>
         <div
           class="management__toolbar"
@@ -311,7 +309,6 @@
                     : "В программе пока нет проектов"
               }}
             </h3>
-            <p>Измените запрос или дождитесь появления новых данных.</p>
             @if (hasListFilters()) {
               <button type="button" appButton="secondary" (click)="resetListFilters()">
                 Сбросить поиск и фильтры
@@ -1128,7 +1125,8 @@
         >
       }
       <footer class="management__filter-actions">
-        <button type="button" appButton="text" (click)="resetProjectFilterDraft()">Сбросить</button
+        <button type="button" appButton="secondary" (click)="resetProjectFilterDraft()">
+          Сбросить</button
         ><button type="submit" appButton="primary">Применить</button>
       </footer>
     </form>
@@ -1415,9 +1413,12 @@
         (dragleave)="onMaterialDragLeave()"
         (drop)="onMaterialDrop($event)"
       >
-        <h2 id="management-dialog-title">
-          {{ editingMaterial() === "new" ? "Добавить материал" : "Изменить материал" }}
-        </h2>
+        <app-dialog-header
+          [title]="editingMaterial() === 'new' ? 'Добавить материал' : 'Изменить материал'"
+          titleId="management-dialog-title"
+          [closeDisabled]="saving() || !!uploading()"
+          (closed)="closeMaterial()"
+        />
         <label for="material-title"
           >Название *<input appField id="material-title" formControlName="title" maxlength="255"
         /></label>
@@ -1430,48 +1431,51 @@
           <label for="material-url"
             >Ссылка *<input type="url" appField id="material-url" formControlName="url"
           /></label>
-        }
-        <div
-          class="management__dropzone"
-          [class.management__dropzone--active]="materialDragActive()"
-          [attr.aria-busy]="uploading() === 'material'"
-        >
-          <div aria-live="polite" role="status">
-            @if (uploading() === "material") {
-              <p class="management__dropzone-title">Загружаем файл…</p>
-              <p appAlert="warning">Дождитесь окончания загрузки.</p>
-            } @else if (
-              materialForm.controls.mode.value === "file" && materialForm.controls.file.value
-            ) {
-              <p class="management__dropzone-title">{{ materialFileName() || "Файл загружен" }}</p>
-              <p appAlert="success">Можно сохранить материал или заменить файл.</p>
-            } @else {
-              <p class="management__dropzone-title">Перетащите файл сюда</p>
-              <p class="management__muted">
-                Или выберите его на устройстве. Один файл на материал.
-              </p>
-            }
-          </div>
-          <input
-            #materialFile
-            type="file"
-            hidden
-            [disabled]="saving() || !!uploading()"
-            (change)="upload($event, 'material')"
-          />
-          <button
-            type="button"
-            appButton="secondary"
-            [disabled]="saving() || !!uploading()"
-            (click)="materialFile.click()"
+        } @else {
+          <div
+            class="management__dropzone"
+            [class.management__dropzone--active]="materialDragActive()"
+            [attr.aria-busy]="uploading() === 'material'"
           >
-            {{
-              materialForm.controls.mode.value === "file" && materialForm.controls.file.value
-                ? "Заменить файл"
-                : "Выбрать файл"
-            }}
-          </button>
-        </div>
+            <div aria-live="polite" role="status">
+              @if (uploading() === "material") {
+                <p class="management__dropzone-title">Загружаем файл…</p>
+                <p appAlert="warning">Дождитесь окончания загрузки.</p>
+              } @else if (
+                materialForm.controls.mode.value === "file" && materialForm.controls.file.value
+              ) {
+                <p class="management__dropzone-title">
+                  {{ materialFileName() || "Файл загружен" }}
+                </p>
+                <p appAlert="success">Можно сохранить материал или заменить файл.</p>
+              } @else {
+                <p class="management__dropzone-title">Перетащите файл сюда</p>
+                <p class="management__muted">
+                  Или выберите его на устройстве. Один файл на материал.
+                </p>
+              }
+            </div>
+            <input
+              #materialFile
+              type="file"
+              hidden
+              [disabled]="saving() || !!uploading()"
+              (change)="upload($event, 'material')"
+            />
+            <button
+              type="button"
+              appButton="secondary"
+              [disabled]="saving() || !!uploading()"
+              (click)="materialFile.click()"
+            >
+              {{
+                materialForm.controls.mode.value === "file" && materialForm.controls.file.value
+                  ? "Заменить файл"
+                  : "Выбрать файл"
+              }}
+            </button>
+          </div>
+        }
         @if (formError()) {
           <p appAlert="error">{{ formError() }}</p>
         }

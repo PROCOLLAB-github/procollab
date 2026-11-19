@@ -20,7 +20,7 @@ const programId = 12;
       [programId]="programId"
       [name]="'Город будущего'"
       [draft]="draft()"
-      [active]="'overview'"
+      [active]="active()"
     />
     @if (header.activeStep()) {
       <ng-container [ngTemplateOutlet]="header.coachTemplate" />
@@ -30,6 +30,7 @@ const programId = 12;
 class HeaderPage {
   readonly programId = programId;
   readonly draft = signal(true);
+  readonly active = signal("overview");
   readonly canLeave = vi.fn(() => true);
 }
 
@@ -87,6 +88,99 @@ describe(ProgramManagementHeaderComponent.name, () => {
     expect(page.querySelector("#program-coach-title")?.textContent?.trim()).toBe(title);
     expect(page.querySelector("#program-coach-step")?.textContent?.trim()).toBe(step);
   }
+
+  it("reveals the active tab horizontally when a narrow navigation strip overflows", async () => {
+    const host = await harness.navigateByUrl(program.launch(programId), HeaderPage);
+    const tabs = harness.routeNativeElement!.querySelector<HTMLElement>(".program-heading__tabs")!;
+    const links = tabs.querySelectorAll<HTMLAnchorElement>("a");
+    Object.defineProperties(tabs, {
+      scrollWidth: { configurable: true, value: 600 },
+      clientWidth: { configurable: true, value: 300 },
+    });
+    vi.spyOn(tabs, "getBoundingClientRect").mockReturnValue({
+      left: 20,
+      right: 320,
+    } as DOMRect);
+    vi.spyOn(links[3], "getBoundingClientRect").mockReturnValue({
+      left: 360,
+      right: 480,
+    } as DOMRect);
+    host.active.set("evaluation");
+    harness.detectChanges();
+    await vi.waitFor(() => expect(tabs.scrollLeft).toBe(164));
+
+    vi.spyOn(links[0], "getBoundingClientRect").mockReturnValue({
+      left: -144,
+      right: -54,
+    } as DOMRect);
+    host.active.set("overview");
+    harness.detectChanges();
+    await vi.waitFor(() => expect(tabs.scrollLeft).toBe(0));
+  });
+
+  it("does not scroll a navigation strip that already fits its container", async () => {
+    const host = await harness.navigateByUrl(program.launch(programId), HeaderPage);
+    const tabs = harness.routeNativeElement!.querySelector<HTMLElement>(".program-heading__tabs")!;
+    Object.defineProperties(tabs, {
+      scrollWidth: { configurable: true, value: 860 },
+      clientWidth: { configurable: true, value: 860 },
+    });
+    const measure = vi.spyOn(tabs, "getBoundingClientRect");
+    host.active.set("evaluation");
+    harness.detectChanges();
+    expect(tabs.scrollLeft).toBe(0);
+    expect(measure).not.toHaveBeenCalled();
+  });
+
+  it("reveals the active tab again when its width changes after rendering", async () => {
+    const observers: Array<{ callback: () => void; targets: Element[] }> = [];
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        targets: Element[] = [];
+        constructor(readonly callback: () => void) {
+          observers.push(this);
+        }
+        observe(target: Element) {
+          this.targets.push(target);
+        }
+        disconnect() {
+          this.targets = [];
+        }
+      },
+    );
+    try {
+      const host = await harness.navigateByUrl(program.launch(programId), HeaderPage);
+      const tabs =
+        harness.routeNativeElement!.querySelector<HTMLElement>(".program-heading__tabs")!;
+      const evaluation = tabs.querySelectorAll<HTMLAnchorElement>("a")[3];
+      Object.defineProperties(tabs, {
+        scrollWidth: { configurable: true, value: 569 },
+        clientWidth: { configurable: true, value: 335 },
+      });
+      tabs.scrollLeft = 98;
+      vi.spyOn(tabs, "getBoundingClientRect").mockReturnValue({
+        left: 20,
+        right: 355,
+      } as DOMRect);
+      const measure = vi.spyOn(evaluation, "getBoundingClientRect").mockReturnValue({
+        left: 236.97,
+        right: 351,
+      } as DOMRect);
+      host.active.set("evaluation");
+      harness.detectChanges();
+      await vi.waitFor(() =>
+        expect(observers.some(observer => observer.targets.includes(evaluation))).toBe(true),
+      );
+      expect(tabs.scrollLeft).toBe(98);
+
+      measure.mockReturnValue({ left: 236.97, right: 365.625 } as DOMRect);
+      observers.find(observer => observer.targets.includes(evaluation))!.callback();
+      expect(tabs.scrollLeft).toBe(112.625);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
 
   it("links to the managed list and uses the correct program page for each publication status", async () => {
     const host = await harness.navigateByUrl(program.launch(programId), HeaderPage);

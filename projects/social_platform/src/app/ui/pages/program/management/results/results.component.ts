@@ -1,4 +1,6 @@
 /** @format */
+
+import { DialogHeaderComponent, SectionHeaderComponent } from "@uilib";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -39,6 +41,8 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
 @Component({
   selector: "app-management-results",
   imports: [
+    DialogHeaderComponent,
+    SectionHeaderComponent,
     TransientNoticeComponent,
     CdkMenuModule,
     IconComponent,

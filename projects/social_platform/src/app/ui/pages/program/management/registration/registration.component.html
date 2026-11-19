@@ -386,36 +386,36 @@
         /></label>
       }
     </div>
-    <footer class="registration__actions">
-      @if (dialog() === "field") {
-        <button appButton="secondary" type="button" (click)="close()">Отмена</button
-        ><button appButton="primary" type="button" (click)="saveField()">Сохранить поле</button>
-      } @else if (dialog() === "archive") {
-        <button appButton="secondary" type="button" (click)="close()">Отмена</button
-        ><button appButton="danger" type="button" (click)="removeNow()">Архивировать</button>
-      } @else if (dialog() === "connection") {
-        <button appButton="secondary" type="button" [disabled]="busy()" (click)="close()">
-          Отмена</button
-        ><button
-          appButton="primary"
-          type="button"
-          [disabled]="busy()"
-          (click)="requestConnection()"
-        >
-          Отправить запрос
-        </button>
-      } @else if (dialog() === "importPreview") {
-        <button appButton="secondary" type="button" (click)="open('field')">Назад к полю</button
-        ><button appButton="primary" type="button" (click)="applyImport()">
-          Использовать список
-        </button>
-      } @else if (dialog() === "import") {
-        <button appButton="secondary" type="button" [disabled]="busy()" (click)="open('field')">
-          Назад к полю
-        </button>
-      } @else {
-        <button appButton="secondary" type="button" (click)="close()">Закрыть</button>
-      }
-    </footer>
+    @if (dialog() !== "preview") {
+      <footer class="registration__actions">
+        @if (dialog() === "field") {
+          <button appButton="secondary" type="button" (click)="close()">Отмена</button
+          ><button appButton="primary" type="button" (click)="saveField()">Сохранить поле</button>
+        } @else if (dialog() === "archive") {
+          <button appButton="secondary" type="button" (click)="close()">Отмена</button
+          ><button appButton="danger" type="button" (click)="removeNow()">Архивировать</button>
+        } @else if (dialog() === "connection") {
+          <button appButton="secondary" type="button" [disabled]="busy()" (click)="close()">
+            Отмена</button
+          ><button
+            appButton="primary"
+            type="button"
+            [disabled]="busy()"
+            (click)="requestConnection()"
+          >
+            Отправить запрос
+          </button>
+        } @else if (dialog() === "importPreview") {
+          <button appButton="secondary" type="button" (click)="open('field')">Назад к полю</button
+          ><button appButton="primary" type="button" (click)="applyImport()">
+            Использовать список
+          </button>
+        } @else if (dialog() === "import") {
+          <button appButton="secondary" type="button" [disabled]="busy()" (click)="open('field')">
+            Назад к полю
+          </button>
+        }
+      </footer>
+    }
   </section>
 </app-modal>

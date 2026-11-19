@@ -601,22 +601,26 @@
 @media (max-width: 999px) {
   .management--lists:has(.management__projects) { padding-bottom: 260px; }
 }
+
 .management--subnav {
   display: grid;
   grid-template-columns: minmax(120px, 150px) minmax(0, 1fr);
-  align-items: start;
   column-gap: 20px;
+  align-items: start;
+
   > :not(app-program-management-header, nav, app-modal) {
     grid-column: 2;
     min-width: 0;
   }
+
   > .management__settings-tabs {
-    grid-column: 1;
-    grid-row: 2 / span 8;
     display: grid;
-    align-items: start;
+    grid-row: 2 / span 8;
+    grid-column: 1;
     gap: 6px;
+    align-items: start;
     margin: 0;
+
     a {
       justify-content: flex-start;
       background: transparent;
@@ -629,17 +633,51 @@
 @media (max-width: 800px) {
   .management--subnav {
     display: block;
+
     > .management__settings-tabs {
       display: flex;
-      overflow-x: auto;
+      gap: 16px;
+      min-width: 0;
+      padding: 0 4px;
       margin-bottom: 16px;
-      a { flex: 0 0 auto; }
+      overflow-x: auto;
+      scrollbar-width: none;
+      scroll-padding-inline: 4px;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      a {
+        flex: 0 0 auto;
+        min-height: 44px;
+        padding-inline: 4px;
+        margin-block: 0;
+        white-space: nowrap;
+        scroll-margin-inline: 4px;
+
+        &::after {
+          inset: 0;
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--accent);
+          outline-offset: -2px;
+        }
+      }
     }
   }
 }
+
 .management__branding {
   min-width: 0;
-  > h3 { color: var(--accent); padding-bottom: 12px; border-bottom: 1px solid var(--accent); }
+
+  > h3 {
+    padding-bottom: 12px;
+    color: var(--accent);
+    border-bottom: 1px solid var(--accent);
+  }
+
   &-previews {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
@@ -668,18 +706,27 @@
       white-space: normal;
     }
   }
+
   &-sample {
     height: 152px;
     overflow: hidden;
     text-align: center;
     border: 1px solid var(--medium-grey-for-outline);
     border-radius: 8px;
-    p { margin-inline: 8px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
+    p {
+      margin-inline: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
+
   &-sample--mobile {
     text-align: left;
     .management__branding-avatar { margin-left: 12px; }
   }
+
   &-cover {
     display: block;
     width: 100%;
@@ -687,18 +734,24 @@
     object-fit: cover;
     background: var(--white);
   }
+
   &-avatar {
+    position: relative;
     display: grid;
     place-items: center;
-    position: relative;
     width: 44px;
     height: 44px;
     margin: -22px auto 0;
     overflow: hidden;
+    color: var(--accent);
     background: var(--light-white);
     border-radius: 50%;
-    color: var(--accent);
-    img { width: 100%; height: 100%; object-fit: cover; }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 }
 

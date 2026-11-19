@@ -62,6 +62,22 @@ function setup() {
   return { fixture, component: fixture.componentInstance, api };
 }
 describe("Результаты программы", () => {
+  it("показывает короткое пустое состояние и объясняет отсутствие рейтинга только при наличии проектов", () => {
+    const { fixture, component } = setup();
+    component.snapshot.set({ ...snapshot, hasNumericCriteria: false, groups: [] });
+    fixture.detectChanges();
+    let text = fixture.nativeElement.textContent;
+    expect(text).toContain("Сданных проектов пока нет");
+    expect(text).not.toContain("Оценено 0 из 0");
+    expect(text).not.toContain("рейтинг не рассчитывается");
+    expect(text).not.toContain("Результаты появятся после сдачи решений");
+
+    component.snapshot.set({ ...snapshot, hasNumericCriteria: false });
+    fixture.detectChanges();
+    text = fixture.nativeElement.textContent;
+    expect(text).toContain("В критериях нет баллов — рейтинг не рассчитывается.");
+  });
+
   it("не показывает нулевую оцененность и безбалльное оценивание, когда оценивание не применяется", async () => {
     const { fixture, component } = setup();
     fixture.componentRef.setInput("submissionApplicable", false);
