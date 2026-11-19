@@ -43,6 +43,7 @@ interface Tour {
   title: string;
   description?: string;
   requiredTab?: string;
+  publishedOnly?: boolean;
   steps: readonly TourStep[];
 }
 
@@ -60,6 +61,33 @@ const TOURS: readonly Tour[] = [
         section: "participants",
         title: "Выгрузка участников",
         text: "Скачайте список участников в Excel с помощью кнопки рядом с фильтрами.",
+      },
+    ],
+  },
+  {
+    title: "Проекты",
+    description: "Список · действия · выгрузка",
+    requiredTab: "projects",
+    steps: [
+      {
+        section: "projects",
+        title: "Список проектов",
+        text: "Найдите проект по названию или используйте фильтры.",
+      },
+      {
+        section: "projects",
+        title: "Карточка проекта",
+        text: "Откройте проект, чтобы посмотреть его данные.",
+      },
+      {
+        section: "projects",
+        title: "Действия с проектом",
+        text: "В меню проекта доступны действия и просмотр команды.",
+      },
+      {
+        section: "projects",
+        title: "Выгрузка",
+        text: "Выгрузите проекты с учетом выбранных фильтров.",
       },
     ],
   },
@@ -92,6 +120,76 @@ const TOURS: readonly Tour[] = [
       },
     ],
   },
+  {
+    title: "Настройки",
+    description: "Страница · сроки · анкеты",
+    requiredTab: "settings",
+    steps: [
+      {
+        section: "settings",
+        tab: "basic",
+        title: "Страница",
+        text: "Заполните информацию, которую увидят участники.",
+      },
+      {
+        section: "settings",
+        tab: "dates",
+        title: "Сроки",
+        text: "Укажите даты программы и регистрации.",
+      },
+      {
+        section: "settings",
+        tab: "registration",
+        title: "Регистрация",
+        text: "Настройте вопросы для участников при регистрации.",
+      },
+      {
+        section: "settings",
+        tab: "project-form",
+        title: "Заявка проекта",
+        text: "Настройте поля, которые заполнит команда проекта.",
+      },
+      {
+        section: "settings",
+        tab: "materials",
+        title: "Материалы",
+        text: "Добавьте документы и ссылки для участников.",
+      },
+      {
+        section: "settings",
+        tab: "organizers",
+        title: "Организаторы",
+        text: "Пригласите коллег к управлению программой.",
+      },
+    ],
+  },
+  {
+    title: "Аналитика",
+    description: "Показатели · воронки · выгрузка",
+    publishedOnly: true,
+    steps: [
+      {
+        section: "analytics",
+        title: "Показатели",
+        text: "Посмотрите показатели участников и проектов программы.",
+      },
+      {
+        section: "analytics",
+        title: "Требует внимания",
+        text: "Нажмите на число больше нуля, чтобы открыть список.",
+      },
+      {
+        section: "analytics",
+        title: "Воронки и динамика",
+        text: "Сравните этапы участия и активность за 30 дней.",
+      },
+      {
+        section: "analytics",
+        title: "Выгрузка",
+        text: "Скачайте данные программы через кнопку выгрузки.",
+      },
+    ],
+  },
 ];
 
 interface ActiveStep {
@@ -119,12 +217,20 @@ class ProgramManagementTourState {
   }
 
   isAt(destination: UrlTree): boolean {
-    return this.router.isActive(destination, {
-      paths: "exact",
-      queryParams: "subset",
-      matrixParams: "ignored",
-      fragment: "ignored",
-    });
+    const current = this.router.parseUrl(this.router.url);
+    const settings = destination.root.children["primary"]?.segments.at(-1)?.path === "settings";
+    const tab = (url: UrlTree) => url.queryParamMap.get("tab") ?? (settings ? "basic" : null);
+    const queryParams = { ...destination.queryParams };
+    delete queryParams["tab"];
+    return (
+      tab(current) === tab(destination) &&
+      this.router.isActive(new UrlTree(destination.root, queryParams, destination.fragment), {
+        paths: "exact",
+        queryParams: "subset",
+        matrixParams: "ignored",
+        fragment: "ignored",
+      })
+    );
   }
 }
 
@@ -143,8 +249,12 @@ export class ProgramManagementHeaderComponent {
   readonly active = input.required<string>();
   readonly status = input("");
   protected readonly tabs = MAIN_TABS;
-  protected readonly topics = TOURS.filter(
-    topic => !topic.requiredTab || this.tabs.some(tab => tab.key === topic.requiredTab),
+  protected readonly topics = computed(() =>
+    TOURS.filter(
+      topic =>
+        (!topic.requiredTab || this.tabs.some(tab => tab.key === topic.requiredTab)) &&
+        (!topic.publishedOnly || !this.draft()),
+    ),
   );
   protected readonly paths = AppRoutes;
   protected readonly helpOpen = signal(false);
@@ -166,7 +276,9 @@ export class ProgramManagementHeaderComponent {
   );
   readonly activeStep = computed(() => {
     const current = this.tourState.current();
-    return current?.programId === this.programId() ? current : null;
+    return current?.programId === this.programId() && this.topics().includes(current.tour)
+      ? current
+      : null;
   });
 
   constructor() {
@@ -246,7 +358,7 @@ export class ProgramManagementHeaderComponent {
 
   protected async showStep(tour: Tour, index: number): Promise<void> {
     const step = tour.steps[index];
-    if (!step || this.navigating()) return;
+    if (!step || this.navigating() || !this.topics().includes(tour)) return;
     const programId = this.programId();
     const destination = this.router.createUrlTree([this.tabPath(step.section)], {
       queryParams: step.tab ? { tab: step.tab } : undefined,
