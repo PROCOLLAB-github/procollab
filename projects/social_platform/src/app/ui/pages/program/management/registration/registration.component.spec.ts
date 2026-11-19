@@ -74,10 +74,21 @@ describe("Редактор анкеты регистрации", () => {
     expect(component.draft().fields).toHaveLength(1);
     expect(component.dirty()).toBe(false);
   });
-  it("предпросмотр ничего не публикует и отключает поля", () => {
-    const { component, api } = setup();
+  it("предпросмотр отключает поля и закрывается одним крестиком без публикации", async () => {
+    const { component, api, fixture } = setup();
     component.preview();
+    await fixture.whenStable();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
     expect(component.previewGroup.disabled).toBe(true);
+    const dialog = document.querySelector("#registration-dialog-heading")?.closest("section");
+    expect(dialog).toBeTruthy();
+    expect(dialog?.querySelector("footer")).toBeNull();
+    const close = dialog?.querySelector('button[aria-label="Закрыть"]') as HTMLButtonElement;
+    expect(close).toBeTruthy();
+    close.click();
+    await fixture.whenStable();
+    expect(component.dialog()).toBeNull();
     expect(api.save).not.toHaveBeenCalled();
   });
   it("запрос принимает сайт без необязательных деталей и передаёт контакт отдельно", () => {

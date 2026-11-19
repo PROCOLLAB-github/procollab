@@ -92,6 +92,24 @@ describe("Таблица заявок решения", () => {
     );
     expect(fixture.nativeElement.querySelector('td[data-label="Презентация"]')).toBeNull();
   });
+  it("закрывает просмотр заявки крестиком и сохраняет отдельное действие истории", async () => {
+    const { component, fixture, api } = await setup();
+    component.open(page.results[0]);
+    await fixture.whenStable();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    const dialog = document.querySelector("#managed-solution-title")?.closest("section");
+    expect(dialog).toBeTruthy();
+    const footerButtons = Array.from(dialog?.querySelectorAll("footer button") ?? []);
+    expect(footerButtons.map(button => button.textContent?.trim())).toEqual(["История изменений"]);
+    const close = dialog?.querySelector('button[aria-label="Закрыть заявку"]') as HTMLButtonElement;
+    expect(close).toBeTruthy();
+    close.click();
+    await fixture.whenStable();
+    expect(component.detailOpen()).toBe(false);
+    expect(api.applySubmitAction).not.toHaveBeenCalled();
+    expect(api.applyArchive).not.toHaveBeenCalled();
+  });
   it("использует те же серверные фильтры для списка и XLSX, включая нулевой ответ", async () => {
     const { api, fixture, component } = await setup();
     await TestBed.inject(Router).navigateByUrl(

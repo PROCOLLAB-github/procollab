@@ -11,7 +11,7 @@
     </div>
   }
   <section class="organizers__card" [attr.aria-busy]="loading()">
-    <h2 class="organizers__title" tabindex="-1">Организаторы</h2>
+    <app-section-header [title]="sectionTitle()" />
     <div class="organizers__toolbar">
       <button
         type="button"
@@ -21,12 +21,9 @@
       >
         Пригласить
       </button>
-      @if (snapshot(); as list) {
+      @if (snapshot()?.invitationCount) {
         <p>
-          {{ list.organizerCount }} {{ organizerCountLabel() }}
-          @if (list.invitationCount) {
-            · <span class="organizers__count">Приглашений: {{ list.invitationCount }}</span>
-          }
+          <span class="organizers__count">Приглашений: {{ snapshot()?.invitationCount }}</span>
         </p>
       }
     </div>
@@ -54,90 +51,86 @@
         <button type="button" appButton="text" (click)="load()">Обновить статус</button>
       </p>
     }
-    @if (loading() && !snapshot()) {
+    @if (loading()) {
       <p role="status">Загружаем организаторов…</p>
     }
-    <table class="organizers__table">
-      <thead>
-        <tr>
-          <th>Организатор</th>
-          <th>Почта</th>
-          <th>Статус</th>
-          <th><span class="organizers__sr">Действия</span></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (row of visible(); track row.id) {
-          <tr [attr.data-organizer-id]="row.id">
-            <td>
-              <div class="organizers__person">
-                <app-avatar
-                  [url]="href(row.avatar) ?? undefined"
-                  [size]="32"
-                  [fallbackLabel]="initials(row)"
-                /><span
-                  >{{ row.name || "—" }}
-                  @if (row.isSelf) {
-                    <span class="organizers__muted"> · вы</span>
-                  }
-                </span>
-              </div>
-            </td>
-            <td class="organizers__email" data-label="Почта">{{ row.email }}</td>
-            <td data-label="Статус">
-              <span
-                class="organizers__badge"
-                [class.organizers__badge--ready]="row.status === 'joined' && row.active !== false"
-                [class.organizers__badge--error]="
-                  row.deliveryStatus === 'failed' || row.active === false
-                "
-                >{{ label(row) }}</span
-              >
-            </td>
-            <td class="organizers__row-actions">
-              <app-row-actions
-                [label]="'Действия организатора: ' + (row.name || row.email)"
-                [actions]="rowActions(row)"
-                [disabled]="busy()"
-                (action)="rowAction(row, $event)"
-              />
-            </td>
-          </tr>
-        } @empty {
+    @if (visible().length) {
+      <table class="organizers__table">
+        <thead>
           <tr>
-            <td colspan="4">
-              {{
-                loading()
-                  ? "Загружаем список…"
-                  : "Организаторы не найдены. Измените поиск или статус."
-              }}
-            </td>
+            <th>Организатор</th>
+            <th>Почта</th>
+            <th>Статус</th>
+            <th><span class="organizers__sr">Действия</span></th>
           </tr>
-        }
-      </tbody>
-    </table>
-    <footer class="organizers__pagination">
-      <span>Показано {{ visible().length }} из {{ filtered().length }}</span>
-      @if (filtered().length > pageSize) {
-        <div>
-          <button
-            type="button"
-            appButton="text"
-            [disabled]="page() === 0"
-            (click)="page.set(page() - 1); clearSelection()"
-          >
-            Назад</button
-          ><button
-            type="button"
-            appButton="text"
-            [disabled]="(page() + 1) * pageSize >= filtered().length"
-            (click)="page.set(page() + 1); clearSelection()"
-          >
-            Далее
-          </button>
-        </div>
-      }
-    </footer>
+        </thead>
+        <tbody>
+          @for (row of visible(); track row.id) {
+            <tr [attr.data-organizer-id]="row.id">
+              <td>
+                <div class="organizers__person">
+                  <app-avatar
+                    [url]="href(row.avatar) ?? undefined"
+                    [size]="32"
+                    [fallbackLabel]="initials(row)"
+                  /><span
+                    >{{ row.name || "—" }}
+                    @if (row.isSelf) {
+                      <span class="organizers__muted"> · вы</span>
+                    }
+                  </span>
+                </div>
+              </td>
+              <td class="organizers__email" data-label="Почта">{{ row.email }}</td>
+              <td data-label="Статус">
+                <span
+                  class="organizers__badge"
+                  [class.organizers__badge--ready]="row.status === 'joined' && row.active !== false"
+                  [class.organizers__badge--error]="
+                    row.deliveryStatus === 'failed' || row.active === false
+                  "
+                  >{{ label(row) }}</span
+                >
+              </td>
+              <td class="organizers__row-actions">
+                <app-row-actions
+                  [label]="'Действия организатора: ' + (row.name || row.email)"
+                  [actions]="rowActions(row)"
+                  [disabled]="busy()"
+                  (action)="rowAction(row, $event)"
+                />
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <footer class="organizers__pagination">
+        <button
+          type="button"
+          appButton="text"
+          [disabled]="page() === 0"
+          (click)="page.set(page() - 1); clearSelection()"
+        >
+          Назад
+        </button>
+        <span
+          >{{ page() * pageSize + 1 }}–{{ page() * pageSize + visible().length }} из
+          {{ filtered().length }}</span
+        >
+        <button
+          type="button"
+          appButton="text"
+          [disabled]="(page() + 1) * pageSize >= filtered().length"
+          (click)="page.set(page() + 1); clearSelection()"
+        >
+          Далее
+        </button>
+      </footer>
+    } @else if (!loading() && !error() && snapshot()) {
+      <p role="status">
+        {{ hasFilters() ? "Организаторы не найдены" : "В программе пока нет организаторов" }}
+      </p>
+    }
   </section>
 </div>
 <app-modal
@@ -148,18 +141,13 @@
   [bodyClass]="'organizers-modal'"
 >
   <section class="organizers__dialog">
-    <header class="organizers__heading">
-      <h2 id="organizer-dialog-title">{{ dialogTitle() }}</h2>
-      <button
-        type="button"
-        appButton="icon"
-        aria-label="Закрыть окно"
-        [disabled]="busy()"
-        (click)="close()"
-      >
-        ×
-      </button>
-    </header>
+    <app-dialog-header
+      [title]="dialogTitle()"
+      titleId="organizer-dialog-title"
+      closeLabel="Закрыть окно"
+      [closeDisabled]="busy()"
+      (closed)="close()"
+    />
     @if (dialogError()) {
       <p appAlert="error" role="alert">{{ dialogError() }}</p>
     }

@@ -1,5 +1,7 @@
 /** @format */
 
+import { DialogHeaderComponent, SectionHeaderComponent } from "@uilib";
+
 import {
   expertStatusLabel,
   expertStatusDescription,
@@ -75,6 +77,8 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
 @Component({
   selector: "app-management-experts",
   imports: [
+    DialogHeaderComponent,
+    SectionHeaderComponent,
     TransientNoticeComponent,
     ExpertRosterComponent,
     ReactiveFormsModule,

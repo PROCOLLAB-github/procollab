@@ -42,7 +42,7 @@ export class ExpertRosterComponent {
   readonly page = input(0);
   readonly pageSize = input(20);
   readonly total = input(0);
-  readonly emptyText = input("Экспертов пока нет. Пригласите первого эксперта по email.");
+  readonly emptyText = input("Экспертов пока нет");
   readonly actions = input.required<(expert: ExpertRow) => RowAction[]>();
   readonly toggleAll = output<void>();
   readonly toggleRow = output<ExpertRow>();

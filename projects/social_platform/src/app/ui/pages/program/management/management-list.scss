@@ -63,10 +63,17 @@
   }
 
   &__list-heading--program {
+    flex-wrap: wrap;
+    gap: 8px 16px;
     padding-bottom: 16px;
     border-bottom: 1px solid var(--accent);
 
     h2 { color: var(--accent-text); }
+
+    > .management__participant-count {
+      margin: 0 0 0 auto;
+      text-align: right;
+    }
   }
 
   &__certificates.ui-button {

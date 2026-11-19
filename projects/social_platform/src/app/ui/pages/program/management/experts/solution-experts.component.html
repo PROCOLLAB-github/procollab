@@ -50,8 +50,7 @@
     </section>
   }
   <section class="experts__card" [attr.aria-busy]="loading()">
-    <header class="experts__heading" [class.experts__people-heading]="tab() === 'experts'">
-      <h2>{{ tab() === "experts" ? "Эксперты программы" : "Решения на оценку" }}</h2>
+    <app-section-header [title]="tab() === 'experts' ? 'Эксперты программы' : 'Решения на оценку'">
       <div class="experts__heading-actions">
         @if (tab() === "experts") {
           <button
@@ -86,7 +85,7 @@
           </button>
         }
       </div>
-    </header>
+    </app-section-header>
     <div class="experts__toolbar">
       <label class="experts__search"
         ><span class="experts__sr">{{
@@ -127,28 +126,30 @@
       <p role="status">Загружаем экспертов и решения…</p>
     }
     @if (tab() === "experts") {
-      <app-expert-roster
-        assignmentLabel="Решения"
-        [rows]="visible()"
-        [selectedIds]="selectedExperts()"
-        [allSelected]="allExpertsSelected()"
-        [busy]="busy()"
-        [loading]="loading()"
-        [page]="page()"
-        [pageSize]="pageSize"
-        [total]="filtered().length"
-        [actions]="rosterActions"
-        [emptyText]="
-          search.value || status.value !== 'all'
-            ? 'Эксперты не найдены. Измените поиск или статус.'
-            : 'Экспертов пока нет. Пригласите первого эксперта по email.'
-        "
-        (toggleAll)="selectAllExperts()"
-        (toggleRow)="toggleExpert($event.id)"
-        (rowClick)="expertRowClick($event.event, $event.expert)"
-        (action)="rowAction($event.expert, $event.event)"
-        (pageChange)="page.set($event)"
-      />
+      @if (!loading() && !error()) {
+        <app-expert-roster
+          assignmentLabel="Решения"
+          [rows]="visible()"
+          [selectedIds]="selectedExperts()"
+          [allSelected]="allExpertsSelected()"
+          [busy]="busy()"
+          [loading]="loading()"
+          [page]="page()"
+          [pageSize]="pageSize"
+          [total]="filtered().length"
+          [actions]="rosterActions"
+          [emptyText]="
+            search.value.trim() || status.value !== 'all'
+              ? 'Эксперты не найдены'
+              : 'Экспертов пока нет'
+          "
+          (toggleAll)="selectAllExperts()"
+          (toggleRow)="toggleExpert($event.id)"
+          (rowClick)="expertRowClick($event.event, $event.expert)"
+          (action)="rowAction($event.expert, $event.event)"
+          (pageChange)="page.set($event)"
+        />
+      }
     } @else {
       <div class="experts__mobile-tools">
         <label class="experts__pick-target"
@@ -340,19 +341,12 @@
     [formGroup]="filterDraft"
     (ngSubmit)="applyFilters()"
   >
-    <header class="experts__filter-heading">
-      <h2 id="solution-experts-filter-title">
-        {{ tab() === "experts" ? "Фильтры экспертов" : "Фильтры распределения" }}
-      </h2>
-      <button
-        appButton="icon"
-        type="button"
-        aria-label="Закрыть фильтры"
-        (click)="filtersOpen.set(false)"
-      >
-        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-      </button>
-    </header>
+    <app-dialog-header
+      [title]="tab() === 'experts' ? 'Фильтры экспертов' : 'Фильтры распределения'"
+      titleId="solution-experts-filter-title"
+      (closed)="filtersOpen.set(false)"
+      closeLabel="Закрыть фильтры"
+    />
     @if (tab() === "experts") {
       <label
         >Статус<select appField formControlName="status">
@@ -387,29 +381,22 @@
   labelledBy="solution-experts-title"
   (openChange)="!$event && close()"
   ><section class="experts__dialog">
-    <header class="experts__heading">
-      <h2 id="solution-experts-title">
-        {{
-          modal() === "invite"
-            ? "Пригласить эксперта"
-            : modal() === "scope"
-              ? "Кейсы эксперта"
-              : modal() === "quota"
-                ? "Число оценщиков"
-                : "Назначить решения"
-        }}
-      </h2>
-      <button
-        appButton="icon"
-        cdkFocusInitial
-        type="button"
-        aria-label="Закрыть"
-        [disabled]="busy()"
-        (click)="close()"
-      >
-        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-      </button>
-    </header>
+    <app-dialog-header
+      [title]="
+        modal() === 'invite'
+          ? 'Пригласить эксперта'
+          : modal() === 'scope'
+            ? 'Кейсы эксперта'
+            : modal() === 'quota'
+              ? 'Число оценщиков'
+              : 'Назначить решения'
+      "
+      titleId="solution-experts-title"
+      (closed)="close()"
+      closeLabel="Закрыть"
+      [closeDisabled]="busy()"
+      [initialFocus]="true"
+    />
     @if (dialogError()) {
       <p appAlert="error" role="alert">{{ dialogError() }}</p>
       <button appButton="secondary" type="button" [disabled]="busy()" (click)="refreshDialog()">

@@ -92,6 +92,10 @@ p {
   border-radius: 15px;
 }
 
+.criteria__card > app-section-header {
+  margin-bottom: 16px;
+}
+
 .criteria__add {
   margin: 16px 0;
 }
@@ -201,3 +205,7 @@ p {
 }
 
 .ui-alert.ui-alert.ui-alert { @include program-management-controls.status-notice; }
+
+.criteria__card > .criteria__locked.ui-alert.ui-alert.ui-alert {
+  margin-bottom: 16px;
+}

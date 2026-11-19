@@ -223,6 +223,21 @@
   .program-heading__tabs a {
     min-height: 44px;
   }
+
+  .program-heading__tabs {
+    justify-content: flex-start;
+    scrollbar-width: none;
+    scroll-padding-inline: 4px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    a {
+      flex: 0 0 auto;
+      scroll-margin-inline: 4px;
+    }
+  }
 }
 
 @media (max-width: 680px) {

@@ -4,18 +4,17 @@
   [class.results--unscored]="snapshot() && !snapshot()?.hasNumericCriteria"
   [attr.aria-busy]="loading()"
 >
-  <header class="results__heading">
-    <h2>
-      {{
-        snapshot() && !snapshot()?.hasNumericCriteria
-          ? solutionMode()
-            ? "Результаты решений"
-            : "Результаты проектов"
-          : solutionMode()
-            ? "Рейтинг решений"
-            : "Рейтинг проектов"
-      }}
-    </h2>
+  <app-section-header
+    [title]="
+      snapshot() && !snapshot()?.hasNumericCriteria
+        ? solutionMode()
+          ? 'Результаты решений'
+          : 'Результаты проектов'
+        : solutionMode()
+          ? 'Рейтинг решений'
+          : 'Рейтинг проектов'
+    "
+  >
     <div class="results__heading-actions">
       <button
         type="button"
@@ -40,7 +39,7 @@
         <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
       </button>
     </div>
-  </header>
+  </app-section-header>
   @if (snapshot(); as data) {
     <div class="results__toolbar">
       <label class="results__search"
@@ -79,23 +78,25 @@
         }
       </div>
     </div>
-    <div class="results__summary" aria-live="polite">
-      @if (submissionApplicable()) {
-        <span
-          >Оценено {{ readyCount() }} из {{ matchingCount() }}
-          {{
-            matchingCount()
-              | pluralize
-                : (solutionMode()
-                    ? ["решения", "решений", "решений"]
-                    : ["проекта", "проектов", "проектов"])
-          }}</span
-        >
-      }
-      @if (updatedTime(); as time) {
-        <time [attr.datetime]="data.generatedAt">Обновлено {{ time }}</time>
-      }
-    </div>
+    @if (data.groups.length || !submissionApplicable()) {
+      <div class="results__summary" aria-live="polite">
+        @if (submissionApplicable()) {
+          <span
+            >Оценено {{ readyCount() }} из {{ matchingCount() }}
+            {{
+              matchingCount()
+                | pluralize
+                  : (solutionMode()
+                      ? ["решения", "решений", "решений"]
+                      : ["проекта", "проектов", "проектов"])
+            }}</span
+          >
+        }
+        @if (updatedTime(); as time) {
+          <time [attr.datetime]="data.generatedAt">Обновлено {{ time }}</time>
+        }
+      </div>
+    }
     @if (pendingCount()) {
       <button
         type="button"
@@ -108,8 +109,8 @@
         ><span>{{ statusFilter.value === "pending" ? "Показать все" : "Показать" }}</span>
       </button>
     }
-    @if (submissionApplicable() && !data.hasNumericCriteria) {
-      <p class="results__muted">Оценивание без баллов</p>
+    @if (data.groups.length && submissionApplicable() && !data.hasNumericCriteria) {
+      <p class="results__muted">В критериях нет баллов — рейтинг не рассчитывается.</p>
     }
     @if (exportSuccess()) {
       <app-transient-notice [source]="exportSuccess" (dismissed)="exportSuccess.set(false)"
@@ -127,13 +128,9 @@
                 : "Сданных проектов пока нет"
           }}
         </h3>
-        <p>
-          {{
-            solutionMode() && !submissionApplicable()
-              ? "В этой программе материалы сохраняются без сдачи решения."
-              : "Результаты появятся после сдачи решений."
-          }}
-        </p>
+        @if (solutionMode() && !submissionApplicable()) {
+          <p>В этой программе материалы сохраняются без сдачи решения.</p>
+        }
       </div>
     } @else if (!projectCount()) {
       <div class="results__empty">
@@ -288,26 +285,18 @@
   bodyClass="modal__body--no-flex results-modal"
 >
   <div class="results__dialog">
-    <header class="results__heading">
-      <h2 id="results-dialog-title">
-        {{
-          modal() === "filters"
-            ? "Фильтры результатов"
-            : modal() === "formula"
-              ? "Как считается балл"
-              : "Выгрузка результатов"
-        }}
-      </h2>
-      <button
-        type="button"
-        appButton="icon"
-        class="results__close"
-        (click)="modal.set(null)"
-        aria-label="Закрыть окно"
-      >
-        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-      </button>
-    </header>
+    <app-dialog-header
+      [title]="
+        modal() === 'filters'
+          ? 'Фильтры результатов'
+          : modal() === 'formula'
+            ? 'Как считается балл'
+            : 'Выгрузка результатов'
+      "
+      titleId="results-dialog-title"
+      (closed)="modal.set(null)"
+      closeLabel="Закрыть окно"
+    />
     @if (modal() === "filters") {
       <label class="results__filter-label"
         >Кейс<select appField [formControl]="draftCase" aria-label="Кейс">

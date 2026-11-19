@@ -1,5 +1,7 @@
 /** @format */
 
+import { By } from "@angular/platform-browser";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { provideRouter } from "@angular/router";
@@ -12,6 +14,56 @@ import { ManagementExpertsComponent } from "./experts.component";
 import { ExpertWorkspace, DistributionProject } from "@domain/program/evaluation-workspace.model";
 
 describe("Управление экспертами", () => {
+  it("не показывает пустую таблицу до получения списка и различает пустой список и поиск", () => {
+    const { fixture, component } = setup();
+    component.snapshot.set(null);
+    component.loading.set(true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain("Загружаем экспертов");
+    expect(fixture.nativeElement.textContent).not.toContain("Экспертов пока нет");
+    expect(fixture.nativeElement.querySelector(".experts__table")).toBeNull();
+    expect(fixture.nativeElement.querySelector(".experts__pagination")).toBeNull();
+
+    component.loading.set(false);
+    component.snapshot.set({ ...snapshot, experts: [] });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain("Экспертов пока нет");
+    expect(fixture.nativeElement.querySelector(".experts__table")).toBeNull();
+    expect(fixture.nativeElement.querySelector(".experts__pagination")).toBeNull();
+
+    component.snapshot.set(snapshot);
+    component.search.setValue("несуществующий эксперт");
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain("Эксперты не найдены");
+    expect(fixture.nativeElement.textContent).not.toContain("Экспертов пока нет");
+    expect(fixture.nativeElement.querySelector(".experts__table")).toBeNull();
+  });
+  it("крестик и Escape не закрывают окно экспертов во время сохранения", async () => {
+    const { fixture, component } = setup();
+    component.open("invite");
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    component.busy.set(true);
+    fixture.detectChanges();
+    const close = document.querySelector(
+      ".experts__dialog app-dialog-header button",
+    ) as HTMLButtonElement;
+    expect(close.disabled).toBe(true);
+    close.click();
+    await fixture.whenStable();
+    expect(component.modal()).toBe("invite");
+    const modal = fixture.debugElement.queryAll(By.directive(ModalComponent))[0]
+      .componentInstance as ModalComponent;
+    modal.onEscape(new Event("keydown"));
+    await fixture.whenStable();
+    expect(component.modal()).toBe("invite");
+    component.busy.set(false);
+    fixture.detectChanges();
+    close.click();
+    await fixture.whenStable();
+    expect(component.modal()).toBeNull();
+  });
   it("отделяет состав от распределения и показывает одну строку правила", () => {
     const { fixture, component } = setup();
     expect(fixture.nativeElement.querySelector(".experts__quota")).toBeNull();

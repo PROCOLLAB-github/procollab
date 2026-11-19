@@ -1,5 +1,7 @@
 /** @format */
 import { provideZonelessChangeDetection } from "@angular/core";
+import { By } from "@angular/platform-browser";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TestBed } from "@angular/core/testing";
 import { HttpErrorResponse } from "@angular/common/http";
 import { of, Subject, throwError } from "rxjs";
@@ -44,6 +46,37 @@ describe("Organizer evaluation criteria", () => {
     await fixture.whenStable();
     return { fixture, component: fixture.componentInstance, pending };
   }
+  it("крестик и Escape сохраняют несохраненный критерий при отказе, подтверждение закрывает редактор", async () => {
+    const { fixture, component } = await setup();
+    const confirm = vi.fn().mockResolvedValue(false);
+    fixture.componentRef.setInput("confirmDiscard", confirm);
+    component.edit();
+    component.editor.controls.name.markAsDirty();
+    component.editor.controls.name.setValue("Не потерять");
+    await fixture.whenStable();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    const close = document.querySelector(
+      ".criteria__dialog app-dialog-header button",
+    ) as HTMLButtonElement;
+    expect(close).toBeTruthy();
+    close.click();
+    await fixture.whenStable();
+    expect(confirm).toHaveBeenCalledTimes(1);
+    expect(component.editing()).toBe("new");
+    expect(component.editor.controls.name.value).toBe("Не потерять");
+    const modal = fixture.debugElement.queryAll(By.directive(ModalComponent))[0]
+      .componentInstance as ModalComponent;
+    modal.onEscape(new Event("keydown"));
+    await fixture.whenStable();
+    expect(confirm).toHaveBeenCalledTimes(2);
+    expect(component.editing()).toBe("new");
+    confirm.mockResolvedValue(true);
+    close.click();
+    await fixture.whenStable();
+    expect(component.editing()).toBeNull();
+    expect(api.saveCriteria).not.toHaveBeenCalled();
+  });
   it("applies centered editor locally, then explicitly saves the complete revision", async () => {
     const { component } = await setup();
     component.edit();
@@ -100,6 +133,23 @@ describe("Organizer evaluation criteria", () => {
     expect(fixture.nativeElement.querySelector(".criteria__row button")).toBeNull();
     component.openPreview();
     expect(component.previewCriteria()[0].name).toBe("Качество");
+    expect(api.saveCriteria).not.toHaveBeenCalled();
+  });
+  it("закрывает предпросмотр крестиком без дублирующей кнопки и сохранения ответов", async () => {
+    const { fixture, component } = await setup();
+    component.openPreview();
+    await fixture.whenStable();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    const title = document.querySelector("#criteria-preview-title");
+    const dialog = title?.closest(".criteria__dialog");
+    expect(dialog).toBeTruthy();
+    expect(dialog?.querySelectorAll("button")).toHaveLength(1);
+    const close = dialog?.querySelector("app-dialog-header button") as HTMLButtonElement;
+    expect(close.getAttribute("aria-label")).toBe("Закрыть");
+    close.click();
+    await fixture.whenStable();
+    expect(component.previewOpen()).toBe(false);
     expect(api.saveCriteria).not.toHaveBeenCalled();
   });
 });

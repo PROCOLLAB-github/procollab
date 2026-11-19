@@ -19,3 +19,5 @@ export * from "./page-header/page-header.component";
 export * from "./state/state.component";
 export * from "./dialog-header/dialog-header.component";
 export * from "./ui-adapters.directive";
+
+export * from "./section-header/section-header.component";

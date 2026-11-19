@@ -821,8 +821,53 @@ describe("Списки управления программой в DOM", () => 
     return { ...context, form };
   }
 
-  it("drop файла в режиме ссылки переключает источник; загрузка блокирует повторный drop и закрытие", async () => {
+  it("крестик закрывает неизмененный материал через общий заголовок окна", async () => {
+    const { component, form } = await materialDialog();
+    const close = form.querySelector<HTMLButtonElement>(
+      "app-dialog-header button[aria-label='Закрыть']",
+    )!;
+    expect(close).toBeTruthy();
+    expect(form.querySelector("#management-dialog-title")?.textContent).toContain(
+      "Добавить материал",
+    );
+    close.click();
+    await vi.waitFor(() => expect(component.editingMaterial()).toBeNull());
+  });
+
+  it("крестик сохраняет защиту несохраненного материала", async () => {
+    const { component, form } = await materialDialog();
+    component.materialForm.controls.title.setValue("Мой материал");
+    component.materialForm.markAsDirty();
+    form.querySelector<HTMLButtonElement>("app-dialog-header button")!.click();
+    expect(component.confirmation()?.title).toBe("Закрыть без сохранения?");
+    component.resolveConfirmation(false);
+    await vi.waitFor(() => expect(component.confirmation()).toBeNull());
+    expect(component.editingMaterial()).toBe("new");
+    expect(component.materialForm.controls.title.value).toBe("Мой материал");
+    expect(component.materialForm.dirty).toBe(true);
+  });
+
+  it("режим ссылки скрывает загрузку и не меняет источник при drop файла", async () => {
+    const { component, form, uploadFile } = await materialDialog();
+    component.materialForm.controls.url.setValue("https://example.com/docs");
+    expect(form.querySelector(".management__dropzone")).toBeNull();
+    expect(form.querySelector("input[type=file]")).toBeNull();
+    const over = drag("dragover");
+    form.dispatchEvent(over);
+    expect(over.dataTransfer?.dropEffect).toBe("none");
+    const drop = drag("drop", [new File(["pdf"], "Презентация.pdf")]);
+    form.dispatchEvent(drop);
+    expect(drop.defaultPrevented).toBe(true);
+    expect(uploadFile).not.toHaveBeenCalled();
+    expect(component.materialForm.controls.mode.value).toBe("link");
+    expect(component.materialForm.controls.url.value).toBe("https://example.com/docs");
+    expect(component.materialDragActive()).toBe(false);
+  });
+
+  it("drop файла в режиме файла загружает материал; загрузка блокирует повторный drop и закрытие", async () => {
     const { component, harness, form, uploadFile, uploaded } = await materialDialog();
+    component.materialForm.controls.mode.setValue("file");
+    harness.detectChanges();
     component.materialForm.controls.title.setValue("Презентация");
     const file = new File(["pdf"], "Презентация.pdf", { type: "application/pdf" });
     const drop = drag("drop", [file]);
@@ -833,6 +878,7 @@ describe("Списки управления программой в DOM", () => 
     expect(component.materialForm.controls.mode.value).toBe("file");
     expect(form.textContent).toContain("Загружаем файл");
     expect(form.querySelector("fieldset")!.disabled).toBe(true);
+    expect(form.querySelector<HTMLButtonElement>("app-dialog-header button")!.disabled).toBe(true);
     form.dispatchEvent(drag("drop", [new File(["other"], "other.pdf")]));
     await component.closeMaterial();
     expect(uploadFile).toHaveBeenCalledTimes(1);
@@ -849,7 +895,9 @@ describe("Списки управления программой в DOM", () => 
   });
 
   it("выбор через input использует ту же загрузку и позволяет выбрать тот же файл повторно", async () => {
-    const { component, form, uploadFile, uploaded } = await materialDialog();
+    const { component, harness, form, uploadFile, uploaded } = await materialDialog();
+    form.querySelector<HTMLInputElement>("input[type=radio][value=file]")!.click();
+    harness.detectChanges();
     const file = new File(["doc"], "Положение.docx");
     const input = form.querySelector<HTMLInputElement>("input[type=file]")!;
     Object.defineProperty(input, "files", { value: [file] });
@@ -862,18 +910,19 @@ describe("Списки управления программой в DOM", () => 
     expect(component.uploading()).toBeNull();
   });
 
-  it("текст не загружается, несколько файлов отклоняются без смены источника и потери ссылки", async () => {
+  it("текст не загружается, несколько файлов отклоняются без потери введенной ссылки", async () => {
     const { component, form, uploadFile } = await materialDialog();
     component.materialForm.controls.url.setValue("https://example.com/docs");
     const text = drag("drop", [], ["text/plain"]);
     form.dispatchEvent(text);
     expect(text.defaultPrevented).toBe(false);
+    component.materialForm.controls.mode.setValue("file");
     const multiple = drag("drop", [new File([], "a.pdf"), new File([], "b.pdf")]);
     form.dispatchEvent(multiple);
     expect(multiple.defaultPrevented).toBe(true);
     expect(uploadFile).not.toHaveBeenCalled();
     expect(component.formError()).toContain("по одному файлу");
-    expect(component.materialForm.controls.mode.value).toBe("link");
+    expect(component.materialForm.controls.mode.value).toBe("file");
     expect(component.materialForm.controls.url.value).toBe("https://example.com/docs");
   });
 
@@ -893,6 +942,7 @@ describe("Списки управления программой в DOM", () => 
 
   it("подсветка не пропадает при переходе между дочерними элементами и очищается при выходе", async () => {
     const { component, form } = await materialDialog();
+    component.materialForm.controls.mode.setValue("file");
     form.dispatchEvent(drag("dragenter"));
     form.querySelector("h2")!.dispatchEvent(drag("dragenter"));
     form.querySelector("h2")!.dispatchEvent(drag("dragleave"));

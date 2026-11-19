@@ -24,24 +24,25 @@
       >
     }
     @if (snapshot()) {
-      <header class="criteria__heading">
-        <div>
-          <h2>Критерии оценки</h2>
-          <p>Один набор для всех кейсов программы.</p>
-        </div>
-        <button type="button" appButton="secondary" (click)="openPreview()">
-          Предпросмотр формы
-        </button>
-      </header>
-      @if (locked()) {
-        <div appAlert="warning">
-          <strong>Критерии зафиксированы</strong>
-          <p>Первая оценка уже сохранена. Добавлять, удалять и менять критерии больше нельзя.</p>
-        </div>
-      }
       <section class="criteria__card" aria-labelledby="criteria-heading">
+        <app-section-header
+          title="Критерии оценки"
+          description="Один набор для всех кейсов программы."
+        >
+          <button type="button" appButton="secondary" (click)="openPreview()">
+            Предпросмотр формы
+          </button>
+        </app-section-header>
+        @if (locked()) {
+          <div class="criteria__locked" appAlert="warning">
+            <strong>Критерии зафиксированы</strong>
+            <p>Первая оценка уже сохранена. Добавлять, удалять и менять критерии больше нельзя.</p>
+          </div>
+        }
         <h3 id="criteria-heading">Критерии программы</h3>
-        <p>Настройте форму до первой сохраненной оценки.</p>
+        @if (!locked()) {
+          <p>Настройте форму до первой сохраненной оценки.</p>
+        }
         <button
           class="criteria__add"
           type="button"
@@ -128,12 +129,11 @@
   labelledBy="criterion-editor-title"
 >
   <form class="criteria__dialog" [formGroup]="editor" (ngSubmit)="apply()">
-    <header class="criteria__heading">
-      <h2 id="criterion-editor-title">
-        {{ editing() === "new" ? "Добавить критерий" : "Изменить критерий" }}
-      </h2>
-      <button type="button" appButton="secondary" (click)="closeEditor()">Закрыть</button>
-    </header>
+    <app-dialog-header
+      [title]="editing() === 'new' ? 'Добавить критерий' : 'Изменить критерий'"
+      titleId="criterion-editor-title"
+      (closed)="closeEditor()"
+    />
     @if (editorError()) {
       <p appAlert="error" role="alert">{{ editorError() }}</p>
     }
@@ -209,30 +209,17 @@
   labelledBy="criteria-preview-title"
 >
   <div class="criteria__dialog">
-    <header class="criteria__heading">
-      <h2 id="criteria-preview-title">Предпросмотр формы эксперта</h2>
-      <button type="button" appButton="secondary" (click)="previewOpen.set(false)">Закрыть</button>
-    </header>
-    <p>Так эксперт увидит критерии. Ответы в предпросмотре не сохраняются и не фиксируют набор.</p>
+    <app-dialog-header
+      title="Предпросмотр формы эксперта"
+      titleId="criteria-preview-title"
+      (closed)="previewOpen.set(false)"
+    />
+    <p>Ответы в предпросмотре не сохраняются.</p>
     <app-project-rating
       layout="full"
       [criteria]="previewCriteria()"
       [formControl]="previewControl"
     />
-    <footer>
-      <p>
-        Целые баллы проверяются по заданной шкале. Ноль и «Нет» — допустимые ответы. Комментарий —
-        до 1000 символов.
-      </p>
-      <button
-        type="button"
-        appButton="secondary"
-        class="criteria__quiet"
-        (click)="previewOpen.set(false)"
-      >
-        Закрыть предпросмотр
-      </button>
-    </footer>
   </div>
 </app-modal>
 <app-modal
@@ -242,7 +229,11 @@
   labelledBy="criterion-delete-title"
 >
   <div class="criteria__dialog">
-    <h2 id="criterion-delete-title">Удалить критерий?</h2>
+    <app-dialog-header
+      title="Удалить критерий?"
+      titleId="criterion-delete-title"
+      (closed)="deleting.set(null)"
+    />
     <p>«{{ deleting()?.name }}» будет удален после сохранения изменений.</p>
     <div class="criteria__actions">
       <button type="button" appButton="primary" (click)="remove()">Удалить критерий</button
@@ -264,7 +255,11 @@
   labelledBy="criteria-conflict-title"
 >
   <div class="criteria__dialog">
-    <h2 id="criteria-conflict-title">Появилась первая оценка</h2>
+    <app-dialog-header
+      title="Появилась первая оценка"
+      titleId="criteria-conflict-title"
+      (closed)="conflictOpen.set(false)"
+    />
     <p appAlert="warning">
       Пока вы редактировали критерии, эксперт сохранил оценку. Набор зафиксирован, ваши изменения не
       применены.
