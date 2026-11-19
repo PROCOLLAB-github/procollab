@@ -33,6 +33,8 @@
 .solution-dialog {
   @include program-management-controls.body-copy;
 
+  --ui-dialog-header-margin-bottom: 0;
+
   display: grid;
   gap: 16px;
   width: 100%;

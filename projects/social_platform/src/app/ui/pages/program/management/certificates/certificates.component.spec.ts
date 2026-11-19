@@ -14,6 +14,7 @@ import {
 } from "@domain/program/program-certificates.model";
 import { ManagementCertificatesComponent } from "./certificates.component";
 import { CertificateCanvasComponent } from "./certificate-canvas.component";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
 const certificate: CertificateDelivery = {
   id: "certificate-id",
   name: "Анна Петрова",
@@ -103,6 +104,83 @@ async function setup(data = settings()) {
   return { fixture, component: fixture.componentInstance, repository };
 }
 describe("Program certificates", () => {
+  it("keeps the launch confirmation open for all close requests while issuance is pending", async () => {
+    const { fixture, component, repository } = await setup();
+    const pending = new Subject<CertificateSettings>();
+    repository.activate.mockReturnValueOnce(pending);
+    await component.prepareLaunch();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const activation = component.activate();
+    fixture.detectChanges();
+    const modal = fixture.debugElement
+      .queryAll(By.directive(ModalComponent))
+      .map(node => node.componentInstance as ModalComponent)
+      .find(instance => instance.labelledBy() === "certificate-confirm-heading")!;
+
+    modal.openChange.emit(false);
+    component.closeLaunchConfirmation();
+    fixture.detectChanges();
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      expect(
+        document.querySelector('.certificates__confirmation--issue button[aria-label="Закрыть"]'),
+      ).not.toBeNull();
+    });
+    const close = document.querySelector(
+      '.certificates__confirmation--issue button[aria-label="Закрыть"]',
+    ) as HTMLButtonElement;
+    expect(close.disabled).toBe(true);
+    close.click();
+    expect(component.confirmOpen()).toBe(true);
+    expect(repository.activate).toHaveBeenCalledTimes(1);
+
+    pending.error({ status: 500 });
+    await activation;
+    fixture.detectChanges();
+    expect(component.confirmOpen()).toBe(true);
+    expect(close.disabled).toBe(false);
+    close.click();
+    expect(component.confirmOpen()).toBe(false);
+    fixture.destroy();
+  });
+
+  it("keeps a selected-delivery confirmation open until its pending request finishes", async () => {
+    const { fixture, component, repository } = await setup();
+    const pending = new Subject<{ count: number; skipped: number }>();
+    repository.selection.mockReturnValueOnce(pending);
+    component.selectFailed("certificate-id");
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const action = component.performSelection();
+    await vi.waitFor(() => expect(component.busy()).toBe(true));
+    fixture.detectChanges();
+    const modal = fixture.debugElement
+      .queryAll(By.directive(ModalComponent))
+      .map(node => node.componentInstance as ModalComponent)
+      .find(instance => instance.labelledBy() === "certificate-selection-heading")!;
+
+    modal.openChange.emit(false);
+    component.closeSelectionConfirmation();
+    fixture.detectChanges();
+    const close = document.querySelector(
+      '.certificates__confirmation button[aria-label="Закрыть"]',
+    ) as HTMLButtonElement;
+    expect(close.disabled).toBe(true);
+    close.click();
+    expect(component.selectionAction()).toBe("retry");
+    expect(repository.selection).toHaveBeenCalledTimes(1);
+
+    pending.error({ status: 500 });
+    await action;
+    fixture.detectChanges();
+    expect(component.selectedIds()).toEqual(["certificate-id"]);
+    expect(close.disabled).toBe(false);
+    close.click();
+    expect(component.selectionAction()).toBeNull();
+    fixture.destroy();
+  });
+
   it("applies a typed font size immediately, grows the old short box and supports undo", async () => {
     const data = settings();
     data.draft.layout.name.height = 2;

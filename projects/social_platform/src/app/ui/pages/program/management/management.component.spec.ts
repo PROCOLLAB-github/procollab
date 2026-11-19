@@ -371,6 +371,30 @@ describe("Списки управления программой в DOM", () => 
     return { harness, component, state, project, element, uploadFile, uploaded };
   }
 
+  it("показывает ответы участника и закрывает просмотр общим крестиком", async () => {
+    const { component, harness } = await setup();
+    component.participantAnswers.set({
+      id: 1,
+      userId: 51,
+      name: "Анна",
+      email: null,
+      city: null,
+      registeredAt: "2026-10-01T12:00:00Z",
+      registrationAnswers: [{ label: "Вопрос", value: "Ответ" }],
+    });
+    harness.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    harness.detectChanges();
+    const dialog = document.querySelector('[aria-labelledby="participant-answers-heading"]')!;
+    expect(dialog.textContent).toContain("Ответ");
+    const close = dialog.querySelector<HTMLButtonElement>('button[aria-label="Закрыть"]')!;
+    expect(close).toBeTruthy();
+    expect(dialog.querySelectorAll("button")).toHaveLength(1);
+    close.click();
+    harness.detectChanges();
+    expect(component.participantAnswers()).toBeNull();
+  });
+
   it("показывает срок регистрации как запасной только для пустого срока приёма решений", async () => {
     const { component, state, element, harness } = await setup("settings", "?tab=dates");
     const hint = () => element().querySelector<HTMLElement>("#submission-deadline-hint");

@@ -1,22 +1,32 @@
 /** @format */
 
-import { DestroyRef, inject, Injectable, signal } from "@angular/core";
+import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { map, tap } from "rxjs";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { GetVacanciesUseCase } from "@api/vacancy/use-cases/get-vacancies.use-case";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class VacancyFilterInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly queryParams = toSignal(this.route.queryParamMap, {
+    initialValue: this.route.snapshot.queryParamMap,
+  });
   private readonly logger = inject(LoggerService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly getVacanciesUseCase = inject(GetVacanciesUseCase);
 
   readonly filterOpen = signal(false);
+  readonly hasFilters = computed(() =>
+    ["role_contains", "required_experience", "work_format", "work_schedule", "salary"].some(key =>
+      this.queryParams()
+        .getAll(key)
+        .some(value => value.trim().length > 0),
+    ),
+  );
 
   readonly searchValue = signal<string | undefined>(undefined);
 
@@ -102,6 +112,7 @@ export class VacancyFilterInfoService {
           work_format: null,
           work_schedule: null,
           role_contains: null,
+          salary: null,
         },
         relativeTo: this.route,
         queryParamsHandling: "merge",
@@ -113,6 +124,7 @@ export class VacancyFilterInfoService {
     this.currentExperience.set(undefined);
     this.currentWorkFormat.set(undefined);
     this.currentWorkSchedule.set(undefined);
+    this.currentSalary.set(undefined);
   }
 
   onClickOutside(): void {

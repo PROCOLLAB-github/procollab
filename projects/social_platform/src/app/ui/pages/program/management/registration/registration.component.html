@@ -225,32 +225,24 @@
   (openChange)="!$event && close()"
 >
   <section class="registration__dialog">
-    <header>
-      <h2 id="registration-dialog-heading">
-        {{
-          dialog() === "field"
-            ? "Поле анкеты"
-            : dialog() === "preview"
-              ? "Предпросмотр анкеты"
-              : dialog() === "connection"
-                ? "Подключение внешней формы"
-                : dialog() === "archive"
-                  ? "Архивировать поле?"
-                  : dialog() === "importPreview"
-                    ? "Проверка списка"
-                    : "Загрузить список"
-        }}
-      </h2>
-      <button
-        appButton="text"
-        type="button"
-        aria-label="Закрыть"
-        [disabled]="busy()"
-        (click)="close()"
-      >
-        <i appIcon icon="cross" appSquare="24"></i>
-      </button>
-    </header>
+    <app-dialog-header
+      [title]="
+        dialog() === 'field'
+          ? 'Поле анкеты'
+          : dialog() === 'preview'
+            ? 'Предпросмотр анкеты'
+            : dialog() === 'connection'
+              ? 'Подключение внешней формы'
+              : dialog() === 'archive'
+                ? 'Архивировать поле?'
+                : dialog() === 'importPreview'
+                  ? 'Проверка списка'
+                  : 'Загрузить список'
+      "
+      titleId="registration-dialog-heading"
+      [closeDisabled]="busy()"
+      (closed)="close()"
+    />
     <div class="registration__scroll" [attr.aria-busy]="busy()">
       @if (busy() && dialog() === "import") {
         <p role="status">Проверяем файл…</p>

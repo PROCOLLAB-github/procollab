@@ -8,7 +8,8 @@ import { DesktopLayoutService, StateComponent } from "@uilib";
 
 import { ChangeDetectionStrategy, Component, computed, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { RouterLink } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { isSuccess } from "@domain/shared/async-state";
 import { ProjectVacancyCardComponent } from "@ui/widgets/project-vacancy-card/project-vacancy-card.component";
@@ -38,11 +39,22 @@ export class VacanciesListComponent {
   protected readonly desktopLayout = inject(DesktopLayoutService).desktop;
   private readonly vacancyInfoService = inject(VacancyInfoService);
   private readonly vacancyUIInfoService = inject(VacancyUIInfoService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly queryParams = toSignal(this.route.queryParamMap, {
+    initialValue: this.route.snapshot.queryParamMap,
+  });
 
   protected readonly type = this.vacancyUIInfoService.listType;
   protected readonly vacancyList = this.vacancyUIInfoService.vacancyList;
   protected readonly hasNoResults = computed(
     () => isSuccess(this.vacancyUIInfoService.vacancies$()) && !this.vacancyList().length,
+  );
+  protected readonly hasFilters = computed(() =>
+    ["role_contains", "required_experience", "work_format", "work_schedule", "salary"].some(key =>
+      this.queryParams()
+        .getAll(key)
+        .some(value => value.trim().length > 0),
+    ),
   );
   protected readonly responsesList = this.vacancyUIInfoService.responsesList;
   protected readonly isMyModal = this.vacancyUIInfoService.isMyModal;

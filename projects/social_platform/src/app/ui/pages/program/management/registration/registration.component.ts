@@ -19,6 +19,7 @@ import {
   FieldDirective,
   ChoiceDirective,
   AlertDirective,
+  DialogHeaderComponent,
   IconComponent,
 } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
@@ -45,6 +46,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     FieldDirective,
     ChoiceDirective,
     AlertDirective,
+    DialogHeaderComponent,
     IconComponent,
     ModalComponent,
     RegistrationPreviewContentComponent,

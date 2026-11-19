@@ -836,14 +836,17 @@
   </app-modal>
   <app-modal
     [open]="!!selectionAction()"
-    (openChange)="!$event && selectionAction.set(null)"
+    (openChange)="!$event && closeSelectionConfirmation()"
     size="small"
     labelledBy="certificate-selection-heading"
   >
     <div class="certificates__confirmation">
-      <h2 id="certificate-selection-heading">
-        {{ selectionCopy().title }}
-      </h2>
+      <app-dialog-header
+        [title]="selectionCopy().title"
+        titleId="certificate-selection-heading"
+        [closeDisabled]="busy()"
+        (closed)="closeSelectionConfirmation()"
+      />
       @if (error()) {
         <p appAlert="error" role="alert">{{ error() }}</p>
       }
@@ -856,7 +859,7 @@
           type="button"
           appButton="secondary"
           [disabled]="busy()"
-          (click)="selectionAction.set(null)"
+          (click)="closeSelectionConfirmation()"
         >
           Отмена
         </button>
@@ -868,13 +871,16 @@
   </app-modal>
   <app-modal
     [open]="confirmOpen()"
-    (openChange)="confirmOpen.set($event)"
+    (openChange)="!$event && closeLaunchConfirmation()"
     labelledBy="certificate-confirm-heading"
   >
     <div class="certificates__confirmation certificates__confirmation--issue">
-      <h2 id="certificate-confirm-heading">
-        {{ d.timing === "scheduled" ? "Запланировать выдачу?" : "Выдать сертификаты?" }}
-      </h2>
+      <app-dialog-header
+        [title]="d.timing === 'scheduled' ? 'Запланировать выдачу?' : 'Выдать сертификаты?'"
+        titleId="certificate-confirm-heading"
+        [closeDisabled]="busy()"
+        (closed)="closeLaunchConfirmation()"
+      />
       @if (error()) {
         <p class="certificates__error" role="alert">{{ error() }}</p>
       }
@@ -888,7 +894,7 @@
           type="button"
           appButton="secondary"
           [disabled]="busy()"
-          (click)="confirmOpen.set(false)"
+          (click)="closeLaunchConfirmation()"
         >
           Отмена</button
         ><button type="button" appButton="primary" [disabled]="busy()" (click)="activate()">

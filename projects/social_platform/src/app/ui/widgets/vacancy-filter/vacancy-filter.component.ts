@@ -68,6 +68,7 @@ export class VacancyFilterComponent implements OnInit {
   readonly searchValueChange = output<string>();
 
   protected readonly filterOpen = this.vacancyFilterInfoService.filterOpen;
+  protected readonly hasFilters = this.vacancyFilterInfoService.hasFilters;
 
   protected readonly currentExperience = this.vacancyFilterInfoService.currentExperience;
   protected readonly currentWorkFormat = this.vacancyFilterInfoService.currentWorkFormat;
