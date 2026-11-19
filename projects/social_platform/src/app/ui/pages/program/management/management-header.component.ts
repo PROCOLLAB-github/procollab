@@ -1,6 +1,5 @@
 /** @format */
 
-import { DOCUMENT } from "@angular/common";
 import {
   afterNextRender,
   ChangeDetectionStrategy,
@@ -154,7 +153,6 @@ export class ProgramManagementHeaderComponent {
   private readonly router = inject(Router);
   private readonly tourState = inject(ProgramManagementTourState);
   private readonly injector = inject(Injector);
-  private readonly document = inject(DOCUMENT);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private tabsObserver?: ResizeObserver;
   private readonly helpDialog = viewChild(ModalComponent);
@@ -239,16 +237,6 @@ export class ProgramManagementHeaderComponent {
       this.programId(),
       section === "evaluation" ? "settings" : section,
     );
-  }
-
-  protected async openChecklist(): Promise<void> {
-    await this.closeHelp();
-    const destination = this.router.createUrlTree([this.paths.program.launch(this.programId())]);
-    if (this.tourState.isAt(destination)) {
-      this.document.getElementById("program-launch-checklist")?.focus();
-    } else {
-      await this.router.navigateByUrl(destination, { state: { focusLaunchChecklist: true } });
-    }
   }
 
   protected async startTour(tour: Tour): Promise<void> {
