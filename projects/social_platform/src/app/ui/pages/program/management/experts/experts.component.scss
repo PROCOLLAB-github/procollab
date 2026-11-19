@@ -867,6 +867,12 @@
   max-width: 100%;
 }
 
+.experts__dialog label.experts__filter-checkbox {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .experts__filter-heading,
 .experts__filter-actions { justify-content: space-between; }
 

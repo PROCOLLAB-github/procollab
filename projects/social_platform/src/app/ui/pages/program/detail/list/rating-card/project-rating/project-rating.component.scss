@@ -15,20 +15,27 @@
   width: 100%;
 }
 
-.ui-button {
-  @include ui-foundation.button;
-
-  min-width: 96px;
-}
-
 .rating__boolean {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 12px 24px;
 }
 
-.rating__boolean .ui-button {
-  width: 96px;
-  min-width: 96px;
+.rating__boolean label {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 24px;
+  cursor: pointer;
+}
+
+.rating__boolean input.ui-choice.ui-choice {
+  width: 12px;
+  min-width: 12px;
+  height: 12px;
+  min-height: 12px;
+  margin: 0;
+  accent-color: var(--accent);
 }
 
 .rating__counter {
@@ -79,7 +86,7 @@ p {
   gap: 8px;
 
   .rating__criterion {
-    grid-template-columns: 72px minmax(0, 1fr);
+    grid-template-columns: 112px minmax(0, 1fr);
     gap: 6px 8px;
     align-items: center;
   }
@@ -122,15 +129,7 @@ p {
   }
 
   .rating__boolean {
-    gap: 4px;
-  }
-
-  .rating__boolean .ui-button {
-    width: 36px;
-    min-width: 36px;
-    min-height: 32px;
-    padding: 4px;
-    font-size: 12px;
+    gap: 8px;
   }
 
   .rating__criterion--text {
@@ -151,7 +150,7 @@ p {
 
   @include responsive.apply-mobile {
     .rating__criterion:not(.rating__criterion--text) {
-      grid-template-columns: 92px minmax(0, 1fr);
+      grid-template-columns: 112px minmax(0, 1fr);
     }
 
     h4,
@@ -165,9 +164,7 @@ p {
       font-size: 16px;
     }
 
-    .rating__boolean .ui-button {
-      width: 44px;
-      min-width: 44px;
+    .rating__boolean label {
       min-height: 44px;
     }
 
@@ -177,20 +174,8 @@ p {
   }
 }
 
-.rating:not(.rating--compact) .ui-button {
-  height: 32px;
-  min-height: 32px;
-  padding: 0 16px;
-}
-
 @media (max-width: 999px) {
-  .rating:not(.rating--compact) .ui-button {
-    position: relative;
-
-    &::after {
-      position: absolute;
-      inset: -6px 0;
-      content: "";
-    }
+  .rating:not(.rating--compact) .rating__boolean label {
+    min-height: 44px;
   }
 }

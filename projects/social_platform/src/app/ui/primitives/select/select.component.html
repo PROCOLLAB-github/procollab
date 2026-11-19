@@ -10,6 +10,8 @@
     [class.field__input--big]="size() === 'big'"
     [class.field__input--disabled]="disabled"
     role="combobox"
+    [attr.aria-label]="ariaLabel()"
+    [attr.aria-labelledby]="ariaLabelledby()"
     aria-haspopup="listbox"
     [attr.tabindex]="disabled ? -1 : 0"
     [attr.aria-expanded]="isOpen"

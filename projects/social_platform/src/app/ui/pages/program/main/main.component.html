@@ -53,7 +53,7 @@
     } @else if (programs().length) {
       <div class="programs__list">
         @for (p of programs(); track p.id) {
-          <a [routerLink]="AppRoutes.program.detail(p.id)">
+          <a [routerLink]="AppRoutes.program.detail(p.id)" [attr.aria-label]="p.name">
             <app-program-card [program]="p"></app-program-card>
           </a>
         }

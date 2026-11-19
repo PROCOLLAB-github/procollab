@@ -159,6 +159,24 @@ describe("RatingCardComponent", () => {
     fixture.detectChanges();
   });
 
+  it.each([
+    { minValue: 0, maxValue: 10, expected: "От 0 до 10 баллов" },
+    { minValue: 0, maxValue: null, expected: "От 0 баллов" },
+    { minValue: null, maxValue: 10, expected: "До 10 баллов" },
+    { minValue: null, maxValue: 0, expected: "До 0 баллов" },
+    { minValue: null, maxValue: null, expected: null },
+  ])("renders optional score bounds: $minValue / $maxValue", ({ minValue, maxValue, expected }) => {
+    render(true);
+    fixture.componentRef.setInput("project", {
+      ...component.project!,
+      criterias: [{ ...component.project!.criterias[0], minValue, maxValue }],
+    });
+    fixture.detectChanges();
+    const scale: HTMLElement | null = fixture.nativeElement.querySelector(".scoring__scale");
+    if (expected === null) expect(scale).toBeNull();
+    else expect(scale?.textContent?.replace(/\s+/g, " ").trim()).toBe(expected);
+  });
+
   it("should create", () => {
     expect(component).toBeTruthy();
   });
@@ -285,7 +303,7 @@ describe("RatingCardComponent", () => {
     rated => {
       render(rated, past, future);
       expect(cta()).toBeNull();
-      expect(fixture.nativeElement.textContent).toContain("Срок оценивания завершен");
+      expect(fixture.nativeElement.textContent).toContain("Срок оценки завершен");
       expect(fixture.nativeElement.querySelector(".scoring__form > button")).toBeNull();
       expectReadonly(true);
       fixture.detectChanges();
@@ -306,7 +324,7 @@ describe("RatingCardComponent", () => {
     ui.applyFormatingProgramData({ ...ui.program()!, datetimeEvaluationEnds: past });
     fixture.detectChanges();
     expect(cta()).toBeNull();
-    expect(fixture.nativeElement.textContent).toContain("Срок оценивания завершен");
+    expect(fixture.nativeElement.textContent).toContain("Срок оценки завершен");
     expectReadonly(true);
     ui.applyFormatingProgramData({ ...ui.program()!, datetimeEvaluationEnds: future });
     fixture.detectChanges();

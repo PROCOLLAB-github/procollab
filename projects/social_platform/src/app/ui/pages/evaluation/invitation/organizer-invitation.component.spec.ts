@@ -57,8 +57,16 @@ describe("Приглашение организатора", () => {
   it("загружает отдельное приглашение и не принимает его при открытии ссылки", () => {
     const { fixture, api, expertApi } = setup();
     expect(fixture.nativeElement.textContent).toContain("Приглашение организатора");
-    expect(fixture.nativeElement.textContent).toContain("Вас пригласили стать организатором");
-    expect(fixture.nativeElement.textContent).not.toContain("Вас пригласили стать экспертом");
+    expect(fixture.nativeElement.querySelector("h1")?.textContent).toBe("Программа");
+    expect(fixture.nativeElement.querySelector("h2")?.textContent).toBe(
+      "Присоединиться к программе",
+    );
+    expect(fixture.nativeElement.textContent).toContain(
+      "Приглашение отправлено на organizer@example.com.",
+    );
+    expect(fixture.nativeElement.textContent).toContain("Создать аккаунт");
+    expect(fixture.nativeElement.textContent).toContain("У меня уже есть аккаунт");
+    expect(fixture.nativeElement.textContent).not.toContain("Приглашение эксперта");
     expect(api.invitation).toHaveBeenCalledOnce();
     expect(api.accept).not.toHaveBeenCalled();
     expect(expertApi.invitation).not.toHaveBeenCalled();

@@ -5,13 +5,17 @@
 :host {
   display: block;
   min-width: 0;
+  height: 100%;
 }
 
 .program-card {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   min-width: 0;
+  height: 100%;
+  min-height: 176px;
   padding: 15px var(--ui-card-padding);
   background: var(--ui-surface);
   border: 1px solid var(--ui-border);
@@ -30,9 +34,10 @@
   &__footer {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--ui-space-sm);
+    gap: 8px 16px;
     align-items: center;
     justify-content: space-between;
+    margin-top: auto;
   }
 
   &__actions {
@@ -46,6 +51,8 @@
 
     min-width: min(116px, 100%);
     max-width: 100%;
+    min-height: 30px;
+    padding: 4px 12px;
     text-align: center;
     white-space: normal;
   }
@@ -65,9 +72,6 @@
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
   min-width: 0;
 
   &__statuses {
@@ -76,12 +80,13 @@
     gap: 5px;
     align-items: center;
     min-width: 0;
+    min-height: 22px;
   }
 
   &__registration,
   &__publication {
     padding: 4px 9px;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 600;
     line-height: 14px;
     overflow-wrap: anywhere;
@@ -111,17 +116,18 @@
     gap: 11px;
     align-items: center;
     min-width: 0;
+    min-height: 72px;
   }
 
   &__photo {
-    flex: 0 0 40px;
+    flex: 0 0 72px;
   }
 
   &__photo--placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 40px;
+    height: 72px;
     color: var(--accent-text);
     background: var(--accent-light);
     border-radius: 50%;
@@ -142,6 +148,7 @@
     min-width: 0;
     margin: 0;
     font-size: max(13px, var(--program-type-card-size));
+    line-height: 17px;
     color: var(--ui-text);
     overflow-wrap: anywhere;
   }
@@ -154,12 +161,49 @@
   }
 
   &__description {
-    font-size: 12px;
+    font-size: 11.5px;
     line-height: 16px;
   }
 
   &__dates {
+    flex: 1 1 120px;
+    min-width: 0;
     font-size: 11px;
     line-height: 15px;
+  }
+
+  &__copy {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 999px) {
+  .program-card .ui-button.ui-button,
+  .program-card__more {
+    min-height: 44px;
+  }
+
+  .card__registration,
+  .card__publication {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .card__name {
+    line-height: var(--program-type-card-line);
+  }
+
+  .card__description {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .card__dates {
+    font-size: 12px;
+    line-height: 16px;
   }
 }

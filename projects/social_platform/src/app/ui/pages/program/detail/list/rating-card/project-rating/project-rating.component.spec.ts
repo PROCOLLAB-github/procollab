@@ -5,6 +5,50 @@ import { ProjectRatingComponent } from "./project-rating.component";
 import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion";
 
 describe("Shared expert form lifecycle", () => {
+  it("выбирает Да и Нет как взаимно исключающие ответы, сохраняя группы независимыми", async () => {
+    await TestBed.configureTestingModule({
+      imports: [ProjectRatingComponent],
+      providers: [provideZonelessChangeDetection()],
+    }).compileComponents();
+    const first = TestBed.createComponent(ProjectRatingComponent);
+    const second = TestBed.createComponent(ProjectRatingComponent);
+    document.body.appendChild(first.nativeElement);
+    const bool: ProjectRatingCriterion = {
+      id: 2,
+      name: "Соответствует кейсу",
+      description: "",
+      type: "bool",
+      minValue: null,
+      maxValue: null,
+      value: "",
+      expertId: 0,
+    };
+    first.componentRef.setInput("criteria", [bool]);
+    second.componentRef.setInput("criteria", [bool]);
+    await Promise.all([first.whenStable(), second.whenStable()]);
+    const radios = first.nativeElement.querySelectorAll(
+      'input[type="radio"]',
+    ) as NodeListOf<HTMLInputElement>;
+    const other = second.nativeElement.querySelectorAll(
+      'input[type="radio"]',
+    ) as NodeListOf<HTMLInputElement>;
+    expect(radios).toHaveLength(2);
+    expect(radios[0].name).toBe(radios[1].name);
+    expect(radios[0].name).not.toBe(other[0].name);
+    expect(first.componentInstance.form.getRawValue()[2]).toBeNull();
+    radios[1].click();
+    await first.whenStable();
+    expect(first.componentInstance.form.getRawValue()[2]).toBe(false);
+    expect(radios[1].checked).toBe(true);
+    radios[0].click();
+    await first.whenStable();
+    expect(first.componentInstance.form.getRawValue()[2]).toBe(true);
+    expect(radios[0].checked).toBe(true);
+    expect(radios[1].checked).toBe(false);
+    expect(second.componentInstance.form.getRawValue()[2]).toBeNull();
+    first.nativeElement.remove();
+  });
+
   it("keeps answers and descriptions when switching between compact cards and full preview", async () => {
     await TestBed.configureTestingModule({
       imports: [ProjectRatingComponent],

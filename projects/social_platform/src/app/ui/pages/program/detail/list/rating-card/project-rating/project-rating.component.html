@@ -43,29 +43,29 @@
         @if (layout() === "full" && description) {
           <p class="rating__description">{{ description }}</p>
         }
-        <div class="rating__boolean" role="group" [attr.aria-label]="criterion.name">
-          <button
-            type="button"
-            [appButton]="
-              form.get(criterion.id.toString())?.value === true ? 'primary' : 'secondary'
-            "
-            [attr.aria-pressed]="form.get(criterion.id.toString())?.value === true"
-            [disabled]="disabled"
-            (click)="chooseBoolean(criterion.id, true)"
-          >
+        <div class="rating__boolean" role="radiogroup" [attr.aria-label]="criterion.name">
+          <label>
+            <input
+              appChoice
+              type="radio"
+              [name]="'rating-' + radioGroupId + '-' + criterion.id"
+              [checked]="form.get(criterion.id.toString())?.value === true"
+              [disabled]="disabled"
+              (change)="chooseBoolean(criterion.id, true)"
+            />
             Да
-          </button>
-          <button
-            type="button"
-            [appButton]="
-              form.get(criterion.id.toString())?.value === false ? 'primary' : 'secondary'
-            "
-            [attr.aria-pressed]="form.get(criterion.id.toString())?.value === false"
-            [disabled]="disabled"
-            (click)="chooseBoolean(criterion.id, false)"
-          >
+          </label>
+          <label>
+            <input
+              appChoice
+              type="radio"
+              [name]="'rating-' + radioGroupId + '-' + criterion.id"
+              [checked]="form.get(criterion.id.toString())?.value === false"
+              [disabled]="disabled"
+              (change)="chooseBoolean(criterion.id, false)"
+            />
             Нет
-          </button>
+          </label>
         </div>
       } @else {
         @if (layout() === "full" && description) {

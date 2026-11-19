@@ -1,20 +1,18 @@
 <!-- @format -->
 <main class="cabinet">
-  <header class="cabinet__title">
-    <h1>Кабинет эксперта</h1>
-    <p>Все работы, назначенные вам для оценки</p>
-    @if (selectedProgram(); as current) {
-      <a [routerLink]="paths.program.detail(current.id)">На страницу программы</a>
+  <app-page-header title="оценивание" [backRoute]="paths.office.feed()" />
+  <nav class="cabinet__tabs" aria-label="Работы эксперта">
+    @for (item of tabs(); track item.id) {
+      <button
+        type="button"
+        [appButton]="tab() === item.id ? 'primary' : 'secondary'"
+        [attr.aria-pressed]="tab() === item.id"
+        (click)="setTab(item.id || '')"
+      >
+        {{ item.linkText }}
+      </button>
     }
-  </header>
-  <app-tabs
-    class="cabinet__tabs"
-    label="Работы эксперта"
-    appearance="underline"
-    [items]="tabs()"
-    [active]="tab()"
-    (selected)="setTab($event)"
-  />
+  </nav>
   @if (tab() !== "invitations") {
     <div class="cabinet__toolbar">
       <div class="cabinet__search">
@@ -24,16 +22,19 @@
           type="search"
           [formControl]="search"
           maxlength="200"
-          placeholder="Поиск по названию работы"
-          aria-label="Поиск по названию работы"
+          placeholder="Найти проект"
+          aria-label="Найти проект"
         />
       </div>
-      <select class="cabinet__program" appField [formControl]="program" aria-label="Программа">
-        <option value="">Все программы</option>
-        @for (p of programs(); track p.id) {
-          <option [value]="p.id">{{ p.name }}</option>
-        }
-      </select>
+      <app-select
+        class="cabinet__program"
+        size="big"
+        placeholder="Все программы"
+        aria-label="Программа"
+        [options]="programOptions()"
+        [selectedId]="selectedProgramId() ?? 0"
+        [formControl]="program"
+      />
       @if (filtersProgramId() || selectedProgram()?.canExportRates) {
         <div class="cabinet__toolbar-actions">
           @if (filtersProgramId()) {
@@ -115,11 +116,14 @@
               >{{ tab() === "completed" ? "Оценено" : "Осталось" }}
               {{ tab() === "completed" ? group.program.completed : group.program.remaining }} из
               {{ group.program.assigned }}</span
-            ><span class="cabinet__deadline">{{
-              group.program.datetimeEvaluationEnds
-                ? "До " + (group.program.datetimeEvaluationEnds | date: "d MMMM, HH:mm")
-                : "Без срока"
-            }}</span>
+            >
+            @if (tab() !== "completed") {
+              <span class="cabinet__deadline">{{
+                group.program.datetimeEvaluationEnds
+                  ? "До " + (group.program.datetimeEvaluationEnds | date: "d MMMM, HH:mm")
+                  : "Без срока"
+              }}</span>
+            }
           </div>
         </header>
         @for (
@@ -130,7 +134,7 @@
             <div class="cabinet__project-info">
               <h3>{{ row.application.name }}</h3>
               @if (row.caseName) {
-                <p>{{ row.caseName }}</p>
+                <p>Кейс: {{ row.caseName }}</p>
               }
               @if (!row.canRate && !row.isCompleted) {
                 <p class="cabinet__blocked">{{ row.blockedReason }}</p>
@@ -138,14 +142,14 @@
             </div>
             @if (row.canRate || row.isCompleted) {
               <a
-                [appButton]="row.isCompleted ? 'secondary' : 'primary'"
+                appButton="secondary"
                 [routerLink]="evaluationPath(row.application)"
                 [queryParams]="{ returnUrl: router.url }"
                 (click)="navigation.remember(router.url)"
                 >{{ row.isCompleted ? "Посмотреть" : "Оценить" }}</a
               >
             } @else {
-              <button type="button" appButton="primary" disabled>Оценить</button>
+              <button type="button" appButton="secondary" disabled>Оценить</button>
             }
           </article>
         }
@@ -240,7 +244,7 @@
     <app-dialog-header
       title="Фильтры проектов"
       titleId="cabinet-filters-title"
-      [closable]="false"
+      (closed)="filtersOpen.set(false)"
     />
     <div appDialogBody class="cabinet__dialog-body">
       @for (field of fields(); track field.id) {
@@ -298,7 +302,8 @@
     <app-dialog-header
       title="Принять приглашение эксперта?"
       titleId="evaluation-accept-title"
-      [closable]="false"
+      [closeDisabled]="busy()"
+      (closed)="close()"
     />
     <div appDialogBody class="cabinet__dialog-body">
       <strong>{{ selected()?.name }}</strong>

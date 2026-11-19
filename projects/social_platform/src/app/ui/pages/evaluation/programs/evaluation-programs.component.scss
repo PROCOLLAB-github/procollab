@@ -38,31 +38,17 @@
   }
 }
 
-.cabinet__title {
-  display: grid;
-  gap: var(--ui-space-xs);
-
-  h1 {
-    @include program-management-controls.page-title;
-  }
-
-  p {
-    @include program-management-controls.body-copy;
-
-    color: var(--ui-text-muted);
-  }
-
-  a {
-    @include typography.body-12;
-
-    width: fit-content;
-    color: var(--accent-text);
-  }
-}
-
 .cabinet__tabs {
-  display: block;
+  display: flex;
+  gap: 8px;
   min-width: 0;
+  padding-block: 4px;
+  overflow-x: auto;
+
+  .ui-button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
 }
 
 .cabinet__toolbar {
@@ -117,20 +103,22 @@
 }
 
 .cabinet__group-heading {
-  flex-wrap: wrap;
-  padding-bottom: var(--ui-space-sm);
+  padding: 8px 12px;
 
   h2 {
     @include program-management-controls.section-title;
 
     min-width: 0;
+    font-size: 16px;
+    line-height: 24px;
   }
 
   a {
-    color: inherit;
+    color: var(--accent-text);
+    text-decoration: none;
 
     &:hover {
-      text-decoration: underline;
+      color: var(--accent-dark);
     }
 
     &:focus-visible {
@@ -154,12 +142,8 @@
 }
 
 .cabinet__project {
-  padding-block: var(--ui-space-sm);
+  padding: 12px;
   border-top: 1px solid var(--ui-border-subtle);
-
-  &:last-child {
-    padding-bottom: 0;
-  }
 
   .ui-button {
     flex-shrink: 0;
@@ -279,5 +263,35 @@
 
   .cabinet__actions > .ui-button {
     flex: 1 1 auto;
+  }
+}
+
+.cabinet > .cabinet__group {
+  padding: 12px;
+}
+
+.cabinet__group-heading h2,
+.cabinet__project h3,
+.cabinet__project-info p {
+  margin: 0;
+}
+
+.cabinet__project-info p {
+  margin-top: 4px;
+}
+
+:host ::ng-deep .cabinet__program .field__input {
+  min-height: 44px;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .cabinet__group-heading {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cabinet__meta {
+    justify-content: space-between;
   }
 }

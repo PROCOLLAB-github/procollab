@@ -6,15 +6,18 @@ import { provideRouter } from "@angular/router";
 import { signal } from "@angular/core";
 import { ProgramMainInfoService } from "@api/program/facades/program-main-info.service";
 import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-ui-info.service";
+import { ProgramCardData } from "./program-card/program-card.component";
 
 describe("MainComponent", () => {
   let component: ProgramMainComponent;
   let fixture: ComponentFixture<ProgramMainComponent>;
   const participating = signal(false);
+  const programs = signal<ProgramCardData[]>([]);
   const toggleParticipation = vi.fn(() => participating.update(checked => !checked));
 
   beforeEach(async () => {
     participating.set(false);
+    programs.set([]);
     toggleParticipation.mockClear();
     const programMainInfoServiceSpy = {
       initializationMainPrograms: vi.fn(),
@@ -32,7 +35,7 @@ describe("MainComponent", () => {
     };
 
     const programMainUIInfoServiceSpy = {
-      programs: signal([]),
+      programs,
       isPparticipating: participating,
       programOptionsFilter: [],
     };
@@ -61,6 +64,24 @@ describe("MainComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("gives each catalog link the complete program name", () => {
+    const name = "Кейс-чемпионат «Город будущего» — программа для команд";
+    programs.set([
+      {
+        id: 7,
+        name,
+        datetimeRegistrationEnds: null,
+        datetimeStarted: null,
+        datetimeFinished: null,
+      },
+    ]);
+    fixture.detectChanges();
+    const link = fixture.nativeElement.querySelector(".programs__list > a") as HTMLAnchorElement;
+    expect(link.getAttribute("aria-label")).toBe(name);
+    expect(link.getAttribute("href")).toBe("/office/program/7");
+    expect(link.querySelector("a, button")).toBeNull();
   });
 
   it("opens the filters and toggles participation once from the checkbox or its label", () => {

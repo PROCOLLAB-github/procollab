@@ -21,6 +21,41 @@ describe("SelectComponent", () => {
     fixture.detectChanges();
   });
 
+  it("forwards accessible names to the focusable combobox", () => {
+    fixture.componentRef.setInput("aria-label", "Программа");
+    fixture.detectChanges();
+    const control: HTMLElement = fixture.nativeElement.querySelector("[role='combobox']");
+    expect(control.getAttribute("aria-label")).toBe("Программа");
+    fixture.componentRef.setInput("aria-label", null);
+    fixture.componentRef.setInput("aria-labelledby", "program-label");
+    fixture.detectChanges();
+    expect(control.hasAttribute("aria-label")).toBe(false);
+    expect(control.getAttribute("aria-labelledby")).toBe("program-label");
+  });
+
+  it("resolves a value written before asynchronous options arrive", () => {
+    component.writeValue("7");
+    fixture.detectChanges();
+    fixture.componentRef.setInput("options", [{ id: 7, value: "7", label: "Программа семь" }]);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector("[role='combobox']").textContent).toContain(
+      "Программа семь",
+    );
+  });
+
+  it("does not restore a pending value after the user selects another option", () => {
+    component.writeValue("7");
+    fixture.componentRef.setInput("options", [{ id: 8, value: "8", label: "Программа восемь" }]);
+    fixture.detectChanges();
+    component.onUpdate(8);
+    fixture.componentRef.setInput("options", [
+      { id: 7, value: "7", label: "Программа семь" },
+      { id: 8, value: "8", label: "Программа восемь" },
+    ]);
+    fixture.detectChanges();
+    expect(component.selectedId).toBe(8);
+  });
+
   it("should create", () => {
     expect(component).toBeTruthy();
   });

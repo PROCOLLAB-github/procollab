@@ -1,5 +1,30 @@
 <!-- @format -->
 <article class="program-card">
+  <div class="card__statuses">
+    @if (management() && !program().draft) {
+      <span class="card__publication">Опубликована</span>
+    }
+    <span class="card__registration" [ngClass]="'card__registration--' + registrationState()">
+      @switch (registrationState()) {
+        @case ("draft") {
+          Черновик
+        }
+        @case ("ended") {
+          Регистрация завершена
+        }
+        @case ("participating") {
+          Ты уже участвуешь
+        }
+        @case ("actual") {
+          Регистрация до {{ program().datetimeRegistrationEnds | date: "d MMMM" }}
+        }
+        @default {
+          Срок регистрации не задан
+        }
+      }
+    </span>
+  </div>
+
   @if (management() && !program().draft) {
     <a
       class="program-card__link"
@@ -13,30 +38,7 @@
   }
 
   <div class="program-card__footer">
-    <div class="card__statuses">
-      @if (management() && !program().draft) {
-        <span class="card__publication">Опубликована</span>
-      }
-      <span class="card__registration" [ngClass]="'card__registration--' + registrationState()">
-        @switch (registrationState()) {
-          @case ("draft") {
-            Черновик
-          }
-          @case ("ended") {
-            Регистрация завершена
-          }
-          @case ("participating") {
-            Ты уже участвуешь
-          }
-          @case ("actual") {
-            Регистрация до {{ program().datetimeRegistrationEnds | date: "d MMMM" }}
-          }
-          @default {
-            Срок регистрации не задан
-          }
-        }
-      </span>
-    </div>
+    <p class="card__dates">{{ programDates() }}</p>
 
     <div class="program-card__actions">
       @if (management()) {
@@ -68,21 +70,20 @@
           class="card__photo"
           [url]="program().imageAddress || ''"
           [imageFraming]="program().imageFraming?.logo ?? null"
-          [size]="40"
+          [size]="72"
           aria-hidden="true"
         />
       } @else {
         <span class="card__photo card__photo--placeholder" aria-hidden="true">
-          <i appIcon icon="folder" appWidth="15" appHeight="13" appViewBox="0 0 15 13"></i>
+          <i appIcon icon="folder" appWidth="24" appHeight="21" appViewBox="0 0 15 13"></i>
         </span>
       }
-      <h3 class="card__name" [title]="program().name">{{ program().name }}</h3>
+      <div class="card__copy">
+        <h3 class="card__name" [title]="program().name">{{ program().name }}</h3>
+        @if (!management() && program().shortDescription?.trim(); as description) {
+          <p class="card__description">{{ description }}</p>
+        }
+      </div>
     </div>
-
-    @if (!management() && program().shortDescription?.trim(); as description) {
-      <p class="card__description">{{ description }}</p>
-    }
-
-    <p class="card__dates">{{ programDates() }}</p>
   </div>
 </ng-template>

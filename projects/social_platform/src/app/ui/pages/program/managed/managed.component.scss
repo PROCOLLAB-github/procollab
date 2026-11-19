@@ -33,8 +33,9 @@
 
   &__list {
     display: grid;
+    grid-auto-rows: 1fr;
     gap: var(--ui-space-lg) var(--ui-space-md);
-    align-items: start;
+    align-items: stretch;
   }
 
   &__empty {

@@ -26,8 +26,9 @@ import {
   IconComponent,
   PaginationComponent,
   StateComponent,
-  TabsComponent,
+  PageHeaderComponent,
 } from "@uilib";
+import { SelectComponent } from "@ui/primitives/select/select.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
@@ -60,6 +61,7 @@ const positive = (value: string | null) => {
   selector: "app-evaluation-programs",
   imports: [
     RouterLink,
+    SelectComponent,
     ReactiveFormsModule,
     DatePipe,
     AlertDirective,
@@ -74,7 +76,7 @@ const positive = (value: string | null) => {
     ModalComponent,
     PaginationComponent,
     StateComponent,
-    TabsComponent,
+    PageHeaderComponent,
     TransientNoticeComponent,
   ],
   templateUrl: "./evaluation-programs.component.html",
@@ -106,6 +108,14 @@ export class EvaluationProgramsComponent {
     const tab = this.params().get("tab");
     return tab === "completed" || tab === "invitations" ? tab : "pending";
   });
+  readonly programOptions = computed(() => [
+    { id: 0, value: "", label: "Все программы" },
+    ...this.programs().map(program => ({
+      id: program.id,
+      value: String(program.id),
+      label: program.name,
+    })),
+  ]);
   readonly selectedProgramId = computed(() => positive(this.params().get("program")));
   readonly activeFilters = computed(
     () =>

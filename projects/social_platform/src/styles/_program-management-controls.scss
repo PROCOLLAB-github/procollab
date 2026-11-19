@@ -27,11 +27,21 @@
   min-width: 32px;
   height: 32px;
   min-height: 32px;
-  padding: 5px;
+  padding: 4px;
   color: var(--accent-text);
-  background: transparent;
+  background: var(--light-gray);
   border: 0;
-  border-radius: 50%;
+  border-radius: 8px;
+
+  // The download sprite has a 12px drawing within its 24px viewBox.
+  // Keep a 16px visible glyph without changing the button's hit area.
+  > i[icon="download"] {
+    transform: scale(1.3333);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+  }
 
   &:hover:not(:disabled) {
     background: var(--accent-light);

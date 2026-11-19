@@ -6,12 +6,14 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  effect,
   forwardRef,
   HostListener,
   Input,
   input,
   Renderer2,
   viewChild,
+  untracked,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ClickOutsideModule } from "ng-click-outside";
@@ -55,6 +57,10 @@ export class SelectComponent implements ControlValueAccessor {
   /** Текст подсказки */
   placeholder = input("");
 
+  /** Accessible name belongs to the focusable combobox, not its component host. */
+  readonly ariaLabel = input<string | null>(null, { alias: "aria-label" });
+  readonly ariaLabelledby = input<string | null>(null, { alias: "aria-labelledby" });
+
   /** ID выбранной опции */
   @Input() selectedId?: number;
 
@@ -85,10 +91,19 @@ export class SelectComponent implements ControlValueAccessor {
   /** Индекс подсвеченного элемента при навигации */
   highlightedIndex = -1;
 
+  private pendingValue: number | string | undefined;
+
   constructor(
     private readonly renderer: Renderer2,
     private readonly cdr: ChangeDetectorRef,
-  ) {}
+  ) {
+    effect(() => {
+      this.options();
+      if (this.pendingValue !== undefined) {
+        untracked(() => this.writeValue(this.pendingValue!));
+      }
+    });
+  }
 
   /** Ссылка на элемент выпадающего списка */
   dropdown = viewChild<ElementRef<HTMLUListElement>>("dropdown");
@@ -162,6 +177,7 @@ export class SelectComponent implements ControlValueAccessor {
 
   // Методы ControlValueAccessor
   writeValue(value: number | string | null) {
+    this.pendingValue = undefined;
     if (value === null || value === undefined || value === "") {
       this.selectedId = undefined;
       this.cdr.markForCheck();
@@ -189,11 +205,13 @@ export class SelectComponent implements ControlValueAccessor {
 
     if (typeof value === "number") {
       this.selectedId = this.options().some(option => option.id === value) ? value : undefined;
+      if (this.selectedId === undefined) this.pendingValue = value;
       this.cdr.markForCheck();
       return;
     }
 
-    this.selectedId = this.getIdByValue(value) || this.getId(value);
+    this.selectedId = this.getIdByValue(value) ?? this.getId(value);
+    if (this.selectedId === undefined) this.pendingValue = value;
     this.cdr.markForCheck();
   }
 
@@ -246,6 +264,7 @@ export class SelectComponent implements ControlValueAccessor {
   onUpdate(id: number): void {
     if (this.disabled) return;
 
+    this.pendingValue = undefined;
     this.selectedId = id;
     this.onChange(this.getValue(id) ?? this.options()[0].value);
 

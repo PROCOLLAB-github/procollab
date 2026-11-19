@@ -1,14 +1,18 @@
 <!-- @format -->
 <main class="rating-workspace">
-  <a class="rating-workspace__back" [routerLink]="returnTree()">В кабинет эксперта</a>
+  <a class="rating-workspace__back" [routerLink]="returnTree()"
+    ><i appIcon icon="left-arrow" appSquare="16" aria-hidden="true"></i>оценивание</a
+  >
   <header class="rating-workspace__header">
     <h1>{{ project()?.name || "Оценка проекта" }}</h1>
     @if (program(); as current) {
-      <p>{{ current.name }}</p>
-      @if (current.datetimeEvaluationEnds; as ends) {
+      <a class="rating-workspace__program" [routerLink]="paths.program.detail(current.id)">{{
+        current.name
+      }}</a>
+      @if (!expired() && !project()?.scored && current.datetimeEvaluationEnds) {
         <p>
-          {{ expired() ? "Оценивание завершено" : "Оценить до" }}
-          {{ ends | date: "dd.MM.yyyy, HH:mm" }}
+          Оценить до
+          {{ current.datetimeEvaluationEnds | date: "dd.MM.yyyy, HH:mm" }}
         </p>
       }
     }
@@ -36,7 +40,11 @@
   bodyClass="modal__body--no-flex"
 >
   <div class="rating-dialog">
-    <h2 id="rating-leave-title">Выйти без сохранения?</h2>
+    <app-dialog-header
+      title="Выйти без сохранения?"
+      titleId="rating-leave-title"
+      (closed)="answerLeave(false)"
+    />
     <p>Введенные ответы не сохранятся.</p>
     <footer>
       <button type="button" appButton="secondary" (click)="answerLeave(false)">Остаться</button>

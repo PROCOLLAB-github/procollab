@@ -6,11 +6,115 @@ import { of, throwError } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { TokenService } from "@corelib";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
+import { ProgramOrganizersUseCase } from "@api/program/use-cases/program-organizers.use-case";
 import { LoginUseCase } from "@api/auth/use-cases/login.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { ExpertInvitationComponent } from "./expert-invitation.component";
 
 describe("Путь приглашённого эксперта", () => {
+  describe.each([false, true])("Приглашение организатора: %s", organizer => {
+    it("после смены чужого аккаунта позволяет зарегистрироваться, сохраняя токен приглашения", () => {
+      const { component, fixture, api, tokens, token } = setup({ organizer, session: true });
+      expect(fixture.nativeElement.textContent).toContain("Приглашение для другой почты");
+      component.switchAccount();
+      fixture.detectChanges();
+      expect(tokens.clearTokens).toHaveBeenCalledOnce();
+      expect(component.mode()).toBe("intro");
+      expect(fixture.nativeElement.textContent).toContain("Создать аккаунт");
+      expect(fixture.nativeElement.textContent).toContain("У меня уже есть аккаунт");
+      expect(api.invitation).toHaveBeenLastCalledWith(token);
+      component.changeMode("register");
+      component.registration.setValue({
+        firstName: "Анна",
+        lastName: "Волкова",
+        password: "Password123!",
+        repeatPassword: "Password123!",
+        acceptPolicy: true,
+        acceptAge: true,
+      });
+      if (organizer) component.organizerBirthday.setValue("1990-01-01");
+      component.register();
+      expect(api.register).toHaveBeenCalledWith(
+        token,
+        expect.objectContaining({ firstName: "Анна" }),
+      );
+      expect(component.mode()).toBe("joined");
+      expect(api.accept).not.toHaveBeenCalled();
+    });
+
+    it("существующая почта ведет ко входу, а принятое приглашение не предлагает регистрацию", () => {
+      const { component, fixture, api, token } = setup({
+        organizer,
+        session: true,
+        accountExists: true,
+        accepted: true,
+      });
+      component.switchAccount();
+      fixture.detectChanges();
+      expect(component.mode()).toBe("login");
+      expect(fixture.nativeElement.textContent).not.toContain("Зарегистрироваться");
+      component.password.setValue("existing-password");
+      component.signIn();
+      expect(api.invitation).toHaveBeenLastCalledWith(token);
+      expect(api.accept).not.toHaveBeenCalled();
+    });
+
+    it("после входа приглашенной почты принимает приглашение только по явному действию", () => {
+      const { component, fixture, api, invitation, token } = setup({
+        organizer,
+        session: true,
+        accountExists: true,
+      });
+      component.switchAccount();
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain("Войти в аккаунт");
+      expect(fixture.nativeElement.textContent).not.toContain("Создать аккаунт");
+      component.changeMode("login");
+      api.invitation.mockReturnValue(of({ ...invitation, matchesAccount: true }));
+      component.password.setValue("existing-password");
+      component.signIn();
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain("Принять приглашение");
+      expect(api.accept).not.toHaveBeenCalled();
+      component.accept();
+      expect(api.accept).toHaveBeenCalledExactlyOnceWith(token);
+      expect(component.mode()).toBe("joined");
+    });
+
+    it("вход новой почты оставляет путь к регистрации и текстовое восстановление после кнопки входа", () => {
+      const { component, fixture } = setup({ organizer });
+      component.changeMode("login");
+      fixture.detectChanges();
+      const buttons = Array.from(
+        fixture.nativeElement.querySelectorAll("form button"),
+      ) as HTMLButtonElement[];
+      const submit = buttons.findIndex(button => button.type === "submit");
+      const reset = buttons.findIndex(button => button.textContent?.includes("Забыли пароль?"));
+      expect(reset).toBeGreaterThan(submit);
+      expect(buttons[reset].classList.contains("ui-button")).toBe(false);
+      buttons.find(button => button.textContent?.includes("Зарегистрироваться"))!.click();
+      expect(component.mode()).toBe("register");
+    });
+
+    it("не сбрасывает аккаунт во время запроса и не принимает приглашение с чужого аккаунта", () => {
+      const { component, api, tokens } = setup({ organizer, session: true });
+      component.busy.set(true);
+      component.switchAccount();
+      expect(tokens.clearTokens).not.toHaveBeenCalled();
+      expect(api.accept).not.toHaveBeenCalled();
+      expect(api.register).not.toHaveBeenCalled();
+    });
+
+    it("ошибка истекшего приглашения не показывает формы входа и регистрации", () => {
+      const { component, api, fixture } = setup({ organizer });
+      api.invitation.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 410 })));
+      component.load();
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain("Приглашение недоступно");
+      expect(fixture.nativeElement.querySelector("form")).toBeNull();
+      expect(api.register).not.toHaveBeenCalled();
+    });
+  });
   it("глазики независимо показывают пароль и повтор без отправки формы и потери значений", () => {
     const { fixture, component, api } = setup();
     component.changeMode("register");
@@ -58,14 +162,23 @@ describe("Путь приглашённого эксперта", () => {
     expect(event.defaultPrevented).toBe(true);
     expect(login.execute).toHaveBeenCalledOnce();
   });
-  function setup() {
-    let session: { access: string; refresh: string } | null = null;
+  function setup(
+    options: {
+      organizer?: boolean;
+      session?: boolean;
+      accountExists?: boolean;
+      accepted?: boolean;
+    } = {},
+  ) {
+    let session: { access: string; refresh: string } | null = options.session
+      ? { access: "other-user", refresh: "other-refresh" }
+      : null;
     const token = "an-invitation-token-0123456789012345";
     const invitation = {
       id: 1,
       email: "expert@example.com",
-      status: "pending",
-      accountExists: false,
+      status: options.accepted ? "accepted" : "pending",
+      accountExists: options.accountExists ?? false,
       matchesAccount: false,
       program: { id: 7, name: "Программа" },
     };
@@ -94,10 +207,14 @@ describe("Путь приглашённого эксперта", () => {
           provide: ActivatedRoute,
           useValue: {
             paramMap: of(convertToParamMap({ token })),
-            snapshot: { queryParamMap: convertToParamMap({}) },
+            snapshot: {
+              queryParamMap: convertToParamMap({}),
+              data: { invitationRole: options.organizer ? "organizer" : "expert" },
+            },
           },
         },
         { provide: EvaluationUseCase, useValue: api },
+        { provide: ProgramOrganizersUseCase, useValue: api },
         { provide: TokenService, useValue: tokens },
         { provide: LoginUseCase, useValue: login },
         { provide: ProfileInfoService, useValue: profiles },

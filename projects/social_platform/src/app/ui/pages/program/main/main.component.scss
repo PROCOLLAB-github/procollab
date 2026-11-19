@@ -39,10 +39,12 @@
   &__list {
     display: grid;
     grid-template-columns: 1fr;
+    grid-auto-rows: 1fr;
     gap: var(--ui-space-lg) var(--ui-space-md);
-    align-items: start;
+    align-items: stretch;
 
     > a {
+      display: block;
       min-width: 0;
       color: inherit;
       text-decoration: none;

@@ -13,11 +13,18 @@ import { HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { distinctUntilChanged, EMPTY, map, startWith, Subject, switchMap } from "rxjs";
-import { ButtonDirective, CardDirective, StateComponent } from "@uilib";
+import {
+  ButtonDirective,
+  CardDirective,
+  DialogHeaderComponent,
+  IconComponent,
+  StateComponent,
+} from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { GetProgramUseCase } from "@api/program/use-cases/get-program.use-case";
 import { GetProjectRatingsUseCase } from "@api/program/use-cases/get-project-ratings.use-case";
+import { AppRoutes } from "@api/paths/app-routes";
 import { cabinetReturnUrl } from "@api/program/evaluation-navigation.service";
 import { ProjectRate } from "@domain/project/project-rate";
 import { RatingCardComponent } from "../detail/list/rating-card/rating-card.component";
@@ -30,6 +37,8 @@ import { RatingCardComponent } from "../detail/list/rating-card/rating-card.comp
     ButtonDirective,
     CardDirective,
     DatePipe,
+    DialogHeaderComponent,
+    IconComponent,
     ModalComponent,
     RatingCardComponent,
     RouterLink,
@@ -56,6 +65,7 @@ export class RatingWorkspaceComponent {
     this.router.parseUrl(
       cabinetReturnUrl(this.query().get("returnUrl"), Number(this.routeParams().get("programId"))),
     );
+  readonly paths = AppRoutes;
   readonly program = this.programState.program;
   readonly expired = this.programState.evaluationDateExpired;
   readonly card = viewChild(RatingCardComponent);

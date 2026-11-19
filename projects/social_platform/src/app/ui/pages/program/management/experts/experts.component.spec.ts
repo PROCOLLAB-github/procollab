@@ -212,23 +212,28 @@ describe("Управление экспертами", () => {
     expect(component.attentionProjects()).toEqual([]);
     expect(component.pendingAutoGroups()).toEqual([]);
   });
-  it("открывает распределение сразу и фильтрует проекты без единого назначения", () => {
+  it("фильтрует проекты без экспертов через общий диалог фильтров", () => {
     const { fixture, component } = setup("distribution");
 
     const panel = (fixture.nativeElement as HTMLElement).querySelector(".experts__distribution")!;
-    const filter = Array.from(panel.querySelectorAll("button")).find(
-      button => button.textContent?.trim() === "Без экспертов",
-    )!;
+    expect(panel.textContent).not.toContain("Без экспертов");
     expect(component.tab()).toBe("distribution");
-    expect(filter.getAttribute("aria-pressed")).toBe("false");
-
-    filter.click();
+    component.openFilters();
+    expect(component.filterDraft.controls.unassigned.value).toBe(false);
+    component.filterDraft.controls.unassigned.setValue(true);
+    component.applyFilters();
     fixture.detectChanges();
-    expect(filter.getAttribute("aria-pressed")).toBe("true");
+    expect(component.filterCount()).toBe(1);
+    expect(component.distributionStatus.value).toBe("unassigned");
     expect(component.filteredDistribution()).toEqual(
       component.allProjects().filter(project => !project.experts.length),
     );
     expect(component.filteredDistribution().length).toBeLessThan(component.allProjects().length);
+    component.openFilters();
+    expect(component.filterDraft.controls.unassigned.value).toBe(true);
+    component.resetFilterDraft();
+    component.applyFilters();
+    expect(component.filterCount()).toBe(0);
   });
   it("в предпросмотре показывает существующих экспертов вместе с добавляемыми", async () => {
     const { component, fixture } = setup();

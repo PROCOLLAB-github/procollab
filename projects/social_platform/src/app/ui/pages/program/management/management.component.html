@@ -196,7 +196,7 @@
                 "
                 (click)="exportParticipants()"
               >
-                <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+                <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
               </button>
             </div>
           } @else {
@@ -225,7 +225,7 @@
                 [disabled]="state.pending() || exportingProjects() || !count()"
                 (click)="exportProjects()"
               >
-                <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+                <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
               </button>
             </div>
           }
@@ -599,7 +599,7 @@
                 [disabled]="exportingParticipants() || removingParticipants()"
                 (click)="exportSelectedParticipants()"
               >
-                <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+                <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
               </button>
               <button
                 appButton="secondary"

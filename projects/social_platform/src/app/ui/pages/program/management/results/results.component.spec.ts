@@ -62,6 +62,21 @@ function setup() {
   return { fixture, component: fixture.componentInstance, api };
 }
 describe("Результаты программы", () => {
+  it("сохраняет доступную выгрузку с общей иконкой и отключает ее без данных", () => {
+    const { fixture, component } = setup();
+    const exportButton = fixture.nativeElement.querySelector(
+      ".results__export",
+    ) as HTMLButtonElement;
+    expect(exportButton.getAttribute("aria-label")).toBe("Выгрузить результаты в Excel");
+    expect(exportButton.querySelector('[icon="download"]')?.getAttribute("appSquare")).toBe("24");
+    expect(exportButton.disabled).toBe(false);
+    exportButton.click();
+    expect(component.modal()).toBe("export");
+    component.snapshot.set({ ...snapshot, groups: [] });
+    fixture.detectChanges();
+    expect(exportButton.disabled).toBe(true);
+  });
+
   it("показывает короткое пустое состояние и объясняет отсутствие рейтинга только при наличии проектов", () => {
     const { fixture, component } = setup();
     component.snapshot.set({ ...snapshot, hasNumericCriteria: false, groups: [] });

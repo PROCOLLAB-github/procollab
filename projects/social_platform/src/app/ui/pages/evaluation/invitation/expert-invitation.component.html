@@ -70,13 +70,11 @@
         }
       } @else if (hasSession() && !invite.matchesAccount) {
         <h2>Приглашение для другой почты</h2>
-        <p>
-          Эта ссылка предназначена для {{ invite.email }}. Чтобы принять приглашение, войдите в
-          соответствующий аккаунт.
-        </p>
-        <button appButton="primary" type="button" (click)="switchAccount()">
-          Войти в другой аккаунт
+        <p>Приглашение отправлено на {{ invite.email }}.</p>
+        <button appButton="primary" type="button" [disabled]="busy()" (click)="switchAccount()">
+          Сменить аккаунт
         </button>
+        <small>Вы выйдете из текущего аккаунта.</small>
       } @else if (hasSession() && invite.matchesAccount) {
         <h2>{{ isOrganizer ? "Стать организатором программы" : "Стать экспертом программы" }}</h2>
         <p>Приглашение для {{ invite.email }}. Ваш аккаунт и другие роли сохранятся.</p>
@@ -92,11 +90,9 @@
       } @else {
         @switch (mode()) {
           @case ("register") {
-            <h2>
-              {{ isOrganizer ? "Создание аккаунта организатора" : "Создание аккаунта эксперта" }}
-            </h2>
+            <h2>Создать аккаунт</h2>
             <label
-              >Email из приглашения<input
+              >Почта из приглашения<input
                 appField
                 type="email"
                 [value]="invite.email"
@@ -203,10 +199,9 @@
                 Создать аккаунт и присоединиться
               </button>
             </form>
-            <small>Компания, должность и фото — позже в профиле.</small
-            ><button
+            <button
               type="button"
-              appButton="text"
+              class="expert-invitation__text-action"
               (click)="changeMode('login')"
               [disabled]="busy()"
             >
@@ -214,11 +209,10 @@
             </button>
           }
           @case ("login") {
-            <h2>Вход для принятия приглашения</h2>
-            <p>Войдите с почтой из приглашения. Затем вы сможете присоединиться к программе.</p>
+            <h2>Войти в аккаунт</h2>
             <form (submit)="$event.preventDefault(); signIn()" novalidate>
               <label
-                >Email из приглашения<input
+                >Почта из приглашения<input
                   appField
                   [value]="invite.email"
                   readonly
@@ -242,15 +236,27 @@
                       <i appIcon icon="eye" appSquare="20" aria-hidden="true"></i>
                     } @else {
                       <i appIcon icon="eye-off" appSquare="20" aria-hidden="true"></i>
-                    }</button></span></label
-              ><button
+                    }</button></span
+              ></label>
+              <button type="submit" appButton="primary" [disabled]="busy()">Войти</button>
+              <button
                 type="button"
-                appButton="text"
+                class="expert-invitation__text-action"
                 (click)="changeMode('reset')"
                 [disabled]="busy()"
               >
-                Забыли пароль?</button
-              ><button type="submit" appButton="primary" [disabled]="busy()">Войти</button>
+                Забыли пароль?
+              </button>
+              @if (invite.status === "pending" && !invite.accountExists) {
+                <button
+                  type="button"
+                  class="expert-invitation__text-action"
+                  [disabled]="busy()"
+                  (click)="changeMode('register')"
+                >
+                  Нет аккаунта? Зарегистрироваться
+                </button>
+              }
             </form>
           }
           @case ("reset") {
@@ -277,30 +283,15 @@
             </button>
           }
           @default {
-            <h2>
-              {{
-                isOrganizer
-                  ? "Вас пригласили стать организатором"
-                  : "Вас пригласили стать экспертом"
-              }}
-            </h2>
-            <p>
-              Приглашение для {{ invite.email }}.
-              {{
-                isOrganizer
-                  ? "После принятия вы сможете управлять этой программой и приглашать коллег."
-                  : "После принятия организатор сможет назначить вам проекты на оценку."
-              }}
-            </p>
+            <h2>Присоединиться к программе</h2>
+            <p>Приглашение отправлено на {{ invite.email }}.</p>
             @if (invite.accountExists) {
               <button type="button" appButton="primary" (click)="changeMode('login')">
-                Войти и принять приглашение
+                Войти в аккаунт
               </button>
             } @else {
               <button type="button" appButton="primary" (click)="changeMode('register')">
-                {{
-                  isOrganizer ? "Создать аккаунт организатора" : "Создать аккаунт эксперта"
-                }}</button
+                Создать аккаунт</button
               ><button type="button" appButton="secondary" (click)="changeMode('login')">
                 У меня уже есть аккаунт
               </button>
