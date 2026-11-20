@@ -51,13 +51,13 @@
       } @else if (mode() === "linkError") {
         @if (canRetryConfirmation()) {
           <button appButton="primary" type="button" [disabled]="busy()" (click)="checkConfirmation()">
-            Проверить ссылку ещё раз
+            Проверить ссылку еще раз
           </button>
         }
         <button appButton="text" type="button" (click)="changeMode('login')">Войти</button>
       } @else if (mode() === "sent" || mode() === "expired") {
         @if (mode() === "expired") {
-          <p appAlert="warning" aria-live="polite">Срок действия ссылки истёк.</p>
+          <p appAlert="warning" aria-live="polite">Срок действия ссылки истек.</p>
         } @else {
           <p appAlert="success">
             Письмо подтверждения отправлено{{ pendingEmail() ? ": " + pendingEmail() : "" }}.

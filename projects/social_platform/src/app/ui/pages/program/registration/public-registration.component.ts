@@ -401,7 +401,7 @@ export class PublicRegistrationComponent {
           if (!result.access || !result.refresh) {
             this.mode.set("linkError");
             this.canRetryConfirmation.set(true);
-            this.error.set("Не удалось проверить ссылку. Попробуйте ещё раз.");
+            this.error.set("Не удалось проверить ссылку. Попробуйте еще раз.");
             return;
           }
           this.tokens.memTokens({ access: result.access, refresh: result.refresh });
@@ -443,7 +443,7 @@ export class PublicRegistrationComponent {
             this.error.set("Ссылка недействительна.");
           } else {
             this.canRetryConfirmation.set(true);
-            this.error.set("Не удалось проверить ссылку. Попробуйте ещё раз.");
+            this.error.set("Не удалось проверить ссылку. Попробуйте еще раз.");
           }
         },
       });
