@@ -119,8 +119,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   // Сторонние переменные для работы с роутингом или доп проверок
   protected readonly backPath = this.detailInfoService.backPath;
   protected readonly registerDateExpired = this.detailProgramInfoService.registerDateExpired;
-  protected readonly submissionProjectDateExpired =
-    this.detailProjectInfoService.submissionProjectDateExpired;
 
   protected readonly isInProject = this.detailInfoService.isInProject;
   protected readonly queryCourseId = this.detailInfoService.queryCourseId;
@@ -170,7 +168,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly isUserMember = this.detailInfoService.isUserMember;
   protected readonly isUserExpert = this.detailInfoService.isUserExpert;
   protected readonly isProjectAssigned = this.detailInfoService.isProjectAssigned;
-  protected readonly applicationPending = this.detailProgramInfoService.applicationPending;
+  protected readonly applicationActionDisabled =
+    this.detailProgramInfoService.applicationActionDisabled;
   protected readonly applicationLabel = this.detailProgramInfoService.applicationLabel;
 
   // Сигналы для работы с модальными окнами с текстом

@@ -39,6 +39,7 @@ export interface RegistrationPublic {
   enrolled: boolean;
   programUrl: string;
   registrationEnds: string;
+  resume?: { draftId: string; answers: Record<string, RegistrationValue> };
 }
 export interface RegistrationImport {
   options: string[];
@@ -46,6 +47,8 @@ export interface RegistrationImport {
   blanks: number;
 }
 export interface RegistrationResult {
+  confirmationRequired?: boolean;
+  browserProof?: string;
   reviewRequired?: boolean;
   answers?: Record<string, RegistrationValue>;
   enrolled?: boolean;

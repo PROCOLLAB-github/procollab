@@ -7,6 +7,7 @@ import { TokenService } from "@corelib";
 import { LoginUseCase } from "@api/auth/use-cases/login.use-case";
 import { ProfileInfoService } from "@api/profile/facades/profile-info.service";
 import { ProgramRegistrationUseCase } from "@api/program/use-cases/program-registration.use-case";
+import { RegistrationPublic } from "@domain/program/program-registration.model";
 import { PublicRegistrationComponent } from "./public-registration.component";
 const field = {
   id: "f" + "a".repeat(32),
@@ -18,9 +19,19 @@ const field = {
   options: [],
   allowOther: false,
 };
-function setup(authenticated = false) {
-  const fragment = new Subject<string | null>();
+function setup(authenticated = false, resume?: RegistrationPublic["resume"]) {
+  const fragmentChanges = new Subject<string | null>();
+  const snapshot = {
+    paramMap: convertToParamMap({ id: "42" }),
+    queryParamMap: convertToParamMap({}),
+    fragment: null as string | null,
+  };
+  const openLink = (fragment: string) => {
+    snapshot.fragment = fragment;
+    fragmentChanges.next(fragment);
+  };
   sessionStorage.clear();
+  localStorage.removeItem("program-registration-42-browser-proof");
   const api = {
     publicForm: vi.fn(() =>
       of({
@@ -31,10 +42,15 @@ function setup(authenticated = false) {
         closed: false,
         enrolled: false,
         authenticated,
+        resume,
       }),
     ),
-    submit: vi.fn(() => of({ receipt: "opaque", email: "test@example.test" })),
-    tokenAction: vi.fn(),
+    submit: vi.fn(() =>
+      of({ receipt: "opaque", browserProof: "browser-proof", email: "test@example.test" }),
+    ),
+    tokenAction: vi
+      .fn<ProgramRegistrationUseCase["tokenAction"]>()
+      .mockReturnValue(of({ confirmationRequired: true })),
     resetPassword: vi.fn(),
   };
   const tokens = { getTokens: vi.fn(() => null), memTokens: vi.fn() };
@@ -48,8 +64,8 @@ function setup(authenticated = false) {
         useValue: {
           paramMap: of(convertToParamMap({ id: "42" })),
           queryParamMap: of(convertToParamMap({})),
-          fragment,
-          snapshot: { queryParamMap: convertToParamMap({}) },
+          fragment: fragmentChanges,
+          snapshot,
         },
       },
       { provide: TokenService, useValue: tokens },
@@ -62,16 +78,62 @@ function setup(authenticated = false) {
   });
   const fixture = TestBed.createComponent(PublicRegistrationComponent);
   fixture.detectChanges();
-  return { fixture, component: fixture.componentInstance, api, tokens, login, fragment };
+  return { fixture, component: fixture.componentInstance, api, tokens, login, openLink };
 }
 describe("Публичная регистрация участника", () => {
-  it("открывает подтверждение по fragment без повторной загрузки той же страницы", () => {
-    const { component, fragment, api } = setup();
-    component.mode.set("sent");
-    fragment.next("confirmation=email-proof");
+  it("при открытии ссылки без доказательства проверяет состояние и требует явного подтверждения", () => {
+    const { component, openLink, api, tokens } = setup();
+    openLink("confirmation=email-proof");
+    openLink("confirmation=email-proof");
     expect(component.mode()).toBe("confirm");
-    expect(component.confirmToken()).toBe("email-proof");
+    expect(api.tokenAction).toHaveBeenCalledExactlyOnceWith(42, "confirm", "email-proof", {
+      linkOpened: true,
+    });
     expect(api.publicForm).toHaveBeenCalledTimes(1);
+    expect(tokens.memTokens).not.toHaveBeenCalled();
+  });
+
+  it("при открытии ссылки в браузере регистрации подтверждает почту автоматически", () => {
+    const { component, api, openLink, tokens } = setup();
+    const navigate = vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
+    localStorage.setItem(
+      "program-registration-42-browser-proof",
+      JSON.stringify({ proof: "browser-proof", expiresAt: Date.now() + 60_000 }),
+    );
+    api.tokenAction.mockReturnValue(
+      of({ access: "test-access", refresh: "test-refresh", enrolled: true }),
+    );
+    openLink("confirmation=email-proof");
+    expect(api.tokenAction).toHaveBeenCalledExactlyOnceWith(42, "confirm", "email-proof", {
+      linkOpened: true,
+      browserProof: "browser-proof",
+    });
+    expect(tokens.memTokens).toHaveBeenCalledWith({
+      access: "test-access",
+      refresh: "test-refresh",
+    });
+    expect(navigate).toHaveBeenCalledWith("/office/program/42", { replaceUrl: true });
+    expect(localStorage.getItem("program-registration-42-browser-proof")).toBeNull();
+  });
+
+  it("для использованной ссылки показывает подтверждение без ошибки или повторной отправки", () => {
+    const { fixture, component, api, openLink, tokens } = setup();
+    api.tokenAction.mockReturnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 409,
+            error: { code: "confirmation_used" },
+          }),
+      ),
+    );
+    openLink("confirmation=used-proof");
+    fixture.detectChanges();
+    expect(component.mode()).toBe("confirmed");
+    expect(fixture.nativeElement.textContent).toContain("Почта уже подтверждена.");
+    expect(fixture.nativeElement.textContent).not.toContain("Отправить письмо еще раз");
+    expect(fixture.nativeElement.querySelector('[role="alert"]')).toBeNull();
+    expect(tokens.memTokens).not.toHaveBeenCalled();
   });
   it("нативная отправка формы запускает регистрацию", () => {
     const { fixture, component, api } = setup(true);
@@ -125,12 +187,26 @@ describe("Публичная регистрация участника", () => {
     expect(component.mode()).toBe("sent");
     expect(component.account.controls.password.value).toBe("");
     expect(JSON.stringify(sessionStorage)).not.toContain("Secret-pass-2030");
+    expect(JSON.stringify(localStorage)).not.toContain("Secret-pass-2030");
+    expect(localStorage.getItem("program-registration-42-browser-proof")).toContain("browser-proof");
   });
   it("сохраняет ответы при переходе ко входу", () => {
     const { component } = setup();
     component.answers.controls[field.id].setValue("Москва");
     component.changeMode("login");
     expect(component.answers.getRawValue()[field.id]).toBe("Москва");
+  });
+  it("восстанавливает ответы владельца и не переносит их в форму другого аккаунта", () => {
+    const { component, api } = setup(true, {
+      draftId: "owner-draft",
+      answers: { [field.id]: "Москва" },
+    });
+    expect(component.answers.getRawValue()[field.id]).toBe("Москва");
+
+    const program = component.program()!;
+    api.publicForm.mockReturnValue(of({ ...program, resume: undefined }));
+    component.load();
+    expect(component.answers.getRawValue()[field.id]).toBe("");
   });
   it("не выдает локальную сессию на основе ошибки подтверждения", () => {
     const { component, api, tokens } = setup();
@@ -148,7 +224,7 @@ describe("Публичная регистрация участника", () => {
     expect(component.mode()).toBe("expired");
     expect(tokens.memTokens).not.toHaveBeenCalled();
   });
-  it("переводит на программу после успешного подтверждения", () => {
+  it("переводит на программу после ручного подтверждения", () => {
     const { component, api, tokens } = setup();
     const navigate = vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
     vi.spyOn(TestBed.inject(Router), "navigate").mockResolvedValue(true);
@@ -161,6 +237,6 @@ describe("Публичная регистрация участника", () => {
       access: "test-access",
       refresh: "test-refresh",
     });
-    expect(navigate).toHaveBeenCalledWith("/office/program/42");
+    expect(navigate).toHaveBeenCalledWith("/office/program/42", { replaceUrl: true });
   });
 });

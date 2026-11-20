@@ -24,7 +24,6 @@ export class DetailProjectInfoService {
   readonly isTeamPage = signal<boolean>(false);
   readonly isVacanciesPage = signal<boolean>(false);
   readonly isProjectChatPage = signal<boolean>(false);
-  readonly submissionProjectDateExpired?: boolean;
   readonly isProjectWorkSectionPage = signal<boolean>(false);
   readonly isKanbanBoardPage = signal<boolean>(false);
   readonly isGantDiagramPage = signal<boolean>(false);

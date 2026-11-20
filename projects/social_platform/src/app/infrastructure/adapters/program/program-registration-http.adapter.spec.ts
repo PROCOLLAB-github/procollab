@@ -62,4 +62,20 @@ describe("Контракт регистрации программы", () => {
     expect(request.request.body).toEqual({ token: "email-proof" });
     request.flush({ enrolled: true });
   });
+  it("передаёт доказательство браузера только в теле запроса при открытии ссылки", () => {
+    adapter
+      .tokenAction(4, "confirm", "email-proof", {
+        linkOpened: true,
+        browserProof: "browser-proof",
+      })
+      .subscribe(result => expect(result.confirmationRequired).toBe(true));
+    const request = http.expectOne("https://local.test/programs/4/registration/confirm/");
+    expect(request.request.method).toBe("POST");
+    expect(request.request.body).toEqual({
+      token: "email-proof",
+      link_opened: true,
+      browser_proof: "browser-proof",
+    });
+    request.flush({ confirmation_required: true });
+  });
 });

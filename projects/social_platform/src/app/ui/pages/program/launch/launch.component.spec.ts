@@ -1,7 +1,7 @@
 /** @format */
 import { TestBed } from "@angular/core/testing";
 import { ActivatedRoute, convertToParamMap, provideRouter } from "@angular/router";
-import { of, Subject } from "rxjs";
+import { BehaviorSubject, of, Subject } from "rxjs";
 import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-case";
 import { ProgramLaunch } from "@domain/program/program-launch.model";
 import { ProgramLaunchComponent } from "./launch.component";
@@ -42,6 +42,7 @@ describe("Подготовка программы к запуску", () => {
   it("показывает реальные причины и равноправные действия, не позволяя опубликовать черновик раньше времени", () => {
     const params = convertToParamMap({ programId: "1" });
     const query = convertToParamMap({});
+    const readiness = new BehaviorSubject(initial);
     TestBed.configureTestingModule({
       imports: [ProgramLaunchComponent],
       providers: [
@@ -54,7 +55,7 @@ describe("Подготовка программы к запуску", () => {
             snapshot: { queryParamMap: query },
           },
         },
-        { provide: ProgramLaunchUseCase, useValue: { readiness: () => of(initial) } },
+        { provide: ProgramLaunchUseCase, useValue: { readiness: () => readiness } },
       ],
     });
     const fixture = TestBed.createComponent(ProgramLaunchComponent);
@@ -74,13 +75,50 @@ describe("Подготовка программы к запуску", () => {
     )!;
     expect(publish.disabled).toBe(true);
 
-    fixture.componentInstance.state.set({
+    readiness.next({
       ...initial,
       checks: initial.checks.map(check => ({ ...check, ready: true })),
       canPublish: true,
     });
     fixture.detectChanges();
     expect(host.textContent).toContain("3 из 3 готово");
+    expect(publish.disabled).toBe(false);
+
+    const ready = fixture.componentInstance.state()!;
+    const caseCheck = {
+      code: "cases",
+      title: "Кейсы программы",
+      ready: false,
+      detail: "Добавьте и сохраните хотя бы один кейс.",
+      section: "project-form",
+    } as const;
+    const blocked: ProgramLaunch = {
+      ...ready,
+      program: { ...ready.program, programFormat: "case_championship" },
+      checks: [...ready.checks, caseCheck],
+      blockers: [caseCheck],
+      canPublish: false,
+    };
+    readiness.next(blocked);
+    fixture.detectChanges();
+    const caseLink = host.querySelector<HTMLAnchorElement>(
+      '[aria-label="Добавить кейсы в заявке проекта"]',
+    )!;
+    const queryParams = new URL(caseLink.href).searchParams;
+    expect(queryParams.get("tab")).toBe("project-form");
+    expect(queryParams.get("return")).toBe("launch");
+    expect(host.textContent).toContain(caseCheck.detail);
+    expect(host.textContent).toContain("3 из 4 готово");
+    expect(publish.disabled).toBe(true);
+
+    readiness.next({
+      ...blocked,
+      checks: [...ready.checks, { ...caseCheck, ready: true }],
+      blockers: [],
+      canPublish: true,
+    });
+    fixture.detectChanges();
+    expect(host.textContent).toContain("4 из 4 готово");
     expect(publish.disabled).toBe(false);
   });
 

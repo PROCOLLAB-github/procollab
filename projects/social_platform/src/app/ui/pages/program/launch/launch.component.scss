@@ -170,30 +170,16 @@
   &__dialog {
     @include program-management-controls.body-copy;
 
+    --ui-dialog-header-margin-bottom: 0;
+
     display: grid;
     gap: 20px;
     width: min(520px, calc(100vw - 72px));
     color: var(--black);
 
-    h2 {
-      @include program-management-controls.section-title;
-    }
-
     p {
       margin: 0;
       line-height: 1.5;
-    }
-
-    header {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      justify-content: space-between;
-
-      button {
-        flex-shrink: 0;
-        padding: 0;
-      }
     }
   }
 }

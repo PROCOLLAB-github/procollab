@@ -28,6 +28,7 @@ export abstract class ProgramRegistrationRepositoryPort {
     id: number,
     action: "confirm" | "resend",
     token: string,
+    openedLink?: { linkOpened: true; browserProof?: string },
   ): Observable<RegistrationResult>;
   abstract resetPassword(id: number, email: string): Observable<void>;
 }

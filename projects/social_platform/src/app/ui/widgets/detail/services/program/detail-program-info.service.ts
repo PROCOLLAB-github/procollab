@@ -45,6 +45,9 @@ export class DetailProgramInfoService {
     () => this.programDetailMainUIInfoService.program()?.currentApplication ?? null,
   );
   readonly applicationPending = signal(false);
+  readonly applicationActionDisabled = computed(() =>
+    this.isApplicationActionDisabled(this.programDetailMainUIInfoService.program()),
+  );
   readonly applicationLabel = computed(() =>
     this.programDetailMainUIInfoService.program()?.solutionStorageMode === "solution"
       ? "мое решение"
@@ -56,11 +59,9 @@ export class DetailProgramInfoService {
   );
 
   addNewProject(programId: number): void {
-    if (this.programDetailMainUIInfoService.program()?.preview) return;
-    if (this.applicationPending()) return;
-    const solutionMode =
-      this.programDetailMainUIInfoService.program()?.solutionStorageMode === "solution";
-    if (!solutionMode) {
+    const program = this.programDetailMainUIInfoService.program();
+    if (program?.id !== programId || this.isApplicationActionDisabled(program)) return;
+    if (program.solutionStorageMode !== "solution") {
       this.addLegacyProject(programId);
       return;
     }
@@ -93,6 +94,25 @@ export class DetailProgramInfoService {
       });
   }
 
+  private isApplicationActionDisabled(program: Program | undefined): boolean {
+    if (
+      !program?.isUserMember ||
+      program.isUserManager ||
+      program.isUserExpert ||
+      program.pendingExpertInvitationId ||
+      program.preview ||
+      program.solutionActionAvailable === false ||
+      this.applicationPending()
+    ) {
+      return true;
+    }
+    if (program.solutionStorageMode === "solution" || program.currentApplication?.submitted) {
+      return false;
+    }
+    const deadline = program.datetimeProjectSubmissionEnds || program.datetimeRegistrationEnds;
+    return !!deadline && Date.parse(deadline) < Date.now();
+  }
+
   private addLegacyProject(programId: number): void {
     const application = this.application();
     if (!application) {
@@ -100,7 +120,9 @@ export class DetailProgramInfoService {
       return;
     }
     if (application.submitted) {
-      void this.router.navigate([AppRoutes.projects.detail(application.projectId)]);
+      void this.router.navigate([AppRoutes.projects.detail(application.projectId)], {
+        queryParams: { programLinkId: application.programLinkId },
+      });
       return;
     }
     void this.router
