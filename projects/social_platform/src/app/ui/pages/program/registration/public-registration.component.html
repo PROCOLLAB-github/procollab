@@ -50,7 +50,12 @@
         <button appButton="primary" type="button" (click)="changeMode('login')">Войти</button>
       } @else if (mode() === "linkError") {
         @if (canRetryConfirmation()) {
-          <button appButton="primary" type="button" [disabled]="busy()" (click)="checkConfirmation()">
+          <button
+            appButton="primary"
+            type="button"
+            [disabled]="busy()"
+            (click)="checkConfirmation()"
+          >
             Проверить ссылку еще раз
           </button>
         }

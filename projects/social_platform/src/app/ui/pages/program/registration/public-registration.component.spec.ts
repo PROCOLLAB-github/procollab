@@ -188,7 +188,9 @@ describe("Публичная регистрация участника", () => {
     expect(component.account.controls.password.value).toBe("");
     expect(JSON.stringify(sessionStorage)).not.toContain("Secret-pass-2030");
     expect(JSON.stringify(localStorage)).not.toContain("Secret-pass-2030");
-    expect(localStorage.getItem("program-registration-42-browser-proof")).toContain("browser-proof");
+    expect(localStorage.getItem("program-registration-42-browser-proof")).toContain(
+      "browser-proof",
+    );
   });
   it("сохраняет ответы при переходе ко входу", () => {
     const { component } = setup();

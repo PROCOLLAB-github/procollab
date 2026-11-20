@@ -1,3 +1,5 @@
+# @format
+
 name: E2E fixes preflight
 
 on:

@@ -70,7 +70,15 @@ export class PublicRegistrationComponent {
   readonly answerErrors = signal<Record<string, string>>({});
   readonly notice = signal<string | null>(null);
   readonly mode = signal<
-    "form" | "login" | "reset" | "sent" | "checking" | "confirm" | "confirmed" | "expired" | "linkError"
+    | "form"
+    | "login"
+    | "reset"
+    | "sent"
+    | "checking"
+    | "confirm"
+    | "confirmed"
+    | "expired"
+    | "linkError"
   >("form");
   readonly canRetryConfirmation = signal(false);
   readonly authenticated = signal(!!this.tokens.getTokens());
@@ -270,7 +278,10 @@ export class PublicRegistrationComponent {
             try {
               localStorage.setItem(
                 this.key("browser-proof"),
-                JSON.stringify({ proof: result.browserProof, expiresAt: Date.now() + 7 * 86_400_000 }),
+                JSON.stringify({
+                  proof: result.browserProof,
+                  expiresAt: Date.now() + 7 * 86_400_000,
+                }),
               );
             } catch {
               /* Manual confirmation stays available. */
