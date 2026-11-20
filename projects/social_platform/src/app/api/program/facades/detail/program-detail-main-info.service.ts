@@ -260,10 +260,15 @@ export class ProgramDetailMainService {
     const programId = Number(this.programId());
     if (!Number.isInteger(programId) || programId <= 0) return EMPTY;
 
+    this.programDetailMainUIInfoService.welcomeAcknowledgementError.set(false);
     this.programDetailMainUIInfoService.welcomeAcknowledgementPending.set(true);
     return this.acknowledgeProgramWelcomeUseCase.execute(programId).pipe(
       tap(result => {
-        if (!result.ok) return;
+        if (Number(this.programId()) !== programId) return;
+        if (!result.ok) {
+          this.programDetailMainUIInfoService.welcomeAcknowledgementError.set(true);
+          return;
+        }
         this.programDetailMainUIInfoService.applyProgramWelcomeAcknowledged(
           result.value.welcomeAcknowledgedAt,
         );

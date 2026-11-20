@@ -21,9 +21,17 @@ import { CreateProjectUseCase } from "@api/project/use-cases/create-project.use-
 import { AppRoutes } from "@api/paths/app-routes";
 import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
 import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
-import { Project } from "@domain/project/project.model";
+import { ProgramProjectCopy, Project } from "@domain/project/project.model";
 import { Program } from "@domain/program/program.model";
-import { AlertDirective, ButtonDirective, ChoiceDirective, FieldDirective } from "@uilib";
+import {
+  AlertDirective,
+  ButtonDirective,
+  ChoiceDirective,
+  DialogBodyDirective,
+  DialogFooterDirective,
+  DialogHeaderComponent,
+  FieldDirective,
+} from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { evaluationError } from "@utils/evaluation-workspace";
 
@@ -33,6 +41,9 @@ import { evaluationError } from "@utils/evaluation-workspace";
     AlertDirective,
     ButtonDirective,
     ChoiceDirective,
+    DialogBodyDirective,
+    DialogFooterDirective,
+    DialogHeaderComponent,
     FieldDirective,
     ModalComponent,
     ReactiveFormsModule,
@@ -45,6 +56,7 @@ import { evaluationError } from "@utils/evaluation-workspace";
 export class ProjectEntryComponent {
   readonly programId = input<number | null>(null);
   readonly projectId = input<number | null>(null);
+  readonly programCopies = input<ProgramProjectCopy[]>([]);
   readonly leaderId = input<number | null>(null);
   readonly close = output<void>();
   private readonly programs = inject(ProgramRepositoryPort);
@@ -60,7 +72,14 @@ export class ProjectEntryComponent {
     validators: [Validators.required, Validators.pattern(/\S/), Validators.maxLength(256)],
   });
   readonly choices = signal<{ id: number; name: string }[]>([]);
+  readonly availableChoices = computed(() => {
+    const applied = new Set(this.programCopies().map(copy => copy.programId));
+    return this.choices().filter(choice => !applied.has(choice.id));
+  });
   readonly selection = signal<number | null>(null);
+  readonly selectedChoice = computed(() =>
+    this.availableChoices().find(choice => choice.id === this.selection()),
+  );
   readonly creating = signal(false);
   readonly loading = signal(false);
   readonly pending = signal(false);
@@ -80,6 +99,9 @@ export class ProjectEntryComponent {
         programId = this.programId(),
         leader = this.leaderId();
       if (!projectId && !programId) return;
+      this.choices.set([]);
+      this.selection.set(null);
+      this.error.set(null);
       this.loading.set(true);
       const source: Observable<{ results: (Project | Program)[] }> = projectId
         ? this.programs.getAll(
@@ -112,7 +134,7 @@ export class ProjectEntryComponent {
   }
 
   async submit(): Promise<void> {
-    if (this.pending()) return;
+    if (this.pending() || (!this.showName() && (this.loading() || !this.selectedChoice()))) return;
     if (this.showName() && this.name.invalid) {
       this.name.markAsTouched();
       return;
@@ -164,6 +186,7 @@ export class ProjectEntryComponent {
       await this.openCopy(
         "newProjectId" in copy ? copy.newProjectId : copy.projectId,
         copy.programLinkId,
+        "canEdit" in copy ? copy.canEdit : undefined,
       );
     } catch {
       if (!this.destroy.destroyed) this.error.set("Не удалось открыть проект. Повторите попытку.");
@@ -172,10 +195,14 @@ export class ProjectEntryComponent {
     }
   }
 
-  private async openCopy(id: number, link: number): Promise<void> {
-    this.close.emit();
-    await this.router.navigate([this.paths.projects.edit(id)], {
-      queryParams: { editingStep: "additional", programLinkId: link },
+  private async openCopy(id: number, link: number, canEdit = true): Promise<void> {
+    const route = canEdit ? this.paths.projects.edit(id) : this.paths.projects.detail(id);
+    const navigated = await this.router.navigate([route], {
+      queryParams: canEdit
+        ? { editingStep: "additional", programLinkId: link }
+        : { programLinkId: link },
     });
+    if (!navigated) throw new Error("Project navigation failed");
+    if (!this.destroy.destroyed) this.close.emit();
   }
 }

@@ -26,6 +26,7 @@ export class ProgramDetailMainUIInfoService {
   readonly showProgramModalErrorMessage = signal<string | null>(null);
   readonly registeredProgramModal = signal<boolean>(false);
   readonly welcomeAcknowledgementPending = signal<boolean>(false);
+  readonly welcomeAcknowledgementError = signal(false);
 
   readonly registerDateExpired = signal<boolean>(false);
   readonly evaluationDateExpired = signal<boolean>(false);
@@ -48,6 +49,7 @@ export class ProgramDetailMainUIInfoService {
   }
 
   applyFormatingProgramData(program: Program): void {
+    if (this.program()?.id !== program.id) this.welcomeAcknowledgementError.set(false);
     this.program.set(program);
     this.registerDateExpired.set(
       Boolean(

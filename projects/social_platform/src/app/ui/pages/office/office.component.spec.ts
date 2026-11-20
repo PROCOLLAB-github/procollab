@@ -53,10 +53,11 @@ describe("OfficeComponent", () => {
       onAcceptInvite: vi.fn(),
       onLogout: vi.fn(),
       invites: signal([]),
+      verificationNoticeError: signal(false),
+      waitVerificationModal: signal(false),
     };
 
     const officeUIInfoServiceSpy = {
-      waitVerificationModal: signal(false),
       verificationAcknowledgementPending: signal(false),
       inviteErrorModal: signal(false),
       navItems: signal([]),

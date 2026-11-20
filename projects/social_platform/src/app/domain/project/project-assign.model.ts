@@ -8,4 +8,5 @@ export class ProjectAssign {
   newProjectId!: number;
   programLinkId!: number;
   partnerProgram!: string;
+  canEdit?: boolean;
 }

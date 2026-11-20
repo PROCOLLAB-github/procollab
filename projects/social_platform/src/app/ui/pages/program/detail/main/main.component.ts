@@ -32,7 +32,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { finalize } from "rxjs";
 import { ProgramLinksComponent } from "@ui/widgets/program-links/program-links.component";
 import { MyCertificateComponent } from "./my-certificate.component";
-import { AlertDirective } from "@uilib";
+import { AlertDirective, DialogBodyDirective, DialogHeaderComponent } from "@uilib";
 import { solutionCreationBlockedMessage } from "@api/solution/solution-navigation";
 
 /** Страница основной вкладки программы с описанием, ссылками и новостями. */
@@ -56,6 +56,8 @@ import { solutionCreationBlockedMessage } from "@api/solution/solution-navigatio
     ProgramLinksComponent,
     MyCertificateComponent,
     AlertDirective,
+    DialogBodyDirective,
+    DialogHeaderComponent,
   ],
   providers: [ProgramDetailMainService, ExpandService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -103,6 +105,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     this.programDetailMainUIInfoService.registeredProgramModal;
   protected readonly welcomeAcknowledgementPending =
     this.programDetailMainUIInfoService.welcomeAcknowledgementPending;
+  protected readonly welcomeAcknowledgementError =
+    this.programDetailMainUIInfoService.welcomeAcknowledgementError;
 
   protected readonly contactLinks = this.programDetailMainUIInfoService.contactLinks;
   protected readonly materialLinks = this.programDetailMainUIInfoService.materialLinks;

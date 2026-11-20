@@ -75,28 +75,30 @@
       </div>
     </div>
   }
-  <app-modal [open]="waitVerificationModal()">
-    <div class="message-modal">
-      <img
-        src="/assets/images/office/shared/wait.png"
-        alt="wait"
-        width="215px"
-        loading="lazy"
-        decoding="async"
+  <app-modal
+    size="small"
+    [open]="waitVerificationModal()"
+    labelledBy="verification-notice-title"
+    describedBy="verification-notice-description"
+    bodyClass="modal__body--no-flex"
+    (openChange)="!$event ? onAcceptWaitVerification() : null"
+  >
+    <section class="verification-notice">
+      <app-dialog-header
+        title="Проверка профиля"
+        titleId="verification-notice-title"
+        [closeDisabled]="verificationAcknowledgementPending()"
+        (closed)="onAcceptWaitVerification()"
       />
-      <h3 class="message-modal__title text-body-14">Ваш аккаунт проходит подтверждение</h3>
-      <p class="message-modal__text text-body-12">
-        Мы проверяем ваши данные и скоро сообщим о подтверждении аккаунта, а пока можете уже
-        пользоваться платформой
-      </p>
-      <app-button
-        class="message-modal__button"
-        [disabled]="verificationAcknowledgementPending()"
-        (click)="onAcceptWaitVerification()"
-      >
-        Хорошо
-      </app-button>
-    </div>
+      <div appDialogBody>
+        <p id="verification-notice-description">
+          Ваш профиль еще не подтвержден администратором. Вы можете пользоваться платформой.
+        </p>
+        @if (verificationNoticeError()) {
+          <p appAlert="error">Не удалось закрыть уведомление. Попробуйте еще раз.</p>
+        }
+      </div>
+    </section>
   </app-modal>
 
   <app-modal [open]="inviteErrorModal()">

@@ -157,58 +157,28 @@
   </app-modal>
 
   <app-modal
+    size="small"
     [open]="registeredProgramModal()"
+    labelledBy="program-welcome-title"
+    describedBy="program-welcome-description"
+    bodyClass="modal__body--no-flex"
     (openChange)="!$event ? onAcknowledgeProgramWelcome() : null"
   >
-    <div class="cancel" style="width: 605px; padding: 0px 24px">
-      <div class="cancel__top">
-        <p class="cancel__title text-body-14">поздравляем с регистрацией на программу! 🎉</p>
-      </div>
-
-      <div class="cancel__text-block">
-        <p class="text-body-12">
-          Это закрытая группа программы – доступ к ней есть только у зарегистрированных участников
+    <section class="program-welcome">
+      <app-dialog-header
+        title="Вы зарегистрированы на программу"
+        titleId="program-welcome-title"
+        [closeDisabled]="welcomeAcknowledgementPending()"
+        (closed)="onAcknowledgeProgramWelcome()"
+      />
+      <div appDialogBody>
+        <p id="program-welcome-description">
+          На странице программы собраны новости, материалы и контакты организаторов.
         </p>
-
-        <p class="text-body-12">Здесь вы найдете:</p>
-
-        <ul class="cancel__text-list">
-          <li class="text-body-12">
-            самые актуальные и важные файлы программы (например, Положение)
-          </li>
-          <li class="text-body-12">контакты организаторов для связи</li>
-          <li class="text-body-12">новости программы</li>
-        </ul>
-
-        @if (program()?.solutionStorageMode === "solution") {
-          <p class="text-body-12">
-            Через кнопку «мое решение» вы открываете заявку команды и заполняете материалы
-            программы.
-          </p>
-          <p class="text-body-12">
-            Сроки заполнения и сдачи указаны в заявке. Созданное решение можно открыть и после
-            закрытия приема.
-          </p>
-        } @else {
-          <p class="text-body-12">
-            Важно: именно через закрытую группу и кнопку «подать проект» вы отправляете результаты
-            работы своей команды, когда будете готовы
-          </p>
-
-          <p class="text-body-12">
-            Будьте внимательны: по истечению дедлайна определенного организаторами, кнопка
-            становится некликабельной 👻
-          </p>
+        @if (welcomeAcknowledgementError()) {
+          <p appAlert="error">Не удалось закрыть приветствие. Попробуйте еще раз.</p>
         }
       </div>
-
-      <app-button
-        customTypographyClass="text-body-12"
-        size="medium"
-        [disabled]="welcomeAcknowledgementPending()"
-        (click)="onAcknowledgeProgramWelcome()"
-        >спасибо, понятно</app-button
-      >
-    </div>
+    </section>
   </app-modal>
 }

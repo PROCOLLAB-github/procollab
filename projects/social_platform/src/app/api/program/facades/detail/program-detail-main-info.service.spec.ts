@@ -112,6 +112,7 @@ describe("ProgramDetailMainService welcome acknowledgement with real repository/
     post.error(new Error("POST failed"));
     expect(ui.welcomeAcknowledgementPending()).toBe(false);
     expect(ui.registeredProgramModal()).toBe(true);
+    expect(ui.welcomeAcknowledgementError()).toBe(true);
     expect(ui.program()?.welcomeAcknowledgedAt).toBeNull();
     await loadProgram();
     expect(adapter.getOne).toHaveBeenCalledTimes(1);
@@ -122,6 +123,21 @@ describe("ProgramDetailMainService welcome acknowledgement with real repository/
     expect(ui.registeredProgramModal()).toBe(false);
     expect(ui.program()?.welcomeAcknowledgedAt).toBe(timestamp);
     expect(ui.welcomeAcknowledgementPending()).toBe(false);
+    expect(ui.welcomeAcknowledgementError()).toBe(false);
+  });
+
+  it("keeps the next program's welcome open when a previous acknowledgement completes", async () => {
+    await loadProgram();
+    service.acknowledgeProgramWelcome().subscribe();
+
+    ui.programId.set(8);
+    ui.applyFormatingProgramData({ ...stale, id: 8 });
+    post.next({ welcomeAcknowledgedAt: timestamp });
+    post.complete();
+
+    expect(ui.registeredProgramModal()).toBe(true);
+    expect(ui.program()?.id).toBe(8);
+    expect(ui.program()?.welcomeAcknowledgedAt).toBeNull();
   });
 
   it("invalid repository IDs are handled by existing Result errors, without HTTP", async () => {
