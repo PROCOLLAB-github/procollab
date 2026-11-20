@@ -47,8 +47,16 @@ export class ProgramRegistrationHttpAdapter implements ProgramRegistrationReposi
       data,
     );
   }
-  tokenAction(id: number, action: "confirm" | "resend", token: string) {
-    return this.api.post<RegistrationResult>(`${this.root(id)}/registration/${action}/`, { token });
+  tokenAction(
+    id: number,
+    action: "confirm" | "resend",
+    token: string,
+    openedLink?: { linkOpened: true; browserProof?: string },
+  ) {
+    return this.api.post<RegistrationResult>(`${this.root(id)}/registration/${action}/`, {
+      token,
+      ...openedLink,
+    });
   }
   resetPassword(id: number, email: string) {
     return this.api.post<void>("/auth/reset_password/", { email, registrationProgramId: id });

@@ -40,11 +40,11 @@ export interface ProgramCreation {
   idempotencyKey: string;
 }
 export interface LaunchCheck {
-  code: "page" | "dates" | "registration";
+  code: "page" | "dates" | "registration" | "cases";
   title: string;
   ready: boolean;
   detail: string;
-  section: "basic" | "dates" | "registration";
+  section: "basic" | "dates" | "registration" | "project-form";
 }
 export interface ProgramLaunch {
   program: ManagedProgram;

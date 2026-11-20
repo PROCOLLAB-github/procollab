@@ -189,6 +189,7 @@ describe("DetailProgramInfoService", () => {
       .mocked(TestBed.inject(GetSolutionContextUseCase).execute)
       .mockReturnValue(response);
     service.addNewProject(12);
+    expect(service.applicationActionDisabled()).toBe(true);
     service.addNewProject(12);
     expect(getContext).toHaveBeenCalledTimes(1);
     programUI.program.set(program({ id: 99 }));
@@ -234,13 +235,64 @@ describe("DetailProgramInfoService", () => {
     });
   });
 
-  it("opens the submitted project in its read-only detail route", () => {
-    setCurrentApplication({ projectId: 10, programLinkId: 44, submitted: true });
+  it("opens the submitted copy with the current program link after the deadline", () => {
+    programUI.program.set(
+      program({
+        id: 12,
+        isUserMember: true,
+        datetimeProjectSubmissionEnds: "2000-01-01T00:00:00Z",
+        currentApplication: { projectId: 10, programLinkId: 44, submitted: true },
+      }),
+    );
 
     expect(service.applicationLabel()).toBe("открыть сданный проект");
+    expect(service.applicationActionDisabled()).toBe(false);
     service.addNewProject(12);
     expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
-    expect(router.navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/10"]);
+    expect(router.navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/10"], {
+      queryParams: { programLinkId: 44 },
+    });
+  });
+
+  it.each([null, { projectId: 10, programLinkId: 44, submitted: false }])(
+    "blocks the legacy entry after the fallback registration deadline for %j",
+    currentApplication => {
+      programUI.program.set(
+        program({
+          id: 12,
+          isUserMember: true,
+          datetimeRegistrationEnds: "2000-01-01T00:00:00Z",
+          currentApplication,
+        }),
+      );
+
+      expect(service.applicationActionDisabled()).toBe(true);
+      service.addNewProject(12);
+      expect(service.legacyEntryProgramId()).toBeNull();
+      expect(router.navigate).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each([
+    { isUserMember: false },
+    { isUserManager: true },
+    { isUserExpert: true },
+    { pendingExpertInvitationId: 32 },
+    { preview: true },
+    { solutionActionAvailable: false },
+  ])("blocks access to the participant action for %j", overrides => {
+    programUI.program.set(
+      program({
+        id: 12,
+        isUserMember: true,
+        currentApplication: { projectId: 10, programLinkId: 44, submitted: true },
+        ...overrides,
+      }),
+    );
+
+    expect(service.applicationActionDisabled()).toBe(true);
+    service.addNewProject(12);
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 
   it("reload reads an existing application directly from Program without project requests", () => {

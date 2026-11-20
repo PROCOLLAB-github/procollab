@@ -49,7 +49,9 @@
                     ? 'Изменить: ' + check.title
                     : check.code === 'registration'
                       ? 'Настроить регистрацию'
-                      : null
+                      : check.code === 'cases'
+                        ? 'Добавить кейсы в заявке проекта'
+                        : null
                 "
                 >{{
                   check.code === "page"
@@ -62,7 +64,9 @@
                         : "Указать сроки"
                       : check.ready
                         ? "Изменить"
-                        : "Настроить"
+                        : check.code === "cases"
+                          ? "Добавить кейсы"
+                          : "Настроить"
                 }}</a
               >
             </div>
@@ -136,15 +140,17 @@
   (openChange)="!$event && closeConfirm()"
 >
   <section class="launch__dialog" [attr.aria-busy]="busy()">
-    <header>
-      <h2 id="program-publish-heading">Опубликовать программу?</h2>
-      <button appButton="icon" aria-label="Закрыть" [disabled]="busy()" (click)="closeConfirm()">
-        <i appIcon icon="cross" appSquare="24"></i>
-      </button>
-    </header>
+    <app-dialog-header
+      title="Опубликовать программу?"
+      titleId="program-publish-heading"
+      [closeDisabled]="busy()"
+      (closed)="closeConfirm()"
+    />
     <p>
       Программа появится в каталоге, и откроется регистрация участников.
-      @if (state()?.program?.solutionStorageMode === "solution") {
+      @if (state()?.program?.programFormat === "case_championship") {
+        Критерии и экспертов можно настроить позже.
+      } @else if (state()?.program?.solutionStorageMode === "solution") {
         Форму решения и оценивание можно настроить позже.
       }
     </p>

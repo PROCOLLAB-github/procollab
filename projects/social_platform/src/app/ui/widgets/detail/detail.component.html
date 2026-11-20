@@ -197,19 +197,9 @@
                   ) {
                     <app-button
                       [size]="appWidth >= 1000 ? 'medium' : 'big'"
-                      [disabled]="
-                        info().preview ||
-                        info().solutionActionAvailable === false ||
-                        (info().solutionStorageMode !== 'solution' &&
-                          (!!submissionProjectDateExpired || isProjectAssigned())) ||
-                        applicationPending()
-                      "
+                      [disabled]="applicationActionDisabled()"
                       [appearance]="isProjectAssigned() ? 'outline' : 'inline'"
-                      (click)="
-                        info().solutionStorageMode === 'solution' || !isProjectAssigned()
-                          ? addNewProject(info().id)
-                          : null
-                      "
+                      (click)="addNewProject(info().id)"
                       customTypographyClass="text-body-12 bar__add-project"
                     >
                       <span>{{ applicationLabel() }}</span>

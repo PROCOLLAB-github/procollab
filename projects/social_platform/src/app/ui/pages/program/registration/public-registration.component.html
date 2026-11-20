@@ -4,7 +4,7 @@
   <a routerLink="/" aria-label="PROCOLLAB — главная"
     ><img class="enrollment__logo" src="/assets/images/shared/logo.svg" alt="PROCOLLAB"
   /></a>
-  @if (loading()) {
+  @if (loading() && mode() === "form") {
     <p aria-busy="true" aria-live="polite">Загружаем программу…</p>
   }
   @if (program(); as data) {
@@ -12,48 +12,69 @@
       <h2>{{ data.name }}</h2>
       <span>Регистрация в программе</span>
     </header>
-    <h1>
-      {{
-        mode() === "login"
+  }
+  <h1>
+    {{
+      mode() === "form"
+        ? "Регистрация участника"
+        : mode() === "login"
           ? "Вход в PROCOLLAB"
           : mode() === "reset"
             ? "Восстановление пароля"
-            : mode() === "sent" || mode() === "confirm" || mode() === "expired"
-              ? "Подтверждение почты"
-              : "Регистрация участника"
-      }}
-    </h1>
+            : "Подтверждение почты"
+    }}
+  </h1>
+  @if (mode() === "form" && formLoadError()) {
+    <div appAlert="error" role="alert">
+      {{ formLoadError() }}
+      <button appButton="secondary" type="button" (click)="load()">Повторить</button>
+    </div>
   }
   @if (error()) {
-    <div appAlert="error" role="alert">
-      {{ error() }}
-      @if (!program()) {
-        <button appButton="secondary" type="button" (click)="load()">Повторить</button>
-      }
-    </div>
+    <div appAlert="error" role="alert">{{ error() }}</div>
   }
   @if (notice()) {
     <p appAlert="warning" aria-live="polite">{{ notice() }}</p>
   }
-  @if (program(); as data) {
+  @if (mode() !== "form") {
     <section class="enrollment__card">
-      @if (mode() === "confirm") {
+      @if (mode() === "checking") {
+        <p aria-busy="true" aria-live="polite">Проверяем ссылку подтверждения…</p>
+      } @else if (mode() === "confirm") {
         <p>Анкета сохранена. Подтвердите почту, чтобы перейти к программе.</p>
         <button appButton="primary" type="button" [disabled]="busy()" (click)="confirm()">
           Подтвердить почту и продолжить
         </button>
+      } @else if (mode() === "confirmed") {
+        <p appAlert="success" aria-live="polite">Почта уже подтверждена.</p>
+        <button appButton="primary" type="button" (click)="changeMode('login')">Войти</button>
+      } @else if (mode() === "linkError") {
+        @if (canRetryConfirmation()) {
+          <button
+            appButton="primary"
+            type="button"
+            [disabled]="busy()"
+            (click)="checkConfirmation()"
+          >
+            Проверить ссылку еще раз
+          </button>
+        }
+        <button appButton="text" type="button" (click)="changeMode('login')">Войти</button>
       } @else if (mode() === "sent" || mode() === "expired") {
-        <p [appAlert]="mode() === 'sent' ? 'success' : 'warning'">
-          {{ mode() === "sent" ? "Письмо подтверждения отправлено" : "Не удалось подтвердить почту"
-          }}{{ pendingEmail() ? ": " + pendingEmail() : "" }}.
-        </p>
+        @if (mode() === "expired") {
+          <p appAlert="warning" aria-live="polite">Срок действия ссылки истек.</p>
+        } @else {
+          <p appAlert="success">
+            Письмо подтверждения отправлено{{ pendingEmail() ? ": " + pendingEmail() : "" }}.
+          </p>
+        }
         <p>Ответы анкеты сохранены. После подтверждения почты откроется программа.</p>
-        @if (hasReceipt() || confirmToken()) {
+        @if (mode() === "expired" || hasReceipt()) {
           <button appButton="secondary" type="button" [disabled]="busy()" (click)="resend()">
             Отправить письмо еще раз
           </button>
         }
-        <button appButton="text" type="button" (click)="changeMode('login')">
+        <button appButton="text" type="button" [disabled]="busy()" (click)="changeMode('login')">
           Уже подтвердили почту? Войти
         </button>
       } @else if (mode() === "login" || mode() === "reset") {
@@ -106,7 +127,11 @@
             {{ mode() === "reset" ? "Вернуться ко входу" : "Создать аккаунт" }}
           </button>
         </form>
-      } @else if (data.enrolled) {
+      }
+    </section>
+  } @else if (program(); as data) {
+    <section class="enrollment__card">
+      @if (data.enrolled) {
         <p appAlert="success">Вы уже зарегистрированы в этой программе.</p>
         <button appButton="primary" type="button" (click)="openProgram()">Открыть программу</button>
       } @else if (data.closed) {

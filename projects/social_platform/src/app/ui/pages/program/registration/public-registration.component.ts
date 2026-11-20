@@ -11,7 +11,7 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Meta } from "@angular/platform-browser";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { debounceTime, finalize, Subscription } from "rxjs";
+import { debounceTime, finalize, merge, Subscription } from "rxjs";
 import {
   AlertDirective,
   ButtonDirective,
@@ -66,9 +66,21 @@ export class PublicRegistrationComponent {
   readonly loading = signal(false);
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
+  readonly formLoadError = signal<string | null>(null);
   readonly answerErrors = signal<Record<string, string>>({});
   readonly notice = signal<string | null>(null);
-  readonly mode = signal<"form" | "login" | "reset" | "sent" | "confirm" | "expired">("form");
+  readonly mode = signal<
+    | "form"
+    | "login"
+    | "reset"
+    | "sent"
+    | "checking"
+    | "confirm"
+    | "confirmed"
+    | "expired"
+    | "linkError"
+  >("form");
+  readonly canRetryConfirmation = signal(false);
   readonly authenticated = signal(!!this.tokens.getTokens());
   readonly showPassword = signal(false);
   readonly showRepeat = signal(false);
@@ -90,10 +102,13 @@ export class PublicRegistrationComponent {
     password: ["", Validators.required],
   });
   answers = registrationControls([]);
-  private id = 0;
+  private id = -1;
   private seq = 0;
   private receipt = "";
   private answersSubscription?: Subscription;
+  private answersKey = "";
+  private confirmationRequest?: Subscription;
+  private queuedLinkCheck = false;
   constructor() {
     const previous = this.meta.getTag('name="referrer"')?.content;
     this.meta.updateTag({ name: "referrer", content: "no-referrer" });
@@ -102,60 +117,67 @@ export class PublicRegistrationComponent {
       if (previous !== undefined) this.meta.updateTag({ name: "referrer", content: previous });
       else this.meta.removeTag('name="referrer"');
     });
-    this.route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
+    merge(this.route.paramMap, this.route.fragment, this.route.queryParamMap)
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.readRoute());
+  }
+  private readRoute() {
+    const route = this.route.snapshot;
+    const id = Number(route.paramMap.get("id"));
+    const proof =
+      new URLSearchParams(route.fragment ?? "").get("confirmation") ??
+      route.queryParamMap.get("confirmation") ??
+      "";
+    if (this.id !== id) {
+      this.queuedLinkCheck = false;
+      this.confirmationRequest?.unsubscribe();
       this.answersSubscription?.unsubscribe();
+      this.answersKey = "";
       this.answers = registrationControls([]);
       this.program.set(null);
-      this.id = Number(params.get("id"));
+      this.id = id;
       this.error.set(null);
       this.notice.set(null);
-      const confirmation =
-        new URLSearchParams(this.route.snapshot.fragment ?? "").get("confirmation") ??
-        this.route.snapshot.queryParamMap.get("confirmation");
-      this.confirmToken.set(confirmation ?? "");
+      this.confirmToken.set("");
       try {
         const saved = JSON.parse(sessionStorage.getItem(this.key("pending")) ?? "null");
         this.receipt = saved?.receipt ?? "";
         this.pendingEmail.set(saved?.email ?? "");
       } catch {
         this.receipt = "";
+        this.pendingEmail.set("");
       }
       this.hasReceipt.set(!!this.receipt);
       this.mode.set(
-        confirmation
-          ? "confirm"
-          : this.route.snapshot.queryParamMap.get("mode") === "login"
-            ? "login"
-            : this.receipt
-              ? "sent"
-              : "form",
+        route.queryParamMap.get("mode") === "login" ? "login" : this.receipt ? "sent" : "form",
       );
       this.load();
-    });
-    this.route.fragment.pipe(takeUntilDestroyed()).subscribe(fragment => {
-      const proof = new URLSearchParams(fragment ?? "").get("confirmation");
-      if (proof) {
-        this.confirmToken.set(proof);
-        this.error.set(null);
-        this.mode.set("confirm");
-      }
-    });
-    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe(query => {
-      const proof = query.get("confirmation");
-      if (proof) {
-        this.confirmToken.set(proof);
-        this.error.set(null);
-        this.mode.set("confirm");
-      }
-    });
+    }
+    if (proof === this.confirmToken()) return;
+    this.queuedLinkCheck = false;
+    this.confirmationRequest?.unsubscribe();
+    this.confirmToken.set(proof);
+    if (proof) this.checkConfirmation();
+    else this.mode.set(this.receipt ? "sent" : "form");
   }
   private key(suffix: string) {
     return `program-registration-${this.id}-${suffix}`;
   }
+  private browserProof() {
+    try {
+      const key = this.key("browser-proof");
+      const saved = JSON.parse(localStorage.getItem(key) ?? "null");
+      if (saved?.expiresAt > Date.now() && typeof saved.proof === "string") return saved.proof;
+      localStorage.removeItem(key);
+    } catch {
+      /* Manual confirmation stays available. */
+    }
+    return "";
+  }
   load() {
     const seq = ++this.seq;
     this.loading.set(true);
-    this.error.set(null);
+    this.formLoadError.set(null);
     this.api
       .publicForm(this.id)
       .pipe(
@@ -167,17 +189,22 @@ export class PublicRegistrationComponent {
       .subscribe({
         next: data => {
           if (seq !== this.seq) return;
-          const current = this.answers.getRawValue();
+          const key = this.key(data.resume ? `answers-${data.resume.draftId}` : "answers");
+          const current = this.answersKey === key ? this.answers.getRawValue() : {};
           let saved: Record<string, RegistrationValue> = {};
           try {
-            saved = JSON.parse(sessionStorage.getItem(this.key("answers")) ?? "{}");
+            saved = JSON.parse(sessionStorage.getItem(key) ?? "{}");
           } catch {
             /* Ignore corrupt local draft. */
           }
-          this.answers = registrationControls(data.fields, { ...saved, ...current });
+          this.answers = registrationControls(data.fields, {
+            ...data.resume?.answers,
+            ...saved,
+            ...current,
+          });
           this.answersSubscription?.unsubscribe();
-          const group = this.answers,
-            key = this.key("answers");
+          this.answersKey = key;
+          const group = this.answers;
           this.answersSubscription = group.valueChanges
             .pipe(debounceTime(150), takeUntilDestroyed(this.destroy))
             .subscribe(() => {
@@ -191,7 +218,7 @@ export class PublicRegistrationComponent {
           this.authenticated.set(data.authenticated);
         },
         error: e => {
-          if (seq === this.seq) this.error.set(evaluationError(e));
+          if (seq === this.seq) this.formLoadError.set(evaluationError(e));
         },
       });
   }
@@ -199,6 +226,7 @@ export class PublicRegistrationComponent {
     this.error.set(null);
     this.notice.set(null);
     this.mode.set(mode);
+    this.removeConfirmationLink();
     if (this.account.controls.email.value)
       this.credentials.controls.email.setValue(this.account.controls.email.value);
     this.credentials.controls.password.reset("");
@@ -229,14 +257,16 @@ export class PublicRegistrationComponent {
       answers: this.answers.getRawValue(),
       ...(!this.authenticated() ? account : {}),
     };
+    const id = this.id;
     this.api
-      .submit(this.id, payload, !this.authenticated())
+      .submit(id, payload, !this.authenticated())
       .pipe(
-        finalize(() => this.busy.set(false)),
+        finalize(() => this.finishAction()),
         takeUntilDestroyed(this.destroy),
       )
       .subscribe({
         next: result => {
+          if (id !== this.id) return;
           if (result.enrolled) {
             this.openProgram();
             return;
@@ -244,7 +274,25 @@ export class PublicRegistrationComponent {
           this.receipt = result.receipt ?? "";
           this.hasReceipt.set(!!this.receipt);
           this.pendingEmail.set(result.email ?? account.email);
+          if (result.browserProof) {
+            try {
+              localStorage.setItem(
+                this.key("browser-proof"),
+                JSON.stringify({
+                  proof: result.browserProof,
+                  expiresAt: Date.now() + 7 * 86_400_000,
+                }),
+              );
+            } catch {
+              /* Manual confirmation stays available. */
+            }
+          }
+          // The server now owns the submitted answers. A later login may be a different account.
+          this.answersSubscription?.unsubscribe();
+          this.answersKey = "";
+          this.answers = registrationControls(data.fields);
           try {
+            sessionStorage.removeItem(this.key("answers"));
             sessionStorage.setItem(
               this.key("pending"),
               JSON.stringify({ receipt: this.receipt, email: this.pendingEmail() }),
@@ -257,6 +305,7 @@ export class PublicRegistrationComponent {
           this.mode.set("sent");
         },
         error: e => {
+          if (id !== this.id) return;
           this.error.set(evaluationError(e));
           const errors = e?.error?.answers;
           if (errors && typeof errors === "object") {
@@ -300,7 +349,7 @@ export class PublicRegistrationComponent {
     this.login
       .execute(this.credentials.getRawValue())
       .pipe(
-        finalize(() => this.busy.set(false)),
+        finalize(() => this.finishAction()),
         takeUntilDestroyed(this.destroy),
       )
       .subscribe({
@@ -321,66 +370,134 @@ export class PublicRegistrationComponent {
         error: () => this.error.set("Не удалось войти. Попробуйте еще раз."),
       });
   }
+  checkConfirmation() {
+    if (this.busy()) {
+      this.queuedLinkCheck = true;
+      this.mode.set("checking");
+      return;
+    }
+    // Do not replace a different active session just by opening a link.
+    const browserProof = this.tokens.getTokens() ? "" : this.browserProof();
+    this.requestConfirmation({ linkOpened: true, ...(browserProof ? { browserProof } : {}) });
+  }
   confirm() {
+    this.requestConfirmation();
+  }
+  private finishAction() {
+    this.busy.set(false);
+    if (this.queuedLinkCheck && !this.destroy.destroyed) {
+      this.queuedLinkCheck = false;
+      this.checkConfirmation();
+    }
+  }
+  private requestConfirmation(openedLink?: { linkOpened: true; browserProof?: string }) {
     if (!this.confirmToken() || this.busy()) return;
     this.busy.set(true);
+    this.mode.set("checking");
     this.error.set(null);
-    this.api
-      .tokenAction(this.id, "confirm", this.confirmToken())
+    this.notice.set(null);
+    this.canRetryConfirmation.set(false);
+    this.confirmationRequest = this.api
+      .tokenAction(this.id, "confirm", this.confirmToken(), openedLink)
       .pipe(
-        finalize(() => this.busy.set(false)),
+        finalize(() => this.finishAction()),
         takeUntilDestroyed(this.destroy),
       )
       .subscribe({
         next: result => {
-          if (result.access && result.refresh) {
-            this.tokens.memTokens({ access: result.access, refresh: result.refresh });
-            this.profile.invalidateProfile();
-            this.authenticated.set(true);
+          if (result.confirmationRequired) {
+            this.mode.set("confirm");
+            return;
           }
-          void this.router.navigate([], {
-            relativeTo: this.route,
-            queryParams: {},
-            replaceUrl: true,
-          });
-          if (result.enrolled) this.openProgram();
-          else {
-            this.mode.set("form");
-            if (result.reviewRequired) {
-              this.answers.patchValue(result.answers ?? {});
-              try {
-                sessionStorage.setItem(this.key("answers"), JSON.stringify(result.answers ?? {}));
-              } catch {
-                /* Optional storage. */
-              }
-              this.notice.set(
-                "Почта подтверждена. Анкета обновлена — проверьте ответы и заполните новые обязательные поля.",
-              );
-            } else this.notice.set("Почта подтверждена. Регистрация в программу уже закрыта.");
-            this.load();
+          if (!result.access || !result.refresh) {
+            this.mode.set("linkError");
+            this.canRetryConfirmation.set(true);
+            this.error.set("Не удалось проверить ссылку. Попробуйте еще раз.");
+            return;
           }
+          this.tokens.memTokens({ access: result.access, refresh: result.refresh });
+          this.profile.invalidateProfile();
+          this.authenticated.set(true);
+          try {
+            if (openedLink?.browserProof && this.browserProof() === openedLink.browserProof)
+              localStorage.removeItem(this.key("browser-proof"));
+          } catch {
+            /* Optional storage. */
+          }
+          if (result.enrolled) {
+            this.openProgram(true);
+            return;
+          }
+          this.clearPending();
+          this.removeConfirmationLink();
+          this.mode.set("form");
+          if (result.reviewRequired) {
+            this.notice.set(
+              "Почта подтверждена. Анкета обновлена — проверьте ответы и заполните новые обязательные поля.",
+            );
+          } else this.notice.set("Почта подтверждена. Регистрация в программу уже закрыта.");
+          this.load();
         },
         error: e => {
-          this.error.set(evaluationError(e));
-          this.mode.set("expired");
+          switch (e?.error?.code) {
+            case "confirmation_used":
+              this.mode.set("confirmed");
+              return;
+            case "confirmation_expired":
+              this.mode.set("expired");
+              return;
+          }
+          this.mode.set("linkError");
+          if (e?.error?.code === "confirmation_replaced") {
+            this.error.set("Эта ссылка заменена. Откройте последнее письмо о подтверждении.");
+          } else if (e?.error?.code === "confirmation_invalid" || e?.status === 404) {
+            this.error.set("Ссылка недействительна.");
+          } else {
+            this.canRetryConfirmation.set(true);
+            this.error.set("Не удалось проверить ссылку. Попробуйте еще раз.");
+          }
         },
       });
   }
+  private removeConfirmationLink() {
+    if (!this.confirmToken()) return;
+    this.queuedLinkCheck = false;
+    this.confirmToken.set("");
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { confirmation: null },
+      queryParamsHandling: "merge",
+      replaceUrl: true,
+    });
+  }
+  private clearPending() {
+    this.receipt = "";
+    this.hasReceipt.set(false);
+    this.pendingEmail.set("");
+    try {
+      sessionStorage.removeItem(this.key("pending"));
+    } catch {
+      /* Optional storage. */
+    }
+  }
   resend() {
     if (this.busy()) return;
-    const token = this.receipt || this.confirmToken();
+    const proof = this.confirmToken();
+    const token = this.mode() === "expired" ? proof : this.receipt;
     if (!token) return;
+    const id = this.id;
     this.busy.set(true);
     this.error.set(null);
     this.notice.set(null);
     this.api
-      .tokenAction(this.id, "resend", token)
+      .tokenAction(id, "resend", token)
       .pipe(
-        finalize(() => this.busy.set(false)),
+        finalize(() => this.finishAction()),
         takeUntilDestroyed(this.destroy),
       )
       .subscribe({
         next: result => {
+          if (id !== this.id || proof !== this.confirmToken()) return;
           this.receipt = result.receipt ?? this.receipt;
           this.hasReceipt.set(!!this.receipt);
           try {
@@ -391,10 +508,17 @@ export class PublicRegistrationComponent {
           } catch {
             /* Optional storage. */
           }
+          this.removeConfirmationLink();
           this.mode.set("sent");
           this.notice.set("Новое письмо отправлено. Проверьте входящие и папку «Спам».");
         },
-        error: e => this.error.set(evaluationError(e)),
+        error: e => {
+          if (id !== this.id || proof !== this.confirmToken()) return;
+          if (e?.error?.code === "confirmation_used") {
+            this.clearPending();
+            this.mode.set("confirmed");
+          } else this.error.set(evaluationError(e));
+        },
       });
   }
   resetPassword() {
@@ -405,7 +529,7 @@ export class PublicRegistrationComponent {
     this.api
       .resetPassword(this.id, this.credentials.controls.email.value)
       .pipe(
-        finalize(() => this.busy.set(false)),
+        finalize(() => this.finishAction()),
         takeUntilDestroyed(this.destroy),
       )
       .subscribe({
@@ -416,17 +540,18 @@ export class PublicRegistrationComponent {
         error: e => this.error.set(evaluationError(e)),
       });
   }
-  openProgram() {
+  openProgram(replaceUrl = false) {
+    this.clearPending();
     try {
       sessionStorage.removeItem(this.key("answers"));
-      sessionStorage.removeItem(this.key("pending"));
+      if (this.answersKey) sessionStorage.removeItem(this.answersKey);
     } catch {
       /* Optional storage. */
     }
     this.answers.markAsPristine();
     this.account.markAsPristine();
     this.profile.invalidateProfile();
-    void this.router.navigateByUrl(`/office/program/${this.id}`);
+    void this.router.navigateByUrl(`/office/program/${this.id}`, { replaceUrl });
   }
   @HostListener("window:beforeunload", ["$event"]) beforeUnload(event: BeforeUnloadEvent) {
     if (this.busy()) {

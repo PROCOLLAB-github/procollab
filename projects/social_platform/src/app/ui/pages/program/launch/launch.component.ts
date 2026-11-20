@@ -20,7 +20,7 @@ import {
   finalize,
   switchMap,
 } from "rxjs";
-import { AlertDirective, ButtonDirective, FieldDirective, IconComponent } from "@uilib";
+import { AlertDirective, ButtonDirective, DialogHeaderComponent, FieldDirective } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-case";
@@ -37,7 +37,7 @@ import { evaluationError } from "@utils/evaluation-workspace";
     AlertDirective,
     ButtonDirective,
     FieldDirective,
-    IconComponent,
+    DialogHeaderComponent,
     ModalComponent,
     TransientNoticeComponent,
   ],

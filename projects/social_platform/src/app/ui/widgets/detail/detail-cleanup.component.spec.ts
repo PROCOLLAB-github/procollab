@@ -1,9 +1,9 @@
 /** @format */
 
-import { signal } from "@angular/core";
+import { computed, signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { FormGroup } from "@angular/forms";
-import { provideRouter, RouterLink } from "@angular/router";
+import { provideRouter, Router, RouterLink } from "@angular/router";
 import { By } from "@angular/platform-browser";
 import { of } from "rxjs";
 import { ProjectFormService } from "@api/project/project-form.service";
@@ -11,6 +11,8 @@ import { ProjectAdditionalService } from "@api/project/facades/edit/project-addi
 import { ChatStateService } from "@domain/shared/chat-state.service";
 import { Program } from "@domain/program/program.model";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
+import { GetSolutionContextUseCase } from "@api/solution/use-cases/solution.use-cases";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { PublicProgramSolutionsComponent } from "@ui/pages/program/published-solutions/public-program-solutions.component";
 import { DeatilComponent } from "./detail.component";
 import { DetailInfoService } from "./services/detail-info.service";
@@ -21,11 +23,8 @@ import { DetailProfileInfoService } from "./services/profile/detail-profile-info
 describe("Detail cleanup actions", () => {
   const info = signal<any>(Program.default());
   const type = signal("program");
-  const submitted = signal(false);
-  const pending = signal(false);
-  const label = signal("создать заявку");
+  const submitted = computed(() => info().currentApplication?.submitted === true);
   const copyLink = vi.fn();
-  const create = vi.fn();
   const profile = signal<any>({ id: 7 });
   const manager = signal(false),
     expert = signal(false),
@@ -36,25 +35,26 @@ describe("Detail cleanup actions", () => {
     manager.set(false);
     expert.set(false);
     member.set(true);
-    info.set(Program.default());
-    submitted.set(false);
-    pending.set(false);
-    label.set("создать заявку");
+    info.set({ ...Program.default(), isUserMember: true });
     copyLink.mockClear();
     profile.set({ id: 7 });
-    create.mockClear();
     // Unused modal flags stay closed; the real template/button primitives are rendered.
     const closed = new Proxy(
       {},
       {
-        get: (_target, key) => (key === "submissionProjectDateExpired" ? undefined : signal(false)),
+        get: () => signal(false),
       },
     );
     await TestBed.configureTestingModule({
       imports: [DeatilComponent, PublicProgramSolutionsComponent],
       providers: [
         provideRouter([]),
-        { provide: ProgramDetailMainUIInfoService, useValue: { program: info } },
+        {
+          provide: ProgramDetailMainUIInfoService,
+          useValue: { program: info, registerDateExpired: signal(false) },
+        },
+        { provide: GetSolutionContextUseCase, useValue: { execute: vi.fn() } },
+        { provide: LoggerService, useValue: { debug: vi.fn() } },
         { provide: ProjectFormService, useValue: { getForm: () => new FormGroup({}) } },
         { provide: ChatStateService, useValue: { userOnlineStatusCache: of({}) } },
       ],
@@ -79,24 +79,7 @@ describe("Detail cleanup actions", () => {
                 destroy: vi.fn(),
               },
             },
-            {
-              provide: DetailProgramInfoService,
-              useValue: {
-                isProjectsPage: signal(false),
-                isMembersPage: signal(false),
-                isProjectsRatingPage: signal(false),
-                isAnalyticsPage: signal(false),
-                isPublishedSolutionsPage: signal(false),
-                isAssignProjectToProgramModalOpen: signal(false),
-                isProgramEndedModalOpen: signal(false),
-                isProgramSubmissionProjectsEndedModalOpen: signal(false),
-                applicationLabel: label,
-                applicationPending: pending,
-                legacyEntryProgramId: signal(null),
-                addNewProject: create,
-                getRegistrationLink: (program: Program) => program.registrationLink,
-              },
-            },
+            DetailProgramInfoService,
             { provide: DetailProjectInfoService, useValue: closed },
             {
               provide: DetailProfileInfoService,
@@ -114,28 +97,23 @@ describe("Detail cleanup actions", () => {
       .compileComponents();
   });
 
-  it("renders create, open-existing and submitted CTA states without changing submitted disabling", () => {
+  it("opens the submitted copy from the participant button after the deadline", () => {
+    info.update(program => ({
+      ...program,
+      id: 12,
+      datetimeProjectSubmissionEnds: "2000-01-01T00:00:00Z",
+      currentApplication: { projectId: 10, programLinkId: 44, submitted: true },
+    }));
+    const navigate = vi.spyOn(TestBed.inject(Router), "navigate").mockResolvedValue(true);
     const fixture = TestBed.createComponent(DeatilComponent);
     fixture.detectChanges();
-    const button = () =>
-      fixture.nativeElement.querySelector(".bar__add-project") as HTMLButtonElement;
-    expect(button().textContent).toContain("создать заявку");
-    // The unrelated deadline flag is absent for programs.
-    expect(button().disabled).toBe(false);
-    button().click();
-    expect(create).toHaveBeenCalledTimes(1);
-    label.set("перейти в заявку");
-    fixture.detectChanges();
-    expect(button().textContent).toContain("перейти в заявку");
-    expect(button().disabled).toBe(false);
-    pending.set(true);
-    fixture.detectChanges();
-    expect(button().disabled).toBe(true);
-    pending.set(false);
-    submitted.set(true);
-    label.set("вы подали проект");
-    fixture.detectChanges();
-    expect(button().disabled).toBe(true);
+    const button = fixture.nativeElement.querySelector(".bar__add-project") as HTMLButtonElement;
+    expect(button.textContent).toContain("открыть сданный проект");
+    expect(button.disabled).toBe(false);
+    button.click();
+    expect(navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/10"], {
+      queryParams: { programLinkId: 44 },
+    });
   });
   it.each(["", "https://example.test/cover.png"])(
     "shows exactly one program heading on desktop and mobile with cover %s",
@@ -272,10 +250,12 @@ describe("Detail cleanup actions", () => {
     profile.set(null);
     const fixture = TestBed.createComponent(DeatilComponent);
     fixture.detectChanges();
+    const applicationService = fixture.debugElement.injector.get(DetailProgramInfoService);
+    const create = vi.spyOn(applicationService, "addNewProject").mockImplementation(() => {});
     const button = fixture.nativeElement.querySelector(".bar__add-project") as HTMLButtonElement;
     expect(button.disabled).toBe(false);
     button.click();
-    expect(create).toHaveBeenCalledTimes(1);
+    expect(create).toHaveBeenCalledExactlyOnceWith(1);
   });
 
   it("workspace/chat are genuinely disabled, focusable tooltip wrappers have no navigation", () => {
