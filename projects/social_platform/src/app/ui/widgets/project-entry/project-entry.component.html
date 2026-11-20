@@ -9,50 +9,87 @@
     (submit)="$event.preventDefault(); submit()"
     [attr.aria-busy]="pending() || loading()"
   >
-    <h2 id="project-entry-heading">{{ heading() }}</h2>
-    @if (error()) {
-      <p appAlert="error" role="alert">{{ error() }}</p>
-    }
-    @if (showName()) {
-      <label class="project-entry__label"
-        >Название проекта *
-        <input
-          appField
-          [formControl]="name"
-          maxlength="256"
-          [attr.aria-invalid]="name.touched && name.invalid"
-        />
-      </label>
-      @if (name.touched && name.invalid) {
-        <p role="alert">Введите название проекта.</p>
+    <app-dialog-header
+      [title]="heading()"
+      titleId="project-entry-heading"
+      [closeDisabled]="pending()"
+      (closed)="close.emit()"
+    />
+    <div appDialogBody>
+      @if (error()) {
+        <p appAlert="error" role="alert">{{ error() }}</p>
       }
-    } @else if (loading()) {
-      <p role="status">Загружаем список…</p>
-    } @else {
-      <fieldset class="project-entry__choices">
-        <legend>{{ projectId() ? "Программы с открытой сдачей" : "Мои проекты" }}</legend>
-        @for (choice of choices(); track choice.id) {
-          <label [class.project-entry__chosen]="selection() === choice.id">
-            <input
-              appChoice
-              type="radio"
-              name="project-choice"
-              [checked]="selection() === choice.id"
-              (change)="selection.set(choice.id)"
-            />
-            {{ choice.name }}
-          </label>
-        } @empty {
-          @if (projectId()) {
-            <p>После регистрации в программе с открытой сдачей она появится здесь.</p>
-            <a routerLink="/office/program">Все программы</a>
-          } @else {
-            <p>Можно создать новый проект.</p>
-          }
+      @if (showName()) {
+        <label class="project-entry__label"
+          >Название проекта *
+          <input
+            appField
+            [formControl]="name"
+            maxlength="256"
+            [attr.aria-invalid]="name.touched && name.invalid"
+          />
+        </label>
+        @if (name.touched && name.invalid) {
+          <p role="alert">Введите название проекта.</p>
         }
-      </fieldset>
-    }
-    <div class="project-entry__actions">
+      } @else {
+        @if (programCopies().length) {
+          <ul class="project-entry__copies" aria-label="Копии проекта в программах">
+            @for (copy of programCopies(); track copy.programLinkId) {
+              <li class="project-entry__row">
+                <div>
+                  {{ copy.name }}
+                  <div class="project-entry__status">
+                    {{ copy.submitted ? "Проект сдан" : "Черновик" }}
+                  </div>
+                </div>
+                <a
+                  [routerLink]="pending() ? null : paths.projects.detail(copy.projectId)"
+                  [queryParams]="{ programLinkId: copy.programLinkId }"
+                  [attr.aria-label]="'Открыть проект в программе «' + copy.name + '»'"
+                  (click)="!pending() && close.emit()"
+                  >Открыть проект</a
+                >
+              </li>
+            }
+          </ul>
+        }
+        @if (loading()) {
+          <p role="status">Загружаем список…</p>
+        } @else if (!error() || availableChoices().length) {
+          <fieldset class="project-entry__choices" [disabled]="pending()">
+            <legend>{{ projectId() ? "Программы с открытой сдачей" : "Мои проекты" }}</legend>
+            @for (choice of availableChoices(); track choice.id) {
+              <label
+                class="project-entry__row"
+                [class.project-entry__chosen]="selection() === choice.id"
+              >
+                <input
+                  appChoice
+                  type="radio"
+                  name="project-choice"
+                  [checked]="selection() === choice.id"
+                  (change)="selection.set(choice.id)"
+                />
+                {{ choice.name }}
+              </label>
+            } @empty {
+              @if (projectId()) {
+                @if (programCopies().length) {
+                  <p>Других программ с открытой сдачей пока нет.</p>
+                } @else {
+                  <p>После регистрации в программе с открытой сдачей она появится здесь.</p>
+                }
+                <a [routerLink]="paths.program.root()">Все программы</a>
+              } @else {
+                <p>Можно создать новый проект.</p>
+              }
+            }
+          </fieldset>
+        }
+      }
+    </div>
+    <footer appDialogFooter class="project-entry__actions">
       @if (!showName() && programId()) {
         <button
           type="button"
@@ -63,17 +100,19 @@
           Создать новый проект
         </button>
       }
-      <button
-        type="submit"
-        appButton="primary"
-        [appButtonLoading]="pending()"
-        [disabled]="pending() || (!showName() && !selection())"
-      >
-        {{ showName() ? "Создать проект" : "Продолжить" }}
-      </button>
+      @if (showName() || !projectId() || availableChoices().length) {
+        <button
+          type="submit"
+          appButton="primary"
+          [appButtonLoading]="pending()"
+          [disabled]="pending() || (!showName() && !selectedChoice())"
+        >
+          {{ showName() ? "Создать проект" : "Продолжить" }}
+        </button>
+      }
       <button type="button" appButton="text" [disabled]="pending()" (click)="close.emit()">
         Отмена
       </button>
-    </div>
+    </footer>
   </form>
 </app-modal>

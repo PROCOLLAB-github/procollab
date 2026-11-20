@@ -1,37 +1,84 @@
 /** @format */
 @use "styles/ui-foundation";
 
-.ui-button.ui-button { @include ui-foundation.button; }
-.ui-field { @include ui-foundation.control; }
-.ui-choice { @include ui-foundation.choice; }
+.ui-button.ui-button {
+  @include ui-foundation.button;
+}
+
+.ui-field {
+  @include ui-foundation.control;
+}
+
+.ui-choice {
+  @include ui-foundation.choice;
+}
 
 .project-entry {
   width: min(540px, calc(100vw - 32px));
-  padding: 24px;
-  h2 { margin: 0 0 20px; font-size: 18px; font-weight: 600; }
-  &__label { display: grid; gap: 8px; }
+  max-width: 100%;
+
+  &__label,
+  &__copies,
   &__choices {
     display: grid;
-    gap: 8px;
+    gap: var(--ui-space-sm);
     min-width: 0;
-    max-height: 52vh;
-    overflow: auto;
-    border: 0;
+  }
+
+  &__copies {
+    padding: 0;
+    margin: 0 0 var(--ui-space-md);
+    list-style: none;
+  }
+
+  &__choices {
     padding: 0;
     margin: 0;
-    legend { margin-bottom: 8px; color: var(--grey-for-text); }
+    border: 0;
+
+    legend {
+      margin-bottom: var(--ui-space-sm);
+      color: var(--grey-for-text);
+    }
+
     label {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      padding: 12px;
-      border: 1px solid var(--medium-grey-for-outline);
-      border-radius: 8px;
-      overflow-wrap: anywhere;
       cursor: pointer;
     }
-    a { color: var(--accent); }
   }
-  &__chosen { background: var(--accent-light); }
-  &__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ui-space-sm);
+    align-items: center;
+    padding: var(--ui-space-md);
+    overflow-wrap: anywhere;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+  }
+
+  &__copies &__row {
+    justify-content: space-between;
+  }
+
+  &__status {
+    font-size: var(--ui-font-small);
+    color: var(--grey-for-text);
+  }
+
+  &__chosen {
+    background: var(--accent-light);
+  }
+
+  a {
+    color: var(--accent);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ui-space-sm);
+    justify-content: flex-end;
+    margin-top: var(--ui-space-md);
+  }
 }

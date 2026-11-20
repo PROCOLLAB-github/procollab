@@ -5,7 +5,6 @@ import { Injectable, inject, signal } from "@angular/core";
 /** UI-состояние офиса: приглашения, пункты навигации и модалки верификации. */
 @Injectable()
 export class OfficeUIInfoService {
-  readonly waitVerificationModal = signal<boolean>(false);
   readonly verificationAcknowledgementPending = signal<boolean>(false);
   readonly inviteErrorModal = signal<boolean>(false);
 
@@ -20,16 +19,8 @@ export class OfficeUIInfoService {
     }[]
   >([]);
 
-  applyOpenVerificationModal(): void {
-    this.waitVerificationModal.set(true);
-  }
-
   applyOpenInviteErrorModal(): void {
     this.inviteErrorModal.set(true);
-  }
-
-  applyVerificationAcknowledged(): void {
-    this.waitVerificationModal.set(false);
   }
 
   applyCreateNavItems(profileId: number): void {

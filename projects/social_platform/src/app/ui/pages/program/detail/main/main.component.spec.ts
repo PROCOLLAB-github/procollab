@@ -34,6 +34,7 @@ describe("MainComponent", () => {
       showProgramModalErrorMessage: signal(""),
       registeredProgramModal: signal(false),
       welcomeAcknowledgementPending: signal(false),
+      welcomeAcknowledgementError: signal(false),
       contactLinks: signal([]),
       materialLinks: signal([]),
     };

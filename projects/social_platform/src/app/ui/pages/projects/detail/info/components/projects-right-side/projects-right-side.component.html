@@ -23,7 +23,11 @@
             }
           } @else {
             @for (copy of item.programCopies ?? []; track copy.programLinkId) {
-              <a class="lists__contact" [routerLink]="paths.projects.detail(copy.projectId)">
+              <a
+                class="lists__contact"
+                [routerLink]="paths.projects.detail(copy.projectId)"
+                [queryParams]="{ programLinkId: copy.programLinkId }"
+              >
                 {{ copy.name }} · {{ copy.submitted ? "Сдан" : "Черновик" }}
               </a>
             }
@@ -35,7 +39,11 @@
         </section>
       }
       @if (entryOpen()) {
-        <app-project-entry [projectId]="item.id" (close)="entryOpen.set(false)" />
+        <app-project-entry
+          [projectId]="item.id"
+          [programCopies]="item.programCopies ?? []"
+          (close)="entryOpen.set(false)"
+        />
       }
     }
     @if (project()!.links.length) {

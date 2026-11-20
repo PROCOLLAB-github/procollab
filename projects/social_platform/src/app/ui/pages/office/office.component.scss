@@ -217,6 +217,10 @@
   }
 }
 
+.verification-notice {
+  max-width: var(--ui-dialog-sm);
+}
+
 .message-modal {
   display: flex;
   flex-direction: column;

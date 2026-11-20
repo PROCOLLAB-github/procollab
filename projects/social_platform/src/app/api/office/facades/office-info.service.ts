@@ -1,8 +1,8 @@
 /** @format */
 
-import { DestroyRef, inject, Injectable, Injector } from "@angular/core";
-import { catchError, EMPTY, filter, finalize, tap } from "rxjs";
-import { Router } from "@angular/router";
+import { computed, DestroyRef, inject, Injectable, Injector, signal } from "@angular/core";
+import { catchError, EMPTY, filter, finalize, map, tap } from "rxjs";
+import { NavigationEnd, Router } from "@angular/router";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
@@ -18,7 +18,17 @@ import { ChatStateService } from "@domain/shared/chat-state.service";
 import { EventBus } from "@domain/shared/event-bus";
 import { loggedOut } from "@domain/auth/events/logged-out.event";
 import { ProgramShellInfoService } from "@api/program/facades/program-shell-info.service";
-import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toObservable, toSignal } from "@angular/core/rxjs-interop";
+
+function isExpertEntry(url: string, hasEvaluationAccess: boolean | undefined): boolean {
+  return (
+    hasEvaluationAccess === true &&
+    (url.startsWith("/office/evaluation") ||
+      /^\/office\/program\/\d+\/(?:projects-rating|solutions-rating|solutions\/\d+\/evaluation)(?:[/?#]|$)/.test(
+        url,
+      ))
+  );
+}
 
 /** Стартовый сервис офисной оболочки: справочники, навигация, чат-статусы, приглашения. */
 @Injectable()
@@ -44,6 +54,27 @@ export class OfficeInfoService {
 
   readonly invites = this.inviteInfoService.invites;
   private readonly profile = this.profileInfoService.profile;
+  private readonly officeUrl = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map(event => event.urlAfterRedirects),
+    ),
+    { initialValue: this.router.url },
+  );
+  readonly verificationNoticeError = signal(false);
+  readonly waitVerificationModal = computed(() => {
+    const url = this.officeUrl();
+    const profile = this.profile();
+    return (
+      profile !== null &&
+      profile.doesCompleted() &&
+      !/^\/office\/program\/\d+(?:[/?#;]|$)/.test(url) &&
+      !isExpertEntry(url, profile.relations.hasEvaluationAccess) &&
+      profile.relations.isActive === true &&
+      profile.relations.verificationDate === null &&
+      profile.relations.verificationNoticeAcknowledgedAt === null
+    );
+  });
 
   initializationOffice(): void {
     this.profileInfoService.ensureProfileLoaded();
@@ -70,29 +101,26 @@ export class OfficeInfoService {
       )
       .subscribe(profile => {
         this.officeUIInfoService.applyCreateNavItems(profile!.id);
-        const expertRoute =
-          this.router.url.startsWith("/office/evaluation") ||
-          /^\/office\/program\/\d+\/(?:projects-rating|solutions-rating|solutions\/\d+\/evaluation)(?:[/?#]|$)/.test(
-            this.router.url,
-          );
-        const expertEntry = expertRoute && profile!.relations.hasEvaluationAccess === true;
-        if (!profile!.doesCompleted() && !expertEntry) {
+        if (
+          !profile!.doesCompleted() &&
+          !isExpertEntry(this.router.url, profile!.relations.hasEvaluationAccess)
+        ) {
           this.router
             .navigateByUrl(AppRoutes.onboarding.root())
             .then(() => this.logger.debug("Route changed from OfficeComponent"));
-        } else if (
-          !expertEntry &&
-          profile!.relations.verificationDate === null &&
-          profile!.relations.verificationNoticeAcknowledgedAt === null
-        ) {
-          this.officeUIInfoService.applyOpenVerificationModal();
         }
       });
   }
 
   onAcknowledgeVerificationNotice(): void {
-    if (this.officeUIInfoService.verificationAcknowledgementPending()) return;
+    if (
+      !this.waitVerificationModal() ||
+      this.officeUIInfoService.verificationAcknowledgementPending()
+    ) {
+      return;
+    }
 
+    this.verificationNoticeError.set(false);
     this.officeUIInfoService.verificationAcknowledgementPending.set(true);
     this.authRepository
       .acknowledgeVerificationNotice()
@@ -101,10 +129,8 @@ export class OfficeInfoService {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
-        next: profile => {
-          this.profileInfoService.applyProfileUpdated(profile);
-          this.officeUIInfoService.applyVerificationAcknowledged();
-        },
+        next: profile => this.profileInfoService.applyProfileUpdated(profile),
+        error: () => this.verificationNoticeError.set(true),
       });
   }
 

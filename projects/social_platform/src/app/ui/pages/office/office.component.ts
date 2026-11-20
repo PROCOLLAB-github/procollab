@@ -17,7 +17,14 @@ import { DeleteConfirmComponent } from "./delete-confirm/delete-confirm.componen
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { isProgramsSectionActive, NavComponent } from "./nav/nav.component";
 import { SnackbarComponent } from "./snackbar/snackbar.component";
-import { ProfileControlPanelComponent, SidebarComponent, type NavItem } from "@uilib";
+import {
+  AlertDirective,
+  DialogBodyDirective,
+  DialogHeaderComponent,
+  ProfileControlPanelComponent,
+  SidebarComponent,
+  type NavItem,
+} from "@uilib";
 import { OfficeInfoService } from "@api/office/facades/office-info.service";
 import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.service";
 import { AppRoutes } from "@api/paths/app-routes";
@@ -43,6 +50,9 @@ import { SolutionInvitationInboxService } from "@api/solution/facades/solution-i
     RouterOutlet,
     ModalComponent,
     ButtonComponent,
+    AlertDirective,
+    DialogBodyDirective,
+    DialogHeaderComponent,
     DeleteConfirmComponent,
     SnackbarComponent,
     RouterLink,
@@ -76,7 +86,8 @@ export class OfficeComponent implements OnInit {
 
   protected readonly invites = this.officeInfoService.invites;
 
-  protected readonly waitVerificationModal = this.officeUIInfoService.waitVerificationModal;
+  protected readonly waitVerificationModal = this.officeInfoService.waitVerificationModal;
+  protected readonly verificationNoticeError = this.officeInfoService.verificationNoticeError;
   protected readonly verificationAcknowledgementPending =
     this.officeUIInfoService.verificationAcknowledgementPending;
 
