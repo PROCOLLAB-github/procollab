@@ -97,6 +97,13 @@ describe("ProgramCardComponent", () => {
       "Срок регистрации не задан",
     );
   });
+  it("keeps the year and its abbreviation together at both ends of a date range", () => {
+    desktop.set(false);
+    setProgram({ datetimeFinished: "2100-01-15T12:00:00Z" });
+    const dates = element().querySelector(".card__dates")?.textContent;
+    expect(dates).toContain("2099\u00a0г.");
+    expect(dates).toContain("2100\u00a0г.");
+  });
   it("reads the status before identity and keeps full long content available", () => {
     const name = "Очень длинное название программы для команд и предпринимателей ".repeat(4);
     const shortDescription = "Длинное описание программы с материалами и поддержкой ".repeat(4);

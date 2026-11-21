@@ -239,6 +239,16 @@
 }
 
 @media (max-width: 600px) {
+  .cabinet__tabs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+
+    .ui-button {
+      padding-inline: var(--ui-space-sm);
+      white-space: normal;
+    }
+  }
+
   .cabinet__toolbar {
     grid-template-columns: minmax(0, 1fr);
   }
