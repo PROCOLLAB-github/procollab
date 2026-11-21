@@ -18,6 +18,14 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
       - run: npm ci
+      - name: Prepare formatting patch
+        run: |
+          npx prettier --write .github/workflows/role-design-preflight.yml projects/social_platform/src/app/ui/widgets/detail/detail.component.html projects/social_platform/src/app/ui/widgets/detail/detail.component.ts projects/social_platform/src/app/ui/pages/program/management/management.component.html projects/social_platform/src/app/ui/pages/program/management/management.component.ts
+          git diff --binary > formatting.patch
+      - uses: actions/upload-artifact@v4
+        with:
+          name: formatting-patch
+          path: formatting.patch
       - run: npm run format:check
       - run: npm run lint:ts
       - run: npm run test:ci
