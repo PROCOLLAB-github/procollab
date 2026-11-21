@@ -72,13 +72,14 @@ import { ProgramPreviewToolbarComponent } from "@ui/pages/program/launch/preview
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
-  private readonly programApplicationAction = viewChild<ElementRef<HTMLElement>>(
+  private readonly programApplicationAction = viewChild<unknown, ElementRef<HTMLElement>>(
     "programApplicationAction",
     { read: ElementRef },
   );
-  private readonly downloadCvAction = viewChild<ElementRef<HTMLElement>>("downloadCvAction", {
-    read: ElementRef,
-  });
+  private readonly downloadCvAction = viewChild<unknown, ElementRef<HTMLElement>>(
+    "downloadCvAction",
+    { read: ElementRef },
+  );
   readonly publicationsOnly = input(false);
   protected readonly defaultCover = PROGRAM_DEFAULT_COVER;
   protected get programCover(): string {
