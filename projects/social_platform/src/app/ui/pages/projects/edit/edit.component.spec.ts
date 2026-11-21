@@ -6,6 +6,7 @@ import { provideRouter } from "@angular/router";
 import { ReactiveFormsModule, FormBuilder } from "@angular/forms";
 import { provideNgxMask } from "ngx-mask";
 import { signal } from "@angular/core";
+import { OverlayContainer } from "@angular/cdk/overlay";
 import { ProjectFormService } from "@api/project/facades/edit/project-form.service";
 import { ProjectVacancyService } from "@api/project/facades/edit/project-vacancy.service";
 import { ProjectVacancyUIService } from "@api/project/facades/edit/ui/project-vacancy-ui.service";
@@ -205,4 +206,38 @@ describe("ProjectEditComponent", () => {
       fixture.nativeElement.querySelectorAll(".project__save app-button")[2].textContent.trim(),
     ).toBe("сохранить");
   });
+
+  it.each(["крестик", "Escape", "фон", "Отмена"])(
+    "закрывает подтверждение сдачи без отправки через %s",
+    async dismiss => {
+      const ui = fixture.debugElement.injector.get(ProjectsEditUIInfoService);
+      const facade = fixture.debugElement.injector.get(ProjectsEditInfoService);
+      const overlay = TestBed.inject(OverlayContainer).getContainerElement();
+      const selector = '[role="dialog"][aria-labelledby="project-edit-submit-dialog-title"]';
+
+      ui.isSendDescisionToPartnerProgramProject.set(true);
+      await expect
+        .poll(() => {
+          fixture.detectChanges();
+          return overlay.querySelector(selector);
+        })
+        .not.toBeNull();
+
+      const dialog = overlay.querySelector<HTMLElement>(selector)!;
+      expect(dialog.querySelectorAll("h2")).toHaveLength(1);
+      expect(dialog.querySelector("h2")?.textContent?.trim()).toBe("Сдать проект?");
+      if (dismiss === "Escape") {
+        dialog.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      } else if (dismiss === "фон") {
+        overlay.querySelector<HTMLElement>(".modal__overlay")!.click();
+      } else if (dismiss === "Отмена") {
+        dialog.querySelector<HTMLButtonElement>(".cancel__buttons button")!.click();
+      } else {
+        dialog.querySelector<HTMLButtonElement>('button[aria-label="Закрыть"]')!.click();
+      }
+
+      expect(ui.isSendDescisionToPartnerProgramProject()).toBe(false);
+      expect(facade.closeSendingDescisionModal).not.toHaveBeenCalled();
+    },
+  );
 });

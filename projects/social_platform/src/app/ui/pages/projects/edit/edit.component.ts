@@ -1,6 +1,6 @@
 /** @format */
 
-import { FormLayoutDirective } from "@uilib";
+import { DialogHeaderComponent, FormLayoutDirective } from "@uilib";
 /** @format */
 
 import {
@@ -58,6 +58,7 @@ import { ProjectCoverResetService } from "@api/project/facades/edit/project-cove
     IconComponent,
     ButtonComponent,
     ModalComponent,
+    DialogHeaderComponent,
     ProjectNavigationComponent,
     ProjectMainStepComponent,
     ProjectAchievementStepComponent,

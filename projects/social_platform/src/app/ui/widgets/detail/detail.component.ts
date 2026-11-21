@@ -4,14 +4,22 @@ import { CommonModule, Location } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   HostListener,
   inject,
   input,
   OnDestroy,
   OnInit,
+  viewChild,
 } from "@angular/core";
+import { take } from "rxjs";
 import { ButtonComponent } from "@ui/primitives";
-import { IconComponent, PageHeaderComponent, ImageFramingDirective } from "@uilib";
+import {
+  DialogHeaderComponent,
+  IconComponent,
+  PageHeaderComponent,
+  ImageFramingDirective,
+} from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { Router, RouterModule } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -46,6 +54,7 @@ import { ProgramPreviewToolbarComponent } from "@ui/pages/program/launch/preview
     IconComponent,
     ButtonComponent,
     ModalComponent,
+    DialogHeaderComponent,
     AvatarComponent,
     ApproveSkillComponent,
     ProgramLinksComponent,
@@ -63,6 +72,10 @@ import { ProgramPreviewToolbarComponent } from "@ui/pages/program/launch/preview
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
+  private readonly programApplicationAction = viewChild<ElementRef<HTMLElement>>(
+    "programApplicationAction",
+    { read: ElementRef },
+  );
   readonly publicationsOnly = input(false);
   protected readonly defaultCover = PROGRAM_DEFAULT_COVER;
   protected get programCover(): string {
@@ -213,6 +226,22 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly legacyEntryProgramId = this.detailProgramInfoService.legacyEntryProgramId;
   addNewProject(programId: number): void {
     this.detailProgramInfoService.addNewProject(programId);
+  }
+
+  closeProgramApplicationError(modal: ModalComponent): void {
+    if (!this.isAssignProjectToProgramModalOpen()) return;
+
+    // Асинхронная загрузка отключает кнопку до открытия окна и может снять с нее фокус.
+    modal.overlayRef
+      ?.detachments()
+      .pipe(take(1))
+      .subscribe(() => {
+        const button = this.programApplicationAction()?.nativeElement.querySelector("button");
+        if (button?.isConnected && button.ownerDocument.activeElement === button.ownerDocument.body) {
+          button.focus();
+        }
+      });
+    this.isAssignProjectToProgramModalOpen.set(false);
   }
 
   onCloseLeaveProjectModal(): void {

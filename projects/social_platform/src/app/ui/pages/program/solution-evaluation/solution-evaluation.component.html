@@ -110,19 +110,15 @@
       (openChange)="closeConfirmation()"
       labelledBy="solution-rating-confirm-title"
       bodyClass="modal__body--no-flex"
-      ><div class="scoring-dialog" [attr.aria-busy]="busy()">
-        <header>
-          <h2 id="solution-rating-confirm-title">Проверьте оценку</h2>
-          <button
-            type="button"
-            class="scoring-dialog__close"
-            aria-label="Закрыть"
-            [disabled]="busy()"
-            (click)="closeConfirmation()"
-          >
-            ×
-          </button>
-        </header>
+    >
+      <div class="scoring-dialog" [attr.aria-busy]="busy()">
+        <app-dialog-header
+          title="Проверьте оценку"
+          titleId="solution-rating-confirm-title"
+          [initialFocusOnTitle]="true"
+          [closeDisabled]="busy()"
+          (closed)="closeConfirmation()"
+        />
         <div class="scoring-dialog__body">
           <h3>{{ data.solution.name }}</h3>
           <dl class="scoring__answers">
@@ -146,31 +142,27 @@
             {{ busy() ? "Сохраняем…" : "Подтвердить оценку" }}
           </button>
         </footer>
-      </div></app-modal
-    >
+      </div>
+    </app-modal>
   }
   <app-modal
     [open]="leaveOpen()"
     (openChange)="answerLeave(false)"
     labelledBy="solution-rating-leave-title"
+    describedBy="solution-rating-leave-description"
     bodyClass="modal__body--no-flex"
-    ><div class="scoring-dialog">
-      <header>
-        <h2 id="solution-rating-leave-title">Выйти без сохранения?</h2>
-        <button
-          type="button"
-          class="scoring-dialog__close"
-          aria-label="Закрыть"
-          (click)="answerLeave(false)"
-        >
-          ×
-        </button>
-      </header>
-      <p>Введенные ответы не сохранятся.</p>
+  >
+    <div class="scoring-dialog">
+      <app-dialog-header
+        title="Выйти без сохранения?"
+        titleId="solution-rating-leave-title"
+        (closed)="answerLeave(false)"
+      />
+      <p id="solution-rating-leave-description">Введенные ответы не сохранятся.</p>
       <footer>
         <button type="button" appButton="secondary" (click)="answerLeave(false)">Остаться</button
         ><button type="button" appButton="primary" (click)="answerLeave(true)">Выйти</button>
       </footer>
-    </div></app-modal
-  >
+    </div>
+  </app-modal>
 </main>

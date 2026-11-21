@@ -15,6 +15,10 @@
   overflow-wrap: anywhere;
 }
 
+.scoring-dialog {
+  --ui-dialog-header-margin-bottom: 0;
+}
+
 .rating-list__rows li.rating-list__empty {
   grid-template-columns: minmax(0, 1fr);
 }

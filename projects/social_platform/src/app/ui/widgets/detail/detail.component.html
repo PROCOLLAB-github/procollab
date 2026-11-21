@@ -138,14 +138,21 @@
 
                 <app-modal
                   [open]="isContactsModalOpen()"
-                  (openChange)="isContactsModalOpen.set(!isContactsModalOpen())"
+                  (openChange)="isContactsModalOpen.set(false)"
+                  labelledBy="program-compact-contacts-dialog-title"
                   bodyClass="modal__body--no-flex"
                 >
+                  <app-dialog-header
+                    title="Контакты"
+                    titleId="program-compact-contacts-dialog-title"
+                    (closed)="isContactsModalOpen.set(false)"
+                  />
                   <app-program-links
                     title="контакты"
                     icon="phone"
+                    [showHeader]="false"
                     [links]="contactLinks()"
-                  ></app-program-links>
+                  />
                 </app-modal>
               } @else {
                 <div class="info__primary-action">
@@ -196,6 +203,7 @@
                     !info().pendingExpertInvitationId
                   ) {
                     <app-button
+                      #programApplicationAction
                       [size]="appWidth >= 1000 ? 'medium' : 'big'"
                       [disabled]="applicationActionDisabled()"
                       [appearance]="isProjectAssigned() ? 'outline' : 'inline'"
@@ -393,98 +401,97 @@
 
                 @defer (when isAssignProjectToProgramModalOpen()) {
                   <app-modal
+                    #programApplicationErrorModal
                     [open]="isAssignProjectToProgramModalOpen()"
-                    (openChange)="
-                      isAssignProjectToProgramModalOpen.set(!isAssignProjectToProgramModalOpen())
-                    "
+                    (openChange)="closeProgramApplicationError(programApplicationErrorModal)"
+                    labelledBy="program-assignment-error-dialog-title"
+                    bodyClass="modal__body--no-flex"
                   >
-                    <div class="cancel" style="width: 100%">
-                      <div class="cancel__top">
-                        <i
-                          (click)="isAssignProjectToProgramModalOpen.set(false)"
-                          appIcon
-                          appSquare="10"
-                          icon="cross"
-                          class="cancel__cross"
-                        ></i>
-                        <p class="cancel__title text-body-14">
-                          {{
-                            info().solutionStorageMode === "solution"
-                              ? "не удалось открыть решение"
-                              : "произошла ошибка при редактировании!"
-                          }}
-                        </p>
-                      </div>
-                      <p class="text-body-12 cancel__text">
-                        {{ assignProjectToProgramModalMessage() }}
-                      </p>
-                    </div>
+                    <app-dialog-header
+                      [title]="
+                        info().solutionStorageMode === 'solution'
+                          ? 'не удалось открыть решение'
+                          : 'произошла ошибка при редактировании!'
+                      "
+                      titleId="program-assignment-error-dialog-title"
+                      [initialFocusOnTitle]="true"
+                      (closed)="closeProgramApplicationError(programApplicationErrorModal)"
+                    />
+                    <p class="text-body-12">{{ assignProjectToProgramModalMessage() }}</p>
                   </app-modal>
                 }
 
                 @defer (when isProgramEndedModalOpen()) {
                   <app-modal
                     [open]="isProgramEndedModalOpen()"
-                    (openChange)="isProgramEndedModalOpen.set(!isProgramEndedModalOpen())"
+                    (openChange)="isProgramEndedModalOpen.set(false)"
+                    labelledBy="program-ended-dialog-title"
+                    bodyClass="modal__body--no-flex"
                   >
-                    <div class="cancel" style="padding: 24px">
-                      <div class="cancel__top">
-                        <p class="cancel__title text-body-14">
-                          к сожалению, программа уже завершена!
-                        </p>
-                      </div>
-
-                      <i appIcon icon="sad-smile" appSquare="50" style="margin-top: 36px"></i>
-                    </div>
+                    <app-dialog-header
+                      title="к сожалению, программа уже завершена!"
+                      titleId="program-ended-dialog-title"
+                      (closed)="isProgramEndedModalOpen.set(false)"
+                    />
+                    <i appIcon icon="sad-smile" appSquare="50" aria-hidden="true"></i>
                   </app-modal>
                 }
 
                 @defer (when isProgramSubmissionProjectsEndedModalOpen()) {
                   <app-modal
                     [open]="isProgramSubmissionProjectsEndedModalOpen()"
-                    (openChange)="
-                      isProgramSubmissionProjectsEndedModalOpen.set(
-                        !isProgramSubmissionProjectsEndedModalOpen()
-                      )
-                    "
+                    (openChange)="isProgramSubmissionProjectsEndedModalOpen.set(false)"
+                    labelledBy="program-submission-ended-dialog-title"
+                    bodyClass="modal__body--no-flex"
                   >
-                    <div class="cancel" style="padding: 24px">
-                      <div class="cancel__top">
-                        <p class="cancel__title text-body-14">
-                          к сожалению, подача проекта уже завершена!
-                        </p>
-                      </div>
-
-                      <i appIcon icon="sad-smile" appSquare="50" style="margin-top: 36px"></i>
-                    </div>
+                    <app-dialog-header
+                      title="к сожалению, подача проекта уже завершена!"
+                      titleId="program-submission-ended-dialog-title"
+                      (closed)="isProgramSubmissionProjectsEndedModalOpen.set(false)"
+                    />
+                    <i appIcon icon="sad-smile" appSquare="50" aria-hidden="true"></i>
                   </app-modal>
                 }
 
                 @defer (when isContactsModalOpen()) {
                   <app-modal
                     [open]="isContactsModalOpen()"
-                    (openChange)="isContactsModalOpen.set(!isContactsModalOpen())"
+                    (openChange)="isContactsModalOpen.set(false)"
+                    labelledBy="program-contacts-dialog-title"
                     bodyClass="modal__body--no-flex"
                   >
+                    <app-dialog-header
+                      title="Контакты"
+                      titleId="program-contacts-dialog-title"
+                      (closed)="isContactsModalOpen.set(false)"
+                    />
                     <app-program-links
                       title="контакты"
                       icon="phone"
+                      [showHeader]="false"
                       [links]="contactLinks()"
-                    ></app-program-links>
+                    />
                   </app-modal>
                 }
 
                 @defer (when isMaterialsModalOpen()) {
                   <app-modal
                     [open]="isMaterialsModalOpen()"
-                    (openChange)="isMaterialsModalOpen.set(!isMaterialsModalOpen())"
+                    (openChange)="isMaterialsModalOpen.set(false)"
+                    labelledBy="program-materials-dialog-title"
                     bodyClass="modal__body--no-flex"
                   >
+                    <app-dialog-header
+                      title="Материалы"
+                      titleId="program-materials-dialog-title"
+                      (closed)="isMaterialsModalOpen.set(false)"
+                    />
                     <app-program-links
                       title="материалы"
                       icon="book"
+                      [showHeader]="false"
                       [links]="materialLinks()"
-                    ></app-program-links>
+                    />
                   </app-modal>
                 }
               }
