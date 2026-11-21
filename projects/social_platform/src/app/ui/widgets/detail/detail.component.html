@@ -256,7 +256,7 @@
                       управление программой
                     </app-button>
                   </a>
-                } @else {
+                } @else if (info().presentationAddress?.trim()) {
                   <a [href]="info().presentationAddress" download="" target="_blank">
                     <app-button
                       appearance="outline"
@@ -703,11 +703,10 @@
               }
               @if (+profile()!.id === +info().id) {
                 <app-button
-                  style="opacity: 0.5"
                   size="medium"
                   appearance="outline"
-                  [disabled]="true"
                   customTypographyClass="text-body-12"
+                  (click)="router.navigateByUrl(AppRoutes.projects.my())"
                   >мои проекты</app-button
                 >
               } @else {
