@@ -21,7 +21,7 @@ import {
 } from "@api/solution/use-cases/solution-evaluation.use-cases";
 import { SolutionApiError, SolutionRatingFrame } from "@domain/solution/solution-contract.model";
 import { validSolutionId } from "@domain/solution/ports/solution.repository.port";
-import { ButtonDirective, TabsComponent } from "@uilib";
+import { ButtonDirective, DialogHeaderComponent, TabsComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { SolutionFieldsComponent } from "@ui/widgets/solution-fields/solution-fields.component";
 import { SolutionTeamComponent } from "../solution/solution-team.component";
@@ -39,6 +39,7 @@ type Values = Record<string, unknown>;
     ButtonDirective,
     TabsComponent,
     ModalComponent,
+    DialogHeaderComponent,
     SolutionFieldsComponent,
     SolutionTeamComponent,
     ProjectRatingComponent,

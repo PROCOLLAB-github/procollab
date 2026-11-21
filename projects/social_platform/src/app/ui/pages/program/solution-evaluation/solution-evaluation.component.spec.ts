@@ -1,6 +1,7 @@
 /** @format */
 
 import { Component, input } from "@angular/core";
+import { OverlayContainer } from "@angular/cdk/overlay";
 import { TestBed } from "@angular/core/testing";
 import { ActivatedRoute, convertToParamMap, provideRouter } from "@angular/router";
 import { BehaviorSubject, of, Subject } from "rxjs";
@@ -132,6 +133,15 @@ describe("Solution evaluation using the shared criterion form", () => {
     page.confirm();
     page.confirm();
     page.closeConfirmation();
+    const overlay = TestBed.inject(OverlayContainer).getContainerElement();
+    const closeButton =
+      '[aria-labelledby="solution-rating-confirm-title"] button[aria-label="Закрыть"]';
+    await expect
+      .poll(() => {
+        fixture.detectChanges();
+        return overlay.querySelector<HTMLButtonElement>(closeButton)?.disabled;
+      })
+      .toBe(true);
     expect(rate.execute).toHaveBeenCalledTimes(1);
     expect(page.confirmation()).toBe(true);
     expect(page.canLeave()).toBe(false);

@@ -8,6 +8,17 @@ import {
 } from "./program-link-fields-error";
 
 describe("Typed team conflicts", () => {
+  it("объясняет, почему нельзя сдать проект без настроенных кейсов", () => {
+    const cause = new HttpErrorResponse({
+      status: 400,
+      error: { detail: "Организатор ещё не настроил кейсы или треки программы." },
+    });
+    const error = mapProgramLinkFieldsError(cause);
+    expect(error.kind).toBe("cases_not_configured");
+    expect(programLinkFieldsErrorMessage(error)).toBe(
+      "Организатор еще не настроил кейсы или треки программы.",
+    );
+  });
   it.each([
     "team_frozen",
     "already_in_program_team",

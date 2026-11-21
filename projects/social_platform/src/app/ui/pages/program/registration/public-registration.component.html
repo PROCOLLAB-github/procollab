@@ -149,45 +149,121 @@
             <div [formGroup]="account" class="enrollment__form">
               <h3>Аккаунт PROCOLLAB</h3>
               <div class="enrollment__columns">
-                <label
-                  >Имя *<input
+                <div class="enrollment__field">
+                  @let firstName = account.controls.firstName;
+                  @let firstInvalid = firstName.touched && firstName.invalid;
+                  <label for="enrollment-first-name">Имя *</label>
+                  <input
                     appField
+                    id="enrollment-first-name"
                     formControlName="firstName"
                     autocomplete="given-name"
-                    maxlength="255" /></label
-                ><label
-                  >Фамилия *<input
+                    maxlength="255"
+                    aria-required="true"
+                    [attr.aria-invalid]="firstInvalid ? 'true' : null"
+                    [attr.aria-describedby]="firstInvalid ? 'enrollment-first-name-error' : null"
+                  />
+                  @if (firstInvalid) {
+                    <small class="enrollment__error" id="enrollment-first-name-error">
+                      @if (firstName.hasError("required")) {
+                        Введите имя.
+                      } @else {
+                        Не более 255 символов.
+                      }
+                    </small>
+                  }
+                </div>
+                <div class="enrollment__field">
+                  @let lastName = account.controls.lastName;
+                  @let lastNameInvalid = lastName.touched && lastName.invalid;
+                  <label for="enrollment-last-name">Фамилия *</label>
+                  <input
                     appField
+                    id="enrollment-last-name"
                     formControlName="lastName"
                     autocomplete="family-name"
                     maxlength="255"
-                /></label>
+                    aria-required="true"
+                    [attr.aria-invalid]="lastNameInvalid ? 'true' : null"
+                    [attr.aria-describedby]="lastNameInvalid ? 'enrollment-last-name-error' : null"
+                  />
+                  @if (lastNameInvalid) {
+                    <small class="enrollment__error" id="enrollment-last-name-error">
+                      @if (lastName.hasError("required")) {
+                        Введите фамилию.
+                      } @else {
+                        Не более 255 символов.
+                      }
+                    </small>
+                  }
+                </div>
               </div>
-              <label
-                >Email *<input
+              <div class="enrollment__field">
+                @let email = account.controls.email;
+                @let emailInvalid = email.touched && email.invalid;
+                <label for="enrollment-email">Email *</label>
+                <input
                   appField
+                  id="enrollment-email"
                   formControlName="email"
                   type="email"
                   autocomplete="email"
                   maxlength="254"
-              /></label>
-              <label
-                >Дата рождения *<input
+                  aria-required="true"
+                  [attr.aria-invalid]="emailInvalid ? 'true' : null"
+                  [attr.aria-describedby]="emailInvalid ? 'enrollment-email-error' : null"
+                />
+                @if (emailInvalid) {
+                  <small class="enrollment__error" id="enrollment-email-error">
+                    @if (email.hasError("required")) {
+                      Введите email.
+                    } @else if (email.hasError("email")) {
+                      Введите корректный email.
+                    } @else {
+                      Не более 254 символов.
+                    }
+                  </small>
+                }
+              </div>
+              <div class="enrollment__field">
+                @let birthday = account.controls.birthday;
+                @let birthdayInvalid = birthday.touched && birthday.invalid;
+                <label for="enrollment-birthday">Дата рождения *</label>
+                <input
                   appField
+                  id="enrollment-birthday"
                   formControlName="birthday"
                   type="date"
                   autocomplete="bday"
-              /></label>
-              <label
-                >Пароль *<span class="enrollment__password"
-                  ><input
+                  aria-required="true"
+                  [attr.aria-invalid]="birthdayInvalid ? 'true' : null"
+                  [attr.aria-describedby]="birthdayInvalid ? 'enrollment-birthday-error' : null"
+                />
+                @if (birthdayInvalid) {
+                  <small class="enrollment__error" id="enrollment-birthday-error">
+                    Укажите дату рождения.
+                  </small>
+                }
+              </div>
+              @let password = account.controls.password;
+              <div class="enrollment__field">
+                @let passwordInvalid = password.touched && password.invalid;
+                <label for="enrollment-password">Пароль *</label>
+                <span class="enrollment__password">
+                  <input
                     appField
+                    id="enrollment-password"
                     formControlName="password"
                     aria-label="Пароль"
                     [type]="showPassword() ? 'text' : 'password'"
                     autocomplete="new-password"
                     minlength="8"
-                    maxlength="128" /><button
+                    maxlength="128"
+                    aria-required="true"
+                    [attr.aria-invalid]="passwordInvalid ? 'true' : null"
+                    aria-describedby="enrollment-password-hint"
+                  />
+                  <button
                     appButton="text"
                     type="button"
                     [attr.aria-label]="showPassword() ? 'Скрыть пароль' : 'Показать пароль'"
@@ -199,18 +275,38 @@
                       [icon]="showPassword() ? 'eye-off' : 'eye'"
                       appSquare="20"
                       appViewBox="0 0 24 24"
-                    ></i></button></span
-                ><small>Не менее 8 символов</small></label
-              >
-              <label
-                >Повторите пароль *<span class="enrollment__password"
-                  ><input
+                    ></i>
+                  </button>
+                </span>
+                <small id="enrollment-password-hint" [class.enrollment__error]="passwordInvalid">
+                  @if (passwordInvalid && password.hasError("required")) {
+                    Введите пароль.
+                  } @else if (passwordInvalid && password.hasError("maxlength")) {
+                    Не более 128 символов.
+                  } @else {
+                    Не менее 8 символов
+                  }
+                </small>
+              </div>
+              <div class="enrollment__field">
+                @let repeat = account.controls.repeatPassword;
+                @let passwordsDiffer = password.valid && repeat.value !== password.value;
+                @let repeatInvalid = repeat.touched && (repeat.invalid || passwordsDiffer);
+                <label for="enrollment-repeat-password">Повторите пароль *</label>
+                <span class="enrollment__password">
+                  <input
                     appField
+                    id="enrollment-repeat-password"
                     formControlName="repeatPassword"
                     aria-label="Повторите пароль"
                     [type]="showRepeat() ? 'text' : 'password'"
                     autocomplete="new-password"
-                    maxlength="128" /><button
+                    maxlength="128"
+                    aria-required="true"
+                    [attr.aria-invalid]="repeatInvalid ? 'true' : null"
+                    [attr.aria-describedby]="repeatInvalid ? 'enrollment-repeat-error' : null"
+                  />
+                  <button
                     appButton="text"
                     type="button"
                     [attr.aria-label]="
@@ -224,8 +320,21 @@
                       [icon]="showRepeat() ? 'eye-off' : 'eye'"
                       appSquare="20"
                       appViewBox="0 0 24 24"
-                    ></i></button></span
-              ></label>
+                    ></i>
+                  </button>
+                </span>
+                @if (repeatInvalid) {
+                  <small class="enrollment__error" id="enrollment-repeat-error">
+                    @if (repeat.hasError("required")) {
+                      Повторите пароль.
+                    } @else if (repeat.hasError("maxlength")) {
+                      Не более 128 символов.
+                    } @else {
+                      Пароли не совпадают.
+                    }
+                  </small>
+                }
+              </div>
             </div>
             <hr />
           }

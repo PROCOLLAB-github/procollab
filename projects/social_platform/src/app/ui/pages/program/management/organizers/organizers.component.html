@@ -157,7 +157,7 @@
       </p>
       <form (submit)="$event.preventDefault(); invite()" novalidate>
         <label
-          >Email<input
+          >Почта<input
             type="email"
             appField
             [formControl]="email"
@@ -167,7 +167,7 @@
             [attr.aria-invalid]="email.touched && email.invalid"
         /></label>
         @if (email.touched && email.invalid) {
-          <p appAlert="error">Введите корректный email.</p>
+          <p appAlert="error">Введите корректный адрес почты.</p>
         }
         <p>Если аккаунта еще нет, предложим зарегистрироваться.</p>
         <footer class="organizers__actions">

@@ -31,6 +31,13 @@ export function mapProgramLinkFieldsError(cause: unknown): ProgramLinkFieldsErro
       if (cause.error?.detail === "Выберите кейс перед сдачей проекта.") {
         return { kind: "case_required", cause };
       }
+      if (
+        typeof cause.error?.detail === "string" &&
+        cause.error.detail.replace(/\u0451/g, "е") ===
+          "Организатор еще не настроил кейсы или треки программы."
+      ) {
+        return { kind: "cases_not_configured", cause };
+      }
       if (cause.error?.detail === "Выбранный кейс больше недоступен. Выберите актуальный кейс.") {
         return { kind: "case_unavailable", cause };
       }
@@ -53,6 +60,8 @@ export function programLinkFieldsErrorMessage(error: ProgramLinkFieldsError): st
       return "Программа не является конкурсной. Сдача на проверку не требуется.";
     case "case_required":
       return "Выберите кейс перед сдачей проекта.";
+    case "cases_not_configured":
+      return "Организатор еще не настроил кейсы или треки программы.";
     case "case_unavailable":
       return "Выбранный кейс больше недоступен. Выберите актуальный кейс.";
     case "network":

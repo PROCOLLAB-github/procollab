@@ -114,13 +114,20 @@ small {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
+  align-items: start;
 }
 
+.enrollment__field,
 label {
   display: grid;
   gap: 8px;
   min-width: 0;
   font-size: 12px;
+}
+
+.enrollment__error {
+  color: var(--ui-error-text);
+  overflow-wrap: anywhere;
 }
 
 .enrollment__password {

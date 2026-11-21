@@ -1221,11 +1221,17 @@
 <app-modal
   [open]="!!participantRemoval()"
   labelledBy="participant-removal-title"
-  (openChange)="!$event && !removingParticipants() && participantRemoval.set(null)"
+  (openChange)="!$event && cancelParticipantRemoval()"
 >
   @if (participantRemoval(); as removal) {
     <section class="management__dialog">
-      <h2 id="participant-removal-title">Удалить участников из программы?</h2>
+      <app-dialog-header
+        title="Удалить участников из программы?"
+        titleId="participant-removal-title"
+        [initialFocusOnTitle]="true"
+        [closeDisabled]="removingParticipants()"
+        (closed)="cancelParticipantRemoval()"
+      />
       <p>Участников: {{ removal.preview.participantCount }}. Аккаунты на платформе сохранятся.</p>
       <p>
         Участники будут удалены из команд проектов-заявок этой программы. Команды исходных проектов
@@ -1277,7 +1283,7 @@
           type="button"
           appButton="secondary"
           [disabled]="removingParticipants()"
-          (click)="participantRemoval.set(null)"
+          (click)="cancelParticipantRemoval()"
         >
           Отмена</button
         ><button
@@ -1386,12 +1392,18 @@
 >
   <div class="management__dialog">
     @if (confirmation(); as confirm) {
-      <h2 id="management-dialog-title">{{ confirm.title }}</h2>
+      <app-dialog-header
+        [title]="confirm.title"
+        titleId="management-dialog-title"
+        (closed)="resolveConfirmation(false)"
+      />
       <p appAlert="warning">{{ confirm.text }}</p>
       <div class="management__inline">
         <button
           type="button"
+          id="management-confirmation-cancel"
           [appButton]="confirm.safeCancel ? 'primary' : 'secondary'"
+          cdkFocusInitial
           (click)="resolveConfirmation(false)"
         >
           {{ confirm.safeCancel ? "Остаться" : "Отмена" }}</button

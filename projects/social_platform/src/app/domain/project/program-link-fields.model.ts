@@ -31,6 +31,7 @@ export interface ProgramLinkFieldsError {
   kind:
     | "case_required"
     | "case_unavailable"
+    | "cases_not_configured"
     | "required_fields"
     | "submission_closed"
     | "already_submitted"

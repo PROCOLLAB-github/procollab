@@ -16,4 +16,5 @@ export class ProgramLinksComponent {
   readonly title = input.required<string>();
   readonly icon = input.required<string>();
   readonly links = input.required<{ label: string; url: string }[]>();
+  readonly showHeader = input(true);
 }

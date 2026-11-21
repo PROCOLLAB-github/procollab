@@ -1,10 +1,12 @@
 <!-- @format -->
 
 <div class="links">
-  <div class="links__head">
-    <h3 class="links__title text-body-12">{{ title() }}</h3>
-    <i appIcon [icon]="icon()" class="links__icon" appSquare="12"></i>
-  </div>
+  @if (showHeader()) {
+    <div class="links__head">
+      <h3 class="links__title text-body-12">{{ title() }}</h3>
+      <i appIcon [icon]="icon()" class="links__icon" appSquare="12"></i>
+    </div>
+  }
   @if (links().length) {
     <ul class="links__list">
       @for (link of links(); track $index) {

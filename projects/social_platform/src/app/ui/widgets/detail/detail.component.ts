@@ -4,14 +4,22 @@ import { CommonModule, Location } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   HostListener,
   inject,
   input,
   OnDestroy,
   OnInit,
+  viewChild,
 } from "@angular/core";
+import { take } from "rxjs";
 import { ButtonComponent } from "@ui/primitives";
-import { IconComponent, PageHeaderComponent, ImageFramingDirective } from "@uilib";
+import {
+  DialogHeaderComponent,
+  IconComponent,
+  PageHeaderComponent,
+  ImageFramingDirective,
+} from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { Router, RouterModule } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
@@ -46,6 +54,7 @@ import { ProgramPreviewToolbarComponent } from "@ui/pages/program/launch/preview
     IconComponent,
     ButtonComponent,
     ModalComponent,
+    DialogHeaderComponent,
     AvatarComponent,
     ApproveSkillComponent,
     ProgramLinksComponent,
@@ -63,6 +72,14 @@ import { ProgramPreviewToolbarComponent } from "@ui/pages/program/launch/preview
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
+  private readonly programApplicationAction = viewChild<unknown, ElementRef<HTMLElement>>(
+    "programApplicationAction",
+    { read: ElementRef },
+  );
+  private readonly downloadCvAction = viewChild<unknown, ElementRef<HTMLElement>>(
+    "downloadCvAction",
+    { read: ElementRef },
+  );
   readonly publicationsOnly = input(false);
   protected readonly defaultCover = PROGRAM_DEFAULT_COVER;
   protected get programCover(): string {
@@ -215,6 +232,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.detailProgramInfoService.addNewProject(programId);
   }
 
+  closeProgramApplicationError(modal: ModalComponent): void {
+    if (!this.isAssignProjectToProgramModalOpen()) return;
+
+    this.restoreDialogTriggerFocus(modal, this.programApplicationAction()?.nativeElement);
+    this.isAssignProjectToProgramModalOpen.set(false);
+  }
+
   onCloseLeaveProjectModal(): void {
     this.detailProjectInfoService.onCloseLeaveProjectModal();
   }
@@ -241,6 +265,29 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   downloadCV() {
     this.detailProfileInfoService.downloadCV();
+  }
+
+  closeDownloadCvDelay(modal: ModalComponent): void {
+    if (!this.isDelayModalOpen()) return;
+
+    this.restoreDialogTriggerFocus(modal, this.downloadCvAction()?.nativeElement);
+    this.isDelayModalOpen.set(false);
+  }
+
+  private restoreDialogTriggerFocus(modal: ModalComponent, trigger?: HTMLElement): void {
+    // Асинхронная загрузка может снять фокус с кнопки до открытия окна.
+    modal.overlayRef
+      ?.detachments()
+      .pipe(take(1))
+      .subscribe(() => {
+        const button = trigger?.querySelector("button");
+        if (
+          button?.isConnected &&
+          button.ownerDocument.activeElement === button.ownerDocument.body
+        ) {
+          button.focus();
+        }
+      });
   }
 
   inviteUser(event: Event): void {

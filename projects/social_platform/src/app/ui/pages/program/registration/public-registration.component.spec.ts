@@ -164,11 +164,80 @@ describe("Публичная регистрация участника", () => {
     expect(api.submit).not.toHaveBeenCalled();
     expect(component.error()).toBe("Заполните обязательные поля анкеты.");
   });
-  it("напоминает о согласиях только при создании аккаунта", () => {
-    const { component, api } = setup();
-    component.submit();
+  it("при отправке пустой формы связывает поля аккаунта с их ошибками", () => {
+    const { fixture, component, api } = setup();
+    const root: HTMLElement = fixture.nativeElement;
+
+    expect(root.querySelector("input[aria-invalid]")).toBeNull();
+    root
+      .querySelector("form.enrollment__form")!
+      .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    fixture.detectChanges();
+
     expect(api.submit).not.toHaveBeenCalled();
     expect(component.error()).toBe("Заполните обязательные поля и подтвердите согласия.");
+    const messages = {
+      firstName: "Введите имя.",
+      lastName: "Введите фамилию.",
+      email: "Введите email.",
+      birthday: "Укажите дату рождения.",
+      password: "Введите пароль.",
+      repeatPassword: "Повторите пароль.",
+    };
+    for (const [name, message] of Object.entries(messages)) {
+      const input = root.querySelector<HTMLInputElement>(`input[formControlName="${name}"]`)!;
+      expect(input.labels).toHaveLength(1);
+      expect(input.getAttribute("aria-invalid")).toBe("true");
+      const errorId = input.getAttribute("aria-describedby");
+      expect(root.querySelector(`#${errorId}`)?.textContent?.trim()).toBe(message);
+    }
+  });
+
+  it("показывает ошибки после ухода с поля и снимает их при исправлении", () => {
+    const { fixture } = setup();
+    const root: HTMLElement = fixture.nativeElement;
+    const email = root.querySelector<HTMLInputElement>("#enrollment-email")!;
+    const password = root.querySelector<HTMLInputElement>("#enrollment-password")!;
+    const repeatPassword = root.querySelector<HTMLInputElement>("#enrollment-repeat-password")!;
+    const enter = (input: HTMLInputElement, value: string) => {
+      input.value = value;
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      fixture.detectChanges();
+    };
+    const blur = (input: HTMLInputElement) => {
+      input.dispatchEvent(new Event("blur"));
+      fixture.detectChanges();
+    };
+
+    enter(email, "test");
+    expect(email.hasAttribute("aria-invalid")).toBe(false);
+    blur(email);
+    expect(root.querySelector("#enrollment-email-error")?.textContent?.trim()).toBe(
+      "Введите корректный email.",
+    );
+    enter(email, "test@example.test");
+    expect(email.hasAttribute("aria-describedby")).toBe(false);
+    expect(root.querySelector("#enrollment-email-error")).toBeNull();
+
+    enter(password, "short");
+    blur(password);
+    expect(password.getAttribute("aria-invalid")).toBe("true");
+    expect(root.querySelector("#enrollment-password-hint")?.textContent?.trim()).toBe(
+      "Не менее 8 символов",
+    );
+    enter(password, "valid-password");
+    expect(password.hasAttribute("aria-invalid")).toBe(false);
+
+    enter(repeatPassword, "other-password");
+    expect(repeatPassword.hasAttribute("aria-invalid")).toBe(false);
+    blur(repeatPassword);
+    expect(repeatPassword.getAttribute("aria-invalid")).toBe("true");
+    expect(root.querySelector("#enrollment-repeat-error")?.textContent?.trim()).toBe(
+      "Пароли не совпадают.",
+    );
+    enter(password, "other-password");
+    expect(repeatPassword.hasAttribute("aria-invalid")).toBe(false);
+    expect(repeatPassword.hasAttribute("aria-describedby")).toBe(false);
   });
   it("не сохраняет пароль в браузере после регистрации", () => {
     const { component } = setup();
