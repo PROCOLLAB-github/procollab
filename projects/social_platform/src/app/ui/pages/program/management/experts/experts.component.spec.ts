@@ -805,8 +805,19 @@ describe("Управление экспертами", () => {
     expect(api.saveProjectExperts).not.toHaveBeenCalled();
     expect(component.projectLimitExceeded()).toBe(true);
   });
-  it("заменяет неоценившего в заполненном составе, сохраняя оценившего", () => {
-    const { component, api } = setup();
+  it("не показывает предупреждение о замене при первом назначении", async () => {
+    const { fixture, component } = setup();
+    component.openProject(projects[1]);
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+
+    const dialog = document.querySelector(".experts__dialog");
+    expect(dialog?.textContent).toContain("Маршрут");
+    expect(dialog?.textContent).not.toContain("Для замены сначала снимите эксперта");
+  });
+  it("заменяет неоценившего в заполненном составе, сохраняя оценившего", async () => {
+    const { fixture, component, api } = setup();
     const waiting = { ...snapshot.experts[0], id: 3, name: "Борис" };
     const replacement = { ...snapshot.experts[0], id: 4, name: "Анна" };
     const project = structuredClone(projects[0]);
@@ -822,6 +833,12 @@ describe("Управление экспертами", () => {
       projects: [project],
     }));
     component.openProject(project);
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+    expect(document.querySelector(".experts__dialog")?.textContent).toContain(
+      "Для замены сначала снимите эксперта",
+    );
     component.toggleCandidate(replacement);
     expect([...component.chosenExperts()]).toEqual([1, 3]);
     component.toggleCandidate(waiting);
