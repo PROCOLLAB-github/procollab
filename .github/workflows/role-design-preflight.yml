@@ -22,5 +22,5 @@ jobs:
       - run: npm ci
       - run: npm run format:check
       - run: npm run lint:ts
-      - run: npm run test:ci
       - run: npm run build:pr
+      - run: npm run test:ci
