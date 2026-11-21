@@ -958,6 +958,9 @@ export class ProgramManagementComponent implements OnInit {
         },
       });
   }
+  cancelParticipantRemoval(): void {
+    if (!this.removingParticipants()) this.participantRemoval.set(null);
+  }
   removeParticipants(): void {
     const removal = this.participantRemoval(),
       ctx = this.state.context;
@@ -1628,6 +1631,13 @@ export class ProgramManagementComponent implements OnInit {
   ): Promise<boolean> {
     this.confirmationCallback?.(false);
     this.confirmation.set({ title, text, label, safeCancel });
+    if (this.editingMaterial()) {
+      // The modal stays open when the confirmation replaces the material form.
+      afterNextRender(
+        () => this.document.getElementById("management-confirmation-cancel")?.focus(),
+        { injector: this.injector },
+      );
+    }
     return new Promise(resolve => {
       this.confirmationCallback = resolve;
     });
