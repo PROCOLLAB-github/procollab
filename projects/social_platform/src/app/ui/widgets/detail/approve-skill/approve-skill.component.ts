@@ -3,18 +3,27 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, input, Input, OnInit } from "@angular/core";
 import { ButtonComponent } from "@ui/primitives";
+import { DialogHeaderComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ApproveSkillPeopleComponent } from "./approve-skill-people/approve-skill-people.component";
 import { Skill } from "@domain/skills/skill.model";
 import { ApproveskillInfoService } from "./services/approve-skill-info.service";
 import { ApproveSkillUIInfoService } from "./services/approve-skill-ui-info.service";
 
+let nextApproveSkillDialogId = 0;
+
 /** Компонент подтверждения навыка пользователя. */
 @Component({
   selector: "app-approve-skill",
   styleUrl: "./approve-skill.component.scss",
   templateUrl: "./approve-skill.component.html",
-  imports: [CommonModule, ButtonComponent, ModalComponent, ApproveSkillPeopleComponent],
+  imports: [
+    CommonModule,
+    ButtonComponent,
+    DialogHeaderComponent,
+    ModalComponent,
+    ApproveSkillPeopleComponent,
+  ],
   providers: [ApproveskillInfoService, ApproveSkillUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -27,6 +36,8 @@ export class ApproveSkillComponent implements OnInit {
   }
 
   protected readonly approveOwnSkillModal = this.approveSkillUIInfoService.approveOwnSkillModal;
+  protected readonly errorTitleId = `approve-skill-error-title-${nextApproveSkillDialogId++}`;
+  protected readonly errorDescriptionId = `${this.errorTitleId}-description`;
 
   readonly skill = input.required<Skill>();
 

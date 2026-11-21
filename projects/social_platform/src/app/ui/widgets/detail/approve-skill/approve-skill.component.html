@@ -18,14 +18,19 @@
   </div>
 </div>
 
-<app-modal [open]="approveOwnSkillModal()" (openChange)="approveOwnSkillModal.set($event)">
-  <div class="modal">
-    <div class="modal__body">
-      <p class="modal__title text-body-14">
-        ошибка при подитверждении навыка!
-        <br />
-        <span class="text-body-10">вы не можете подтверждать навыки своего профиля</span>
-      </p>
-    </div>
-  </div>
+<app-modal
+  [open]="approveOwnSkillModal()"
+  (openChange)="approveOwnSkillModal.set(false)"
+  [labelledBy]="errorTitleId"
+  [describedBy]="errorDescriptionId"
+  bodyClass="modal__body--no-flex"
+>
+  <app-dialog-header
+    title="ошибка при подитверждении навыка!"
+    [titleId]="errorTitleId"
+    (closed)="approveOwnSkillModal.set(false)"
+  />
+  <p [id]="errorDescriptionId" class="text-body-10">
+    вы не можете подтверждать навыки своего профиля
+  </p>
 </app-modal>
