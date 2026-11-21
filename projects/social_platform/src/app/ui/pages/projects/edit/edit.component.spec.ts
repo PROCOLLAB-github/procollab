@@ -51,7 +51,6 @@ describe("ProjectEditComponent", () => {
     };
 
     const projectsEditUIInfoServiceSpy = {
-      fromProgram: signal(false),
       fromProgramOpen: signal(false),
       isProjectAssignToProgram: signal(false),
       isProjectBoundToProgram: signal(false),
@@ -60,8 +59,6 @@ describe("ProjectEditComponent", () => {
       isSendDescisionToPartnerProgramProject: signal(false),
       errorModalMessage: signal(""),
       onEditClicked: signal(false),
-      warningModalSeen: signal(false),
-      applyCloseWarningModal: vi.fn(),
     };
 
     const projectStepServiceSpy = {

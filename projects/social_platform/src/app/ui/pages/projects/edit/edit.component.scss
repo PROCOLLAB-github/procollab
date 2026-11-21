@@ -124,18 +124,6 @@
       align-items: center;
     }
   }
-
-  &__warning-modal {
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-
-    span {
-      color: var(--red);
-    }
-  }
 }
 
 .skill {

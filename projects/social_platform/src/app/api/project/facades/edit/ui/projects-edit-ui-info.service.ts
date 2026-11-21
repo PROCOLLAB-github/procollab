@@ -34,7 +34,6 @@ export class ProjectsEditUIInfoService {
   } | null>(null);
 
   readonly onEditClicked = signal<boolean>(false);
-  readonly warningModalSeen = signal<boolean>(false);
 
   // Сигнал модалки с текстом о привязке проекта.
   readonly assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
@@ -53,10 +52,6 @@ export class ProjectsEditUIInfoService {
   }
 
   // Методы для работы с модальными окнами
-  applyCloseWarningModal(): void {
-    this.warningModalSeen.set(true);
-  }
-
   closeAssignProjectToProgramModal(): void {
     this.isAssignProjectToProgramModalOpen.set(false);
   }

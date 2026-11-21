@@ -104,7 +104,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   // Получаем форму дополнительных полей из сервиса
   protected readonly additionalForm = this.projectsEditInfoService.additionalForm;
 
-  protected readonly fromProgram = this.projectsEditUIInfoService.fromProgram;
   protected readonly fromProgramOpen = this.projectsEditUIInfoService.fromProgramOpen;
 
   // Маркер того является ли проект привязанный к конкурсной программе
@@ -130,7 +129,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly errorModalMessage = this.projectsEditUIInfoService.errorModalMessage;
 
   protected readonly onEditClicked = this.projectsEditUIInfoService.onEditClicked;
-  protected readonly warningModalSeen = this.projectsEditUIInfoService.warningModalSeen;
 
   protected readonly profileId = this.projectsEditInfoService.profileId;
 
@@ -206,10 +204,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // Методы для работы с модальными окнами
-  closeWarningModal(): void {
-    this.projectsEditUIInfoService.applyCloseWarningModal();
-  }
-
   closeSendingDescisionModal(): void {
     this.projectsEditInfoService.closeSendingDescisionModal();
   }

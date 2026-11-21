@@ -168,6 +168,7 @@
       <app-dialog-header
         title="Вы зарегистрированы на программу"
         titleId="program-welcome-title"
+        [initialFocusOnTitle]="true"
         [closeDisabled]="welcomeAcknowledgementPending()"
         (closed)="onAcknowledgeProgramWelcome()"
       />
