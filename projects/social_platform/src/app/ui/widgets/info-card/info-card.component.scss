@@ -332,6 +332,10 @@
       white-space: normal;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
+
+      @include responsive.apply-desktop {
+        font-size: 13px;
+      }
     }
 
     .card__description {
@@ -391,6 +395,17 @@
 
     .card__context {
       margin-bottom: 3px;
+
+      @include responsive.apply-desktop {
+        font-size: 10px;
+      }
+    }
+
+    .card__status--program {
+      @include responsive.apply-desktop {
+        // The longest status with its icon can use the card's side insets.
+        max-width: calc(100% + 20px);
+      }
     }
 
     .card__head {
@@ -405,10 +420,6 @@
       @media screen and (max-width: 999px) {
         font-size: var(--ui-font-caption);
       }
-
-      @media screen and (min-width: 1000px) {
-        font-size: 11px;
-      }
     }
 
     .card__description {
@@ -418,7 +429,7 @@
       color: var(--grey-for-text);
 
       p {
-        font-size: 9px;
+        font-size: 10px;
         line-height: 12px;
         -webkit-line-clamp: 2;
       }
@@ -437,7 +448,7 @@
     .card__program-name {
       width: 100%;
       overflow: hidden;
-      font-size: 9px;
+      font-size: 10px;
       line-height: 12px;
       color: var(--grey-for-text);
       text-overflow: ellipsis;
@@ -535,14 +546,14 @@
   }
 
   &__role {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 600;
     line-height: 11px;
     color: var(--black);
   }
 
   &__access-label {
-    font-size: 8px;
+    font-size: 10px;
     line-height: 10px;
     color: var(--grey-for-text);
   }
