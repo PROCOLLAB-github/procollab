@@ -457,12 +457,23 @@
   }
 
   .management__toolbar--participants .management__toolbar-actions {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: max-content minmax(0, 200px) 44px;
 
     .management__toolbar-slot .ui-button {
-      width: auto;
       overflow-wrap: normal;
       white-space: normal;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .management__toolbar--participants .management__toolbar-actions {
+    grid-template-columns: minmax(0, 1fr) 44px;
+
+    > .management__toolbar-slot:first-child {
+      grid-column: 1 / -1;
+      justify-self: start;
     }
   }
 }

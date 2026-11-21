@@ -239,17 +239,12 @@
   }
 
   .program-heading__tabs {
+    flex-wrap: wrap;
     justify-content: flex-start;
-    scrollbar-width: none;
-    scroll-padding-inline: 4px;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    overflow: visible;
 
     a {
       flex: 0 0 auto;
-      scroll-margin-inline: 4px;
     }
   }
 }

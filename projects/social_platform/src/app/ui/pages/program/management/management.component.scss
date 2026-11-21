@@ -638,28 +638,27 @@
 
     > .management__settings-tabs {
       display: flex;
-      gap: 16px;
+      flex-wrap: wrap;
+      gap: 4px 8px;
       min-width: 0;
-      padding: 0 4px;
       margin-bottom: 16px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      scroll-padding-inline: 4px;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
 
       a {
         flex: 0 0 auto;
+        justify-content: center;
+        min-width: 44px;
         min-height: 44px;
-        padding-inline: 4px;
+        padding-inline: 8px;
         margin-block: 0;
-        white-space: nowrap;
-        scroll-margin-inline: 4px;
+        border-bottom: 1px solid transparent;
+
+        &[aria-current="page"] {
+          color: var(--accent-text);
+          border-bottom-color: var(--accent);
+        }
 
         &::after {
-          inset: 0;
+          content: none;
         }
 
         &:focus-visible {
