@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from "
 import { RouterLink } from "@angular/router";
 import { finalize } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { ButtonDirective, IconComponent, AlertDirective } from "@uilib";
+import { AlertDirective, ButtonDirective, DialogHeaderComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProgramRegistrationUseCase } from "@api/program/use-cases/program-registration.use-case";
@@ -19,9 +19,9 @@ import { evaluationError } from "@utils/evaluation-workspace";
   selector: "app-program-preview-toolbar",
   imports: [
     RouterLink,
-    ButtonDirective,
-    IconComponent,
     AlertDirective,
+    ButtonDirective,
+    DialogHeaderComponent,
     ModalComponent,
     RegistrationPreviewContentComponent,
   ],
@@ -56,18 +56,16 @@ import { evaluationError } from "@utils/evaluation-workspace";
       (openChange)="!$event && close()"
     >
       <section class="preview-dialog">
-        <header>
-          <h2 id="launch-preview-title">Предпросмотр анкеты</h2>
-          <button appButton="icon" aria-label="Закрыть" (click)="close()">
-            <i appIcon icon="cross" appSquare="24"></i>
-          </button>
-        </header>
+        <app-dialog-header
+          title="Предпросмотр анкеты"
+          titleId="launch-preview-title"
+          (closed)="close()"
+        />
         @if (schema(); as schema) {
           <div class="preview-dialog__scroll">
             <app-registration-preview-content [fields]="schema.fields" [group]="group" />
           </div>
         }
-        <footer><button appButton="secondary" (click)="close()">Закрыть</button></footer>
       </section>
     </app-modal>
   }`,

@@ -201,6 +201,27 @@ describe("Detail cleanup actions", () => {
     expect(actions.textContent).not.toContain("узнать подробнее");
     expect(actions.querySelectorAll('a[href*="published-solutions"]')).toHaveLength(1);
   });
+
+  it("links to the program document only when an address is provided", () => {
+    const fixture = TestBed.createComponent(DeatilComponent);
+    const page: HTMLElement = fixture.nativeElement;
+    const documentLink = () =>
+      [...page.querySelectorAll<HTMLAnchorElement>(".info__actions a")].find(link =>
+        link.textContent?.includes("положение"),
+      );
+
+    for (const presentationAddress of [null, "", "  "]) {
+      info.update(program => ({ ...program, presentationAddress }));
+      fixture.detectChanges();
+      expect(documentLink()).toBeUndefined();
+    }
+
+    const presentationAddress = "https://example.org/program.pdf";
+    info.update(program => ({ ...program, presentationAddress }));
+    fixture.detectChanges();
+    expect(documentLink()?.getAttribute("href")).toBe(presentationAddress);
+  });
+
   it("missing registration settings show an explained disabled action", () => {
     member.set(false);
     const fixture = TestBed.createComponent(DeatilComponent);
@@ -237,10 +258,14 @@ describe("Detail cleanup actions", () => {
     expect(actions.textContent).not.toContain("продвигать");
     if (id === 7) {
       expect(buttons[0]).toBe(share);
-      expect(buttons[1].textContent).toContain("мои проекты");
-      expect(buttons[1].disabled).toBe(true);
+      const myProjects = buttons.find(button => button.textContent?.includes("мои проекты"))!;
+      const navigate = vi.spyOn(TestBed.inject(Router), "navigateByUrl").mockResolvedValue(true);
+      expect(myProjects.disabled).toBe(false);
+      myProjects.click();
+      expect(navigate).toHaveBeenCalledExactlyOnceWith("/office/projects/my");
     } else {
       expect(buttons[0].textContent).toContain("подтвердить навыки");
+      expect(actions.textContent).not.toContain("мои проекты");
     }
     share.click();
     expect(copyLink).toHaveBeenCalledExactlyOnceWith(id);

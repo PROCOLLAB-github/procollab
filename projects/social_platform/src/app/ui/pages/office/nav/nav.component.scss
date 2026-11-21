@@ -248,6 +248,29 @@
     ::ng-deep .nav__item {
       min-height: 44px;
     }
+
+    .nav__link--active {
+      color: var(--accent-text);
+
+      .nav-bar__icon {
+        color: inherit;
+      }
+
+      .nav__item {
+        position: relative;
+        padding-inline-end: 12px;
+
+        &::after {
+          position: absolute;
+          inset-inline-end: 0;
+          width: 4px;
+          height: 4px;
+          content: "";
+          background: var(--accent);
+          border-radius: 50%;
+        }
+      }
+    }
   }
 
   &__user {

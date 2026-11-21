@@ -20,4 +20,19 @@ describe("DialogHeaderComponent", () => {
     button.click();
     expect(closed).toHaveBeenCalledTimes(1);
   });
+
+  it("marks the title for initial focus and keeps close keyboard-accessible", async () => {
+    await TestBed.configureTestingModule({ imports: [DialogHeaderComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(DialogHeaderComponent);
+    fixture.componentRef.setInput("title", "Вы зарегистрированы на программу");
+    fixture.componentRef.setInput("initialFocusOnTitle", true);
+    fixture.detectChanges();
+
+    const heading: HTMLHeadingElement = fixture.nativeElement.querySelector("h2");
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector("button");
+    expect(heading.getAttribute("tabindex")).toBe("-1");
+    expect(heading.hasAttribute("cdkFocusInitial")).toBe(true);
+    expect(button.hasAttribute("cdkFocusInitial")).toBe(false);
+    expect(button.tabIndex).toBe(0);
+  });
 });

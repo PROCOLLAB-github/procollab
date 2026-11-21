@@ -59,10 +59,10 @@ export class ProgramCardComponent {
     if (Number.isFinite(started) && Number.isFinite(finished) && finished >= started) {
       const start = new Date(started);
       const end = new Date(finished);
-      const endLabel = this.fullDate.format(end);
+      const endLabel = this.formatFullDate(end);
       if (start.toDateString() === end.toDateString()) return endLabel;
       if (start.getFullYear() !== end.getFullYear()) {
-        return `${this.fullDate.format(start)} – ${endLabel}`;
+        return `${this.formatFullDate(start)} – ${endLabel}`;
       }
       return start.getMonth() === end.getMonth()
         ? `${start.getDate()}–${endLabel}`
@@ -78,4 +78,8 @@ export class ProgramCardComponent {
     if (!this.management() && this.program().isUserMember) return "participating";
     return Number.isFinite(deadline) ? "actual" : "not-set";
   });
+
+  private formatFullDate(date: Date): string {
+    return this.fullDate.format(date).replace(/\sг\.$/u, "\u00a0г.");
+  }
 }

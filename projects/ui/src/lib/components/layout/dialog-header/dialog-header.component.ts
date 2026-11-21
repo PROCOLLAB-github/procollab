@@ -8,7 +8,13 @@ import { ButtonDirective } from "../../primitives/button/button.directive";
   selector: "app-dialog-header",
   imports: [IconComponent, ButtonDirective],
   template: `<header class="dialog-header">
-    <h2 [id]="titleId()">{{ title() }}</h2>
+    <h2
+      [id]="titleId()"
+      [attr.tabindex]="initialFocusOnTitle() ? -1 : null"
+      [attr.cdkFocusInitial]="initialFocusOnTitle() ? '' : null"
+    >
+      {{ title() }}
+    </h2>
     @if (closable()) {
       <button
         class="dialog-header__close"
@@ -16,7 +22,7 @@ import { ButtonDirective } from "../../primitives/button/button.directive";
         type="button"
         [attr.aria-label]="closeLabel()"
         [disabled]="closeDisabled()"
-        [attr.cdkFocusInitial]="initialFocus() ? '' : null"
+        [attr.cdkFocusInitial]="initialFocus() && !initialFocusOnTitle() ? '' : null"
         (click)="closed.emit()"
       >
         <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
@@ -84,5 +90,6 @@ export class DialogHeaderComponent {
   readonly closeLabel = input("Закрыть");
   readonly closeDisabled = input(false);
   readonly initialFocus = input(false);
+  readonly initialFocusOnTitle = input(false);
   readonly closed = output<void>();
 }

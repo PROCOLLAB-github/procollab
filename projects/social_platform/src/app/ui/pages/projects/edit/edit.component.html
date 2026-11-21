@@ -89,36 +89,6 @@
         }
       </div>
     </form>
-    <app-modal
-      [open]="
-        (projectForm.invalid || additionalForm.invalid) &&
-        projSubmitInitiated() &&
-        !warningModalSeen()
-      "
-    >
-      <div class="project__warning-modal">
-        <h3 class="text-bold-body-16">📢 внимание!</h3>
-        <p class="text-body-14">
-          для публикации проекта, нужно заполнить все <strong>обязательные поля</strong> (они будут
-          <strong>подсвечены&nbsp;<span>красным</span></strong
-          >). Если вы пока не знаете что написать, можно сохранить черновик проекта и заполнить поля
-          позже :&#41;
-
-          {{
-            fromProgram() || isProjectAssignToProgram()
-              ? 'также проверь вкладку "данные для конкурсов"'
-              : ""
-          }}
-        </p>
-        <app-button
-          size="medium"
-          customTypographyClass="text-body-12"
-          appearance="outline"
-          (click)="closeWarningModal()"
-          >понятно</app-button
-        >
-      </div>
-    </app-modal>
   </main>
 </div>
 

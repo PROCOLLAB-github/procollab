@@ -448,10 +448,7 @@
   }
 
   .management__toolbar-actions {
-    display: grid;
-    grid-template-columns: minmax(88px, auto) minmax(0, 1fr) 44px;
     gap: 8px;
-    align-items: center;
   }
 
   .management__toolbar-slot .ui-button {
@@ -459,8 +456,14 @@
     padding-inline: 8px;
   }
 
-  .management__toolbar-slot .management__sort-trigger {
-    white-space: normal;
+  .management__toolbar--participants .management__toolbar-actions {
+    flex-wrap: wrap;
+
+    .management__toolbar-slot .ui-button {
+      width: auto;
+      overflow-wrap: normal;
+      white-space: normal;
+    }
   }
 }
 
