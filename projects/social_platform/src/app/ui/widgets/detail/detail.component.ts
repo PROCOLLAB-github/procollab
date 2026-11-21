@@ -76,6 +76,9 @@ export class DeatilComponent implements OnInit, OnDestroy {
     "programApplicationAction",
     { read: ElementRef },
   );
+  private readonly downloadCvAction = viewChild<ElementRef<HTMLElement>>("downloadCvAction", {
+    read: ElementRef,
+  });
   readonly publicationsOnly = input(false);
   protected readonly defaultCover = PROGRAM_DEFAULT_COVER;
   protected get programCover(): string {
@@ -231,16 +234,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   closeProgramApplicationError(modal: ModalComponent): void {
     if (!this.isAssignProjectToProgramModalOpen()) return;
 
-    // Асинхронная загрузка отключает кнопку до открытия окна и может снять с нее фокус.
-    modal.overlayRef
-      ?.detachments()
-      .pipe(take(1))
-      .subscribe(() => {
-        const button = this.programApplicationAction()?.nativeElement.querySelector("button");
-        if (button?.isConnected && button.ownerDocument.activeElement === button.ownerDocument.body) {
-          button.focus();
-        }
-      });
+    this.restoreDialogTriggerFocus(modal, this.programApplicationAction()?.nativeElement);
     this.isAssignProjectToProgramModalOpen.set(false);
   }
 
@@ -270,6 +264,26 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   downloadCV() {
     this.detailProfileInfoService.downloadCV();
+  }
+
+  closeDownloadCvDelay(modal: ModalComponent): void {
+    if (!this.isDelayModalOpen()) return;
+
+    this.restoreDialogTriggerFocus(modal, this.downloadCvAction()?.nativeElement);
+    this.isDelayModalOpen.set(false);
+  }
+
+  private restoreDialogTriggerFocus(modal: ModalComponent, trigger?: HTMLElement): void {
+    // Асинхронная загрузка может снять фокус с кнопки до открытия окна.
+    modal.overlayRef
+      ?.detachments()
+      .pipe(take(1))
+      .subscribe(() => {
+        const button = trigger?.querySelector("button");
+        if (button?.isConnected && button.ownerDocument.activeElement === button.ownerDocument.body) {
+          button.focus();
+        }
+      });
   }
 
   inviteUser(event: Event): void {
