@@ -280,7 +280,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(() => {
         const button = trigger?.querySelector("button");
-        if (button?.isConnected && button.ownerDocument.activeElement === button.ownerDocument.body) {
+        if (
+          button?.isConnected &&
+          button.ownerDocument.activeElement === button.ownerDocument.body
+        ) {
           button.focus();
         }
       });
