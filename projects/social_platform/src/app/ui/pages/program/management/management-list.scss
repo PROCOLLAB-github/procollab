@@ -451,6 +451,11 @@
   }
 }
 
+.management__toolbar--participants .management__toolbar-slot .ui-button {
+  width: auto;
+  padding-inline: 20px;
+}
+
 .management__sort-label--compact {
   display: none;
 }
@@ -473,21 +478,17 @@
   }
 
   .management__toolbar--participants .management__toolbar-actions {
-    display: grid;
-    grid-template-columns: max-content minmax(0, 1fr);
-
-    .management__toolbar-slot .ui-button {
-      overflow-wrap: normal;
-      white-space: normal;
-    }
-
-    .management__sort-trigger.ui-button {
-      gap: 4px;
-      padding-inline: 6px;
-      line-height: 16px;
-    }
+    flex-wrap: wrap;
   }
 
+  .management__toolbar--participants .management__toolbar-slot .ui-button,
+  .management__certificates.ui-button.ui-button {
+    width: auto;
+    gap: 4px;
+    padding-inline: 12px;
+    line-height: 20px;
+    white-space: nowrap;
+  }
 }
 
 @media (max-width: 360px) {
@@ -507,18 +508,20 @@
   }
 }
 
-@media (max-width: 360px) {
-  .management__toolbar--participants .management__filter-trigger.ui-button {
-    gap: 4px;
-    padding-inline: 6px;
-  }
-
+@media (max-width: 385px) {
   .management__sort-label {
     display: none;
   }
 
   .management__sort-label--compact {
     display: inline;
+  }
+}
+
+@media (max-width: 360px) {
+  .management__toolbar--participants .management__toolbar-slot .ui-button,
+  .management__certificates.ui-button.ui-button {
+    padding-inline: 10px;
   }
 }
 
