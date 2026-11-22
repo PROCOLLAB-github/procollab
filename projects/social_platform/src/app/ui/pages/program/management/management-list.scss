@@ -521,7 +521,11 @@
 @media (max-width: 360px) {
   .management__toolbar--participants .management__toolbar-slot .ui-button,
   .management__certificates.ui-button.ui-button {
-    padding-inline: 10px;
+    padding-inline: 7px;
+  }
+
+  .management__toolbar--participants .management__toolbar-actions {
+    gap: 6px;
   }
 }
 
