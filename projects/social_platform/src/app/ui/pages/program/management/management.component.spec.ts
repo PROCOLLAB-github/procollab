@@ -805,8 +805,11 @@ describe("Списки управления программой в DOM", () => 
   it("меню сортировки содержит два явных направления и не меняет порядок до выбора", async () => {
     const { component, harness, state, element } = await setup();
     expect(state.context?.query.order).toBe("activity_desc");
-    expect(element().querySelector(".management__sort-trigger")?.textContent?.trim()).toBe(
+    expect(element().querySelector(".management__sort-trigger")?.getAttribute("aria-label")).toBe(
       "Сначала активные",
+    );
+    expect(element().querySelector(".management__sort-label--compact")?.textContent?.trim()).toBe(
+      "Активные ↑",
     );
     element().querySelector<HTMLButtonElement>(".management__sort-trigger")!.click();
     harness.detectChanges();
@@ -825,8 +828,11 @@ describe("Списки управления программой в DOM", () => 
     await vi.waitFor(() => expect(state.context?.query.order).toBe("activity_asc"));
     expect(component.activitySortLabel()).toBe("Сначала неактивные");
     harness.detectChanges();
-    expect(element().querySelector(".management__sort-trigger")?.textContent?.trim()).toBe(
+    expect(element().querySelector(".management__sort-trigger")?.getAttribute("aria-label")).toBe(
       "Сначала неактивные",
+    );
+    expect(element().querySelector(".management__sort-label--compact")?.textContent?.trim()).toBe(
+      "Неактивные ↑",
     );
   });
 
