@@ -76,8 +76,20 @@
     }
   }
 
+  &__list-heading--participants {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, auto) 44px;
+    gap: 8px;
+
+    > .management__participant-count {
+      min-width: 0;
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+  }
+
   &__certificates.ui-button {
-    min-width: min(196px, 100%);
+    min-width: 0;
   }
 
   &__participant-count span {
@@ -439,6 +451,10 @@
   }
 }
 
+.management__sort-label--compact {
+  display: none;
+}
+
 @media (max-width: 999px) {
   .management__toolbar--participants,
   .management__toolbar--projects {
@@ -472,18 +488,32 @@
     }
   }
 
-  .management__toolbar--participants {
-    position: relative;
+}
 
-    .management__search {
-      padding-right: 44px;
+@media (max-width: 360px) {
+  .management__list-heading--participants {
+    grid-template-columns: minmax(0, 1fr) 44px;
+
+    > .management__participant-count {
+      grid-row: 2;
+      grid-column: 1 / -1;
+      text-align: right;
     }
 
-    .management__export {
-      position: absolute;
-      top: 0;
-      right: 0;
+    > .management__export {
+      grid-row: 1;
+      grid-column: 2;
     }
+  }
+}
+
+@media (max-width: 360px) {
+  .management__sort-label {
+    display: none;
+  }
+
+  .management__sort-label--compact {
+    display: inline;
   }
 }
 

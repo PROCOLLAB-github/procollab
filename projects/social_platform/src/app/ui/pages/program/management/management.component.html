@@ -97,7 +97,10 @@
       (section() === "projects" && !allocation() && program.solutionStorageMode !== "solution")
     ) {
       <section class="management__card" [attr.aria-busy]="state.pending()">
-        <div class="management__list-heading management__list-heading--program">
+        <div
+          class="management__list-heading management__list-heading--program"
+          [class.management__list-heading--participants]="section() === 'participants'"
+        >
           <h2>
             {{
               section() === "participants"
@@ -114,6 +117,23 @@
                 <span> · По фильтрам: {{ count() }}</span>
               }
             </p>
+            <button
+              appButton="icon"
+              class="management__export"
+              type="button"
+              aria-label="Выгрузить участников в Excel"
+              title="Выгрузить участников в Excel"
+              [appButtonLoading]="exportingParticipants()"
+              [disabled]="
+                state.pending() ||
+                exportingParticipants() ||
+                !!participantFilterError() ||
+                !count()
+              "
+              (click)="exportParticipants()"
+            >
+              <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
+            </button>
           } @else {
             <p class="management__participant-count" aria-live="polite">
               Всего проектов: <strong>{{ state.projects()?.totalCount ?? count() }}</strong>
@@ -141,7 +161,9 @@
               [formControl]="search"
               maxlength="200"
               [placeholder]="
-                section() === 'participants' ? 'Имя или почта' : 'Поиск по названию проекта'
+                section() === 'participants'
+                  ? 'Поиск по имени или почте'
+                  : 'Поиск по названию проекта'
               "
             />
           </form>
@@ -166,10 +188,14 @@
                   appButton="secondary"
                   class="management__sort-trigger"
                   [title]="activitySortLabel()"
+                  [attr.aria-label]="activitySortLabel()"
                   [cdkMenuTriggerFor]="activitySortMenu"
                   [cdkMenuPosition]="activitySortPositions"
                 >
-                  {{ activitySortLabel() }}
+                  <span class="management__sort-label">{{ activitySortLabel() }}</span>
+                  <span class="management__sort-label--compact" aria-hidden="true">
+                    {{ activityOrder() === "activity_desc" ? "Активные ↑" : "Неактивные ↑" }}
+                  </span>
                   <i
                     appIcon
                     icon="chevron-down"
@@ -179,23 +205,6 @@
                   ></i>
                 </button>
               </div>
-              <button
-                appButton="icon"
-                class="management__export"
-                type="button"
-                aria-label="Выгрузить участников в Excel"
-                title="Выгрузить участников в Excel"
-                [appButtonLoading]="exportingParticipants()"
-                [disabled]="
-                  state.pending() ||
-                  exportingParticipants() ||
-                  !!participantFilterError() ||
-                  !count()
-                "
-                (click)="exportParticipants()"
-              >
-                <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
-              </button>
             </div>
           } @else {
             <div class="management__toolbar-actions management__toolbar-actions--projects">
