@@ -668,3 +668,25 @@ $detail-bar-mb: 12px;
     padding-top: 0;
   }
 }
+
+@media screen and (max-width: 479px) {
+  .info__actions--program.info__actions--has-invitation {
+    grid-template-columns: minmax(0, 1fr);
+
+    .info__primary-action,
+    > a {
+      grid-column: 1 / -1;
+    }
+
+    .info__primary-action {
+      display: grid;
+      gap: 8px;
+    }
+
+    .info__primary-action > a {
+      display: block;
+      width: 100%;
+      min-width: 0;
+    }
+  }
+}

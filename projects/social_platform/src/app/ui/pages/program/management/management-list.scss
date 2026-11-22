@@ -458,22 +458,31 @@
 
   .management__toolbar--participants .management__toolbar-actions {
     display: grid;
-    grid-template-columns: max-content minmax(0, 200px) 44px;
+    grid-template-columns: max-content minmax(0, 1fr);
 
     .management__toolbar-slot .ui-button {
       overflow-wrap: normal;
       white-space: normal;
     }
+
+    .management__sort-trigger.ui-button {
+      gap: 4px;
+      padding-inline: 6px;
+      line-height: 16px;
+    }
   }
-}
 
-@media (max-width: 360px) {
-  .management__toolbar--participants .management__toolbar-actions {
-    grid-template-columns: minmax(0, 1fr) 44px;
+  .management__toolbar--participants {
+    position: relative;
 
-    > .management__toolbar-slot:first-child {
-      grid-column: 1 / -1;
-      justify-self: start;
+    .management__search {
+      padding-right: 44px;
+    }
+
+    .management__export {
+      position: absolute;
+      top: 0;
+      right: 0;
     }
   }
 }
@@ -556,6 +565,56 @@
   .management__table td.management__pick::before,
   .management__table td.management__row-actions::before {
     display: none;
+  }
+
+  .management__participants {
+    margin-top: 0;
+
+    tr {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr) 36px;
+      gap: 4px 8px;
+      align-items: start;
+      padding: 12px 0;
+    }
+
+    td {
+      grid-column: 2 / -1;
+      grid-template-columns: minmax(0, 92px) minmax(0, 1fr);
+      min-width: 0;
+      padding: 2px 0;
+    }
+
+    td:nth-child(2) {
+      display: none;
+    }
+
+    td.management__pick {
+      position: static;
+      grid-row: 1;
+      grid-column: 1;
+      width: auto;
+
+      label {
+        justify-content: start;
+      }
+    }
+
+    td.management__name {
+      grid-row: 1;
+      grid-column: 2;
+      align-self: center;
+      padding: 0;
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    td.management__row-actions {
+      position: static;
+      grid-row: 1;
+      grid-column: 3;
+      width: auto;
+    }
   }
 
   .management__bulk {
