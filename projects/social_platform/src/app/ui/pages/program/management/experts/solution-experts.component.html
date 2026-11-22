@@ -95,9 +95,7 @@
           appField
           type="search"
           [formControl]="search"
-          [placeholder]="
-            tab() === 'experts' ? 'Поиск по имени или почте' : 'Поиск по названию решения'
-          "
+          [placeholder]="tab() === 'experts' ? 'Имя или почта' : 'Название решения'"
           maxlength="200"
       /></label>
       <button
