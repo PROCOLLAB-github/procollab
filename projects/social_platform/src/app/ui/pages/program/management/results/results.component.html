@@ -70,10 +70,16 @@
             type="button"
             appButton="secondary"
             class="results__sort-trigger"
+            [attr.aria-label]="sortLabel()"
+            [title]="sortLabel()"
             [cdkMenuTriggerFor]="sortMenu"
             [cdkMenuPosition]="sortPositions"
           >
-            {{ sortLabel() }}<i appIcon icon="chevron-down" appSquare="16" aria-hidden="true"></i>
+            <span class="results__sort-label">{{ sortLabel() }}</span>
+            <span class="results__sort-label--compact" aria-hidden="true">
+              {{ order() === "desc" ? "Высокий балл" : "Низкий балл" }}
+            </span>
+            <i appIcon icon="chevron-down" appSquare="16" aria-hidden="true"></i>
           </button>
         }
       </div>

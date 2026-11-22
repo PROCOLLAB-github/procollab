@@ -76,7 +76,7 @@
     }
   }
 
-  &__list-heading--participants {
+  &__list-heading--with-export {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, auto) 44px;
     gap: 8px;
@@ -259,7 +259,7 @@
     align-items: center;
     justify-content: center;
 
-    @include program-management-controls.compact-action;
+    @include program-management-controls.compact-action($mobile-padding: 12px);
 
     min-width: 0;
     color: var(--ui-on-accent) !important;
@@ -401,7 +401,7 @@
 }
 
 .management__card ::ng-deep app-pagination .ui-button.ui-button {
-  @include program-management-controls.compact-action;
+  @include program-management-controls.compact-action($mobile-padding: 12px);
 }
 
 .management__col-number {
@@ -482,6 +482,7 @@
   }
 
   .management__toolbar--participants .management__toolbar-slot .ui-button,
+  .management__toolbar--projects .management__toolbar-slot .ui-button,
   .management__certificates.ui-button.ui-button {
     width: auto;
     gap: 4px;
@@ -492,7 +493,7 @@
 }
 
 @media (max-width: 360px) {
-  .management__list-heading--participants {
+  .management__list-heading--with-export {
     grid-template-columns: minmax(0, 1fr) 44px;
 
     > .management__participant-count {
@@ -706,7 +707,7 @@
 
 .management__toolbar-actions.management__toolbar-actions--projects {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .management__bulk-summary {

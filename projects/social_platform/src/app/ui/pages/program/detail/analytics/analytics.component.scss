@@ -4,11 +4,11 @@
 @use "styles/program-management-controls";
 
 .analytics .ui-button.ui-button {
-  @include program-management-controls.compact-action;
+  @include program-management-controls.compact-action($mobile-padding: 12px);
 }
 
 .analytics ::ng-deep app-button > button.button.button {
-  @include program-management-controls.compact-action;
+  @include program-management-controls.compact-action($mobile-padding: 12px);
 
   min-width: 0;
   max-height: none;

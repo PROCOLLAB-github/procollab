@@ -370,7 +370,7 @@
 
   .ui-button.ui-button {
     min-height: 44px;
-    padding: 5px 16px;
+    padding: 5px 12px;
   }
 
   .ui-button.ui-button--icon {
@@ -387,10 +387,13 @@
     padding-bottom: calc(220px + env(safe-area-inset-bottom, 0px));
   }
 
-  .experts__heading,
-  .experts__quota {
+  .experts__heading {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .experts__quota {
+    flex-wrap: wrap;
   }
 
   .experts__heading {
