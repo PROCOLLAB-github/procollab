@@ -145,7 +145,7 @@
           [class.management__toolbar--participants]="section() === 'participants'"
           [class.management__toolbar--projects]="section() === 'projects'"
         >
-          <form class="management__search" (ngSubmit)="submitSearch()">
+          <form class="management__search" (submit)="$event.preventDefault(); submitSearch()">
             <label class="management__sr" for="management-search">{{
               section() === "participants"
                 ? "Поиск по имени или почте"

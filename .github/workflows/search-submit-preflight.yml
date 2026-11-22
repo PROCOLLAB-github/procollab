@@ -1,0 +1,26 @@
+# @format
+
+name: Search submit preflight
+
+on:
+  push:
+    branches: [fix/dev-management-search-submit-20261122]
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint:ts
+      - run: npm run build:pr
+      - run: npx vitest run projects/social_platform/src/app/ui/pages/program/management/management.component.spec.ts
