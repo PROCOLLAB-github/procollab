@@ -20,6 +20,14 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
       - run: npm ci
+      - name: Prepare formatting patch
+        run: |
+          npx prettier --write projects/social_platform/src/app/ui/pages/program/management/management.component.html
+          git diff --binary > formatting.patch
+      - uses: actions/upload-artifact@v4
+        with:
+          name: formatting-patch
+          path: formatting.patch
       - run: npm run format:check
       - run: npm run lint:ts
       - run: npm run build:pr
