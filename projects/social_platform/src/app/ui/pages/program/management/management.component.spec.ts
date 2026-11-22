@@ -986,6 +986,19 @@ describe("Списки управления программой в DOM", () => 
   });
 
   it.each(["participants", "projects"])(
+    "%s: отправка поиска сохраняет запрос и не перезагружает страницу",
+    async section => {
+      const { component, element } = await setup(section);
+      component.search.setValue("Анна", { emitEvent: false });
+      const event = new Event("submit", { bubbles: true, cancelable: true });
+      element().querySelector<HTMLFormElement>("form.management__search")!.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(true);
+      await vi.waitFor(() => expect(TestBed.inject(Router).url).toContain("search="));
+      expect(component.search.value).toBe("Анна");
+    },
+  );
+
+  it.each(["participants", "projects"])(
     "%s: обновление списка не уничтожает поле поиска и его ввод",
     async section => {
       const { harness, component, state, element } = await setup(section);
