@@ -50,7 +50,7 @@
           appField
           type="search"
           [formControl]="search"
-          [placeholder]="solutionMode() ? 'Поиск по названию решения' : 'Поиск по названию проекта'"
+          [placeholder]="solutionMode() ? 'Название решения' : 'Название проекта'"
           maxlength="200"
       /></label>
       <div class="results__toolbar-actions">
@@ -77,7 +77,7 @@
           >
             <span class="results__sort-label">{{ sortLabel() }}</span>
             <span class="results__sort-label--compact" aria-hidden="true">
-              {{ order() === "desc" ? "Высокий балл" : "Низкий балл" }}
+              {{ order() === "desc" ? "Балл: выше" : "Балл: ниже" }}
             </span>
             <i appIcon icon="chevron-down" appSquare="16" aria-hidden="true"></i>
           </button>

@@ -1,0 +1,23 @@
+# @format
+
+name: Management mobile fit preflight
+
+on:
+  push:
+    branches: [fix/dev-management-mobile-fit-20261122]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint:ts
+      - run: npm run test:ci
+      - run: npm run build:pr
