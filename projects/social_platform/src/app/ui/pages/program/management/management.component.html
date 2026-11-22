@@ -158,9 +158,7 @@
               [formControl]="search"
               maxlength="200"
               [placeholder]="
-                section() === 'participants'
-                  ? 'Поиск по имени или почте'
-                  : 'Поиск по названию проекта'
+                section() === 'participants' ? 'Поиск: имя или почта' : 'Поиск по названию проекта'
               "
             />
           </form>
