@@ -79,6 +79,9 @@
             class="info__actions"
             [class.info__actions--program]="listType() === 'program'"
             [class.info__actions--manager]="listType() === 'program' && isUserManager()"
+            [class.info__actions--has-invitation]="
+              listType() === 'program' && info().pendingExpertInvitationId
+            "
           >
             <ng-container
               *ngTemplateOutlet="
