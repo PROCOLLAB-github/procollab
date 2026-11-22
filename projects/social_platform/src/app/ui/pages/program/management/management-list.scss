@@ -583,6 +583,8 @@
       grid-template-columns: minmax(0, 92px) minmax(0, 1fr);
       min-width: 0;
       padding: 2px 0;
+      font-size: 12px;
+      line-height: 18px;
     }
 
     td:nth-child(2) {
@@ -615,6 +617,11 @@
       grid-column: 3;
       width: auto;
     }
+  }
+
+  .management__list-heading--program > .management__participant-count {
+    font-size: 12px;
+    line-height: 18px;
   }
 
   .management__bulk {
