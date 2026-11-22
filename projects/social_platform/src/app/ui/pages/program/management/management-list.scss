@@ -508,6 +508,11 @@
 }
 
 @media (max-width: 360px) {
+  .management__toolbar--participants .management__filter-trigger.ui-button {
+    gap: 4px;
+    padding-inline: 6px;
+  }
+
   .management__sort-label {
     display: none;
   }
