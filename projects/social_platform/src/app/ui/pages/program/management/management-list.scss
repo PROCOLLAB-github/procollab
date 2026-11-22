@@ -462,7 +462,13 @@
 
     .management__toolbar-slot .ui-button {
       overflow-wrap: normal;
-      white-space: nowrap;
+      white-space: normal;
+    }
+
+    .management__sort-trigger.ui-button {
+      gap: 4px;
+      padding-inline: 6px;
+      line-height: 16px;
     }
   }
 
