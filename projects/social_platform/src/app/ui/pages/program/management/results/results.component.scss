@@ -400,6 +400,7 @@ small {
   }
 
   .results__toolbar-actions {
+    flex-wrap: wrap;
     gap: 8px;
     justify-content: flex-start;
     width: 100%;
@@ -485,7 +486,7 @@ small {
   }
 }
 
-@media (max-width: 385px) {
+@media (max-width: 480px) {
   .results__sort-label {
     display: none;
   }
