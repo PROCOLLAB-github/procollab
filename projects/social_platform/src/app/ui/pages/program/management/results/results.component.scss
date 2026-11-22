@@ -10,7 +10,7 @@
 
 .ui-button.ui-button {
   @include ui-foundation.button;
-  @include program-management-controls.compact-action;
+  @include program-management-controls.compact-action($mobile-padding: 12px);
 
   white-space: nowrap;
 }
@@ -114,6 +114,10 @@ small {
 
 .results__toolbar-actions .ui-button {
   gap: 8px;
+}
+
+.results__sort-label--compact {
+  display: none;
 }
 
 .results__summary {
@@ -397,11 +401,14 @@ small {
 
   .results__toolbar-actions {
     flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
     width: 100%;
   }
 
   .results__toolbar-actions .ui-button {
-    flex: 1 0 auto;
+    flex: 0 0 auto;
+    gap: 4px;
   }
 
   .results__columns {
@@ -476,6 +483,22 @@ small {
 
   .results__download {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .results__sort-label {
+    display: none;
+  }
+
+  .results__sort-label--compact {
+    display: inline;
+  }
+}
+
+@media (max-width: 360px) {
+  .results__toolbar-actions .ui-button {
+    padding-inline: 7px;
   }
 }
 

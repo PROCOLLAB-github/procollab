@@ -11,7 +11,7 @@
 
 .ui-button.ui-button {
   @include ui-foundation.button;
-  @include program-management-controls.compact-action;
+  @include program-management-controls.compact-action($mobile-padding: 12px);
 }
 
 .branding-preview {

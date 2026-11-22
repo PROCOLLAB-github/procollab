@@ -53,7 +53,7 @@
 }
 
 .analytics-drilldown .ui-button.ui-button.analytics-drilldown__close {
-  @include program-management-controls.compact-action;
+  @include program-management-controls.compact-action($mobile-padding: 12px);
 
   flex-shrink: 0;
   padding: 0;

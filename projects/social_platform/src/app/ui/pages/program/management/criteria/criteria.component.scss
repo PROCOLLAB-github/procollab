@@ -9,7 +9,7 @@
 
 .ui-button.ui-button {
   @include ui-foundation.button;
-  @include program-management-controls.compact-action;
+  @include program-management-controls.compact-action($mobile-padding: 12px);
 }
 
 .ui-field {
@@ -34,7 +34,7 @@
 }
 
 .criteria__dialog ::ng-deep app-project-rating .ui-button.ui-button {
-  @include program-management-controls.compact-action;
+  @include program-management-controls.compact-action($mobile-padding: 12px);
 }
 
 h2,
@@ -176,16 +176,18 @@ p {
   max-width: calc(100vw - 40px);
 }
 
+@media (max-width: 999px) {
+  .criteria__card {
+    padding: 16px;
+  }
+}
+
 @media (max-width: 650px) {
   .criteria > .criteria__heading,
   .criteria__row {
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
-  }
-
-  .criteria__card {
-    padding: 16px;
   }
 
   .criteria__dialog .criteria__heading {

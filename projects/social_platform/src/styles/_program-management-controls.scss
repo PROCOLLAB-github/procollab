@@ -124,7 +124,7 @@
 }
 
 // Opt-in sizing for program management; fields and unrelated product buttons keep their sizing.
-@mixin compact-action {
+@mixin compact-action($mobile-padding: 16px) {
   position: relative;
   box-sizing: border-box;
   min-height: 32px;
@@ -141,7 +141,7 @@
 
   @media (max-width: 999px) {
     min-height: 44px;
-    padding-inline: 16px;
+    padding-inline: $mobile-padding;
 
     &.ui-button--icon {
       width: 44px;

@@ -16,7 +16,7 @@
 
 // Native adapters share the existing foundation on desktop as well as mobile.
 .ui-button.ui-button {
-  @include program-management-controls.compact-action;
+  @include program-management-controls.compact-action($mobile-padding: 12px);
 }
 
 .management {

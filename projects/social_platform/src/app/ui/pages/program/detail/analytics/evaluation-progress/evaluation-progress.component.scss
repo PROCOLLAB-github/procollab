@@ -4,7 +4,7 @@
 
 .evaluation-progress__open.ui-button,
 .evaluation-progress__retry.ui-button {
-  @include program-management-controls.compact-action;
+  @include program-management-controls.compact-action($mobile-padding: 12px);
 }
 
 :host {

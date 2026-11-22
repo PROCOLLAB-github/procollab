@@ -98,8 +98,7 @@
     ) {
       <section class="management__card" [attr.aria-busy]="state.pending()">
         <div
-          class="management__list-heading management__list-heading--program"
-          [class.management__list-heading--participants]="section() === 'participants'"
+          class="management__list-heading management__list-heading--program management__list-heading--with-export"
         >
           <h2>
             {{
@@ -138,6 +137,18 @@
                 <span> · По фильтрам: {{ count() }}</span>
               }
             </p>
+            <button
+              appButton="icon"
+              class="management__export"
+              type="button"
+              aria-label="Выгрузить проекты в Excel"
+              title="Выгрузить проекты в Excel"
+              [appButtonLoading]="exportingProjects()"
+              [disabled]="state.pending() || exportingProjects() || !count()"
+              (click)="exportProjects()"
+            >
+              <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
+            </button>
           }
         </div>
         <div
@@ -217,18 +228,6 @@
                   }}
                 </button>
               </div>
-              <button
-                appButton="icon"
-                class="management__export"
-                type="button"
-                aria-label="Выгрузить проекты в Excel"
-                title="Выгрузить проекты в Excel"
-                [appButtonLoading]="exportingProjects()"
-                [disabled]="state.pending() || exportingProjects() || !count()"
-                (click)="exportProjects()"
-              >
-                <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
-              </button>
             </div>
           }
         </div>
