@@ -125,10 +125,7 @@
               title="Выгрузить участников в Excel"
               [appButtonLoading]="exportingParticipants()"
               [disabled]="
-                state.pending() ||
-                exportingParticipants() ||
-                !!participantFilterError() ||
-                !count()
+                state.pending() || exportingParticipants() || !!participantFilterError() || !count()
               "
               (click)="exportParticipants()"
             >
