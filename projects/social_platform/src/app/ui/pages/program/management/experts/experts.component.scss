@@ -180,27 +180,24 @@
 }
 
 .experts__method {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  --method-action-width: 220px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--method-action-width);
   gap: 8px 12px;
+  align-items: center;
   padding-top: 12px;
   border-top: 1px solid var(--light-gray);
 
-  > div {
-    flex: 1 1 22ch;
-    min-width: 0;
-  }
-
-  > button {
-    max-width: 100%;
+  > .ui-button.ui-button {
+    width: min(100%, var(--method-action-width));
+    padding-inline: 12px;
   }
 }
 
 @media (max-width: 520px) {
   .experts__method {
-    display: grid;
-    gap: 8px;
+    grid-template-columns: minmax(0, 1fr);
     justify-items: start;
   }
 }
