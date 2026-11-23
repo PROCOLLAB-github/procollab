@@ -144,7 +144,7 @@ jobs:
               const exportModal = page.getByRole('dialog', { name: 'Выгрузка результатов' });
               await button('Скачать .xlsx', exportModal).click();
               const error = 'Не удалось подготовить файл. Попробуйте еще раз.';
-              await page.locator('app-snackbar .item--error').getByText(error, { exact: true }).waitFor();
+              await page.locator('app-snackbar .item--error').getByText(error, { exact: true }).waitFor({ timeout: 25000 });
               await visibleOverDialog('app-snackbar .item--error', error);
               assert.equal(await exportModal.getByText(error, { exact: true }).count(), 0);
               assert.equal(await button('Повторить выгрузку', exportModal).isEnabled(), true);

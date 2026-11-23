@@ -28,6 +28,7 @@ import {
   notSubmittedProject,
 } from "@domain/program/program-analytics-attention.fixture";
 import { fail, ok } from "@domain/shared/result.type";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { AnalyticsDrilldownComponent } from "./analytics-drilldown.component";
@@ -539,6 +540,7 @@ describe("Attention views: real overlay", () => {
   });
 
   it("select all found selects beyond the visible page, send requires confirmation", async () => {
+    const notification = vi.spyOn(TestBed.inject(SnackbarService), "success");
     visit.execute.mockReturnValue(of(ok(participantsPage({ count: 75 }))));
     await open("participants-without-visit");
     const header = dialog().querySelector<HTMLInputElement>('thead input[type="checkbox"]')!;
@@ -558,7 +560,10 @@ describe("Attention views: real overlay", () => {
       "participants-without-visit",
       "preview",
     );
-    expect(dialog().textContent).toContain("Письма поставлены в очередь");
+    expect(notification).toHaveBeenCalledExactlyOnceWith(
+      "Напоминания созданы: 1. Письма поставлены в очередь.",
+    );
+    expect(dialog().textContent).not.toContain("Письма поставлены в очередь");
   });
 
   it("блокирует напоминание для выбранной работы без экспертов при открытом оценивании", async () => {
