@@ -40,6 +40,7 @@ import {
   ImageFramingDirective,
   DialogHeaderComponent,
   SectionHeaderComponent,
+  StateComponent,
 } from "@uilib";
 import { FileService } from "@corelib";
 import { ProgramManagementRepositoryPort } from "@domain/program/ports/program-management.repository.port";
@@ -125,6 +126,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     ModalComponent,
     DialogHeaderComponent,
     SectionHeaderComponent,
+    StateComponent,
     RowActionsComponent,
     ProgramAnalyticsComponent,
     ProgramBrandingPreviewComponent,
@@ -437,6 +439,13 @@ export class ProgramManagementComponent implements OnInit {
       ? (this.state.participants()?.count ?? 0)
       : (this.state.projects()?.count ?? 0),
   );
+  readonly listHeading = computed(() => {
+    const participants = this.section() === "participants";
+    const list = participants ? this.state.participants() : this.state.projects();
+    const total = list?.totalCount ?? list?.count;
+    const title = participants ? "Участники" : "Проекты";
+    return total === undefined ? title : `${title} · ${total}`;
+  });
   readonly offset = computed(() =>
     this.state.projects() || this.state.participants()
       ? (this.state.context?.query.offset ?? 0)

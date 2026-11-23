@@ -9,7 +9,7 @@ import {
 } from "./expert-presentation";
 import { ChangeDetectionStrategy, Component, input, output } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { AvatarComponent, ButtonDirective, ChoiceDirective } from "@uilib";
+import { AvatarComponent, ButtonDirective, ChoiceDirective, StateComponent } from "@uilib";
 import { AppRoutes } from "@api/paths/app-routes";
 import { ExpertRow } from "@domain/program/evaluation-workspace.model";
 import { presentationHref } from "@utils/program-case-analytics";
@@ -22,7 +22,14 @@ import {
 // Общее представление roster. Отбор строк, назначения и все операции остаются в V1/V2.
 @Component({
   selector: "app-expert-roster",
-  imports: [RouterLink, AvatarComponent, ButtonDirective, ChoiceDirective, RowActionsComponent],
+  imports: [
+    RouterLink,
+    AvatarComponent,
+    ButtonDirective,
+    ChoiceDirective,
+    StateComponent,
+    RowActionsComponent,
+  ],
   templateUrl: "./expert-roster.component.html",
   styleUrls: [
     "../program-native-button.scss",
@@ -42,7 +49,7 @@ export class ExpertRosterComponent {
   readonly page = input(0);
   readonly pageSize = input(20);
   readonly total = input(0);
-  readonly emptyText = input("Экспертов пока нет");
+  readonly filtersActive = input(false);
   readonly actions = input.required<(expert: ExpertRow) => RowAction[]>();
   readonly toggleAll = output<void>();
   readonly toggleRow = output<ExpertRow>();

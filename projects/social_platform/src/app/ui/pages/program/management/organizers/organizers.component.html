@@ -127,9 +127,9 @@
         </button>
       </footer>
     } @else if (!loading() && !error() && snapshot()) {
-      <p role="status">
-        {{ hasFilters() ? "Организаторы не найдены" : "В программе пока нет организаторов" }}
-      </p>
+      <app-state
+        [title]="hasFilters() ? 'Организаторы не найдены' : 'В программе пока нет организаторов'"
+      />
     }
   </section>
 </div>

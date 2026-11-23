@@ -10,6 +10,7 @@ import {
   ButtonDirective,
   FieldDirective,
   IconComponent,
+  StateComponent,
 } from "@uilib";
 
 @Component({
@@ -150,7 +151,18 @@ const preview = (long = false) => ({
   },
   template: `
 <button appButton="secondary" type="button" (click)="open=true">Открыть пример</button>
-<app-modal [open]="open" (openChange)="open=$event" labelledBy="preview-example-title"><section style="padding:24px;max-width:680px;display:grid;gap:20px;min-width:0;font-size:var(--program-type-body-size);line-height:var(--program-type-body-line)"><app-dialog-header title="Предпросмотр формы эксперта" titleId="preview-example-title" (closed)="open=false" /><p style="margin:0">Ответы в предпросмотре не сохраняются.</p><app-project-rating layout="full" [criteria]="criteria" [formControl]="control" /></section></app-modal>`,
+<app-modal [open]="open" (openChange)="open=$event" labelledBy="preview-example-title">
+  <section style="padding:24px;max-width:680px;display:grid;gap:var(--ui-space-sm);min-width:0;font-size:var(--program-type-body-size);line-height:var(--program-type-body-line)">
+    <app-dialog-header
+      title="Предпросмотр формы оценивания"
+      titleId="preview-example-title"
+      style="--ui-dialog-header-margin-bottom:0"
+      (closed)="open=false"
+    />
+    <p style="margin:0">Ответы в предпросмотре не сохраняются.</p>
+    <app-project-rating layout="full" [criteria]="criteria" [formControl]="control" />
+  </section>
+</app-modal>`,
 });
 const editor = (busy = false, dirty = false) => ({
   props: { busy, dirty },
@@ -168,7 +180,7 @@ export const UnsavedDialog: Story = {
 };
 @Component({
   selector: "app-evaluation-screen-example",
-  imports: [SectionHeaderComponent, ButtonDirective, FieldDirective, IconComponent],
+  imports: [SectionHeaderComponent, ButtonDirective, FieldDirective, IconComponent, StateComponent],
   styleUrls: ["./evaluation-standard.stories.scss"],
   template: ` <main class="example">
     <p class="example__notice">Демонстрационный экран. Действия и переходы не подключены.</p>
@@ -191,7 +203,7 @@ export const UnsavedDialog: Story = {
         }
       </nav>
       <section class="example__panel" aria-label="Эксперты программы">
-        <app-section-header title="Эксперты"
+        <app-section-header title="Эксперты · 0"
           ><div class="example__actions">
             <button appButton="primary" type="button" aria-disabled="true">
               Пригласить эксперта</button
@@ -202,7 +214,7 @@ export const UnsavedDialog: Story = {
               disabled
               aria-label="Выгрузить экспертов"
             >
-              <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
+              <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
             </button></div
         ></app-section-header>
         <div class="example__toolbar">
@@ -210,17 +222,7 @@ export const UnsavedDialog: Story = {
             >Поиск по имени или почте<input appField type="search" placeholder="Поиск" /></label
           ><button appButton="secondary" type="button" aria-disabled="true">Фильтры</button>
         </div>
-        <div class="example__table" role="table" aria-label="Список экспертов">
-          <div class="example__columns" role="row">
-            <span role="columnheader">Эксперт</span><span role="columnheader">Кейсы</span
-            ><span role="columnheader">Статус</span><span role="columnheader">Назначено</span
-            ><span role="columnheader">Оценено</span>
-          </div>
-          <div role="row">
-            <p role="cell">Экспертов пока нет. Пригласите первого эксперта по email.</p>
-          </div>
-        </div>
-        <p class="example__count">0–0 из 0</p>
+        <app-state title="Экспертов пока нет" />
       </section>
     </div>
   </main>`,
@@ -331,26 +333,6 @@ export const UnsavedDialog: Story = {
       width: 100%;
       box-sizing: border-box;
     }
-    .example__table {
-      min-width: 0;
-    }
-    .example__columns {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
-      gap: 12px;
-      color: var(--grey-for-text);
-      padding: 12px 0;
-    }
-    .example__table p {
-      margin: 0;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--medium-grey-for-outline);
-    }
-    .example__count {
-      margin: 0;
-      text-align: right;
-      color: var(--grey-for-text);
-    }
     @media (max-width: 650px) {
       .example {
         padding: 16px;
@@ -379,9 +361,6 @@ export const UnsavedDialog: Story = {
       }
       .example__search {
         flex-basis: 100%;
-      }
-      .example__columns {
-        display: none;
       }
     }
   `,

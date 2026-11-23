@@ -49,6 +49,7 @@ import {
   ChoiceDirective,
   FieldDirective,
   IconComponent,
+  StateComponent,
 } from "@uilib";
 import { AppRoutes } from "@api/paths/app-routes";
 import { exportExperts } from "@utils/export-experts";
@@ -93,6 +94,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     NgTemplateOutlet,
     RouterLink,
     IconComponent,
+    StateComponent,
   ],
   templateUrl: "./experts.component.html",
   styleUrls: [

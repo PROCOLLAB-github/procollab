@@ -97,46 +97,36 @@
       (section() === "projects" && !allocation() && program.solutionStorageMode !== "solution")
     ) {
       <section class="management__card" [attr.aria-busy]="state.pending()">
-        <div
-          class="management__list-heading management__list-heading--program management__list-heading--with-export"
-        >
-          <h2>
-            {{
-              section() === "participants"
-                ? "Участники"
-                : allocation()
-                  ? "Распределение"
-                  : "Проекты"
-            }}
-          </h2>
+        <header class="management__list-heading">
+          <h2>{{ listHeading() }}</h2>
           @if (section() === "participants") {
-            <p class="management__participant-count" aria-live="polite">
-              Всего участников: <strong>{{ state.participants()?.totalCount ?? count() }}</strong>
-              @if (hasListFilters()) {
-                <span> · По фильтрам: {{ count() }}</span>
-              }
-            </p>
-            <button
-              appButton="icon"
-              class="management__export"
-              type="button"
-              aria-label="Выгрузить участников в Excel"
-              title="Выгрузить участников в Excel"
-              [appButtonLoading]="exportingParticipants()"
-              [disabled]="
-                state.pending() || exportingParticipants() || !!participantFilterError() || !count()
-              "
-              (click)="exportParticipants()"
-            >
-              <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
-            </button>
+            <div class="management__heading-actions">
+              <a
+                class="management__certificates"
+                appButton="secondary"
+                [routerLink]="paths.program.management(program.id, 'certificates')"
+              >
+                Сертификаты
+              </a>
+              <button
+                appButton="icon"
+                class="management__export"
+                type="button"
+                aria-label="Выгрузить участников в Excel"
+                title="Выгрузить участников в Excel"
+                [appButtonLoading]="exportingParticipants()"
+                [disabled]="
+                  state.pending() ||
+                  exportingParticipants() ||
+                  !!participantFilterError() ||
+                  !count()
+                "
+                (click)="exportParticipants()"
+              >
+                <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+              </button>
+            </div>
           } @else {
-            <p class="management__participant-count" aria-live="polite">
-              Всего проектов: <strong>{{ state.projects()?.totalCount ?? count() }}</strong>
-              @if (hasListFilters()) {
-                <span> · По фильтрам: {{ count() }}</span>
-              }
-            </p>
             <button
               appButton="icon"
               class="management__export"
@@ -147,10 +137,10 @@
               [disabled]="state.pending() || exportingProjects() || !count()"
               (click)="exportProjects()"
             >
-              <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
+              <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
             </button>
           }
-        </div>
+        </header>
         <div
           class="management__toolbar"
           [class.management__toolbar--participants]="section() === 'participants'"
@@ -231,14 +221,8 @@
             </div>
           }
         </div>
-        @if (section() === "participants") {
-          <a
-            class="management__certificates"
-            appButton="secondary"
-            [routerLink]="paths.program.management(program.id, 'certificates')"
-          >
-            Сертификаты
-          </a>
+        @if (hasListFilters() && count() && !state.pending()) {
+          <p class="management__list-meta" role="status">Найдено: {{ count() }}</p>
         }
         <ng-template #activitySortMenu>
           <div
@@ -300,22 +284,21 @@
         @if (state.pending()) {
           <p class="management__list-loading" role="status">Обновляем список…</p>
         } @else if (!count()) {
-          <div class="management__empty" role="status">
-            <h3>
-              {{
-                hasListFilters()
-                  ? "Ничего не найдено"
-                  : section() === "participants"
-                    ? "В программе пока нет участников"
-                    : "В программе пока нет проектов"
-              }}
-            </h3>
-            @if (hasListFilters()) {
+          @if (hasListFilters()) {
+            <app-state icon="search" title="Ничего не найдено">
               <button type="button" appButton="secondary" (click)="resetListFilters()">
                 Сбросить поиск и фильтры
               </button>
-            }
-          </div>
+            </app-state>
+          } @else {
+            <app-state
+              [title]="
+                section() === 'participants'
+                  ? 'В программе пока нет участников'
+                  : 'В программе пока нет проектов'
+              "
+            />
+          }
         } @else if (section() === "participants") {
           <div class="management__mobile-tools">
             <label class="management__pick-all">
@@ -600,7 +583,7 @@
                 [disabled]="exportingParticipants() || removingParticipants()"
                 (click)="exportSelectedParticipants()"
               >
-                <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
+                <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
               </button>
               <button
                 appButton="secondary"
@@ -1074,12 +1057,10 @@
               />
             </article>
           } @empty {
-            <div class="management__materials-empty">
-              <h3>В программе пока нет материалов</h3>
-              <p class="management__muted">
-                Добавьте файл или ссылку, чтобы участники могли открыть их со страницы программы.
-              </p>
-            </div>
+            <app-state
+              title="В программе пока нет материалов"
+              description="Добавьте файл или ссылку, чтобы участники могли открыть их со страницы программы."
+            />
           }
         </section>
       }

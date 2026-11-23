@@ -36,7 +36,7 @@
         (click)="openModal('export')"
         [disabled]="loading() || !allCount()"
       >
-        <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
+        <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
       </button>
     </div>
   </app-section-header>
@@ -124,24 +124,22 @@
       >
     }
     @if (!data.groups.length) {
-      <div class="results__empty">
-        <h3>
-          {{
-            solutionMode() && !submissionApplicable()
-              ? "Оценивание не требуется"
-              : solutionMode()
-                ? "Сданных решений пока нет"
-                : "Сданных проектов пока нет"
-          }}
-        </h3>
-        @if (solutionMode() && !submissionApplicable()) {
-          <p>В этой программе материалы сохраняются без сдачи решения.</p>
-        }
-      </div>
+      <app-state
+        [title]="
+          solutionMode() && !submissionApplicable()
+            ? 'Оценивание не требуется'
+            : solutionMode()
+              ? 'Сданных решений пока нет'
+              : 'Сданных проектов пока нет'
+        "
+        [description]="
+          solutionMode() && !submissionApplicable()
+            ? 'В этой программе материалы сохраняются без сдачи решения.'
+            : undefined
+        "
+      />
     } @else if (!projectCount()) {
-      <div class="results__empty">
-        <h3>Ничего не найдено</h3>
-        <p>Измените поиск или фильтры.</p>
+      <app-state title="Ничего не найдено" description="Измените поиск или фильтры.">
         <button
           appButton="secondary"
           type="button"
@@ -149,7 +147,7 @@
         >
           Сбросить фильтры
         </button>
-      </div>
+      </app-state>
     }
     @for (group of pageGroups(); track group.caseName) {
       <section class="results__group" [attr.aria-label]="group.caseName ?? 'Без кейса'">

@@ -42,6 +42,7 @@ import {
   FieldDirective,
   AlertDirective,
   IconComponent,
+  StateComponent,
 } from "@uilib";
 import {
   RowAction,
@@ -88,6 +89,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     FieldDirective,
     AlertDirective,
     IconComponent,
+    StateComponent,
     RowActionsComponent,
     ModalComponent,
     SolutionAllocationComponent,
@@ -268,6 +270,11 @@ export class SolutionExpertsComponent {
   readonly filterCount = computed(() =>
     Number((this.tab() === "experts" ? this.statusValue() : this.caseValue()) !== "all"),
   );
+  readonly filtersActive = computed(() => !!this.searchValue().trim() || !!this.filterCount());
+  readonly listHeading = computed(() => {
+    if (this.tab() === "distribution") return "Решения на оценку";
+    return this.loading() || this.error() ? "Эксперты" : `Эксперты · ${this.experts().length}`;
+  });
   readonly distributionActions: RowAction[] = [{ id: "assign", label: "Назначить экспертов" }];
   readonly rosterActions = (expert: ExpertRow) => this.rowActions(expert);
   selectAllExperts(): void {

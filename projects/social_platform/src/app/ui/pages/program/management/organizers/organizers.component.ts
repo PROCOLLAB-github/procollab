@@ -26,6 +26,7 @@ import {
   DialogHeaderComponent,
   FieldDirective,
   SectionHeaderComponent,
+  StateComponent,
 } from "@uilib";
 import { ProgramOrganizersUseCase } from "@api/program/use-cases/program-organizers.use-case";
 import {
@@ -56,6 +57,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     DialogHeaderComponent,
     FieldDirective,
     SectionHeaderComponent,
+    StateComponent,
     ModalComponent,
     RowActionsComponent,
   ],

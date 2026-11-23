@@ -31,11 +31,11 @@
   min-width: 32px;
   height: 32px;
   min-height: 32px;
-  padding: 4px;
-  color: var(--accent-text);
+  padding: 0;
+  color: var(--accent);
   background: transparent;
-  border: 0;
-  border-radius: 50%;
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 8px;
 
   &:disabled {
     opacity: 0.35;
@@ -43,6 +43,7 @@
 
   &:hover:not(:disabled) {
     background: var(--accent-light);
+    border-color: var(--medium-grey-for-outline);
   }
 
   @media (max-width: 999px) {

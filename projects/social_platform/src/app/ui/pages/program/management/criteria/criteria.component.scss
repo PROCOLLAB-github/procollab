@@ -33,27 +33,32 @@
   width: 100%;
 }
 
-.criteria__dialog ::ng-deep app-project-rating .ui-button.ui-button {
-  @include program-management-controls.compact-action($mobile-padding: 12px);
+.criteria__dialog--preview {
+  gap: var(--ui-space-sm);
 }
 
-h2,
-h3,
-h4 {
+.criteria__dialog--preview app-dialog-header {
+  --ui-dialog-header-margin-bottom: 0;
+}
+
+.criteria__preview-note {
   margin: 0;
-  overflow-wrap: anywhere;
 }
 
-h2,
+// Keep the full evaluation layout and tighten its spacing in the preview alone.
+.criteria__dialog--preview ::ng-deep app-project-rating .rating {
+  gap: 12px;
+}
+
+.criteria__dialog--preview ::ng-deep app-project-rating .rating__criterion {
+  gap: 6px;
+}
+
 h3 {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-}
-
-h4 {
+  margin: 0;
   font-size: 14px;
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 p {
@@ -62,7 +67,6 @@ p {
   overflow-wrap: anywhere;
 }
 
-.criteria__heading,
 .criteria__row,
 .criteria__actions {
   display: flex;
@@ -71,17 +75,10 @@ p {
   justify-content: space-between;
 }
 
-.criteria__heading {
-  align-items: flex-start;
-}
-
-.criteria__heading > div,
-.criteria__heading h2,
 .criteria__row > div {
   min-width: 0;
 }
 
-.criteria__heading button,
 .criteria__row > .criteria__actions {
   flex-shrink: 0;
 }
@@ -94,6 +91,10 @@ p {
 
 .criteria__card > app-section-header {
   margin-bottom: 16px;
+}
+
+.criteria__preview-trigger {
+  margin-inline-start: auto;
 }
 
 .criteria__add {
@@ -144,14 +145,6 @@ p {
   margin: 0 0 20px;
 }
 
-.criteria__notice {
-  margin-top: 16px;
-}
-
-.criteria__empty {
-  padding: 20px 0;
-}
-
 .criteria__note,
 .ui-alert--error,
 .ui-alert--success {
@@ -183,14 +176,8 @@ p {
 }
 
 @media (max-width: 650px) {
-  .criteria > .criteria__heading,
   .criteria__row {
     flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
-  }
-
-  .criteria__dialog .criteria__heading {
     gap: 12px;
     align-items: flex-start;
   }

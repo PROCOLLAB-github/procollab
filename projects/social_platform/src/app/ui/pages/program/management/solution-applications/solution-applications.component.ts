@@ -61,6 +61,7 @@ import {
   FieldDirective,
   IconComponent,
   PaginationComponent,
+  StateComponent,
   TableDirective,
 } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
@@ -101,6 +102,7 @@ type ActionPreview = {
     FieldDirective,
     IconComponent,
     PaginationComponent,
+    StateComponent,
     TableDirective,
     ModalComponent,
     RowActionsComponent,
@@ -161,6 +163,7 @@ export class SolutionApplicationsComponent {
   readonly selecting = signal(false);
   readonly filtersOpen = signal(false);
   readonly archived = signal(false);
+  readonly hasListFilters = signal(false);
   readonly search = new FormControl("", { nonNullable: true });
   readonly caseFilter = new FormControl("all", { nonNullable: true });
   readonly submissionFilter = new FormControl("all", { nonNullable: true });
@@ -286,6 +289,11 @@ export class SolutionApplicationsComponent {
     this.offset.set(Number.isSafeInteger(offset) && offset >= 0 ? offset : 0);
     this.archived.set(q.get("participation") === "archived");
     const filters = this.filters();
+    this.hasListFilters.set(
+      !!filters.search ||
+        (!this.archived() &&
+          (filters.submission !== "all" || filters.caseScope !== "all" || !!filters.fieldId)),
+    );
     const key = JSON.stringify([programId, filters, this.archived()]);
     if (this.selectionKey !== key) this.selected.set(new Set());
     this.selectionKey = key;

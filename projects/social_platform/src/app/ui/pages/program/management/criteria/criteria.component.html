@@ -25,11 +25,14 @@
     }
     @if (snapshot()) {
       <section class="criteria__card" aria-labelledby="criteria-heading">
-        <app-section-header
-          title="Критерии оценки"
-          description="Один набор для всех кейсов программы."
-        >
-          <button type="button" appButton="secondary" (click)="openPreview()">
+        <app-section-header title="Критерии оценки" titleId="criteria-heading">
+          <button
+            sectionHeaderAction
+            class="criteria__preview-trigger"
+            type="button"
+            appButton="secondary"
+            (click)="openPreview()"
+          >
             Предпросмотр формы
           </button>
         </app-section-header>
@@ -39,14 +42,13 @@
             <p>Первая оценка уже сохранена. Добавлять, удалять и менять критерии больше нельзя.</p>
           </div>
         }
-        <h3 id="criteria-heading">Критерии программы</h3>
         @if (!locked()) {
           <p>Настройте форму до первой сохраненной оценки.</p>
         }
         <button
           class="criteria__add"
           type="button"
-          appButton="secondary"
+          appButton="primary"
           [disabled]="locked() || saving()"
           (click)="edit()"
         >
@@ -55,7 +57,7 @@
         @for (criterion of criteria(); track criterion.id) {
           <article class="criteria__row">
             <div>
-              <h4>{{ criterion.name }}</h4>
+              <h3>{{ criterion.name }}</h3>
               <p>{{ summary(criterion) }}</p>
               @if (criterion.description) {
                 <p>{{ criterion.description }}</p>
@@ -83,14 +85,12 @@
             }
           </article>
         } @empty {
-          <p class="criteria__empty">
-            Критериев пока нет. Добавьте критерий, чтобы настроить форму эксперта.
-          </p>
-        }
-        @if (!locked()) {
-          <p appAlert="warning">
-            После первой сохраненной оценки весь набор критериев будет зафиксирован.
-          </p>
+          <app-state
+            title="Критериев пока нет."
+            [description]="
+              locked() ? undefined : 'Добавьте критерий, чтобы настроить форму эксперта.'
+            "
+          />
         }
       </section>
       @if (!locked()) {
@@ -208,13 +208,13 @@
   (openChange)="previewOpen.set($event)"
   labelledBy="criteria-preview-title"
 >
-  <div class="criteria__dialog">
+  <div class="criteria__dialog criteria__dialog--preview">
     <app-dialog-header
-      title="Предпросмотр формы эксперта"
+      title="Предпросмотр формы оценивания"
       titleId="criteria-preview-title"
       (closed)="previewOpen.set(false)"
     />
-    <p>Ответы в предпросмотре не сохраняются.</p>
+    <p class="criteria__preview-note">Ответы в предпросмотре не сохраняются.</p>
     <app-project-rating
       layout="full"
       [criteria]="previewCriteria()"
