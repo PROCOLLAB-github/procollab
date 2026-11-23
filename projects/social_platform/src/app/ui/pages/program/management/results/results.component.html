@@ -15,7 +15,21 @@
           : 'Рейтинг проектов'
     "
   >
-    <div class="results__heading-actions">
+    @if (snapshot()?.hasNumericCriteria) {
+      <button
+        sectionHeaderTitleAction
+        class="results__help"
+        type="button"
+        appButton="icon"
+        aria-label="Как считается балл"
+        title="Как считается балл"
+        aria-haspopup="dialog"
+        (click)="openModal('formula')"
+      >
+        <i appIcon icon="hint" appSquare="16" aria-hidden="true"></i>
+      </button>
+    }
+    <div sectionHeaderAction class="results__heading-actions">
       <button
         type="button"
         appButton="icon"
@@ -33,6 +47,7 @@
         class="results__icon results__export"
         aria-label="Выгрузить результаты в Excel"
         title="Выгрузить результаты в Excel"
+        aria-haspopup="dialog"
         (click)="openModal('export')"
         [disabled]="loading() || !allCount()"
       >
@@ -216,16 +231,6 @@
           }
         }
       </section>
-    }
-    @if (data.hasNumericCriteria) {
-      <button
-        class="results__formula"
-        type="button"
-        appButton="text"
-        (click)="openModal('formula')"
-      >
-        Как считается балл
-      </button>
     }
     @if (projectCount()) {
       <nav class="results__pagination" aria-label="Страницы результатов">

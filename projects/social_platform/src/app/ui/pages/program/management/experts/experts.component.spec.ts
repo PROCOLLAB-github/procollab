@@ -64,14 +64,11 @@ describe("Управление экспертами", () => {
     await fixture.whenStable();
     expect(component.modal()).toBeNull();
   });
-  it("отделяет состав от распределения и показывает одну строку правила", () => {
+  it("открывает настройки распределения из заголовка даже при пустом списке проектов", () => {
     const { fixture, component } = setup();
-    expect(fixture.nativeElement.querySelector(".experts__quota")).toBeNull();
+    expect(fixture.nativeElement.querySelector(".experts__distribute")).toBeNull();
     component.switchTab("distribution");
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector(".experts__quota").textContent).toContain(
-      "Экспертов на проект: 2",
-    );
     expect(fixture.nativeElement.textContent).toContain("Распределение экспертов");
     component.snapshot.set({ ...snapshot, projects: [] });
     fixture.detectChanges();
@@ -80,6 +77,14 @@ describe("Управление экспертами", () => {
     );
     expect(fixture.nativeElement.querySelector(".experts__table")).toBeNull();
     expect(fixture.nativeElement.querySelector(".experts__pagination")).toBeNull();
+
+    const distribute = fixture.nativeElement.querySelector(
+      "app-section-header .experts__distribute",
+    ) as HTMLButtonElement;
+    distribute.click();
+    expect(component.modal()).toBe("method");
+    expect(component.quota.value).toBe(2);
+    component.discard();
 
     component.distributionSearch.setValue("несуществующий проект");
     fixture.detectChanges();
@@ -670,7 +675,7 @@ describe("Управление экспертами", () => {
   });
   it("новый ввод N сбрасывает старый предпросмотр и запрещает 0", () => {
     const { component } = setup();
-    component.open("quota");
+    component.open("method");
     component.quotaPreview.set({
       revision: "v1",
       requiredEvaluators: 2,
@@ -683,6 +688,28 @@ describe("Управление экспертами", () => {
     expect(component.quotaPreview()).toBeNull();
     component.quota.setValue(0);
     expect(component.quota.invalid).toBe(true);
+  });
+  it("сохраняет квоту по ревизии предпросмотра и оставляет способы распределения открытыми", () => {
+    const { component, api } = setup();
+    component.open("method");
+    component.quota.setValue(3);
+    component.startAutomaticAllocation();
+    component.saveQuota();
+    expect(component.modal()).toBe("method");
+    expect(api.allocation).not.toHaveBeenCalled();
+    expect(api.saveQuota).not.toHaveBeenCalled();
+
+    api.quota.mockReturnValue(of({ revision: "preview-r1", requiredEvaluators: 3 }));
+    api.saveQuota.mockReturnValue(of({ ...snapshot, requiredEvaluators: 3 }));
+    component.previewQuota();
+    expect(api.quota).toHaveBeenCalledWith(42, 3);
+    expect(api.saveQuota).not.toHaveBeenCalled();
+    component.saveQuota();
+    expect(api.saveQuota).toHaveBeenCalledWith(42, 3, "preview-r1");
+    expect(component.modal()).toBe("method");
+    expect(component.quota.value).toBe(3);
+    expect(component.quotaPreview()).toBeNull();
+    expect(component.quotaSaved()).toBe(true);
   });
   it("можно выбрать разные кейсы, но ручное назначение требует одного кейса", () => {
     const { fixture, component } = setup();

@@ -28,6 +28,7 @@ import {
   EMPTY,
   exhaustMap,
   filter,
+  finalize,
   forkJoin,
   map,
   Observable,
@@ -73,6 +74,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { SolutionAllocationComponent } from "../solution-applications/solution-allocation.component";
 import { exportExperts } from "@utils/export-experts";
 import { ExpertRosterComponent } from "./expert-roster.component";
+import { ExpertQuotaComponent } from "./expert-quota.component";
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 
 /** Program experts keep their existing invitation/case-scope API. Assignment IDs and counters come only from solutions. */
@@ -94,6 +96,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     ModalComponent,
     SolutionAllocationComponent,
     ExpertRosterComponent,
+    ExpertQuotaComponent,
     TransientNoticeComponent,
   ],
   templateUrl: "./solution-experts.component.html",
@@ -145,7 +148,7 @@ export class SolutionExpertsComponent {
   readonly pageSize = 20;
   readonly distributionSelection = signal(new Set<number>());
   readonly tab = signal<"experts" | "distribution">("experts");
-  readonly modal = signal<"invite" | "scope" | "assignments" | "quota" | null>(null);
+  readonly modal = signal<"invite" | "scope" | "assignments" | "method" | null>(null);
   readonly selected = signal<ExpertRow | null>(null);
   readonly selectedExperts = signal(new Set<number | string>());
   readonly bulkScope = signal(false);
@@ -153,6 +156,7 @@ export class SolutionExpertsComponent {
   readonly selectedSolutions = signal(new Set<number>());
   readonly allocation = signal<{ programId: number; ids: number[] } | null>(null);
   readonly quotaPreview = signal<SolutionQuota | null>(null);
+  readonly quotaSaved = signal(false);
   readonly scopeAll = signal(true);
   readonly scopeCases = signal(new Set<string | null>());
   readonly cases = signal<string[]>([]);
@@ -167,8 +171,7 @@ export class SolutionExpertsComponent {
     validators: [Validators.required, Validators.email, Validators.maxLength(254)],
   });
   readonly emailValue = toSignal(this.email.valueChanges, { initialValue: "" });
-  readonly quota = new FormControl(1, {
-    nonNullable: true,
+  readonly quota = new FormControl<number | null>(1, {
     validators: [
       Validators.required,
       Validators.min(1),
@@ -177,6 +180,7 @@ export class SolutionExpertsComponent {
     ],
   });
   readonly quotaValue = toSignal(this.quota.valueChanges, { initialValue: 1 });
+  readonly quotaChanged = computed(() => this.quotaValue() !== this.required());
   readonly paths = AppRoutes;
   readonly href = presentationHref;
   initials(expert: ExpertRow): string {
@@ -219,8 +223,8 @@ export class SolutionExpertsComponent {
         return !!this.emailValue() || this.scopeKey() !== "all";
       case "scope":
         return this.scopeKey() !== this.initialScope();
-      case "quota":
-        return this.quotaValue() !== this.required();
+      case "method":
+        return this.quotaChanged();
       case "assignments": {
         const before =
           this.options()
@@ -272,7 +276,7 @@ export class SolutionExpertsComponent {
   );
   readonly filtersActive = computed(() => !!this.searchValue().trim() || !!this.filterCount());
   readonly listHeading = computed(() => {
-    if (this.tab() === "distribution") return "Решения на оценку";
+    if (this.tab() === "distribution") return "Распределение экспертов";
     return this.loading() || this.error() ? "Эксперты" : `Эксперты · ${this.experts().length}`;
   });
   readonly distributionActions: RowAction[] = [{ id: "assign", label: "Назначить экспертов" }];
@@ -425,9 +429,9 @@ export class SolutionExpertsComponent {
     effect(() => {
       this.statusChange.emit({ dirty: this.dirty(), busy: this.busy() || this.allocationBusy() });
     });
-    effect(() => {
-      this.quotaValue();
-      untracked(() => this.quotaPreview.set(null));
+    this.quota.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.quotaPreview.set(null);
+      this.quotaSaved.set(false);
     });
   }
   load(): void {
@@ -502,8 +506,8 @@ export class SolutionExpertsComponent {
     const rows = this.assignments().filter(a => a.application.solutionId === solutionId);
     return { assigned: rows.length, completed: rows.filter(a => a.status === "completed").length };
   }
-  open(kind: "invite" | "scope" | "assignments" | "quota", expert: ExpertRow | null = null): void {
-    if (this.busy() || this.loading()) return;
+  open(kind: "invite" | "scope" | "assignments" | "method", expert: ExpertRow | null = null): void {
+    if (this.busy() || this.loading() || this.allocationBusy()) return;
     this.cancelDialog.next();
     this.selected.set(expert);
     this.bulkScope.set(false);
@@ -515,7 +519,7 @@ export class SolutionExpertsComponent {
     this.scopeAll.set(expert?.allCases ?? true);
     this.scopeCases.set(new Set(expert?.caseNames ?? []));
     this.initialScope.set(this.scopeKey());
-    this.quota.setValue(this.required());
+    if (kind === "method") this.resetQuota();
     this.modal.set(kind);
     if (kind === "assignments" && expert?.status === "joined") {
       this.optionsApi
@@ -601,16 +605,20 @@ export class SolutionExpertsComponent {
         });
     }
   }
-  private write<T>(request: Observable<T>, message: string): void {
+  private write<T>(request: Observable<T>, onSaved: string | ((data: T) => void)): void {
     if (this.busy()) return;
     this.busy.set(true);
     this.dialogError.set("");
     this.error.set("");
     request.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
+      next: data => {
         this.busy.set(false);
+        if (typeof onSaved === "function") {
+          onSaved(data);
+          return;
+        }
         this.discard();
-        this.message.set(message);
+        this.message.set(onSaved);
         this.load();
       },
       error: () => {
@@ -686,15 +694,31 @@ export class SolutionExpertsComponent {
       "Решения назначены эксперту.",
     );
   }
+  resetQuota(): void {
+    this.quota.reset(this.required());
+    this.dialogError.set("");
+  }
   previewQuota(): void {
-    if (this.quota.invalid || this.busy()) return;
+    const value = this.quota.value;
+    if (
+      this.modal() !== "method" ||
+      this.quota.invalid ||
+      this.busy() ||
+      value === null ||
+      !this.quotaChanged()
+    )
+      return;
     this.cancelDialog.next();
     this.quotaPreview.set(null);
     this.dialogError.set("");
-    const value = this.quota.value;
+    this.busy.set(true);
     this.quotaApi
       .execute(this.programId(), value)
-      .pipe(takeUntil(this.cancelDialog), takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntil(this.cancelDialog),
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.busy.set(false)),
+      )
       .subscribe(result => {
         if (value !== this.quota.value) return;
         if (result.ok) this.quotaPreview.set(result.value);
@@ -702,12 +726,13 @@ export class SolutionExpertsComponent {
       });
   }
   saveQuota(): void {
-    if (this.busy()) return;
+    if (this.modal() !== "method" || this.busy() || !this.quotaChanged()) return;
     const p = this.quotaPreview();
     if (!p || p.requiredEvaluators !== this.quota.value) return;
+    const programId = this.programId();
     this.write(
       this.saveQuotaApi
-        .execute(this.programId(), {
+        .execute(programId, {
           revision: p.revision,
           requiredEvaluators: p.requiredEvaluators,
         })
@@ -717,8 +742,34 @@ export class SolutionExpertsComponent {
             return result.value;
           }),
         ),
-      "Число оценщиков изменено. Готовность решений пересчитана.",
+      data => {
+        if (programId !== this.programId()) {
+          this.load();
+          return;
+        }
+        this.revision.set(data.revision);
+        this.required.set(data.requiredEvaluators);
+        this.quota.reset(data.requiredEvaluators);
+        this.quotaSaved.set(true);
+      },
     );
+  }
+  async goToExpertsForAllocation(): Promise<void> {
+    await this.close();
+    if (!this.modal()) this.tab.set("experts");
+  }
+  startAutomaticAllocation(): void {
+    if (
+      this.modal() !== "method" ||
+      this.busy() ||
+      this.loading() ||
+      this.allocationBusy() ||
+      this.quotaChanged()
+    )
+      return;
+    if (!this.distributionSelection().size && !this.filteredSolutions().length) return;
+    this.discard();
+    this.startAllocation();
   }
   startAllocation(
     ids = this.distributionSelection().size

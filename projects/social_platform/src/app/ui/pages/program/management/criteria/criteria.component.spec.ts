@@ -145,9 +145,9 @@ describe("Organizer evaluation criteria", () => {
     const heading = root.querySelector("#criteria-heading");
     expect(heading?.textContent).toBe("Критерии оценки");
     expect(heading?.closest("section")?.getAttribute("aria-labelledby")).toBe(heading?.id);
-    expect(heading?.parentElement?.querySelector("button")?.textContent).toContain(
-      "Предпросмотр формы",
-    );
+    expect(
+      heading?.closest(".section-header__heading")?.querySelector("button")?.textContent,
+    ).toContain("Предпросмотр формы");
     expect(root.querySelector(".criteria__add")?.classList.contains("ui-button--primary")).toBe(
       true,
     );

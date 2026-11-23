@@ -67,7 +67,6 @@ small {
   color: var(--grey-for-text);
 }
 
-.results__heading,
 .results__heading-actions,
 .results__toolbar,
 .results__toolbar-actions,
@@ -85,17 +84,22 @@ small {
   flex-shrink: 0;
   gap: 8px;
   justify-content: flex-end;
-  width: 100%;
+  margin-inline-start: auto;
 }
 
 .results__icon.ui-button.ui-button,
-.results__close.ui-button.ui-button {
+.results__help.ui-button.ui-button {
+  flex-shrink: 0;
   width: 32px;
   min-width: 32px;
   height: 32px;
   padding: 5px;
   color: var(--accent);
-  background: var(--light-white);
+  background: transparent;
+}
+
+.results__help.ui-button.ui-button {
+  color: var(--accent-text);
 }
 
 .results__export.ui-button.ui-button {
@@ -240,17 +244,6 @@ small {
   color: var(--accent-text);
 }
 
-.results__formula.ui-button.ui-button {
-  justify-self: start;
-  justify-content: flex-start;
-  padding-inline: 0;
-
-  &:hover:not(:disabled),
-  &:active:not(:disabled) {
-    background: transparent;
-  }
-}
-
 .results--unscored .results__columns,
 .results--unscored .results__row {
   grid-template-columns: minmax(0, 1fr) minmax(80px, 0.65fr) 84px;
@@ -374,7 +367,7 @@ small {
 
 @media (max-width: 999px) {
   .results__icon.ui-button.ui-button,
-  .results__close.ui-button.ui-button {
+  .results__help.ui-button.ui-button {
     width: 44px;
     min-width: 44px;
     height: 44px;
@@ -472,10 +465,6 @@ small {
 
   .results__pagination {
     gap: 12px;
-  }
-
-  .results__dialog .results__heading {
-    align-items: start;
   }
 
   .results__download {

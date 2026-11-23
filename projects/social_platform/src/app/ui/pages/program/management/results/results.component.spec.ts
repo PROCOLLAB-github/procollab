@@ -68,6 +68,7 @@ describe("Результаты программы", () => {
       ".results__export",
     ) as HTMLButtonElement;
     expect(exportButton.getAttribute("aria-label")).toBe("Выгрузить результаты в Excel");
+    expect(exportButton.closest(".section-header__heading")).toBeTruthy();
     expect(exportButton.querySelector('[icon="download"]')?.getAttribute("appSquare")).toBe("18");
     expect(exportButton.disabled).toBe(false);
     exportButton.click();
@@ -75,6 +76,20 @@ describe("Результаты программы", () => {
     component.snapshot.set({ ...snapshot, groups: [] });
     fixture.detectChanges();
     expect(exportButton.disabled).toBe(true);
+  });
+
+  it("открывает справку о балле из заголовка рейтинга", () => {
+    const { fixture, component } = setup();
+    const title = fixture.nativeElement.querySelector(".section-header__title");
+    const help = title.querySelector('[aria-label="Как считается балл"]') as HTMLButtonElement;
+    expect(title.querySelector("h2").textContent).toBe("Рейтинг проектов");
+    expect(help.querySelector('[icon="hint"]')).toBeTruthy();
+    help.click();
+    expect(component.modal()).toBe("formula");
+
+    component.snapshot.set({ ...snapshot, hasNumericCriteria: false });
+    fixture.detectChanges();
+    expect(title.querySelector('[aria-label="Как считается балл"]')).toBeNull();
   });
 
   it("показывает короткое пустое состояние и объясняет отсутствие рейтинга только при наличии проектов", () => {

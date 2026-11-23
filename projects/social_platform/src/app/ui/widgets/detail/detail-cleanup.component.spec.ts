@@ -51,7 +51,7 @@ describe("Detail cleanup actions", () => {
         provideRouter([]),
         {
           provide: ProgramDetailMainUIInfoService,
-          useValue: { program: info, registerDateExpired: signal(false) },
+          useValue: { program: info },
         },
         { provide: GetSolutionContextUseCase, useValue: { execute: vi.fn() } },
         { provide: LoggerService, useValue: { debug: vi.fn() } },
@@ -215,6 +215,9 @@ describe("Detail cleanup actions", () => {
     expect(
       [...page.querySelectorAll(".info__program-action")].map(action => action.textContent?.trim()),
     ).toEqual(["Зарегистрироваться", "Подробнее"]);
+    expect(page.querySelector('a[href="https://example.org/register"]')?.textContent).toContain(
+      "Зарегистрироваться",
+    );
 
     info.update(program => ({ ...program, landingUrl: "https://example.org/event" }));
     fixture.detectChanges();
@@ -222,6 +225,30 @@ describe("Detail cleanup actions", () => {
       "Подробнее",
     );
     expect(page.querySelector(".info__actions button")).toBeNull();
+  });
+
+  it.each([
+    { datetimeRegistrationEnds: "2000-01-01T00:00:00Z" },
+    { datetimeProjectSubmissionEnds: "2000-01-01T00:00:00Z" },
+    { registrationLink: null },
+  ])("keeps registration disabled and the program website accessible for %j", unavailable => {
+    member.set(false);
+    info.set({
+      ...Program.default(),
+      registrationLink: "https://example.org/register",
+      landingUrl: "https://example.org/event",
+      ...unavailable,
+    });
+    const fixture = TestBed.createComponent(DeatilComponent);
+    fixture.detectChanges();
+    const page: HTMLElement = fixture.nativeElement;
+    const registration = page.querySelector<HTMLButtonElement>("button.info__program-action");
+    expect(registration?.textContent?.trim()).toBe("Зарегистрироваться");
+    expect(registration?.disabled).toBe(true);
+    expect(page.querySelector('a[href="https://example.org/register"]')).toBeNull();
+    expect(page.querySelector('a[href="https://example.org/event"]')?.textContent).toContain(
+      "Подробнее",
+    );
   });
   it.each([7, 8])("shares the viewed profile using the existing copy-link flow (id=%s)", id => {
     type.set("profile");

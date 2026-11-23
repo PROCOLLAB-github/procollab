@@ -170,16 +170,18 @@
                 </app-modal>
               } @else {
                 @if (!isUserMember() && !isUserManager() && !isUserExpert()) {
-                  @if (!registerDateExpired()) {
-                    @if (getProgramRegistrationLink(info()); as registrationLink) {
-                      <a
-                        class="info__program-action"
-                        appButton="primary"
-                        [href]="registrationLink"
-                        (click)="checkPrograRegistrationEnded($event, info())"
-                        >Зарегистрироваться</a
-                      >
-                    }
+                  @if (getOpenProgramRegistrationLink(info()); as registrationLink) {
+                    <a
+                      class="info__program-action"
+                      appButton="primary"
+                      [href]="registrationLink"
+                      (click)="checkPrograRegistrationEnded($event, info())"
+                      >Зарегистрироваться</a
+                    >
+                  } @else {
+                    <button class="info__program-action" appButton="primary" type="button" disabled>
+                      Зарегистрироваться
+                    </button>
                   }
                   @if (info().landingUrl?.trim(); as landingUrl) {
                     <a class="info__program-action" appButton="secondary" [href]="landingUrl">

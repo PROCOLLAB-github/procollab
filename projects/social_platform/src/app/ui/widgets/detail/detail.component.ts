@@ -137,8 +137,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   // Сторонние переменные для работы с роутингом или доп проверок
   protected readonly backPath = this.detailInfoService.backPath;
-  protected readonly registerDateExpired = this.detailProgramInfoService.registerDateExpired;
-
   protected readonly isInProject = this.detailInfoService.isInProject;
   protected readonly queryCourseId = this.detailInfoService.queryCourseId;
 
@@ -312,7 +310,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.detailProgramInfoService.checkPrograRegistrationEnded(event, program);
   }
 
-  getProgramRegistrationLink(program: Program): string | null {
-    return this.detailProgramInfoService.getRegistrationLink(program);
+  getOpenProgramRegistrationLink(program: Program): string | null {
+    return this.detailProgramInfoService.getOpenRegistrationLink(program);
   }
 }

@@ -204,7 +204,7 @@ export const UnsavedDialog: Story = {
       </nav>
       <section class="example__panel" aria-label="Эксперты программы">
         <app-section-header title="Эксперты · 0"
-          ><div class="example__actions">
+          ><div sectionHeaderAction class="example__actions">
             <button appButton="primary" type="button" aria-disabled="true">
               Пригласить эксперта</button
             ><button
@@ -307,7 +307,6 @@ export const UnsavedDialog: Story = {
       display: grid;
       gap: 16px;
     }
-    .example__actions,
     .example__toolbar {
       display: flex;
       align-items: center;
@@ -316,7 +315,10 @@ export const UnsavedDialog: Story = {
       width: 100%;
     }
     .example__actions {
-      flex-wrap: wrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-inline-start: auto;
     }
     .example__actions button {
       flex-shrink: 0;
