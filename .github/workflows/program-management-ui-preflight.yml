@@ -37,6 +37,9 @@ jobs:
           os.chdir("dist/social_platform")
 
           class App(SimpleHTTPRequestHandler):
+              def log_message(self, format, *args):
+                  pass
+
               def do_GET(self):
                   if not os.path.isfile(self.translate_path(self.path)):
                       self.path = "/index.html"
@@ -104,7 +107,10 @@ jobs:
                 const heading = page.getByRole('heading', { name: label, exact: true });
                 await heading.waitFor();
                 await page.getByText(emptyText, { exact: true }).waitFor();
-                await page.locator('app-state use[xlink\\:href$="#empty-chat"]').waitFor({ state: 'attached' });
+                const icon = page.locator('app-state use');
+                await icon.waitFor({ state: 'attached' });
+                const symbol = await icon.evaluate(use => use.href.baseVal);
+                assert.match(symbol, /#empty-chat$/);
                 const download = page.getByRole('button', { name: exportName, exact: true });
                 const style = await download.evaluate(button => {
                   const css = getComputedStyle(button);
