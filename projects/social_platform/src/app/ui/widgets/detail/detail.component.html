@@ -174,7 +174,7 @@
                     @if (getProgramRegistrationLink(info()); as registrationLink) {
                       <a
                         class="info__program-action"
-                        appButton="secondary"
+                        appButton="primary"
                         [href]="registrationLink"
                         (click)="checkPrograRegistrationEnded($event, info())"
                         >Зарегистрироваться</a
@@ -202,6 +202,7 @@
                   !isUserExpert() &&
                   info().solutionStorageMode !== "solution" &&
                   !info().currentApplication?.submitted &&
+                  !info().hasSubmittedTeamProject &&
                   !applicationActionDisabled()
                 ) {
                   <button

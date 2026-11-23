@@ -175,9 +175,7 @@
           >
         }
         @case ("participant") {
-          @if (participantView()?.applicationLink; as application) {
-            <a [routerLink]="application.path" [queryParams]="application.queryParams">Открыть →</a>
-          } @else if (data.participant.submissionOpen) {
+          @if (!participantView()?.applicationLink && data.participant.submissionOpen) {
             <button
               appButton="primary"
               type="button"
@@ -188,9 +186,9 @@
               "
               (click)="createApplication()"
             >
-              Создать заявку →
+              {{ data.storageMode === "solution" ? "Подать решение" : "Подать проект" }}
             </button>
-          } @else {
+          } @else if (!participantView()?.applicationLink) {
             <span>Срок подачи закрыт</span>
           }
         }

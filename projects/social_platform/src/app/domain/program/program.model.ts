@@ -15,6 +15,7 @@ export class Program {
   previewWidget?: ProgramRoleWidget;
   draft?: boolean;
   solutionActionAvailable?: boolean;
+  hasSubmittedTeamProject?: boolean;
   solutionActionBlockedReason?: string | null;
   id!: number;
   imageAddress!: string;

@@ -108,6 +108,17 @@ describe("Detail cleanup actions", () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector(".info__program-action")).toBeNull();
   });
+
+  it("does not offer a new application to a member of a team that already submitted", () => {
+    info.update(program => ({
+      ...program,
+      currentApplication: null,
+      hasSubmittedTeamProject: true,
+    }));
+    const fixture = TestBed.createComponent(DeatilComponent);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector(".info__program-action")).toBeNull();
+  });
   it.each(["", "https://example.test/cover.png"])(
     "shows exactly one program heading on desktop and mobile with cover %s",
     coverImageAddress => {

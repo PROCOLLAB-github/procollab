@@ -12,6 +12,7 @@ import {
   viewChild,
 } from "@angular/core";
 import { isFailure } from "@domain/shared/async-state";
+import { NgTemplateOutlet } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
@@ -40,6 +41,7 @@ import { solutionCreationBlockedMessage } from "@api/solution/solution-navigatio
   templateUrl: "./main.component.html",
   styleUrl: "./main.component.scss",
   imports: [
+    NgTemplateOutlet,
     IconComponent,
     ButtonComponent,
     ParseBreaksPipe,

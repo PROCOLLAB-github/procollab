@@ -17,6 +17,8 @@
             loading="lazy"
             decoding="async"
           />
+          <ng-container *ngTemplateOutlet="programResources" />
+          <ng-container *ngTemplateOutlet="programMaterials" />
         </div>
       } @else {
         <div class="program__details">
@@ -60,6 +62,7 @@
                   }
                 </div>
               }
+              <ng-container *ngTemplateOutlet="programResources" />
             </div>
             <div class="news">
               @if (program()!.isUserManager) {
@@ -109,48 +112,54 @@
                 ></app-program-links>
               </aside>
             }
-            @if (
-              program()!.materials?.length && (!program()!.isUserManager || program()!.isUserMember)
-            ) {
-              <aside class="program__aside program__section">
-                <app-program-links
-                  title="материалы"
-                  icon="book"
-                  [links]="materialLinks()"
-                ></app-program-links>
-              </aside>
-            }
+            <ng-container *ngTemplateOutlet="programMaterials" />
           </div>
         </div>
       }
-      @if (!program()!.isUserManager) {
-        <div class="program__resources">
-          @if (program()!.presentationAddress?.trim(); as documentUrl) {
-            <a class="program__resource-link" [href]="documentUrl" target="_blank" rel="noopener">
-              {{
-                program()!.name.includes("Технолидеры Будущего")
-                  ? "Каталог лучших стартапов 2022/23"
-                  : "Положение"
-              }}
-            </a>
-          }
-          @if (program()!.solutionStorageMode === "solution") {
-            <a
-              class="program__resource-link"
-              [routerLink]="AppRoutes.program.publishedSolutions(program()!.id)"
-            >
-              Решения
-            </a>
-          } @else if (program()!.publishedProjectsAvailable) {
-            <a
-              class="program__resource-link"
-              [routerLink]="AppRoutes.program.projects(program()!.id)"
-            >
-              Проекты участников
-            </a>
-          }
-        </div>
-      }
+      <ng-template #programResources>
+        @if (
+          !program()!.isUserManager &&
+          (program()!.presentationAddress?.trim() ||
+            program()!.solutionStorageMode === "solution" ||
+            program()!.publishedProjectsAvailable)
+        ) {
+          <div class="program__resources">
+            @if (program()!.presentationAddress?.trim(); as documentUrl) {
+              <a class="program__resource-link" [href]="documentUrl" target="_blank" rel="noopener">
+                {{
+                  program()!.name.includes("Технолидеры Будущего")
+                    ? "Каталог лучших стартапов 2022/23"
+                    : "Положение"
+                }}
+              </a>
+            }
+            @if (program()!.solutionStorageMode === "solution") {
+              <a
+                class="program__resource-link"
+                [routerLink]="AppRoutes.program.publishedSolutions(program()!.id)"
+              >
+                Решения
+              </a>
+            } @else if (program()!.publishedProjectsAvailable) {
+              <a
+                class="program__resource-link"
+                [routerLink]="AppRoutes.program.projects(program()!.id)"
+              >
+                Проекты участников
+              </a>
+            }
+          </div>
+        }
+      </ng-template>
+      <ng-template #programMaterials>
+        @if (
+          program()!.materials?.length && (!program()!.isUserManager || program()!.isUserMember)
+        ) {
+          <aside class="program__aside program__section">
+            <app-program-links title="материалы" icon="book" [links]="materialLinks()" />
+          </aside>
+        }
+      </ng-template>
     </section>
   </main>
 
