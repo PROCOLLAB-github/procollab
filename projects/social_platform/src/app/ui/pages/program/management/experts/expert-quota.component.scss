@@ -1,0 +1,106 @@
+/** @format */
+
+@use "styles/program-management-controls";
+
+:host {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.quota__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.quota__actions .ui-button.ui-button {
+  @include program-management-controls.compact-action($mobile-padding: 12px);
+}
+
+.quota {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) auto;
+  gap: 8px 12px;
+  align-items: center;
+  justify-content: start;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.quota__stepper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.quota__stepper .ui-field {
+  box-sizing: border-box;
+  width: 56px;
+  min-width: 0;
+  height: 32px;
+  min-height: 32px;
+  padding: 0 8px;
+  text-align: center;
+  appearance: textfield;
+  border-radius: 8px;
+}
+
+.quota__stepper input::-webkit-inner-spin-button,
+.quota__stepper input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.quota__steps {
+  display: grid;
+}
+
+.quota__steps button {
+  display: grid;
+  width: 24px;
+  height: 16px;
+  place-items: center;
+  padding: 0;
+  color: var(--accent-text);
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+}
+.quota__steps button:not(:disabled) {
+  cursor: pointer;
+}
+.quota__steps button:not(:disabled):hover {
+  background: var(--light-gray);
+}
+.quota__steps button:disabled {
+  opacity: 0.5;
+}
+.quota__steps button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.quota__steps button::before {
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(1.5px) rotate(225deg);
+  content: "";
+}
+.quota__steps button:last-child::before {
+  transform: translateY(-1.5px) rotate(45deg);
+}
+.quota__error {
+  margin: 0;
+  font-size: 12px;
+}
+
+@media (max-width: 999px) {
+  .quota__stepper .ui-field {
+    height: 44px;
+    min-height: 44px;
+  }
+
+  .quota__steps button {
+    width: 32px;
+    height: 24px;
+  }
+}

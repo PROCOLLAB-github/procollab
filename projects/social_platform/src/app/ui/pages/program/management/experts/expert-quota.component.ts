@@ -68,84 +68,11 @@ import { ButtonDirective, FieldDirective } from "@uilib";
       </div>
     }
   `,
-  styleUrls: ["../program-native-button.scss", "../program-native-field.scss"],
-  styles: `
-    :host {
-      display: grid;
-      gap: 8px;
-      min-width: 0;
-    }
-    .quota,
-    .quota__actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px 12px;
-    }
-    .quota {
-      font-size: 14px;
-      font-weight: 600;
-    }
-    .quota__stepper {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .quota__stepper input {
-      box-sizing: border-box;
-      width: 4rem;
-      min-width: 0;
-      padding-inline: 8px;
-      appearance: textfield;
-    }
-    .quota__stepper input::-webkit-inner-spin-button,
-    .quota__stepper input::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-    }
-    .quota__steps {
-      display: grid;
-      gap: 2px;
-    }
-    .quota__steps button {
-      display: grid;
-      width: 26px;
-      height: 24px;
-      place-items: center;
-      padding: 0;
-      border: 1px solid var(--light-gray);
-      border-radius: 4px;
-      background: var(--light-white);
-      color: var(--accent-text);
-    }
-    .quota__steps button:not(:disabled) {
-      cursor: pointer;
-    }
-    .quota__steps button:not(:disabled):hover {
-      background: var(--light-gray);
-    }
-    .quota__steps button:disabled {
-      opacity: 0.5;
-    }
-    .quota__steps button:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 1px;
-    }
-    .quota__steps button::before {
-      width: 6px;
-      height: 6px;
-      border-right: 1.5px solid currentColor;
-      border-bottom: 1.5px solid currentColor;
-      transform: translateY(1.5px) rotate(225deg);
-      content: "";
-    }
-    .quota__steps button:last-child::before {
-      transform: translateY(-1.5px) rotate(45deg);
-    }
-    .quota__error {
-      margin: 0;
-      font-size: 12px;
-    }
-  `,
+  styleUrls: [
+    "../program-native-button.scss",
+    "../program-native-field.scss",
+    "./expert-quota.component.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpertQuotaComponent {
