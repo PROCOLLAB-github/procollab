@@ -53,14 +53,6 @@
         </div>
       }
     </div>
-    @if (exportError()) {
-      <p appAlert="error" role="alert">Не удалось выгрузить оценки. Попробуйте еще раз.</p>
-    }
-  }
-  @if (accepted()) {
-    <app-transient-notice [source]="accepted" (dismissed)="accepted.set(false)"
-      >Приглашение принято</app-transient-notice
-    >
   }
   @if (failed()) {
     <app-state

@@ -30,9 +30,9 @@ import {
 } from "@uilib";
 import { SelectComponent } from "@ui/primitives/select/select.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
 import { EvaluationProgram, EvaluationPrograms } from "@domain/program/evaluation-workspace.model";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { GetCabinetApplicationsUseCase } from "@api/solution/use-cases/solution-evaluation.use-cases";
 import {
   SolutionApplicationRef,
@@ -77,7 +77,6 @@ const positive = (value: string | null) => {
     PaginationComponent,
     StateComponent,
     PageHeaderComponent,
-    TransientNoticeComponent,
   ],
   templateUrl: "./evaluation-programs.component.html",
   styleUrl: "./evaluation-programs.component.scss",
@@ -89,6 +88,7 @@ export class EvaluationProgramsComponent {
   private readonly applications = inject(GetCabinetApplicationsUseCase);
   private readonly getFilters = inject(GetProgramFiltersUseCase);
   private readonly exports = inject(ExportFileService);
+  private readonly snackbar = inject(SnackbarService);
   private readonly profile = inject(ProfileInfoService);
   private readonly auth = inject(AuthInfoService);
   private readonly route = inject(ActivatedRoute);
@@ -149,14 +149,12 @@ export class EvaluationProgramsComponent {
     () => Object.values(this.draftFilters()).filter(values => values.length).length > 3,
   );
   readonly exporting = signal(false);
-  readonly exportError = signal(false);
   readonly selected = signal<EvaluationProgram | null>(null);
   readonly loading = signal(true);
   readonly failed = signal<string | null>(null);
   readonly unauthorized = signal(false);
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
-  readonly accepted = signal(false, { equal: () => false });
   readonly paths = AppRoutes;
   readonly href = presentationHref;
   readonly programs = computed(() => this.data()?.results.filter(p => p.status === "joined") ?? []);
@@ -226,7 +224,6 @@ export class EvaluationProgramsComponent {
       this.filtersOpen.set(false);
       this.fields.set([]);
       this.filterError.set(false);
-      this.exportError.set(false);
       if (!programId) return;
       const request = this.getFilters.execute(programId).subscribe(result => {
         this.filterError.set(!result.ok);
@@ -253,7 +250,6 @@ export class EvaluationProgramsComponent {
         this.selected.set(null);
         this.busy.set(false);
         this.error.set(null);
-        this.accepted.set(false);
         this.handledInvitation = null;
       });
     });
@@ -362,7 +358,7 @@ export class EvaluationProgramsComponent {
   exportRates(): void {
     const program = this.selectedProgram();
     if (!program?.canExportRates || this.exporting()) return;
-    this.exportError.set(false);
+    const accountId = this.accountId();
     this.exporting.set(true);
     this.exports
       .exportProgramRates(program.id)
@@ -372,7 +368,11 @@ export class EvaluationProgramsComponent {
       )
       .subscribe({
         next: blob => saveFile(blob, "rates", program.name),
-        error: () => this.exportError.set(true),
+        error: () => {
+          if (accountId === this.accountId()) {
+            this.snackbar.error("Не удалось выгрузить оценки. Попробуйте еще раз.");
+          }
+        },
       });
   }
   page(delta: number): void {
@@ -419,7 +419,7 @@ export class EvaluationProgramsComponent {
         next: () => {
           if (accountId !== this.accountId()) return;
           this.selected.set(null);
-          this.accepted.set(true);
+          this.snackbar.success("Приглашение принято");
           this.navigate({ invitation: null });
           this.reload();
           this.auth

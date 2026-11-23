@@ -1,0 +1,177 @@
+# @format
+
+name: Expert cabinet notification check
+
+on:
+  push:
+    branches: [fix/dev-expert-cabinet-snackbar-20261124]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npx vitest run --maxWorkers=2 evaluation-programs.component.spec.ts snackbar.component.spec.ts
+      - run: npm run build:pr
+      - run: npm install --prefix /tmp/procollab-browser-tools --no-audit --no-fund playwright-core
+      - name: Verify expert notifications in Chromium
+        env:
+          PLAYWRIGHT_MODULE: /tmp/procollab-browser-tools/node_modules/playwright-core
+          CHROME_PATH: /usr/bin/google-chrome
+        run: |
+          python - <<'PY' &
+          import os
+          from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+          os.chdir("dist/social_platform")
+
+          class App(SimpleHTTPRequestHandler):
+              def log_message(self, format, *args):
+                  pass
+
+              def do_GET(self):
+                  if not os.path.isfile(self.translate_path(self.path)):
+                      self.path = "/index.html"
+                  super().do_GET()
+
+          ThreadingHTTPServer(("127.0.0.1", 4360), App).serve_forever()
+          PY
+          for attempt in {1..30}; do
+            curl --silent --fail http://127.0.0.1:4360/ -o /dev/null && break
+            sleep 1
+          done
+          mkdir -p /tmp/expert-snackbar-preview
+
+          node <<'NODE'
+          const assert = require('node:assert/strict');
+          const { launch } = require('./docs/responsive/browser-harness.cjs');
+          const headers = { 'Access-Control-Allow-Origin': '*' };
+          const joined = {
+            id: 7, name: 'Кейс-чемпионат «Город будущего»', imageAddress: null,
+            datetimeEvaluationEnds: null, status: 'joined', canExportRates: true,
+            storageMode: 'solution', assigned: 1, remaining: 0, completed: 1,
+          };
+          const invitation = {
+            ...joined, id: 8, name: 'Хакатон городских решений', status: 'pending',
+            email: 'expert@example.test', invitationId: 19,
+          };
+          const application = {
+            assignmentId: 23, program: { id: 7, name: joined.name },
+            application: { kind: 'solution', programId: 7, solutionId: 42, name: 'Проект Альфа' },
+            deadline: null, caseName: 'Городская среда', isCompleted: true, canRate: false,
+            blockedReason: null,
+          };
+
+          async function check(width) {
+            const { browser, context, page, base, errors } = await launch(width);
+            page.setDefaultTimeout(10000);
+            const route = (path, handler) => context.route(url => url.pathname === path, handler);
+            const open = query => page.goto(base + '/office/evaluation?' + query);
+            const button = (label, parent = page) => parent.getByRole('button', { name: label, exact: true });
+            const screen = name => page.screenshot({ path: '/tmp/expert-snackbar-preview/' + name + '-' + width + '.png' });
+            const messages = page.locator('app-snackbar .item');
+            const assertToast = async (kind, message) => {
+              const selector = 'app-snackbar .item--' + kind;
+              const toast = page.locator(selector).getByText(message, { exact: true });
+              await toast.waitFor({ timeout: 25000 });
+              await page.waitForFunction(({ selector, message }) => {
+                const item = [...document.querySelectorAll(selector)].find(el => el.textContent.trim() === message);
+                if (!item) return false;
+                const box = item.getBoundingClientRect();
+                return Number(getComputedStyle(item).opacity) > 0.95 &&
+                  item.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2));
+              }, { selector, message });
+              assert.equal(await messages.count(), 1);
+              assert.equal(await page.locator('main.cabinet').getByText(message, { exact: true }).count(), 0);
+              const box = await page.locator(selector).boundingBox();
+              assert.ok(box.x >= 0 && box.x + box.width <= width && box.y <= 55, JSON.stringify(box));
+              if (width < 1000) assert.ok(box.x <= 25 && box.width >= width - 50, JSON.stringify(box));
+              else assert.ok(box.x > width / 2 && width - box.x - box.width < 80, JSON.stringify(box));
+            };
+
+            try {
+              let accepted = false;
+              let acceptCalls = 0;
+              let finishAcceptance;
+              const acceptancePending = new Promise(resolve => { finishAcceptance = resolve; });
+              await route('/evaluation/programs/', request => request.fulfill({
+                headers, json: { hasAccess: true, results: accepted ? [joined] : [joined, invitation] },
+              }));
+              await route('/evaluation/applications/', request => {
+                const completed = new URL(request.request().url()).searchParams.get('status') === 'completed';
+                return request.fulfill({ headers, json: {
+                  count: completed ? 1 : 0, limit: 20, offset: 0, pending: 0, completed: 1,
+                  unavailable: 0, results: completed ? [application] : [],
+                } });
+              });
+              await route('/evaluation/own-invitations/19/accept/', async request => {
+                assert.equal(request.request().method(), 'POST');
+                acceptCalls++;
+                await acceptancePending;
+                accepted = true;
+                await request.fulfill({ headers, json: { accepted: true, programId: 8 } });
+              });
+
+              await open('tab=invitations&invitation=19');
+              const dialog = page.getByRole('dialog', { name: 'Принять приглашение эксперта?' });
+              const accept = button('Принять приглашение', dialog);
+              await accept.focus();
+              await accept.press('Enter');
+              await button('Принимаем…', dialog).waitFor();
+              assert.equal(await messages.count(), 0);
+              finishAcceptance();
+              await dialog.waitFor({ state: 'hidden' });
+              await page.getByText('Нет новых приглашений', { exact: true }).waitFor();
+              assert.equal(acceptCalls, 1);
+              assert.equal(new URL(page.url()).searchParams.has('invitation'), false);
+              await assertToast('success', 'Приглашение принято');
+              await screen('invitation-accepted');
+
+              let exportSucceeds = false;
+              let exportCalls = 0;
+              await route('/programs/7/export-rates/', request => {
+                assert.equal(request.request().method(), 'GET');
+                exportCalls++;
+                return exportSucceeds
+                  ? request.fulfill({ headers, body: 'fixture', contentType: 'application/octet-stream' })
+                  : request.fulfill({ headers, status: 503, json: { detail: 'Временная ошибка' } });
+              });
+              await open('tab=completed&program=7');
+              const exportButton = button('Выгрузить оценки');
+              await exportButton.click();
+              await assertToast('error', 'Не удалось выгрузить оценки. Попробуйте еще раз.');
+              assert.ok(await exportButton.isEnabled());
+              assert.ok(await page.getByRole('heading', { name: 'Проект Альфа' }).isVisible());
+              await screen('export-failed');
+
+              const callsBeforeRetry = exportCalls;
+              exportSucceeds = true;
+              const download = page.waitForEvent('download');
+              await exportButton.click();
+              assert.match((await download).suggestedFilename(), /^scores-.*\.xlsx$/);
+              assert.equal(exportCalls, callsBeforeRetry + 1);
+              await messages.waitFor({ state: 'hidden', timeout: 8000 });
+              console.log(width + 'px: invitation, export failure, retry and download verified');
+            } catch (error) {
+              console.error({ width, url: page.url(), errors, text: (await page.locator('body').innerText()).slice(0, 1700) });
+              await screen('failed');
+              throw error;
+            } finally {
+              await browser.close();
+            }
+          }
+
+          Promise.all([320, 390, 1440].map(check)).catch(error => { console.error(error); process.exitCode = 1; });
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: expert-snackbar-preview
+          path: /tmp/expert-snackbar-preview
+          if-no-files-found: ignore
