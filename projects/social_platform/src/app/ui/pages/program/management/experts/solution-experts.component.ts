@@ -23,6 +23,7 @@ import {
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { RouterLink } from "@angular/router";
+import { HttpErrorResponse } from "@angular/common/http";
 import {
   catchError,
   EMPTY,
@@ -51,6 +52,7 @@ import {
   RowActionsComponent,
 } from "@ui/primitives/row-actions/row-actions.component";
 import { presentationHref } from "@utils/program-case-analytics";
+import { evaluationError } from "@utils/evaluation-workspace";
 import { AppRoutes } from "@api/paths/app-routes";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
 import {
@@ -70,12 +72,12 @@ import {
   SolutionManagerSolutionRow,
   SolutionQuota,
 } from "@domain/solution/solution-contract.model";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { SolutionAllocationComponent } from "../solution-applications/solution-allocation.component";
 import { exportExperts } from "@utils/export-experts";
 import { ExpertRosterComponent } from "./expert-roster.component";
 import { ExpertQuotaComponent } from "./expert-quota.component";
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 
 /** Program experts keep their existing invitation/case-scope API. Assignment IDs and counters come only from solutions. */
 @Component({
@@ -97,7 +99,6 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     SolutionAllocationComponent,
     ExpertRosterComponent,
     ExpertQuotaComponent,
-    TransientNoticeComponent,
   ],
   templateUrl: "./solution-experts.component.html",
   styleUrls: [
@@ -115,6 +116,7 @@ export class SolutionExpertsComponent {
   readonly floatingPosition = input<{ center: number; width: number } | null>(null);
   readonly confirmDiscard = input.required<() => Promise<boolean>>();
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
+  private readonly snackbar = inject(SnackbarService);
   private readonly roster = inject(EvaluationUseCase);
   private readonly assignmentsApi = inject(GetSolutionManagerAssignmentsUseCase);
   private readonly solutionsApi = inject(GetSolutionManagerSolutionsUseCase);
@@ -135,10 +137,7 @@ export class SolutionExpertsComponent {
   readonly allocationBusy = signal(false);
   readonly error = signal("");
   readonly dialogError = signal("");
-  readonly message = signal("", { equal: () => false });
   readonly exporting = signal(false);
-  readonly exportError = signal(false);
-  readonly exportSuccess = signal(false, { equal: () => false });
   readonly filtersOpen = signal(false);
   readonly filterDraft = new FormGroup({
     status: new FormControl("all", { nonNullable: true }),
@@ -156,7 +155,6 @@ export class SolutionExpertsComponent {
   readonly selectedSolutions = signal(new Set<number>());
   readonly allocation = signal<{ programId: number; ids: number[] } | null>(null);
   readonly quotaPreview = signal<SolutionQuota | null>(null);
-  readonly quotaSaved = signal(false);
   readonly scopeAll = signal(true);
   readonly scopeCases = signal(new Set<string | null>());
   readonly cases = signal<string[]>([]);
@@ -431,7 +429,6 @@ export class SolutionExpertsComponent {
     });
     this.quota.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
       this.quotaPreview.set(null);
-      this.quotaSaved.set(false);
     });
   }
   load(): void {
@@ -607,25 +604,42 @@ export class SolutionExpertsComponent {
   }
   private write<T>(request: Observable<T>, onSaved: string | ((data: T) => void)): void {
     if (this.busy()) return;
+    const id = this.programId();
     this.busy.set(true);
     this.dialogError.set("");
     this.error.set("");
     request.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: data => {
         this.busy.set(false);
+        if (id !== this.programId()) {
+          this.load();
+          return;
+        }
         if (typeof onSaved === "function") {
           onSaved(data);
           return;
         }
         this.discard();
-        this.message.set(onSaved);
+        this.snackbar.success(onSaved);
         this.load();
       },
-      error: () => {
+      error: error => {
         this.busy.set(false);
+        if (id !== this.programId()) {
+          this.load();
+          return;
+        }
         this.quotaPreview.set(null);
         this.options.set(null);
-        this.dialogError.set("Изменение не сохранено. Обновите данные и повторите попытку.");
+        const modal = this.modal();
+        const status = error instanceof HttpErrorResponse ? error.status : null;
+        if (modal === "assignments" || modal === "method" || (modal && status === 409)) {
+          this.dialogError.set("Изменение не сохранено. Обновите данные и повторите попытку.");
+        } else if (modal && status === 400) {
+          this.dialogError.set(evaluationError(error));
+        } else {
+          this.snackbar.error("Не удалось сохранить изменения. Повторите попытку.");
+        }
       },
     });
   }
@@ -722,17 +736,16 @@ export class SolutionExpertsComponent {
       .subscribe(result => {
         if (value !== this.quota.value) return;
         if (result.ok) this.quotaPreview.set(result.value);
-        else this.dialogError.set("Не удалось проверить новое число оценщиков.");
+        else this.snackbar.error("Не удалось проверить новое число оценщиков.");
       });
   }
   saveQuota(): void {
     if (this.modal() !== "method" || this.busy() || !this.quotaChanged()) return;
     const p = this.quotaPreview();
     if (!p || p.requiredEvaluators !== this.quota.value) return;
-    const programId = this.programId();
     this.write(
       this.saveQuotaApi
-        .execute(programId, {
+        .execute(this.programId(), {
           revision: p.revision,
           requiredEvaluators: p.requiredEvaluators,
         })
@@ -743,14 +756,10 @@ export class SolutionExpertsComponent {
           }),
         ),
       data => {
-        if (programId !== this.programId()) {
-          this.load();
-          return;
-        }
         this.revision.set(data.revision);
         this.required.set(data.requiredEvaluators);
         this.quota.reset(data.requiredEvaluators);
-        this.quotaSaved.set(true);
+        this.snackbar.success("Готовность решений пересчитана.");
       },
     );
   }
@@ -797,11 +806,11 @@ export class SolutionExpertsComponent {
   }
   async downloadExperts(): Promise<void> {
     if (this.exporting()) return;
+    const programId = this.programId();
     this.exporting.set(true);
-    this.exportError.set(false);
     try {
       await exportExperts(
-        this.programId(),
+        programId,
         this.filtered().map(e => ({
           name: e.name ?? "",
           email: e.email,
@@ -813,11 +822,13 @@ export class SolutionExpertsComponent {
           remaining: e.remaining,
         })),
       );
-      this.exportSuccess.set(true);
+      if (!this.destroyRef.destroyed && this.programId() === programId)
+        this.snackbar.success("Excel с экспертами по текущим фильтрам готов.");
     } catch {
-      this.exportError.set(true);
+      if (!this.destroyRef.destroyed && this.programId() === programId)
+        this.snackbar.error("Не удалось выгрузить экспертов. Повторите попытку.");
     } finally {
-      this.exporting.set(false);
+      if (!this.destroyRef.destroyed) this.exporting.set(false);
     }
   }
 }

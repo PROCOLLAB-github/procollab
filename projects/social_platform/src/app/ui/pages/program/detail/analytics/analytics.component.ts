@@ -24,7 +24,8 @@ import { ProgramCaseSelection } from "@domain/program/program-case-analytics.mod
 import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program-analytics-info.service";
 import { ProgramAnalyticsCaseMetrics } from "@domain/program/program-analytics.model";
 import { PluralizePipe } from "@corelib";
-import { isFailure, isLoading } from "@domain/shared/async-state";
+import { isLoading } from "@domain/shared/async-state";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { exportRegions, RegionExportKind } from "@utils/export-regions";
@@ -45,11 +46,6 @@ interface AnalyticsMetric {
   value: number;
   tooltip: string;
   icon?: string;
-}
-
-interface RegionExportState {
-  pending: boolean;
-  failed: boolean;
 }
 
 interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
@@ -88,6 +84,7 @@ interface AnalyticsCaseRow extends ProgramAnalyticsCaseMetrics {
 export class ProgramAnalyticsComponent implements OnInit {
   private readonly analytics = inject(ProgramAnalyticsInfoService);
   private readonly exports = inject(ExportFileInfoService);
+  private readonly snackbar = inject(SnackbarService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly zone = inject(NgZone);
   private readonly document = inject(DOCUMENT);
@@ -124,18 +121,17 @@ export class ProgramAnalyticsComponent implements OnInit {
   protected readonly activeTooltip = signal<string | null>(null);
   protected readonly pinnedTooltip = signal<string | null>(null);
   protected readonly casesExpanded = signal(false);
-  protected readonly caseExportState = signal({ pending: false, failed: false });
+  protected readonly caseExportPending = signal(false);
   protected readonly teamSizeFormat = new Intl.NumberFormat("ru-RU", {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
   });
-  protected readonly regionExportState = signal<Record<RegionExportKind, RegionExportState>>({
-    "project-regions": { pending: false, failed: false },
-    "participant-regions": { pending: false, failed: false },
+  protected readonly regionExportPending = signal<Record<RegionExportKind, boolean>>({
+    "project-regions": false,
+    "participant-regions": false,
   });
 
   protected readonly loadingExports = computed(() => isLoading(this.exports.loadingExports$()));
-  protected readonly exportFailed = computed(() => isFailure(this.exports.loadingExports$()));
 
   protected readonly caseEmptyMessage = computed(() => {
     const cases = this.data()?.cases;
@@ -339,7 +335,7 @@ export class ProgramAnalyticsComponent implements OnInit {
     const programId = this.programId();
     const overview = this.data();
     const rows = this.caseRows();
-    if (programId === null || !overview || !rows.length || this.caseExportState().pending) return;
+    if (programId === null || !overview || !rows.length || this.caseExportPending()) return;
 
     const includeSubmitted = overview.cases.submissionApplicable;
     const headers = ["Кейс", "Проекты", ...(includeSubmitted ? ["Сдано"] : []), "Участники"];
@@ -352,37 +348,30 @@ export class ProgramAnalyticsComponent implements OnInit {
         { type: Number, value: row.participantsTotal },
       ]),
     ];
-    this.caseExportState.set({ pending: true, failed: false });
+    this.caseExportPending.set(true);
     try {
       const { default: writeExcelFile } = await import("write-excel-file/browser");
       await writeExcelFile(sheetData, {
         sheet: "Кейсы",
         columns: headers.map((_, index) => ({ width: index === 0 ? 48 : 16 })),
       }).toFile(`program-${programId}-cases.xlsx`);
-      this.caseExportState.set({ pending: false, failed: false });
     } catch {
-      this.caseExportState.set({ pending: false, failed: true });
+      this.snackbar.error("Не удалось выгрузить кейсы. Повторите попытку.");
+    } finally {
+      this.caseExportPending.set(false);
     }
   }
 
   protected async downloadRegions(kind: RegionExportKind): Promise<void> {
     const card = this.regionCards().find(item => item.key === kind);
-    if (!card?.items.length || this.regionExportState()[kind].pending) return;
-    this.regionExportState.update(state => ({
-      ...state,
-      [kind]: { pending: true, failed: false },
-    }));
+    if (!card?.items.length || this.regionExportPending()[kind]) return;
+    this.regionExportPending.update(state => ({ ...state, [kind]: true }));
     try {
       await exportRegions(kind, card.items);
-      this.regionExportState.update(state => ({
-        ...state,
-        [kind]: { pending: false, failed: false },
-      }));
     } catch {
-      this.regionExportState.update(state => ({
-        ...state,
-        [kind]: { pending: false, failed: true },
-      }));
+      this.snackbar.error("Не удалось создать Excel. Попробуйте еще раз.");
+    } finally {
+      this.regionExportPending.update(state => ({ ...state, [kind]: false }));
     }
   }
 

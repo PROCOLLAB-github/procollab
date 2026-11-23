@@ -133,11 +133,6 @@
     @if (data.groups.length && submissionApplicable() && !data.hasNumericCriteria) {
       <p class="results__muted">В критериях нет баллов — рейтинг не рассчитывается.</p>
     }
-    @if (exportSuccess()) {
-      <app-transient-notice [source]="exportSuccess" (dismissed)="exportSuccess.set(false)"
-        >Выгрузка Excel скачана.</app-transient-notice
-      >
-    }
     @if (!data.groups.length) {
       <app-state
         [title]="
@@ -388,9 +383,6 @@
             solutionMode() ? "В текущей выборке нет решений." : "В текущей выборке нет проектов."
           }}
         </p>
-      }
-      @if (exportError()) {
-        <p appAlert="error" role="alert">Не удалось подготовить файл. Попробуйте еще раз.</p>
       }
       <button
         type="button"

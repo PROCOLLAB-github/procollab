@@ -44,15 +44,13 @@ import { PartnerProgramFields } from "@domain/program/partner-program-fields.mod
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProgramFieldsComponent } from "@ui/widgets/program-fields/program-fields.component";
 import { PROGRAM_FIELD_TYPE_LABELS, programFieldControl } from "@utils/program-field-controls";
-
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 @Component({
   selector: "app-management-project-form",
   templateUrl: "./project-form.component.html",
   styleUrl: "./project-form.component.scss",
   imports: [
-    TransientNoticeComponent,
     ReactiveFormsModule,
     AlertDirective,
     ButtonDirective,
@@ -74,6 +72,7 @@ export class ManagementProjectFormComponent {
   private readonly api = inject(ProgramManagementUseCase);
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly destroyRef = inject(DestroyRef);
+  private readonly snackbar = inject(SnackbarService);
   readonly snapshot = signal<ManagementProjectForm | null>(null);
   readonly cases = signal<ManagementCase[]>([]);
   readonly fields = signal<ManagementFormField[]>([]);
@@ -96,7 +95,6 @@ export class ManagementProjectFormComponent {
   readonly saving = signal(false);
   readonly error = signal<string | null>(null);
   readonly conflict = signal(false);
-  readonly saved = signal(false, { equal: () => false });
   readonly caseIndex = signal<number | null>(null); // -1 is new
   readonly caseName = this.fb.control("", [
     Validators.required,
@@ -202,7 +200,6 @@ export class ManagementProjectFormComponent {
     this.editorDirty.set(false);
     this.error.set(null);
     this.conflict.set(false);
-    this.saved.set(false);
   }
   async cancel(): Promise<void> {
     if (!this.dirty() || (await this.confirmDiscard()())) this.discard();
@@ -212,7 +209,6 @@ export class ManagementProjectFormComponent {
     this.caseIndex.set(index);
     this.caseName.reset(index < 0 ? "" : this.cases()[index].name);
     this.caseError.set(null);
-    this.saved.set(false);
     setTimeout(() => document.getElementById("case-name")?.focus());
   }
   saveCase(): void {
@@ -270,7 +266,6 @@ export class ManagementProjectFormComponent {
     this.editorDirty.set(false);
     this.editorError.set(null);
     this.editing.set(field);
-    this.saved.set(false);
   }
   addOption(): void {
     this.editor.controls.options.push(this.fb.control("", Validators.required));
@@ -368,7 +363,6 @@ export class ManagementProjectFormComponent {
       return;
     this.saving.set(true);
     this.error.set(null);
-    this.saved.set(false);
     this.api
       .saveProjectForm(this.programId(), this.writeBody())
       .pipe(
@@ -379,7 +373,7 @@ export class ManagementProjectFormComponent {
         next: data => {
           this.snapshot.set(data);
           this.discard();
-          this.saved.set(true);
+          this.snackbar.success("Кейсы и поля сохранены.");
           this.savedAt.emit(data.updatedAt);
         },
         error: (error: HttpErrorResponse) => {

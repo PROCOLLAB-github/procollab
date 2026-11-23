@@ -193,11 +193,6 @@
       >{{ offset() + 1 }}–{{ offset() + rows().length }} из {{ count() }}</app-pagination
     >
   }
-  @if (message()) {
-    <app-transient-notice [source]="message" (dismissed)="message.set(null)">{{
-      message()
-    }}</app-transient-notice>
-  }
   @if (selected().size && !archived()) {
     <section
       class="management__selection management__bulk management__bulk--projects"

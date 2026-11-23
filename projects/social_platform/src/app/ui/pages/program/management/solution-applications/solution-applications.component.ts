@@ -70,7 +70,7 @@ import {
   RowActionEvent,
   RowActionsComponent,
 } from "@ui/primitives/row-actions/row-actions.component";
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { SolutionFieldsComponent } from "@ui/widgets/solution-fields/solution-fields.component";
 import { SolutionCaseActionComponent, SolutionCaseRequest } from "./solution-case-action.component";
 import { SolutionAllocationComponent } from "./solution-allocation.component";
@@ -95,7 +95,6 @@ type ActionPreview = {
     ReactiveFormsModule,
     RouterLink,
     AlertDirective,
-    TransientNoticeComponent,
     ButtonDirective,
     ChoiceDirective,
     DialogHeaderComponent,
@@ -127,6 +126,7 @@ export class SolutionApplicationsComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly snackbar = inject(SnackbarService);
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly getList = inject(GetSolutionManagerSolutionsUseCase);
   private readonly getArchive = inject(ListSolutionsUseCase);
@@ -158,7 +158,6 @@ export class SolutionApplicationsComponent {
   readonly offset = signal(0);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
-  readonly message = signal<string | null>(null);
   readonly selected = signal(new Set<number>());
   readonly selecting = signal(false);
   readonly filtersOpen = signal(false);
@@ -220,7 +219,6 @@ export class SolutionApplicationsComponent {
         this.actionRequest.set(null);
         this.actionPreview.set(null);
         this.filtersOpen.set(false);
-        this.message.set(null);
         this.formError.set(null);
         this.activeProgram = program.id;
         this.fields.set([]);
@@ -392,7 +390,7 @@ export class SolutionApplicationsComponent {
         .pipe(takeUntil(this.cancelList), takeUntilDestroyed(this.destroyRef))
         .subscribe(result => {
           if (!result.ok) {
-            this.error.set(result.error.detail);
+            this.snackbar.error("Не удалось выбрать все заявки. Повторите попытку.");
             this.selecting.set(false);
             return;
           }
@@ -448,8 +446,17 @@ export class SolutionApplicationsComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         this.exporting.set(false);
-        if (result.ok) saveAs(result.value, `program-${programId}-solutions.xlsx`);
-        else this.error.set(result.error.detail);
+        if (result.ok) {
+          saveAs(result.value, `program-${programId}-solutions.xlsx`);
+          this.snackbar.success("Excel с заявками по текущим фильтрам готов.");
+        } else {
+          const { code, detail } = result.error;
+          this.snackbar.error(
+            ["network", "server_error", "unknown"].includes(code)
+              ? "Не удалось выгрузить заявки. Повторите попытку."
+              : detail,
+          );
+        }
       });
   }
   evaluation(row: SolutionManagerSolutionRow): string {
@@ -727,7 +734,7 @@ export class SolutionApplicationsComponent {
         this.actionRequest.set(null);
         this.detailOpen.set(false);
         this.selected.set(new Set());
-        this.message.set("Изменения сохранены.");
+        this.snackbar.success("Изменения сохранены.");
         this.load();
         this.restoreFocus();
       } else this.actionError.set(result.error.detail);
@@ -765,7 +772,7 @@ export class SolutionApplicationsComponent {
   caseChanged(): void {
     this.caseRequest.set(null);
     this.detailOpen.set(false);
-    this.message.set("Кейс изменен. Материалы, команда и оценки сохранены.");
+    this.snackbar.success("Кейс изменен. Материалы, команда и оценки сохранены.");
     this.load();
     this.restoreFocus();
   }
@@ -776,7 +783,7 @@ export class SolutionApplicationsComponent {
   }
   allocationCompleted(): void {
     this.allocationRequest.set(null);
-    this.message.set("Назначения экспертов сохранены.");
+    this.snackbar.success("Назначения экспертов сохранены.");
     this.clear();
     this.load();
     this.restoreFocus();

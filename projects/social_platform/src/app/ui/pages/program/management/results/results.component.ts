@@ -31,20 +31,18 @@ import {
 } from "@uilib";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import { ProgramResults, ResultEntry, ResultsQuery } from "@domain/program/program-results.model";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { GetSolutionResultsUseCase } from "@api/solution/use-cases/solution-evaluation.use-cases";
 import { ExportSolutionResultsUseCase } from "@api/solution/use-cases/solution-results-export.use-case";
 import { map } from "rxjs";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ResultProjectScoresComponent } from "./result-project-scores.component";
 
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
-
 @Component({
   selector: "app-management-results",
   imports: [
     DialogHeaderComponent,
     SectionHeaderComponent,
-    TransientNoticeComponent,
     CdkMenuModule,
     IconComponent,
     StateComponent,
@@ -68,6 +66,7 @@ export class ManagementResultsComponent {
   readonly submissionApplicable = input(true);
   private readonly injector = inject(Injector);
   private readonly api = inject(ProgramManagementUseCase);
+  private readonly snackbar = inject(SnackbarService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly requests = new Subject<number>();
@@ -89,7 +88,6 @@ export class ManagementResultsComponent {
   readonly exportScope = signal<"current" | "all">("current");
   readonly exporting = signal(false);
   readonly exportError = signal(false);
-  readonly exportSuccess = signal(false, { equal: () => false });
   readonly pageSize = 20;
   readonly page = signal(0);
   readonly sortPositions: ConnectedPosition[] = [
@@ -259,7 +257,6 @@ export class ManagementResultsComponent {
         this.page.set(0);
         this.order.set("desc");
         this.modal.set(null);
-        this.exportSuccess.set(false);
         this.load(id);
       });
     });
@@ -320,7 +317,6 @@ export class ManagementResultsComponent {
     };
     this.exporting.set(true);
     this.exportError.set(false);
-    this.exportSuccess.set(false);
     const request = this.solutionMode()
       ? this.injector
           .get(ExportSolutionResultsUseCase)
@@ -342,9 +338,12 @@ export class ManagementResultsComponent {
         next: file => {
           saveAs(file, `program-${this.programId()}-results.xlsx`);
           if (this.modal() === "export") this.modal.set(null);
-          this.exportSuccess.set(true);
+          this.snackbar.success("Выгрузка Excel скачана.");
         },
-        error: () => this.exportError.set(true),
+        error: () => {
+          this.exportError.set(true);
+          this.snackbar.error("Не удалось подготовить файл. Попробуйте еще раз.");
+        },
       });
   }
 }

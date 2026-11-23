@@ -6,6 +6,7 @@ import { of, Subject, throwError } from "rxjs";
 import { FileService } from "@corelib";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import { ManagementProjectForm } from "@domain/program/program-project-form.model";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ManagementProjectFormComponent } from "./project-form.component";
 
 const initial = (): ManagementProjectForm => ({
@@ -70,6 +71,7 @@ describe("Organizer cases and common fields", () => {
       fields: component.fields().map(f => ({ ...f, id: 11, name: "server_name" })),
     };
     api.saveProjectForm.mockReturnValue(of(saved));
+    const success = vi.spyOn(TestBed.inject(SnackbarService), "success");
     component.save();
     expect(api.saveProjectForm).toHaveBeenCalledWith(
       8,
@@ -80,7 +82,7 @@ describe("Organizer cases and common fields", () => {
       }),
     );
     expect(component.dirty()).toBe(false);
-    expect(component.saved()).toBe(true);
+    expect(success).toHaveBeenCalledExactlyOnceWith("Кейсы и поля сохранены.");
   });
   it("retains draft after conflict; cancelled refresh does not overwrite it", async () => {
     const { fixture, component, pending } = await setup();

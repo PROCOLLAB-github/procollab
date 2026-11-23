@@ -29,8 +29,7 @@ import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion
 import { AlertDirective, ButtonDirective, FieldDirective } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProjectRatingComponent } from "../../detail/list/rating-card/project-rating/project-rating.component";
-
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 @Component({
   selector: "app-management-criteria",
@@ -38,7 +37,6 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     DialogHeaderComponent,
     SectionHeaderComponent,
     StateComponent,
-    TransientNoticeComponent,
     ReactiveFormsModule,
     AlertDirective,
     ButtonDirective,
@@ -57,6 +55,7 @@ export class ManagementCriteriaComponent {
   readonly savedAt = output<string>();
   private readonly api = inject(ProgramManagementUseCase);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly snackbar = inject(SnackbarService);
   private readonly fb = inject(FormBuilder).nonNullable;
   readonly snapshot = signal<ManagementCriteria | null>(null);
   readonly criteria = signal<ManagementCriterion[]>([]);
@@ -65,7 +64,6 @@ export class ManagementCriteriaComponent {
   readonly error = signal<string | null>(null);
   readonly conflict = signal<"criteria_locked" | "stale_criteria" | null>(null);
   readonly conflictOpen = signal(false);
-  readonly saved = signal(false, { equal: () => false });
   readonly editing = signal<ManagementCriterion | "new" | null>(null);
   readonly editorDirty = signal(false);
   readonly editorError = signal<string | null>(null);
@@ -156,7 +154,6 @@ export class ManagementCriteriaComponent {
     this.error.set(null);
     this.conflict.set(null);
     this.conflictOpen.set(false);
-    this.saved.set(false);
   }
   async cancel(): Promise<void> {
     if (!this.dirty() || (await this.confirmDiscard()())) this.discard();
@@ -174,7 +171,6 @@ export class ManagementCriteriaComponent {
     this.editorType.set(this.editor.controls.type.value);
     this.editorDirty.set(false);
     this.editorError.set(null);
-    this.saved.set(false);
   }
   async closeEditor(): Promise<void> {
     if (this.editorDirty() && !(await this.confirmDiscard()())) return;
@@ -221,13 +217,11 @@ export class ManagementCriteriaComponent {
     if (!criterion || this.locked() || this.saving()) return;
     this.criteria.update(rows => rows.filter(c => c.id !== criterion.id));
     this.deleting.set(null);
-    this.saved.set(false);
   }
   save(): void {
     if (!this.snapshot() || this.locked() || this.saving() || !this.dirty()) return;
     this.saving.set(true);
     this.error.set(null);
-    this.saved.set(false);
     this.api
       .saveCriteria(this.programId(), this.body())
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -235,7 +229,7 @@ export class ManagementCriteriaComponent {
         next: data => {
           this.snapshot.set(data);
           this.discard();
-          this.saved.set(true);
+          this.snackbar.success("Критерии сохранены.");
           this.saving.set(false);
           this.savedAt.emit(data.updatedAt);
         },

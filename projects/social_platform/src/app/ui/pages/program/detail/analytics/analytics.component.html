@@ -38,14 +38,6 @@
       @if (loadingExports()) {
         <p class="text-body-10" role="status">Подготавливаем Excel…</p>
       }
-      @if (exportFailed()) {
-        <app-state
-          class="exports__error text-body-10"
-          [compact]="true"
-          kind="error"
-          title="Не удалось подготовить выгрузку. Повторите попытку."
-        />
-      }
     </header>
 
     @if (pending()) {
@@ -301,21 +293,13 @@
               class="analytics__download"
               aria-label="Скачать сводку по кейсам в Excel"
               title="Скачать сводку по кейсам в Excel"
-              [disabled]="!caseRows().length || caseExportState().pending"
-              [attr.aria-busy]="caseExportState().pending"
+              [disabled]="!caseRows().length || caseExportPending()"
+              [attr.aria-busy]="caseExportPending()"
               (click)="downloadCases()"
             >
               <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
             </button>
           </div>
-          @if (caseExportState().failed) {
-            <app-state
-              class="exports__error"
-              [compact]="true"
-              kind="error"
-              title="Не удалось выгрузить кейсы. Повторите попытку."
-            />
-          }
           @if (caseEmptyMessage(); as message) {
             <p class="analytics-empty-state text-body-10">{{ message }}</p>
           }
@@ -441,27 +425,19 @@
                 class="analytics__download regions__export"
                 [attr.aria-label]="'Выгрузить ' + card.title.toLowerCase() + ' в Excel'"
                 [attr.title]="card.items.length ? 'Скачать XLSX' : 'Нет данных для выгрузки'"
-                [disabled]="!card.items.length || regionExportState()[card.key].pending"
-                [attr.aria-busy]="regionExportState()[card.key].pending"
+                [disabled]="!card.items.length || regionExportPending()[card.key]"
+                [attr.aria-busy]="regionExportPending()[card.key]"
                 (click)="downloadRegions(card.key)"
               >
                 <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
               </button>
             </div>
-            @if (regionExportState()[card.key].pending) {
+            @if (regionExportPending()[card.key]) {
               <app-state
                 class="regions__export-message"
                 [compact]="true"
                 kind="loading"
                 title="Подготавливаем Excel…"
-              />
-            }
-            @if (regionExportState()[card.key].failed) {
-              <app-state
-                class="regions__export-message exports__error"
-                [compact]="true"
-                kind="error"
-                title="Не удалось создать Excel. Попробуйте еще раз."
               />
             }
             @if (card.items.length > 0) {

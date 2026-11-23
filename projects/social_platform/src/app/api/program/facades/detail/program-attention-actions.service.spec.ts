@@ -10,6 +10,7 @@ import {
 } from "@domain/program/program-analytics-attention.fixture";
 import { fail, ok } from "@domain/shared/result.type";
 import { ProgramAttentionPreview } from "@domain/program/program-attention-actions.model";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 vi.mock("file-saver", () => ({ saveAs: vi.fn() }));
 import { saveAs } from "file-saver";
@@ -28,6 +29,7 @@ const preview: ProgramAttentionPreview = {
 describe("Attention bulk actions", () => {
   let state: ProgramAnalyticsDrilldownService;
   const actions = { preview: vi.fn(), send: vi.fn(), export: vi.fn() };
+  const snackbar = { success: vi.fn(), info: vi.fn(), error: vi.fn() };
   const repo = {
     getManagerParticipantsWithoutTeam: vi.fn(),
     getManagerParticipantsWithoutVisit: vi.fn(),
@@ -45,6 +47,7 @@ describe("Attention bulk actions", () => {
         ProgramAnalyticsDrilldownService,
         { provide: ProgramRepositoryPort, useValue: repo },
         { provide: ProgramAttentionActionsUseCase, useValue: actions },
+        { provide: SnackbarService, useValue: snackbar },
       ],
     });
     state = TestBed.inject(ProgramAnalyticsDrilldownService);
@@ -87,7 +90,9 @@ describe("Attention bulk actions", () => {
       "participants-without-visit",
       "signed-preview",
     );
-    expect(state.actionSuccess()).toContain("Напоминания созданы: 1");
+    expect(snackbar.success).toHaveBeenCalledExactlyOnceWith(
+      "Напоминания созданы: 1. Письма поставлены в очередь.",
+    );
     expect(state.selectedCount()).toBe(0);
     state.sendReminder();
     expect(actions.send).toHaveBeenCalledTimes(1);
@@ -114,9 +119,10 @@ describe("Attention bulk actions", () => {
     state.previewReminder();
     actions.send.mockReturnValue(of(ok({ createdCount: 0, skippedCount: 1 })));
     state.sendReminder();
-    expect(state.actionSuccess()).toContain("Нет доступных получателей");
-    expect(state.actionSuccess()).toContain("Пропущено после повторной проверки: 1");
-    expect(state.actionSuccess()).not.toContain("Письма");
+    expect(snackbar.info).toHaveBeenCalledExactlyOnceWith(
+      "Нет доступных получателей для напоминания. Пропущено после повторной проверки: 1.",
+    );
+    expect(snackbar.success).not.toHaveBeenCalled();
   });
 
   it("disables duplicate submissions and keeps selection stable while sending", () => {
@@ -141,6 +147,9 @@ describe("Attention bulk actions", () => {
     actions.send.mockReturnValue(of(fail({ kind: "network" })));
     state.sendReminder();
     expect(state.preview()?.token).toBe("signed-preview");
+    expect(snackbar.error).toHaveBeenCalledExactlyOnceWith(
+      "Не удалось выполнить действие. Попробуйте еще раз.",
+    );
     actions.send.mockReturnValue(of(ok({ createdCount: 1, skippedCount: 0 })));
     state.sendReminder();
     expect(actions.send.mock.calls.map(call => call[2])).toEqual([
@@ -213,12 +222,12 @@ describe("Attention bulk actions", () => {
     expect(actions.export).not.toHaveBeenCalled();
   });
 
-  it("clear selection also clears validation and success messages", () => {
+  it("clear selection also clears contextual error messages", () => {
     state.selectAllFound();
-    state.actionSuccess.set("done");
+    state.actionError.set("Уточните поиск");
     state.clearSelection();
     expect(state.selectedCount()).toBe(0);
-    expect(state.actionSuccess()).toBe("");
+    expect(state.actionError()).toBe("");
     expect(state.isSelected(attentionParticipant().userId)).toBe(false);
   });
 });

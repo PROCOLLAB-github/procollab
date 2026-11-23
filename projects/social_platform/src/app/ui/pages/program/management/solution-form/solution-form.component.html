@@ -12,8 +12,8 @@
       </button>
     </div>
   }
-  @if (notice()) {
-    <p role="status">{{ notice() }}</p>
+  @if (rebaseNotice()) {
+    <p role="status">{{ rebaseNotice() }}</p>
   }
   @if (snapshot(); as current) {
     <header class="project-form__heading">

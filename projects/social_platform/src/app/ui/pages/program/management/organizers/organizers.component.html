@@ -1,10 +1,5 @@
 <!-- @format -->
 <div class="organizers">
-  @if (message()) {
-    <app-transient-notice [source]="message" (dismissed)="message.set(null)">{{
-      message()
-    }}</app-transient-notice>
-  }
   @if (error()) {
     <div appAlert="error" role="alert">
       {{ error() }} <button type="button" appButton="text" (click)="load()">Обновить список</button>

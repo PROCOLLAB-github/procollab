@@ -27,6 +27,7 @@ import {
   untracked,
 } from "@angular/core";
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
+import { HttpErrorResponse } from "@angular/common/http";
 import { NgTemplateOutlet } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
@@ -53,6 +54,7 @@ import {
 } from "@uilib";
 import { AppRoutes } from "@api/paths/app-routes";
 import { exportExperts } from "@utils/export-experts";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import {
   RowAction,
@@ -74,14 +76,12 @@ import { presentationHref } from "@utils/program-case-analytics";
 
 import { ExpertRosterComponent } from "./expert-roster.component";
 import { ExpertQuotaComponent } from "./expert-quota.component";
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 
 @Component({
   selector: "app-management-experts",
   imports: [
     DialogHeaderComponent,
     SectionHeaderComponent,
-    TransientNoticeComponent,
     ExpertRosterComponent,
     ExpertQuotaComponent,
     ReactiveFormsModule,
@@ -113,6 +113,7 @@ export class ManagementExpertsComponent {
   readonly programId = input.required<number>();
   readonly confirmDiscard = input.required<() => Promise<boolean>>();
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
+  private readonly snackbar = inject(SnackbarService);
   private readonly api = inject(EvaluationUseCase);
   private readonly incomingAssignment = inject(ProgramProjectAssignmentSelection);
   private readonly destroyRef = inject(DestroyRef);
@@ -126,7 +127,6 @@ export class ManagementExpertsComponent {
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
   readonly dialogError = signal<string | null>(null);
-  readonly message = signal<string | null>(null, { equal: () => false });
   readonly deliveryRefreshPaused = signal(false);
   readonly selected = signal<ExpertRow | null>(null);
   readonly selectedExpertIds = signal(new Set<number | string>());
@@ -203,7 +203,6 @@ export class ManagementExpertsComponent {
   readonly quotaChanged = computed(
     () => this.quotaValue() !== (this.snapshot()?.requiredEvaluators ?? 1),
   );
-  readonly quotaSaved = signal(false);
   private readonly query = signal("");
   private readonly statusValue = signal("all");
   readonly page = signal(0);
@@ -224,8 +223,6 @@ export class ManagementExpertsComponent {
         Number(this.distributionStatusValue() !== "all"),
   );
   readonly exporting = signal(false);
-  readonly exportError = signal(false);
-  readonly exportSuccess = signal(false, { equal: () => false });
   readonly initialTab = input<"experts" | "distribution">("experts");
   readonly tab = linkedSignal(() => this.initialTab());
   readonly distributionSearch = this.fb.control("");
@@ -439,8 +436,6 @@ export class ManagementExpertsComponent {
         this.selectedProjects.set(new Set());
         this.tab.set(this.initialTab());
         this.filtersOpen.set(null);
-        this.exportSuccess.set(false);
-        this.exportError.set(false);
         this.load(id);
       });
     });
@@ -488,7 +483,6 @@ export class ManagementExpertsComponent {
     });
     this.quota.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
       this.quotaPreview.set(null);
-      this.quotaSaved.set(false);
     });
     this.distributionSearch.valueChanges.pipe(takeUntilDestroyed()).subscribe(v => {
       this.distributionQuery.set(v);
@@ -536,7 +530,7 @@ export class ManagementExpertsComponent {
               targets.length !== incoming.length ||
               new Set(targets.map(p => p.caseName)).size > 1
             )
-              this.error.set(
+              this.snackbar.error(
                 "Выбранные проекты изменились. Выберите сданные проекты одного кейса заново.",
               );
             else {
@@ -554,6 +548,7 @@ export class ManagementExpertsComponent {
   }
   private request<T>(request: Observable<T>, done: (data: T) => void): void {
     if (this.busy()) return;
+    const id = this.programId();
     this.busy.set(true);
     this.dialogError.set(null);
     this.error.set(null);
@@ -563,10 +558,21 @@ export class ManagementExpertsComponent {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
-        next: done,
+        next: data => {
+          if (id === this.programId()) done(data);
+        },
         error: e => {
-          if (this.modal()) this.dialogError.set(evaluationError(e));
-          else this.error.set(evaluationError(e));
+          if (id !== this.programId()) return;
+          const message = evaluationError(e);
+          const status = e instanceof HttpErrorResponse ? e.status : null;
+          if (status === 409) {
+            if (this.modal()) this.dialogError.set(message);
+            else this.error.set(message);
+          } else if (this.modal() && status === 400) {
+            this.dialogError.set(message);
+          } else {
+            this.snackbar.error(message);
+          }
         },
       });
   }
@@ -604,8 +610,6 @@ export class ManagementExpertsComponent {
       return;
     const programId = this.programId();
     this.exporting.set(true);
-    this.exportError.set(false);
-    this.exportSuccess.set(false);
     try {
       await exportExperts(
         programId,
@@ -621,9 +625,10 @@ export class ManagementExpertsComponent {
         })),
       );
       if (!this.destroyRef.destroyed && this.programId() === programId)
-        this.exportSuccess.set(true);
+        this.snackbar.success("Excel с экспертами по текущим фильтрам готов.");
     } catch {
-      if (!this.destroyRef.destroyed && this.programId() === programId) this.exportError.set(true);
+      if (!this.destroyRef.destroyed && this.programId() === programId)
+        this.snackbar.error("Не удалось выгрузить экспертов. Повторите попытку.");
     } finally {
       if (!this.destroyRef.destroyed) this.exporting.set(false);
     }
@@ -717,7 +722,7 @@ export class ManagementExpertsComponent {
         this.selectedExpertIds.set(new Set());
         this.bulkScope.set(false);
         this.bulkRevoke.set(false);
-        this.message.set(
+        this.snackbar.success(
           action === "cases"
             ? "Кейсы выбранных экспертов сохранены."
             : action === "resend"
@@ -747,7 +752,6 @@ export class ManagementExpertsComponent {
     this.allocationBeforeSettings = null;
     this.bulkRevoke.set(false);
     this.dialogError.set(null);
-    this.message.set(null);
     this.modal.set(kind);
     this.plan.set(null);
     this.quotaPreview.set(null);
@@ -800,7 +804,9 @@ export class ManagementExpertsComponent {
       }),
       () => {
         this.modal.set(null);
-        this.message.set("Приглашение создано. Статус отправки письма обновится автоматически.");
+        this.snackbar.success(
+          "Приглашение создано. Статус отправки письма обновится автоматически.",
+        );
         this.load();
       },
     );
@@ -814,7 +820,7 @@ export class ManagementExpertsComponent {
     if (!id) return;
     this.request(this.api.invitationAction(this.programId(), id, action), () => {
       this.modal.set(null);
-      this.message.set(
+      this.snackbar.success(
         action === "resend"
           ? "Приглашение передано на повторную отправку."
           : "Приглашение отозвано.",
@@ -960,7 +966,7 @@ export class ManagementExpertsComponent {
     this.request(this.api.applyAllocation(this.programId(), plan.planToken), data => {
       this.snapshot.set(data);
       this.modal.set(null);
-      this.message.set("Проекты распределены.");
+      this.snackbar.success("Проекты распределены.");
       this.selectedProjects.set(new Set());
     });
   }
@@ -1001,7 +1007,7 @@ export class ManagementExpertsComponent {
         if (programId !== this.programId()) return;
         this.snapshot.set(data);
         this.quota.reset(data.requiredEvaluators);
-        this.quotaSaved.set(true);
+        this.snackbar.success("Готовность проектов пересчитана.");
       },
     );
   }
@@ -1048,10 +1054,7 @@ export class ManagementExpertsComponent {
       );
   }
   openProject(project?: DistributionProject): void {
-    if (!project && this.mixedProjectCases()) {
-      this.error.set("Для ручного назначения выберите проекты одного кейса.");
-      return;
-    }
+    if (!project && this.mixedProjectCases()) return;
     const ids = project ? [project.id] : [...this.selectedProjects()];
     if (!ids.length) return;
     this.assignmentTargets.set(ids);
@@ -1139,7 +1142,7 @@ export class ManagementExpertsComponent {
         this.snapshot.set(data);
         this.modal.set(null);
         this.selectedProjects.set(new Set());
-        this.message.set("Эксперты назначены.");
+        this.snackbar.success("Эксперты назначены.");
       },
     );
   }
@@ -1183,7 +1186,7 @@ export class ManagementExpertsComponent {
         this.snapshot.set(data);
         this.selected.set(data.experts.find(e => e.id === expert.id) ?? null);
         this.modal.set(null);
-        this.message.set("Кейсы эксперта сохранены. Текущие назначения остаются.");
+        this.snackbar.success("Кейсы эксперта сохранены. Текущие назначения остаются.");
       },
     );
   }

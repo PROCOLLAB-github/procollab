@@ -11,6 +11,7 @@ import {
   signal,
   untracked,
 } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { finalize } from "rxjs";
@@ -35,12 +36,11 @@ import {
 import { registrationControls } from "@ui/widgets/registration-fields/registration-fields.component";
 import { RegistrationPreviewContentComponent } from "@ui/widgets/registration-fields/registration-preview-content.component";
 import { evaluationError } from "@utils/evaluation-workspace";
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 @Component({
   selector: "app-management-registration",
   imports: [
-    TransientNoticeComponent,
     ReactiveFormsModule,
     ButtonDirective,
     FieldDirective,
@@ -65,6 +65,7 @@ export class ManagementRegistrationComponent {
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
   private readonly api = inject(ProgramRegistrationUseCase);
   private readonly destroy = inject(DestroyRef);
+  private readonly snackbar = inject(SnackbarService);
   private readonly fb = inject(FormBuilder).nonNullable;
   readonly snapshot = signal<RegistrationSettings | null>(null);
   readonly draft = signal<RegistrationSchema>({ mode: "native", fields: [] });
@@ -72,7 +73,6 @@ export class ManagementRegistrationComponent {
   readonly busy = signal(false);
   readonly editorDirty = signal(false);
   readonly error = signal<string | null>(null);
-  readonly message = signal<string | null>(null, { equal: () => false });
   readonly dirty = computed(
     () => JSON.stringify(this.draft()) !== JSON.stringify(this.snapshot()?.draft ?? this.draft()),
   );
@@ -156,7 +156,6 @@ export class ManagementRegistrationComponent {
   }
   setMode(mode: "native" | "external") {
     this.draft.update(d => ({ ...d, mode }));
-    this.message.set(null);
   }
   typeLabel(field: RegistrationField) {
     return this.fieldTypes.find(t => t.id === field.type)?.label ?? field.type;
@@ -236,7 +235,7 @@ export class ManagementRegistrationComponent {
     const field = this.editing();
     this.draft.update(d => ({ ...d, fields: d.fields.filter(f => f.id !== field?.id) }));
     this.dialog.set(null);
-    this.message.set(
+    this.snackbar.success(
       this.snapshot()?.published
         ? "Поле убрано из черновика. Примените изменения публикацией формы."
         : "Поле убрано из черновика. Сохраните черновик, чтобы применить изменения.",
@@ -247,7 +246,6 @@ export class ManagementRegistrationComponent {
     if (!snapshot || this.busy()) return;
     this.busy.set(true);
     this.error.set(null);
-    this.message.set(null);
     this.api
       .save(this.programId(), snapshot.revision, this.draft(), publish)
       .pipe(
@@ -257,7 +255,7 @@ export class ManagementRegistrationComponent {
       .subscribe({
         next: data => {
           this.apply(data);
-          this.message.set(
+          this.snackbar.success(
             publish && data.programDraft
               ? "Анкета сохранена и проверена. Регистрация откроется вместе с программой."
               : publish
@@ -265,7 +263,12 @@ export class ManagementRegistrationComponent {
                 : "Черновик сохранен.",
           );
         },
-        error: e => this.error.set(evaluationError(e)),
+        error: e => {
+          const message = evaluationError(e);
+          if (e instanceof HttpErrorResponse && e.status >= 400 && e.status < 500)
+            this.error.set(message);
+          else this.snackbar.error(message);
+        },
       });
   }
   preview(event?: Event) {
@@ -276,9 +279,9 @@ export class ManagementRegistrationComponent {
   async copy() {
     try {
       await navigator.clipboard.writeText(this.snapshot()?.link ?? "");
-      this.message.set("Ссылка скопирована.");
+      this.snackbar.success("Ссылка скопирована.");
     } catch {
-      this.error.set("Не удалось скопировать. Выделите ссылку и скопируйте вручную.");
+      this.snackbar.error("Не удалось скопировать. Выделите ссылку и скопируйте вручную.");
     }
   }
   private parseOptions(text: string): RegistrationImport {
@@ -354,7 +357,7 @@ export class ManagementRegistrationComponent {
         next: data => {
           this.snapshot.set(data);
           this.dialog.set(null);
-          this.message.set(
+          this.snackbar.success(
             "Запрос отправлен администратору. Мы свяжемся с вами в ближайшее время.",
           );
         },

@@ -18,11 +18,6 @@
         </button>
       </div>
     }
-    @if (saved()) {
-      <app-transient-notice [source]="saved" (dismissed)="saved.set(false)"
-        >Критерии сохранены.</app-transient-notice
-      >
-    }
     @if (snapshot()) {
       <section class="criteria__card" aria-labelledby="criteria-heading">
         <app-section-header title="Критерии оценки" titleId="criteria-heading">

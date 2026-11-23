@@ -29,8 +29,8 @@ import {
 } from "@uilib";
 import { PluralizePipe } from "@corelib";
 import { AppRoutes } from "@api/paths/app-routes";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 import { ProgramCertificatesUseCase } from "@api/program/use-cases/program-certificates.use-case";
 import { ProgramCertificatesRepositoryPort } from "@domain/program/ports/program-certificates.repository.port";
 import { ProgramCertificatesHttpAdapter } from "@infrastructure/adapters/program/program-certificates-http.adapter";
@@ -78,7 +78,6 @@ interface CertificateEditState {
     DialogHeaderComponent,
     AlertDirective,
     ModalComponent,
-    TransientNoticeComponent,
     CertificateCanvasComponent,
   ],
   providers: [
@@ -101,6 +100,7 @@ export class ManagementCertificatesComponent {
   readonly floatingPosition = input<{ center: number; width: number } | null>(null);
   readonly confirmDiscard = input.required<() => Promise<boolean>>();
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
+  private readonly snackbar = inject(SnackbarService);
   private readonly api = inject(ProgramCertificatesUseCase);
   private readonly destroy = inject(DestroyRef);
   readonly snapshot = signal<CertificateSettings | null>(null);
@@ -111,7 +111,6 @@ export class ManagementCertificatesComponent {
   readonly loading = signal(true);
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
-  readonly message = signal<string | null>(null, { equal: () => false });
   readonly step = signal(1);
   readonly participantsRoute = computed(() =>
     AppRoutes.program.management(this.programId(), "participants"),
@@ -416,10 +415,12 @@ export class ManagementCertificatesComponent {
   }
   private async run<T>(request: () => Observable<T>, accept: (value: T) => void): Promise<void> {
     if (this.busy()) return;
+    const id = this.programId();
     this.busy.set(true);
     this.error.set(null);
     try {
-      accept(await this.observe(request()));
+      const value = await this.observe(request());
+      if (!this.destroy.destroyed && id === this.programId()) accept(value);
     } catch (error) {
       let requestError = error;
       if (error instanceof HttpErrorResponse && error.error instanceof Blob) {
@@ -432,7 +433,14 @@ export class ManagementCertificatesComponent {
           /* Non-JSON file errors use the standard request error. */
         }
       }
-      this.error.set(evaluationError(requestError));
+      if (!this.destroy.destroyed && id === this.programId()) {
+        const message = evaluationError(requestError);
+        if (requestError instanceof HttpErrorResponse && requestError.status === 409) {
+          this.error.set(message);
+        } else {
+          this.snackbar.error(message);
+        }
+      }
     } finally {
       this.busy.set(false);
     }
@@ -445,12 +453,19 @@ export class ManagementCertificatesComponent {
     this.error.set(null);
     try {
       const data = await this.observe(this.api.save(id, this.snapshot()!.revision, this.draft()!));
-      if (id !== this.programId()) return false;
+      if (this.destroy.destroyed || id !== this.programId()) return false;
       this.accept(data);
-      this.message.set("Настройки сертификата сохранены.");
+      this.snackbar.success("Настройки сертификата сохранены.");
       return true;
     } catch (error) {
-      if (id === this.programId()) this.error.set(evaluationError(error));
+      if (!this.destroy.destroyed && id === this.programId()) {
+        const message = evaluationError(error);
+        if (error instanceof HttpErrorResponse && (error.status === 400 || error.status === 409)) {
+          this.error.set(message);
+        } else {
+          this.snackbar.error(message);
+        }
+      }
       return false;
     } finally {
       this.busy.set(false);
@@ -565,13 +580,13 @@ export class ManagementCertificatesComponent {
     if (!(await this.save()) || id !== this.programId()) return;
     return this.run(
       () => this.api.test(this.programId(), this.snapshot()!.revision),
-      data => this.message.set(data.detail),
+      data => this.snackbar.success(data.detail),
     );
   }
   activate(): Promise<void> {
     if (this.dirty() || this.confirmationRevision !== this.snapshot()?.revision) {
       this.confirmOpen.set(false);
-      this.error.set("Настройки изменились. Проверьте параметры запуска еще раз.");
+      this.snackbar.error("Настройки изменились. Проверьте параметры запуска еще раз.");
       return Promise.resolve();
     }
     return this.run(
@@ -580,7 +595,7 @@ export class ManagementCertificatesComponent {
         this.accept(data);
         this.confirmOpen.set(false);
         this.step.set(3);
-        this.message.set("Выдача запущена. Прогресс появится в журнале.");
+        this.snackbar.success("Выдача запущена. Прогресс появится в журнале.");
         void this.loadJournal();
       },
     );
@@ -593,7 +608,7 @@ export class ManagementCertificatesComponent {
   }
   async prepareLaunch(): Promise<void> {
     if (this.busy() || this.loading()) return;
-    this.error.set("");
+    this.error.set(null);
     if (this.snapshot()?.batch?.active) {
       this.setStep(3);
       return;
@@ -703,13 +718,17 @@ export class ManagementCertificatesComponent {
         const progress = this.selectionCopy().progress;
         this.selectionAction.set(null);
         this.clearSelection();
-        this.message.set(
-          data.count
-            ? `${progress}: ${data.count}.${data.skipped ? ` Уже отправлено: ${data.skipped}.` : ""}`
-            : data.skipped
+        if (data.count) {
+          this.snackbar.success(
+            `${progress}: ${data.count}.${data.skipped ? ` Уже отправлено: ${data.skipped}.` : ""}`,
+          );
+        } else {
+          this.snackbar.info(
+            data.skipped
               ? "Все выбранные сертификаты уже отправлены."
               : "Выбранные сертификаты не найдены.",
-        );
+          );
+        }
         void this.loadJournal();
       },
     );
@@ -725,7 +744,7 @@ export class ManagementCertificatesComponent {
     await this.run(
       () => this.api.currentPdf(this.programId(), id, this.snapshot()!.revision),
       () => {
-        this.message.set("Сертификат на платформе обновлен.");
+        this.snackbar.success("Сертификат на платформе обновлен.");
         void this.loadJournal();
       },
     );

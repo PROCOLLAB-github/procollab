@@ -12,11 +12,6 @@
       </button>
     </div>
   }
-  @if (message()) {
-    <app-transient-notice [source]="message" (dismissed)="message.set(null)">{{
-      message()
-    }}</app-transient-notice>
-  }
   @if (snapshot(); as data) {
     <section class="registration__card">
       <h2>Способ регистрации</h2>

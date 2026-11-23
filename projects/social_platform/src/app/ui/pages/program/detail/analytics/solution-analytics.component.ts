@@ -20,6 +20,7 @@ import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { AnalyticsActivityChartComponent } from "./activity-chart/activity-chart.component";
 import { Result } from "@domain/shared/result.type";
 import { saveAs } from "file-saver";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { A11yModule } from "@angular/cdk/a11y";
 import { EvaluationProgressSummaryComponent } from "./evaluation-progress/evaluation-progress-summary.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
@@ -126,6 +127,7 @@ export class SolutionAnalyticsComponent {
   private readonly assignmentsApi = inject(GetSolutionManagerAssignmentsUseCase);
   private readonly detailApi = inject(GetSolutionManagerAssignmentUseCase);
   private readonly exportApi = inject(ExportSolutionAnalyticsUseCase);
+  private readonly snackbar = inject(SnackbarService);
   private readonly previewApi = inject(PreviewSolutionExpertReminderUseCase);
   private readonly confirmApi = inject(ConfirmSolutionExpertReminderUseCase);
   private readonly withoutTeam = inject(GetProgramManagerParticipantsWithoutTeamUseCase);
@@ -239,7 +241,6 @@ export class SolutionAnalyticsComponent {
   readonly activeTooltip = signal<string | null>(null);
   readonly error = signal("");
   readonly exporting = signal(false);
-  readonly exportError = signal("");
   readonly modal = signal<View | null>(null);
   readonly title = signal("");
   readonly query = signal<SolutionManagerSolutionFilters>({});
@@ -265,7 +266,6 @@ export class SolutionAnalyticsComponent {
   readonly preview = signal<SolutionReminderPreview | ProgramAttentionPreview | null>(null);
   readonly actionPending = signal(false);
   readonly actionError = signal("");
-  readonly message = signal("");
   readonly paths = AppRoutes;
   private readonly currentTime = signal(Date.now());
   // The second chart is absent when submission is not applicable; raw API nulls remain in data().
@@ -378,7 +378,6 @@ export class SolutionAnalyticsComponent {
     this.cancel.next();
     this.cancelExport.next();
     this.exporting.set(false);
-    this.exportError.set("");
     this.pending.set(true);
     this.error.set("");
     this.data.set(null);
@@ -430,7 +429,6 @@ export class SolutionAnalyticsComponent {
   download(kind: "program" | "solutions" | "submitted" | "scores", filtered = false): void {
     if (this.exporting()) return;
     this.exporting.set(true);
-    this.exportError.set("");
     const query =
       filtered && kind === "solutions"
         ? { kind, ...this.query(), search: this.appliedSearch() }
@@ -445,7 +443,7 @@ export class SolutionAnalyticsComponent {
       .subscribe(result => {
         this.exporting.set(false);
         if (result.ok) saveAs(result.value, `program-${this.programId()}-${kind}.xlsx`);
-        else this.exportError.set("Не удалось подготовить Excel. Повторите попытку.");
+        else this.snackbar.error("Не удалось подготовить Excel. Повторите попытку.");
       });
   }
   openSolutions(title: string, query: SolutionManagerSolutionFilters, trigger: HTMLElement): void {
@@ -623,7 +621,7 @@ export class SolutionAnalyticsComponent {
       .subscribe(result => {
         this.actionPending.set(false);
         if (result.ok) this.preview.set(result.value);
-        else this.actionError.set("Не удалось подготовить напоминание. Повторите попытку.");
+        else this.snackbar.error("Не удалось подготовить напоминание. Повторите попытку.");
       });
   }
   confirmReminder(): void {
@@ -646,9 +644,10 @@ export class SolutionAnalyticsComponent {
         this.preview.set(null);
         if (result.ok) {
           this.resetSelection();
-          this.message.set(
-            `Напоминания созданы: ${result.value.createdCount}. Пропущено: ${result.value.skippedCount}.`,
-          );
+          const { createdCount, skippedCount } = result.value;
+          const message = `Напоминания созданы: ${createdCount}. Пропущено: ${skippedCount}.`;
+          if (createdCount) this.snackbar.success(message);
+          else this.snackbar.info(message);
         } else
           this.actionError.set(
             "Напоминание не отправлено. Обновите список и подготовьте его заново.",
@@ -675,7 +674,6 @@ export class SolutionAnalyticsComponent {
     this.appliedSearch.set("");
     this.offset.set(0);
     this.query.set({});
-    this.message.set("");
     this.resetSelection();
     if (!force && this.trigger?.isConnected) this.trigger.focus();
     this.trigger = null;

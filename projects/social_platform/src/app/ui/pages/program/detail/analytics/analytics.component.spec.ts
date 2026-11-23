@@ -10,6 +10,7 @@ import { ExportFileInfoService } from "@api/export-file/facades/export-file-info
 import { ProgramAnalyticsInfoService } from "@api/program/facades/detail/program-analytics-info.service";
 import { ProgramAnalyticsOverview } from "@domain/program/program-analytics.model";
 import { initial } from "@domain/shared/async-state";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ProgramAnalyticsComponent } from "./analytics.component";
 import { exportRegions } from "@utils/export-regions";
 import { GetProgramManagerAssignmentsUseCase } from "@api/program/use-cases/get-program-manager-assignments.use-case";
@@ -1106,7 +1107,8 @@ describe("ProgramAnalyticsComponent", () => {
     expect(buttons[0].disabled).toBe(false);
   });
 
-  it("disables empty region exports and keeps export errors local to their card", async () => {
+  it("disables empty region exports and shows a retryable export error in the snackbar", async () => {
+    const notification = vi.spyOn(TestBed.inject(SnackbarService), "error");
     const empty = overview();
     empty.summary.regions = { total: 0, items: [] };
     data.set(empty);
@@ -1124,15 +1126,18 @@ describe("ProgramAnalyticsComponent", () => {
     buttons[1].click();
     await fixture.whenStable();
     fixture.detectChanges();
-    expect(
-      root.querySelector('[data-testid="participant-regions"] [role="alert"]')?.textContent,
-    ).toContain("Не удалось создать Excel");
+    expect(notification).toHaveBeenCalledExactlyOnceWith(
+      "Не удалось создать Excel. Попробуйте еще раз.",
+    );
+    expect(root.querySelector('[data-testid="participant-regions"] [role="alert"]')).toBeNull();
+    expect(buttons[1].disabled).toBe(false);
     expect(root.textContent).not.toContain("internal details");
     expect(root.querySelector(".activity")).not.toBeNull();
     buttons[1].click();
     await fixture.whenStable();
     fixture.detectChanges();
-    expect(root.querySelector('[data-testid="participant-regions"] [role="alert"]')).toBeNull();
+    expect(notification).toHaveBeenCalledTimes(1);
+    expect(exportRegions).toHaveBeenCalledTimes(2);
   });
 
   it("показывает отдельные zero states для каждого блока", () => {

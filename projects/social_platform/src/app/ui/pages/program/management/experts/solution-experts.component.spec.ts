@@ -1,4 +1,6 @@
 /** @format */
+
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { TestBed } from "@angular/core/testing";
 import { of, Subject } from "rxjs";
 import { ok, fail } from "@domain/shared/result.type";
@@ -146,6 +148,7 @@ describe("Solution expert management", () => {
   });
   it("выгружает весь фильтр экспертов независимо от страницы и массового выбора", async () => {
     const { c, expert } = setup();
+    const success = vi.spyOn(TestBed.inject(SnackbarService), "success");
     vi.mocked(exportExperts).mockClear();
     c.experts.set(Array.from({ length: 21 }, (_, i) => ({ ...expert, id: i + 1 })));
     c.page.set(1);
@@ -154,7 +157,9 @@ describe("Solution expert management", () => {
     expect(exportExperts).toHaveBeenCalledTimes(1);
     expect(vi.mocked(exportExperts).mock.calls[0][0]).toBe(12);
     expect(vi.mocked(exportExperts).mock.calls[0][1]).toHaveLength(21);
-    expect(c.exportSuccess()).toBe(true);
+    expect(success).toHaveBeenCalledExactlyOnceWith(
+      "Excel с экспертами по текущим фильтрам готов.",
+    );
     expect(c.exporting()).toBe(false);
   });
   it("сохраняет выбранных экспертов и страницу при применении неизмененного фильтра", () => {
@@ -283,6 +288,7 @@ describe("Solution expert management", () => {
   });
   it("сохраняет выбор решений при изменении квоты и передает его в автоматическое распределение", () => {
     const { c, saveQuota } = setup();
+    const success = vi.spyOn(TestBed.inject(SnackbarService), "success");
     c.distributionSelection.set(new Set([302]));
     c.open("method");
     c.quota.setValue(2);
@@ -290,12 +296,14 @@ describe("Solution expert management", () => {
     expect(c.allocation()).toBeNull();
     expect(saveQuota.execute).not.toHaveBeenCalled();
     c.previewQuota();
+    expect(success).not.toHaveBeenCalled();
     c.saveQuota();
     expect(saveQuota.execute).toHaveBeenCalledWith(12, { revision: "r1", requiredEvaluators: 2 });
     expect(c.modal()).toBe("method");
     expect(c.required()).toBe(2);
     expect(c.revision()).toBe("r2");
     expect(c.quotaPreview()).toBeNull();
+    expect(success).toHaveBeenCalledExactlyOnceWith("Готовность решений пересчитана.");
     c.startAutomaticAllocation();
     expect(c.modal()).toBeNull();
     expect(c.allocation()).toEqual({ programId: 12, ids: [302] });

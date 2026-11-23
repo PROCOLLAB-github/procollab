@@ -2,6 +2,7 @@
 import { TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 import { HttpErrorResponse } from "@angular/common/http";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { provideRouter } from "@angular/router";
 import { of, Subject, throwError } from "rxjs";
 import { describe, expect, it, vi } from "vitest";
@@ -306,13 +307,15 @@ describe("Program certificates", () => {
   });
   it("shows an actionable API error when a PDF request returns a JSON blob", async () => {
     const { fixture, component, repository } = await setup();
+    const errorNotice = vi.spyOn(TestBed.inject(SnackbarService), "error");
     const text = JSON.stringify({ detail: "Дождитесь завершения обработки." });
     const error = Object.assign(new Blob([text], { type: "application/json" }), {
       text: async () => text,
     });
     repository.pdf.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 400, error })));
     await component.pdf(certificate);
-    expect(component.error()).toBe("Дождитесь завершения обработки.");
+    expect(errorNotice).toHaveBeenCalledExactlyOnceWith("Дождитесь завершения обработки.");
+    expect(component.error()).toBeNull();
     fixture.destroy();
   });
   it.each([
@@ -521,18 +524,30 @@ describe("Program certificates", () => {
     "keeps the draft and blocks dependent actions if saving fails (%s)",
     async status => {
       const { fixture, component, repository } = await setup();
+      const errorNotice = vi.spyOn(TestBed.inject(SnackbarService), "error");
       repository.save.mockReturnValue(
-        throwError(() => ({
-          status,
-          error: { detail: "Настройки изменены другим организатором." },
-        })),
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status,
+              error: { detail: "Настройки изменены другим организатором." },
+            }),
+        ),
       );
       component.patch({ director: "Несохраненное имя" });
       await component.prepareLaunch();
       expect(component.confirmOpen()).toBe(false);
       expect(component.draft()!.director).toBe("Несохраненное имя");
       expect(component.dirty()).toBe(true);
-      expect(component.error()).toBeTruthy();
+      if (status === 400 || status === 409) {
+        expect(component.error()).toBe("Настройки изменены другим организатором.");
+        expect(errorNotice).not.toHaveBeenCalled();
+      } else {
+        expect(errorNotice).toHaveBeenCalledExactlyOnceWith(
+          "Настройки изменены другим организатором.",
+        );
+        expect(component.error()).toBeNull();
+      }
       expect(repository.activate).not.toHaveBeenCalled();
       expect(component.busy()).toBe(false);
       await component.preview();
@@ -542,8 +557,9 @@ describe("Program certificates", () => {
       fixture.destroy();
     },
   );
-  it("shows an activation failure inside the open confirmation and allows retry", async () => {
+  it("notifies about an activation failure and allows retry in the open confirmation", async () => {
     const { fixture, component, repository } = await setup();
+    const errorNotice = vi.spyOn(TestBed.inject(SnackbarService), "error");
     await component.prepareLaunch();
     fixture.detectChanges();
     await fixture.whenStable();
@@ -554,12 +570,10 @@ describe("Program certificates", () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(component.confirmOpen()).toBe(true);
-    await vi.waitFor(() => {
-      fixture.detectChanges();
-      expect(
-        document.querySelector('.certificates__confirmation [role="alert"]')?.textContent,
-      ).toContain("Попробуйте еще раз");
-    });
+    expect(errorNotice).toHaveBeenCalledExactlyOnceWith(
+      "Не удалось выполнить действие. Попробуйте еще раз.",
+    );
+    expect(component.error()).toBeNull();
     await component.activate();
     expect(component.confirmOpen()).toBe(false);
     expect(component.step()).toBe(3);

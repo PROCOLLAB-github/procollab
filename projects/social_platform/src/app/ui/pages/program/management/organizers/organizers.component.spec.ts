@@ -1,6 +1,7 @@
 /** @format */
 import { TestBed } from "@angular/core/testing";
 import { HttpErrorResponse } from "@angular/common/http";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { of, Subject, throwError } from "rxjs";
 import { ProgramOrganizersUseCase } from "@api/program/use-cases/program-organizers.use-case";
 import { ProgramOrganizers } from "@domain/program/program-organizers.model";
@@ -226,6 +227,30 @@ describe("Организаторы программы", () => {
     expect(component.snapshot()).toBeNull();
     expect(component.selected()).toBeNull();
     expect(component.busy()).toBe(false);
+  });
+  it("уведомляет об ошибке приглашения и позволяет повторить отправку", () => {
+    const { component, api } = setup();
+    const snackbar = TestBed.inject(SnackbarService);
+    const success = vi.spyOn(snackbar, "success");
+    const error = vi.spyOn(snackbar, "error");
+    api.invite.mockReturnValueOnce(throwError(() => new HttpErrorResponse({ status: 500 })));
+    component.open("invite");
+    component.email.setValue("new@example.com");
+
+    component.invite();
+    expect(error).toHaveBeenCalledExactlyOnceWith(
+      "Не удалось выполнить действие. Попробуйте еще раз.",
+    );
+    expect(component.modal()).toBe("invite");
+    expect(component.email.value).toBe("new@example.com");
+    expect(component.dialogError()).toBeNull();
+    expect(success).not.toHaveBeenCalled();
+
+    component.invite();
+    expect(success).toHaveBeenCalledExactlyOnceWith(
+      "Приглашение создано. Статус отправки появится в списке.",
+    );
+    expect(component.modal()).toBeNull();
   });
   it("сохраняет email и модалку при конфликте и обновляет ревизию", () => {
     const { component, api } = setup();

@@ -48,6 +48,7 @@ import {
   fieldWrite,
   rebaseSolutionFields,
 } from "@domain/solution/solution-form-rebase";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { solutionFieldsGroup } from "@utils/solution-field-controls";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { SolutionFieldsComponent } from "@ui/widgets/solution-fields/solution-fields.component";
@@ -95,6 +96,7 @@ export class ManagementSolutionFormComponent {
   private readonly saveForm = inject(SaveManagedSolutionFormUseCase);
   private readonly getTemplates = inject(GetSolutionTemplatesUseCase);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly snackbar = inject(SnackbarService);
   private readonly cancelRead = new Subject<void>();
   private readonly cancelSave = new Subject<void>();
   private context = 0;
@@ -108,7 +110,7 @@ export class ManagementSolutionFormComponent {
   readonly loading = signal(false);
   readonly saving = signal(false);
   readonly error = signal("");
-  readonly notice = signal("");
+  readonly rebaseNotice = signal("");
   readonly missingIds = signal<number[]>([]);
   readonly editing = signal<number | null>(null);
   readonly editorDirty = signal(false);
@@ -266,7 +268,7 @@ export class ManagementSolutionFormComponent {
           if (this.template() === before.form.template)
             this.template.set(result.value.form.template);
           this.snapshot.set(result.value);
-          this.notice.set(
+          this.rebaseNotice.set(
             "Форма обновлена. Ваши правки сохранены локально. Проверьте их и сохраните еще раз.",
           );
         } else {
@@ -293,7 +295,7 @@ export class ManagementSolutionFormComponent {
     this.editing.set(null);
     this.editorDirty.set(false);
     this.error.set("");
-    this.notice.set("");
+    this.rebaseNotice.set("");
     this.missingIds.set([]);
   }
   async cancel() {
@@ -316,7 +318,7 @@ export class ManagementSolutionFormComponent {
     this.editorDirty.set(false);
     this.missingIds.set([]);
     this.error.set("");
-    this.notice.set("");
+    this.rebaseNotice.set("");
   }
   usage(field: EditableSolutionField) {
     return this.snapshot()?.fieldsUsage.find(usage => usage.fieldId === field.id);
@@ -521,7 +523,7 @@ export class ManagementSolutionFormComponent {
     }
     this.saving.set(true);
     this.error.set("");
-    this.notice.set("");
+    this.rebaseNotice.set("");
     const id = this.context;
     this.saveForm
       .execute(id, this.writeBody())
@@ -535,7 +537,7 @@ export class ManagementSolutionFormComponent {
         if (result.ok) {
           this.snapshot.set(result.value);
           this.discard();
-          this.notice.set("Форма решения сохранена.");
+          this.snackbar.success("Форма решения сохранена.");
         } else {
           this.error.set(result.error.detail);
           if (result.error.code === "form_revision_conflict") this.load(true);

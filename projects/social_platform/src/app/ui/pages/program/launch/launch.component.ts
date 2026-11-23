@@ -22,7 +22,7 @@ import {
 } from "rxjs";
 import { AlertDirective, ButtonDirective, DialogHeaderComponent, FieldDirective } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-case";
 import { ProgramLaunch } from "@domain/program/program-launch.model";
 import { AppRoutes } from "@api/paths/app-routes";
@@ -39,7 +39,6 @@ import { evaluationError } from "@utils/evaluation-workspace";
     FieldDirective,
     DialogHeaderComponent,
     ModalComponent,
-    TransientNoticeComponent,
   ],
   templateUrl: "./launch.component.html",
   styleUrl: "./launch.component.scss",
@@ -47,6 +46,7 @@ import { evaluationError } from "@utils/evaluation-workspace";
 })
 export class ProgramLaunchComponent {
   private readonly api = inject(ProgramLaunchUseCase);
+  private readonly snackbar = inject(SnackbarService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
@@ -63,7 +63,6 @@ export class ProgramLaunchComponent {
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
   readonly publishError = signal<string | null>(null);
-  readonly message = signal<string | null>(null, { equal: () => false });
   readonly confirmOpen = signal(false);
   readyCount(): number {
     return this.state()?.checks.filter(check => check.ready).length ?? 0;
@@ -149,9 +148,9 @@ export class ProgramLaunchComponent {
     if (!link) return;
     try {
       await navigator.clipboard.writeText(link);
-      this.message.set("Ссылка скопирована.");
+      this.snackbar.success("Ссылка скопирована.");
     } catch {
-      this.publishError.set("Не удалось скопировать. Выделите ссылку и скопируйте вручную.");
+      this.snackbar.error("Не удалось скопировать. Выделите ссылку и скопируйте вручную.");
     }
   }
   canDeactivate(): boolean {

@@ -18,11 +18,6 @@
         </button>
       </div>
     }
-    @if (saved()) {
-      <app-transient-notice [source]="saved" (dismissed)="saved.set(false)"
-        >Кейсы и поля сохранены.</app-transient-notice
-      >
-    }
     @if (snapshot()) {
       <section class="project-form__card" aria-labelledby="application-heading">
         <header class="project-form__preview-heading">

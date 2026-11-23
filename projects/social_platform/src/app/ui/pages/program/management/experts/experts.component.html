@@ -3,11 +3,6 @@
   @if (initialTab() === "experts" && tab() === "distribution") {
     <button type="button" appButton="text" (click)="switchTab('experts')">К экспертам</button>
   }
-  @if (message()) {
-    <app-transient-notice [source]="message" (dismissed)="message.set(null)">{{
-      message()
-    }}</app-transient-notice>
-  }
   @if (error()) {
     <div appAlert="error" role="alert">
       {{ error() }} <button type="button" appButton="text" (click)="load()">Повторить</button>
@@ -69,14 +64,6 @@
           }}
         </button>
       </div>
-      @if (exportError()) {
-        <p appAlert="error" role="alert">Не удалось выгрузить экспертов. Повторите попытку.</p>
-      }
-      @if (exportSuccess()) {
-        <app-transient-notice [source]="exportSuccess" (dismissed)="exportSuccess.set(false)"
-          >Excel с экспертами по текущим фильтрам готов.</app-transient-notice
-        >
-      }
       @if (deliveryRefreshPaused()) {
         <p appAlert="warning">
           Отправка занимает больше времени.
@@ -518,9 +505,6 @@
             </div>
           }
         </app-expert-quota>
-        @if (quotaSaved()) {
-          <p role="status">Готовность проектов пересчитана.</p>
-        }
         <section class="experts__method">
           <div>
             <h3>Вручную</h3>
