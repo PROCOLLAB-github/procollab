@@ -171,6 +171,14 @@
   border-radius: 8px;
 }
 
+.experts__dialog--method {
+  gap: 12px;
+
+  > app-dialog-header {
+    --ui-dialog-header-margin-bottom: 0;
+  }
+}
+
 .experts__method {
   display: flex;
   flex-wrap: wrap;
@@ -186,6 +194,14 @@
 
   > button {
     max-width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .experts__method {
+    display: grid;
+    gap: 8px;
+    justify-items: start;
   }
 }
 

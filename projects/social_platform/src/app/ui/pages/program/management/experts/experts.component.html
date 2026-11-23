@@ -394,7 +394,11 @@
   labelledBy="experts-dialog-title"
   [bodyClass]="dialogBodyClass(modal())"
 >
-  <div class="experts__dialog" [attr.aria-busy]="busy()">
+  <div
+    class="experts__dialog"
+    [class.experts__dialog--method]="modal() === 'method'"
+    [attr.aria-busy]="busy()"
+  >
     <app-dialog-header
       [title]="dialogTitle()"
       titleId="experts-dialog-title"

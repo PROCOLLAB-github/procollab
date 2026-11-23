@@ -368,7 +368,11 @@
   [bodyClass]="dialogBodyClass(modal())"
   labelledBy="solution-experts-title"
   (openChange)="!$event && close()"
-  ><section class="experts__dialog" [attr.aria-busy]="busy()">
+  ><section
+    class="experts__dialog"
+    [class.experts__dialog--method]="modal() === 'method'"
+    [attr.aria-busy]="busy()"
+  >
     <app-dialog-header
       [title]="
         modal() === 'invite'

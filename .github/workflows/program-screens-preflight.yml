@@ -154,10 +154,14 @@ jobs:
               assert.equal(await quota.inputValue(), '2');
               assert.equal(await options.getByRole('heading', { name: 'Вручную', exact: true }).count(), 1);
               assert.equal(await options.getByRole('heading', { name: 'Автоматически', exact: true }).count(), 1);
+              const dialogGap = await options.locator('app-expert-quota').evaluate(quotaField =>
+                quotaField.getBoundingClientRect().top - quotaField.previousElementSibling.getBoundingClientRect().bottom);
+              assert.ok(dialogGap >= 8 && dialogGap <= 16, 'Spacing after the allocation header: ' + dialogGap);
+              await capture('distribution');
               await options.getByRole('button', { name: 'Увеличить количество экспертов', exact: true }).click(timeout);
               assert.equal(await quota.inputValue(), '3');
               await options.getByRole('button', { name: 'Посмотреть изменения', exact: true }).waitFor(timeout);
-              await capture('distribution');
+              await capture('distribution-quota-changed');
               await page.keyboard.press('Escape');
               await options.waitFor({ state: 'hidden', timeout: 8500 });
               await distribution.getByRole('button', { name: 'Распределить', exact: true }).click(timeout);
