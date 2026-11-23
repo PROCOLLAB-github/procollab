@@ -66,6 +66,10 @@ jobs:
               await context.route('**/programs/1/', route => route.fulfill({
                 json: detail, headers: { 'Access-Control-Allow-Origin': '*' }
               }));
+              await context.route(url => url.pathname === '/solution-invitations/', route => route.fulfill({
+                json: { count: 0, next: null, previous: null, results: [] },
+                headers: { 'Access-Control-Allow-Origin': '*' }
+              }));
               const open = async () => {
                 await page.goto(base + '/office/program/1');
                 await page.locator('.info__avatar--program').waitFor();
