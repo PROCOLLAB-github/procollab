@@ -1,6 +1,6 @@
 /** @format */
 
-import { DialogHeaderComponent, SectionHeaderComponent } from "@uilib";
+import { DialogHeaderComponent, SectionHeaderComponent, StateComponent } from "@uilib";
 
 import {
   ChangeDetectionStrategy,
@@ -37,6 +37,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
   imports: [
     DialogHeaderComponent,
     SectionHeaderComponent,
+    StateComponent,
     TransientNoticeComponent,
     ReactiveFormsModule,
     AlertDirective,

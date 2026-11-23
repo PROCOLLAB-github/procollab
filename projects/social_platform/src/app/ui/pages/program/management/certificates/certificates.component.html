@@ -69,7 +69,7 @@
             [disabled]="busy()"
             (click)="preview()"
           >
-            <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
+            <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
           </button>
           <p class="certificates__muted">{{ formatLabel() }}</p>
         </header>
@@ -485,7 +485,7 @@
           [disabled]="busy() || journalLoading() || !journal()?.summary?.ready"
           (click)="archive(false)"
         >
-          <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
+          <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
         </button>
       </div>
       <div class="certificates__filters" role="group" aria-label="Статус отправки">
@@ -528,140 +528,141 @@
           <button type="button" appButton="secondary" (click)="loadJournal()">Повторить</button>
         </p>
       }
-      <div class="certificates__table" [attr.aria-busy]="journalLoading()">
-        <table>
-          <thead>
-            <tr>
-              <th class="certificates__select-cell">
-                <label>
-                  <input
-                    type="checkbox"
-                    appChoice
-                    aria-label="Выбрать всех по текущему фильтру"
-                    [checked]="allChecked()"
-                    [indeterminate]="selectedCount() > 0 && !allChecked()"
-                    [disabled]="busy() || !journal()?.count || journalLoading()"
-                    (change)="selectAll($any($event.target).checked)"
-                  />
-                  <span class="certificates__mobile-select">Выбрать всех</span>
-                </label>
-              </th>
-              <th>Участник</th>
-              <th>Письмо</th>
-              <th>Сертификат</th>
-              <th>Действие</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (row of journal()?.results; track row.id) {
+      @if (journal()?.results?.length) {
+        <div class="certificates__table" [attr.aria-busy]="journalLoading()">
+          <table>
+            <thead>
               <tr>
-                <td class="certificates__select-cell">
-                  <input
-                    type="checkbox"
-                    appChoice
-                    [attr.aria-label]="'Выбрать: ' + row.name"
-                    [checked]="isSelected(row.id)"
-                    [disabled]="busy() || journalLoading()"
-                    (change)="toggleRow(row.id, $any($event.target).checked)"
-                  />
-                </td>
-                <td>
-                  <strong>{{ row.name }}</strong
-                  ><small>{{ row.email }}</small>
-                </td>
-                <td data-label="Письмо">
-                  <span
-                    [class.certificates__error]="
-                      !row.sentAt && row.status === 'failed' && row.pdfReady && !row.pdfError
-                    "
-                    >{{
-                      row.sentAt
-                        ? "Отправлено"
-                        : row.status === "failed" && (!row.pdfReady || row.pdfError)
-                          ? "Не отправлено"
-                          : labels[row.status]
-                    }}</span
-                  >
-                  @if (row.sentAt || (row.pdfReady && !row.pdfError && row.error)) {
-                    <small>{{
-                      row.sentAt ? (row.sentAt | date: "dd.MM.yyyy, HH:mm" : "+0300") : row.error
-                    }}</small>
-                  }
-                </td>
-                <td data-label="Сертификат">
-                  <span
-                    [class.certificates__error]="
-                      row.status === 'failed' && (!row.pdfReady || row.pdfError)
-                    "
-                    >{{
-                      row.status === "failed" && (!row.pdfReady || row.pdfError)
-                        ? row.pdfReady
-                          ? "PDF не обновлен"
-                          : "PDF не создан"
-                        : row.outdated
-                          ? "Шаблон изменен"
-                          : row.pdfReady
-                            ? "PDF готов"
-                            : "Готовится"
-                    }}</span
-                  >
-                </td>
-                <td data-label="Действие">
-                  @if (row.status === "failed") {
-                    <button
-                      type="button"
-                      appButton="text"
-                      [disabled]="busy()"
-                      (click)="selectFailed(row.id)"
-                    >
-                      Повторить
-                    </button>
-                  }
-                  @if (row.pdfReady) {
-                    <button
-                      type="button"
-                      appButton="text"
-                      [disabled]="
-                        busy() ||
-                        row.status === 'pending' ||
-                        row.status === 'generating' ||
-                        row.status === 'sending'
+                <th class="certificates__select-cell">
+                  <label>
+                    <input
+                      type="checkbox"
+                      appChoice
+                      aria-label="Выбрать всех по текущему фильтру"
+                      [checked]="allChecked()"
+                      [indeterminate]="selectedCount() > 0 && !allChecked()"
+                      [disabled]="busy() || !journal()?.count || journalLoading()"
+                      (change)="selectAll($any($event.target).checked)"
+                    />
+                    <span class="certificates__mobile-select">Выбрать всех</span>
+                  </label>
+                </th>
+                <th>Участник</th>
+                <th>Письмо</th>
+                <th>Сертификат</th>
+                <th>Действие</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of journal()?.results; track row.id) {
+                <tr>
+                  <td class="certificates__select-cell">
+                    <input
+                      type="checkbox"
+                      appChoice
+                      [attr.aria-label]="'Выбрать: ' + row.name"
+                      [checked]="isSelected(row.id)"
+                      [disabled]="busy() || journalLoading()"
+                      (change)="toggleRow(row.id, $any($event.target).checked)"
+                    />
+                  </td>
+                  <td>
+                    <strong>{{ row.name }}</strong
+                    ><small>{{ row.email }}</small>
+                  </td>
+                  <td data-label="Письмо">
+                    <span
+                      [class.certificates__error]="
+                        !row.sentAt && row.status === 'failed' && row.pdfReady && !row.pdfError
                       "
-                      (click)="pdf(row)"
+                      >{{
+                        row.sentAt
+                          ? "Отправлено"
+                          : row.status === "failed" && (!row.pdfReady || row.pdfError)
+                            ? "Не отправлено"
+                            : labels[row.status]
+                      }}</span
                     >
-                      Скачать PDF
-                    </button>
-                    @if (row.outdated || dirty()) {
+                    @if (row.sentAt || (row.pdfReady && !row.pdfError && row.error)) {
+                      <small>{{
+                        row.sentAt ? (row.sentAt | date: "dd.MM.yyyy, HH:mm" : "+0300") : row.error
+                      }}</small>
+                    }
+                  </td>
+                  <td data-label="Сертификат">
+                    <span
+                      [class.certificates__error]="
+                        row.status === 'failed' && (!row.pdfReady || row.pdfError)
+                      "
+                      >{{
+                        row.status === "failed" && (!row.pdfReady || row.pdfError)
+                          ? row.pdfReady
+                            ? "PDF не обновлен"
+                            : "PDF не создан"
+                          : row.outdated
+                            ? "Шаблон изменен"
+                            : row.pdfReady
+                              ? "PDF готов"
+                              : "Готовится"
+                      }}</span
+                    >
+                  </td>
+                  <td data-label="Действие">
+                    @if (row.status === "failed") {
                       <button
                         type="button"
                         appButton="text"
                         [disabled]="busy()"
-                        (click)="updateOnPlatform(row.id)"
+                        (click)="selectFailed(row.id)"
                       >
-                        Обновить на платформе
+                        Повторить
                       </button>
                     }
-                  }
-                </td>
-              </tr>
-            } @empty {
-              <tr>
-                <td colspan="5" class="certificates__empty">
-                  {{
-                    journalLoading()
-                      ? "Загружаем сертификаты…"
-                      : filter() === "failed"
-                        ? "Ошибок отправки не найдено."
-                        : search()
-                          ? "Никого не нашли. Измените запрос."
-                          : "Сертификаты появятся после выдачи."
-                  }}
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
+                    @if (row.pdfReady) {
+                      <button
+                        type="button"
+                        appButton="text"
+                        [disabled]="
+                          busy() ||
+                          row.status === 'pending' ||
+                          row.status === 'generating' ||
+                          row.status === 'sending'
+                        "
+                        (click)="pdf(row)"
+                      >
+                        Скачать PDF
+                      </button>
+                      @if (row.outdated || dirty()) {
+                        <button
+                          type="button"
+                          appButton="text"
+                          [disabled]="busy()"
+                          (click)="updateOnPlatform(row.id)"
+                        >
+                          Обновить на платформе
+                        </button>
+                      }
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else if (journalLoading()) {
+        <p role="status">Загружаем сертификаты…</p>
+      } @else if (!journalError()) {
+        <app-state
+          [icon]="search() ? 'search' : 'empty-chat'"
+          [title]="
+            filter() === 'failed'
+              ? 'Ошибок отправки не найдено.'
+              : search()
+                ? 'Никого не нашли. Измените запрос.'
+                : 'Сертификаты появятся после выдачи.'
+          "
+        />
+      }
       @if ((journal()?.count ?? 0) > 20 || journal()?.summary?.failed) {
         <footer class="certificates__footer">
           @if ((journal()?.count ?? 0) > 20) {

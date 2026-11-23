@@ -398,6 +398,7 @@
                   <button
                     type="button"
                     appButton="icon"
+                    class="analytics-drilldown__export-trigger"
                     aria-label="Варианты выгрузки в Excel"
                     [cdkMenuTriggerFor]="attentionExport"
                     [disabled]="!!state.actionPending()"
@@ -426,6 +427,7 @@
                   <button
                     type="button"
                     appButton="icon"
+                    class="analytics-drilldown__export-trigger"
                     aria-label="Выгрузить найденные записи в Excel"
                     [disabled]="!!state.actionPending() || !state.attentionCount()"
                     (click)="state.exportAttention(false)"

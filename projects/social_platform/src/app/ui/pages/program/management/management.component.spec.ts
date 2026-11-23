@@ -727,7 +727,7 @@ describe("Списки управления программой в DOM", () => 
   });
 
   it("восстанавливает фильтры участников из URL и продолжает нумерацию со второй страницы", async () => {
-    const { component, state, element } = await setup(
+    const { component, state, element, harness } = await setup(
       "participants",
       "?region_scope=selected&region=Москва&activity=period&activity_from=2026-10-01&activity_to=2026-10-19&offset=25",
     );
@@ -736,7 +736,12 @@ describe("Списки управления программой в DOM", () => 
     expect(state.context?.query.region).toBe("Москва");
     expect(state.context?.query.activityTo).toBe("2026-10-19");
     expect(element().querySelector('td[data-label="№"]')?.textContent?.trim()).toBe("26");
-    expect(element().textContent).toContain("Всего участников:");
+    state.participants.update(page => ({ ...page, totalCount: 42 }));
+    harness.detectChanges();
+    expect(element().querySelector(".management__list-heading h2")?.textContent).toBe(
+      "Участники · 42",
+    );
+    expect(element().querySelector(".management__list-meta")?.textContent).toBe("Найдено: 1");
     component.activityFrom.setValue("2026-10-20");
     component.applyParticipantFilters();
     expect(component.participantFilterError()).toContain("не раньше");
@@ -1082,10 +1087,14 @@ describe("Списки управления программой в DOM", () => 
   });
   it("из списка участников можно открыть сертификаты этой программы", async () => {
     const { element } = await setup();
-    const link = element().querySelector<HTMLAnchorElement>(
+    const heading = element().querySelector(".management__list-heading");
+    const link = heading?.querySelector<HTMLAnchorElement>(
       'a[href="/office/program/1/management/certificates"]',
     );
     expect(link?.textContent?.trim()).toBe("Сертификаты");
+    expect(link?.nextElementSibling?.getAttribute("aria-label")).toBe(
+      "Выгрузить участников в Excel",
+    );
   });
 
   it("имя участника ведет в его профиль, а анкета остается отдельной командой", async () => {

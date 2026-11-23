@@ -7,6 +7,10 @@
 @use "styles/program-management-controls";
 @include program-analytics-dialog.body;
 
+.analytics-drilldown__export-trigger.ui-button.ui-button {
+  @include program-management-controls.export-trigger;
+}
+
 .analytics-case {
   &__metrics {
     display: grid;

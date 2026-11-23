@@ -130,10 +130,30 @@ describe("Organizer evaluation criteria", () => {
     pending.next({ ...initial(), locked: true });
     await fixture.whenStable();
     expect(fixture.nativeElement.textContent).toContain("Критерии зафиксированы");
+    expect(fixture.nativeElement.textContent).not.toContain("Настройте форму");
+    expect(fixture.nativeElement.querySelector(".criteria__add")?.disabled).toBe(true);
     expect(fixture.nativeElement.querySelector(".criteria__row button")).toBeNull();
     component.openPreview();
     expect(component.previewCriteria()[0].name).toBe("Качество");
     expect(api.saveCriteria).not.toHaveBeenCalled();
+  });
+  it("показывает общий заголовок с действием справа, основную кнопку и пустой список", async () => {
+    const { fixture, pending } = await setup();
+    pending.next({ ...initial(), criteria: [] });
+    await fixture.whenStable();
+    const root: HTMLElement = fixture.nativeElement;
+    const heading = root.querySelector("#criteria-heading");
+    expect(heading?.textContent).toBe("Критерии оценки");
+    expect(heading?.closest("section")?.getAttribute("aria-labelledby")).toBe(heading?.id);
+    expect(heading?.parentElement?.querySelector("button")?.textContent).toContain(
+      "Предпросмотр формы",
+    );
+    expect(root.querySelector(".criteria__add")?.classList.contains("ui-button--primary")).toBe(
+      true,
+    );
+    expect(root.querySelector("app-state")?.textContent).toContain("Критериев пока нет.");
+    expect(root.textContent).toContain("Настройте форму до первой сохраненной оценки.");
+    expect(root.querySelector(".ui-alert--warning")).toBeNull();
   });
   it("закрывает предпросмотр крестиком без дублирующей кнопки и сохранения ответов", async () => {
     const { fixture, component } = await setup();
@@ -142,8 +162,10 @@ describe("Organizer evaluation criteria", () => {
     await new Promise(resolve => setTimeout(resolve, 0));
     fixture.detectChanges();
     const title = document.querySelector("#criteria-preview-title");
+    expect(title?.textContent?.trim()).toBe("Предпросмотр формы оценивания");
     const dialog = title?.closest(".criteria__dialog");
     expect(dialog).toBeTruthy();
+    expect(dialog?.textContent).toContain("Ответы в предпросмотре не сохраняются.");
     expect(dialog?.querySelectorAll("button")).toHaveLength(1);
     const close = dialog?.querySelector("app-dialog-header button") as HTMLButtonElement;
     expect(close.getAttribute("aria-label")).toBe("Закрыть");

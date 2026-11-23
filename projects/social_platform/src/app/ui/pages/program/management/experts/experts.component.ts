@@ -49,6 +49,7 @@ import {
   ChoiceDirective,
   FieldDirective,
   IconComponent,
+  StateComponent,
 } from "@uilib";
 import { AppRoutes } from "@api/paths/app-routes";
 import { exportExperts } from "@utils/export-experts";
@@ -93,6 +94,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     NgTemplateOutlet,
     RouterLink,
     IconComponent,
+    StateComponent,
   ],
   templateUrl: "./experts.component.html",
   styleUrls: [
@@ -225,6 +227,9 @@ export class ManagementExpertsComponent {
   readonly distributionStatus = this.fb.control("all");
   readonly expertSearch = this.fb.control("");
   private readonly distributionQuery = signal("");
+  readonly distributionHasFilters = computed(
+    () => !!this.distributionQuery().trim() || this.filterCount() > 0,
+  );
   private readonly distributionCaseValue = signal("all");
   private readonly distributionStatusValue = signal("all");
   private readonly expertQuery = signal("");

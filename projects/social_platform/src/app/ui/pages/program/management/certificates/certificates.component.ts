@@ -25,6 +25,7 @@ import {
   DialogHeaderComponent,
   FieldDirective,
   IconComponent,
+  StateComponent,
 } from "@uilib";
 import { PluralizePipe } from "@corelib";
 import { AppRoutes } from "@api/paths/app-routes";
@@ -72,6 +73,7 @@ interface CertificateEditState {
     ButtonDirective,
     FieldDirective,
     IconComponent,
+    StateComponent,
     ChoiceDirective,
     DialogHeaderComponent,
     AlertDirective,

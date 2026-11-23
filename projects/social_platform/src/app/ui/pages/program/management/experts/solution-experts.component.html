@@ -50,7 +50,7 @@
     </section>
   }
   <section class="experts__card" [attr.aria-busy]="loading()">
-    <app-section-header [title]="tab() === 'experts' ? 'Эксперты программы' : 'Решения на оценку'">
+    <app-section-header [title]="listHeading()">
       <div class="experts__heading-actions">
         @if (tab() === "experts") {
           <button
@@ -72,7 +72,7 @@
             [disabled]="loading() || busy() || exporting() || !filtered().length"
             (click)="downloadExperts()"
           >
-            <i appIcon icon="download" appSquare="24" aria-hidden="true"></i>
+            <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
           </button>
         } @else {
           <button
@@ -122,9 +122,8 @@
     }
     @if (loading()) {
       <p role="status">Загружаем экспертов и решения…</p>
-    }
-    @if (tab() === "experts") {
-      @if (!loading() && !error()) {
+    } @else if (!error()) {
+      @if (tab() === "experts") {
         <app-expert-roster
           assignmentLabel="Решения"
           [rows]="visible()"
@@ -136,122 +135,123 @@
           [pageSize]="pageSize"
           [total]="filtered().length"
           [actions]="rosterActions"
-          [emptyText]="
-            search.value.trim() || status.value !== 'all'
-              ? 'Эксперты не найдены'
-              : 'Экспертов пока нет'
-          "
+          [filtersActive]="filtersActive()"
           (toggleAll)="selectAllExperts()"
           (toggleRow)="toggleExpert($event.id)"
           (rowClick)="expertRowClick($event.event, $event.expert)"
           (action)="rowAction($event.expert, $event.event)"
           (pageChange)="page.set($event)"
         />
-      }
-    } @else {
-      <div class="experts__mobile-tools">
-        <label class="experts__pick-target"
-          ><input
-            appChoice
-            type="checkbox"
-            [checked]="allSolutionsSelected()"
-            [indeterminate]="!!distributionSelection().size && !allSolutionsSelected()"
-            [disabled]="busy() || loading() || allocationBusy()"
-            (change)="selectAllSolutions()"
-          />Все решения</label
-        >
-      </div>
-      <table class="experts__table experts__table--projects experts__table--solutions">
-        <caption class="experts__sr">
-          Распределение экспертов по решениям
-        </caption>
-        <thead>
-          <tr>
-            <th class="experts__pick">
-              <label class="experts__pick-target"
-                ><input
-                  appChoice
-                  type="checkbox"
-                  aria-label="Выбрать все решения по фильтрам"
-                  [checked]="allSolutionsSelected()"
-                  [indeterminate]="!!distributionSelection().size && !allSolutionsSelected()"
-                  [disabled]="busy() || loading() || allocationBusy()"
-                  (change)="selectAllSolutions()"
-              /></label>
-            </th>
-            <th>Решение</th>
-            <th>Кейс</th>
-            <th>Эксперты и статус оценки</th>
-            <th>Оценки</th>
-            <th><span class="experts__sr">Действия</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (row of filteredSolutions(); track row.application.solutionId) {
-            <tr
-              [class.experts__row--selected]="
-                distributionSelection().has(row.application.solutionId)
-              "
-            >
-              <td class="experts__pick">
+      } @else if (filteredSolutions().length) {
+        <div class="experts__mobile-tools">
+          <label class="experts__pick-target"
+            ><input
+              appChoice
+              type="checkbox"
+              [checked]="allSolutionsSelected()"
+              [indeterminate]="!!distributionSelection().size && !allSolutionsSelected()"
+              [disabled]="busy() || loading() || allocationBusy()"
+              (change)="selectAllSolutions()"
+            />Все решения</label
+          >
+        </div>
+        <table class="experts__table experts__table--projects experts__table--solutions">
+          <caption class="experts__sr">
+            Распределение экспертов по решениям
+          </caption>
+          <thead>
+            <tr>
+              <th class="experts__pick">
                 <label class="experts__pick-target"
                   ><input
                     appChoice
                     type="checkbox"
-                    [attr.aria-label]="'Выбрать решение: ' + row.application.name"
-                    [checked]="distributionSelection().has(row.application.solutionId)"
-                    [disabled]="busy() || allocationBusy()"
-                    (change)="toggleDistribution(row.application.solutionId)"
+                    aria-label="Выбрать все решения по фильтрам"
+                    [checked]="allSolutionsSelected()"
+                    [indeterminate]="!!distributionSelection().size && !allSolutionsSelected()"
+                    [disabled]="busy() || loading() || allocationBusy()"
+                    (change)="selectAllSolutions()"
                 /></label>
-              </td>
-              <td data-label="Решение">
-                <a
-                  class="experts__profile"
-                  [routerLink]="paths.program.solution(programId(), row.application.solutionId)"
-                  >{{ row.application.name }}</a
-                >
-              </td>
-              <td data-label="Кейс">{{ row.caseName ?? "Без кейса" }}</td>
-              <td data-label="Эксперты и статус оценки">
-                @for (assignment of assignments(); track assignment.assignmentId) {
-                  @if (assignment.application.solutionId === row.application.solutionId) {
-                    <p>
-                      {{ assignment.expert.fullName }} ·
-                      {{ assignment.status === "completed" ? "Оценено" : "Ожидается оценка" }}
-                    </p>
+              </th>
+              <th>Решение</th>
+              <th>Кейс</th>
+              <th>Эксперты и статус оценки</th>
+              <th>Оценки</th>
+              <th><span class="experts__sr">Действия</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of filteredSolutions(); track row.application.solutionId) {
+              <tr
+                [class.experts__row--selected]="
+                  distributionSelection().has(row.application.solutionId)
+                "
+              >
+                <td class="experts__pick">
+                  <label class="experts__pick-target"
+                    ><input
+                      appChoice
+                      type="checkbox"
+                      [attr.aria-label]="'Выбрать решение: ' + row.application.name"
+                      [checked]="distributionSelection().has(row.application.solutionId)"
+                      [disabled]="busy() || allocationBusy()"
+                      (change)="toggleDistribution(row.application.solutionId)"
+                  /></label>
+                </td>
+                <td data-label="Решение">
+                  <a
+                    class="experts__profile"
+                    [routerLink]="paths.program.solution(programId(), row.application.solutionId)"
+                    >{{ row.application.name }}</a
+                  >
+                </td>
+                <td data-label="Кейс">{{ row.caseName ?? "Без кейса" }}</td>
+                <td data-label="Эксперты и статус оценки">
+                  @for (assignment of assignments(); track assignment.assignmentId) {
+                    @if (assignment.application.solutionId === row.application.solutionId) {
+                      <p>
+                        {{ assignment.expert.fullName }} ·
+                        {{ assignment.status === "completed" ? "Оценено" : "Ожидается оценка" }}
+                      </p>
+                    }
                   }
-                }
-                @if (!counts(row.application.solutionId).assigned) {
-                  <span>Эксперты не назначены</span>
-                }
-                <p class="experts__muted">
-                  Назначено: {{ counts(row.application.solutionId).assigned }} из {{ required() }}
-                </p>
-              </td>
-              <td data-label="Оценки">
-                {{ counts(row.application.solutionId).completed }} из {{ required() }}
-              </td>
-              <td class="experts__row-actions">
-                <app-row-actions
-                  [label]="'Назначения решения: ' + row.application.name"
-                  [actions]="distributionActions"
-                  [disabled]="busy() || allocationBusy()"
-                  (action)="startAllocation([row.application.solutionId])"
-                />
-              </td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="6">
-                Сданных решений для распределения не найдено. Измените поиск или фильтры.
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-      <p class="experts__muted" aria-live="polite">
-        Решений по фильтрам: {{ filteredSolutions().length }}
-      </p>
+                  @if (!counts(row.application.solutionId).assigned) {
+                    <span>Эксперты не назначены</span>
+                  }
+                  <p class="experts__muted">
+                    Назначено: {{ counts(row.application.solutionId).assigned }} из {{ required() }}
+                  </p>
+                </td>
+                <td data-label="Оценки">
+                  {{ counts(row.application.solutionId).completed }} из {{ required() }}
+                </td>
+                <td class="experts__row-actions">
+                  <app-row-actions
+                    [label]="'Назначения решения: ' + row.application.name"
+                    [actions]="distributionActions"
+                    [disabled]="busy() || allocationBusy()"
+                    (action)="startAllocation([row.application.solutionId])"
+                  />
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <p class="experts__muted" aria-live="polite">
+          Решений по фильтрам: {{ filteredSolutions().length }}
+        </p>
+      } @else if (filtersActive()) {
+        <app-state
+          icon="search"
+          title="Решения не найдены"
+          description="Попробуйте изменить поиск или фильтры."
+        />
+      } @else {
+        <app-state
+          title="Пока нет решений для распределения"
+          description="Решения появятся здесь после сдачи."
+        />
+      }
     }
   </section>
   @if (tab() === "experts" && selectedExperts().size) {

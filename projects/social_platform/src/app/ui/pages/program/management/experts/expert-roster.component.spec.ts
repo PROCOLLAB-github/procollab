@@ -26,12 +26,12 @@ describe("Список экспертов: состояния данных", () 
     expect(fixture.nativeElement.querySelector('[role="status"]')).toBeNull();
   });
 
-  it("после загрузки показывает только короткий текст без пустой шапки и 0–0", () => {
+  it("после загрузки показывает общее пустое состояние без таблицы и пагинации", () => {
     const fixture = setup();
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('[role="status"]').textContent.trim()).toBe(
-      "Экспертов пока нет",
-    );
+    const state = fixture.nativeElement.querySelector("app-state");
+    expect(state.textContent.trim()).toBe("Экспертов пока нет");
+    expect(state.querySelector('i[aria-hidden="true"]')).toBeTruthy();
     expect(fixture.nativeElement.querySelector("table")).toBeNull();
     expect(fixture.nativeElement.querySelector(".experts__pagination")).toBeNull();
   });

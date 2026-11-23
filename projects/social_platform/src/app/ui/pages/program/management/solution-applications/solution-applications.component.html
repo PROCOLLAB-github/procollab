@@ -3,13 +3,8 @@
   @if (formError()) {
     <p appAlert="error" role="alert">Не удалось загрузить настройки полей: {{ formError() }}</p>
   }
-  <div class="management__list-heading">
-    <div>
-      <h2>Заявки</h2>
-      <p class="management__participant-count">
-        {{ archived() ? "В архиве" : "Всего заявок по фильтрам" }}: <strong>{{ count() }}</strong>
-      </p>
-    </div>
+  <header class="management__list-heading">
+    <h2>{{ loading() || error() ? "Заявки" : "Заявки · " + count() }}</h2>
     <button
       appButton="icon"
       class="management__export"
@@ -21,7 +16,7 @@
     >
       <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
     </button>
-  </div>
+  </header>
   <div class="management__toolbar management__toolbar--projects">
     <form
       class="management__search"
@@ -56,21 +51,41 @@
       </div>
     </div>
   </div>
+  @let filteredResults = hasListFilters() && count() > 0 && !loading() && !error();
+  @if (archived() || filteredResults) {
+    <p class="management__list-meta">
+      {{
+        archived()
+          ? filteredResults
+            ? "Архив · По текущим фильтрам"
+            : "Архив"
+          : "По текущим фильтрам"
+      }}
+    </p>
+  }
   @if (loading()) {
     <p role="status">Загружаем заявки…</p>
   } @else if (error()) {
     <p appAlert="error" role="alert">{{ error() }}</p>
     <button appButton="secondary" type="button" (click)="load()">Повторить</button>
   } @else if (!rows().length) {
-    <p role="status">
-      {{
-        search.value.trim()
-          ? "Ничего не найдено. Измените запрос или фильтры."
-          : archived()
-            ? "В архиве пока нет заявок."
-            : "В программе пока нет заявок по выбранным условиям."
-      }}
-    </p>
+    @if (count() && offset()) {
+      <app-state title="На этой странице нет заявок">
+        <button type="button" appButton="secondary" (click)="navigate({ offset: null })">
+          На первую страницу
+        </button>
+      </app-state>
+    } @else if (hasListFilters()) {
+      <app-state
+        icon="search"
+        title="Заявки не найдены"
+        description="Попробуйте изменить поиск или фильтры."
+      />
+    } @else {
+      <app-state
+        [title]="archived() ? 'В архиве пока нет заявок' : 'В программе пока нет заявок'"
+      />
+    }
   } @else {
     @if (!archived()) {
       <div class="management__mobile-tools">

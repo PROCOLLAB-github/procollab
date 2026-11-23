@@ -57,42 +57,37 @@
 
   &__list-heading {
     display: flex;
-    gap: 16px;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__list-heading--program {
     flex-wrap: wrap;
     gap: 8px 16px;
+    align-items: center;
+    justify-content: space-between;
     padding-bottom: 16px;
     border-bottom: 1px solid var(--accent);
 
-    h2 { color: var(--accent-text); }
-
-    > .management__participant-count {
-      margin: 0 0 0 auto;
-      text-align: right;
+    h2 {
+      flex: 1 1 auto;
+      min-width: 0;
+      color: var(--accent-text);
+      overflow-wrap: anywhere;
     }
   }
 
-  &__list-heading--with-export {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, auto) 44px;
+  &__heading-actions {
+    display: flex;
     gap: 8px;
-
-    > .management__participant-count {
-      min-width: 0;
-      margin: 0;
-      overflow-wrap: anywhere;
-    }
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto;
   }
 
   &__certificates.ui-button {
     min-width: 0;
   }
 
-  &__participant-count span {
+  &__list-meta {
+    margin-block: 0 8px;
+    font-size: 12px;
+    line-height: 18px;
     color: var(--grey-for-text);
   }
 
@@ -266,13 +261,6 @@
     text-align: center;
     background: var(--accent);
     border-radius: 30px;
-  }
-
-  &__empty {
-    display: grid;
-    gap: 16px;
-    justify-items: start;
-    padding: 28px 0;
   }
 
   &__sr {
@@ -492,23 +480,6 @@
   }
 }
 
-@media (max-width: 360px) {
-  .management__list-heading--with-export {
-    grid-template-columns: minmax(0, 1fr) 44px;
-
-    > .management__participant-count {
-      grid-row: 2;
-      grid-column: 1 / -1;
-      text-align: right;
-    }
-
-    > .management__export {
-      grid-row: 1;
-      grid-column: 2;
-    }
-  }
-}
-
 @media (max-width: 385px) {
   .management__sort-label {
     display: none;
@@ -660,11 +631,6 @@
       grid-column: 3;
       width: auto;
     }
-  }
-
-  .management__list-heading--program > .management__participant-count {
-    font-size: 12px;
-    line-height: 18px;
   }
 
   .management__bulk {

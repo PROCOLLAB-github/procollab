@@ -63,6 +63,9 @@ describe("Таблица заявок решения", () => {
   }
   it("сохраняет таблицу из восьми колонок, а материал находится в меню", async () => {
     const { api, component, fixture } = await setup();
+    expect(fixture.nativeElement.querySelector(".management__list-heading h2").textContent).toBe(
+      `Заявки · ${page.count}`,
+    );
     const headers = Array.from(
       fixture.nativeElement.querySelectorAll("thead th") as NodeListOf<HTMLElement>,
     ).map(el => el.textContent?.trim());
@@ -91,6 +94,21 @@ describe("Таблица заявок решения", () => {
       "https://files.test/presentation.pdf",
     );
     expect(fixture.nativeElement.querySelector('td[data-label="Презентация"]')).toBeNull();
+  });
+  it("различает отсутствие заявок и отсутствие результатов по фильтру без поиска", async () => {
+    const { api, fixture, component } = await setup();
+    api.managerSolutions.mockReturnValue(of({ ...page, count: 0, results: [] }));
+    component.load();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector("app-state").textContent).toContain(
+      "В программе пока нет заявок",
+    );
+    await TestBed.inject(Router).navigateByUrl("/?submission=submitted");
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector("app-state").textContent).toContain(
+      "Заявки не найдены",
+    );
+    expect(fixture.nativeElement.querySelector("table")).toBeNull();
   });
   it("закрывает просмотр заявки крестиком и сохраняет отдельное действие истории", async () => {
     const { component, fixture, api } = await setup();

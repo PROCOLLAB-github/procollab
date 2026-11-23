@@ -125,6 +125,14 @@
       </button>
     </footer>
   } @else if (!loading()) {
-    <p role="status">{{ emptyText() }}</p>
+    @if (filtersActive()) {
+      <app-state
+        icon="search"
+        title="Эксперты не найдены"
+        description="Попробуйте изменить поиск или фильтры."
+      />
+    } @else {
+      <app-state title="Экспертов пока нет" />
+    }
   }
 </div>

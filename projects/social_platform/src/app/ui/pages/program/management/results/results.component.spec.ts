@@ -68,7 +68,7 @@ describe("Результаты программы", () => {
       ".results__export",
     ) as HTMLButtonElement;
     expect(exportButton.getAttribute("aria-label")).toBe("Выгрузить результаты в Excel");
-    expect(exportButton.querySelector('[icon="download"]')?.getAttribute("appSquare")).toBe("24");
+    expect(exportButton.querySelector('[icon="download"]')?.getAttribute("appSquare")).toBe("18");
     expect(exportButton.disabled).toBe(false);
     exportButton.click();
     expect(component.modal()).toBe("export");

@@ -73,6 +73,19 @@ describe("Управление экспертами", () => {
       "Экспертов на проект: 2",
     );
     expect(fixture.nativeElement.textContent).toContain("Распределение экспертов");
+    component.snapshot.set({ ...snapshot, projects: [] });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector("app-state").textContent).toContain(
+      "Пока нет проектов для распределения",
+    );
+    expect(fixture.nativeElement.querySelector(".experts__table")).toBeNull();
+    expect(fixture.nativeElement.querySelector(".experts__pagination")).toBeNull();
+
+    component.distributionSearch.setValue("несуществующий проект");
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector("app-state").textContent).toContain(
+      "Проекты не найдены",
+    );
   });
   it("обновляет отправку письма без сброса поиска и прекращает проверку после sent", async () => {
     vi.useFakeTimers();

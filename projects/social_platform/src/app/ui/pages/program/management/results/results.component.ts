@@ -27,6 +27,7 @@ import {
   ChoiceDirective,
   FieldDirective,
   IconComponent,
+  StateComponent,
 } from "@uilib";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import { ProgramResults, ResultEntry, ResultsQuery } from "@domain/program/program-results.model";
@@ -46,6 +47,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     TransientNoticeComponent,
     CdkMenuModule,
     IconComponent,
+    StateComponent,
     PluralizePipe,
     ReactiveFormsModule,
     NgTemplateOutlet,

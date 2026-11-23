@@ -269,18 +269,9 @@ small {
   color: var(--grey-for-text);
 }
 
-.results__empty,
 .results__sheet-info {
   display: grid;
   gap: 12px;
-  padding-block: 16px;
-}
-
-.results__empty button {
-  justify-self: start;
-}
-
-.results__sheet-info {
   padding: 16px;
   background: var(--light-gray);
   border-radius: 10px;
