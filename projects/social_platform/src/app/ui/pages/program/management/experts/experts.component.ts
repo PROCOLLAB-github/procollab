@@ -227,6 +227,9 @@ export class ManagementExpertsComponent {
   readonly distributionStatus = this.fb.control("all");
   readonly expertSearch = this.fb.control("");
   private readonly distributionQuery = signal("");
+  readonly distributionHasFilters = computed(
+    () => !!this.distributionQuery().trim() || this.filterCount() > 0,
+  );
   private readonly distributionCaseValue = signal("all");
   private readonly distributionStatusValue = signal("all");
   private readonly expertQuery = signal("");

@@ -19,9 +19,13 @@ jobs:
       - run: npm run format:check
       - name: Check changed program scenarios
         run: npx vitest run --maxWorkers=2 management.component.spec.ts criteria.component.spec.ts experts.component.spec.ts expert-roster.component.spec.ts solution-applications.component.spec.ts results.component.spec.ts certificates.component.spec.ts
-      - run: npm run build:pr
-      - run: npm install --prefix /tmp/program-management-tools --no-audit --no-fund playwright-core
+      - id: build
+        if: "!cancelled()"
+        run: npm run build:pr
+      - if: "!cancelled() && steps.build.outcome == 'success'"
+        run: npm install --prefix /tmp/program-management-tools --no-audit --no-fund playwright-core
       - name: Verify rendered management screens in Chromium
+        if: "!cancelled() && steps.build.outcome == 'success'"
         env:
           PLAYWRIGHT_MODULE: /tmp/program-management-tools/node_modules/playwright-core
           CHROME_PATH: /usr/bin/google-chrome

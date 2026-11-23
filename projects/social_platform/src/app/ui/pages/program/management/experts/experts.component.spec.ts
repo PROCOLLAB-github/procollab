@@ -64,7 +64,7 @@ describe("Управление экспертами", () => {
     await fixture.whenStable();
     expect(component.modal()).toBeNull();
   });
-  it("отделяет состав от распределения и показывает одну строку правила", async () => {
+  it("отделяет состав от распределения и показывает одну строку правила", () => {
     const { fixture, component } = setup();
     expect(fixture.nativeElement.querySelector(".experts__quota")).toBeNull();
     component.switchTab("distribution");
@@ -82,12 +82,10 @@ describe("Управление экспертами", () => {
     expect(fixture.nativeElement.querySelector(".experts__pagination")).toBeNull();
 
     component.distributionSearch.setValue("несуществующий проект");
-    await vi.waitFor(() => {
-      fixture.detectChanges();
-      expect(fixture.nativeElement.querySelector("app-state").textContent).toContain(
-        "Проекты не найдены",
-      );
-    });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector("app-state").textContent).toContain(
+      "Проекты не найдены",
+    );
   });
   it("обновляет отправку письма без сброса поиска и прекращает проверку после sent", async () => {
     vi.useFakeTimers();

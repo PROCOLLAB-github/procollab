@@ -285,7 +285,7 @@
                 На первую страницу
               </button>
             </app-state>
-          } @else if (distributionSearch.value.trim() || filterCount()) {
+          } @else if (distributionHasFilters()) {
             <app-state
               icon="search"
               title="Проекты не найдены"

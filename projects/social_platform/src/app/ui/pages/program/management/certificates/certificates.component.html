@@ -653,6 +653,7 @@
         <p role="status">Загружаем сертификаты…</p>
       } @else if (!journalError()) {
         <app-state
+          [icon]="search() ? 'search' : 'empty-chat'"
           [title]="
             filter() === 'failed'
               ? 'Ошибок отправки не найдено.'
