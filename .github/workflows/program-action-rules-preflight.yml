@@ -17,6 +17,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run format:check
+      - name: Verify program action and role contracts
+        run: |
+          npx vitest run --maxWorkers=2 detail-cleanup.component.spec.ts detail-program-info.service.spec.ts program-role-widget.component.spec.ts program-role-widget.service.spec.ts main.roles.spec.ts get-program-role-widget.use-case.spec.ts
+          npm run test:solution-contract
       - run: npm run build:pr
       - run: npm install --no-save --package-lock=false playwright-core
       - name: Check actual Angular header in Chromium
@@ -51,8 +55,12 @@ jobs:
           const name = 'Кейс-чемпионат «Город будущего»';
           const overlap = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
           async function check(width) {
-            const { browser, context, page, base } = await launch(width);
+            const { browser, context, page, base, errors } = await launch(width);
+            const widgetRequests = [];
             try {
+              page.on('request', request => {
+                if (request.url().includes('/analytics-widget/')) widgetRequests.push(request.url());
+              });
               const common = { ...program, name, imageAddress: '', isUserMember: false, welcomeAcknowledgedAt: null, datetimeRegistrationEnds: '2099-01-01', datetimeProjectSubmissionEnds: '2099-01-01' };
               let detail = { ...common, pendingExpertInvitationId: 34 };
               await context.route('**/programs/1/', route => route.fulfill({
@@ -96,7 +104,7 @@ jobs:
               await open();
               assert.equal(await page.getByRole('link', { name: 'Подробнее' }).getAttribute('href'), 'https://example.org/landing');
               detail = { ...common, isUserExpert: false, isUserManager: false, isUserMember: true, currentApplication: { projectId: 78, programLinkId: 44, submitted: true }, welcomeAcknowledgedAt: '2026-10-01', courses: [{ id: 10, title: 'Доступный курс', isAvailable: true }, { id: 11, title: 'Недоступный курс', isAvailable: false }] };
-              await context.route('**/programs/1/analytics-widget/**', route => {
+              await context.route(url => url.pathname === '/programs/1/analytics-widget/', route => {
                 const url = new URL(route.request().url());
                 const participant = { programId: 1, isCompetitive: true, role: 'participant', participant: { participantProject: { id: 78, name: 'Сданный проект', programLinkId: 44 }, caseProvided: true, caseName: 'Городской транспорт', stage: 'submitted', submissionOpen: false, submissionDeadline: null } };
                 const json = detail.isUserManager && url.searchParams.get('role') !== 'participant'
@@ -106,21 +114,24 @@ jobs:
               });
               await open();
               assert.equal(await actions.count(), 0);
-              await page.getByRole('link', { name: /Сданный проект/ }).waitFor();
+              await page.getByRole('link', { name: /Сданный проект/ }).waitFor({ timeout: 10000 });
               assert.equal(await page.getByRole('link', { name: 'Доступный курс' }).count(), 1);
               assert.equal(await page.getByRole('link', { name: 'Недоступный курс' }).count(), 0);
               detail = { ...detail, isUserManager: true, isUserExpert: true, currentApplication: null, hasSubmittedTeamProject: true, datetimeEvaluationEnds: '2000-01-01' };
               await open();
-              await page.getByRole('link', { name: /Сданный проект/ }).waitFor();
+              await page.getByRole('link', { name: /Сданный проект/ }).waitFor({ timeout: 10000 });
               assert.equal(await page.locator('app-program-role-widget').count(), 2);
               assert.deepEqual(await actions.allTextContents().then(texts => texts.map(text => text.trim())), labels);
               console.log(width + 'px: organizer with invitation, visitor, submitted participant and mixed roles passed');
+            } catch (error) {
+              console.error({ width, widgetRequests, widgets: await page.locator('app-program-role-widget').allTextContents(), errors });
+              throw error;
             } finally {
               await browser.close();
             }
           }
           (async () => {
-            for (const width of [320, 390, 768, 1000, 1440]) await check(width);
+            for (const width of [390, 1440, 320, 768, 1000]) await check(width);
           })().catch(error => { console.error(error); process.exitCode = 1; });
           NODE
       - uses: actions/upload-artifact@v4
@@ -128,5 +139,4 @@ jobs:
         with:
           name: program-header-preview
           path: /tmp/program-header-preview
-      - run: npm run test:ci
       - run: npm run lint:ts

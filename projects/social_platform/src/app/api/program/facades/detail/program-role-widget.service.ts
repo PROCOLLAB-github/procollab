@@ -40,7 +40,7 @@ export class ProgramRoleWidgetService {
     const userId = profile !== this.loggedOutProfile() ? profile?.id : null;
     const role = this.role();
     return userId && role && program?.id === this.routeId()
-      ? `${program.id}:${userId}:${role}`
+      ? `${program.id}:${userId}:${role}:${this.participantOnly()}`
       : "";
   });
   readonly state = computed<AsyncState<ProgramRoleWidget, ProgramWidgetError>>(() => {
