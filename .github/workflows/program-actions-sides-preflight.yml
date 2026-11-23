@@ -1,0 +1,72 @@
+# @format
+
+name: Program actions sides preflight
+
+on:
+  push:
+    branches: [fix/dev-program-actions-sides-20261123]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run build:pr
+      - run: npm install --no-save --package-lock=false playwright-core
+      - name: Check action layout in Chromium
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const sass = require('sass');
+          const { chromium } = require('playwright-core');
+          const opts = { loadPaths: ['projects/social_platform/src'] };
+          const detail = sass.compile('projects/social_platform/src/app/ui/widgets/detail/detail.component.scss', opts).css.replace(/::ng-deep/g, ' ');
+          const button = sass.compile('projects/ui/src/lib/components/primitives/button/button.component.scss', opts).css.replace(/::ng-deep/g, ' ');
+          const css = `${detail}\n${button}\nbody{margin:0;font:12px Arial}.fixture{width:min(868px,calc(100vw - 40px));margin:40px auto}.info__avatar{width:123px;height:123px}.info__cover{background:#ddd}.info__avatar{background:#aaa}.button{box-sizing:border-box;border:1px solid #774be3;background:white}.fixture-heading{display:block}@media(min-width:1000px){.fixture{width:min(868px,calc(100vw - 320px))}.fixture-heading{display:none}}@media(max-width:999px){.info__avatar{width:105px;height:105px}}`;
+          const wrap = text => `<a href="#"><app-button><button class="button button--outline button--medium"><span class="button__content">${text}</span></button></app-button></a>`;
+          const direct = text => `<app-button><button class="button button--outline button--medium"><span class="button__content">${text}</span></button></app-button>`;
+          const scenarios = [
+            { name: 'organizer', classes: 'info__actions--manager info__actions--has-invitation', left: wrap('Принять приглашение') + wrap('оценка проектов'), right: wrap('управление программой'), leftCount: 2, rightCount: 1 },
+            { name: 'participant', classes: '', left: wrap('зарегистрироваться'), right: wrap('узнать подробнее') + direct('перейти в курс'), leftCount: 1, rightCount: 2 },
+          ];
+          const overlap = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+          (async () => {
+            const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
+            for (const width of [320, 375, 768, 1000, 1280]) {
+              for (const s of scenarios) {
+                const page = await browser.newPage({ viewport: { width, height: 900 } });
+                await page.setContent(`<style>${css}</style><main class="fixture"><div class="info"><div class="info__cover info__cover--program"><div class="info__avatar info__avatar--program"></div></div><div class="info__body"><div class="info__page-header fixture-heading">Название программы</div><div class="info__actions info__actions--program ${s.classes}"><div class="info__primary-action">${s.left}</div><div class="info__secondary-actions">${s.right}</div></div><h1 class="info__program-heading">Название программы</h1></div></div></main>`);
+                const result = await page.evaluate(() => {
+                  const rect = e => { const r = e.getBoundingClientRect(); return { left:r.left, right:r.right, top:r.top, bottom:r.bottom, width:r.width, height:r.height }; };
+                  return { viewport:innerWidth, documentWidth:document.documentElement.scrollWidth, avatar:rect(document.querySelector('.info__avatar--program')), left:[...document.querySelectorAll('.info__primary-action button')].map(rect), right:[...document.querySelectorAll('.info__secondary-actions button')].map(rect) };
+                });
+                const all = [...result.left, ...result.right];
+                if (result.documentWidth > width || result.left.length !== s.leftCount || result.right.length !== s.rightCount) throw new Error(`${s.name} ${width}: overflow or missing actions ${JSON.stringify(result)}`);
+                for (let i = 0; i < all.length; i++) {
+                  if (all[i].width <= 0 || overlap(all[i], result.avatar)) throw new Error(`${s.name} ${width}: avatar overlap ${JSON.stringify(result)}`);
+                  for (let j = i + 1; j < all.length; j++) if (overlap(all[i], all[j])) throw new Error(`${s.name} ${width}: button overlap ${JSON.stringify(result)}`);
+                }
+                if (width >= 1000) {
+                  if (result.left.some(r => r.right > result.avatar.left) || result.right.some(r => r.left < result.avatar.right)) throw new Error(`${s.name} ${width}: actions not at logo sides ${JSON.stringify(result)}`);
+                  for (const group of [result.left, result.right]) for (let i = 1; i < group.length; i++) if (group[i].top - group[i - 1].bottom < 7) throw new Error(`${s.name} ${width}: actions have insufficient gap ${JSON.stringify(result)}`);
+                }
+                if ([375,1280].includes(width)) await page.screenshot({ path: `/tmp/program-actions-${s.name}-${width}.png` });
+                console.log(`${s.name} ${width}: OK`);
+                await page.close();
+              }
+            }
+            await browser.close();
+          })().catch(error => { console.error(error); process.exit(1); });
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: program-actions-screenshots
+          path: /tmp/program-actions-*.png

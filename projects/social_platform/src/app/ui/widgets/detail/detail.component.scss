@@ -6,7 +6,8 @@
 
 .info__actions--program {
   > a,
-  > .info__primary-action {
+  > .info__primary-action,
+  > .info__secondary-actions {
     min-width: 0;
   }
 
@@ -27,13 +28,13 @@
     width: 100%;
   }
 
-  > a {
+  > .info__secondary-actions {
     grid-column: 3;
     width: 100%;
   }
 
   .info__primary-action > a,
-  > a,
+  .info__secondary-actions > a,
   app-button {
     display: grid;
     width: 100%;
@@ -74,12 +75,12 @@
     }
 
     .info__primary-action > a,
-    > a {
+    .info__secondary-actions > a {
       align-items: center;
       min-height: 44px;
     }
 
-    > a {
+    .info__secondary-actions > a {
       grid-column: 2;
     }
 
@@ -617,7 +618,9 @@ $detail-bar-mb: 12px;
       > a,
       > app-button,
       > .info__unavailable,
-      > .info__primary-action {
+      > .info__primary-action,
+      .info__secondary-actions > a,
+      .info__secondary-actions > app-button {
         display: block;
         justify-self: stretch;
         width: 100%;
@@ -644,6 +647,10 @@ $detail-bar-mb: 12px;
 
     .info__primary-action {
       order: 0;
+    }
+
+    .info__secondary-actions {
+      display: contents;
     }
 
     .info__materials--full {
@@ -674,7 +681,7 @@ $detail-bar-mb: 12px;
     grid-template-columns: minmax(0, 1fr);
 
     .info__primary-action,
-    > a {
+    .info__secondary-actions > a {
       grid-column: 1 / -1;
     }
 
@@ -691,48 +698,61 @@ $detail-bar-mb: 12px;
   }
 }
 
-// Program actions must clear the centered logo for every combination of roles.
+// Keep program actions on both sides of the centered logo.
 @media screen and (min-width: 1000px) {
   .info__actions.info__actions--program {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 72px 0 20px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 207px minmax(0, 1fr);
+    gap: 0;
+    align-items: start;
+    padding: 24px 0 20px;
 
-    > .info__primary-action {
-      display: contents;
+    > .info__primary-action,
+    > .info__secondary-actions {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      width: 100%;
+      min-width: 0;
     }
 
-    > .info__divider {
+    > .info__primary-action {
+      grid-column: 1;
+    }
+
+    > .info__secondary-actions {
+      grid-column: 3;
+    }
+
+    .info__divider {
       display: none;
     }
 
-    > a,
-    > app-button,
     .info__primary-action > a,
     .info__primary-action > app-button,
-    .info__primary-action > .info__unavailable {
+    .info__primary-action > .info__unavailable,
+    .info__secondary-actions > a,
+    .info__secondary-actions > app-button {
       display: block;
-      width: auto;
+      width: 100%;
       min-width: 0;
       max-width: 100%;
     }
 
     app-button {
       display: block;
-      width: auto;
+      width: 100%;
       height: auto;
       min-height: 32px;
     }
 
     ::ng-deep app-button > button {
-      width: auto;
-      min-width: 157px;
+      width: 100%;
+      min-width: 0;
       max-width: 100%;
       height: auto;
       min-height: 32px;
+      max-height: none;
       padding: 5px 16px;
       line-height: 20px;
       white-space: normal;
