@@ -690,3 +690,67 @@ $detail-bar-mb: 12px;
     }
   }
 }
+
+// Program actions must clear the centered logo for every combination of roles.
+@media screen and (min-width: 1000px) {
+  .info__actions.info__actions--program {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 72px 0 20px;
+
+    > .info__primary-action {
+      display: contents;
+    }
+
+    > .info__divider {
+      display: none;
+    }
+
+    > a,
+    > app-button,
+    .info__primary-action > a,
+    .info__primary-action > app-button,
+    .info__primary-action > .info__unavailable {
+      display: block;
+      width: auto;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    app-button {
+      display: block;
+      width: auto;
+      height: auto;
+      min-height: 32px;
+    }
+
+    ::ng-deep app-button > button {
+      width: auto;
+      min-width: 157px;
+      max-width: 100%;
+      height: auto;
+      min-height: 32px;
+      padding: 5px 16px;
+      line-height: 20px;
+      white-space: normal;
+    }
+
+    ::ng-deep .button__content {
+      white-space: normal;
+    }
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .info__actions.info__actions--program {
+    align-items: start;
+
+    .info__primary-action {
+      display: grid;
+      gap: 8px;
+    }
+  }
+}
