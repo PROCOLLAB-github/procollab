@@ -104,8 +104,11 @@ export class ProgramHttpAdapter {
     return selection.scope === "selected" ? params.set("case_name", selection.caseName) : params;
   }
 
-  getRoleWidget(programId: number): Observable<ProgramRoleWidget> {
-    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/analytics-widget/`);
+  getRoleWidget(programId: number, role?: "participant"): Observable<ProgramRoleWidget> {
+    const path = `${this.PROGRAMS_URL}/${programId}/analytics-widget/`;
+    return role
+      ? this.apiService.get(path, new HttpParams().set("role", role))
+      : this.apiService.get(path);
   }
   private readonly PROGRAMS_URL = "/programs";
   private readonly AUTH_PUBLIC_USERS_URL = "/auth/public-users";

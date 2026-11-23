@@ -28,11 +28,17 @@ export class ProgramRoleWidgetService {
   private readonly loggedOutProfile = signal<User | null | undefined>(undefined);
   private activeRequest?: Subscription;
   private version = 0;
+  readonly participantOnly = signal(false);
+  private readonly role = computed(() => {
+    const program = this.programUI.program();
+    if (this.participantOnly()) return program?.isUserMember ? "participant" : null;
+    return programWidgetRole(program);
+  });
   private readonly key = computed(() => {
     const program = this.programUI.program();
     const profile = this.auth.profile();
     const userId = profile !== this.loggedOutProfile() ? profile?.id : null;
-    const role = programWidgetRole(program);
+    const role = this.role();
     return userId && role && program?.id === this.routeId()
       ? `${program.id}:${userId}:${role}`
       : "";
@@ -42,7 +48,7 @@ export class ProgramRoleWidgetService {
       return failure("unauthorized");
     const program = this.programUI.program();
     if (program?.preview && program.previewWidget) return success(program.previewWidget);
-    if (program && !programWidgetRole(program)) return failure("forbidden");
+    if (program && !this.role()) return failure("forbidden");
     return this.key() && this.loadedKey() === this.key()
       ? this.rawState()
       : loading<ProgramRoleWidget>();
@@ -85,11 +91,16 @@ export class ProgramRoleWidgetService {
     if (!key) return;
     if (this.programUI.program()?.preview) return;
     const programId = this.programId();
-    this.activeRequest = this.request.execute(programId).subscribe(result => {
+    const participantOnly = this.participantOnly();
+    const request = participantOnly
+      ? this.request.execute(programId, "participant")
+      : this.request.execute(programId);
+    this.activeRequest = request.subscribe(result => {
       if (version !== this.version || key !== this.key()) return;
       this.rawState.set(
         result.ok
-          ? result.value.programId === programId
+          ? result.value.programId === programId &&
+            (!participantOnly || result.value.role === "participant")
             ? success(result.value)
             : failure("not_found")
           : failure(result.error),

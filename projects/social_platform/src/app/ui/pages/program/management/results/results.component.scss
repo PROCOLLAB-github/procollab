@@ -241,8 +241,14 @@ small {
 }
 
 .results__formula.ui-button.ui-button {
+  justify-self: start;
   justify-content: flex-start;
   padding-inline: 0;
+
+  &:hover:not(:disabled),
+  &:active:not(:disabled) {
+    background: transparent;
+  }
 }
 
 .results--unscored .results__columns,

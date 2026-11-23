@@ -54,8 +54,8 @@ export class DetailProgramInfoService {
       : this.application()?.submitted
         ? "открыть сданный проект"
         : this.application()
-          ? "открыть черновик"
-          : "подать проект",
+          ? "Продолжить черновик"
+          : "Подать проект",
   );
 
   addNewProject(programId: number): void {
@@ -97,9 +97,6 @@ export class DetailProgramInfoService {
   private isApplicationActionDisabled(program: Program | undefined): boolean {
     if (
       !program?.isUserMember ||
-      program.isUserManager ||
-      program.isUserExpert ||
-      program.pendingExpertInvitationId ||
       program.preview ||
       program.solutionActionAvailable === false ||
       this.applicationPending()

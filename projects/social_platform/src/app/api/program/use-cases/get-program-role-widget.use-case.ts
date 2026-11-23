@@ -11,8 +11,14 @@ import { catchError, map, Observable, of } from "rxjs";
 @Injectable({ providedIn: "root" })
 export class GetProgramRoleWidgetUseCase {
   private readonly repository = inject(ProgramRepositoryPort);
-  execute(programId: number): Observable<Result<ProgramRoleWidget, ProgramWidgetError>> {
-    return this.repository.getRoleWidget(programId).pipe(
+  execute(
+    programId: number,
+    role?: "participant",
+  ): Observable<Result<ProgramRoleWidget, ProgramWidgetError>> {
+    const request = role
+      ? this.repository.getRoleWidget(programId, role)
+      : this.repository.getRoleWidget(programId);
+    return request.pipe(
       map(data => ok(data)),
       catchError((error: unknown) => {
         const status = error instanceof HttpErrorResponse ? error.status : 0;

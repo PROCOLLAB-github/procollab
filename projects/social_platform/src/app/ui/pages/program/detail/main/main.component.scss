@@ -31,6 +31,34 @@
     width: 157px;
   }
 
+  &__aside:has(> app-program-role-widget) {
+    display: grid;
+    gap: 12px;
+  }
+
+  &__resources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+
+    &:not(:empty) {
+      margin-top: 16px;
+    }
+  }
+
+  &__resource-link {
+    color: var(--accent-text);
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+  }
+
+  &__section > &__resource-link {
+    display: block;
+    margin-top: 8px;
+  }
+
   &__section {
     padding: 24px;
     margin-bottom: 14px;

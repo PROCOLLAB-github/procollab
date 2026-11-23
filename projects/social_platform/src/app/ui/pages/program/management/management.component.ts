@@ -367,6 +367,7 @@ export class ProgramManagementComponent implements OnInit {
     imageFraming: this.fb.control<ProgramImageFraming>(programImageFraming()),
     advertisementImageAddress: [""],
     presentationAddress: [""],
+    landingUrl: [""],
   });
   readonly datesForm = this.fb.group({
     datetimeStarted: ["", Validators.required],
@@ -1241,6 +1242,7 @@ export class ProgramManagementComponent implements OnInit {
       imageFraming: programImageFraming(p.imageFraming),
       advertisementImageAddress: p.advertisementImageAddress ?? "",
       presentationAddress: p.presentationAddress ?? "",
+      landingUrl: p.landingUrl ?? "",
     });
     this.datesForm.reset({
       datetimeStarted: toMoscowInput(p.datetimeStarted),

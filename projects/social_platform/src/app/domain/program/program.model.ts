@@ -22,6 +22,7 @@ export class Program {
   mobileCoverImageAddress?: string | null;
   imageFraming?: ProgramImageFraming;
   presentationAddress!: string;
+  landingUrl?: string | null;
   advertisementImageAddress!: string;
   name!: string;
   description!: string;

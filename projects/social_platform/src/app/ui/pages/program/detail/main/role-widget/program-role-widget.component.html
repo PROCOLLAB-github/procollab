@@ -50,7 +50,13 @@
             }
           </div>
           <div class="widget__stage-state">
-            @if (participant.stage === "not_submitted") {
+            @if (
+              participant.stage === "submitted" ||
+              participant.stage === "review" ||
+              participant.stage === "evaluated"
+            ) {
+              {{ data.storageMode === "solution" ? "Решение сдано" : "Проект сдан" }}
+            } @else if (participant.stage === "not_submitted") {
               Не отправлен
             }
             @if (participant.stage === "not_applicable") {

@@ -97,23 +97,16 @@ describe("Detail cleanup actions", () => {
       .compileComponents();
   });
 
-  it("opens the submitted copy from the participant button after the deadline", () => {
+  it("keeps a submitted project out of the program header", () => {
     info.update(program => ({
       ...program,
       id: 12,
       datetimeProjectSubmissionEnds: "2000-01-01T00:00:00Z",
       currentApplication: { projectId: 10, programLinkId: 44, submitted: true },
     }));
-    const navigate = vi.spyOn(TestBed.inject(Router), "navigate").mockResolvedValue(true);
     const fixture = TestBed.createComponent(DeatilComponent);
     fixture.detectChanges();
-    const button = fixture.nativeElement.querySelector(".bar__add-project") as HTMLButtonElement;
-    expect(button.textContent).toContain("открыть сданный проект");
-    expect(button.disabled).toBe(false);
-    button.click();
-    expect(navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/10"], {
-      queryParams: { programLinkId: 44 },
-    });
+    expect(fixture.nativeElement.querySelector(".info__program-action")).toBeNull();
   });
   it.each(["", "https://example.test/cover.png"])(
     "shows exactly one program heading on desktop and mobile with cover %s",
@@ -154,7 +147,7 @@ describe("Detail cleanup actions", () => {
     const fixture = TestBed.createComponent(DeatilComponent);
     fixture.detectChanges();
     const actions = fixture.nativeElement.querySelector(".info__actions");
-    expect(actions.textContent).toContain("управление программой");
+    expect(actions.textContent).toContain("Управление программой");
     expect(actions.querySelector('a[href*="published-solutions"]')).toBeNull();
   });
   it("opens the overview for a published program and launch preparation for a draft", () => {
@@ -165,86 +158,60 @@ describe("Detail cleanup actions", () => {
     const page: HTMLElement = fixture.nativeElement;
     const managementLink = () =>
       [...page.querySelectorAll<HTMLAnchorElement>(".info__actions a")].find(a =>
-        a.textContent?.includes("управление программой"),
+        a.textContent?.includes("Управление программой"),
       );
     expect(managementLink()?.getAttribute("href")).toBe("/office/program/12/management/analytics");
     info.set({ ...Program.default(), id: 12, draft: true });
     fixture.detectChanges();
     expect(managementLink()?.getAttribute("href")).toBe("/office/program/12/launch");
   });
-  it("показывает организатору управление, оценку и отдельное приглашение эксперта", () => {
-    manager.set(true);
-    expert.set(true);
-    info.set({ ...Program.default(), id: 12, pendingExpertInvitationId: 34 });
-    const fixture = TestBed.createComponent(DeatilComponent);
-    fixture.detectChanges();
-    const actions: HTMLElement = fixture.nativeElement.querySelector(".info__actions");
-    expect(
-      actions.querySelector('a[href="/office/evaluation?invitation=34"]')?.textContent,
-    ).toContain("Принять приглашение");
-    expect(actions.querySelector('a[href="/office/evaluation?program=12"]')?.textContent).toContain(
-      "оценка проектов",
-    );
-    expect(actions.textContent).toContain("управление программой");
-  });
-  it("participant has one public action replacing the disabled more placeholder", () => {
+  it.each([320, 1440])(
+    "keeps the expert invitation outside the two organizer actions at %ipx",
+    width => {
+      manager.set(true);
+      expert.set(true);
+      info.set({ ...Program.default(), id: 12, pendingExpertInvitationId: 34 });
+      const fixture = TestBed.createComponent(DeatilComponent);
+      Object.assign(fixture.componentInstance, { appWidth: width });
+      fixture.detectChanges();
+      const page: HTMLElement = fixture.nativeElement;
+      const actions = page.querySelectorAll(".info__program-action");
+      expect([...actions].map(action => action.textContent?.trim())).toEqual([
+        "Оценка проектов",
+        "Управление программой",
+      ]);
+      expect(page.querySelector(".info__program-invitation-link")?.getAttribute("href")).toBe(
+        "/office/evaluation?invitation=34",
+      );
+      expect(page.querySelector(".info__actions .info__program-invitation-link")).toBeNull();
+    },
+  );
+
+  it.each([320, 1440])("only enables Подробнее for a configured landing page at %ipx", width => {
     member.set(false);
     info.set({
       ...Program.default(),
-      solutionStorageMode: "solution",
       registrationLink: "https://example.org/register",
+      presentationAddress: "https://example.org/program.pdf",
+      courses: [{ id: 10, title: "Курс", isAvailable: true }],
     });
     const fixture = TestBed.createComponent(DeatilComponent);
+    Object.assign(fixture.componentInstance, { appWidth: width });
     fixture.detectChanges();
-    const actions = fixture.nativeElement.querySelector(".info__actions");
-    expect(actions.textContent).toContain("зарегистрироваться");
-    expect(actions.textContent).not.toContain("узнать подробнее");
-    expect(actions.querySelectorAll('a[href*="published-solutions"]')).toHaveLength(1);
-  });
-
-  it("links to the program document only when an address is provided", () => {
-    const fixture = TestBed.createComponent(DeatilComponent);
     const page: HTMLElement = fixture.nativeElement;
-    const documentLink = () =>
-      [...page.querySelectorAll<HTMLAnchorElement>(".info__actions a")].find(link =>
-        link.textContent?.includes("положение"),
-      );
+    expect(page.querySelector(".info__actions button")?.disabled).toBe(true);
+    expect(page.querySelector(".info__actions button")?.textContent).toContain("Подробнее");
+    expect(
+      [...page.querySelectorAll(".info__program-action")].map(action => action.textContent?.trim()),
+    ).toEqual(["Зарегистрироваться", "Подробнее"]);
 
-    for (const presentationAddress of [null, "", "  "]) {
-      info.update(program => ({ ...program, presentationAddress }));
-      fixture.detectChanges();
-      expect(documentLink()).toBeUndefined();
-    }
-
-    const presentationAddress = "https://example.org/program.pdf";
-    info.update(program => ({ ...program, presentationAddress }));
+    info.update(program => ({ ...program, landingUrl: "https://example.org/event" }));
     fixture.detectChanges();
-    expect(documentLink()?.getAttribute("href")).toBe(presentationAddress);
-  });
-
-  it("missing registration settings show an explained disabled action", () => {
-    member.set(false);
-    const fixture = TestBed.createComponent(DeatilComponent);
-    fixture.detectChanges();
-    const control = fixture.nativeElement.querySelector(
-      '[aria-describedby="registration-unavailable"]',
+    expect(page.querySelector('a[href="https://example.org/event"]')?.textContent).toContain(
+      "Подробнее",
     );
-    expect(control.querySelector("button").disabled).toBe(true);
-    expect(control.textContent).toContain("Организатор еще не открыл регистрацию.");
+    expect(page.querySelector(".info__actions button")).toBeNull();
   });
-  it("expert can open published legacy projects without enabling private participants", () => {
-    expert.set(true);
-    info.set({ ...Program.default(), publishedProjectsAvailable: true });
-    const fixture = TestBed.createComponent(DeatilComponent);
-    fixture.detectChanges();
-    const links = [...fixture.nativeElement.querySelectorAll("a")] as HTMLAnchorElement[];
-    const projects = links.find(a => a.textContent?.includes("проекты-участники"))!;
-    expect(projects.querySelector("button")!.disabled).toBe(false);
-    expect(projects.getAttribute("href")).toContain("/projects");
-    const participants = links.find(a => a.textContent?.trim() === "участники")!;
-    expect(participants.querySelector("button")!.disabled).toBe(true);
-  });
-
   it.each([7, 8])("shares the viewed profile using the existing copy-link flow (id=%s)", id => {
     type.set("profile");
     info.set({ id, firstName: "Имя", lastName: "Фамилия", skills: [] });
@@ -277,7 +244,9 @@ describe("Detail cleanup actions", () => {
     fixture.detectChanges();
     const applicationService = fixture.debugElement.injector.get(DetailProgramInfoService);
     const create = vi.spyOn(applicationService, "addNewProject").mockImplementation(() => {});
-    const button = fixture.nativeElement.querySelector(".bar__add-project") as HTMLButtonElement;
+    const button = fixture.nativeElement.querySelector(
+      "button.info__program-action",
+    ) as HTMLButtonElement;
     expect(button.disabled).toBe(false);
     button.click();
     expect(create).toHaveBeenCalledExactlyOnceWith(1);

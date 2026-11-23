@@ -90,8 +90,8 @@ export class ProgramRepository implements ProgramRepositoryPort {
     return this.programAdapter.exportCaseProjects(programId, selection, filters);
   }
 
-  getRoleWidget(programId: number): Observable<ProgramRoleWidget> {
-    return this.programAdapter.getRoleWidget(programId);
+  getRoleWidget(programId: number, role?: "participant"): Observable<ProgramRoleWidget> {
+    return this.programAdapter.getRoleWidget(programId, role);
   }
   private readonly programAdapter = inject(ProgramHttpAdapter);
   private readonly entityCache = new EntityCache<Program>(5 * 60 * 1000);

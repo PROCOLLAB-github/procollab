@@ -5,7 +5,6 @@ import {
   computed,
   DestroyRef,
   ElementRef,
-  HostListener,
   inject,
   OnDestroy,
   OnInit,
@@ -85,6 +84,12 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   protected readonly readFullDescription = this.expandService.readFullDescription;
 
   protected readonly program = this.programDetailMainUIInfoService.program;
+  protected readonly availableCourses = computed(() => {
+    const program = this.program();
+    return program?.isUserMember
+      ? (program.courses ?? []).filter(course => course.isAvailable)
+      : [];
+  });
   protected readonly news = this.newsInfoService.news;
 
   protected readonly newsPending = signal(false);
@@ -110,13 +115,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   protected readonly contactLinks = this.programDetailMainUIInfoService.contactLinks;
   protected readonly materialLinks = this.programDetailMainUIInfoService.materialLinks;
-
-  protected appWidth = window.innerWidth;
-
-  @HostListener("window:resize")
-  onResize() {
-    this.appWidth = window.innerWidth;
-  }
 
   ngOnInit(): void {
     this.programDetailMainService.initializationProgramDetailMain(this.descEl());

@@ -1,0 +1,116 @@
+# @format
+
+name: Program action rules preflight
+
+on:
+  push:
+    branches: [fix/dev-program-action-rules-20261123]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run build:pr
+      - run: npm install --no-save --package-lock=false playwright-core
+      - name: Check actual Angular header in Chromium
+        env:
+          PLAYWRIGHT_MODULE: playwright-core
+          CHROME_PATH: /usr/bin/google-chrome
+        run: |
+          python - <<'PY' &
+          import os
+          from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+          os.chdir("dist/social_platform")
+
+          class App(SimpleHTTPRequestHandler):
+              def do_GET(self):
+                  if not os.path.isfile(self.translate_path(self.path)):
+                      self.path = "/index.html"
+                  super().do_GET()
+
+          ThreadingHTTPServer(("127.0.0.1", 4360), App).serve_forever()
+          PY
+          for attempt in {1..30}; do
+            curl --silent --fail http://127.0.0.1:4360/ -o /dev/null && break
+            sleep 1
+          done
+          mkdir -p /tmp/program-header-preview
+          node <<'NODE'
+          const assert = require('node:assert/strict');
+          const { launch } = require('./docs/responsive/browser-harness.cjs');
+          const { program } = require('./docs/responsive/fixtures.cjs');
+          const labels = ['Оценка проектов', 'Управление программой'];
+          const name = 'Кейс-чемпионат «Город будущего»';
+          const overlap = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+          async function check(width) {
+            const { browser, context, page, base } = await launch(width);
+            try {
+              const common = { ...program, name, isUserMember: false, welcomeAcknowledgedAt: null, datetimeRegistrationEnds: '2099-01-01', datetimeProjectSubmissionEnds: '2099-01-01' };
+              let detail = { ...common, pendingExpertInvitationId: 34 };
+              await context.route('**/programs/1/', route => route.fulfill({
+                json: detail, headers: { 'Access-Control-Allow-Origin': '*' }
+              }));
+              const open = async () => {
+                await page.goto(base + '/office/program/1');
+                await page.locator('.info__avatar--program').waitFor();
+              };
+              await open();
+              const actions = page.locator('.info__actions--program > .info__program-action');
+              await actions.first().waitFor();
+              assert.deepEqual(await actions.allTextContents().then(texts => texts.map(text => text.trim())), labels);
+              const invite = page.getByRole('link', { name: 'Посмотреть приглашение' });
+              assert.match(await invite.getAttribute('href'), /evaluation\?invitation=34$/);
+              const avatar = await page.locator('.info__avatar--program').boundingBox();
+              const left = await actions.nth(0).boundingBox();
+              const right = await actions.nth(1).boundingBox();
+              assert.ok(Math.abs(left.width - right.width) < 1 && Math.abs(left.y - right.y) < 1, 'Actions must be symmetrical and in one row');
+              assert.ok(!overlap(left, avatar) && !overlap(right, avatar), 'Action must not overlap avatar');
+              if (width >= 1000) assert.ok(left.x + left.width < avatar.x && right.x > avatar.x + avatar.width, 'Desktop actions should flank avatar');
+              for (const box of [left, right, await invite.boundingBox()]) {
+                assert.ok(box.x >= 0 && box.x + box.width <= width + 1, 'An action exceeds the viewport');
+              }
+              if ([390, 1440].includes(width)) {
+                await page.evaluate(() => document.fonts.ready);
+                await page.locator('.info.detail__info').screenshot({ path: '/tmp/program-header-preview/invitation-' + width + '.png' });
+              }
+              detail = { ...common, isUserExpert: false, isUserManager: false, registrationLink: 'https://example.org/register', landingUrl: '', courses: [{ id: 10, title: 'Курс', isAvailable: true }] };
+              await open();
+              assert.equal(await page.getByRole('button', { name: 'Подробнее' }).isDisabled(), true);
+              assert.equal(await page.getByText('Курсы программы', { exact: true }).count(), 0);
+              detail = { ...detail, landingUrl: 'https://example.org/landing' };
+              await open();
+              assert.equal(await page.getByRole('link', { name: 'Подробнее' }).getAttribute('href'), 'https://example.org/landing');
+              detail = { ...common, isUserExpert: false, isUserManager: false, isUserMember: true, currentApplication: { projectId: 78, programLinkId: 44, submitted: true }, welcomeAcknowledgedAt: '2026-10-01', courses: [{ id: 10, title: 'Доступный курс', isAvailable: true }, { id: 11, title: 'Недоступный курс', isAvailable: false }] };
+              await context.route('**/programs/1/analytics-widget/**', route => route.fulfill({
+                json: { programId: 1, isCompetitive: true, role: 'participant', participant: { participantProject: { id: 78, name: 'Сданный проект', programLinkId: 44 }, caseProvided: true, caseName: 'Городской транспорт', stage: 'submitted', submissionOpen: false, submissionDeadline: null } },
+                headers: { 'Access-Control-Allow-Origin': '*' }
+              }));
+              await open();
+              assert.equal(await actions.count(), 0);
+              await page.getByRole('link', { name: /Сданный проект/ }).waitFor();
+              assert.equal(await page.getByRole('link', { name: 'Доступный курс' }).count(), 1);
+              assert.equal(await page.getByRole('link', { name: 'Недоступный курс' }).count(), 0);
+              console.log(width + 'px: organizer with invitation, visitor, submitted participant passed');
+            } finally {
+              await browser.close();
+            }
+          }
+          (async () => {
+            for (const width of [320, 390, 768, 1000, 1440]) await check(width);
+          })().catch(error => { console.error(error); process.exitCode = 1; });
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: program-header-preview
+          path: /tmp/program-header-preview
+      - run: npm run test:ci
+      - run: npm run lint:ts
