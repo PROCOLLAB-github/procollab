@@ -12,6 +12,7 @@ import { GetProgramFiltersUseCase } from "@api/program/use-cases/get-program-fil
 import { ExportFileService } from "@api/export-file/export-file.service";
 import { SolutionCabinetApplications } from "@domain/solution/solution-contract.model";
 import { fail, ok } from "@domain/shared/result.type";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { EvaluationProgramsComponent } from "./evaluation-programs.component";
 
 type CabinetData = EvaluationPrograms & { applications: SolutionCabinetApplications };
@@ -83,6 +84,7 @@ function setup(
     ),
   };
   const auth = { fetchProfile: vi.fn(() => of({ id: 10 })) };
+  const exports = { exportProgramRates: vi.fn<ExportFileService["exportProgramRates"]>() };
   TestBed.configureTestingModule({
     imports: [EvaluationProgramsComponent],
     providers: [
@@ -94,7 +96,7 @@ function setup(
       { provide: EvaluationUseCase, useValue: api },
       { provide: GetCabinetApplicationsUseCase, useValue: applications },
       { provide: GetProgramFiltersUseCase, useValue: { execute: () => of(ok([])) } },
-      { provide: ExportFileService, useValue: {} },
+      { provide: ExportFileService, useValue: exports },
       { provide: ProfileInfoService, useValue: profiles },
       { provide: AuthInfoService, useValue: auth },
     ],
@@ -112,6 +114,7 @@ function setup(
     profile,
     profiles,
     auth,
+    exports,
     navigate,
   };
 }
@@ -346,18 +349,21 @@ describe("Кабинет эксперта: только реальные наз�
   });
   it("приглашение открывается по ссылке, отправляется однократно и обновляет профиль", () => {
     const { c, api, auth, profiles, fixture } = setup({ invitation: "19" });
+    const notification = vi.spyOn(TestBed.inject(SnackbarService), "success");
     expect(c.selected()?.invitationId).toBe(19);
     const request = new Subject<{ accepted: boolean; programId: number }>();
     api.acceptOwn.mockReturnValue(request);
     c.accept();
     c.accept();
     expect(api.acceptOwn).toHaveBeenCalledTimes(1);
+    expect(notification).not.toHaveBeenCalled();
     c.close();
     expect(c.selected()).not.toBeNull();
     request.next({ accepted: true, programId: 8 });
     request.complete();
     fixture.detectChanges();
     expect(c.selected()).toBeNull();
+    expect(notification).toHaveBeenCalledExactlyOnceWith("Приглашение принято");
     expect(auth.fetchProfile).toHaveBeenCalledOnce();
     expect(profiles.applyProfileUpdated).toHaveBeenCalledWith({ id: 10 });
   });
@@ -370,6 +376,30 @@ describe("Кабинет эксперта: только реальные наз�
     expect(c.error()).toBeTruthy();
     expect(c.busy()).toBe(false);
     expect(c.selected()).not.toBeNull();
+  });
+  it("показывает ошибку выгрузки в Snackbar и разрешает повторить запрос", () => {
+    const data = payload();
+    data.results[0].canExportRates = true;
+    const { c, exports } = setup({ program: "7" }, of(data), data);
+    const notification = vi.spyOn(TestBed.inject(SnackbarService), "error");
+    const request = new Subject<Blob>();
+    exports.exportProgramRates.mockReturnValue(request);
+
+    c.exportRates();
+    c.exportRates();
+    expect(exports.exportProgramRates).toHaveBeenCalledExactlyOnceWith(7);
+    expect(notification).not.toHaveBeenCalled();
+
+    request.error(new Error("Export failed"));
+    expect(notification).toHaveBeenCalledExactlyOnceWith(
+      "Не удалось выгрузить оценки. Попробуйте еще раз.",
+    );
+    expect(c.exporting()).toBe(false);
+
+    exports.exportProgramRates.mockReturnValue(new Subject<Blob>());
+    c.exportRates();
+    expect(exports.exportProgramRates).toHaveBeenCalledTimes(2);
+    expect(notification).toHaveBeenCalledTimes(1);
   });
   it("смена вкладки и программы сбрасывает страницу, сохраняя остальные параметры", () => {
     const { c, navigate } = setup({ page: "3", q: "Альфа" });
