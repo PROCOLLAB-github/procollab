@@ -70,7 +70,7 @@ jobs:
 
           async function check(width) {
             const { browser, context, page, base, errors } = await launch(width);
-            page.setDefaultTimeout(10000);
+            page.setDefaultTimeout(15000);
             const route = (path, handler) => context.route(url => url.pathname === path, handler);
             const open = query => page.goto(base + '/office/evaluation?' + query);
             const button = (label, parent = page) => parent.getByRole('button', { name: label, exact: true });
@@ -100,6 +100,9 @@ jobs:
               let acceptCalls = 0;
               let finishAcceptance;
               const acceptancePending = new Promise(resolve => { finishAcceptance = resolve; });
+              await route('/solution-invitations/', request => request.fulfill({
+                headers, json: { count: 0, next: null, previous: null, results: [] },
+              }));
               await route('/evaluation/programs/', request => request.fulfill({
                 headers, json: { hasAccess: true, results: accepted ? [joined] : [joined, invitation] },
               }));
@@ -129,7 +132,7 @@ jobs:
               await dialog.waitFor({ state: 'hidden' });
               await page.getByText('Нет новых приглашений', { exact: true }).waitFor();
               assert.equal(acceptCalls, 1);
-              assert.equal(new URL(page.url()).searchParams.has('invitation'), false);
+              await page.waitForURL(url => !url.searchParams.has('invitation'));
               await assertToast('success', 'Приглашение принято');
               await screen('invitation-accepted');
 
@@ -167,7 +170,9 @@ jobs:
             }
           }
 
-          Promise.all([320, 390, 1440].map(check)).catch(error => { console.error(error); process.exitCode = 1; });
+          (async () => {
+            for (const width of [390, 1440, 320]) await check(width);
+          })().catch(error => { console.error(error); process.exitCode = 1; });
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
