@@ -36,9 +36,6 @@
     @if (exporting()) {
       <p class="text-body-10" role="status">Подготавливаем Excel…</p>
     }
-    @if (exportError()) {
-      <p appAlert="error" role="alert">{{ exportError() }}</p>
-    }
   </header>
   @if (pending()) {
     <section class="analytics__loading" aria-live="polite" aria-busy="true">
@@ -499,9 +496,6 @@
         <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
       </button>
     </header>
-    @if (message()) {
-      <p role="status">{{ message() }}</p>
-    }
     @if (actionError()) {
       <p appAlert="error" role="alert">{{ actionError() }}</p>
     }

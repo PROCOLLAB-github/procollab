@@ -4,6 +4,7 @@ import { provideRouter } from "@angular/router";
 import { of, Subject, throwError } from "rxjs";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import { ProgramResults, ResultProject } from "@domain/program/program-results.model";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ManagementResultsComponent } from "./results.component";
 
 const project = (
@@ -214,10 +215,13 @@ describe("Результаты программы", () => {
   });
   it("показывает ошибку выгрузки и разрешает повторить", () => {
     const { component, api } = setup();
+    const notification = vi.spyOn(TestBed.inject(SnackbarService), "error");
     api.exportResults.mockReturnValue(throwError(() => new Error("offline")));
     component.openModal("export");
     component.download();
-    expect(component.exportError()).toBe(true);
+    expect(notification).toHaveBeenCalledExactlyOnceWith(
+      "Не удалось подготовить файл. Попробуйте еще раз.",
+    );
     expect(component.exporting()).toBe(false);
     expect(component.modal()).toBe("export");
   });

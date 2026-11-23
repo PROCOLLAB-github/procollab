@@ -19,6 +19,7 @@ import {
   ManagementTeam,
   ManagementEvaluation,
 } from "@domain/program/program-management.model";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ProgramManagementComponent } from "./management.component";
 import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
@@ -478,6 +479,7 @@ describe("Списки управления программой в DOM", () => 
     "ошибка %s сохраняет опубликованный статус и разрешает повтор",
     async status => {
       const { component, state } = await setup("settings", "?tab=basic");
+      const notifyError = vi.spyOn(TestBed.inject(SnackbarService), "error");
       state.api.returnToDraft.mockReturnValue(
         throwError(
           () =>
@@ -491,7 +493,15 @@ describe("Списки управления программой в DOM", () => 
       component.resolveConfirmation(true);
       await action;
       expect(state.program().draft).toBeFalsy();
-      expect(component.formError()).toBeTruthy();
+      if (status === 409) {
+        expect(component.formError()).toBe("Программа изменена другим организатором");
+        expect(notifyError).not.toHaveBeenCalled();
+      } else {
+        expect(component.formError()).toBeNull();
+        expect(notifyError).toHaveBeenCalledExactlyOnceWith(
+          "Не удалось выполнить запрос. Проверьте соединение и повторите попытку.",
+        );
+      }
       expect(component.returningToDraft()).toBe(false);
       expect(component.basicForm.enabled).toBe(true);
       expect(component.basicForm.controls.name.value).toBe(program.name);
@@ -530,6 +540,7 @@ describe("Списки управления программой в DOM", () => 
   });
   it("после открепления обновляет список и очищает выбор", async () => {
     const { component, state } = await setup("projects");
+    const success = vi.spyOn(TestBed.inject(SnackbarService), "success");
     component.selectedRows.set(new Set([1]));
     component.projectActionCompleted({
       programId: 1,
@@ -540,7 +551,7 @@ describe("Списки управления программой в DOM", () => 
     expect(component.selectedRows().size).toBe(0);
     expect(component.projectActionRequest()).toBeNull();
     expect(state.retry).toHaveBeenCalledOnce();
-    expect(component.tableMessage()).toBe("Проект откреплен от программы.");
+    expect(success).toHaveBeenCalledExactlyOnceWith("Проект откреплен от программы.");
   });
   it.each([
     "?case_scope=selected&case_name=" + encodeURIComponent("Кейс №1") + "&offset=40",
@@ -1200,12 +1211,14 @@ describe("Списки управления программой в DOM", () => 
 
   it("ошибка выгрузки проектов понятна и позволяет повторить запрос", async () => {
     const { component, state, harness, element } = await setup("projects");
+    const notifyError = vi.spyOn(TestBed.inject(SnackbarService), "error");
     state.api.exportProjects.mockReturnValueOnce(throwError(() => new Error("network")));
     component.exportProjects();
     harness.detectChanges();
-    expect(element().querySelector('[role="alert"]')?.textContent).toContain(
-      "Не удалось выгрузить проекты",
+    expect(notifyError).toHaveBeenCalledExactlyOnceWith(
+      "Не удалось выгрузить проекты. Повторите попытку.",
     );
+    expect(element().textContent).not.toContain("Не удалось выгрузить проекты");
     const button = element().querySelector<HTMLButtonElement>(
       '[aria-label="Выгрузить проекты в Excel"]',
     )!;

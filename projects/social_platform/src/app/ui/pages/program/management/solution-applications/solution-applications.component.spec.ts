@@ -1,7 +1,9 @@
 /** @format */
 import { TestBed } from "@angular/core/testing";
 import { provideRouter, Router } from "@angular/router";
-import { of, Subject } from "rxjs";
+import { of, Subject, throwError } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { SolutionRepositoryPort } from "@domain/solution/ports/solution.repository.port";
 import { ProgramManagement } from "@domain/program/program-management.model";
 import {
@@ -95,6 +97,21 @@ describe("Таблица заявок решения", () => {
     );
     expect(fixture.nativeElement.querySelector('td[data-label="Презентация"]')).toBeNull();
   });
+  it("после ошибки экспорта список заявок остается доступен", async () => {
+    const { api, component, fixture } = await setup();
+    const notifyError = vi.spyOn(TestBed.inject(SnackbarService), "error");
+    api.exportAnalytics.mockReturnValueOnce(
+      throwError(() => new HttpErrorResponse({ status: 500 })),
+    );
+    component.export();
+    fixture.detectChanges();
+    expect(notifyError).toHaveBeenCalledExactlyOnceWith(
+      "Не удалось выгрузить заявки. Повторите попытку.",
+    );
+    expect(fixture.nativeElement.querySelector("table")).toBeTruthy();
+    expect(component.exporting()).toBe(false);
+  });
+
   it("различает отсутствие заявок и отсутствие результатов по фильтру без поиска", async () => {
     const { api, fixture, component } = await setup();
     api.managerSolutions.mockReturnValue(of({ ...page, count: 0, results: [] }));

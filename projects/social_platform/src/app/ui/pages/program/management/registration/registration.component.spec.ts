@@ -7,6 +7,7 @@ import {
   RegistrationField,
   RegistrationSettings,
 } from "@domain/program/program-registration.model";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ManagementRegistrationComponent } from "./registration.component";
 const field: RegistrationField = {
   id: "f" + "a".repeat(32),
@@ -126,6 +127,7 @@ describe("Редактор анкеты регистрации", () => {
   });
   it("запрос принимает сайт без необязательных деталей и передаёт контакт отдельно", () => {
     const { component, api } = setup();
+    const success = vi.spyOn(TestBed.inject(SnackbarService), "success");
     component.setMode("external");
     component.open("connection");
     component.connection.controls.url.setValue("https://event.example.test");
@@ -139,7 +141,9 @@ describe("Редактор анкеты регистрации", () => {
       "",
       "@event_organizer",
     );
-    expect(component.message()).toContain("Мы свяжемся с вами в ближайшее время");
+    expect(success).toHaveBeenCalledExactlyOnceWith(
+      "Запрос отправлен администратору. Мы свяжемся с вами в ближайшее время.",
+    );
     expect(component.dialog()).toBeNull();
   });
   it("ошибка импорта сохраняет старые варианты", () => {

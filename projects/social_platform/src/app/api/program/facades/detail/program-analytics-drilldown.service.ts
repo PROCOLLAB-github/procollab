@@ -3,6 +3,7 @@ import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core"
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Subject, takeUntil } from "rxjs";
 import { saveAs } from "file-saver";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ProgramAttentionActionsUseCase } from "@api/program/use-cases/program-attention-actions.use-case";
 import {
   ProgramAttentionCategory,
@@ -78,7 +79,7 @@ export class ProgramAnalyticsDrilldownService {
   }
   readonly actionPending = signal<"preview" | "send" | "export" | null>(null);
   readonly actionError = signal("");
-  readonly actionSuccess = signal("", { equal: () => false });
+  private readonly snackbar = inject(SnackbarService);
   readonly supportsActions = computed(
     () => this.isAttentionView() && this.view() !== "projects-not-submitted",
   );
@@ -110,7 +111,6 @@ export class ProgramAnalyticsDrilldownService {
     if (this.actionPending()) return;
     this.preview.set(null);
     this.actionError.set("");
-    this.actionSuccess.set("");
     const current = this.selection();
     const field = current.mode === "all" ? "excludedIds" : "ids";
     const ids = current[field];
@@ -126,7 +126,6 @@ export class ProgramAnalyticsDrilldownService {
     this.selection.set({ mode: "all", ids: [], excludedIds: [] });
     this.preview.set(null);
     this.actionError.set("");
-    this.actionSuccess.set("");
   }
 
   clearSelection(): void {
@@ -155,7 +154,6 @@ export class ProgramAnalyticsDrilldownService {
       return;
     this.actionPending.set("preview");
     this.actionError.set("");
-    this.actionSuccess.set("");
     this.actions
       .preview(this.programId, category, {
         search: this.appliedSearch(),
@@ -198,9 +196,9 @@ export class ProgramAnalyticsDrilldownService {
           const message = result.value.createdCount
             ? `Напоминания созданы: ${result.value.createdCount}. Письма поставлены в очередь.`
             : "Нет доступных получателей для напоминания.";
-          this.actionSuccess.set(
-            `${message}${result.value.skippedCount ? ` Пропущено после повторной проверки: ${result.value.skippedCount}.` : ""}`,
-          );
+          const summary = `${message}${result.value.skippedCount ? ` Пропущено после повторной проверки: ${result.value.skippedCount}.` : ""}`;
+          if (result.value.createdCount) this.snackbar.success(summary);
+          else this.snackbar.info(summary);
         } else this.setActionError(result.error.kind);
       });
   }
@@ -236,14 +234,16 @@ export class ProgramAnalyticsDrilldownService {
   }
 
   private setActionError(kind: string): void {
-    this.actionError.set(
-      kind === "forbidden" || kind === "unauthorized"
-        ? "Нет доступа к действию. Обновите страницу и проверьте права."
-        : kind === "validation"
-          ? "Выбор или предпросмотр устарел либо превышает 10 000 строк. Уточните поиск и проверьте получателей еще раз."
-          : "Не удалось выполнить действие. Попробуйте еще раз.",
-    );
-    if (kind === "validation") this.preview.set(null);
+    if (kind === "forbidden" || kind === "unauthorized") {
+      this.actionError.set("Нет доступа к действию. Обновите страницу и проверьте права.");
+    } else if (kind === "validation") {
+      this.actionError.set(
+        "Выбор или предпросмотр устарел либо превышает 10 000 строк. Уточните поиск и проверьте получателей еще раз.",
+      );
+      this.preview.set(null);
+    } else {
+      this.snackbar.error("Не удалось выполнить действие. Попробуйте еще раз.");
+    }
   }
 
   private resetActions(): void {
@@ -253,7 +253,6 @@ export class ProgramAnalyticsDrilldownService {
     this.preview.set(null);
     this.actionPending.set(null);
     this.actionError.set("");
-    this.actionSuccess.set("");
   }
   readonly cases = inject(ProgramCaseProjectsService);
 

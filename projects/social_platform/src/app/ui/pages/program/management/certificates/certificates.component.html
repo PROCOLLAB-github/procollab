@@ -15,18 +15,13 @@
     </button>
   }
 </nav>
-@if (error()) {
+@if (error() && !confirmOpen() && !selectionAction()) {
   <div class="certificates__notice" appAlert="error" role="alert">
     {{ error() }}
     <button type="button" appButton="secondary" [disabled]="busy()" (click)="reload()">
       Обновить
     </button>
   </div>
-}
-@if (message()) {
-  <app-transient-notice [source]="message" (dismissed)="message.set(null)">{{
-    message()
-  }}</app-transient-notice>
 }
 @if (loading()) {
   <section class="certificates__card" aria-busy="true">Загружаем настройки сертификатов…</section>

@@ -257,30 +257,6 @@
             }
           </div>
         </ng-template>
-        @if (section() === "participants") {
-          @if (participantExportError()) {
-            <p appAlert="error" role="alert">Не удалось выгрузить участников. Повторите попытку.</p>
-          }
-          @if (participantExportSuccess()) {
-            <app-transient-notice
-              [source]="participantExportSuccess"
-              (dismissed)="participantExportSuccess.set(false)"
-              >Excel с участниками по текущим фильтрам готов.</app-transient-notice
-            >
-          }
-        }
-        @if (section() === "projects") {
-          @if (projectExportError()) {
-            <p appAlert="error" role="alert">Не удалось выгрузить проекты. Повторите попытку.</p>
-          }
-          @if (projectExportSuccess()) {
-            <app-transient-notice
-              [source]="projectExportSuccess"
-              (dismissed)="projectExportSuccess.set(false)"
-              >Excel с проектами по текущим фильтрам готов.</app-transient-notice
-            >
-          }
-        }
         @if (state.pending()) {
           <p class="management__list-loading" role="status">Обновляем список…</p>
         } @else if (!count()) {
@@ -537,11 +513,6 @@
         @if (tableError()) {
           <p appAlert="error" role="alert">{{ tableError() }}</p>
         }
-        @if (tableMessage()) {
-          <app-transient-notice [source]="tableMessage" (dismissed)="tableMessage.set(null)">{{
-            tableMessage()
-          }}</app-transient-notice>
-        }
         @if (selectedRows().size) {
           <section
             class="management__selection management__bulk"
@@ -669,11 +640,6 @@
           {{ formError() }}
           <button type="button" appButton="text" (click)="reload()">Обновить данные</button>
         </div>
-      }
-      @if (saved()) {
-        <app-transient-notice [source]="saved" (dismissed)="saved.set(false)"
-          >Изменения сохранены.</app-transient-notice
-        >
       }
       @if (settingsTab() === "project-form") {
         @if (program.solutionStorageMode === "solution") {

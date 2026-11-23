@@ -92,8 +92,7 @@ import { presentationHref } from "@utils/program-case-analytics";
 import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-management";
 import { DEFAULT_IMAGE_FRAME, programImageFraming } from "@utils/program-branding";
 import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-image-framing.model";
-
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 
 @Component({
   selector: "app-program-management",
@@ -109,7 +108,6 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     ProgramManagementHeaderComponent,
     NgTemplateOutlet,
     ImageFramingDirective,
-    TransientNoticeComponent,
     RouterLink,
     ReactiveFormsModule,
     DatePipe,
@@ -161,6 +159,7 @@ export class ProgramManagementComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly destroyRef = inject(DestroyRef);
+  private readonly snackbar = inject(SnackbarService);
   private readonly files = inject(FileService);
   private readonly document = inject(DOCUMENT);
   private readonly injector = inject(Injector);
@@ -199,8 +198,6 @@ export class ProgramManagementComponent implements OnInit {
     evaluation: this.evaluationFilter,
   });
   readonly exportingProjects = signal(false);
-  readonly projectExportError = signal(false);
-  readonly projectExportSuccess = signal(false, { equal: () => false });
   readonly participantFiltersOpen = signal(false);
   readonly participantFilterCount = signal(0);
   readonly activitySortOptions = [
@@ -213,8 +210,6 @@ export class ProgramManagementComponent implements OnInit {
   ];
   readonly participantFilterError = signal<string | null>(null);
   readonly exportingParticipants = signal(false);
-  readonly participantExportError = signal(false);
-  readonly participantExportSuccess = signal(false, { equal: () => false });
   readonly participantAnswers = signal<ManagementParticipant | null>(null);
   readonly selectedRows = signal(new Set<number>());
   readonly selectedRowIds = computed(() => [...this.selectedRows()]);
@@ -230,7 +225,6 @@ export class ProgramManagementComponent implements OnInit {
   readonly removingParticipants = signal(false);
   readonly solutionRemovalRequest = signal<{ programId: number; ids: number[] } | null>(null);
   readonly tableError = signal<string | null>(null);
-  readonly tableMessage = signal<string | null>(null, { equal: () => false });
   private selectionKey = "";
   private selectionSequence = 0;
   readonly allRowsSelected = computed(
@@ -267,7 +261,6 @@ export class ProgramManagementComponent implements OnInit {
   readonly certificatesStatus = signal({ dirty: false, busy: false });
   readonly uploading = signal<string | null>(null);
   readonly formError = signal<string | null>(null);
-  readonly saved = signal(false, { equal: () => false });
   readonly projectForm = viewChild(ManagementProjectFormComponent);
   readonly solutionForm = viewChild(ManagementSolutionFormComponent);
   private readonly managementLayout = viewChild<ElementRef<HTMLElement>>("managementLayout");
@@ -561,11 +554,9 @@ export class ProgramManagementComponent implements OnInit {
           this.participantRemoval.set(null);
           this.solutionRemovalRequest.set(null);
           this.tableError.set(null);
-          this.tableMessage.set(null);
           this.selectionKey = selectionKey;
         }
         this.formError.set(null);
-        this.saved.set(false);
         const offset = Number(q.get("offset") ?? 0),
           id = Number(this.route.parent?.snapshot.paramMap.get("programId"));
         if (!Number.isSafeInteger(id) || id < 1) return;
@@ -614,9 +605,6 @@ export class ProgramManagementComponent implements OnInit {
         );
         this.closeParticipantFilters();
         this.participantFilterError.set(null);
-        this.participantExportSuccess.set(false);
-        this.projectExportSuccess.set(false);
-        this.projectExportError.set(false);
         this.projectFilterCount.set(
           Number(this.caseFilter.value !== "all") +
             Number(this.submissionFilter.value !== "all") +
@@ -729,8 +717,6 @@ export class ProgramManagementComponent implements OnInit {
     const ctx = this.state.context;
     if (!ctx || this.exportingProjects() || !this.count()) return;
     this.exportingProjects.set(true);
-    this.projectExportError.set(false);
-    this.projectExportSuccess.set(false);
     this.state.api
       .exportProjects(ctx.programId, { ...ctx.query, search: this.search.value.trim() })
       .pipe(
@@ -741,11 +727,11 @@ export class ProgramManagementComponent implements OnInit {
         next: file => {
           saveAs(file, `program-${ctx.programId}-projects.xlsx`);
           if (this.state.context?.programId === ctx.programId && this.section() === "projects")
-            this.projectExportSuccess.set(true);
+            this.snackbar.success("Excel с проектами по текущим фильтрам готов.");
         },
         error: () => {
           if (this.state.context?.programId === ctx.programId && this.section() === "projects")
-            this.projectExportError.set(true);
+            this.snackbar.error("Не удалось выгрузить проекты. Повторите попытку.");
         },
       });
   }
@@ -822,8 +808,6 @@ export class ProgramManagementComponent implements OnInit {
     const ctx = this.state.context;
     if (!ctx || this.exportingParticipants() || this.participantFilterError()) return;
     this.exportingParticipants.set(true);
-    this.participantExportError.set(false);
-    this.participantExportSuccess.set(false);
     this.state.api
       .exportParticipants(ctx.programId, { ...ctx.query, search: this.search.value.trim() })
       .pipe(
@@ -833,9 +817,9 @@ export class ProgramManagementComponent implements OnInit {
       .subscribe({
         next: file => {
           saveAs(file, `program-${ctx.programId}-participants.xlsx`);
-          this.participantExportSuccess.set(true);
+          this.snackbar.success("Excel с участниками по текущим фильтрам готов.");
         },
-        error: () => this.participantExportError.set(true),
+        error: () => this.snackbar.error("Не удалось выгрузить участников. Повторите попытку."),
       });
   }
   changeCase(value: string): void {
@@ -911,7 +895,7 @@ export class ProgramManagementComponent implements OnInit {
         },
         error: () => {
           if (seq === this.selectionSequence)
-            this.tableError.set("Не удалось выбрать все записи. Повторите попытку.");
+            this.snackbar.error("Не удалось выбрать все записи. Повторите попытку.");
         },
       });
   }
@@ -964,7 +948,7 @@ export class ProgramManagementComponent implements OnInit {
           if (key === this.selectionKey) this.participantRemoval.set({ ids, preview });
         },
         error: e => {
-          if (key === this.selectionKey) this.tableError.set(this.errorMessage(e));
+          if (key === this.selectionKey) this.showParticipantRemovalError(e);
         },
       });
   }
@@ -987,7 +971,7 @@ export class ProgramManagementComponent implements OnInit {
         next: result => {
           this.participantRemoval.set(null);
           this.clearRows();
-          this.tableMessage.set(`Удалено участников из программы: ${result.removed}.`);
+          this.snackbar.success(`Удалено участников из программы: ${result.removed}.`);
           const lastOffset =
             Math.max(0, Math.ceil((this.count() - result.removed) / this.pageSize) - 1) *
             this.pageSize;
@@ -996,9 +980,14 @@ export class ProgramManagementComponent implements OnInit {
         },
         error: e => {
           this.participantRemoval.set(null);
-          this.tableError.set(this.errorMessage(e));
+          this.showParticipantRemovalError(e);
         },
       });
+  }
+  private showParticipantRemovalError(error: HttpErrorResponse): void {
+    const message = this.errorMessage(error);
+    if (error.status >= 400 && error.status < 500) this.tableError.set(message);
+    else this.snackbar.error(message);
   }
   selectFromRow(event: MouseEvent, project: ManagementProject): void {
     if (!(event.target as HTMLElement).closest("a,button,input,label")) this.select(project);
@@ -1006,7 +995,7 @@ export class ProgramManagementComponent implements OnInit {
   solutionRegistrationsRemoved(count: number): void {
     this.solutionRemovalRequest.set(null);
     this.clearRows();
-    this.tableMessage.set(`Удалено участников из программы: ${count}.`);
+    this.snackbar.success(`Удалено участников из программы: ${count}.`);
     const lastOffset =
       Math.max(0, Math.ceil((this.count() - count) / this.pageSize) - 1) * this.pageSize;
     if (this.offset() > lastOffset) void this.changeQuery({ offset: lastOffset });
@@ -1098,7 +1087,7 @@ export class ProgramManagementComponent implements OnInit {
     if (!context || context.programId !== result.programId || this.section() !== "projects") return;
     this.projectActionRequest.set(null);
     this.clearRows();
-    this.tableMessage.set(
+    this.snackbar.success(
       result.action === "change_case"
         ? "Кейс проекта изменен."
         : result.action === "detach"
@@ -1311,7 +1300,6 @@ export class ProgramManagementComponent implements OnInit {
       return;
     this.saving.set(true);
     this.returningToDraft.set(true);
-    this.saved.set(false);
     this.formError.set(null);
     this.basicForm.disable({ emitEvent: false });
     this.state.api
@@ -1328,13 +1316,13 @@ export class ProgramManagementComponent implements OnInit {
         next: result => {
           if (this.state.program()?.id !== program.id) return;
           this.state.program.set(result);
-          this.saved.set(true);
+          this.snackbar.success("Изменения сохранены.");
           afterNextRender(() => this.document.getElementById("program-launch-link")?.focus(), {
             injector: this.injector,
           });
         },
         error: (error: HttpErrorResponse) => {
-          if (this.state.program()?.id === program.id) this.formError.set(this.errorMessage(error));
+          if (this.state.program()?.id === program.id) this.showSettingsRequestError(error);
         },
       });
   }
@@ -1371,7 +1359,6 @@ export class ProgramManagementComponent implements OnInit {
             : control.value;
     this.saving.set(true);
     this.formError.set(null);
-    this.saved.set(false);
     this.state.api
       .save(p.id, section, body)
       .pipe(
@@ -1382,7 +1369,7 @@ export class ProgramManagementComponent implements OnInit {
         next: program => {
           this.state.program.set(program);
           this.resetForms();
-          this.saved.set(true);
+          this.snackbar.success("Изменения сохранены.");
         },
         error: (error: HttpErrorResponse) => {
           if (error.error?.code === "reopen_confirmation_required") {
@@ -1409,7 +1396,7 @@ export class ProgramManagementComponent implements OnInit {
             ).then(yes => {
               if (yes) this.save(true);
             });
-          } else this.formError.set(this.errorMessage(error));
+          } else this.showSettingsRequestError(error);
         },
       });
   }
@@ -1599,9 +1586,9 @@ export class ProgramManagementComponent implements OnInit {
           );
           this.editingMaterial.set(null);
           this.materialForm.markAsPristine();
-          this.saved.set(true);
+          this.snackbar.success("Изменения сохранены.");
         },
-        error: (error: HttpErrorResponse) => this.formError.set(this.errorMessage(error)),
+        error: (error: HttpErrorResponse) => this.showSettingsRequestError(error),
       });
   }
   async deleteMaterial(material: ManagementMaterial): Promise<void> {
@@ -1629,9 +1616,9 @@ export class ProgramManagementComponent implements OnInit {
           this.state.program.update(p =>
             p ? { ...p, materials: p.materials.filter(m => m.id !== material.id) } : p,
           );
-          this.saved.set(true);
+          this.snackbar.success("Изменения сохранены.");
         },
-        error: (error: HttpErrorResponse) => this.formError.set(this.errorMessage(error)),
+        error: (error: HttpErrorResponse) => this.showSettingsRequestError(error),
       });
   }
   private confirm(
@@ -1662,6 +1649,11 @@ export class ProgramManagementComponent implements OnInit {
   dismissModal(): void {
     if (this.confirmation()) this.resolveConfirmation(false);
     else void this.closeMaterial();
+  }
+  private showSettingsRequestError(error: HttpErrorResponse): void {
+    const message = this.errorMessage(error);
+    if (error.status >= 400 && error.status < 500) this.formError.set(message);
+    else this.snackbar.error(message);
   }
   errorMessage(error: HttpErrorResponse | null): string {
     if (error?.status === 403) return "У вас нет доступа к управлению этой программой.";

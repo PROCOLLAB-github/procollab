@@ -34,6 +34,7 @@ import {
   OrganizerRow,
   ProgramOrganizers,
 } from "@domain/program/program-organizers.model";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import {
   RowAction,
@@ -43,12 +44,9 @@ import {
 import { evaluationError } from "@utils/evaluation-workspace";
 import { presentationHref } from "@utils/program-case-analytics";
 
-import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
-
 @Component({
   selector: "app-management-organizers",
   imports: [
-    TransientNoticeComponent,
     ReactiveFormsModule,
     AlertDirective,
     AvatarComponent,
@@ -70,6 +68,7 @@ export class ManagementOrganizersComponent {
   readonly confirmDiscard = input<() => Promise<boolean>>(() => Promise.resolve(true));
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
   readonly accessRemoved = output<void>();
+  private readonly snackbar = inject(SnackbarService);
   private readonly api = inject(ProgramOrganizersUseCase);
   private readonly destroyRef = inject(DestroyRef);
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -82,7 +81,6 @@ export class ManagementOrganizersComponent {
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
   readonly dialogError = signal<string | null>(null);
-  readonly message = signal<string | null>(null, { equal: () => false });
   readonly modal = signal<"invite" | "remove" | "revoke" | null>(null);
   readonly search = this.fb.control("");
   readonly status = this.fb.control("all");
@@ -383,6 +381,7 @@ export class ManagementOrganizersComponent {
     request: Observable<ProgramOrganizers | OrganizerAccessRemoved>,
     message: string,
   ): void {
+    const id = this.programId();
     this.busy.set(true);
     this.loading.set(false);
     this.dialogError.set(null);
@@ -395,6 +394,7 @@ export class ManagementOrganizersComponent {
       )
       .subscribe({
         next: data => {
+          if (id !== this.programId()) return;
           this.discard();
           if ("accessRemoved" in data) {
             this.snapshot.set(null);
@@ -405,15 +405,16 @@ export class ManagementOrganizersComponent {
             return;
           }
           this.apply(data);
-          this.message.set(message);
+          this.snackbar.success(message);
           this.trigger?.focus();
         },
         error: e => {
-          if (this.handleAccessError(e)) return;
+          if (id !== this.programId() || this.handleAccessError(e)) return;
           const text = evaluationError(e);
-          if (this.modal()) this.dialogError.set(text);
-          else this.error.set(text);
-          if (e instanceof HttpErrorResponse && e.status === 409) this.load();
+          const status = e instanceof HttpErrorResponse ? e.status : null;
+          if (this.modal() && (status === 400 || status === 409)) this.dialogError.set(text);
+          else this.snackbar.error(text);
+          if (status === 409) this.load();
         },
       });
   }

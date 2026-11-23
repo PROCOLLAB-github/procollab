@@ -1,6 +1,7 @@
 /** @format */
 import { computed, DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { Subject, takeUntil } from "rxjs";
 import { GetProgramCaseProjectsUseCase } from "@api/program/use-cases/get-program-case-projects.use-case";
 import { ExportProgramCaseProjectsUseCase } from "@api/program/use-cases/export-program-case-projects.use-case";
@@ -50,6 +51,7 @@ export class ProgramCaseProjectsService {
   readonly limit = 25;
   readonly exportPending = signal(false);
   readonly exportError = signal<ProgramCaseError | null>(null);
+  private readonly snackbar = inject(SnackbarService);
   private readonly confirmed = signal(false);
   readonly canExport = computed(
     () =>
@@ -164,9 +166,11 @@ export class ProgramCaseProjectsService {
       .subscribe(result => {
         this.exportPending.set(false);
         if (result.ok) saveCaseProjects(result.value, this.programName, selection);
-        else {
+        else if (result.error.kind === "network") {
+          this.snackbar.error("Не удалось подготовить выгрузку. Повторите попытку.");
+        } else {
           this.exportError.set(result.error);
-          if (result.error.kind !== "network") this.confirmed.set(false);
+          this.confirmed.set(false);
         }
       });
   }

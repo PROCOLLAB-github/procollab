@@ -14,11 +14,6 @@
       <button appButton="secondary" [disabled]="busy()" (click)="reload()">Обновить данные</button>
     </div>
   }
-  @if (message()) {
-    <app-transient-notice [source]="message" (dismissed)="message.set(null)">{{
-      message()
-    }}</app-transient-notice>
-  }
   @if (state(); as state) {
     <app-program-management-header
       [programId]="state.program.id"

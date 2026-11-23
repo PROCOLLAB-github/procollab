@@ -9,6 +9,7 @@ import { exportExperts } from "@utils/export-experts";
 
 vi.mock("@utils/export-experts", () => ({ exportExperts: vi.fn().mockResolvedValue(undefined) }));
 import { HttpErrorResponse } from "@angular/common/http";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
 import { ManagementExpertsComponent } from "./experts.component";
 import { ExpertWorkspace, DistributionProject } from "@domain/program/evaluation-workspace.model";
@@ -691,6 +692,7 @@ describe("Управление экспертами", () => {
   });
   it("сохраняет квоту по ревизии предпросмотра и оставляет способы распределения открытыми", () => {
     const { component, api } = setup();
+    const success = vi.spyOn(TestBed.inject(SnackbarService), "success");
     component.open("method");
     component.quota.setValue(3);
     component.startAutomaticAllocation();
@@ -704,12 +706,13 @@ describe("Управление экспертами", () => {
     component.previewQuota();
     expect(api.quota).toHaveBeenCalledWith(42, 3);
     expect(api.saveQuota).not.toHaveBeenCalled();
+    expect(success).not.toHaveBeenCalled();
     component.saveQuota();
     expect(api.saveQuota).toHaveBeenCalledWith(42, 3, "preview-r1");
     expect(component.modal()).toBe("method");
     expect(component.quota.value).toBe(3);
     expect(component.quotaPreview()).toBeNull();
-    expect(component.quotaSaved()).toBe(true);
+    expect(success).toHaveBeenCalledExactlyOnceWith("Готовность проектов пересчитана.");
   });
   it("можно выбрать разные кейсы, но ручное назначение требует одного кейса", () => {
     const { fixture, component } = setup();
@@ -1108,6 +1111,8 @@ describe("Управление экспертами", () => {
   });
   it("выгружает всю текущую выборку, включая другие страницы, и показывает повторяемую ошибку", async () => {
     const { fixture, component } = setup();
+    const success = vi.spyOn(TestBed.inject(SnackbarService), "success");
+    const error = vi.spyOn(TestBed.inject(SnackbarService), "error");
     vi.mocked(exportExperts).mockClear().mockResolvedValue(undefined);
     component.snapshot.update(s => ({
       ...s!,
@@ -1130,13 +1135,18 @@ describe("Управление экспертами", () => {
       ]),
     );
     expect(vi.mocked(exportExperts).mock.calls[0][1]).toHaveLength(25);
-    expect(component.exportSuccess()).toBe(true);
+    expect(success).toHaveBeenCalledExactlyOnceWith(
+      "Excel с экспертами по текущим фильтрам готов.",
+    );
     vi.mocked(exportExperts).mockRejectedValueOnce(new Error("failed"));
     await component.downloadExperts();
-    expect(component.exportError()).toBe(true);
+    expect(error).toHaveBeenCalledExactlyOnceWith(
+      "Не удалось выгрузить экспертов. Повторите попытку.",
+    );
     expect(component.exporting()).toBe(false);
     vi.mocked(exportExperts).mockResolvedValueOnce(undefined);
     await component.downloadExperts();
-    expect(component.exportError()).toBe(false);
+    expect(success).toHaveBeenCalledTimes(2);
+    expect(error).toHaveBeenCalledTimes(1);
   });
 });

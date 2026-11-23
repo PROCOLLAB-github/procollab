@@ -6,6 +6,7 @@ import { saveFile } from "@utils/export-file";
 import { ProgramDetailMainUIInfoService } from "../../program/facades/detail/ui/program-detail-main-ui-info.service";
 import { LoggerService } from "@corelib";
 import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
+import { SnackbarService } from "@domain/shared/snackbar.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /** Обрабатывает экспорт файлов программы и состояние загрузки export-кнопок. */
@@ -13,6 +14,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 export class ExportFileInfoService {
   private readonly loggerService = inject(LoggerService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly snackbar = inject(SnackbarService);
 
   private readonly exportFileService = inject(ExportFileService);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
@@ -33,7 +35,7 @@ export class ExportFileInfoService {
           saveFile(blob, "program", program.name);
           this.loadingExports$.set(success(undefined));
         },
-        error: () => this.loadingExports$.set(failure("program_export_failed")),
+        error: () => this.exportFailed("program_export_failed"),
       });
   }
 
@@ -50,7 +52,7 @@ export class ExportFileInfoService {
         },
         error: err => {
           this.loggerService.error(err);
-          this.loadingExports$.set(failure(`export_file_${err}`));
+          this.exportFailed(`export_file_${err}`);
         },
       });
   }
@@ -67,7 +69,7 @@ export class ExportFileInfoService {
           this.loadingExports$.set(success(undefined));
         },
         error: err => {
-          this.loadingExports$.set(failure(`export_file_${err}`));
+          this.exportFailed(`export_file_${err}`);
         },
       });
   }
@@ -84,10 +86,15 @@ export class ExportFileInfoService {
           this.loadingExports$.set(success(undefined));
         },
         error: err => {
-          this.loadingExports$.set(failure(`export_file_${err}`));
+          this.exportFailed(`export_file_${err}`);
         },
       });
   }
 
   downloadCalculations(): void {}
+
+  private exportFailed(code: string): void {
+    this.loadingExports$.set(failure(code));
+    this.snackbar.error("Не удалось подготовить выгрузку. Повторите попытку.");
+  }
 }

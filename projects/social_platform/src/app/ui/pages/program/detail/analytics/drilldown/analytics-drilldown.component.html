@@ -680,14 +680,6 @@
             @if (state.actionError()) {
               <p class="attention-actions__error" role="alert">{{ state.actionError() }}</p>
             }
-            @if (state.actionSuccess()) {
-              <app-transient-notice
-                class="attention-actions__success"
-                [source]="state.actionSuccess"
-                (dismissed)="state.actionSuccess.set('')"
-                >{{ state.actionSuccess() }}</app-transient-notice
-              >
-            }
             @if (!state.preview() && state.selectedCount()) {
               <span class="attention-actions__count" role="status"
                 >Выбрано: {{ state.selectedCount() }}</span
