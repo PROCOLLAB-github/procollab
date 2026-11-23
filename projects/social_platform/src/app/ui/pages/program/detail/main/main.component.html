@@ -3,20 +3,12 @@
 @if (program()) {
   <main class="project">
     <section class="program__main">
-      <!-- advertisementImageAddress поле только для тех кто не участник программы поэтому нельзя сделать toggle и давать появляться или нет полю -->
-      @if (
-        !program()!.isUserMember &&
-        !program()!.isUserManager &&
-        !program()!.isUserExpert &&
-        program()!.advertisementImageAddress
-      ) {
-        <div class="program__advertisement">
-          <img
-            [src]="program()!.advertisementImageAddress"
-            [alt]="program()!.name"
-            loading="lazy"
-            decoding="async"
-          />
+      @if (!program()!.isUserMember && !program()!.isUserManager && !program()!.isUserExpert) {
+        @let advertisementUrl = program()!.advertisementImageAddress?.trim();
+        <div [class.program__advertisement]="!!advertisementUrl">
+          @if (advertisementUrl) {
+            <img [src]="advertisementUrl" [alt]="program()!.name" loading="lazy" decoding="async" />
+          }
           <ng-container *ngTemplateOutlet="programResources" />
           <ng-container *ngTemplateOutlet="programMaterials" />
         </div>

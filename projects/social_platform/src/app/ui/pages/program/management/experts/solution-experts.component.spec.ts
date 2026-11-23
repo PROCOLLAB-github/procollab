@@ -88,6 +88,9 @@ function setup() {
   const quota = {
     execute: vi.fn(() => of(ok({ revision: "r1", requiredEvaluators: 2 } as SolutionQuota))),
   };
+  const saveQuota = {
+    execute: vi.fn(() => of(ok({ revision: "r2", requiredEvaluators: 2 } as SolutionQuota))),
+  };
   TestBed.configureTestingModule({
     imports: [SolutionExpertsComponent],
     providers: [
@@ -97,7 +100,7 @@ function setup() {
       { provide: GetSolutionExpertAssignmentsUseCase, useValue: options },
       { provide: SaveSolutionExpertAssignmentsUseCase, useValue: save },
       { provide: PreviewSolutionQuotaUseCase, useValue: quota },
-      { provide: SaveSolutionQuotaUseCase, useValue: save },
+      { provide: SaveSolutionQuotaUseCase, useValue: saveQuota },
     ],
   });
   TestBed.overrideComponent(SolutionExpertsComponent, { set: { template: "" } });
@@ -114,6 +117,7 @@ function setup() {
     options,
     save,
     quota,
+    saveQuota,
   };
 }
 describe("Solution expert management", () => {
@@ -268,14 +272,33 @@ describe("Solution expert management", () => {
     expect(c.modal()).toBeNull();
   });
   it("does not apply a quota preview after the number changes", () => {
-    const { fixture, c, save } = setup();
-    c.open("quota");
+    const { fixture, c, saveQuota } = setup();
+    c.open("method");
     c.quota.setValue(2);
     c.previewQuota();
     c.quota.setValue(3);
     fixture.detectChanges();
     c.saveQuota();
-    expect(save.execute).not.toHaveBeenCalled();
+    expect(saveQuota.execute).not.toHaveBeenCalled();
+  });
+  it("сохраняет выбор решений при изменении квоты и передает его в автоматическое распределение", () => {
+    const { c, saveQuota } = setup();
+    c.distributionSelection.set(new Set([302]));
+    c.open("method");
+    c.quota.setValue(2);
+    c.startAutomaticAllocation();
+    expect(c.allocation()).toBeNull();
+    expect(saveQuota.execute).not.toHaveBeenCalled();
+    c.previewQuota();
+    c.saveQuota();
+    expect(saveQuota.execute).toHaveBeenCalledWith(12, { revision: "r1", requiredEvaluators: 2 });
+    expect(c.modal()).toBe("method");
+    expect(c.required()).toBe(2);
+    expect(c.revision()).toBe("r2");
+    expect(c.quotaPreview()).toBeNull();
+    c.startAutomaticAllocation();
+    expect(c.modal()).toBeNull();
+    expect(c.allocation()).toEqual({ programId: 12, ids: [302] });
   });
   it("unchecking one case from all cases keeps the other cases", () => {
     const { c } = setup();
@@ -296,7 +319,7 @@ describe("Solution expert management", () => {
     c.toggleSolution(302);
     expect(c.dirty()).toBe(true);
     c.discard();
-    c.open("quota");
+    c.open("method");
     expect(c.dirty()).toBe(false);
     c.quota.setValue(2);
     TestBed.flushEffects();

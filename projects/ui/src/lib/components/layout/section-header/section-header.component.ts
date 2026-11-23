@@ -5,7 +5,10 @@ import { ChangeDetectionStrategy, Component, input } from "@angular/core";
   selector: "app-section-header",
   template: `<header class="section-header">
     <div class="section-header__heading">
-      <h2 [attr.id]="titleId()">{{ title() }}</h2>
+      <div class="section-header__title">
+        <h2 [attr.id]="titleId()">{{ title() }}</h2>
+        <ng-content select="[sectionHeaderTitleAction]" />
+      </div>
       <ng-content select="[sectionHeaderAction]" />
     </div>
     @if (description()) {
@@ -33,8 +36,14 @@ import { ChangeDetectionStrategy, Component, input } from "@angular/core";
       padding-bottom: 16px;
       border-bottom: 1px solid var(--accent);
     }
-    h2 {
+    .section-header__title {
+      display: flex;
+      gap: 4px;
+      align-items: center;
       flex: 1 1 12ch;
+      min-width: 0;
+    }
+    h2 {
       min-width: 0;
       margin: 0;
       font-size: 16px;

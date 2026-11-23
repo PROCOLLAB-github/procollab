@@ -26,7 +26,7 @@ import {
   signal,
   untracked,
 } from "@angular/core";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { NgTemplateOutlet } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
@@ -73,6 +73,7 @@ import { canAssignAutomatically, evaluationError } from "@utils/evaluation-works
 import { presentationHref } from "@utils/program-case-analytics";
 
 import { ExpertRosterComponent } from "./expert-roster.component";
+import { ExpertQuotaComponent } from "./expert-quota.component";
 import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transient-notice.component";
 
 @Component({
@@ -82,6 +83,7 @@ import { TransientNoticeComponent } from "@ui/primitives/transient-notice/transi
     SectionHeaderComponent,
     TransientNoticeComponent,
     ExpertRosterComponent,
+    ExpertQuotaComponent,
     ReactiveFormsModule,
     AlertDirective,
     AvatarComponent,
@@ -145,7 +147,6 @@ export class ManagementExpertsComponent {
   readonly modal = signal<
     | "invite"
     | "auto"
-    | "quota"
     | "revoke"
     | "method"
     | "project"
@@ -192,12 +193,17 @@ export class ManagementExpertsComponent {
     Validators.maxLength(254),
   ]);
   private readonly inviteEmail = toSignal(this.email.valueChanges, { initialValue: "" });
-  readonly quota = this.fb.control(1, [
+  readonly quota = new FormControl<number | null>(1, [
     Validators.required,
     Validators.min(1),
     Validators.max(1000),
     Validators.pattern(/^\d+$/),
   ]);
+  readonly quotaValue = toSignal(this.quota.valueChanges, { initialValue: 1 });
+  readonly quotaChanged = computed(
+    () => this.quotaValue() !== (this.snapshot()?.requiredEvaluators ?? 1),
+  );
+  readonly quotaSaved = signal(false);
   private readonly query = signal("");
   private readonly statusValue = signal("all");
   readonly page = signal(0);
@@ -394,8 +400,6 @@ export class ManagementExpertsComponent {
         return this.targets().length > 1
           ? "Назначить экспертов нескольким проектам"
           : "Назначить экспертов";
-      case "quota":
-        return "Сколько экспертов нужно каждому проекту";
       case "revoke":
         return "Отозвать приглашение";
       default:
@@ -482,7 +486,10 @@ export class ManagementExpertsComponent {
       this.selected.set(null);
       this.selectedExpertIds.set(new Set());
     });
-    this.quota.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => this.quotaPreview.set(null));
+    this.quota.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.quotaPreview.set(null);
+      this.quotaSaved.set(false);
+    });
     this.distributionSearch.valueChanges.pipe(takeUntilDestroyed()).subscribe(v => {
       this.distributionQuery.set(v);
       this.projectPage.set(0);
@@ -735,7 +742,8 @@ export class ManagementExpertsComponent {
   readonly statusDescription = expertStatusDescription;
   readonly deliveryLabel = expertDeliveryLabel;
   readonly initials = expertInitials;
-  open(kind: "invite" | "auto" | "quota" | "revoke" | "method"): void {
+  open(kind: "invite" | "auto" | "revoke" | "method"): void {
+    const previous = this.modal();
     this.allocationBeforeSettings = null;
     this.bulkRevoke.set(false);
     this.dialogError.set(null);
@@ -748,7 +756,7 @@ export class ManagementExpertsComponent {
       this.scopeAll.set(!this.caseNames().length && !this.hasProjectsWithoutCase());
       this.scopeCases.set(new Set());
     }
-    if (kind === "quota") this.quota.setValue(this.snapshot()?.requiredEvaluators ?? 1);
+    if (kind === "method" || (kind === "auto" && previous !== "method")) this.resetQuota();
     if (kind === "auto") {
       this.allocationOverrides.set(new Map());
       this.allocationSeed.set(0);
@@ -825,7 +833,7 @@ export class ManagementExpertsComponent {
     this.calculateAllocation(this.allocationOverrides(), this.allocationSeed());
   }
   startAutomaticAllocation(): void {
-    if (this.busy()) return;
+    if (this.busy() || (this.modal() === "method" && this.quotaChanged())) return;
     this.open("auto");
     const groups = this.pendingAutoGroups();
     if (groups.length && !groups.some(group => this.poolExperts(group.name).length)) return;
@@ -956,24 +964,44 @@ export class ManagementExpertsComponent {
       this.selectedProjects.set(new Set());
     });
   }
+  resetQuota(): void {
+    this.quota.reset(this.snapshot()?.requiredEvaluators ?? 1);
+    this.dialogError.set(null);
+  }
   previewQuota(): void {
-    if (this.quota.invalid) {
-      this.quota.markAsTouched();
+    const value = this.quota.value;
+    if (
+      this.modal() !== "method" ||
+      this.busy() ||
+      value === null ||
+      this.quota.invalid ||
+      !this.quotaChanged()
+    )
       return;
-    }
-    this.request(this.api.quota(this.programId(), this.quota.value), data =>
-      this.quotaPreview.set(data),
-    );
+    const programId = this.programId();
+    this.request(this.api.quota(programId, value), data => {
+      if (programId === this.programId() && this.modal() === "method" && value === this.quota.value)
+        this.quotaPreview.set(data);
+    });
   }
   saveQuota(): void {
     const preview = this.quotaPreview();
-    if (!preview || preview.requiredEvaluators !== this.quota.value) return;
+    if (
+      this.modal() !== "method" ||
+      this.busy() ||
+      !preview ||
+      preview.requiredEvaluators !== this.quota.value ||
+      !this.quotaChanged()
+    )
+      return;
+    const programId = this.programId();
     this.request(
-      this.api.saveQuota(this.programId(), preview.requiredEvaluators, preview.revision),
+      this.api.saveQuota(programId, preview.requiredEvaluators, preview.revision),
       data => {
+        if (programId !== this.programId()) return;
         this.snapshot.set(data);
-        this.modal.set(null);
-        this.message.set("Число оценщиков изменено, готовность проектов пересчитана.");
+        this.quota.reset(data.requiredEvaluators);
+        this.quotaSaved.set(true);
       },
     );
   }

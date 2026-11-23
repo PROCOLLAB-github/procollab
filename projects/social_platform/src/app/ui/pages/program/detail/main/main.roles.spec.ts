@@ -169,24 +169,39 @@ describe("Program page: program-scoped news and role visibility", () => {
     TestBed.inject(NewsInfoService).applyAddNews(news);
     f.detectChanges();
     expect(f.nativeElement.querySelector("app-program-role-widget")).toBeTruthy();
+    expect(f.nativeElement.querySelector(".program__about")).toBeTruthy();
     expect(f.nativeElement.querySelector("app-news-card,app-news-form")).toBeNull();
     expect(fetch).not.toHaveBeenCalled();
     expect(mine).not.toHaveBeenCalled();
   });
   it("preserves advertisement and no internal content for an unrelated user", () => {
     const f = render({ advertisementImageAddress: "/advertisement.webp" });
-    expect(f.nativeElement.querySelector(".program__advertisement")).toBeTruthy();
+    const page: HTMLElement = f.nativeElement;
+    expect(page.querySelector(".program__advertisement img")?.getAttribute("src")).toBe(
+      "/advertisement.webp",
+    );
     expect(
-      f.nativeElement.querySelector("app-program-role-widget,app-news-card,app-news-form"),
+      page.querySelector(".program__about,app-program-role-widget,app-news-card,app-news-form"),
     ).toBeNull();
     expect(fetch).not.toHaveBeenCalled();
   });
-  it("does not render a broken advertisement when the program has no image", () => {
-    const f = render({});
-    expect(f.nativeElement.querySelector(".program__advertisement img")).toBeNull();
+  it("keeps public resources without an advertisement or internal about card", () => {
+    const f = render({
+      advertisementImageAddress: " ",
+      presentationAddress: "https://example.org/rules.pdf",
+      materials: [{ title: "Памятка участника", url: "https://example.org/guide" }],
+    });
+    const page: HTMLElement = f.nativeElement;
+    expect(page.querySelector(".program__advertisement img")).toBeNull();
     expect(
-      f.nativeElement.querySelector("app-program-role-widget,app-news-card,app-news-form"),
+      page.querySelector(".program__about,app-program-role-widget,app-news-card,app-news-form"),
     ).toBeNull();
+    expect(page.querySelector('a[href="https://example.org/rules.pdf"]')?.textContent).toContain(
+      "Положение",
+    );
+    expect(page.querySelector('a[href="https://example.org/guide"]')?.textContent).toContain(
+      "Памятка участника",
+    );
     expect(fetch).not.toHaveBeenCalled();
   });
 });

@@ -18,15 +18,18 @@
       <app-section-header
         [title]="'Эксперты' + (snapshot() ? ' · ' + snapshot()!.experts.length : '')"
       >
-        <div class="experts__heading-actions">
+        <div sectionHeaderAction class="experts__people-actions">
           <button
             class="experts__invite"
             type="button"
             appButton="primary"
+            aria-label="Пригласить эксперта"
+            aria-haspopup="dialog"
             (click)="open('invite')"
             [disabled]="busy()"
           >
-            Пригласить эксперта
+            <span class="experts__invite-full">Пригласить эксперта</span>
+            <span class="experts__invite-short">Пригласить</span>
           </button>
           <button
             class="experts__export"
@@ -106,18 +109,18 @@
   } @else {
     @if (snapshot(); as state) {
       <section class="experts__card experts__distribution" [attr.aria-busy]="loading()">
-        <app-section-header title="Распределение экспертов"> </app-section-header>
-        <div class="experts__quota">
-          <strong>Экспертов на проект: {{ state.requiredEvaluators }}</strong>
-          <button type="button" appButton="secondary" [disabled]="busy()" (click)="open('quota')">
-            Изменить
-          </button>
-        </div>
-        <div class="experts__heading-actions experts__allocation-actions">
-          <button type="button" appButton="primary" [disabled]="busy()" (click)="open('method')">
+        <app-section-header title="Распределение экспертов">
+          <button
+            sectionHeaderAction
+            class="experts__distribute"
+            type="button"
+            appButton="primary"
+            [disabled]="busy()"
+            (click)="open('method')"
+          >
             Распределить
           </button>
-        </div>
+        </app-section-header>
         @if (attentionProjects().length) {
           <button
             type="button"
@@ -484,75 +487,59 @@
         </footer>
       }
       @case ("method") {
-        <section class="experts__method">
-          <div class="experts__manual-heading">
-            <h3>Вручную</h3>
-            <details class="experts__help">
-              <summary aria-label="Как назначить экспертов вручную">?</summary>
+        <app-expert-quota
+          label="Экспертов на проект"
+          [control]="quota"
+          [busy]="busy()"
+          [changed]="quotaChanged()"
+          [previewReady]="!!quotaPreview()"
+          (preview)="previewQuota()"
+          (save)="saveQuota()"
+          (resetQuota)="resetQuota()"
+        >
+          @if (quotaPreview(); as preview) {
+            <div [appAlert]="preview.projectsMissingExperts ? 'warning' : 'success'" role="status">
+              <strong>
+                Полностью оцененных проектов во всей программе: {{ preview.readyBefore }} →
+                {{ preview.readyAfter }}
+              </strong>
               <p>
-                Закройте это окно, выберите проекты одного кейса в таблице и нажмите «Назначить
-                экспертов». Для одного проекта откройте меню с тремя точками в его строке и выберите
-                назначение экспертов.
+                Экспертов нужно добавить в {{ preview.projectsMissingExperts ?? 0 }}
+                {{
+                  preview.projectsMissingExperts ?? 0
+                    | pluralize: ["проект", "проекта", "проектов"]
+                }}.
               </p>
-            </details>
+              <p>Сохраненные оценки и текущие назначения останутся.</p>
+            </div>
+          }
+        </app-expert-quota>
+        @if (quotaSaved()) {
+          <p role="status">Готовность проектов пересчитана.</p>
+        }
+        <section class="experts__method">
+          <div>
+            <h3>Вручную</h3>
+            <p>Выберите проекты одного кейса или откройте меню нужного проекта.</p>
           </div>
-          <p>Назначайте экспертов в таблице проектов.</p>
-          <button type="button" appButton="secondary" (click)="close()">К проектам</button>
+          <button type="button" appButton="secondary" [disabled]="busy()" (click)="close()">
+            К проектам
+          </button>
         </section>
         <section class="experts__method">
-          <h3>Автоматически</h3>
-          <p>Доступные эксперты распределяются по всем кейсам с учетом нагрузки.</p>
-          <p>Организаторам можно назначить проекты вручную.</p>
-          <button type="button" appButton="primary" (click)="startAutomaticAllocation()">
+          <div>
+            <h3>Автоматически</h3>
+            <p>Назначения по всем кейсам с учетом нагрузки экспертов.</p>
+          </div>
+          <button
+            type="button"
+            appButton="primary"
+            [disabled]="busy() || quotaChanged()"
+            (click)="startAutomaticAllocation()"
+          >
             Распределить автоматически
           </button>
         </section>
-      }
-      @case ("quota") {
-        <label
-          >Количество экспертов на каждый проект<input
-            type="number"
-            min="1"
-            max="1000"
-            step="1"
-            appField
-            [formControl]="quota"
-        /></label>
-        <p>Изменение применяется ко всей программе.</p>
-        @if (quotaPreview(); as preview) {
-          <div [appAlert]="preview.projectsMissingExperts ? 'warning' : 'success'">
-            <strong
-              >Полностью оцененных проектов: {{ preview.readyBefore }} →
-              {{ preview.readyAfter }}</strong
-            >
-            <p>
-              Экспертов нужно добавить в {{ preview.projectsMissingExperts ?? 0 }}
-              {{
-                preview.projectsMissingExperts ?? 0 | pluralize: ["проект", "проекта", "проектов"]
-              }}.
-            </p>
-            <p>Сохраненные оценки и текущие назначения останутся.</p>
-          </div>
-        }
-        <footer class="experts__actions">
-          <button type="button" appButton="secondary" (click)="close()" [disabled]="busy()">
-            Отмена
-          </button>
-          @if (quotaPreview()) {
-            <button type="button" appButton="primary" (click)="saveQuota()" [disabled]="busy()">
-              Сохранить и пересчитать
-            </button>
-          } @else {
-            <button
-              type="button"
-              appButton="primary"
-              (click)="previewQuota()"
-              [disabled]="busy() || quota.invalid"
-            >
-              Посмотреть изменения
-            </button>
-          }
-        </footer>
       }
       @case ("auto") {
         @if (plan(); as preview) {

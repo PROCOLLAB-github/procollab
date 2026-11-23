@@ -36,54 +36,44 @@
       </button>
     </div>
   }
-  @if (tab() === "distribution") {
-    <section class="experts__card experts__quota">
-      <strong>Количество экспертов на каждое решение: {{ required() }}</strong
-      ><button
-        appButton="secondary"
-        type="button"
-        [disabled]="busy() || loading()"
-        (click)="open('quota')"
-      >
-        Изменить
-      </button>
-    </section>
-  }
   <section class="experts__card" [attr.aria-busy]="loading()">
     <app-section-header [title]="listHeading()">
-      <div class="experts__heading-actions">
-        @if (tab() === "experts") {
-          <button
-            class="experts__invite"
-            appButton="primary"
-            type="button"
-            [disabled]="busy() || loading()"
-            (click)="open('invite')"
-          >
-            Пригласить эксперта
-          </button>
-          <button
-            class="experts__export"
-            appButton="icon"
-            type="button"
-            aria-label="Выгрузить экспертов в Excel"
-            title="Выгрузить экспертов в Excel"
-            [appButtonLoading]="exporting()"
-            [disabled]="loading() || busy() || exporting() || !filtered().length"
-            (click)="downloadExperts()"
-          >
-            <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
-          </button>
-        } @else {
-          <button
-            appButton="primary"
-            type="button"
-            [disabled]="busy() || loading() || allocationBusy() || !filteredSolutions().length"
-            (click)="startAllocation()"
-          >
-            Распределить решения
-          </button>
-        }
+      <button
+        sectionHeaderAction
+        class="experts__distribute"
+        appButton="primary"
+        type="button"
+        [hidden]="tab() !== 'distribution'"
+        [disabled]="busy() || loading() || allocationBusy() || !!error()"
+        (click)="open('method')"
+      >
+        Распределить
+      </button>
+      <div sectionHeaderAction class="experts__people-actions" [hidden]="tab() !== 'experts'">
+        <button
+          class="experts__invite"
+          appButton="primary"
+          type="button"
+          aria-label="Пригласить эксперта"
+          aria-haspopup="dialog"
+          [disabled]="busy() || loading()"
+          (click)="open('invite')"
+        >
+          <span class="experts__invite-full">Пригласить эксперта</span>
+          <span class="experts__invite-short">Пригласить</span>
+        </button>
+        <button
+          class="experts__export"
+          appButton="icon"
+          type="button"
+          aria-label="Выгрузить экспертов в Excel"
+          title="Выгрузить экспертов в Excel"
+          [appButtonLoading]="exporting()"
+          [disabled]="loading() || busy() || exporting() || !filtered().length"
+          (click)="downloadExperts()"
+        >
+          <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+        </button>
       </div>
     </app-section-header>
     <div class="experts__toolbar">
@@ -378,15 +368,15 @@
   [bodyClass]="dialogBodyClass(modal())"
   labelledBy="solution-experts-title"
   (openChange)="!$event && close()"
-  ><section class="experts__dialog">
+  ><section class="experts__dialog" [attr.aria-busy]="busy()">
     <app-dialog-header
       [title]="
         modal() === 'invite'
           ? 'Пригласить эксперта'
           : modal() === 'scope'
             ? 'Кейсы эксперта'
-            : modal() === 'quota'
-              ? 'Число оценщиков'
+            : modal() === 'method'
+              ? 'Распределить решения'
               : 'Назначить решения'
       "
       titleId="solution-experts-title"
@@ -506,49 +496,66 @@
       } @else if (!dialogError()) {
         <p role="status">Загружаем решения…</p>
       }
-    } @else if (modal() === "quota") {
-      <label
-        >Оценщиков на одно решение<input
-          appField
-          type="number"
-          min="1"
-          max="1000"
-          step="1"
-          [formControl]="quota"
-          [readOnly]="busy()"
-      /></label>
-      @if (quotaPreview(); as p) {
-        <p>
-          Готовых решений: {{ p.readyBefore }} → {{ p.readyAfter }}. Не хватает назначений:
-          {{ p.missingAssignments }}. Лишних назначений: {{ p.surplusAssignments }}. Сохраненные
-          оценки и назначения остаются.
-        </p>
-        <footer class="experts__actions">
-          <button appButton="secondary" type="button" [disabled]="busy()" (click)="close()">
-            Отмена</button
-          ><button
-            appButton="primary"
-            type="button"
-            [disabled]="busy() || p.requiredEvaluators !== quota.value"
-            (click)="saveQuota()"
-          >
-            Подтвердить изменение
-          </button>
-        </footer>
-      } @else {
-        <footer class="experts__actions">
-          <button appButton="secondary" type="button" [disabled]="busy()" (click)="close()">
-            Отмена</button
-          ><button
-            appButton="primary"
-            type="button"
-            [disabled]="busy() || quota.invalid"
-            (click)="previewQuota()"
-          >
-            Проверить изменение
-          </button>
-        </footer>
+    } @else if (modal() === "method") {
+      <app-expert-quota
+        label="Экспертов на решение"
+        [control]="quota"
+        [busy]="busy()"
+        [changed]="quotaChanged()"
+        [previewReady]="!!quotaPreview()"
+        (preview)="previewQuota()"
+        (save)="saveQuota()"
+        (resetQuota)="resetQuota()"
+      >
+        @if (quotaPreview(); as preview) {
+          <div [appAlert]="preview.missingAssignments ? 'warning' : 'success'" role="status">
+            <strong>
+              Полностью оцененных решений во всей программе: {{ preview.readyBefore }} →
+              {{ preview.readyAfter }}
+            </strong>
+            <p>
+              Не хватает назначений: {{ preview.missingAssignments }}. Лишних назначений:
+              {{ preview.surplusAssignments }}.
+            </p>
+            <p>Сохраненные оценки и текущие назначения останутся.</p>
+          </div>
+        }
+      </app-expert-quota>
+      @if (quotaSaved()) {
+        <p role="status">Готовность решений пересчитана.</p>
       }
+      <section class="experts__method">
+        <div>
+          <h3>Вручную</h3>
+          <p>В меню эксперта выберите «Назначить решения».</p>
+        </div>
+        <button
+          appButton="secondary"
+          type="button"
+          [disabled]="busy()"
+          (click)="goToExpertsForAllocation()"
+        >
+          К экспертам
+        </button>
+      </section>
+      <section class="experts__method">
+        <div>
+          <h3>Автоматически</h3>
+          <p>Распределите выбранные решения или весь список с учетом фильтров.</p>
+        </div>
+        <button
+          appButton="primary"
+          type="button"
+          [disabled]="
+            busy() ||
+            quotaChanged() ||
+            (!distributionSelection().size && !filteredSolutions().length)
+          "
+          (click)="startAutomaticAllocation()"
+        >
+          Распределить автоматически
+        </button>
+      </section>
     }
   </section></app-modal
 >

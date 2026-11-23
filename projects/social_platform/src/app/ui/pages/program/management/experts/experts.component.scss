@@ -78,62 +78,6 @@
   }
 }
 
-.experts__manual-heading {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.experts__help {
-  position: relative;
-
-  summary {
-    display: grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    color: var(--accent);
-    list-style: none;
-    cursor: pointer;
-    border: 1px solid var(--accent-light);
-    border-radius: 50%;
-
-    &::-webkit-details-marker {
-      display: none;
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
-  }
-
-  &[open] p {
-    position: absolute;
-    z-index: 2;
-    width: min(320px, 65vw);
-    padding: 12px;
-    margin-top: 8px;
-    color: var(--black);
-    background: var(--light-white);
-    border: 1px solid var(--accent-light);
-    border-radius: 10px;
-    box-shadow: 0 4px 16px #00000014;
-  }
-
-  @media (max-width: 999px) {
-    summary {
-      width: 44px;
-      height: 44px;
-    }
-
-    &[open] p {
-      left: -80px;
-      width: min(320px, 72vw);
-    }
-  }
-}
-
 .experts__scroll--cases {
   max-height: 240px;
 }
@@ -177,8 +121,7 @@
 }
 
 .experts__heading,
-.experts__actions,
-.experts__quota {
+.experts__actions {
   display: flex;
   gap: 12px;
   align-items: center;
@@ -190,8 +133,7 @@
   min-width: 0;
 }
 
-.experts__heading > button,
-.experts__quota > button {
+.experts__heading > button {
   flex-shrink: 0;
 }
 
@@ -209,10 +151,6 @@
   border-radius: 15px;
 }
 
-.experts__quota p {
-  margin-top: 4px;
-}
-
 .experts label,
 .experts__dialog label {
   display: grid;
@@ -225,8 +163,7 @@
   margin-top: 6px;
 }
 
-.experts__scope,
-.experts__method {
+.experts__scope {
   display: grid;
   gap: 8px;
   padding: 16px;
@@ -234,9 +171,22 @@
   border-radius: 8px;
 }
 
-.experts__method > button {
-  justify-self: start;
-  min-width: 180px;
+.experts__method {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--light-gray);
+
+  > div {
+    flex: 1 1 22ch;
+    min-width: 0;
+  }
+
+  > button {
+    max-width: 100%;
+  }
 }
 
 .experts__floating {
@@ -390,10 +340,6 @@
   .experts__heading {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .experts__quota {
-    flex-wrap: wrap;
   }
 
   .experts__heading {
@@ -813,7 +759,6 @@
 }
 
 // Панель действий повторяет оформление списков участников и проектов.
-.experts__heading-actions,
 .experts__toolbar,
 .experts__filter-heading,
 .experts__filter-actions {
@@ -827,15 +772,40 @@
   flex: 1;
 }
 
-.experts__heading-actions {
-  flex-wrap: wrap;
-  justify-content: space-between;
-  width: 100%;
+.experts__people-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  margin-inline-start: auto;
 }
 
-.experts__heading-actions.experts__allocation-actions {
-  display: flex;
-  flex-wrap: wrap;
+.experts__invite-short {
+  display: none;
+}
+
+@media (max-width: 420px) {
+  .experts__people-actions {
+    gap: 6px;
+  }
+
+  .experts__invite-full {
+    display: none;
+  }
+
+  .experts__invite-short {
+    display: inline;
+  }
+}
+
+.experts__distribute {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+}
+
+.experts__distribute[hidden],
+.experts__people-actions[hidden] {
+  display: none;
 }
 
 .experts__table--allocation.experts__table--projects {

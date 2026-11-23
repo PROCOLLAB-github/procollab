@@ -3,7 +3,7 @@ import { ExpertRow } from "@domain/program/evaluation-workspace.model";
 
 export function expertDialogBodyClass(kind: string | null): string {
   const variant =
-    kind === "invite" || kind === "quota" || kind === "revoke"
+    kind === "invite" || kind === "method" || kind === "revoke"
       ? "compact"
       : kind === "scope"
         ? "scope"

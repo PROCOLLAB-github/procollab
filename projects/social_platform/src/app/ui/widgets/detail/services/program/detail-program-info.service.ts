@@ -37,7 +37,6 @@ export class DetailProgramInfoService {
   readonly isProgramEndedModalOpen = signal(false);
   readonly isProgramSubmissionProjectsEndedModalOpen = signal<boolean>(false);
   readonly assignProjectToProgramModalMessage = signal<string | null>(null);
-  readonly registerDateExpired = this.programDetailMainUIInfoService.registerDateExpired;
 
   readonly legacyEntryProgramId = signal<number | null>(null);
 
@@ -142,25 +141,37 @@ export class DetailProgramInfoService {
     return program.registrationLink;
   }
 
+  getOpenRegistrationLink(program: Program): string | null {
+    return this.registrationClosedReason(program)
+      ? null
+      : this.getRegistrationLink(program)?.trim() || null;
+  }
+
   /**
    * Блокирует внешнюю регистрацию, если закончился один из разрешённых периодов.
    */
   checkPrograRegistrationEnded(event: Event, program: Program): void {
-    if (
-      program?.datetimeRegistrationEnds &&
-      Date.now() > Date.parse(program.datetimeRegistrationEnds)
-    ) {
-      event.preventDefault();
-      event.stopPropagation();
+    const closedReason = this.registrationClosedReason(program);
+    if (!closedReason) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    if (closedReason === "registration") {
       this.isProgramEndedModalOpen.set(true);
-    } else if (
-      program?.datetimeProjectSubmissionEnds &&
-      Date.now() > Date.parse(program?.datetimeProjectSubmissionEnds)
-    ) {
-      event.preventDefault();
-      event.stopPropagation();
+    } else {
       this.isProgramSubmissionProjectsEndedModalOpen.set(true);
     }
+  }
+
+  private registrationClosedReason(program: Program): "registration" | "submission" | null {
+    const now = Date.now();
+    if (now > Date.parse(program.datetimeRegistrationEnds ?? "")) {
+      return "registration";
+    }
+    if (now > Date.parse(program.datetimeProjectSubmissionEnds)) {
+      return "submission";
+    }
+    return null;
   }
 
   applyUpdateStage(
