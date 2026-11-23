@@ -46,14 +46,14 @@ jobs:
           node <<'NODE'
           const assert = require('node:assert/strict');
           const { launch } = require('./docs/responsive/browser-harness.cjs');
-          const { program } = require('./docs/responsive/fixtures.cjs');
+          const { program, response } = require('./docs/responsive/fixtures.cjs');
           const labels = ['Оценка проектов', 'Управление программой'];
           const name = 'Кейс-чемпионат «Город будущего»';
           const overlap = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
           async function check(width) {
             const { browser, context, page, base } = await launch(width);
             try {
-              const common = { ...program, name, isUserMember: false, welcomeAcknowledgedAt: null, datetimeRegistrationEnds: '2099-01-01', datetimeProjectSubmissionEnds: '2099-01-01' };
+              const common = { ...program, name, imageAddress: '', isUserMember: false, welcomeAcknowledgedAt: null, datetimeRegistrationEnds: '2099-01-01', datetimeProjectSubmissionEnds: '2099-01-01' };
               let detail = { ...common, pendingExpertInvitationId: 34 };
               await context.route('**/programs/1/', route => route.fulfill({
                 json: detail, headers: { 'Access-Control-Allow-Origin': '*' }
@@ -79,7 +79,14 @@ jobs:
               }
               if ([390, 1440].includes(width)) {
                 await page.evaluate(() => document.fonts.ready);
-                await page.locator('.info.detail__info').screenshot({ path: '/tmp/program-header-preview/invitation-' + width + '.png' });
+                const cover = await page.locator('.info__cover--program').boundingBox();
+                const invitation = await invite.boundingBox();
+                const bottom = Math.max(right.y + right.height, invitation.y + invitation.height);
+                const x = Math.max(0, cover.x - 12);
+                await page.screenshot({
+                  path: '/tmp/program-header-preview/invitation-' + width + '.png',
+                  clip: { x, y: cover.y, width: Math.min(width - x, cover.width + 24), height: bottom - cover.y + 16 }
+                });
               }
               detail = { ...common, isUserExpert: false, isUserManager: false, registrationLink: 'https://example.org/register', landingUrl: '', courses: [{ id: 10, title: 'Курс', isAvailable: true }] };
               await open();
@@ -89,16 +96,25 @@ jobs:
               await open();
               assert.equal(await page.getByRole('link', { name: 'Подробнее' }).getAttribute('href'), 'https://example.org/landing');
               detail = { ...common, isUserExpert: false, isUserManager: false, isUserMember: true, currentApplication: { projectId: 78, programLinkId: 44, submitted: true }, welcomeAcknowledgedAt: '2026-10-01', courses: [{ id: 10, title: 'Доступный курс', isAvailable: true }, { id: 11, title: 'Недоступный курс', isAvailable: false }] };
-              await context.route('**/programs/1/analytics-widget/**', route => route.fulfill({
-                json: { programId: 1, isCompetitive: true, role: 'participant', participant: { participantProject: { id: 78, name: 'Сданный проект', programLinkId: 44 }, caseProvided: true, caseName: 'Городской транспорт', stage: 'submitted', submissionOpen: false, submissionDeadline: null } },
-                headers: { 'Access-Control-Allow-Origin': '*' }
-              }));
+              await context.route('**/programs/1/analytics-widget/**', route => {
+                const url = new URL(route.request().url());
+                const participant = { programId: 1, isCompetitive: true, role: 'participant', participant: { participantProject: { id: 78, name: 'Сданный проект', programLinkId: 44 }, caseProvided: true, caseName: 'Городской транспорт', stage: 'submitted', submissionOpen: false, submissionDeadline: null } };
+                const json = detail.isUserManager && url.searchParams.get('role') !== 'participant'
+                  ? response(url.pathname, 'GET', url.searchParams, {})
+                  : participant;
+                return route.fulfill({ json, headers: { 'Access-Control-Allow-Origin': '*' } });
+              });
               await open();
               assert.equal(await actions.count(), 0);
               await page.getByRole('link', { name: /Сданный проект/ }).waitFor();
               assert.equal(await page.getByRole('link', { name: 'Доступный курс' }).count(), 1);
               assert.equal(await page.getByRole('link', { name: 'Недоступный курс' }).count(), 0);
-              console.log(width + 'px: organizer with invitation, visitor, submitted participant passed');
+              detail = { ...detail, isUserManager: true, isUserExpert: true, currentApplication: null, hasSubmittedTeamProject: true, datetimeEvaluationEnds: '2000-01-01' };
+              await open();
+              await page.getByRole('link', { name: /Сданный проект/ }).waitFor();
+              assert.equal(await page.locator('app-program-role-widget').count(), 2);
+              assert.deepEqual(await actions.allTextContents().then(texts => texts.map(text => text.trim())), labels);
+              console.log(width + 'px: organizer with invitation, visitor, submitted participant and mixed roles passed');
             } finally {
               await browser.close();
             }
