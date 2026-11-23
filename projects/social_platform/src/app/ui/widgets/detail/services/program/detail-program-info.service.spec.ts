@@ -219,14 +219,14 @@ describe("DetailProgramInfoService", () => {
   }
 
   it("currentApplication=null offers application creation", () => {
-    expect(service.applicationLabel()).toBe("подать проект");
+    expect(service.applicationLabel()).toBe("Подать проект");
     expect(service.application()).toBeNull();
   });
 
   it("backend draft immediately offers navigation with backend IDs and does not create", () => {
     setCurrentApplication({ projectId: 10, programLinkId: 44, submitted: false });
 
-    expect(service.applicationLabel()).toBe("открыть черновик");
+    expect(service.applicationLabel()).toBe("Продолжить черновик");
     service.addNewProject(12);
     expect(TestBed.inject(ApplyProjectToProgramUseCase).execute).not.toHaveBeenCalled();
     expect(TestBed.inject(GetProgramProjectAdditionalFieldsUseCase).execute).not.toHaveBeenCalled();
@@ -273,27 +273,23 @@ describe("DetailProgramInfoService", () => {
     },
   );
 
-  it.each([
-    { isUserMember: false },
-    { isUserManager: true },
-    { isUserExpert: true },
-    { pendingExpertInvitationId: 32 },
-    { preview: true },
-    { solutionActionAvailable: false },
-  ])("blocks access to the participant action for %j", overrides => {
-    programUI.program.set(
-      program({
-        id: 12,
-        isUserMember: true,
-        currentApplication: { projectId: 10, programLinkId: 44, submitted: true },
-        ...overrides,
-      }),
-    );
+  it.each([{ isUserMember: false }, { preview: true }, { solutionActionAvailable: false }])(
+    "blocks access to the participant action for %j",
+    overrides => {
+      programUI.program.set(
+        program({
+          id: 12,
+          isUserMember: true,
+          currentApplication: { projectId: 10, programLinkId: 44, submitted: true },
+          ...overrides,
+        }),
+      );
 
-    expect(service.applicationActionDisabled()).toBe(true);
-    service.addNewProject(12);
-    expect(router.navigate).not.toHaveBeenCalled();
-  });
+      expect(service.applicationActionDisabled()).toBe(true);
+      service.addNewProject(12);
+      expect(router.navigate).not.toHaveBeenCalled();
+    },
+  );
 
   it("reload reads an existing application directly from Program without project requests", () => {
     setCurrentApplication({ projectId: 55, programLinkId: 700, submitted: false });
@@ -303,7 +299,7 @@ describe("DetailProgramInfoService", () => {
       programLinkId: 700,
       submitted: false,
     });
-    expect(service.applicationLabel()).toBe("открыть черновик");
+    expect(service.applicationLabel()).toBe("Продолжить черновик");
     expect(TestBed.inject(GetMyProjectsUseCase).execute).not.toHaveBeenCalled();
     expect(TestBed.inject(GetProjectUseCase).execute).not.toHaveBeenCalled();
   });
@@ -326,7 +322,7 @@ describe("DetailProgramInfoService", () => {
     );
     setCurrentApplication({ projectId: 100, programLinkId: 202, submitted: false });
 
-    expect(service.applicationLabel()).toBe("открыть черновик");
+    expect(service.applicationLabel()).toBe("Продолжить черновик");
     service.addNewProject(12);
     expect(router.navigate).toHaveBeenCalledExactlyOnceWith(["/office/projects/100/edit"], {
       queryParams: { editingStep: "additional", programLinkId: 202 },

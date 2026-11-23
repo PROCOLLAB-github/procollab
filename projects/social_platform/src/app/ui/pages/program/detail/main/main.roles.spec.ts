@@ -45,7 +45,9 @@ class NewsCardStub {
   delete = output<number>();
 }
 @Component({ selector: "app-program-role-widget", template: "Виджет" })
-class WidgetStub {}
+class WidgetStub {
+  participantOnly = input(false);
+}
 
 describe("Program page: program-scoped news and role visibility", () => {
   const news = { ...FeedNews.default(), id: 1, text: "Существующая новость", files: [] };

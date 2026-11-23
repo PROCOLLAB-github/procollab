@@ -5,7 +5,6 @@ import {
   computed,
   DestroyRef,
   ElementRef,
-  HostListener,
   inject,
   OnDestroy,
   OnInit,
@@ -13,6 +12,7 @@ import {
   viewChild,
 } from "@angular/core";
 import { isFailure } from "@domain/shared/async-state";
+import { NgTemplateOutlet } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
@@ -41,6 +41,7 @@ import { solutionCreationBlockedMessage } from "@api/solution/solution-navigatio
   templateUrl: "./main.component.html",
   styleUrl: "./main.component.scss",
   imports: [
+    NgTemplateOutlet,
     IconComponent,
     ButtonComponent,
     ParseBreaksPipe,
@@ -85,6 +86,12 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   protected readonly readFullDescription = this.expandService.readFullDescription;
 
   protected readonly program = this.programDetailMainUIInfoService.program;
+  protected readonly availableCourses = computed(() => {
+    const program = this.program();
+    return program?.isUserMember
+      ? (program.courses ?? []).filter(course => course.isAvailable)
+      : [];
+  });
   protected readonly news = this.newsInfoService.news;
 
   protected readonly newsPending = signal(false);
@@ -110,13 +117,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   protected readonly contactLinks = this.programDetailMainUIInfoService.contactLinks;
   protected readonly materialLinks = this.programDetailMainUIInfoService.materialLinks;
-
-  protected appWidth = window.innerWidth;
-
-  @HostListener("window:resize")
-  onResize() {
-    this.appWidth = window.innerWidth;
-  }
 
   ngOnInit(): void {
     this.programDetailMainService.initializationProgramDetailMain(this.descEl());

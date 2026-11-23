@@ -65,7 +65,7 @@ export abstract class ProgramRepositoryPort {
     filters?: ProgramCaseFilters,
   ): Observable<Blob>;
 
-  abstract getRoleWidget(programId: number): Observable<ProgramRoleWidget>;
+  abstract getRoleWidget(programId: number, role?: "participant"): Observable<ProgramRoleWidget>;
   abstract getAll(
     skip: number,
     take: number,

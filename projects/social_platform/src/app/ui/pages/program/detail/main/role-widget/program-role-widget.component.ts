@@ -8,7 +8,9 @@ import {
   Component,
   computed,
   DestroyRef,
+  effect,
   inject,
+  input,
   signal,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
@@ -32,6 +34,7 @@ import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/p
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramRoleWidgetComponent {
+  readonly participantOnly = input(false);
   readonly service = inject(ProgramRoleWidgetService);
   readonly program = inject(ProgramDetailMainUIInfoService).program;
   private readonly applicationAction = inject(DetailProgramInfoService);
@@ -116,6 +119,7 @@ export class ProgramRoleWidgetComponent {
     integrity: "Данные заявки требуют проверки",
   };
   constructor() {
+    effect(() => this.service.participantOnly.set(this.participantOnly()));
     // Только локальные часы: никаких повторных HTTP-запросов. Пересечение дедлайна ≤1 с.
     const clock = setInterval(() => this.now.set(Date.now()), 1000);
     inject(DestroyRef).onDestroy(() => clearInterval(clock));

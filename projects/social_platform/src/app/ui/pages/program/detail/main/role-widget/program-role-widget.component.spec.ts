@@ -48,7 +48,10 @@ describe("ProgramRoleWidgetComponent", () => {
     TestBed.overrideComponent(ProgramRoleWidgetComponent, {
       set: {
         providers: [
-          { provide: ProgramRoleWidgetService, useValue: { state, retry, programId: signal(12) } },
+          {
+            provide: ProgramRoleWidgetService,
+            useValue: { state, retry, programId: signal(12), participantOnly: signal(false) },
+          },
         ],
       },
     });
@@ -65,7 +68,7 @@ describe("ProgramRoleWidgetComponent", () => {
     expect(f.nativeElement.querySelector(".widget__skeleton")).toBeTruthy();
     expect(f.nativeElement.querySelector("dd")).toBeNull();
   });
-  it("uses a real solution reference for both participant links and clears legacy query parameters", () => {
+  it("links to the submitted solution from its name and clears legacy query parameters", () => {
     const f = render(participant);
     state.set(
       success({
@@ -89,9 +92,9 @@ describe("ProgramRoleWidgetComponent", () => {
     );
     f.detectChanges();
     const links = f.nativeElement.querySelectorAll("a");
-    expect(links).toHaveLength(2);
-    for (const link of links)
-      expect(link.getAttribute("href")).toBe("/office/program/12/solutions/301");
+    expect(links).toHaveLength(1);
+    expect(links[0].getAttribute("href")).toBe("/office/program/12/solutions/301");
+    expect(f.nativeElement.textContent).toContain("Решение сдано");
     expect(f.nativeElement.textContent).toContain("Решение:");
     expect(f.nativeElement.textContent).not.toContain("Проект:");
     expect(f.nativeElement.querySelectorAll(".widget__step--complete")).toHaveLength(3);
@@ -157,12 +160,12 @@ describe("ProgramRoleWidgetComponent", () => {
       "/office/evaluation?program=12",
     );
   });
-  it("opens the exact project from both name and action and retains full accessible names", () => {
+  it("opens the exact submitted project from its name and retains full accessible names", () => {
     const f = render(participant);
     const links = f.nativeElement.querySelectorAll("a");
-    expect(links).toHaveLength(2);
-    for (const link of links)
-      expect(link.getAttribute("href")).toBe("/office/projects/5?programLinkId=34");
+    expect(links).toHaveLength(1);
+    expect(links[0].getAttribute("href")).toBe("/office/projects/5?programLinkId=34");
+    expect(f.nativeElement.textContent).toContain("Проект сдан");
     expect(links[0].textContent).toContain(participant.participant.participantProject!.name);
     expect(f.nativeElement.querySelector('[aria-current="step"]').textContent).toContain(
       "Проверен",
@@ -238,7 +241,7 @@ describe("ProgramRoleWidgetComponent", () => {
       participant: { ...participant.participant, stage: "not_submitted", submissionOpen: false },
     });
     expect(f.nativeElement.textContent).toContain("Не отправлен");
-    expect(f.nativeElement.querySelectorAll("a")).toHaveLength(2);
+    expect(f.nativeElement.querySelectorAll("a")).toHaveLength(1);
   });
   it("shows four organizer counts without a standalone percentage", () => {
     const f = render({

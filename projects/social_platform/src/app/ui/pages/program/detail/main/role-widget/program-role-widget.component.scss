@@ -230,6 +230,10 @@
     align-items: center;
     justify-content: center;
     border-top: 0.5px solid var(--medium-grey-for-outline);
+
+    &:empty {
+      border: 0;
+    }
   }
 
   &__footer a,

@@ -66,6 +66,17 @@ describe("ProgramRoleWidgetService", () => {
     responses[0].next(ok(result()));
     expect(service.state()).toEqual({ status: "success", data: result() });
   });
+  it("requests the participant view when the member is also an organizer", () => {
+    program.update(value => ({ ...value, isUserManager: true }));
+    service.participantOnly.set(true);
+    TestBed.flushEffects();
+    expect(TestBed.inject(GetProgramRoleWidgetUseCase).execute).toHaveBeenLastCalledWith(
+      12,
+      "participant",
+    );
+    responses.at(-1)?.next(ok(result()));
+    expect(service.state()).toEqual({ status: "success", data: result() });
+  });
   it("does not replace a failure with zero and permits explicit retry", () => {
     responses[0].next(fail("network"));
     expect(service.state()).toEqual({ status: "failure", error: "network", previous: undefined });

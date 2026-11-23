@@ -17,6 +17,8 @@
             loading="lazy"
             decoding="async"
           />
+          <ng-container *ngTemplateOutlet="programResources" />
+          <ng-container *ngTemplateOutlet="programMaterials" />
         </div>
       } @else {
         <div class="program__details">
@@ -24,6 +26,11 @@
             <aside class="program__aside">
               @if (program()!.isUserMember || program()!.isUserManager || program()!.isUserExpert) {
                 <app-program-role-widget></app-program-role-widget>
+              }
+              @if (
+                program()!.isUserMember && (program()!.isUserManager || program()!.isUserExpert)
+              ) {
+                <app-program-role-widget [participantOnly]="true" />
               }
             </aside>
           </div>
@@ -55,6 +62,7 @@
                   }
                 </div>
               }
+              <ng-container *ngTemplateOutlet="programResources" />
             </div>
             <div class="news">
               @if (program()!.isUserManager) {
@@ -81,30 +89,77 @@
             </div>
           </div>
 
-          @if (appWidth > 1000) {
-            <div class="program__right">
-              @if (program()!.isUserMember && program()!.links?.length && program()!.links) {
-                <aside class="links program__section">
-                  <app-program-links
-                    title="контакты"
-                    icon="phone"
-                    [links]="contactLinks()"
-                  ></app-program-links>
-                </aside>
-              }
-              @if (program()!.isUserMember && program()!.materials?.length) {
-                <aside class="program__aside program__section">
-                  <app-program-links
-                    title="материалы"
-                    icon="book"
-                    [links]="materialLinks()"
-                  ></app-program-links>
-                </aside>
-              }
-            </div>
-          }
+          <div class="program__right">
+            @if (availableCourses().length) {
+              <aside class="program__section">
+                <h3 class="text-body-12">Курсы программы</h3>
+                @for (course of availableCourses(); track course.id) {
+                  <a
+                    class="program__resource-link"
+                    [routerLink]="AppRoutes.courses.detail(course.id)"
+                  >
+                    {{ course.title }}
+                  </a>
+                }
+              </aside>
+            }
+            @if (program()!.isUserMember && program()!.links?.length && program()!.links) {
+              <aside class="links program__section">
+                <app-program-links
+                  title="контакты"
+                  icon="phone"
+                  [links]="contactLinks()"
+                ></app-program-links>
+              </aside>
+            }
+            <ng-container *ngTemplateOutlet="programMaterials" />
+          </div>
         </div>
       }
+      <ng-template #programResources>
+        @if (
+          !program()!.isUserManager &&
+          (program()!.presentationAddress?.trim() ||
+            program()!.solutionStorageMode === "solution" ||
+            program()!.publishedProjectsAvailable)
+        ) {
+          <div class="program__resources">
+            @if (program()!.presentationAddress?.trim(); as documentUrl) {
+              <a class="program__resource-link" [href]="documentUrl" target="_blank" rel="noopener">
+                {{
+                  program()!.name.includes("Технолидеры Будущего")
+                    ? "Каталог лучших стартапов 2022/23"
+                    : "Положение"
+                }}
+              </a>
+            }
+            @if (program()!.solutionStorageMode === "solution") {
+              <a
+                class="program__resource-link"
+                [routerLink]="AppRoutes.program.publishedSolutions(program()!.id)"
+              >
+                Решения
+              </a>
+            } @else if (program()!.publishedProjectsAvailable) {
+              <a
+                class="program__resource-link"
+                [routerLink]="AppRoutes.program.projects(program()!.id)"
+              >
+                Проекты участников
+              </a>
+            }
+          </div>
+        }
+      </ng-template>
+      <ng-template #programMaterials>
+        @if (
+          program()!.materials?.length && (!program()!.isUserManager || program()!.isUserMember)
+        ) {
+          <aside class="program__aside program__section">
+            <app-program-links title="материалы" icon="book" [links]="materialLinks()" />
+          </aside>
+        }
+      </ng-template>
     </section>
   </main>
 

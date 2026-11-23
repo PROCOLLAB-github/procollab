@@ -15,6 +15,7 @@ import {
 import { take } from "rxjs";
 import { ButtonComponent } from "@ui/primitives";
 import {
+  ButtonDirective,
   DialogHeaderComponent,
   IconComponent,
   PageHeaderComponent,
@@ -52,6 +53,7 @@ import { ProgramPreviewToolbarComponent } from "@ui/pages/program/launch/preview
     CommonModule,
     RouterModule,
     IconComponent,
+    ButtonDirective,
     ButtonComponent,
     ModalComponent,
     DialogHeaderComponent,
@@ -184,7 +186,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly isUserManager = this.detailInfoService.isUserManager;
   protected readonly isUserMember = this.detailInfoService.isUserMember;
   protected readonly isUserExpert = this.detailInfoService.isUserExpert;
-  protected readonly isProjectAssigned = this.detailInfoService.isProjectAssigned;
   protected readonly applicationActionDisabled =
     this.detailProgramInfoService.applicationActionDisabled;
   protected readonly applicationLabel = this.detailProgramInfoService.applicationLabel;
@@ -199,9 +200,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly inviteForm = this.detailProfileInfoService.inviteForm;
 
   protected readonly isContactsModalOpen = this.detailInfoService.isContactsModalOpen;
-  protected readonly isMaterialsModalOpen = this.detailInfoService.isMaterialsModalOpen;
   protected readonly contactLinks = this.detailInfoService.contactLinks;
-  protected readonly materialLinks = this.detailInfoService.materialLinks;
 
   protected appWidth = window.innerWidth;
 

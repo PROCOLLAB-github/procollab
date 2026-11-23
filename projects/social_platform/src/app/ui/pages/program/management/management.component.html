@@ -932,6 +932,16 @@
               id="presentation-link"
               formControlName="presentationAddress"
           /></label>
+          <label for="program-landing-url"
+            >Адрес лендинга<input
+              appField
+              type="url"
+              id="program-landing-url"
+              formControlName="landingUrl"
+              maxlength="200"
+            />
+            <small>Откроется по кнопке «Подробнее» на странице программы.</small>
+          </label>
           <div class="management__inline">
             <button
               appButton="primary"

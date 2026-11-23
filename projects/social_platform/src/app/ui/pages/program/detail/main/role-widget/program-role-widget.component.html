@@ -50,7 +50,13 @@
             }
           </div>
           <div class="widget__stage-state">
-            @if (participant.stage === "not_submitted") {
+            @if (
+              participant.stage === "submitted" ||
+              participant.stage === "review" ||
+              participant.stage === "evaluated"
+            ) {
+              {{ data.storageMode === "solution" ? "Решение сдано" : "Проект сдан" }}
+            } @else if (participant.stage === "not_submitted") {
               Не отправлен
             }
             @if (participant.stage === "not_applicable") {
@@ -169,9 +175,7 @@
           >
         }
         @case ("participant") {
-          @if (participantView()?.applicationLink; as application) {
-            <a [routerLink]="application.path" [queryParams]="application.queryParams">Открыть →</a>
-          } @else if (data.participant.submissionOpen) {
+          @if (!participantView()?.applicationLink && data.participant.submissionOpen) {
             <button
               appButton="primary"
               type="button"
@@ -182,9 +186,9 @@
               "
               (click)="createApplication()"
             >
-              Создать заявку →
+              {{ data.storageMode === "solution" ? "Подать решение" : "Подать проект" }}
             </button>
-          } @else {
+          } @else if (!participantView()?.applicationLink) {
             <span>Срок подачи закрыт</span>
           }
         }

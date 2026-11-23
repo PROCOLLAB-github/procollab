@@ -40,6 +40,7 @@ export interface ManagementBasic {
   advertisementImageAddress: string | null;
   registrationLink: string | null;
   presentationAddress: string | null;
+  landingUrl?: string | null;
 }
 export interface ManagementDates {
   datetimeStarted: string | null;

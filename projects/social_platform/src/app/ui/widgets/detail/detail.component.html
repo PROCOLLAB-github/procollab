@@ -75,14 +75,10 @@
               "
             />
           }
-          <div
-            class="info__actions"
-            [class.info__actions--program]="listType() === 'program'"
-            [class.info__actions--manager]="listType() === 'program' && isUserManager()"
-            [class.info__actions--has-invitation]="
-              listType() === 'program' && info().pendingExpertInvitationId
-            "
-          >
+          @if (appWidth < 1000 && listType() === "program" && !publicationsOnly()) {
+            <ng-container *ngTemplateOutlet="programInvitation" />
+          }
+          <div class="info__actions" [class.info__actions--program]="listType() === 'program'">
             <ng-container
               *ngTemplateOutlet="
                 listType() === 'program'
@@ -96,11 +92,26 @@
 
           @if (appWidth >= 1000 && listType() === "program" && !publicationsOnly()) {
             <h1 class="info__program-heading text-body-18">{{ info().name }}</h1>
+            <ng-container *ngTemplateOutlet="programInvitation" />
           }
 
           @if (appWidth >= 1000 && listType() === "project") {
             <h1 class="info__project-title text-body-12">{{ info().name }}</h1>
           }
+
+          <ng-template #programInvitation>
+            @if (info().pendingExpertInvitationId; as invitationId) {
+              <p class="info__program-invitation">
+                <span>Вас пригласили стать экспертом</span>
+                <a
+                  class="info__program-invitation-link"
+                  [routerLink]="AppRoutes.office.evaluation()"
+                  [queryParams]="{ invitation: invitationId }"
+                  >Посмотреть приглашение</a
+                >
+              </p>
+            }
+          </ng-template>
 
           <ng-template #programTpl>
             @if (userType() !== undefined || publicationsOnly()) {
@@ -158,250 +169,73 @@
                   />
                 </app-modal>
               } @else {
-                <div class="info__primary-action">
-                  @if (
-                    !isUserMember() &&
-                    !isUserManager() &&
-                    !isUserExpert() &&
-                    !info().pendingExpertInvitationId
-                  ) {
+                @if (!isUserMember() && !isUserManager() && !isUserExpert()) {
+                  @if (!registerDateExpired()) {
                     @if (getProgramRegistrationLink(info()); as registrationLink) {
                       <a
-                        (click)="checkPrograRegistrationEnded($event, info())"
+                        class="info__program-action"
+                        appButton="primary"
                         [href]="registrationLink"
+                        (click)="checkPrograRegistrationEnded($event, info())"
+                        >Зарегистрироваться</a
                       >
-                        <app-button
-                          appearance="outline"
-                          size="medium"
-                          customTypographyClass="text-body-12"
-                        >
-                          зарегистрироваться
-                        </app-button>
-                      </a>
-                    } @else {
-                      <span
-                        class="info__unavailable"
-                        tabindex="0"
-                        role="button"
-                        aria-disabled="true"
-                        aria-describedby="registration-unavailable"
-                      >
-                        <app-button
-                          appearance="outline"
-                          size="medium"
-                          [disabled]="true"
-                          customTypographyClass="text-body-12"
-                          >зарегистрироваться</app-button
-                        >
-                        <span id="registration-unavailable" class="info__unavailable-tooltip">
-                          Организатор еще не открыл регистрацию.
-                        </span>
-                      </span>
                     }
                   }
-                  @if (
-                    isUserMember() &&
-                    !isUserManager() &&
-                    !isUserExpert() &&
-                    !info().pendingExpertInvitationId
-                  ) {
-                    <app-button
-                      #programApplicationAction
-                      [size]="appWidth >= 1000 ? 'medium' : 'big'"
-                      [disabled]="applicationActionDisabled()"
-                      [appearance]="isProjectAssigned() ? 'outline' : 'inline'"
-                      (click)="addNewProject(info().id)"
-                      customTypographyClass="text-body-12 bar__add-project"
-                    >
-                      <span>{{ applicationLabel() }}</span>
-                      <i appIcon icon="plus" appSquare="10"></i>
-                    </app-button>
-                  }
-                  @if (info().pendingExpertInvitationId) {
-                    <a
-                      routerLink="/office/evaluation"
-                      [queryParams]="{ invitation: info().pendingExpertInvitationId }"
-                      ><app-button
-                        appearance="outline"
-                        [size]="appWidth >= 1000 ? 'medium' : 'big'"
-                        customTypographyClass="text-body-12"
-                        >Принять приглашение</app-button
-                      ></a
-                    >
-                  }
-                  @if (isUserExpert()) {
-                    <a
-                      [routerLink]="AppRoutes.office.evaluation()"
-                      [queryParams]="{ program: info().id }"
-                    >
-                      <app-button
-                        [appearance]="
-                          isProjectsRatingPage() || appWidth < 1000 ? 'inline' : 'outline'
-                        "
-                        [size]="appWidth >= 1000 ? 'medium' : 'big'"
-                        customTypographyClass="text-body-12"
-                      >
-                        {{
-                          info().solutionStorageMode === "solution"
-                            ? "оценка решений"
-                            : "оценка проектов"
-                        }}
-                      </app-button>
+                  @if (info().landingUrl?.trim(); as landingUrl) {
+                    <a class="info__program-action" appButton="secondary" [href]="landingUrl">
+                      Подробнее
                     </a>
+                  } @else {
+                    <button
+                      class="info__program-action"
+                      appButton="secondary"
+                      type="button"
+                      disabled
+                    >
+                      Подробнее
+                    </button>
                   }
-                </div>
-
+                }
+                @if (
+                  isUserMember() &&
+                  !isUserManager() &&
+                  !isUserExpert() &&
+                  info().solutionStorageMode !== "solution" &&
+                  !info().currentApplication?.submitted &&
+                  !info().hasSubmittedTeamProject &&
+                  !applicationActionDisabled()
+                ) {
+                  <button
+                    #programApplicationAction
+                    class="info__program-action"
+                    appButton="primary"
+                    type="button"
+                    (click)="addNewProject(info().id)"
+                  >
+                    {{ applicationLabel() }}
+                  </button>
+                }
+                @if (isUserExpert()) {
+                  <a
+                    class="info__program-action"
+                    appButton="secondary"
+                    [routerLink]="AppRoutes.office.evaluation()"
+                    [queryParams]="{ program: info().id }"
+                    >Оценка проектов</a
+                  >
+                }
                 @if (isUserManager()) {
                   <a
+                    class="info__program-action"
+                    appButton="secondary"
                     [routerLink]="
                       info().draft
                         ? AppRoutes.program.launch(info().id)
                         : AppRoutes.program.management(info().id, 'analytics')
                     "
+                    >Управление программой</a
                   >
-                    <app-button
-                      [appearance]="isAnalyticsPage() ? 'inline' : 'outline'"
-                      [size]="appWidth >= 1000 ? 'medium' : 'big'"
-                      customTypographyClass="text-body-12"
-                    >
-                      управление программой
-                    </app-button>
-                  </a>
-                } @else if (info().presentationAddress?.trim()) {
-                  <a [href]="info().presentationAddress" download="" target="_blank">
-                    <app-button
-                      appearance="outline"
-                      [size]="appWidth >= 1000 ? 'medium' : 'small'"
-                      customTypographyClass="text-body-12"
-                    >
-                      <span>{{
-                        info().name.includes("Технолидеры Будущего")
-                          ? "Каталог лучших стартапов 2022/23"
-                          : "положение"
-                      }}</span>
-                      <i
-                        appIcon
-                        class="info__presentation-icon"
-                        [icon]="appWidth >= 1000 ? 'arrow-down' : 'file'"
-                        [appSquare]="appWidth >= 1000 ? '8' : '12'"
-                      ></i>
-                    </app-button>
-                  </a>
                 }
-
-                @if (appWidth >= 1000) {
-                  <div class="info__divider"></div>
-                }
-                @if (appWidth < 1000) {
-                  @if (isUserMember() && info().links?.length) {
-                    <app-button
-                      appearance="outline"
-                      size="small"
-                      [disabled]="!info().links?.length"
-                      class="info__contacts"
-                      customTypographyClass="text-body-12"
-                      (click)="isContactsModalOpen.set(true)"
-                    >
-                      <i appIcon icon="phone" appSquare="12"></i>
-                      @if (appWidth < 1000) {
-                        <span>Контакты</span>
-                      }
-                    </app-button>
-                  }
-                }
-                @if (!isUserManager() && info().solutionStorageMode === "solution") {
-                  <a
-                    [routerLink]="AppRoutes.program.publishedSolutions(info().id)"
-                    routerLinkActive
-                    #publishedLink="routerLinkActive"
-                    [attr.aria-current]="publishedLink.isActive ? 'page' : null"
-                  >
-                    <app-button
-                      [appearance]="publishedLink.isActive ? 'inline' : 'outline'"
-                      [size]="appWidth >= 1000 ? 'medium' : 'small'"
-                      customTypographyClass="text-body-12"
-                      >решения</app-button
-                    >
-                  </a>
-                } @else if (
-                  !isUserManager() && (isUserExpert() || info().publishedProjectsAvailable)
-                ) {
-                  <a
-                    [routerLink]="
-                      info().publishedProjectsAvailable
-                        ? AppRoutes.program.projects(info().id)
-                        : null
-                    "
-                  >
-                    <app-button
-                      [appearance]="isProjectsPage() ? 'inline' : 'outline'"
-                      size="medium"
-                      [disabled]="!info().publishedProjectsAvailable"
-                      customTypographyClass="text-body-12"
-                    >
-                      проекты-участники
-                    </app-button>
-                  </a>
-                }
-                @if (
-                  !isUserManager() &&
-                  !isUserExpert() &&
-                  appWidth >= 1000 &&
-                  info().solutionStorageMode !== "solution" &&
-                  !info().publishedProjectsAvailable
-                ) {
-                  <a class="info__more">
-                    <app-button
-                      appearance="outline"
-                      [disabled]="true"
-                      size="medium"
-                      customTypographyClass="text-body-12"
-                    >
-                      узнать подробнее
-                    </app-button>
-                  </a>
-                }
-                @if (!isUserManager() && isUserExpert() && appWidth >= 1000) {
-                  <a [routerLink]="AppRoutes.program.members(info().id)" class="info__members">
-                    <app-button
-                      [appearance]="isMembersPage() ? 'inline' : 'outline'"
-                      size="medium"
-                      [disabled]="isUserExpert() && !isUserManager()"
-                      customTypographyClass="text-body-12"
-                    >
-                      участники
-                    </app-button>
-                  </a>
-                }
-                @if (appWidth < 1000 && !isUserManager()) {
-                  <app-button
-                    appearance="outline"
-                    size="big"
-                    [disabled]="!info().materials?.length"
-                    class="info__materials"
-                    [class.info__materials--full]="isUserManager() || isUserExpert()"
-                    customTypographyClass="text-body-12"
-                    (click)="isMaterialsModalOpen.set(true)"
-                  >
-                    материалы
-                  </app-button>
-                }
-                @if (!isUserManager() && !isUserExpert()) {
-                  <app-button
-                    (click)="
-                      info().courses?.length
-                        ? router.navigateByUrl(AppRoutes.courses.detail(info().courses[0].id))
-                        : null
-                    "
-                    appearance="outline"
-                    [disabled]="!info().courses?.length"
-                    [size]="appWidth >= 1000 ? 'medium' : 'big'"
-                    customTypographyClass="text-body-12"
-                  >
-                    {{ appWidth >= 1000 ? "перейти в курс" : "курс" }}
-                  </app-button>
-                }
-
                 @defer (when isAssignProjectToProgramModalOpen()) {
                   <app-modal
                     #programApplicationErrorModal
@@ -453,48 +287,6 @@
                       (closed)="isProgramSubmissionProjectsEndedModalOpen.set(false)"
                     />
                     <i appIcon icon="sad-smile" appSquare="50" aria-hidden="true"></i>
-                  </app-modal>
-                }
-
-                @defer (when isContactsModalOpen()) {
-                  <app-modal
-                    [open]="isContactsModalOpen()"
-                    (openChange)="isContactsModalOpen.set(false)"
-                    labelledBy="program-contacts-dialog-title"
-                    bodyClass="modal__body--no-flex"
-                  >
-                    <app-dialog-header
-                      title="Контакты"
-                      titleId="program-contacts-dialog-title"
-                      (closed)="isContactsModalOpen.set(false)"
-                    />
-                    <app-program-links
-                      title="контакты"
-                      icon="phone"
-                      [showHeader]="false"
-                      [links]="contactLinks()"
-                    />
-                  </app-modal>
-                }
-
-                @defer (when isMaterialsModalOpen()) {
-                  <app-modal
-                    [open]="isMaterialsModalOpen()"
-                    (openChange)="isMaterialsModalOpen.set(false)"
-                    labelledBy="program-materials-dialog-title"
-                    bodyClass="modal__body--no-flex"
-                  >
-                    <app-dialog-header
-                      title="Материалы"
-                      titleId="program-materials-dialog-title"
-                      (closed)="isMaterialsModalOpen.set(false)"
-                    />
-                    <app-program-links
-                      title="материалы"
-                      icon="book"
-                      [showHeader]="false"
-                      [links]="materialLinks()"
-                    />
                   </app-modal>
                 }
               }
