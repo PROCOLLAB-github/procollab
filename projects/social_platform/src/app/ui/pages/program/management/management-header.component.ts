@@ -114,6 +114,7 @@ export class ProgramManagementHeaderComponent {
   private readonly readiness = signal<{ programId: number; seen: ReadonlySet<string> } | null>(
     null,
   );
+  private readonly shownContext = new Set<string>();
   private readonly expectedTarget = signal<HTMLElement | null>(null);
   protected readonly target = this.expectedTarget.asReadonly();
   protected readonly step = computed(() => {
@@ -225,6 +226,13 @@ export class ProgramManagementHeaderComponent {
       this.skipTimer = undefined;
     }
     if (current) {
+      const replayId =
+        current.tour.id === "participants-v1"
+          ? "participant-removal-v1"
+          : current.tour.id === "evaluation-v1"
+            ? "allocation-shortage-v1"
+            : null;
+      if (replayId && this.openContextGuide(replayId)) return;
       if (current.tour.id === "participants-v1" && current.index === 0) {
         const empty = PROGRAM_GUIDES.find(tour => tour.id === "participant-empty-v1");
         if (empty && this.findTarget(empty.steps[0].target)) {
@@ -263,24 +271,32 @@ export class ProgramManagementHeaderComponent {
     const programId = this.programId();
     if (ready?.programId !== programId || this.helpOpen() || this.navigating()) return;
     for (const tour of PROGRAM_CONTEXT_GUIDES) {
-      if (ready.seen.has(tour.id)) continue;
-      const target = this.findTarget(tour.steps[0].target);
-      if (!target) continue;
-      this.restoreFocus = null;
-      this.expectedTarget.set(target);
-      this.tourState.current.set({
-        programId,
-        tour,
-        index: 0,
-        destination: this.router.parseUrl(this.router.url),
-      });
-      this.readiness.set({ programId, seen: new Set([...ready.seen, tour.id]) });
-      this.api
-        .post<{ seen: string[] }>(this.helpStatePath(programId), { guide: tour.id })
-        .pipe(takeUntilDestroyed(this.destroy))
-        .subscribe({ error: () => undefined });
-      break;
+      if (ready.seen.has(tour.id) || this.shownContext.has(tour.id)) continue;
+      if (this.openContextGuide(tour.id)) break;
     }
+  }
+
+  private openContextGuide(id: string): boolean {
+    const tour = PROGRAM_CONTEXT_GUIDES.find(guide => guide.id === id);
+    const target = tour && this.findTarget(tour.steps[0].target);
+    if (!tour || !target) return false;
+    const programId = this.programId();
+    const seen = this.readiness();
+    this.restoreFocus = null;
+    this.expectedTarget.set(target);
+    this.tourState.current.set({
+      programId,
+      tour,
+      index: 0,
+      destination: this.router.parseUrl(this.router.url),
+    });
+    if (!(seen?.programId === programId && seen.seen.has(id)) && !this.shownContext.has(id)) {
+      this.shownContext.add(id);
+      this.api.post<{ seen: string[] }>(this.helpStatePath(programId), { guide: id }).subscribe({
+        error: () => undefined,
+      });
+    }
+    return true;
   }
 
   private observeActiveTab(): void {
