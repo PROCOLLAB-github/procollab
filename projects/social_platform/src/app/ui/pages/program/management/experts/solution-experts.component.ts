@@ -4,6 +4,7 @@ import { DialogHeaderComponent, SectionHeaderComponent } from "@uilib";
 
 import {
   expertAssignmentsAction,
+  type ExpertDialogIssue,
   expertScopeLabel,
   expertStatusLabel,
   expertDeliveryLabel,
@@ -141,7 +142,7 @@ export class SolutionExpertsComponent {
   readonly busy = signal(false);
   readonly allocationBusy = signal(false);
   readonly error = signal("");
-  readonly dialogError = signal("");
+  readonly dialogError = signal<ExpertDialogIssue | null>(null);
   readonly exporting = signal(false);
   readonly filtersOpen = signal(false);
   readonly filterDraft = new FormGroup({
@@ -560,7 +561,7 @@ export class SolutionExpertsComponent {
     this.bulkScope.set(false);
     this.options.set(null);
     this.selectedSolutions.set(new Set());
-    this.dialogError.set("");
+    this.dialogError.set(null);
     this.quotaPreview.set(null);
     this.email.reset("");
     this.scopeAll.set(expert?.allCases ?? true);
@@ -578,7 +579,12 @@ export class SolutionExpertsComponent {
             this.selectedSolutions.set(
               new Set(result.value.solutions.filter(s => s.assigned).map(s => s.solutionId)),
             );
-          } else this.dialogError.set("Не удалось загрузить назначения эксперта.");
+          } else {
+            this.dialogError.set({
+              message: "Не удалось загрузить назначения эксперта.",
+              kind: "refresh",
+            });
+          }
         });
     }
   }
@@ -607,7 +613,7 @@ export class SolutionExpertsComponent {
   refreshDialog(): void {
     if (this.busy() || !this.modal()) return;
     this.cancelDialog.next();
-    this.dialogError.set("");
+    this.dialogError.set(null);
     const expert = this.selected();
     if (this.modal() === "assignments" && expert?.status === "joined") {
       this.options.set(null);
@@ -616,7 +622,10 @@ export class SolutionExpertsComponent {
         .pipe(takeUntil(this.cancelDialog), takeUntilDestroyed(this.destroyRef))
         .subscribe(result => {
           if (!result.ok) {
-            this.dialogError.set("Не удалось обновить назначения. Повторите попытку.");
+            this.dialogError.set({
+              message: "Не удалось обновить назначения. Повторите попытку.",
+              kind: "refresh",
+            });
             return;
           }
           const chosen = this.selectedSolutions(),
@@ -634,9 +643,9 @@ export class SolutionExpertsComponent {
           this.options.set(fresh);
           this.selectedSolutions.set(ids);
           if ([...chosen].some(id => !ids.has(id)))
-            this.dialogError.set(
-              "Часть выбранных решений стала недоступна. Проверьте обновленный выбор.",
-            );
+            this.dialogError.set({
+              message: "Часть выбранных решений стала недоступна. Проверьте обновленный выбор.",
+            });
         });
     } else {
       this.roster
@@ -648,7 +657,11 @@ export class SolutionExpertsComponent {
             this.cases.set(data.cases ?? []);
             this.quotaPreview.set(null);
           },
-          error: () => this.dialogError.set("Не удалось обновить данные. Повторите попытку."),
+          error: () =>
+            this.dialogError.set({
+              message: "Не удалось обновить данные. Повторите попытку.",
+              kind: "refresh",
+            }),
         });
     }
   }
@@ -656,7 +669,7 @@ export class SolutionExpertsComponent {
     if (this.busy()) return;
     const id = this.programId();
     this.busy.set(true);
-    this.dialogError.set("");
+    this.dialogError.set(null);
     this.error.set("");
     request.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: data => {
@@ -684,9 +697,12 @@ export class SolutionExpertsComponent {
         const modal = this.modal();
         const status = error instanceof HttpErrorResponse ? error.status : null;
         if (modal === "assignments" || modal === "method" || (modal && status === 409)) {
-          this.dialogError.set("Изменение не сохранено. Обновите данные и повторите попытку.");
+          this.dialogError.set({
+            message: "Изменение не сохранено. Обновите данные и повторите попытку.",
+            kind: "refresh",
+          });
         } else if (modal && status === 400) {
-          this.dialogError.set(evaluationError(error));
+          this.dialogError.set({ message: evaluationError(error) });
         } else {
           this.snackbar.error("Не удалось сохранить изменения. Повторите попытку.");
         }
@@ -700,7 +716,10 @@ export class SolutionExpertsComponent {
       return;
     }
     if (!this.scopeAll() && !this.scopeCases().size) {
-      this.dialogError.set("Выберите кейсы эксперта.");
+      this.dialogError.set({
+        message: "Выберите хотя бы один кейс или отметьте «Все кейсы».",
+        kind: "case-selection",
+      });
       return;
     }
     this.write(
@@ -760,7 +779,7 @@ export class SolutionExpertsComponent {
   }
   resetQuota(): void {
     this.quota.reset(this.required());
-    this.dialogError.set("");
+    this.dialogError.set(null);
   }
   previewQuota(): void {
     const value = this.quota.value;
@@ -774,7 +793,7 @@ export class SolutionExpertsComponent {
       return;
     this.cancelDialog.next();
     this.quotaPreview.set(null);
-    this.dialogError.set("");
+    this.dialogError.set(null);
     this.busy.set(true);
     this.quotaApi
       .execute(this.programId(), value)
@@ -852,7 +871,7 @@ export class SolutionExpertsComponent {
     this.options.set(null);
     this.quotaPreview.set(null);
     this.selected.set(null);
-    this.dialogError.set("");
+    this.dialogError.set(null);
   }
   async downloadExperts(): Promise<void> {
     if (this.exporting()) return;

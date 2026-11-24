@@ -24,7 +24,7 @@
   gap: 8px 12px;
   align-items: center;
   justify-content: start;
-  font-size: 14px;
+  font-size: var(--ui-font-small);
   font-weight: 600;
 }
 
@@ -94,6 +94,10 @@
 }
 
 @media (max-width: 999px) {
+  .quota {
+    font-size: var(--ui-font-body);
+  }
+
   .quota__stepper .ui-field {
     height: 44px;
     min-height: 44px;

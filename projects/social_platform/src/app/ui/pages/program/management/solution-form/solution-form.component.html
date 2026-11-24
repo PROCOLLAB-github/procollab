@@ -189,18 +189,17 @@
   labelledBy="solution-editor-title"
   (openChange)="closeEditor()"
 >
-  <form class="project-form__dialog" [formGroup]="editor" (ngSubmit)="applyField()">
-    <header class="project-form__dialog-heading">
-      <h2 id="solution-editor-title">Настройка поля</h2>
-      <button
-        appButton="icon"
-        type="button"
-        aria-label="Закрыть настройку поля"
-        (click)="closeEditor()"
-      >
-        <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
-      </button>
-    </header>
+  <form
+    class="project-form__dialog project-form__dialog--field"
+    [formGroup]="editor"
+    (ngSubmit)="applyField()"
+  >
+    <app-dialog-header
+      title="Настройка поля"
+      titleId="solution-editor-title"
+      closeLabel="Закрыть настройку поля"
+      (closed)="closeEditor()"
+    />
     <label for="solution-field-label"
       >Подпись *<input appField id="solution-field-label" formControlName="label" maxlength="256"
     /></label>
@@ -229,7 +228,7 @@
         appField
         id="solution-field-help"
         formControlName="helpText"
-        rows="3"
+        rows="2"
         maxlength="4000"
       ></textarea>
     </label>
@@ -313,8 +312,8 @@
       <p appAlert="error" role="alert">Проверьте обязательные поля и ограничения.</p>
     }
     <div class="project-form__actions">
-      <button appButton="primary" type="submit">Применить</button
-      ><button appButton="secondary" type="button" (click)="closeEditor()">Отмена</button>
+      <button appButton="secondary" type="button" (click)="closeEditor()">Отмена</button>
+      <button appButton="primary" type="submit">Применить</button>
     </div>
   </form>
 </app-modal>

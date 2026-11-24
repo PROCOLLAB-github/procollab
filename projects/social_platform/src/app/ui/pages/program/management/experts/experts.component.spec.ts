@@ -984,7 +984,7 @@ describe("Управление экспертами", () => {
     component.email.setValue("expert@example.com");
     component.sendInvite();
     expect(api.invite).not.toHaveBeenCalled();
-    expect(component.dialogError()).toContain("кейс");
+    expect(component.dialogError()?.kind).toBe("case-selection");
     component.openScope(snapshot.experts[1]);
     component.toggleScope("Т-Банк");
     component.saveScope();

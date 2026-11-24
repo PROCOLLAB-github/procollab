@@ -26,6 +26,7 @@ import {
   AlertDirective,
   ButtonDirective,
   ChoiceDirective,
+  DialogHeaderComponent,
   FieldDirective,
   IconComponent,
 } from "@uilib";
@@ -79,6 +80,7 @@ const purposeTypes: Partial<Record<SolutionPurpose, SolutionFieldType>> = {
     AlertDirective,
     ButtonDirective,
     ChoiceDirective,
+    DialogHeaderComponent,
     FieldDirective,
     IconComponent,
     ModalComponent,
