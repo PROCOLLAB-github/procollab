@@ -3,6 +3,11 @@ import { ExpertRow } from "@domain/program/evaluation-workspace.model";
 import { AppRoutes } from "@api/paths/app-routes";
 import { RowAction } from "@ui/primitives/row-actions/row-actions.component";
 
+export type ExpertDialogIssue = {
+  message: string;
+  kind?: "refresh" | "case-selection";
+};
+
 export function expertAssignmentsAction(programId: number, expert: ExpertRow): RowAction {
   return {
     id: "view-assignments",
@@ -18,7 +23,7 @@ export function expertDialogBodyClass(kind: string | null): string {
       ? "compact"
       : kind === "scope"
         ? "scope"
-        : kind === "project" || kind === "assignments"
+        : kind === "project" || kind === "assignments" || kind === "auto"
           ? "assignments"
           : "wide";
   return `modal__body--no-flex experts-modal experts-modal--${variant}`;

@@ -382,6 +382,7 @@
     class="experts__dialog"
     [class.experts__dialog--compact-header]="modal() === 'invite' || modal() === 'scope'"
     [class.experts__dialog--method]="modal() === 'method'"
+    [class.experts__dialog--preview]="modal() === 'auto' && !!plan()"
     [attr.aria-busy]="busy()"
   >
     <app-dialog-header
@@ -391,12 +392,15 @@
       closeLabel="Закрыть окно"
       [closeDisabled]="busy()"
     />
-    @if (dialogError()) {
+    @let issue = dialogError();
+    @if (issue && issue.kind !== "case-selection") {
       <div appAlert="error" role="alert">
-        {{ dialogError() }}
-        <button type="button" appButton="text" [disabled]="busy() || loading()" (click)="load()">
-          Обновить данные
-        </button>
+        {{ issue.message }}
+        @if (issue.kind === "refresh") {
+          <button type="button" appButton="text" [disabled]="busy() || loading()" (click)="load()">
+            Обновить данные
+          </button>
+        }
       </div>
     }
     @switch (modal()) {
@@ -846,6 +850,10 @@
       >
     }
   </div>
+  @let issue = dialogError();
+  @if (issue?.kind === "case-selection" && !scopeAll() && !scopeCases().size) {
+    <p class="experts__case-error" role="alert">{{ issue.message }}</p>
+  }
 </ng-template>
 <ng-template #expertChooser>
   <label

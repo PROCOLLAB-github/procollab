@@ -4,6 +4,7 @@ import { DialogHeaderComponent, SectionHeaderComponent } from "@uilib";
 
 import {
   expertAssignmentsAction,
+  type ExpertDialogIssue,
   expertStatusLabel,
   expertStatusDescription,
   expertDeliveryLabel,
@@ -127,7 +128,7 @@ export class ManagementExpertsComponent {
   readonly loading = signal(false);
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
-  readonly dialogError = signal<string | null>(null);
+  readonly dialogError = signal<ExpertDialogIssue | null>(null);
   readonly deliveryRefreshPaused = signal(false);
   readonly selected = signal<ExpertRow | null>(null);
   readonly selectedExpertIds = signal(new Set<number | string>());
@@ -508,6 +509,7 @@ export class ManagementExpertsComponent {
         next: data => {
           if (seq !== this.loadSequence) return;
           this.snapshot.set(data);
+          if (this.dialogError()?.kind === "refresh") this.dialogError.set(null);
           this.loading.set(false);
           this.selected.set(data.experts.find(e => e.id === this.selected()?.id) ?? null);
           this.selectedProjects.update(
@@ -559,10 +561,10 @@ export class ManagementExpertsComponent {
           const message = evaluationError(e);
           const status = e instanceof HttpErrorResponse ? e.status : null;
           if (status === 409) {
-            if (this.modal()) this.dialogError.set(message);
+            if (this.modal()) this.dialogError.set({ message, kind: "refresh" });
             else this.error.set(message);
           } else if (this.modal() && status === 400) {
-            this.dialogError.set(message);
+            this.dialogError.set({ message });
           } else {
             this.snackbar.error(message);
           }
@@ -692,7 +694,10 @@ export class ManagementExpertsComponent {
       rows = this.selectedExpertRows();
     if (!state || !rows.length || (action !== "cases" && !this.canBulkInvite())) return;
     if (action === "cases" && !this.scopeAll() && !this.scopeCases().size) {
-      this.dialogError.set("Выберите хотя бы один кейс или все кейсы.");
+      this.dialogError.set({
+        message: "Выберите хотя бы один кейс или отметьте «Все кейсы».",
+        kind: "case-selection",
+      });
       return;
     }
     this.request(
@@ -778,11 +783,14 @@ export class ManagementExpertsComponent {
   sendInvite(): void {
     if (this.email.invalid) {
       this.email.markAsTouched();
-      this.dialogError.set("Введите корректный email эксперта.");
+      this.dialogError.set({ message: "Введите корректный email эксперта." });
       return;
     }
     if (!this.scopeAll() && !this.scopeCases().size) {
-      this.dialogError.set("Выберите хотя бы один кейс или все кейсы.");
+      this.dialogError.set({
+        message: "Выберите хотя бы один кейс или отметьте «Все кейсы».",
+        kind: "case-selection",
+      });
       return;
     }
     this.request(

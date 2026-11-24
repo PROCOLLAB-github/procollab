@@ -287,21 +287,17 @@
 </div>
 
 <app-modal [open]="!!editing()" (openChange)="closeEditor()" labelledBy="field-editor-title">
-  <form class="project-form__dialog" [formGroup]="editor" (ngSubmit)="saveField()">
-    <header class="project-form__dialog-heading">
-      <h2 id="field-editor-title">
-        {{ editing() === "new" ? "Добавить поле" : "Настройка поля" }}
-      </h2>
-      <button
-        type="button"
-        appButton="icon"
-        aria-label="Закрыть настройку поля"
-        (click)="closeEditor()"
-      >
-        <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
-      </button>
-    </header>
-    <p>Поле появится в общей форме всех проектов программы.</p>
+  <form
+    class="project-form__dialog project-form__dialog--field"
+    [formGroup]="editor"
+    (ngSubmit)="saveField()"
+  >
+    <app-dialog-header
+      [title]="editing() === 'new' ? 'Добавить поле' : 'Настройка поля'"
+      titleId="field-editor-title"
+      closeLabel="Закрыть настройку поля"
+      (closed)="closeEditor()"
+    />
     <label for="field-label"
       >Название поля *<input
         appField
@@ -328,9 +324,7 @@
       </select></label
     >
     @if (editor.controls.fieldType.disabled) {
-      <p appAlert="warning">
-        Тип существующего поля с ответами или специального поля изменить нельзя.
-      </p>
+      <p>Тип существующего поля с ответами или специального поля изменить нельзя.</p>
     }
     <label for="field-help"
       >Подсказка для команды<textarea
@@ -338,7 +332,7 @@
         id="field-help"
         formControlName="helpText"
         maxlength="4000"
-        rows="3"
+        rows="2"
         placeholder="Объясните, что нужно указать"
       ></textarea>
     </label>
@@ -346,13 +340,6 @@
       ><input appChoice type="checkbox" formControlName="isRequired" />Обязательно перед сдачей
       решения</label
     >
-    <div class="project-form__note">
-      Команда сможет создать и сохранить черновик без ответа. Поле нужно заполнить перед сдачей
-      решения.
-    </div>
-    @if (snapshot()?.hasProjects) {
-      <p>Изменения требований действуют только для еще не сданных проектов.</p>
-    }
     @if (choiceEditor) {
       <fieldset class="project-form__options">
         <legend>Варианты ответа *</legend>
@@ -387,19 +374,20 @@
           Добавить вариант
         </button>
       </fieldset>
-      <p appAlert="warning">Использованные командами варианты нельзя удалить или переименовать.</p>
+      @let field = editing();
+      @if (field && field !== "new" && field.answersCount) {
+        <p>Использованные командами варианты нельзя удалить или переименовать.</p>
+      }
     }
     @if (editorError()) {
       <p appAlert="error">{{ editorError() }}</p>
     }
-    <footer>
-      <p>После добавления поля сохраните настройки страницы.</p>
-      <div class="project-form__actions">
-        <button appButton="primary">
-          {{ editing() === "new" ? "Добавить поле" : "Применить" }}</button
-        ><button type="button" appButton="secondary" (click)="closeEditor()">Отмена</button>
-      </div>
-    </footer>
+    <div class="project-form__actions">
+      <button type="button" appButton="secondary" (click)="closeEditor()">Отмена</button>
+      <button type="submit" appButton="primary">
+        {{ editing() === "new" ? "Добавить поле" : "Применить" }}
+      </button>
+    </div>
   </form>
 </app-modal>
 

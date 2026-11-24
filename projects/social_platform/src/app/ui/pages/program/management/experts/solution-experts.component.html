@@ -383,11 +383,16 @@
       [closeDisabled]="busy()"
       [initialFocus]="true"
     />
-    @if (dialogError()) {
-      <p appAlert="error" role="alert">{{ dialogError() }}</p>
-      <button appButton="secondary" type="button" [disabled]="busy()" (click)="refreshDialog()">
-        Обновить данные
-      </button>
+    @let issue = dialogError();
+    @if (issue && issue.kind !== "case-selection") {
+      <div appAlert="error" role="alert">
+        {{ issue.message }}
+        @if (issue.kind === "refresh") {
+          <button appButton="text" type="button" [disabled]="busy()" (click)="refreshDialog()">
+            Обновить данные
+          </button>
+        }
+      </div>
     }
     @if (modal() === "invite" || modal() === "scope") {
       @if (modal() === "invite") {
@@ -434,6 +439,9 @@
           (change)="toggleScope(null)"
         />Без выбранного кейса</label
       >
+      @if (issue?.kind === "case-selection" && !scopeAll() && !scopeCases().size) {
+        <p class="experts__case-error" role="alert">{{ issue.message }}</p>
+      }
       <footer class="experts__actions">
         <button appButton="secondary" type="button" [disabled]="busy()" (click)="close()">
           Отмена</button

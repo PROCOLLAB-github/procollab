@@ -242,6 +242,23 @@
   color: var(--black);
 }
 
+.project-form__dialog--field {
+  gap: 12px;
+  width: var(--ui-dialog-md);
+
+  > app-dialog-header {
+    --ui-dialog-header-margin-bottom: 0px;
+  }
+
+  > p {
+    margin: 0;
+  }
+
+  > .project-form__actions {
+    justify-content: flex-end;
+  }
+}
+
 .project-form__dialog > label {
   display: grid;
   gap: 8px;

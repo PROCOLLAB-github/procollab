@@ -137,7 +137,12 @@
   gap: 12px;
 }
 
+.experts__dialog--preview {
+  gap: var(--ui-space-sm);
+}
+
 .experts__dialog--method,
+.experts__dialog--preview,
 .experts__dialog--compact-header,
 .experts__filter-dialog {
   > app-dialog-header {
@@ -154,6 +159,11 @@
   align-items: center;
   padding-top: 12px;
   border-top: 1px solid var(--light-gray);
+
+  h3 {
+    font-size: var(--ui-font-body);
+    line-height: 20px;
+  }
 
   > .ui-button.ui-button {
     width: min(100%, var(--method-action-width));
@@ -535,8 +545,8 @@
 
 .experts__allocation-project {
   display: grid;
-  gap: 12px;
-  padding: 16px 0;
+  gap: var(--ui-space-sm);
+  padding: 12px 0;
   border-bottom: 1px solid var(--medium-grey-for-outline);
 }
 
@@ -558,7 +568,7 @@
 
 .experts__allocation-members {
   display: grid;
-  gap: 8px;
+  gap: var(--ui-space-xs);
   padding: 0;
   margin: 0;
   list-style: none;
@@ -686,7 +696,12 @@
 }
 
 .experts__allocation-actions {
-  justify-content: space-between;
+  padding-top: var(--ui-space-sm);
+}
+
+.experts__dialog p.experts__case-error {
+  margin-top: var(--ui-space-xs);
+  color: var(--ui-error-text);
 }
 
 @media (max-width: 999px) {

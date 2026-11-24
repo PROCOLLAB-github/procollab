@@ -29,6 +29,7 @@ import {
   AlertDirective,
   ButtonDirective,
   ChoiceDirective,
+  DialogHeaderComponent,
   FieldDirective,
   IconComponent,
 } from "@uilib";
@@ -55,6 +56,7 @@ import { SnackbarService } from "@domain/shared/snackbar.service";
     AlertDirective,
     ButtonDirective,
     ChoiceDirective,
+    DialogHeaderComponent,
     FieldDirective,
     IconComponent,
     ModalComponent,
