@@ -109,7 +109,8 @@ async function check(width) {
     await route(root + "experts/", request => {
       if (request.request().method() === "POST") {
         invites++;
-        assert.deepEqual(request.request().postDataJSON().case_names, ["Пилот"]);
+        const payload = request.request().postDataJSON();
+        assert.deepEqual(payload.case_names ?? payload.caseNames, ["Пилот"]);
         return request.fulfill({
           headers,
           status: 409,
@@ -170,7 +171,29 @@ async function check(width) {
     let formWrites = 0;
     await route(root + "project-form/", request => {
       if (request.request().method() !== "GET") formWrites++;
-      return request.fulfill({ headers, json: { ...projectForm, hasProjects } });
+      return request.fulfill({
+        headers,
+        json: {
+          ...projectForm,
+          hasProjects,
+          fields: hasProjects
+            ? [
+                {
+                  id: 6,
+                  name: "track",
+                  label: "Направление",
+                  fieldType: "select",
+                  options: ["Транспорт"],
+                  isRequired: false,
+                  helpText: "",
+                  answersCount: 1,
+                  editableType: false,
+                  isVisible: true,
+                },
+              ]
+            : [],
+        },
+      });
     });
     await open("settings?tab=project-form");
     await button("Добавить поле").click();
@@ -196,6 +219,15 @@ async function check(width) {
     await field.waitFor({ state: "hidden" });
     assert.equal(formWrites, 0);
     assert.ok(await button("Сохранить изменения").isEnabled());
+    if (hasProjects) {
+      await button("Действия с полем «Направление»").click();
+      await page.getByRole("menuitem", { name: "Изменить", exact: true }).click();
+      const edit = dialog("Настройка поля");
+      await edit
+        .getByText("Использованные командами варианты нельзя удалить или переименовать.")
+        .waitFor();
+      await escape(edit);
+    }
     console.log(
       width + "px: compact allocation, invite validation and recovery, and field editor verified",
     );

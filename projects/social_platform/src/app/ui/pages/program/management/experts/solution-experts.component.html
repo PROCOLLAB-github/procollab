@@ -439,7 +439,7 @@
           (change)="toggleScope(null)"
         />Без выбранного кейса</label
       >
-      @if (issue?.kind === "case-selection" && !scopeAll() && !scopeCases().size) {
+      @if (issue && issue.kind === "case-selection" && !scopeAll() && !scopeCases().size) {
         <p class="experts__case-error" role="alert">{{ issue.message }}</p>
       }
       <footer class="experts__actions">
