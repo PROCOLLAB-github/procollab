@@ -1,0 +1,55 @@
+<!-- @format -->
+@if (position(); as bounds) {
+  <span
+    class="guide__spot"
+    aria-hidden="true"
+    [style.left.px]="bounds.left"
+    [style.top.px]="bounds.top"
+    [style.width.px]="bounds.width"
+    [style.height.px]="bounds.height"
+  ></span>
+}
+<section
+  class="guide"
+  [class.guide--inline]="inDialog()"
+  aria-label="Помощь по программе"
+  [style.left.px]="position()?.cardTop != null ? position()?.cardLeft : null"
+  [style.top.px]="position()?.cardTop"
+>
+  <div class="guide__head">
+    <small id="program-coach-step">Шаг {{ index() + 1 }} из {{ total() }}</small>
+    <button type="button" appButton="icon" aria-label="Закрыть подсказку" (click)="closed.emit()">
+      <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
+    </button>
+  </div>
+  <h2
+    id="program-coach-title"
+    class="guide__title"
+    tabindex="-1"
+    aria-describedby="program-coach-step program-coach-description"
+  >
+    {{ step().title }}
+  </h2>
+  <p id="program-coach-description">{{ step().text }}</p>
+  <div class="guide__actions">
+    @if (index() > 0) {
+      <button type="button" appButton="secondary" [disabled]="busy()" (click)="previous.emit()">
+        Назад
+      </button>
+    }
+    <button
+      type="button"
+      [appButton]="step().advance === 'click' && target() ? 'secondary' : 'primary'"
+      [disabled]="busy()"
+      (click)="next.emit()"
+    >
+      {{
+        step().advance === "click" && target()
+          ? "Пропустить"
+          : index() + 1 === total()
+            ? "Готово"
+            : "Далее"
+      }}
+    </button>
+  </div>
+</section>

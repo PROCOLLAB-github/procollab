@@ -83,7 +83,11 @@
         </p>
       }
     </section>
-    <section class="project-form__card" aria-labelledby="solution-definition-title">
+    <section
+      class="project-form__card"
+      aria-labelledby="solution-definition-title"
+      data-program-guide="settings-project-form"
+    >
       <div class="project-form__section-heading">
         <h3 id="solution-definition-title">Поля решения</h3>
         <button appButton="secondary" type="button" [disabled]="saving()" (click)="edit()">

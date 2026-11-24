@@ -74,9 +74,13 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
         </button>
       }
       @if (plan(); as checked) {
-        <h3>Будет добавлено назначений: {{ checked.assignments.length }}</h3>
-        @for (shortage of checked.shortages; track shortage.solutionId) {
-          <p>{{ shortage.solutionName }}: не хватает экспертов — {{ shortage.missing }}.</p>
+        <h3 data-program-guide="allocation-preview">
+          Будет добавлено назначений: {{ checked.assignments.length }}
+        </h3>
+        @for (shortage of checked.shortages; track shortage.solutionId; let first = $first) {
+          <p [attr.data-program-guide]="first ? 'allocation-shortage-v1' : null">
+            {{ shortage.solutionName }}: не хватает экспертов — {{ shortage.missing }}.
+          </p>
         }
         @for (row of checked.load; track row.expertId) {
           <p>{{ row.name }}: {{ row.before }} → {{ row.after }} работ.</p>
@@ -100,6 +104,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
             appButton="primary"
             type="button"
             [disabled]="loading() || busy() || !selected().size || !revision()"
+            data-program-guide="allocation-review"
             (click)="preview()"
           >
             Проверить назначения

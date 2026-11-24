@@ -4,6 +4,7 @@ import { ActivatedRoute, convertToParamMap, provideRouter } from "@angular/route
 import { BehaviorSubject, of, Subject } from "rxjs";
 import { ProgramLaunchUseCase } from "@api/program/use-cases/program-launch.use-case";
 import { ProgramLaunch } from "@domain/program/program-launch.model";
+import { ApiService } from "@corelib";
 import { ProgramLaunchComponent } from "./launch.component";
 
 describe("Подготовка программы к запуску", () => {
@@ -47,6 +48,7 @@ describe("Подготовка программы к запуску", () => {
       imports: [ProgramLaunchComponent],
       providers: [
         provideRouter([]),
+        { provide: ApiService, useValue: { get: () => of({ seen: [] }) } },
         {
           provide: ActivatedRoute,
           useValue: {
@@ -132,6 +134,7 @@ describe("Подготовка программы к запуску", () => {
       imports: [ProgramLaunchComponent],
       providers: [
         provideRouter([]),
+        { provide: ApiService, useValue: { get: () => of({ seen: [] }) } },
         {
           provide: ActivatedRoute,
           useValue: {

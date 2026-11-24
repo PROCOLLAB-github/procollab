@@ -23,7 +23,7 @@
       [status]="'Опубликована'"
     />
     @if (state.program.draft) {
-      <section class="launch__card">
+      <section class="launch__card" data-program-guide="launch-checklist">
         <div class="launch__card-heading">
           <h2 id="program-launch-checklist" tabindex="-1">Подготовка к запуску</h2>
           <p>{{ readyCount() }} из {{ state.checks.length }} готово</p>
@@ -39,6 +39,7 @@
                 appButton="secondary"
                 [routerLink]="paths.program.management(state.program.id, 'settings')"
                 [queryParams]="{ tab: check.section, return: 'launch' }"
+                [attr.data-program-guide]="'launch-check-' + check.code"
                 [attr.aria-label]="
                   check.ready
                     ? 'Изменить: ' + check.title
@@ -73,6 +74,7 @@
           appButton="primary"
           [disabled]="!state.canPublish || busy()"
           [appButtonLoading]="busy()"
+          data-program-guide="launch-publish"
           (click)="confirm($event)"
         >
           Опубликовать программу
