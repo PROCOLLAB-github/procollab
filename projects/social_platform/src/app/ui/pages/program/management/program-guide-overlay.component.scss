@@ -29,6 +29,11 @@
   box-shadow: 0 8px 28px rgb(21 15 37 / 24%);
 }
 
+.guide--anchored {
+  right: auto;
+  bottom: auto;
+}
+
 .guide--inline {
   position: static;
   width: 100%;
@@ -47,8 +52,8 @@
 }
 
 .guide__head small {
-  color: var(--accent-text);
   font-weight: 600;
+  color: var(--accent-text);
 }
 
 .guide__title {
