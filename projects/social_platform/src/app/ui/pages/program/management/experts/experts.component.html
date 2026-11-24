@@ -15,6 +15,7 @@
             class="experts__invite"
             type="button"
             appButton="primary"
+            data-program-guide="evaluation-experts"
             aria-label="Пригласить эксперта"
             aria-haspopup="dialog"
             (click)="open('invite')"
@@ -97,6 +98,7 @@
           <button
             sectionHeaderAction
             class="experts__distribute"
+            data-program-guide="allocation-start"
             type="button"
             appButton="primary"
             [disabled]="busy()"
@@ -477,6 +479,7 @@
       }
       @case ("method") {
         <app-expert-quota
+          data-program-guide="allocation-quota"
           label="Экспертов на проект"
           [control]="quota"
           [busy]="busy()"
@@ -508,7 +511,13 @@
             <h3>Вручную</h3>
             <p>Выберите проекты из одного кейса.</p>
           </div>
-          <button type="button" appButton="secondary" [disabled]="busy()" (click)="close()">
+          <button
+            type="button"
+            appButton="secondary"
+            data-program-guide="allocation-manual"
+            [disabled]="busy()"
+            (click)="close()"
+          >
             К проектам
           </button>
         </section>
@@ -520,6 +529,7 @@
           <button
             type="button"
             appButton="primary"
+            data-program-guide="allocation-auto"
             [disabled]="busy() || quotaChanged()"
             (click)="startAutomaticAllocation()"
           >
@@ -548,9 +558,14 @@
             </button>
           </div>
           @if (preview.shortages.length) {
-            <p appAlert="warning">Не удалось назначить всех экспертов.</p>
+            <p appAlert="warning" data-program-guide="allocation-shortage-v1">
+              Не удалось назначить всех экспертов.
+            </p>
           }
-          <div class="experts__scroll experts__scroll--allocation">
+          <div
+            class="experts__scroll experts__scroll--allocation"
+            data-program-guide="allocation-preview"
+          >
             @for (project of allocationProjects(); track project.id) {
               <section class="experts__allocation-project">
                 <header class="experts__allocation-heading">

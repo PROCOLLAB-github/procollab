@@ -8,6 +8,7 @@
     <h1>
       <a
         class="program-heading__name"
+        data-program-guide="program-page"
         [routerLink]="programPage()"
         [title]="draft() ? 'Предпросмотр страницы программы' : 'Страница программы'"
         >{{ name() }}</a
@@ -24,7 +25,7 @@
     type="button"
     appButton="secondary"
     aria-haspopup="dialog"
-    (click)="helpOpen.set(true)"
+    (click)="openHelp()"
   >
     Помощь по программе
   </button>
@@ -41,53 +42,21 @@
     </a>
   }
 </nav>
-<ng-template #coachContent>
-  @if (activeStep(); as current) {
-    @let step = current.tour.steps[current.index];
-    @let total = current.tour.steps.length;
-    @let last = current.index + 1 === total;
-    <section class="program-heading__coach" aria-labelledby="program-coach-title">
-      <div class="program-heading__coach-head">
-        <div class="program-heading__coach-heading">
-          <small id="program-coach-step">{{ current.index + 1 }} из {{ total }}</small>
-          <span aria-hidden="true">·</span>
-          <h2
-            #coachTitle
-            id="program-coach-title"
-            tabindex="-1"
-            aria-describedby="program-coach-step program-coach-description"
-          >
-            {{ step.title }}
-          </h2>
-        </div>
-        <button type="button" appButton="icon" aria-label="Закрыть обучение" (click)="finishTour()">
-          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-        </button>
-      </div>
-      <p id="program-coach-description">{{ step.text }}</p>
-      <div class="program-heading__actions">
-        @if (current.index > 0) {
-          <button
-            type="button"
-            appButton="secondary"
-            [disabled]="navigating()"
-            (click)="showStep(current.tour, current.index - 1)"
-          >
-            Назад
-          </button>
-        }
-        <button
-          type="button"
-          appButton="primary"
-          [disabled]="navigating()"
-          (click)="last ? finishTour() : showStep(current.tour, current.index + 1)"
-        >
-          {{ last ? "Готово" : "Далее" }}
-        </button>
-      </div>
-    </section>
+@if (activeStep(); as current) {
+  @if (step(); as activeGuideStep) {
+    <app-program-guide-overlay
+      [step]="activeGuideStep"
+      [target]="target()"
+      [index]="current.index"
+      [total]="current.tour.steps.length"
+      [busy]="navigating()"
+      [automatic]="isAutomatic()"
+      (previous)="advance(-1)"
+      (next)="advance()"
+      (closed)="finishTour()"
+    />
   }
-</ng-template>
+}
 <app-modal [open]="helpOpen()" (openChange)="helpOpen.set($event)" labelledBy="program-help">
   <section class="program-heading__help">
     <div class="program-heading__help-title">

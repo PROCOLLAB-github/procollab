@@ -16,7 +16,7 @@ import {
   untracked,
   viewChild,
 } from "@angular/core";
-import { DatePipe, DOCUMENT, NgTemplateOutlet } from "@angular/common";
+import { DatePipe, DOCUMENT } from "@angular/common";
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from "@angular/router";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -141,7 +141,6 @@ interface ImageEdit {
   ],
   imports: [
     ProgramManagementHeaderComponent,
-    NgTemplateOutlet,
     ImageFramingDirective,
     RouterLink,
     ReactiveFormsModule,
