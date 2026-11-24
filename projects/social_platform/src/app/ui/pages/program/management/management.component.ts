@@ -19,11 +19,19 @@ import {
 import { DatePipe, DOCUMENT, NgTemplateOutlet } from "@angular/common";
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from "@angular/router";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { HttpErrorResponse } from "@angular/common/http";
 import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import { authLoginUrl } from "@core/lib/models/auth/auth-return-url";
-import { debounceTime, distinctUntilChanged, filter, finalize, startWith } from "rxjs";
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  finalize,
+  of,
+  startWith,
+  switchMap,
+} from "rxjs";
 import { saveAs } from "file-saver";
 import { A11yModule } from "@angular/cdk/a11y";
 import { CdkMenuModule } from "@angular/cdk/menu";
@@ -70,7 +78,7 @@ import {
   RowActionsComponent,
 } from "@ui/primitives/row-actions/row-actions.component";
 import { ProgramAnalyticsComponent } from "../detail/analytics/analytics.component";
-import { ProgramBrandingPreviewComponent } from "./branding-preview/branding-preview.component";
+import { ProgramImageCropComponent } from "./branding-preview/program-image-crop.component";
 import {
   ManagementProjectActionsComponent,
   ProjectActionRequest,
@@ -91,8 +99,35 @@ import { ManagementCertificatesComponent } from "./certificates/certificates.com
 import { presentationHref } from "@utils/program-case-analytics";
 import { evaluationLabel, fromMoscowInput, toMoscowInput } from "@utils/program-management";
 import { DEFAULT_IMAGE_FRAME, programImageFraming } from "@utils/program-branding";
-import { ProgramImageFraming, ProgramImageKey } from "@domain/program/program-image-framing.model";
+import {
+  ProgramImageFrame,
+  ProgramImageFraming,
+  ProgramImageKey,
+} from "@domain/program/program-image-framing.model";
 import { SnackbarService } from "@domain/shared/snackbar.service";
+
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
+
+const PROGRAM_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const PROGRAM_IMAGE_EXTENSIONS = /\.(?:jpe?g|png|webp|gif)$/i;
+
+const IMAGE_FRAME_KEYS = {
+  imageAddress: "logo",
+  coverImageAddress: "cover",
+  mobileCoverImageAddress: "mobileCover",
+} as const satisfies Record<string, ProgramImageKey>;
+
+type ProgramImageField = keyof typeof IMAGE_FRAME_KEYS | "advertisementImageAddress";
+
+interface ImageEdit {
+  programId: number;
+  field: ProgramImageField;
+  title: string;
+  source: string | null;
+  file: File | null;
+  uploadedUrl?: string;
+  frame: ProgramImageFrame;
+}
 
 @Component({
   selector: "app-program-management",
@@ -124,10 +159,11 @@ import { SnackbarService } from "@domain/shared/snackbar.service";
     ModalComponent,
     DialogHeaderComponent,
     SectionHeaderComponent,
+    TooltipComponent,
     StateComponent,
     RowActionsComponent,
     ProgramAnalyticsComponent,
-    ProgramBrandingPreviewComponent,
+    ProgramImageCropComponent,
     ManagementProjectActionsComponent,
     ManagementProjectFormComponent,
     ManagementSolutionFormComponent,
@@ -310,7 +346,21 @@ export class ProgramManagementComponent implements OnInit {
   private teamTrigger: HTMLElement | null = null;
   readonly allocation = signal(false);
   readonly allocationExpertId = signal<number | null>(null);
-  readonly framingDevice = signal<"desktop" | "mobile" | null>(null);
+  readonly submissionHintVisible = signal(false);
+  readonly imageFileTypes = [...PROGRAM_IMAGE_TYPES, ".jpg", ".jpeg", ".png", ".webp", ".gif"].join(
+    ",",
+  );
+  readonly imageMaxSizeMb = 10;
+  private readonly oversizedImage = signal<{ field: ProgramImageField; inEditor: boolean } | null>(
+    null,
+  );
+  readonly imageFormats = "JPG, PNG, WebP или GIF";
+  readonly imageDropTarget = signal<ProgramImageField | null>(null);
+  readonly imageEdit = signal<ImageEdit | null>(null);
+  readonly imageReady = signal(false);
+  readonly imageError = signal<string | null>(null);
+  private imageSaveResponse: ReturnType<typeof this.state.program> = null;
+
   readonly activeGroup = computed(() => {
     const section = this.section();
     if (section === "analytics") return "overview";
@@ -359,7 +409,6 @@ export class ProgramManagementComponent implements OnInit {
   readonly basicForm = this.fb.group({
     name: ["", [Validators.required, Validators.pattern(/\S/)]],
     city: [""],
-    tag: [""],
     description: [""],
     imageAddress: [""],
     coverImageAddress: [""],
@@ -376,12 +425,6 @@ export class ProgramManagementComponent implements OnInit {
     datetimeEvaluationEnds: [""],
     datetimeFinished: ["", Validators.required],
   });
-  readonly submissionDeadline = toSignal(
-    this.datesForm.controls.datetimeProjectSubmissionEnds.valueChanges,
-    {
-      initialValue: this.datesForm.controls.datetimeProjectSubmissionEnds.value,
-    },
-  );
   readonly materialForm = this.fb.group({
     title: ["", Validators.required],
     mode: ["link"],
@@ -391,23 +434,22 @@ export class ProgramManagementComponent implements OnInit {
   readonly basicFields = [
     { key: "name", label: "Название программы", required: true },
     { key: "city", label: "Город" },
-    { key: "tag", label: "Тег" },
   ];
   readonly coverFields = [
     {
       key: "coverImageAddress",
       device: "desktop",
       label: "Компьютер",
-      uploadLabel: "Загрузить обложку",
-      replaceLabel: "Заменить обложку",
+      title: "Обложка программы",
+      hint: "Показывается в шапке программы на компьютере.",
       dimensions: "Рекомендуемый размер: 1800 × 320 px (примерно 5,6:1).",
     },
     {
       key: "mobileCoverImageAddress",
       device: "mobile",
       label: "Телефон",
-      uploadLabel: "Загрузить обложку для телефона",
-      replaceLabel: "Заменить обложку для телефона",
+      title: "Обложка для телефона",
+      hint: "Если отдельной обложки нет, используется основная.",
       dimensions: "Рекомендуемый размер: 960 × 400 px (примерно 2,4:1).",
     },
   ] as const;
@@ -424,7 +466,7 @@ export class ProgramManagementComponent implements OnInit {
       dimensions: "Рекомендуемая ширина: 1800 px.",
       hint: "Высоту можно выбрать любую — баннер показывается целиком и не обрезается. Его видят будущие участники программы.",
     },
-  ];
+  ] as const;
   readonly dateFields = [
     { key: "datetimeStarted", label: "Начало программы" },
     { key: "datetimeRegistrationEnds", label: "Окончание регистрации" },
@@ -451,7 +493,9 @@ export class ProgramManagementComponent implements OnInit {
   );
   readonly pageSize = 20;
   readonly rangeEnd = computed(() => Math.min(this.offset() + this.pageSize, this.count()));
-  readonly modalOpen = computed(() => !!this.confirmation() || !!this.editingMaterial());
+  readonly modalOpen = computed(
+    () => !!this.confirmation() || !!this.editingMaterial() || !!this.imageEdit(),
+  );
   readonly requestError = computed(() => this.errorMessage(this.state.error()));
 
   constructor() {
@@ -479,9 +523,14 @@ export class ProgramManagementComponent implements OnInit {
     });
     effect(() => {
       const program = this.state.program();
-      if (program) untracked(() => this.resetForms());
+      untracked(() => {
+        if (program && program !== this.imageSaveResponse) this.resetForms();
+        this.imageSaveResponse = null;
+      });
     });
     this.destroyRef.onDestroy(() => {
+      const filePreview = this.imageEdit();
+      if (filePreview?.file && filePreview.source) URL.revokeObjectURL(filePreview.source);
       this.confirmationCallback?.(false);
     });
   }
@@ -490,6 +539,7 @@ export class ProgramManagementComponent implements OnInit {
   }
   @HostListener("window:beforeunload", ["$event"]) onBeforeUnload(event: BeforeUnloadEvent): void {
     if (
+      this.imageEdit()?.file ||
       this.dirty() ||
       this.saving() ||
       this.uploading() ||
@@ -1198,6 +1248,7 @@ export class ProgramManagementComponent implements OnInit {
   }
   async canLeave(): Promise<boolean> {
     if (
+      this.imageEdit() ||
       this.saving() ||
       this.removingParticipants() ||
       this.projectActionBusy() ||
@@ -1249,7 +1300,6 @@ export class ProgramManagementComponent implements OnInit {
     this.basicForm.reset({
       name: p.name,
       city: p.city,
-      tag: p.tag,
       description: p.description ?? "",
       imageAddress: p.imageAddress ?? "",
       coverImageAddress: p.coverImageAddress ?? "",
@@ -1450,7 +1500,6 @@ export class ProgramManagementComponent implements OnInit {
             target === "material" ? this.materialForm.controls.file : this.basicForm.get(target);
           control?.setValue(url);
           control?.markAsDirty();
-          if (target !== "material") this.resetFrameForImage(target);
           if (target === "material") this.materialFileName.set(file.name);
         },
         error: (error: HttpErrorResponse) =>
@@ -1461,32 +1510,182 @@ export class ProgramManagementComponent implements OnInit {
           ),
       });
   }
-  clearImage(target: string): void {
-    if (this.saving() || this.uploading()) return;
-    const control = this.basicForm.get(target);
-    control?.setValue("");
-    control?.markAsDirty();
-    this.resetFrameForImage(target);
+  openImage(field: ProgramImageField): void {
+    const program = this.state.program();
+    if (!program || this.imageEdit() || this.saving() || this.uploading()) return;
+    const item = [...this.coverFields, ...this.images].find(item => item.key === field);
+    if (!item) return;
+    const key = this.imageFrameKey(field);
+    this.imageDropTarget.set(null);
+    this.imageReady.set(false);
+    this.imageError.set(null);
+    this.imageEdit.set({
+      programId: program.id,
+      field,
+      title:
+        field === "coverImageAddress"
+          ? "Обложка программы"
+          : field === "mobileCoverImageAddress"
+            ? "Обложка для телефона"
+            : item.label,
+      source: this.href(program[field] ?? null),
+      file: null,
+      frame: key ? programImageFraming(program.imageFraming)[key] : { ...DEFAULT_IMAGE_FRAME },
+    });
   }
-  changeFraming(value: ProgramImageFraming): void {
-    if (this.saving() || this.uploading()) return;
-    this.basicForm.controls.imageFraming.setValue(value);
-    this.basicForm.controls.imageFraming.markAsDirty();
+
+  selectImage(event: Event, field: ProgramImageField): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = "";
+    if (file) this.previewImage(file, field);
   }
-  private resetFrameForImage(target: string): void {
-    const keys: Record<string, ProgramImageKey> = {
-      imageAddress: "logo",
-      coverImageAddress: "cover",
-      mobileCoverImageAddress: "mobileCover",
-    };
-    const key = keys[target];
-    if (!key) return;
-    const framing = programImageFraming(this.basicForm.controls.imageFraming.value);
-    framing[key] = { ...DEFAULT_IMAGE_FRAME };
-    if (key === "cover" && !this.basicForm.controls.mobileCoverImageAddress.value)
+
+  onImageDragOver(event: DragEvent, field: ProgramImageField, inEditor = false): void {
+    const transfer = event.dataTransfer;
+    if (!transfer?.types.includes("Files")) return;
+    event.preventDefault();
+    const items = Array.from(transfer.items).filter(item => item.kind === "file");
+    const acceptsFile =
+      this.canDropImage(field, inEditor) &&
+      items.length === 1 &&
+      PROGRAM_IMAGE_TYPES.includes(items[0].type);
+    transfer.dropEffect = acceptsFile ? "copy" : "none";
+    this.imageDropTarget.set(acceptsFile ? field : null);
+  }
+
+  onImageDragLeave(event: DragEvent, field: ProgramImageField): void {
+    const target = event.currentTarget as HTMLElement;
+    if (event.relatedTarget instanceof Node && target.contains(event.relatedTarget)) return;
+    if (this.imageDropTarget() === field) this.imageDropTarget.set(null);
+  }
+
+  onImageDrop(event: DragEvent, field: ProgramImageField, inEditor = false): void {
+    const transfer = event.dataTransfer;
+    if (!transfer || (!transfer.files.length && !transfer.types.includes("Files"))) return;
+    event.preventDefault();
+    this.imageDropTarget.set(null);
+    if (transfer.files.length !== 1 || !this.canDropImage(field, inEditor)) return;
+    this.previewImage(transfer.files[0], field);
+  }
+
+  private canDropImage(field: ProgramImageField, inEditor: boolean): boolean {
+    if (this.saving() || this.uploading()) return false;
+    const edit = this.imageEdit();
+    return inEditor ? edit?.field === field : !edit && !this.basicForm.controls[field].value;
+  }
+
+  private previewImage(file: File, field: ProgramImageField): void {
+    const supported = file.type
+      ? PROGRAM_IMAGE_TYPES.includes(file.type)
+      : PROGRAM_IMAGE_EXTENSIONS.test(file.name);
+    if (!supported || this.saving() || this.uploading()) return;
+    this.imageDropTarget.set(null);
+    if (file.size > this.imageMaxSizeMb * 1024 ** 2) {
+      this.oversizedImage.set({ field, inEditor: this.imageEdit()?.field === field });
+      return;
+    }
+    this.oversizedImage.set(null);
+    if (this.imageEdit()?.field !== field) this.openImage(field);
+    const edit = this.imageEdit();
+    if (!edit || edit.field !== field) return;
+    if (edit.file && edit.source) URL.revokeObjectURL(edit.source);
+    this.imageReady.set(false);
+    this.imageError.set(null);
+    this.imageEdit.set({
+      ...edit,
+      source: URL.createObjectURL(file),
+      file,
+      uploadedUrl: undefined,
+      frame: { ...DEFAULT_IMAGE_FRAME },
+    });
+  }
+
+  imageTooLarge(field: ProgramImageField, inEditor = false): boolean {
+    const error = this.oversizedImage();
+    return error?.field === field && error.inEditor === inEditor;
+  }
+
+  closeImage(): void {
+    if (this.saving() || this.uploading()) return;
+    this.discardImage();
+  }
+
+  private discardImage(): void {
+    const edit = this.imageEdit();
+    if (edit?.file && edit.source) URL.revokeObjectURL(edit.source);
+    this.imageDropTarget.set(null);
+    this.oversizedImage.set(null);
+    this.imageEdit.set(null);
+  }
+
+  imageFrameKey(field: ProgramImageField): ProgramImageKey | null {
+    return field === "advertisementImageAddress" ? null : IMAGE_FRAME_KEYS[field];
+  }
+
+  setImageFrame(frame: ProgramImageFrame): void {
+    this.imageEdit.update(edit => (edit ? { ...edit, frame } : null));
+  }
+
+  saveImage(remove = false): void {
+    const edit = this.imageEdit();
+    const program = this.state.program();
+    if (
+      !edit ||
+      !program ||
+      program.id !== edit.programId ||
+      this.saving() ||
+      this.uploading() ||
+      (!remove && !this.imageReady())
+    )
+      return;
+
+    const key = this.imageFrameKey(edit.field);
+    const framing = programImageFraming(program.imageFraming);
+    if (key) framing[key] = remove ? { ...DEFAULT_IMAGE_FRAME } : edit.frame;
+    if (key === "cover" && (remove || edit.file) && !program.mobileCoverImageAddress)
       framing.mobileCover = { ...DEFAULT_IMAGE_FRAME };
-    this.basicForm.controls.imageFraming.setValue(framing);
-    this.basicForm.controls.imageFraming.markAsDirty();
+
+    this.saving.set(true);
+    this.imageError.set(null);
+    const address =
+      edit.uploadedUrl ??
+      (remove || !edit.file ? (remove ? "" : (program[edit.field] ?? "")) : null);
+    const upload$ =
+      address === null && edit.file ? this.files.uploadFile(edit.file) : of({ url: address ?? "" });
+    upload$
+      .pipe(
+        switchMap(({ url }) => {
+          if (edit.file && !remove)
+            this.imageEdit.update(current => (current ? { ...current, uploadedUrl: url } : null));
+          return this.state.api.save(program.id, "basic", {
+            expectedUpdatedAt: program.updatedAt,
+            [edit.field]: remove ? "" : url,
+            ...(key ? { imageFraming: framing } : {}),
+          });
+        }),
+        finalize(() => this.saving.set(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: updated => {
+          if (this.state.program()?.id !== edit.programId) return;
+          this.imageSaveResponse = updated;
+          this.state.program.set(updated);
+          this.basicForm.controls[edit.field].setValue(updated[edit.field] ?? "");
+          if (key)
+            this.basicForm.controls.imageFraming.setValue(
+              programImageFraming(updated.imageFraming),
+            );
+          this.discardImage();
+        },
+        error: (error: HttpErrorResponse) =>
+          this.imageError.set(
+            error.status === 413
+              ? "Файл слишком большой. Выберите файл меньшего размера."
+              : this.errorMessage(error),
+          ),
+      });
   }
   onMaterialDragEnter(event: DragEvent): void {
     if (!event.dataTransfer?.types.includes("Files")) return;

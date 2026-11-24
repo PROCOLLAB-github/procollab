@@ -5,7 +5,10 @@ import { ChangeDetectionStrategy, Component, input } from "@angular/core";
   selector: "app-section-header",
   template: `<header class="section-header">
     <div class="section-header__heading">
-      <div class="section-header__title">
+      <div
+        class="section-header__title"
+        [class.section-header__title--baseline]="alignTitleBaseline()"
+      >
         <h2 [attr.id]="titleId()">{{ title() }}</h2>
         <ng-content select="[sectionHeaderTitleAction]" />
       </div>
@@ -43,6 +46,9 @@ import { ChangeDetectionStrategy, Component, input } from "@angular/core";
       flex: 1 1 12ch;
       min-width: 0;
     }
+    .section-header__title--baseline {
+      align-items: baseline;
+    }
     h2 {
       min-width: 0;
       margin: 0;
@@ -63,6 +69,7 @@ import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 })
 export class SectionHeaderComponent {
   readonly title = input.required<string>();
+  readonly alignTitleBaseline = input(false);
   readonly titleId = input<string>();
   readonly description = input<string>();
 }
