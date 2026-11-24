@@ -344,6 +344,20 @@
   }
 }
 
+.management__dialog--discard {
+  --ui-dialog-header-margin-bottom: 0;
+
+  gap: var(--ui-space-sm);
+
+  > p {
+    color: var(--ui-text-muted);
+  }
+
+  > .management__inline {
+    margin-top: var(--ui-space-sm);
+  }
+}
+
 .management__dropzone {
   display: grid;
   gap: 16px;

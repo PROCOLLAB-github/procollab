@@ -1,23 +1,5 @@
 <!-- @format -->
 <div class="experts" [class.experts--people]="tab() === 'experts'">
-  <nav class="experts__tabs" aria-label="Управление экспертами">
-    <button
-      type="button"
-      [attr.aria-current]="tab() === 'experts' ? 'page' : null"
-      [disabled]="busy() || allocationBusy()"
-      (click)="tab.set('experts')"
-    >
-      Эксперты
-    </button>
-    <button
-      type="button"
-      [attr.aria-current]="tab() === 'distribution' ? 'page' : null"
-      [disabled]="busy() || allocationBusy()"
-      (click)="tab.set('distribution')"
-    >
-      Распределение экспертов
-    </button>
-  </nav>
   @if (error()) {
     <div appAlert="error" role="alert">
       {{ error()
@@ -79,7 +61,7 @@
         ><input
           appField
           type="search"
-          [formControl]="search"
+          [formControl]="tab() === 'experts' ? search : distributionSearch"
           [placeholder]="tab() === 'experts' ? 'Имя или почта' : 'Название решения'"
           maxlength="200"
       /></label>
@@ -233,24 +215,14 @@
   </section>
   @if (tab() === "experts" && selectedExperts().size) {
     <section
-      class="experts__floating experts__bulk"
+      class="experts__floating experts__bulk experts__bulk--roster"
       [style.left.px]="floatingPosition()?.center"
-      [style.width.px]="floatingPosition()?.width"
+      [style.width.px]="floatingPosition()?.rosterWidth"
       aria-label="Действия с выбранными экспертами"
     >
-      <div class="experts__bulk-heading">
-        <strong>Выбрано экспертов: {{ selectedExperts().size }}</strong
-        ><button
-          class="experts__bulk-clear"
-          appButton="icon"
-          type="button"
-          aria-label="Снять выбор экспертов"
-          [disabled]="busy()"
-          (click)="clearSelectedExperts()"
-        >
-          <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
-        </button>
-      </div>
+      <strong class="experts__bulk-count" aria-live="polite"
+        >Выбрано экспертов: {{ selectedExperts().size }}</strong
+      >
       <div class="experts__bulk-actions">
         <button appButton="secondary" type="button" [disabled]="busy()" (click)="bulk('cases')">
           Изменить кейсы</button
@@ -271,6 +243,16 @@
           Отозвать приглашения
         </button>
       </div>
+      <button
+        class="experts__bulk-clear"
+        appButton="icon"
+        type="button"
+        aria-label="Снять выбор экспертов"
+        [disabled]="busy()"
+        (click)="clearSelectedExperts()"
+      >
+        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
+      </button>
     </section>
   }
   @if (tab() === "distribution" && distributionSelection().size) {
@@ -334,7 +316,7 @@
       >
     } @else {
       <label
-        >Кейс<select appField formControlName="case">
+        >Кейс<select appField aria-label="Кейс" formControlName="case">
           <option value="all">Все кейсы</option>
           <option value="null">Без выбранного кейса</option>
           @for (name of cases(); track name) {
@@ -342,6 +324,30 @@
           }
         </select></label
       >
+      <label
+        >Эксперты<select
+          appField
+          aria-label="Эксперты"
+          formControlName="expert"
+          (change)="filterDraft.controls.unassigned.setValue(false)"
+        >
+          <option value="all">Все решения</option>
+          <optgroup label="Назначены эксперту">
+            @for (expert of joined(); track expert.id) {
+              <option [value]="'expert:' + expert.id">{{ expert.name || expert.email }}</option>
+            }
+          </optgroup>
+        </select></label
+      >
+      <label class="experts__filter-checkbox">
+        <input
+          type="checkbox"
+          appChoice
+          formControlName="unassigned"
+          (change)="filterDraft.controls.expert.setValue('all')"
+        />
+        Без экспертов
+      </label>
     }
     <footer class="experts__filter-actions">
       <button appButton="text" type="button" (click)="resetFilterDraft()">Сбросить</button
@@ -357,6 +363,7 @@
   (openChange)="!$event && close()"
   ><section
     class="experts__dialog"
+    [class.experts__dialog--compact-header]="modal() === 'invite' || modal() === 'scope'"
     [class.experts__dialog--method]="modal() === 'method'"
     [attr.aria-busy]="busy()"
   >

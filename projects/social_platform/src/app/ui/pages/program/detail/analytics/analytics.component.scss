@@ -336,15 +336,8 @@
     overflow-wrap: anywhere;
   }
 
-  &__label,
-  &__hint {
+  &__label {
     color: var(--grey-for-text);
-  }
-
-  &__hint {
-    grid-column: 1 / -1;
-    font-size: 12px;
-    line-height: 16px;
   }
 
   &__status {

@@ -1,5 +1,16 @@
 /** @format */
 import { ExpertRow } from "@domain/program/evaluation-workspace.model";
+import { AppRoutes } from "@api/paths/app-routes";
+import { RowAction } from "@ui/primitives/row-actions/row-actions.component";
+
+export function expertAssignmentsAction(programId: number, expert: ExpertRow): RowAction {
+  return {
+    id: "view-assignments",
+    label: "Посмотреть назначения",
+    routerLink: AppRoutes.program.management(programId, "projects"),
+    queryParams: { tab: "allocation", expert: expert.id },
+  };
+}
 
 export function expertDialogBodyClass(kind: string | null): string {
   const variant =

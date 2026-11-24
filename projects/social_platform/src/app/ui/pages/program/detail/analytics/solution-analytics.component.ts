@@ -222,7 +222,6 @@ export class SolutionAnalyticsComponent {
     }
     return rows.filter(row => row.value !== null);
   });
-  readonly hasAttention = computed(() => this.hasValues(this.attentionRows()));
   readonly casesExpanded = signal(false);
   readonly caseRows = computed(() => {
     const cases = this.data()?.cases;

@@ -264,7 +264,11 @@ export class ProgramManagementComponent implements OnInit {
   readonly projectForm = viewChild(ManagementProjectFormComponent);
   readonly solutionForm = viewChild(ManagementSolutionFormComponent);
   private readonly managementLayout = viewChild<ElementRef<HTMLElement>>("managementLayout");
-  readonly floatingPosition = signal<{ center: number; width: number } | null>(null);
+  readonly floatingPosition = signal<{
+    center: number;
+    width: number;
+    rosterWidth: number;
+  } | null>(null);
   readonly projectFormStatus = signal({ dirty: false, busy: false });
   readonly criteriaForm = viewChild(ManagementCriteriaComponent);
   readonly criteriaStatus = signal({ dirty: false, busy: false });
@@ -305,6 +309,7 @@ export class ProgramManagementComponent implements OnInit {
   private confirmationCallback: ((yes: boolean) => void) | null = null;
   private teamTrigger: HTMLElement | null = null;
   readonly allocation = signal(false);
+  readonly allocationExpertId = signal<number | null>(null);
   readonly framingDevice = signal<"desktop" | "mobile" | null>(null);
   readonly activeGroup = computed(() => {
     const section = this.section();
@@ -459,6 +464,7 @@ export class ProgramManagementComponent implements OnInit {
           this.floatingPosition.set({
             center: rect.left + rect.width / 2,
             width: Math.min(704, rect.width, window.innerWidth - 32),
+            rosterWidth: Math.min(848, rect.width, window.innerWidth - 32),
           });
         }
       };
@@ -540,6 +546,10 @@ export class ProgramManagementComponent implements OnInit {
         );
         this.section.set(section);
         this.allocation.set(section === "projects" && tab === "allocation");
+        const expertId = Number(q.get("expert"));
+        this.allocationExpertId.set(
+          this.allocation() && Number.isSafeInteger(expertId) && expertId > 0 ? expertId : null,
+        );
         const selectionKey = JSON.stringify([
           section,
           this.route.parent?.snapshot.paramMap.get("programId"),
@@ -906,7 +916,14 @@ export class ProgramManagementComponent implements OnInit {
       id,
       [...this.selectedProjects().values()].map(p => p.projectId),
     );
-    void this.router.navigateByUrl(this.paths.program.management(id, "experts"));
+    void this.router.navigate([this.paths.program.management(id, "projects")], {
+      queryParams: { tab: "allocation" },
+    });
+  }
+  openExperts(): void {
+    const programId = this.state.program()?.id;
+    if (programId)
+      void this.router.navigateByUrl(this.paths.program.management(programId, "experts"));
   }
   exportSelectedParticipants(): void {
     const ctx = this.state.context;

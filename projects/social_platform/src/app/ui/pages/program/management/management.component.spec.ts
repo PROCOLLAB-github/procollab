@@ -23,6 +23,8 @@ import { SnackbarService } from "@domain/shared/snackbar.service";
 import { ProgramManagementComponent } from "./management.component";
 import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/program-project-assignment-selection.service";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
+import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
+import { ExpertWorkspace } from "@domain/program/evaluation-workspace.model";
 
 @Component({ template: "<h1>Профиль участника</h1>" })
 class ProfileNavigationTarget {}
@@ -45,6 +47,54 @@ const program = {
   materials: [],
   isCompetitive: true,
 } as unknown as ProgramManagement;
+
+const evaluationWorkspace: ExpertWorkspace = {
+  revision: "e1",
+  requiredEvaluators: 1,
+  managedEvaluation: true,
+  submittedProjects: 2,
+  missingAssignments: 1,
+  readyProjects: 0,
+  cases: ["Кейс №1"],
+  experts: [
+    {
+      id: 11,
+      userId: 101,
+      name: "Мария Иванова",
+      email: "maria@example.com",
+      status: "joined",
+      assigned: 1,
+      completed: 0,
+      remaining: 1,
+    },
+  ],
+  projects: [
+    {
+      id: 91,
+      name: "Назначенный проект",
+      caseName: "Кейс №1",
+      leaderId: 51,
+      teamUserIds: [],
+      experts: [
+        {
+          expertId: 11,
+          name: "Мария Иванова",
+          email: "maria@example.com",
+          completed: false,
+          protected: false,
+        },
+      ],
+    },
+    {
+      id: 92,
+      name: "Свободный проект",
+      caseName: "Кейс №1",
+      leaderId: 52,
+      teamUserIds: [],
+      experts: [],
+    },
+  ],
+};
 describe("Сохранение настроек организатора", () => {
   function setup() {
     const save = vi.fn(() => of(program));
@@ -354,6 +404,7 @@ describe("Списки управления программой в DOM", () => 
           },
         ]),
         { provide: FileService, useValue: { uploadFile } },
+        { provide: EvaluationUseCase, useValue: { workspace: () => of(evaluationWorkspace) } },
       ],
     }).overrideComponent(ProgramManagementComponent, {
       set: {
@@ -1311,6 +1362,36 @@ describe("Списки управления программой в DOM", () => 
     component.assignSelectedProjects();
     expect(TestBed.inject(ProgramProjectAssignmentSelection).take(1)).toEqual([91]);
     expect(TestBed.inject(ProgramProjectAssignmentSelection).take(1)).toBeNull();
+  });
+  it("открывает вкладку распределения с назначениями выбранного эксперта", async () => {
+    const { harness, element } = await setup("experts");
+    element().querySelector<HTMLButtonElement>("app-expert-roster app-row-actions button")!.click();
+    harness.detectChanges();
+    const action = [...document.querySelectorAll<HTMLAnchorElement>('a[role="menuitem"]')].find(
+      button => button.textContent?.trim() === "Посмотреть назначения",
+    );
+    expect(action).toBeDefined();
+    action!.click();
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    expect(TestBed.inject(Router).url).toBe(
+      "/office/program/1/management/projects?tab=allocation&expert=11",
+    );
+    const active = element().querySelector(
+      '[aria-label="Разделы оценивания"] [aria-current="page"]',
+    );
+    expect(active?.textContent?.trim()).toBe("Распределение");
+    expect(element().textContent).toContain("Назначенный проект");
+    expect(element().textContent).not.toContain("Свободный проект");
+    expect(element().textContent).not.toContain("К экспертам");
+
+    await harness.navigateByUrl("/office/program/1/management/experts", ProgramManagementComponent);
+    await harness.navigateByUrl(
+      "/office/program/1/management/projects?tab=allocation",
+      ProgramManagementComponent,
+    );
+    expect(element().textContent).toContain("Свободный проект");
   });
   it("удаление запрашивает предварительный просмотр и отправляет его подписанное подтверждение", async () => {
     const { component, state } = await setup();
