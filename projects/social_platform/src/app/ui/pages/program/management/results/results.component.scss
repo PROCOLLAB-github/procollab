@@ -38,6 +38,12 @@
   color: var(--black);
 }
 
+.results__dialog--compact {
+  --ui-dialog-header-margin-bottom: 0px;
+
+  gap: var(--ui-space-sm);
+}
+
 .results {
   padding: 24px;
   background: var(--light-white);

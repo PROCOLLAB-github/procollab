@@ -68,7 +68,7 @@ describe("Управление экспертами", () => {
   it("открывает настройки распределения из заголовка даже при пустом списке проектов", () => {
     const { fixture, component } = setup();
     expect(fixture.nativeElement.querySelector(".experts__distribute")).toBeNull();
-    component.switchTab("distribution");
+    fixture.componentRef.setInput("tab", "distribution");
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain("Распределение экспертов");
     component.snapshot.set({ ...snapshot, projects: [] });
@@ -586,7 +586,7 @@ describe("Управление экспертами", () => {
     { id: 11, name: "Маршрут", caseName: "Сбер", leaderId: 91, teamUserIds: [], experts: [] },
     { id: 12, name: "Финплан", caseName: "Т-Банк", leaderId: 92, teamUserIds: [], experts: [] },
   ];
-  function setup(initialTab: "experts" | "distribution" = "experts") {
+  function setup(tab: "experts" | "distribution" = "experts") {
     const api = {
       workspace: vi.fn(() =>
         of({
@@ -611,7 +611,7 @@ describe("Управление экспертами", () => {
     });
     const fixture = TestBed.createComponent(ManagementExpertsComponent);
     fixture.componentRef.setInput("programId", 42);
-    fixture.componentRef.setInput("initialTab", initialTab);
+    fixture.componentRef.setInput("tab", tab);
     fixture.componentRef.setInput("confirmDiscard", () => Promise.resolve(false));
     fixture.detectChanges();
     return { fixture, component: fixture.componentInstance, api };
@@ -715,8 +715,7 @@ describe("Управление экспертами", () => {
     expect(success).toHaveBeenCalledExactlyOnceWith("Готовность проектов пересчитана.");
   });
   it("можно выбрать разные кейсы, но ручное назначение требует одного кейса", () => {
-    const { fixture, component } = setup();
-    component.switchTab("distribution");
+    const { fixture, component } = setup("distribution");
     component.selectVisibleProjects();
     expect(component.selectedProjects().size).toBe(3);
     expect(component.mixedProjectCases()).toBe(true);
@@ -735,9 +734,7 @@ describe("Управление экспертами", () => {
   });
 
   it("поиск проекта и фильтр кейса сохраняются при обновлении данных", () => {
-    const { fixture, component } = setup();
-    component.switchTab("distribution");
-    fixture.detectChanges();
+    const { fixture, component } = setup("distribution");
     const input = fixture.nativeElement.querySelector("input[type=search]") as HTMLInputElement;
     input.focus();
     input.value = "Мар";
@@ -1083,8 +1080,7 @@ describe("Управление экспертами", () => {
     expect(component.search.value).toBe("pending");
   });
   it("объединяет существующие фильтры распределения, сохраняя поиск", () => {
-    const { component } = setup();
-    component.switchTab("distribution");
+    const { component } = setup("distribution");
     component.distributionSearch.setValue("Проект");
     component.openFilters();
     component.filterDraft.patchValue({ case: JSON.stringify("Сбер"), expert: "missing" });

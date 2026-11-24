@@ -478,9 +478,10 @@ describe("ProgramAnalyticsComponent", () => {
       const root = fixture.nativeElement as HTMLElement;
       const card = root.querySelector<HTMLElement>('[data-testid="program-deadlines"]')!;
       expect(card.querySelectorAll("time")).toHaveLength(2);
-      expect(card.querySelector('[data-deadline="submission"]')?.textContent).toContain(
-        "По сроку регистрации",
-      );
+      expect(
+        card.querySelector('[data-deadline="submission"] time')?.getAttribute("datetime"),
+      ).toBe(card.querySelector('[data-deadline="registration"] time')?.getAttribute("datetime"));
+      expect(card.textContent).not.toContain("По сроку регистрации");
       expect(card.textContent).not.toContain("Конец оценивания");
       expect(card.previousElementSibling?.getAttribute("data-testid")).toBe("attention-block");
     });
@@ -587,9 +588,8 @@ describe("ProgramAnalyticsComponent", () => {
     fixture.detectChanges();
     const attention = fixture.nativeElement.querySelector('[data-testid="attention-block"]');
     expect(attention.textContent).not.toContain("Эксперты задерживают оценивание");
-    expect(attention.querySelector(".attention__empty")?.textContent).toContain(
-      "Ничего не требует внимания",
-    );
+    expect(attention.querySelectorAll(".attention__action:disabled strong")).toHaveLength(2);
+    expect(attention.textContent).not.toContain("Ничего не требует внимания");
   });
 
   it.each([
@@ -654,7 +654,7 @@ describe("ProgramAnalyticsComponent", () => {
     ).not.toContain("Участники еще не заходили на платформу");
   });
 
-  it("participants without a visit alone prevent the all-clear attention state", () => {
+  it("keeps the visit counter visible when it drops to zero", () => {
     const base = overview();
     data.set({
       ...base,
@@ -668,15 +668,19 @@ describe("ProgramAnalyticsComponent", () => {
     });
     const fixture = TestBed.createComponent(ProgramAnalyticsComponent);
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector(".attention__empty")).toBeNull();
+    const counter = fixture.nativeElement.querySelector(
+      '[data-attention-kind="without-visit"] .attention__action',
+    ) as HTMLButtonElement;
+    expect(counter.querySelector("strong")?.textContent).toBe("1");
+    expect(counter.disabled).toBe(false);
     data.update(current => ({
       ...current!,
       attention: { ...current!.attention, participantsWithoutVisit: 0 },
     }));
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector(".attention__empty")?.textContent).toContain(
-      "Ничего не требует внимания",
-    );
+    expect(counter.querySelector("strong")?.textContent).toBe("0");
+    expect(counter.disabled).toBe(true);
+    expect(fixture.nativeElement.textContent).not.toContain("Ничего не требует внимания");
   });
 
   it("не дублирует счётчик несданных проектов в блоке внимания", () => {
@@ -705,7 +709,8 @@ describe("ProgramAnalyticsComponent", () => {
       },
     });
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain("Ничего не требует внимания");
+    expect(fixture.nativeElement.querySelectorAll(".attention__action:disabled")).toHaveLength(2);
+    expect(fixture.nativeElement.textContent).not.toContain("Ничего не требует внимания");
   });
 
   it("non-competitive скрывает строку даже с notSubmitted > 0 и не делает detail request", () => {
@@ -1190,18 +1195,14 @@ describe("ProgramAnalyticsComponent", () => {
     expect(fixture.nativeElement.textContent).toContain("Пока нет данных по участникам");
     expect(fixture.nativeElement.textContent).toContain("Нет решений для отображения");
     expect(fixture.nativeElement.textContent).toContain("Нет назначений экспертов");
-    expect(fixture.nativeElement.textContent).toContain("Ничего не требует внимания");
+    expect(fixture.nativeElement.textContent).not.toContain("Ничего не требует внимания");
     const emptyStates = Array.from(
       (fixture.nativeElement as HTMLElement).querySelectorAll(".analytics-empty-state"),
     ) as HTMLElement[];
-    expect(emptyStates).toHaveLength(9);
+    expect(emptyStates).toHaveLength(8);
     expect(emptyStates.every(state => state.querySelector("i") === null)).toBe(true);
     expect(emptyStates.every(state => !state.textContent?.trim().endsWith("."))).toBe(true);
-    expect(fixture.nativeElement.querySelector(".attention--empty")).not.toBeNull();
-    expect(fixture.nativeElement.querySelector(".attention__empty")).not.toBeNull();
-    expect(
-      fixture.nativeElement.querySelector(".attention > .analytics-empty-state"),
-    ).not.toBeNull();
+    expect(fixture.nativeElement.querySelectorAll(".attention__action:disabled")).toHaveLength(2);
     expect(fixture.nativeElement.querySelector(".regions > .analytics-empty-state")).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain("За последние 30 дней активности не было");
     expect(fixture.nativeElement.querySelector(".activity__note")).toBeNull();

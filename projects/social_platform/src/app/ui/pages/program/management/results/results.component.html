@@ -288,7 +288,7 @@
   labelledBy="results-dialog-title"
   bodyClass="modal__body--no-flex results-modal"
 >
-  <div class="results__dialog">
+  <div class="results__dialog" [class.results__dialog--compact]="modal() !== 'export'">
     <app-dialog-header
       [title]="
         modal() === 'filters'

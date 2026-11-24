@@ -2,16 +2,7 @@
 
 import { ChangeDetectionStrategy, Component, inject, OnInit, DestroyRef } from "@angular/core";
 import { ResolveEnd, ResolveStart, Router, RouterOutlet } from "@angular/router";
-import {
-  debounceTime,
-  filter,
-  fromEvent,
-  map,
-  merge,
-  noop,
-  type Observable,
-  throttleTime,
-} from "rxjs";
+import { debounceTime, filter, fromEvent, map, merge, noop, type Observable } from "rxjs";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { LoggerService, TokenService } from "@corelib";
@@ -82,9 +73,6 @@ export class AppComponent implements OnInit {
       }
     }
 
-    const loadEvent = fromEvent(window, "load");
-    const resizeEvent = fromEvent(window, "resize").pipe(throttleTime(500));
-
     // visualViewport shrinks when the mobile keyboard opens; overlays must follow it.
     const updateViewport = () => {
       const viewport = window.visualViewport;
@@ -102,14 +90,11 @@ export class AppComponent implements OnInit {
       merge(fromEvent(window.visualViewport, "resize"), fromEvent(window.visualViewport, "scroll"))
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(updateViewport);
+    } else {
+      fromEvent(window, "resize")
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(updateViewport);
     }
-
-    merge(loadEvent, resizeEvent)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`);
-        updateViewport();
-      });
   }
 
   isLoading$?: Observable<boolean>;

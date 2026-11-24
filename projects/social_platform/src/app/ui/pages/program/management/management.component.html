@@ -68,24 +68,29 @@
         [submissionApplicable]="program.isCompetitive"
       />
     }
-    @if (section() === "experts" || (allocation() && program.solutionStorageMode !== "solution")) {
+    @if (section() === "experts" || allocation()) {
       @if (program.solutionStorageMode === "solution") {
         <app-solution-experts
           [floatingPosition]="floatingPosition()"
           [programId]="program.id"
+          [tab]="allocation() ? 'distribution' : 'experts'"
+          [allocationExpertId]="allocationExpertId()"
           [confirmDiscard]="confirmProjectFormDiscard"
+          (expertsRequested)="openExperts()"
           (statusChange)="expertsStatus.set($event)"
         />
       } @else {
         <app-management-experts
+          [floatingPosition]="floatingPosition()"
           [programId]="program.id"
-          [initialTab]="allocation() ? 'distribution' : 'experts'"
+          [tab]="allocation() ? 'distribution' : 'experts'"
+          [allocationExpertId]="allocationExpertId()"
           [confirmDiscard]="confirmProjectFormDiscard"
           (statusChange)="expertsStatus.set($event)"
         />
       }
     }
-    @if (section() === "projects" && program.solutionStorageMode === "solution") {
+    @if (section() === "projects" && !allocation() && program.solutionStorageMode === "solution") {
       <app-solution-applications
         [floatingPosition]="floatingPosition()"
         [program]="program"
@@ -1343,19 +1348,25 @@
   </aside>
 }
 
+@let confirm = confirmation();
 <app-modal
   [open]="modalOpen()"
   labelledBy="management-dialog-title"
+  [describedBy]="confirm?.safeCancel ? 'management-confirmation-description' : undefined"
   (openChange)="!$event ? dismissModal() : null"
 >
-  <div class="management__dialog">
-    @if (confirmation(); as confirm) {
+  <div class="management__dialog" [class.management__dialog--discard]="confirm?.safeCancel">
+    @if (confirm) {
       <app-dialog-header
         [title]="confirm.title"
         titleId="management-dialog-title"
         (closed)="resolveConfirmation(false)"
       />
-      <p appAlert="warning">{{ confirm.text }}</p>
+      @if (confirm.safeCancel) {
+        <p id="management-confirmation-description">{{ confirm.text }}</p>
+      } @else {
+        <p appAlert="warning">{{ confirm.text }}</p>
+      }
       <div class="management__inline">
         <button
           type="button"

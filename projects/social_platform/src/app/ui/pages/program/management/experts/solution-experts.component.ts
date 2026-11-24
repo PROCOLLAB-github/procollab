@@ -3,6 +3,7 @@
 import { DialogHeaderComponent, SectionHeaderComponent } from "@uilib";
 
 import {
+  expertAssignmentsAction,
   expertScopeLabel,
   expertStatusLabel,
   expertDeliveryLabel,
@@ -32,6 +33,7 @@ import {
   finalize,
   forkJoin,
   map,
+  merge,
   Observable,
   Subject,
   takeUntil,
@@ -113,8 +115,11 @@ import { ExpertQuotaComponent } from "./expert-quota.component";
 export class SolutionExpertsComponent {
   readonly dialogBodyClass = expertDialogBodyClass;
   readonly programId = input.required<number>();
-  readonly floatingPosition = input<{ center: number; width: number } | null>(null);
+  readonly floatingPosition = input<{ center: number; width: number; rosterWidth: number } | null>(
+    null,
+  );
   readonly confirmDiscard = input.required<() => Promise<boolean>>();
+  readonly expertsRequested = output<void>();
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
   private readonly snackbar = inject(SnackbarService);
   private readonly roster = inject(EvaluationUseCase);
@@ -142,11 +147,14 @@ export class SolutionExpertsComponent {
   readonly filterDraft = new FormGroup({
     status: new FormControl("all", { nonNullable: true }),
     case: new FormControl("all", { nonNullable: true }),
+    expert: new FormControl("all", { nonNullable: true }),
+    unassigned: new FormControl(false, { nonNullable: true }),
   });
   readonly page = signal(0);
   readonly pageSize = 20;
   readonly distributionSelection = signal(new Set<number>());
-  readonly tab = signal<"experts" | "distribution">("experts");
+  readonly tab = input<"experts" | "distribution">("experts");
+  readonly allocationExpertId = input<number | null>(null);
   readonly modal = signal<"invite" | "scope" | "assignments" | "method" | null>(null);
   readonly selected = signal<ExpertRow | null>(null);
   readonly selectedExperts = signal(new Set<number | string>());
@@ -160,10 +168,17 @@ export class SolutionExpertsComponent {
   readonly cases = signal<string[]>([]);
   readonly search = new FormControl("", { nonNullable: true });
   readonly searchValue = toSignal(this.search.valueChanges, { initialValue: "" });
+  readonly distributionSearch = new FormControl("", { nonNullable: true });
+  readonly distributionSearchValue = toSignal(this.distributionSearch.valueChanges, {
+    initialValue: "",
+  });
   readonly status = new FormControl("all", { nonNullable: true });
   readonly statusValue = toSignal(this.status.valueChanges, { initialValue: "all" });
   readonly caseFilter = new FormControl("all", { nonNullable: true });
   readonly caseValue = toSignal(this.caseFilter.valueChanges, { initialValue: "all" });
+  readonly expertFilter = new FormControl("all", { nonNullable: true });
+  readonly expertValue = toSignal(this.expertFilter.valueChanges, { initialValue: "all" });
+  readonly joined = computed(() => this.experts().filter(expert => expert.status === "joined"));
   readonly email = new FormControl("", {
     nonNullable: true,
     validators: [Validators.required, Validators.email, Validators.maxLength(254)],
@@ -192,7 +207,10 @@ export class SolutionExpertsComponent {
     return [
       { id: "scope", label: "Изменить кейсы" },
       ...(expert.status === "joined"
-        ? [{ id: "assignments", label: "Назначить решения" }]
+        ? [
+            expertAssignmentsAction(this.programId(), expert),
+            { id: "assignments", label: "Назначить решения" },
+          ]
         : [
             { id: "resend", label: "Отправить повторно" },
             {
@@ -205,7 +223,7 @@ export class SolutionExpertsComponent {
     ];
   }
   rowAction(expert: ExpertRow, event: RowActionEvent): void {
-    if (this.busy()) return;
+    if (this.busy() || this.allocationBusy()) return;
     if (event.id === "scope" || event.id === "assignments") this.open(event.id, expert);
     else if (event.id === "resend" || event.id === "revoke")
       this.invitationAction(expert, event.id);
@@ -247,15 +265,22 @@ export class SolutionExpertsComponent {
       );
     }),
   );
-  readonly filteredSolutions = computed(() =>
-    this.solutions().filter(
+  readonly filteredSolutions = computed(() => {
+    const expert = this.expertValue();
+    const query = this.distributionSearchValue().trim().toLocaleLowerCase("ru");
+    const assigned = new Set(
+      this.assignments()
+        .filter(row => expert === "unassigned" || "expert:" + row.expert.expertId === expert)
+        .map(row => row.application.solutionId),
+    );
+    return this.solutions().filter(
       row =>
-        row.application.name
-          .toLocaleLowerCase("ru")
-          .includes(this.searchValue().trim().toLocaleLowerCase("ru")) &&
-        (this.caseValue() === "all" || JSON.stringify(row.caseName) === this.caseValue()),
-    ),
-  );
+        row.application.name.toLocaleLowerCase("ru").includes(query) &&
+        (this.caseValue() === "all" || JSON.stringify(row.caseName) === this.caseValue()) &&
+        (expert === "all" ||
+          assigned.has(row.application.solutionId) === (expert !== "unassigned")),
+    );
+  });
   readonly visible = computed(() =>
     this.filtered().slice(this.page() * this.pageSize, (this.page() + 1) * this.pageSize),
   );
@@ -270,9 +295,15 @@ export class SolutionExpertsComponent {
       ),
   );
   readonly filterCount = computed(() =>
-    Number((this.tab() === "experts" ? this.statusValue() : this.caseValue()) !== "all"),
+    this.tab() === "experts"
+      ? Number(this.statusValue() !== "all")
+      : Number(this.caseValue() !== "all") + Number(this.expertValue() !== "all"),
   );
-  readonly filtersActive = computed(() => !!this.searchValue().trim() || !!this.filterCount());
+  readonly filtersActive = computed(
+    () =>
+      !!(this.tab() === "experts" ? this.searchValue() : this.distributionSearchValue()).trim() ||
+      !!this.filterCount(),
+  );
   readonly listHeading = computed(() => {
     if (this.tab() === "distribution") return "Распределение экспертов";
     return this.loading() || this.error() ? "Эксперты" : `Эксперты · ${this.experts().length}`;
@@ -314,20 +345,27 @@ export class SolutionExpertsComponent {
     );
   }
   openFilters(): void {
-    this.filterDraft.setValue({ status: this.status.value, case: this.caseFilter.value });
+    this.filterDraft.setValue({
+      status: this.status.value,
+      case: this.caseFilter.value,
+      expert: this.expertFilter.value === "unassigned" ? "all" : this.expertFilter.value,
+      unassigned: this.expertFilter.value === "unassigned",
+    });
     this.filtersOpen.set(true);
   }
   applyFilters(): void {
-    const control = this.tab() === "experts" ? this.status : this.caseFilter;
-    const value =
-      this.tab() === "experts"
-        ? this.filterDraft.controls.status.value
-        : this.filterDraft.controls.case.value;
-    if (value !== control.value) control.setValue(value);
+    const draft = this.filterDraft.getRawValue();
+    if (this.tab() === "experts") {
+      if (draft.status !== this.status.value) this.status.setValue(draft.status);
+    } else {
+      if (draft.case !== this.caseFilter.value) this.caseFilter.setValue(draft.case);
+      const expert = draft.unassigned ? "unassigned" : draft.expert;
+      if (expert !== this.expertFilter.value) this.expertFilter.setValue(expert);
+    }
     this.filtersOpen.set(false);
   }
   resetFilterDraft(): void {
-    this.filterDraft.setValue({ status: "all", case: "all" });
+    this.filterDraft.setValue({ status: "all", case: "all", expert: "all", unassigned: false });
   }
   toggleExpert(id: number | string): void {
     if (this.busy()) return;
@@ -371,15 +409,27 @@ export class SolutionExpertsComponent {
     this.search.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
       this.page.set(0);
       this.clearSelectedExperts();
-      this.distributionSelection.set(new Set());
     });
     this.status.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
       this.page.set(0);
       this.clearSelectedExperts();
     });
-    this.caseFilter.valueChanges
+    merge(
+      this.caseFilter.valueChanges,
+      this.expertFilter.valueChanges,
+      this.distributionSearch.valueChanges,
+    )
       .pipe(takeUntilDestroyed())
-      .subscribe(() => this.distributionSelection.set(new Set()));
+      .subscribe(() => this.clearDistributionSelection());
+    effect(() => {
+      const expertId = this.allocationExpertId();
+      const expert = expertId ? "expert:" + expertId : "all";
+      if (expert !== this.expertFilter.value) untracked(() => this.expertFilter.setValue(expert));
+    });
+    effect(() => {
+      this.tab();
+      this.filtersOpen.set(false);
+    });
     timer(4000, 4000)
       .pipe(
         filter(
@@ -765,7 +815,7 @@ export class SolutionExpertsComponent {
   }
   async goToExpertsForAllocation(): Promise<void> {
     await this.close();
-    if (!this.modal()) this.tab.set("experts");
+    if (!this.modal()) this.expertsRequested.emit();
   }
   startAutomaticAllocation(): void {
     if (

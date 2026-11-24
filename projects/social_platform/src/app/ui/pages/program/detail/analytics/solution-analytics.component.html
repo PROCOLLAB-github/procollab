@@ -78,7 +78,7 @@
       }
     </section>
     <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
-      <article class="attention" [class.attention--empty]="!hasAttention()">
+      <article class="attention">
         <div class="analytics__heading-row">
           <h2 class="text-body-12">Требует внимания</h2>
           <app-tooltip
@@ -89,45 +89,35 @@
             (hide)="hideTooltip('attention')"
           />
         </div>
-        @if (hasAttention() || overview.solutionFunnel.submissionApplicable) {
-          <ul class="attention__list">
-            @for (row of attentionRows(); track row.key) {
-              <li
-                [class.attention__row--disabled]="!row.value"
-                [attr.data-attention-kind]="row.key"
+        <ul class="attention__list">
+          @for (row of attentionRows(); track row.key) {
+            <li [class.attention__row--disabled]="!row.value" [attr.data-attention-kind]="row.key">
+              <button
+                #trigger
+                appButton="primary"
+                class="attention__action"
+                type="button"
+                [disabled]="!row.value"
+                aria-haspopup="dialog"
+                (click)="openAttention(row.key, trigger)"
               >
-                <button
-                  #trigger
-                  appButton="primary"
-                  class="attention__action"
-                  type="button"
-                  [disabled]="!row.value"
-                  aria-haspopup="dialog"
-                  (click)="openAttention(row.key, trigger)"
-                >
-                  <span class="attention__icon">
-                    <i appIcon [icon]="row.icon" appSquare="20" aria-hidden="true"></i>
-                  </span>
-                  <span class="text-body-10">{{ row.label }}</span>
-                  <strong>{{ row.value }}</strong>
-                </button>
-                <app-tooltip
-                  [text]="row.tooltip"
-                  [isVisible]="activeTooltip() === row.key"
-                  [useOverlay]="true"
-                  position="left"
-                  (show)="showTooltip(row.key)"
-                  (hide)="hideTooltip(row.key)"
-                />
-              </li>
-            }
-          </ul>
-        }
-        @if (!hasAttention()) {
-          <p class="analytics-empty-state attention__empty text-body-10">
-            Ничего не требует внимания
-          </p>
-        }
+                <span class="attention__icon">
+                  <i appIcon [icon]="row.icon" appSquare="20" aria-hidden="true"></i>
+                </span>
+                <span class="text-body-10">{{ row.label }}</span>
+                <strong>{{ row.value }}</strong>
+              </button>
+              <app-tooltip
+                [text]="row.tooltip"
+                [isVisible]="activeTooltip() === row.key"
+                [useOverlay]="true"
+                position="left"
+                (show)="showTooltip(row.key)"
+                (hide)="hideTooltip(row.key)"
+              />
+            </li>
+          }
+        </ul>
       </article>
       <article class="analytics-card program-deadlines">
         <div class="analytics__heading-row">
@@ -154,9 +144,6 @@
                   <time class="program-deadlines__date" [attr.datetime]="deadline.datetime">
                     {{ deadline.dateLabel }}
                   </time>
-                  @if (deadline.usesRegistrationDeadline) {
-                    <span class="program-deadlines__hint">По сроку регистрации</span>
-                  }
                 </div>
                 <span class="program-deadlines__status">{{ deadline.status }}</span>
               </li>

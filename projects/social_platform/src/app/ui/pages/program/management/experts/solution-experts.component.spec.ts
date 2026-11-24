@@ -179,12 +179,13 @@ describe("Solution expert management", () => {
     expect(roster.workspace).toHaveBeenCalledTimes(1);
   });
   it("не расширяет распределение до всех решений после применения неизмененного фильтра", () => {
-    const { c } = setup();
+    const { c, fixture } = setup();
     const source = solutionContractScenarios.find(s => s.name === "manager_solution_list_awaiting")!
       .response as SolutionManagerSolutions;
     const row = source.results[0];
     c.solutions.set([row, { ...row, application: { ...row.application, solutionId: 302 } }]);
-    c.tab.set("distribution");
+    fixture.componentRef.setInput("tab", "distribution");
+    fixture.detectChanges();
     c.caseFilter.setValue(JSON.stringify(row.caseName));
     c.toggleDistribution(302);
     c.openFilters();
@@ -192,6 +193,34 @@ describe("Solution expert management", () => {
     expect([...c.distributionSelection()]).toEqual([302]);
     c.startAllocation();
     expect(c.allocation()).toEqual({ programId: 12, ids: [302] });
+  });
+  it("показывает назначения выбранного эксперта без переноса поиска из списка экспертов", () => {
+    const { c, expert, fixture } = setup();
+    const source = solutionContractScenarios.find(s => s.name === "manager_solution_list_awaiting")!
+      .response as SolutionManagerSolutions;
+    const row = source.results[0];
+    c.solutions.set([row, { ...row, application: { ...row.application, solutionId: 302 } }]);
+    c.search.setValue("Эксперт");
+    expect(c.rowActions(expert).find(action => action.id === "view-assignments")).toMatchObject({
+      routerLink: "/office/program/12/management/projects",
+      queryParams: { tab: "allocation", expert: 11 },
+    });
+
+    fixture.componentRef.setInput("tab", "distribution");
+    fixture.componentRef.setInput("allocationExpertId", 11);
+    fixture.detectChanges();
+    expect(c.filteredSolutions().map(item => item.application.solutionId)).toEqual([301]);
+    expect(c.filterCount()).toBe(1);
+    c.openFilters();
+    expect(c.filterDraft.controls.expert.value).toBe("expert:11");
+    c.filterDraft.patchValue({ expert: "all", unassigned: true });
+    c.applyFilters();
+    expect(c.filteredSolutions().map(item => item.application.solutionId)).toEqual([302]);
+
+    fixture.componentRef.setInput("allocationExpertId", null);
+    fixture.detectChanges();
+    expect(c.filteredSolutions()).toHaveLength(2);
+    expect(c.search.value).toBe("Эксперт");
   });
   it("applies the filter draft only on confirmation and resets selection without changing the roster API", () => {
     const { c, roster } = setup();

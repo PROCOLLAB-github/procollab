@@ -87,32 +87,27 @@
             "
           />
         }
-      </section>
-      @if (!locked()) {
-        <footer class="criteria__footer">
-          <p aria-live="polite">
-            {{ dirty() ? "Есть несохраненные изменения" : "Нет несохраненных изменений" }}
-          </p>
-          <div class="criteria__actions">
+        @if (!locked()) {
+          <footer class="criteria__footer criteria__actions">
             <button
               type="button"
               appButton="primary"
-              [disabled]="!dirty() || saving() || !!conflict()"
+              [disabled]="!dirty() || !!conflict()"
+              [appButtonLoading]="saving()"
               (click)="save()"
             >
               {{ saving() ? "Сохраняем…" : "Сохранить изменения" }}</button
             ><button
               type="button"
               appButton="secondary"
-              class="criteria__quiet"
               [disabled]="!dirty() || saving()"
               (click)="cancel()"
             >
               Отменить изменения
             </button>
-          </div>
-        </footer>
-      }
+          </footer>
+        }
+      </section>
     }
   }
 </div>

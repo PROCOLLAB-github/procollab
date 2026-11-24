@@ -94,11 +94,7 @@
       </section>
 
       <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
-        <article
-          class="attention"
-          [class.attention--empty]="!hasValues(attention())"
-          data-testid="attention-block"
-        >
+        <article class="attention" data-testid="attention-block">
           <div class="analytics__heading-row">
             <h2 class="text-body-12">Требует внимания</h2>
             <app-tooltip
@@ -110,60 +106,53 @@
               (hide)="hideTooltip('attention')"
             ></app-tooltip>
           </div>
-          @if (hasValues(attention()) || data()?.attention?.projectsNotSubmitted?.applicable) {
-            <ul class="attention__list">
-              @for (item of attention(); track item.key) {
-                <li
-                  [class.attention__row--disabled]="item.value === 0"
-                  [attr.data-attention-kind]="item.key"
+          <ul class="attention__list">
+            @for (item of attention(); track item.key) {
+              <li
+                [class.attention__row--disabled]="item.value === 0"
+                [attr.data-attention-kind]="item.key"
+              >
+                <button
+                  #attentionTrigger
+                  type="button"
+                  class="attention__action"
+                  aria-haspopup="dialog"
+                  [disabled]="item.value === 0"
+                  (click)="
+                    drilldown.openAttention(
+                      item.key === 'without-visit'
+                        ? 'participants-without-visit'
+                        : item.key === 'without-team'
+                          ? 'participants-without-team'
+                          : 'projects-awaiting-evaluation',
+                      attentionTrigger
+                    )
+                  "
                 >
-                  <button
-                    #attentionTrigger
-                    type="button"
-                    class="attention__action"
-                    aria-haspopup="dialog"
-                    [disabled]="item.value === 0"
-                    (click)="
-                      drilldown.openAttention(
-                        item.key === 'without-visit'
-                          ? 'participants-without-visit'
-                          : item.key === 'without-team'
-                            ? 'participants-without-team'
-                            : 'projects-awaiting-evaluation',
-                        attentionTrigger
-                      )
-                    "
-                  >
-                    <span class="text-body-10">{{ item.label }}</span
-                    ><strong>{{ item.value }}</strong>
-                  </button>
-                  <app-tooltip
-                    [text]="item.tooltip"
-                    role="button"
-                    tabindex="0"
-                    [attr.aria-label]="item.tooltip"
-                    [attr.aria-expanded]="isTooltipVisible(item.key)"
-                    [isVisible]="isTooltipVisible(item.key)"
-                    [useOverlay]="true"
-                    position="left"
-                    (click)="toggleTooltip(item.key)"
-                    (keydown.enter)="toggleTooltip(item.key); $event.preventDefault()"
-                    (keydown.space)="toggleTooltip(item.key); $event.preventDefault()"
-                    (keydown.escape)="closeTooltip(item.key)"
-                    (focus)="showTooltip(item.key)"
-                    (blur)="closeTooltip(item.key)"
-                    (show)="showTooltip(item.key)"
-                    (hide)="hideTooltip(item.key)"
-                  ></app-tooltip>
-                </li>
-              }
-            </ul>
-          }
-          @if (!hasValues(attention())) {
-            <p class="analytics-empty-state attention__empty text-body-10">
-              Ничего не требует внимания
-            </p>
-          }
+                  <span class="text-body-10">{{ item.label }}</span
+                  ><strong>{{ item.value }}</strong>
+                </button>
+                <app-tooltip
+                  [text]="item.tooltip"
+                  role="button"
+                  tabindex="0"
+                  [attr.aria-label]="item.tooltip"
+                  [attr.aria-expanded]="isTooltipVisible(item.key)"
+                  [isVisible]="isTooltipVisible(item.key)"
+                  [useOverlay]="true"
+                  position="left"
+                  (click)="toggleTooltip(item.key)"
+                  (keydown.enter)="toggleTooltip(item.key); $event.preventDefault()"
+                  (keydown.space)="toggleTooltip(item.key); $event.preventDefault()"
+                  (keydown.escape)="closeTooltip(item.key)"
+                  (focus)="showTooltip(item.key)"
+                  (blur)="closeTooltip(item.key)"
+                  (show)="showTooltip(item.key)"
+                  (hide)="hideTooltip(item.key)"
+                ></app-tooltip>
+              </li>
+            }
+          </ul>
         </article>
         <article class="analytics-card program-deadlines" data-testid="program-deadlines">
           <div class="analytics__heading-row">
@@ -193,9 +182,6 @@
                     {{ deadline.dateLabel }}
                   </time>
                   <span class="program-deadlines__status">{{ deadline.status }}</span>
-                  @if (deadline.usesRegistrationDeadline) {
-                    <span class="program-deadlines__hint">По сроку регистрации</span>
-                  }
                 </li>
               }
             </ul>

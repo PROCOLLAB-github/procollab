@@ -119,8 +119,7 @@ p {
 }
 
 .criteria__footer {
-  display: grid;
-  gap: 12px;
+  margin-top: 20px;
 }
 
 .criteria__range {
@@ -182,7 +181,7 @@ p {
     align-items: flex-start;
   }
 
-  .criteria__footer .criteria__actions,
+  .criteria__footer,
   .criteria__dialog footer .criteria__actions {
     flex-direction: column;
     align-items: stretch;

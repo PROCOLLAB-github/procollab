@@ -3,6 +3,7 @@
 import { DialogHeaderComponent, SectionHeaderComponent } from "@uilib";
 
 import {
+  expertAssignmentsAction,
   expertStatusLabel,
   expertStatusDescription,
   expertDeliveryLabel,
@@ -21,7 +22,6 @@ import {
   effect,
   inject,
   input,
-  linkedSignal,
   output,
   signal,
   untracked,
@@ -111,6 +111,9 @@ import { ExpertQuotaComponent } from "./expert-quota.component";
 export class ManagementExpertsComponent {
   readonly dialogBodyClass = expertDialogBodyClass;
   readonly programId = input.required<number>();
+  readonly floatingPosition = input<{ center: number; width: number; rosterWidth: number } | null>(
+    null,
+  );
   readonly confirmDiscard = input.required<() => Promise<boolean>>();
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
   private readonly snackbar = inject(SnackbarService);
@@ -120,8 +123,6 @@ export class ManagementExpertsComponent {
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly injector = inject(Injector);
-  readonly floatingCenter = signal<number | null>(null);
-  readonly floatingWidth = signal<number | null>(null);
   readonly snapshot = signal<ExpertWorkspace | null>(null);
   readonly loading = signal(false);
   readonly busy = signal(false);
@@ -223,8 +224,8 @@ export class ManagementExpertsComponent {
         Number(this.distributionStatusValue() !== "all"),
   );
   readonly exporting = signal(false);
-  readonly initialTab = input<"experts" | "distribution">("experts");
-  readonly tab = linkedSignal(() => this.initialTab());
+  readonly tab = input<"experts" | "distribution">("experts");
+  readonly allocationExpertId = input<number | null>(null);
   readonly distributionSearch = this.fb.control("");
   readonly distributionCase = this.fb.control("all");
   readonly distributionStatus = this.fb.control("all");
@@ -410,23 +411,6 @@ export class ManagementExpertsComponent {
   });
   private loadSequence = 0;
   constructor() {
-    afterNextRender(() => {
-      const update = () => {
-        const rect = this.element.nativeElement.getBoundingClientRect();
-        if (rect.width > 0) {
-          this.floatingCenter.set(rect.left + rect.width / 2);
-          this.floatingWidth.set(Math.min(704, rect.width, window.innerWidth - 32));
-        }
-      };
-      const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(update);
-      observer?.observe(this.element.nativeElement);
-      window.addEventListener("resize", update);
-      update();
-      this.destroyRef.onDestroy(() => {
-        observer?.disconnect();
-        window.removeEventListener("resize", update);
-      });
-    });
     effect(() => {
       const id = this.programId();
       untracked(() => {
@@ -434,10 +418,20 @@ export class ManagementExpertsComponent {
         this.selected.set(null);
         this.selectedExpertIds.set(new Set());
         this.selectedProjects.set(new Set());
-        this.tab.set(this.initialTab());
         this.filtersOpen.set(null);
         this.load(id);
       });
+    });
+    effect(() => {
+      const expertId = this.allocationExpertId();
+      const status = expertId ? "expert:" + expertId : "all";
+      if (status !== this.distributionStatus.value)
+        untracked(() => this.distributionStatus.setValue(status));
+    });
+    effect(() => {
+      this.tab();
+      this.selected.set(null);
+      this.filtersOpen.set(null);
     });
     effect(onCleanup => {
       const id = this.programId();
@@ -525,7 +519,6 @@ export class ManagementExpertsComponent {
           const incoming = this.incomingAssignment.take(id);
           if (incoming?.length) {
             const targets = (data.projects ?? []).filter(p => incoming.includes(p.id));
-            this.tab.set("distribution");
             if (
               targets.length !== incoming.length ||
               new Set(targets.map(p => p.caseName)).size > 1
@@ -653,8 +646,7 @@ export class ManagementExpertsComponent {
         label: "Открыть профиль",
         routerLink: this.paths.profile.detail(row.userId),
       });
-    if (row.status === "joined")
-      actions.unshift({ id: "assignments", label: "Посмотреть назначения" });
+    if (row.status === "joined") actions.unshift(expertAssignmentsAction(this.programId(), row));
     else {
       actions.push({ id: "resend", label: "Отправить приглашение повторно" });
       if (row.status !== "revoked")
@@ -663,15 +655,11 @@ export class ManagementExpertsComponent {
     return actions;
   }
   rowAction(row: ExpertRow, event: RowActionEvent): void {
-    if (this.busy() || event.id === "profile") return;
+    if (this.busy() || event.id === "profile" || event.id === "view-assignments") return;
     this.selected.set(row);
     if (event.id === "scope") this.openScope(row);
     else if (event.id === "resend") this.invitationAction("resend");
     else if (event.id === "revoke") this.open("revoke");
-    else if (event.id === "assignments") {
-      this.switchTab("distribution");
-      this.distributionStatus.setValue("expert:" + row.id);
-    }
   }
   toggleSelectedExpert(row: ExpertRow): void {
     if (this.busy()) return;
@@ -1010,11 +998,6 @@ export class ManagementExpertsComponent {
         this.snackbar.success("Готовность проектов пересчитана.");
       },
     );
-  }
-  switchTab(tab: "experts" | "distribution"): void {
-    if (this.busy()) return;
-    this.tab.set(tab);
-    this.selected.set(null);
   }
   caseLabel(name: string | null): string {
     return name ?? "Без выбранного кейса";
