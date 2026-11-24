@@ -1,0 +1,45 @@
+<!-- @format -->
+
+<div #surface class="image-crop" [style.width]="'min(100%, ' + imageRatio() * 320 + 'px)'">
+  <img
+    #picture
+    [src]="source()"
+    alt=""
+    draggable="false"
+    (load)="imageLoaded(picture, true)"
+    (error)="imageLoaded(picture, false)"
+  />
+  @if (kind() && picture.complete && picture.naturalWidth && failedSource() !== source()) {
+    <div
+      class="image-crop__frame"
+      [class.image-crop__frame--avatar]="kind() === 'logo'"
+      [style.left.%]="box().left * 100"
+      [style.top.%]="box().top * 100"
+      [style.width.%]="box().width * 100"
+      [style.height.%]="box().height * 100"
+      role="group"
+      aria-label="Область кадрирования"
+      aria-describedby="program-image-help"
+      [attr.tabindex]="disabled() ? null : 0"
+      (keydown)="keyFrame($event)"
+      (pointerdown)="startDrag($event, surface)"
+      (pointermove)="moveDrag($event)"
+      (lostpointercapture)="stopDrag()"
+    >
+      @if (!disabled()) {
+        <span class="image-crop__handle image-crop__handle--nw" data-x="-1" data-y="-1"></span>
+        <span class="image-crop__handle image-crop__handle--ne" data-x="1" data-y="-1"></span>
+        <span class="image-crop__handle image-crop__handle--sw" data-x="-1" data-y="1"></span>
+        <span class="image-crop__handle image-crop__handle--se" data-x="1" data-y="1"></span>
+      }
+    </div>
+  }
+</div>
+@if (failedSource() === source()) {
+  <p role="alert">Не удалось открыть изображение. Выберите другой файл.</p>
+} @else if (kind()) {
+  <p id="program-image-help">
+    Перетащите рамку или потяните за угол.
+    <span class="image-crop__sr">С клавиатуры используйте стрелки и клавиши плюс и минус.</span>
+  </p>
+}

@@ -280,7 +280,8 @@ describe("Сохранение настроек организатора", () =>
       mobileCover: { x: 80, y: 30, zoom: 1.5 },
       logo: { x: 50, y: 50, zoom: 1 },
     };
-    component.changeFraming(framing);
+    component.basicForm.controls.imageFraming.setValue(framing);
+    component.basicForm.controls.imageFraming.markAsDirty();
     component.basicForm.controls.mobileCoverImageAddress.setValue("https://example.com/mobile.png");
     component.basicForm.controls.mobileCoverImageAddress.markAsDirty();
     save.mockReturnValue(
@@ -353,6 +354,7 @@ describe("Списки управления программой в DOM", () => 
       team: signal<ManagementTeam | null>(null),
       context: null as ManagementContext | null,
       api: {
+        save: vi.fn(() => of(program)),
         returnToDraft: vi.fn<(id: number, version: string) => Observable<ProgramManagement>>(() =>
           of({ ...program, draft: true, updatedAt: "2026-10-30T10:01:00Z" }),
         ),
@@ -447,21 +449,12 @@ describe("Списки управления программой в DOM", () => 
     expect(component.participantAnswers()).toBeNull();
   });
 
-  it("показывает срок регистрации как запасной только для пустого срока приёма решений", async () => {
-    const { component, state, element, harness } = await setup("settings", "?tab=dates");
-    const hint = () => element().querySelector<HTMLElement>("#submission-deadline-hint");
-    const input = () =>
-      element().querySelector<HTMLInputElement>("#datetimeProjectSubmissionEnds")!;
-    expect(hint()?.textContent).toContain("Прием решений завершится вместе с регистрацией");
-    expect(input().getAttribute("aria-describedby")).toBe("submission-deadline-hint");
-    expect(element().textContent).not.toContain("Перенос завершенного срока");
-
-    component.datesForm.controls.datetimeProjectSubmissionEnds.setValue("2026-10-22T18:00");
-    harness.detectChanges();
-    expect(hint()).toBeNull();
-    expect(input().getAttribute("aria-describedby")).toBeNull();
-
-    component.datesForm.controls.datetimeProjectSubmissionEnds.setValue("");
+  it("объясняет срок по умолчанию рядом с полем конкурсной программы", async () => {
+    const { state, element, harness } = await setup("settings", "?tab=dates");
+    const hint = () =>
+      element().querySelector('label[for="datetimeProjectSubmissionEnds"] + app-tooltip');
+    expect(element().textContent).toContain("UTC+3");
+    expect(hint()).not.toBeNull();
     state.program.set({ ...program, isCompetitive: false });
     harness.detectChanges();
     expect(hint()).toBeNull();
@@ -469,9 +462,9 @@ describe("Списки управления программой в DOM", () => 
 
   it("возврат в черновик открывает подтверждение; отмена не отправляет запрос", async () => {
     const { component, state, element, harness } = await setup("settings", "?tab=basic");
-    const button = [...element().querySelectorAll<HTMLButtonElement>("button")].find(
-      item => item.textContent?.trim() === "Вернуть в черновик",
-    )!;
+    element().querySelector<HTMLButtonElement>('[aria-label="Действия программы"]')!.click();
+    harness.detectChanges();
+    const button = document.querySelector<HTMLButtonElement>(".management__settings-menu button")!;
     expect(button).toBeTruthy();
     button.click();
     harness.detectChanges();
@@ -506,7 +499,7 @@ describe("Списки управления программой в DOM", () => 
     expect(element().querySelector('a[href="/office/program/1/launch"]')?.textContent).toContain(
       "Обзор",
     );
-    expect(element().querySelector("#program-publication-title")).toBeNull();
+    expect(element().querySelector('[aria-label="Действия программы"]')).toBeNull();
   });
 
   it("несохраненные настройки блокируют возврат без потери введенного текста", async () => {
@@ -514,9 +507,9 @@ describe("Списки управления программой в DOM", () => 
     component.basicForm.controls.name.setValue("Мое название");
     component.basicForm.controls.name.markAsDirty();
     harness.detectChanges();
-    const button = [...element().querySelectorAll<HTMLButtonElement>("button")].find(
-      item => item.textContent?.trim() === "Вернуть в черновик",
-    )!;
+    element().querySelector<HTMLButtonElement>('[aria-label="Действия программы"]')!.click();
+    harness.detectChanges();
+    const button = document.querySelector<HTMLButtonElement>(".management__settings-menu button")!;
     expect(button.disabled).toBe(true);
     expect(button.getAttribute("aria-describedby")).toBe("program-publication-dirty");
     await component.returnToDraft();
@@ -572,7 +565,7 @@ describe("Списки управления программой в DOM", () => 
     const { state, element, harness } = await setup("settings", "?tab=basic");
     state.program.set({ ...program, draft: true });
     harness.detectChanges();
-    expect(element().querySelector("#program-publication-title")).toBeNull();
+    expect(element().querySelector('[aria-label="Действия программы"]')).toBeNull();
     expect(element().querySelector('a[href="/office/program/1/launch"]')?.textContent).toContain(
       "Обзор",
     );
@@ -682,84 +675,61 @@ describe("Списки управления программой в DOM", () => 
     return event as DragEvent;
   }
 
-  it("замена и удаление изображений сбрасывают только зависимые кадры, включая mobile fallback", async () => {
-    const { component, harness, element, uploaded } = await setup("settings", "?tab=basic");
-    const framing = {
-      cover: { x: 20, y: 30, zoom: 2 },
-      mobileCover: { x: 80, y: 70, zoom: 3 },
-      logo: { x: 40, y: 60, zoom: 1.5 },
-    };
-    component.basicForm.controls.mobileCoverImageAddress.setValue("https://example.com/mobile.png");
-    component.changeFraming(framing);
-    const input = element().querySelector<HTMLInputElement>(
-      'input[type=file][aria-describedby="program-image-hint-coverImageAddress"]',
-    )!;
-    Object.defineProperty(input, "files", {
-      value: [new File(["image"], "cover.png", { type: "image/png" })],
-    });
-    input.dispatchEvent(new Event("change", { bubbles: true }));
-    uploaded.next({ url: "https://example.com/cover.png" });
-    uploaded.complete();
-    harness.detectChanges();
-    expect(component.basicForm.controls.imageFraming.value).toEqual({
-      ...framing,
-      cover: { x: 50, y: 50, zoom: 1 },
-    });
-    component.clearImage("mobileCoverImageAddress");
-    expect(component.basicForm.controls.imageFraming.value.mobileCover).toEqual({
-      x: 50,
-      y: 50,
-      zoom: 1,
-    });
-    component.changeFraming(framing);
-    component.clearImage("coverImageAddress");
-    expect(component.basicForm.controls.imageFraming.value).toEqual({
-      ...framing,
-      cover: { x: 50, y: 50, zoom: 1 },
-      mobileCover: { x: 50, y: 50, zoom: 1 },
-    });
-    component.clearImage("imageAddress");
-    expect(component.basicForm.controls.imageFraming.value.logo).toEqual({ x: 50, y: 50, zoom: 1 });
-    component.resetForms();
-    expect(component.basicForm.pristine).toBe(true);
-    expect(component.basicForm.controls.mobileCoverImageAddress.value).toBe("");
-  });
-
-  it("предпросмотры компьютера и телефона используют несохраненную обложку", async () => {
-    const { component, harness, element, state, uploaded } = await setup("settings", "?tab=basic");
-    const save = vi.spyOn(component, "save");
+  it("открывает локальный предпросмотр и сохраняет обложку отдельно от черновика формы", async () => {
+    const { component, harness, element, state, uploadFile, uploaded } = await setup(
+      "settings",
+      "?tab=basic",
+    );
     const preview = () => element().querySelector(".management__branding")!;
-    const draftCover = () =>
-      preview().querySelector<HTMLImageElement>("img.management__branding-cover")!;
-    expect(component.basicForm.pristine).toBe(true);
-    expect(save).not.toHaveBeenCalled();
-    expect(preview().textContent).toContain("Компьютер");
-    expect(preview().textContent).toContain("Телефон");
-    const input = preview().querySelector<HTMLInputElement>(
-      'input[type=file][aria-describedby="program-image-hint-coverImageAddress"]',
+    const input = element().querySelector<HTMLInputElement>(
+      '[data-image-field="coverImageAddress"]',
     )!;
-    Object.defineProperty(input, "files", {
-      value: [new File(["image"], "cover.png", { type: "image/png" })],
-    });
-    input.dispatchEvent(new Event("change", { bubbles: true }));
-    harness.detectChanges();
-    expect(element().textContent).toContain("Загружаем…");
-    uploaded.next({ url: "https://example.com/unsaved-cover.png" });
-    uploaded.complete();
-    harness.detectChanges();
-    expect(draftCover().src).toBe("https://example.com/unsaved-cover.png");
-    expect(component.basicForm.dirty).toBe(true);
-    expect(state.program().coverImageAddress).not.toBe("https://example.com/unsaved-cover.png");
-    expect(save).not.toHaveBeenCalled();
-    expect(
-      preview().querySelector<HTMLImageElement>(".management__branding-sample--mobile img")?.src,
-    ).toBe("https://example.com/unsaved-cover.png");
-    component.resetForms();
-    harness.detectChanges();
-    expect(preview().querySelector<HTMLImageElement>('img[src*="unsaved-cover.png"]')).toBeNull();
-    expect(component.basicForm.pristine).toBe(true);
-    expect(element().textContent).toContain("Высоту можно выбрать любую");
-    expect(element().textContent).not.toContain("Высота — по содержимому");
+    const source = vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:cover");
+    const release = vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+    try {
+      const name = component.basicForm.controls.name;
+      name.setValue("Еще не сохранено");
+      name.markAsDirty();
+      const file = new File(["image"], "cover.png", { type: "image/png" });
+      Object.defineProperty(input, "files", { value: [file] });
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      expect(component.imageEdit()?.source).toBe("blob:cover");
+      expect(uploadFile).not.toHaveBeenCalled();
+      component.imageReady.set(true);
+      component.setImageFrame({ x: 50, y: 65, zoom: 1 });
+      const url = "https://example.com/cover.png";
+      state.api.save.mockReturnValue(
+        of({
+          ...program,
+          coverImageAddress: url,
+          imageFraming: { cover: { x: 50, y: 65, zoom: 1 } },
+        }),
+      );
+      component.saveImage();
+      expect(uploadFile).toHaveBeenCalledExactlyOnceWith(file);
+      uploaded.next({ url });
+      uploaded.complete();
+      harness.detectChanges();
+      expect(state.api.save).toHaveBeenCalledWith(1, "basic", {
+        expectedUpdatedAt: program.updatedAt,
+        coverImageAddress: url,
+        imageFraming: {
+          cover: { x: 50, y: 65, zoom: 1 },
+          mobileCover: { x: 50, y: 50, zoom: 1 },
+          logo: { x: 50, y: 50, zoom: 1 },
+        },
+      });
+      expect(
+        preview().querySelector<HTMLImageElement>(".management__branding-sample--mobile img")?.src,
+      ).toBe(url);
+      expect(name.value).toBe("Еще не сохранено");
+      expect(name.dirty).toBe(true);
+      expect(component.imageEdit()).toBeNull();
+      expect(release).toHaveBeenCalledWith("blob:cover");
+    } finally {
+      source.mockRestore();
+      release.mockRestore();
+    }
   });
 
   it("показывает последнюю активность по Москве, а для null и старого API — прочерк", async () => {

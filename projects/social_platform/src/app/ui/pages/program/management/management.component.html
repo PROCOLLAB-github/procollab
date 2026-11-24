@@ -684,16 +684,53 @@
         />
       } @else if (settingsTab() === "basic") {
         <form [formGroup]="basicForm" (ngSubmit)="save()" class="management__card management__form">
-          <app-section-header title="Основная информация" />
+          <app-section-header title="Основная информация">
+            @if (!program.draft) {
+              <button
+                sectionHeaderAction
+                type="button"
+                appButton="icon"
+                [cdkMenuTriggerFor]="publicationMenu"
+                aria-label="Действия программы"
+              >
+                <i appIcon icon="dots" appSquare="20" aria-hidden="true"></i>
+              </button>
+            }
+          </app-section-header>
+          <ng-template #publicationMenu>
+            <div cdkMenu class="management__settings-menu">
+              <button
+                type="button"
+                cdkMenuItem
+                [disabled]="
+                  dirty() || saving() || !!uploading() || state.pending() || returningToDraft()
+                "
+                [attr.aria-describedby]="dirty() ? 'program-publication-dirty' : null"
+                (click)="returnToDraft()"
+              >
+                Вернуть в черновик
+              </button>
+              @if (dirty()) {
+                <p class="management__muted" id="program-publication-dirty">
+                  Сначала сохраните или отмените изменения в настройках.
+                </p>
+              }
+            </div>
+          </ng-template>
           @for (field of basicFields; track field.key) {
-            <label [for]="'program-' + field.key"
-              >{{ field.label }}{{ field.required ? " *" : ""
-              }}<input
+            <div class="management__labeled-field">
+              <div class="management__field-caption">
+                <label [for]="'program-' + field.key"
+                  >{{ field.label }}{{ field.required ? " *" : "" }}</label
+                >
+              </div>
+              <input
                 appField
                 [id]="'program-' + field.key"
                 [formControlName]="field.key"
                 [attr.aria-required]="field.required || null"
-            /></label>
+              />
+            </div>
           }
           <label for="program-description"
             >Описание<textarea
@@ -703,8 +740,59 @@
               rows="7"
             ></textarea>
           </label>
+          @for (field of coverFields; track field.key) {
+            <div class="management__image">
+              <strong>{{ field.title }}</strong>
+              <div>
+                <p>{{ field.dimensions }}</p>
+                <p class="management__muted">{{ field.hint }}</p>
+              </div>
+              @if (basicForm.controls[field.key].value) {
+                <div class="management__inline">
+                  @if (href(basicForm.controls[field.key].value); as src) {
+                    <img [src]="src" [alt]="field.title" />
+                  }
+                  <ng-container
+                    *ngTemplateOutlet="editImageAction; context: { $implicit: field }"
+                  />
+                </div>
+              } @else {
+                <ng-container *ngTemplateOutlet="imageAction; context: { $implicit: field }" />
+              }
+            </div>
+          }
+          @for (image of images; track image.key) {
+            <div class="management__image">
+              <strong>{{ image.label }}</strong>
+              <div>
+                <p>{{ image.dimensions }}</p>
+                <p class="management__muted">{{ image.hint }}</p>
+              </div>
+              @if (basicForm.controls[image.key].value) {
+                <div class="management__inline">
+                  @if (href(basicForm.controls[image.key].value); as src) {
+                    <img
+                      [src]="src"
+                      [alt]="image.label"
+                      [class.management__image-avatar]="image.key === 'imageAddress'"
+                      [appImageFraming]="
+                        image.key === 'imageAddress'
+                          ? basicForm.controls.imageFraming.value.logo
+                          : undefined
+                      "
+                    />
+                  }
+                  <ng-container
+                    *ngTemplateOutlet="editImageAction; context: { $implicit: image }"
+                  />
+                </div>
+              } @else {
+                <ng-container *ngTemplateOutlet="imageAction; context: { $implicit: image }" />
+              }
+            </div>
+          }
           <section class="management__branding" aria-labelledby="program-branding-title">
-            <h3 id="program-branding-title">Оформление программы</h3>
+            <app-section-header title="Оформление программы" titleId="program-branding-title" />
             <div class="management__branding-previews">
               @for (field of coverFields; track field.key) {
                 <article>
@@ -737,7 +825,7 @@
                       @if (href(basicForm.controls.imageAddress.value); as avatar) {
                         <img
                           [src]="avatar"
-                          [appImageFraming]="basicForm.controls.imageFraming.value?.logo"
+                          [appImageFraming]="basicForm.controls.imageFraming.value.logo"
                           alt=""
                         />
                       } @else {
@@ -746,139 +834,153 @@
                     </span>
                     <p>{{ basicForm.controls.name.value }}</p>
                   </div>
+                </article>
+              }
+            </div>
+          </section>
+          <ng-template #editImageAction let-item>
+            <button
+              type="button"
+              appButton="icon"
+              [attr.aria-label]="'Изменить изображение: ' + item.label"
+              [attr.title]="'Изменить изображение: ' + item.label"
+              [disabled]="!!uploading() || saving()"
+              (click)="openImage(item.key)"
+            >
+              <i appIcon icon="edit-pen" appSquare="16" aria-hidden="true"></i>
+            </button>
+          </ng-template>
+          <ng-template #imageAction let-item>
+            <div
+              class="management__dropzone"
+              [class.management__dropzone--active]="!imageEdit() && imageDropTarget() === item.key"
+              (dragover)="onImageDragOver($event, item.key)"
+              (dragleave)="onImageDragLeave($event, item.key)"
+              (drop)="onImageDrop($event, item.key)"
+            >
+              <div>
+                <p class="management__dropzone-title">Перетащите изображение сюда</p>
+                <p class="management__muted">{{ imageFormats }} · до {{ imageMaxSizeMb }} МБ</p>
+              </div>
+              <input
+                #newImage
+                type="file"
+                [accept]="imageFileTypes"
+                hidden
+                [attr.data-image-field]="item.key"
+                (change)="selectImage($event, item.key)"
+              />
+              <button
+                type="button"
+                appButton="secondary"
+                [disabled]="!!uploading() || saving()"
+                (click)="newImage.click()"
+              >
+                Выбрать файл
+              </button>
+              @if (imageTooLarge(item.key)) {
+                <p appAlert="error" role="alert">Файл больше {{ imageMaxSizeMb }} МБ.</p>
+              }
+            </div>
+          </ng-template>
+          <app-modal
+            [open]="!!imageEdit()"
+            (openChange)="!$event && closeImage()"
+            labelledBy="program-image-title"
+          >
+            @if (imageEdit(); as edit) {
+              <section
+                class="management__framing"
+                [class.management__framing--compact]="
+                  edit.field === 'imageAddress' || edit.field === 'mobileCoverImageAddress'
+                "
+              >
+                <app-dialog-header
+                  [title]="edit.title"
+                  titleId="program-image-title"
+                  [initialFocusOnTitle]="true"
+                  [closeDisabled]="saving()"
+                  (closed)="closeImage()"
+                />
+                @if (edit.source; as source) {
+                  <app-program-image-crop
+                    [source]="source"
+                    [kind]="imageFrameKey(edit.field)"
+                    [frame]="edit.frame"
+                    [disabled]="saving()"
+                    (frameChanged)="setImageFrame($event)"
+                    (ready)="imageReady.set($event)"
+                  />
+                }
+                @if (imageError(); as error) {
+                  <p appAlert="error" role="alert">{{ error }}</p>
+                }
+                <div
+                  class="management__dropzone management__dropzone--replacement"
+                  [class.management__dropzone--active]="imageDropTarget() === edit.field"
+                  (dragover)="onImageDragOver($event, edit.field, true)"
+                  (dragleave)="onImageDragLeave($event, edit.field)"
+                  (drop)="onImageDrop($event, edit.field, true)"
+                >
+                  <div>
+                    <p class="management__dropzone-title">Перетащите сюда другое изображение</p>
+                    <p class="management__muted">{{ imageFormats }} · до {{ imageMaxSizeMb }} МБ</p>
+                  </div>
+                  <input
+                    #replacement
+                    type="file"
+                    [accept]="imageFileTypes"
+                    hidden
+                    (change)="selectImage($event, edit.field)"
+                  />
                   <button
-                    class="management__branding-frame"
                     type="button"
                     appButton="secondary"
-                    [attr.aria-label]="'Настроить кадр: ' + field.label"
-                    (click)="framingDevice.set(field.device)"
+                    [disabled]="saving()"
+                    (click)="replacement.click()"
                   >
-                    Настроить кадр
+                    {{ edit.source ? "Заменить файл" : "Выбрать файл" }}
                   </button>
-                  <div class="management__branding-actions">
-                    <span class="management__sr" [id]="'program-image-hint-' + field.key">
-                      {{ field.dimensions }}
-                    </span>
-                    <input
-                      #coverInput
-                      type="file"
-                      accept="image/*"
-                      hidden
-                      [attr.aria-describedby]="'program-image-hint-' + field.key"
-                      (change)="upload($event, field.key)"
-                    />
-                    <button
-                      type="button"
-                      appButton="text"
-                      [attr.title]="field.dimensions"
-                      [attr.aria-describedby]="'program-image-hint-' + field.key"
-                      [disabled]="!!uploading() || saving()"
-                      (click)="coverInput.click()"
-                    >
-                      {{
-                        uploading() === field.key
-                          ? "Загружаем…"
-                          : basicForm.controls[field.key].value
-                            ? field.replaceLabel
-                            : field.uploadLabel
-                      }}
-                    </button>
-                    @if (basicForm.controls[field.key].value) {
+                  @if (imageTooLarge(edit.field, true)) {
+                    <p appAlert="error" role="alert">Файл больше {{ imageMaxSizeMb }} МБ.</p>
+                  }
+                </div>
+                <div class="management__image-footer">
+                  <div class="management__inline">
+                    @if (!edit.file && basicForm.controls[edit.field].value) {
                       <button
                         type="button"
                         appButton="text"
-                        [attr.aria-label]="'Убрать обложку: ' + field.label"
-                        [disabled]="!!uploading() || saving()"
-                        (click)="clearImage(field.key)"
+                        [disabled]="saving()"
+                        (click)="saveImage(true)"
                       >
                         Убрать
                       </button>
                     }
                   </div>
-                  @if (field.device === "mobile" && !basicForm.controls[field.key].value) {
-                    <p class="management__muted">Показывается основная обложка</p>
-                  }
-                </article>
-              }
-            </div>
-          </section>
-          <app-modal
-            [open]="!!framingDevice()"
-            (openChange)="!$event && framingDevice.set(null)"
-            labelledBy="program-framing-heading"
-          >
-            <section class="management__framing">
-              <div class="management__inline">
-                <h2 id="program-framing-heading">Настроить кадр</h2>
-                <button
-                  type="button"
-                  appButton="icon"
-                  aria-label="Закрыть оформление"
-                  (click)="framingDevice.set(null)"
-                >
-                  <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-                </button>
-              </div>
-              @if (framingDevice(); as device) {
-                <app-program-branding-preview
-                  [device]="device"
-                  [cover]="href(basicForm.controls.coverImageAddress.value)"
-                  [logo]="href(basicForm.controls.imageAddress.value)"
-                  [mobileCover]="href(basicForm.controls.mobileCoverImageAddress.value)"
-                  [framing]="basicForm.controls.imageFraming.value"
-                  [disabled]="saving() || !!uploading()"
-                  [busy]="!!uploading()"
-                  (framingChange)="changeFraming($event)"
-                />
-              }
-            </section>
+                  <div class="management__inline">
+                    <button
+                      type="button"
+                      appButton="secondary"
+                      [disabled]="saving()"
+                      (click)="closeImage()"
+                    >
+                      Отмена
+                    </button>
+                    <button
+                      type="button"
+                      appButton="primary"
+                      [appButtonLoading]="saving()"
+                      [disabled]="!imageReady()"
+                      (click)="saveImage()"
+                    >
+                      Сохранить
+                    </button>
+                  </div>
+                </div>
+              </section>
+            }
           </app-modal>
-          @for (image of images; track image.key) {
-            <div class="management__image">
-              <strong>{{ image.label }}</strong>
-              <div [id]="'program-image-hint-' + image.key">
-                <p>{{ image.dimensions }}</p>
-                <p class="management__muted">{{ image.hint }}</p>
-              </div>
-              @if (href(basicForm.get(image.key)?.value ?? null); as src) {
-                <img [src]="src" [alt]="image.label" />
-              }
-              <div class="management__inline">
-                <input
-                  #imageInput
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  [attr.aria-describedby]="'program-image-hint-' + image.key"
-                  (change)="upload($event, image.key)"
-                /><button
-                  type="button"
-                  appButton="secondary"
-                  [attr.aria-describedby]="'program-image-hint-' + image.key"
-                  [disabled]="!!uploading() || saving()"
-                  (click)="imageInput.click()"
-                >
-                  {{
-                    uploading() === image.key
-                      ? "Загружаем…"
-                      : basicForm.get(image.key)?.value
-                        ? "Заменить файл"
-                        : "Загрузить файл"
-                  }}
-                </button>
-                @if (basicForm.get(image.key)?.value) {
-                  <button
-                    type="button"
-                    appButton="text"
-                    [disabled]="!!uploading() || saving()"
-                    (click)="clearImage(image.key)"
-                  >
-                    Убрать
-                  </button>
-                }
-              </div>
-            </div>
-          }
           <label for="presentation-link"
             >Презентация или положение<input
               appField
@@ -913,68 +1015,36 @@
             </button>
           </div>
         </form>
-        @if (!program.draft) {
-          <section
-            class="management__card management__form"
-            aria-labelledby="program-publication-title"
-          >
-            <h2 id="program-publication-title">Публикация программы</h2>
-            <p class="management__muted">
-              Можно скрыть программу от участников, сохранив заявки, решения и оценки.
-            </p>
-            <div class="management__inline">
-              <button
-                type="button"
-                appButton="secondary"
-                [appButtonLoading]="returningToDraft()"
-                [disabled]="dirty() || saving() || !!uploading() || state.pending()"
-                [attr.aria-describedby]="dirty() ? 'program-publication-dirty' : null"
-                (click)="returnToDraft()"
-              >
-                Вернуть в черновик
-              </button>
-            </div>
-            @if (dirty()) {
-              <p class="management__muted" id="program-publication-dirty">
-                Сначала сохраните или отмените изменения в настройках.
-              </p>
-            }
-          </section>
-        }
       } @else if (settingsTab() === "dates") {
         <form [formGroup]="datesForm" (ngSubmit)="save()" class="management__card management__form">
-          <app-section-header title="Календарь программы" />
-          <p class="management__muted">Даты и время указаны по Москве (UTC+3).</p>
+          <app-section-header title="Календарь программы" [alignTitleBaseline]="true">
+            <span sectionHeaderTitleAction class="management__timezone">UTC+3</span>
+          </app-section-header>
           @for (field of dateFields; track field.key) {
-            <label [for]="field.key"
-              >{{ field.label
-              }}<input
+            <div class="management__labeled-field">
+              <div class="management__field-caption">
+                <label [for]="field.key">{{ field.label }}</label>
+                @if (program.isCompetitive && field.key === "datetimeProjectSubmissionEnds") {
+                  <app-tooltip
+                    text="Если оставить поле пустым, прием решений закончится в дату и время окончания регистрации."
+                    [isVisible]="submissionHintVisible()"
+                    [useOverlay]="true"
+                    (show)="submissionHintVisible.set(true)"
+                    (hide)="submissionHintVisible.set(false)"
+                  />
+                }
+              </div>
+              <input
                 appField
                 type="datetime-local"
                 [id]="field.key"
                 [formControlName]="field.key"
                 [attr.aria-invalid]="dateError(field.key) ? 'true' : null"
-                [attr.aria-describedby]="
-                  dateError(field.key)
-                    ? field.key + '-error'
-                    : program.isCompetitive &&
-                        field.key === 'datetimeProjectSubmissionEnds' &&
-                        !submissionDeadline()
-                      ? 'submission-deadline-hint'
-                      : null
-                "
-            /></label>
+                [attr.aria-describedby]="dateError(field.key) ? field.key + '-error' : null"
+              />
+            </div>
             @if (dateError(field.key); as error) {
               <p appAlert="error" role="alert" [id]="field.key + '-error'">{{ error }}</p>
-            }
-            @if (
-              program.isCompetitive &&
-              field.key === "datetimeProjectSubmissionEnds" &&
-              !submissionDeadline()
-            ) {
-              <p class="management__muted" id="submission-deadline-hint">
-                Прием решений завершится вместе с регистрацией.
-              </p>
             }
           }
           <div class="management__inline">
@@ -995,7 +1065,12 @@
             title="Материалы программы"
             description="Документы и полезные ссылки для участников."
           >
-            <button type="button" appButton="primary" (click)="editMaterial('new')">
+            <button
+              sectionHeaderAction
+              type="button"
+              appButton="primary"
+              (click)="editMaterial('new')"
+            >
               Добавить материал
             </button>
           </app-section-header>

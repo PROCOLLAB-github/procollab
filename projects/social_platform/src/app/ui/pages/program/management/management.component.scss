@@ -159,7 +159,9 @@
       width: 100%;
     }
 
-    textarea {
+    textarea.ui-field {
+      padding: 14px 16px;
+      border-radius: var(--ui-radius-md, 12px);
       resize: vertical;
     }
   }
@@ -682,12 +684,6 @@
 .management__branding {
   min-width: 0;
 
-  > h3 {
-    padding-bottom: 12px;
-    color: var(--accent);
-    border-bottom: 1px solid var(--accent);
-  }
-
   &-previews {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
@@ -700,21 +696,8 @@
     }
   }
 
-  &-frame.ui-button {
-    width: 100%;
+  &-previews .ui-button {
     margin-top: 8px;
-  }
-
-  &-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 12px;
-
-    .ui-button {
-      padding-inline: 0;
-      text-align: left;
-      white-space: normal;
-    }
   }
 
   &-sample {
@@ -768,5 +751,71 @@
 .management__framing {
   width: min(760px, calc(100vw - 32px));
   padding: 20px;
-  > .management__inline { justify-content: space-between; }
+  box-sizing: border-box;
+
+  &--compact {
+    width: min(490px, calc(100vw - 32px));
+  }
+
+  .management__image-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+}
+
+.management__image img.management__image-avatar {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.management__labeled-field {
+  display: grid;
+  gap: 8px;
+}
+
+.management__field-caption {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.management__timezone {
+  margin-inline-start: 6px;
+  color: var(--grey-for-text);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.management__settings-menu {
+  display: grid;
+  gap: 8px;
+  max-width: 250px;
+  padding: 8px;
+  background: var(--white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 8px;
+
+  button {
+    padding: 8px;
+    color: var(--accent-text);
+    text-align: start;
+    background: transparent;
+    border: 0;
+
+    &:disabled { opacity: 0.5; }
+  }
+
+  p { padding: 0 8px 8px; }
+}
+
+
+.management__dropzone--replacement {
+  gap: 8px;
+  margin-block-start: 16px;
+  padding: 12px;
 }
