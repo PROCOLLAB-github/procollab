@@ -7,6 +7,7 @@
   @for (label of steps; track label; let index = $index) {
     <button
       type="button"
+      [attr.data-program-guide]="'certificate-tab-' + (index + 1)"
       [appButton]="step() === index + 1 ? 'primary' : 'secondary'"
       [attr.aria-current]="step() === index + 1 ? 'step' : null"
       (click)="setStep(index + 1)"
@@ -53,7 +54,11 @@
         (layoutChange)="patch({ layout: $event }, false)"
         (removeElement)="hideElement($event)"
       >
-        <header canvas-header class="certificates__canvas-heading">
+        <header
+          canvas-header
+          class="certificates__canvas-heading"
+          data-program-guide="certificate-template"
+        >
           <h3>Шаблон сертификата</h3>
           <button
             type="button"
@@ -248,7 +253,7 @@
     @let counts = eligibleCounts();
     <fieldset class="certificates__issuance" [disabled]="busy()">
       <div class="certificates__card certificates__rules">
-        <section aria-labelledby="certificate-audience">
+        <section aria-labelledby="certificate-audience" data-program-guide="certificate-audience">
           <h3 id="certificate-audience">Кому выдать</h3>
           <div
             class="certificates__options"
@@ -288,7 +293,7 @@
             </label>
           </div>
         </section>
-        <section aria-labelledby="certificate-timing">
+        <section aria-labelledby="certificate-timing" data-program-guide="certificate-timing">
           <h3 id="certificate-timing">Когда выдать</h3>
           <div class="certificates__options" role="radiogroup" aria-labelledby="certificate-timing">
             <label class="certificates__option">
@@ -338,7 +343,7 @@
             </label>
           }
         </section>
-        <section aria-labelledby="certificate-channel">
+        <section aria-labelledby="certificate-channel" data-program-guide="certificate-channel">
           <h3 id="certificate-channel">Где участник получит сертификат</h3>
           <div
             class="certificates__options"
@@ -434,7 +439,11 @@
   }
   @if (step() === 3) {
     <section class="certificates__card">
-      <div class="certificates__metrics" aria-live="polite">
+      <div
+        class="certificates__metrics"
+        data-program-guide="certificate-journal"
+        aria-live="polite"
+      >
         <div>
           <strong>{{ journal()?.summary?.ready ?? 0 }}</strong
           ><span>PDF готовы</span>

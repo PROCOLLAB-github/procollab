@@ -78,7 +78,11 @@
         }
         <p class="project-form__muted">Скрытые данные сохраняются.</p>
       </section>
-      <section class="project-form__card" aria-labelledby="fields-heading">
+      <section
+        class="project-form__card"
+        aria-labelledby="fields-heading"
+        data-program-guide="settings-project-form"
+      >
         <h3 id="fields-heading" class="project-form__panel-title">Поля для сдачи</h3>
         @if (snapshot()?.caseRequired || cases().length) {
           <div class="project-form__field-row">

@@ -17,6 +17,7 @@
               [cdkMenuTriggerFor]="analyticsExports"
               [disabled]="loadingExports()"
               [attr.aria-busy]="loadingExports()"
+              data-program-guide="analytics-export"
               aria-label="Выгрузить данные программы"
               title="Выгрузить данные программы"
             >
@@ -62,7 +63,11 @@
         }
       </section>
     } @else if (data(); as overview) {
-      <section class="summary" aria-label="Основные показатели">
+      <section
+        class="summary"
+        aria-label="Основные показатели"
+        data-program-guide="analytics-summary"
+      >
         @for (card of summary(); track card.key) {
           <article
             class="summary-card"
@@ -96,7 +101,7 @@
       <section class="analytics-grid analytics-grid--priority" aria-label="Контроль программы">
         <article class="attention" data-testid="attention-block">
           <div class="analytics__heading-row">
-            <h2 class="text-body-12">Требует внимания</h2>
+            <h2 class="text-body-12" data-program-guide="analytics-attention">Требует внимания</h2>
             <app-tooltip
               text="Показатели, которые могут потребовать действия организатора."
               [isVisible]="isTooltipVisible('attention')"
@@ -191,7 +196,11 @@
         </article>
       </section>
 
-      <section class="analytics-grid" aria-label="Воронки программы">
+      <section
+        class="analytics-grid"
+        aria-label="Воронки программы"
+        data-program-guide="analytics-funnels"
+      >
         <article class="analytics-card" data-testid="participant-funnel">
           <div class="analytics__heading-row">
             <h2 class="text-body-12">Воронка участников</h2>

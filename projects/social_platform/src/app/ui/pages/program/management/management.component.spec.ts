@@ -6,7 +6,7 @@ import { ActivatedRoute, Router, provideRouter } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Observable, of, Subject, throwError } from "rxjs";
-import { FileService } from "@corelib";
+import { ApiService, FileService } from "@corelib";
 import {
   ManagementContext,
   ProgramManagementService,
@@ -406,6 +406,10 @@ describe("Списки управления программой в DOM", () => 
           },
         ]),
         { provide: FileService, useValue: { uploadFile } },
+        {
+          provide: ApiService,
+          useValue: { get: () => of({ seen: [] }), post: () => of({ seen: [] }) },
+        },
         { provide: EvaluationUseCase, useValue: { workspace: () => of(evaluationWorkspace) } },
       ],
     }).overrideComponent(ProgramManagementComponent, {

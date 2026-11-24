@@ -11,7 +11,6 @@
 >
   @if (state.program(); as program) {
     <app-program-management-header
-      #managementHeader
       [programId]="program.id"
       [name]="program.name"
       [draft]="!!program.draft"
@@ -30,11 +29,6 @@
           </a>
         }
       </nav>
-    }
-    @if (managementHeader.activeStep()) {
-      <div class="management__coach">
-        <ng-container [ngTemplateOutlet]="managementHeader.coachTemplate" />
-      </div>
     }
   }
   @if (state.error()) {
@@ -108,6 +102,7 @@
             <div class="management__heading-actions">
               <a
                 class="management__certificates"
+                data-program-guide="certificates-entry"
                 appButton="secondary"
                 [routerLink]="paths.program.management(program.id, 'certificates')"
               >
@@ -117,6 +112,7 @@
                 appButton="icon"
                 class="management__export"
                 type="button"
+                data-program-guide="participants-export"
                 aria-label="Выгрузить участников в Excel"
                 title="Выгрузить участников в Excel"
                 [appButtonLoading]="exportingParticipants()"
@@ -136,6 +132,7 @@
               appButton="icon"
               class="management__export"
               type="button"
+              data-program-guide="projects-export"
               aria-label="Выгрузить проекты в Excel"
               title="Выгрузить проекты в Excel"
               [appButtonLoading]="exportingProjects()"
@@ -159,6 +156,7 @@
             }}</label>
             <input
               id="management-search"
+              [attr.data-program-guide]="section() + '-search'"
               type="search"
               appField
               [formControl]="search"
@@ -176,6 +174,7 @@
                   appButton="secondary"
                   class="management__filter-trigger"
                   aria-haspopup="dialog"
+                  data-program-guide="participants-filters"
                   [attr.aria-expanded]="participantFiltersOpen()"
                   (click)="openParticipantFilters()"
                 >
@@ -215,6 +214,7 @@
                   appButton="secondary"
                   class="management__filter-trigger"
                   aria-haspopup="dialog"
+                  data-program-guide="projects-filters"
                   [attr.aria-expanded]="projectFiltersOpen()"
                   (click)="openProjectFilters()"
                 >
@@ -273,6 +273,7 @@
             </app-state>
           } @else {
             <app-state
+              [attr.data-program-guide]="section() === 'participants' ? 'participants-empty' : null"
               [title]="
                 section() === 'participants'
                   ? 'В программе пока нет участников'
@@ -377,6 +378,7 @@
                   </td>
                   <td class="management__row-actions">
                     <app-row-actions
+                      data-program-guide="participants-actions"
                       [label]="'Действия участника: ' + person.name"
                       [actions]="participantActions(person)"
                       [disabled]="state.pending()"
@@ -461,9 +463,11 @@
                   </td>
                   <td data-label="№">{{ offset() + index + 1 }}</td>
                   <td class="management__name" data-label="Проект">
-                    <a [routerLink]="paths.projects.detail(project.projectId)">{{
-                      project.name
-                    }}</a>
+                    <a
+                      data-program-guide="projects-card"
+                      [routerLink]="paths.projects.detail(project.projectId)"
+                      >{{ project.name }}</a
+                    >
                     @if (project.draft) {
                       <small class="management__draft-badge">Черновик заявки</small>
                     }
@@ -495,6 +499,7 @@
                   </td>
                   <td class="management__row-actions">
                     <app-row-actions
+                      data-program-guide="projects-actions"
                       [label]="'Действия проекта: ' + project.name"
                       [actions]="projectActions(project)"
                       [disabled]="state.pending()"
@@ -684,7 +689,7 @@
         />
       } @else if (settingsTab() === "basic") {
         <form [formGroup]="basicForm" (ngSubmit)="save()" class="management__card management__form">
-          <app-section-header title="Основная информация">
+          <app-section-header title="Основная информация" data-program-guide="settings-page">
             @if (!program.draft) {
               <button
                 sectionHeaderAction
@@ -1017,7 +1022,11 @@
         </form>
       } @else if (settingsTab() === "dates") {
         <form [formGroup]="datesForm" (ngSubmit)="save()" class="management__card management__form">
-          <app-section-header title="Календарь программы" [alignTitleBaseline]="true">
+          <app-section-header
+            title="Календарь программы"
+            [alignTitleBaseline]="true"
+            data-program-guide="settings-dates"
+          >
             <span sectionHeaderTitleAction class="management__timezone">UTC+3</span>
           </app-section-header>
           @for (field of dateFields; track field.key) {
@@ -1069,6 +1078,7 @@
               sectionHeaderAction
               type="button"
               appButton="primary"
+              data-program-guide="settings-materials"
               (click)="editMaterial('new')"
             >
               Добавить материал
@@ -1264,6 +1274,7 @@
   @if (participantRemoval(); as removal) {
     <section class="management__dialog">
       <app-dialog-header
+        data-program-guide="participant-removal-v1"
         title="Удалить участников из программы?"
         titleId="participant-removal-title"
         [initialFocusOnTitle]="true"
@@ -1382,7 +1393,14 @@
     (keydown.escape)="closeTeam(); $event.stopPropagation()"
   >
     <div class="management__team-heading">
-      <h2 id="management-team-heading" tabindex="-1" cdkFocusInitial>Команда проекта</h2>
+      <h2
+        id="management-team-heading"
+        data-program-guide="projects-team-panel"
+        tabindex="-1"
+        cdkFocusInitial
+      >
+        Команда проекта
+      </h2>
       <button
         type="button"
         appButton="icon"

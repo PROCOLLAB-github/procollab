@@ -36,7 +36,12 @@ import { SolutionRegistrationRemovalPreview } from "@domain/solution/solution-co
     labelledBy="solution-registration-removal-title"
     (openChange)="!$event && close()"
     ><section class="solution-dialog" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
-      <h2 id="solution-registration-removal-title">Удалить участников из программы?</h2>
+      <h2
+        id="solution-registration-removal-title"
+        [attr.data-program-guide]="preview() ? 'participant-removal-v1' : null"
+      >
+        Удалить участников из программы?
+      </h2>
       @if (pending()) {
         <p role="status">Проверяем регистрации и связанные решения…</p>
       }

@@ -12,6 +12,7 @@
         type="button"
         appButton="primary"
         [disabled]="busy() || !snapshot()"
+        data-program-guide="settings-organizers"
         (click)="open('invite', $event)"
       >
         Пригласить
