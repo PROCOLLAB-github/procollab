@@ -225,6 +225,13 @@ export class ProgramManagementHeaderComponent {
       this.skipTimer = undefined;
     }
     if (current) {
+      if (current.tour.id === "participants-v1" && current.index === 0) {
+        const empty = PROGRAM_GUIDES.find(tour => tour.id === "participant-empty-v1");
+        if (empty && this.findTarget(empty.steps[0].target)) {
+          this.tourState.current.set({ ...current, tour: empty });
+          return;
+        }
+      }
       const step = current.tour.steps[current.index];
       const target = !step.when || this.findTarget(step.when) ? this.findTarget(step.target) : null;
       this.expectedTarget.set(target);

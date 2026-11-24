@@ -23,6 +23,9 @@ const programId = 12;
       [draft]="draft()"
       [active]="active()"
     />
+    @if (emptyParticipants()) {
+      <div data-program-guide="participants-empty">Пока нет участников.</div>
+    }
     @if (showContext()) {
       <div role="dialog" aria-modal="true" aria-label="Предпросмотр">
         <div>
@@ -37,6 +40,7 @@ class HeaderPage {
   readonly draft = signal(true);
   readonly active = signal("overview");
   readonly showContext = signal(false);
+  readonly emptyParticipants = signal(false);
   readonly canLeave = vi.fn(() => true);
 }
 
@@ -296,6 +300,15 @@ describe(ProgramManagementHeaderComponent.name, () => {
     }
     expect(router.parseUrl(router.url).queryParamMap.get("q")).toBe("Аня");
     expect(host.canLeave).not.toHaveBeenCalled();
+  });
+
+  it("ведет из темы «Участники» к подсказке пустого списка", async () => {
+    const host = await harness.navigateByUrl(program.management(programId), HeaderPage);
+    host.emptyParticipants.set(true);
+    harness.detectChanges();
+    click("Открыть обучение «Участники»", await openHelp());
+    await vi.waitFor(() => expectCoach("Первые регистрации", "1 из 2"));
+    expect(api.post).not.toHaveBeenCalled();
   });
 
   it("runs the leave guard before opening criteria from another settings tab", async () => {
