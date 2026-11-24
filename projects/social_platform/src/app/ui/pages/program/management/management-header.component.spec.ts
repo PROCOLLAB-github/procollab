@@ -26,6 +26,13 @@ const programId = 12;
     @if (emptyParticipants()) {
       <div data-program-guide="participants-empty">Пока нет участников.</div>
     }
+    @if (showRemoval()) {
+      <div role="dialog" aria-modal="true" aria-label="Удаление">
+        <div>
+          <p data-program-guide="participant-removal-v1">Проверьте затронутые заявки.</p>
+        </div>
+      </div>
+    }
     @if (showContext()) {
       <div role="dialog" aria-modal="true" aria-label="Предпросмотр">
         <div>
@@ -40,6 +47,7 @@ class HeaderPage {
   readonly draft = signal(true);
   readonly active = signal("overview");
   readonly showContext = signal(false);
+  readonly showRemoval = signal(false);
   readonly emptyParticipants = signal(false);
   readonly canLeave = vi.fn(() => true);
 }
@@ -261,6 +269,26 @@ describe(ProgramManagementHeaderComponent.name, () => {
     await vi.waitFor(() => expect(api.get).toHaveBeenCalledTimes(3));
     expect(api.post).toHaveBeenCalledTimes(1);
     expect(document.querySelector('[role="dialog"] #program-coach-title')).toBeNull();
+  });
+
+  it("повторно показывает знакомую подсказку после ручного запуска темы", async () => {
+    const guide = PROGRAM_CONTEXT_GUIDES.find(topic => topic.id === "participant-removal-v1")!;
+    seen.add(guide.id);
+    const host = await harness.navigateByUrl(program.management(programId), HeaderPage);
+    click("Открыть обучение «Участники»", await openHelp());
+    await vi.waitFor(() => {
+      harness.detectChanges();
+      expect(harness.routeNativeElement!.querySelector("#program-coach-title")).not.toBeNull();
+    });
+    host.showRemoval.set(true);
+    harness.detectChanges();
+    await vi.waitFor(() => {
+      harness.detectChanges();
+      expect(
+        document.querySelector('[role="dialog"] #program-coach-title')?.textContent?.trim(),
+      ).toBe(guide.steps[0].title);
+    });
+    expect(api.post).not.toHaveBeenCalled();
   });
 
   it("оставляет ручные инструкции доступными при ошибке чтения отметок", async () => {
