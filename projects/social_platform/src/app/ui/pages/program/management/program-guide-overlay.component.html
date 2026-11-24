@@ -12,6 +12,7 @@
 <section
   class="guide"
   [class.guide--inline]="inDialog()"
+  [class.guide--anchored]="position()?.cardTop != null"
   aria-label="Помощь по программе"
   [style.left.px]="position()?.cardTop != null ? position()?.cardLeft : null"
   [style.top.px]="position()?.cardTop"
