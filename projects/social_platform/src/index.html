@@ -13,13 +13,15 @@
         try {
           preference = localStorage.getItem("procollab-theme");
         } catch {
-          // Follow the system when storage is unavailable.
+          // Fall back to light when storage is unavailable.
         }
         const explicit =
           preference === "light" || preference === "dark" || preference === "dark-special";
+        const systemDark =
+          preference === "system" && window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
         document.documentElement.dataset.theme = explicit
           ? preference
-          : window.matchMedia?.("(prefers-color-scheme: dark)")?.matches
+          : systemDark
             ? "dark"
             : "light";
       })();
