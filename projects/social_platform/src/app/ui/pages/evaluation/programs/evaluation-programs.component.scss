@@ -72,6 +72,7 @@
 
 .cabinet__search {
   position: relative;
+  align-self: start;
   min-width: 0;
 
   i {
@@ -84,12 +85,14 @@
   }
 
   .ui-field {
+    display: block;
+    min-height: 44px;
     padding-inline-start: calc(32px + var(--ui-space-sm));
   }
 }
 
 .cabinet__program {
-  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .cabinet__group-heading,

@@ -60,17 +60,45 @@
           data-program-guide="certificate-template"
         >
           <h3>Шаблон сертификата</h3>
-          <button
-            type="button"
-            appButton="icon"
-            class="certificates__download"
-            aria-label="Скачать пробный PDF"
-            title="Скачать пробный PDF"
-            [disabled]="busy()"
-            (click)="preview()"
-          >
-            <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
-          </button>
+          <div class="certificates__canvas-actions" role="group" aria-label="Действия с шаблоном">
+            <button
+              type="button"
+              appButton="icon"
+              aria-label="Отменить действие"
+              title="Отменить действие"
+              [disabled]="busy() || !undoStack().length"
+              (click)="undo()"
+            >
+              <i appIcon icon="reply" appSquare="18" aria-hidden="true"></i>
+            </button>
+            <button
+              type="button"
+              appButton="icon"
+              aria-label="Повторить действие"
+              title="Повторить действие"
+              [disabled]="busy() || !redoStack().length"
+              (click)="redo()"
+            >
+              <i
+                class="certificates__redo-icon"
+                appIcon
+                icon="reply"
+                appSquare="18"
+                aria-hidden="true"
+              ></i>
+            </button>
+            <button
+              type="button"
+              appButton="icon"
+              class="certificates__download"
+              aria-label="Скачать пробный PDF"
+              title="Скачать пробный PDF"
+              [disabled]="busy()"
+              (click)="preview()"
+            >
+              <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
+            </button>
+          </div>
           <p class="certificates__muted">{{ formatLabel() }}</p>
         </header>
         <label canvas-preview class="certificates__check">
@@ -96,157 +124,188 @@
     </fieldset>
   }
   <ng-template #editorSettings let-textControls>
-    <aside class="certificates__card certificates__settings" aria-label="Настройки шаблона">
-      <section class="certificates__format-settings">
-        <h4 id="certificate-orientation">Ориентация</h4>
-        <div
-          class="certificates__orientation"
-          role="group"
-          aria-labelledby="certificate-orientation"
-        >
-          <button
-            type="button"
-            [appButton]="d.orientation === 'portrait' ? 'primary' : 'secondary'"
-            [attr.aria-pressed]="d.orientation === 'portrait'"
-            (click)="setOrientation('portrait')"
+    <aside class="certificates__sidebar" aria-label="Настройки шаблона">
+      <div class="certificates__card certificates__settings">
+        <section class="certificates__format-settings">
+          <h4 id="certificate-orientation">Ориентация</h4>
+          <div
+            class="certificates__orientation"
+            role="group"
+            aria-labelledby="certificate-orientation"
           >
-            Вертикальная
-          </button>
-          <button
-            type="button"
-            [appButton]="d.orientation === 'landscape' ? 'primary' : 'secondary'"
-            [attr.aria-pressed]="d.orientation === 'landscape'"
-            (click)="setOrientation('landscape')"
-          >
-            Альбомная
-          </button>
-        </div>
-      </section>
-      <section>
-        <h4>Фон</h4>
-        @if (assets().background; as background) {
-          <p class="certificates__filename">{{ background.name }}</p>
-        }
-        <input
-          #backgroundFile
-          type="file"
-          accept="image/png,image/jpeg"
-          hidden
-          (change)="upload($event, 'background')"
-        />
-        <div class="certificates__actions">
-          <button
-            type="button"
-            appButton="secondary"
-            aria-describedby="certificate-background-types"
-            (click)="backgroundFile.click()"
-          >
-            {{ assets().background ? "Заменить фон" : "Загрузить фон" }}
-          </button>
-          @if (assets().background) {
-            <button type="button" appButton="text" (click)="remove('background')">Убрать</button>
-          }
-        </div>
-        <p id="certificate-background-types" class="certificates__muted">PNG или JPG до 10 МБ</p>
-      </section>
-      <section class="certificates__layers-section">
-        <div class="certificates__row">
-          <h4>Элементы</h4>
-          @if (visibleElements().length > 1) {
-            <button type="button" appButton="text" (click)="onlyName()">Только имя</button>
-          }
-        </div>
-        <div class="certificates__layers" aria-label="Элементы сертификата">
-          @for (key of visibleElements(); track key) {
-            <div
-              class="certificates__layer"
-              [class.certificates__layer--selected]="selected() === key"
+            <button
+              type="button"
+              [appButton]="d.orientation === 'portrait' ? 'primary' : 'secondary'"
+              [attr.aria-pressed]="d.orientation === 'portrait'"
+              (click)="setOrientation('portrait')"
             >
-              <button
-                type="button"
-                class="certificates__layer-select"
-                [attr.aria-pressed]="selected() === key"
-                [attr.aria-label]="'Выбрать: ' + elementLabels[key]"
-                (click)="selected.set(key)"
-              >
-                {{ elementLabels[key] }}
-              </button>
-              @if (key === "name") {
-                <span class="certificates__required" title="Обязательный элемент"
-                  ><img src="/assets/icons/svg/lock.svg" alt="" /><span class="sr-only"
-                    >Обязательный элемент</span
-                  ></span
-                >
-              } @else {
-                <button
-                  type="button"
-                  appButton="icon"
-                  [attr.aria-label]="'Удалить: ' + elementLabels[key]"
-                  (click)="hideElement(key)"
-                >
-                  <img src="/assets/icons/svg/basket.svg" alt="" />
-                </button>
-              }
-            </div>
+              Вертикальная
+            </button>
+            <button
+              type="button"
+              [appButton]="d.orientation === 'landscape' ? 'primary' : 'secondary'"
+              [attr.aria-pressed]="d.orientation === 'landscape'"
+              (click)="setOrientation('landscape')"
+            >
+              Альбомная
+            </button>
+          </div>
+        </section>
+        <section>
+          <h4>Фон</h4>
+          @if (assets().background; as background) {
+            <p class="certificates__filename">{{ background.name }}</p>
           }
-        </div>
-        <details #elementMenu class="certificates__add">
-          <summary class="ui-button ui-button--secondary">Добавить элемент</summary>
-          <div>
-            @for (key of hiddenElements(); track key) {
-              <button type="button" (click)="addElement(key); elementMenu.open = false">
-                {{ elementLabels[key] }}
-              </button>
-            } @empty {
-              <p class="certificates__muted">Все элементы уже добавлены.</p>
+          <input
+            #backgroundFile
+            type="file"
+            accept="image/png,image/jpeg"
+            hidden
+            (change)="upload($event, 'background')"
+          />
+          <div class="certificates__actions">
+            <button
+              type="button"
+              appButton="secondary"
+              aria-describedby="certificate-background-types"
+              (click)="backgroundFile.click()"
+            >
+              {{ assets().background ? "Заменить фон" : "Загрузить фон" }}
+            </button>
+            @if (assets().background) {
+              <button type="button" appButton="text" (click)="remove('background')">Убрать</button>
             }
           </div>
-        </details>
-      </section>
-      @if (selected() === "director" || selected() === "position" || selected() === "signature") {
-        <section class="certificates__element-settings">
-          <h4>{{ elementLabels[selected()] }}</h4>
-          @if (selected() === "director") {
-            <label class="certificates__field"
-              ><span>Имя директора</span
-              ><input
-                appField
-                maxlength="250"
-                [ngModel]="d.director"
-                (ngModelChange)="patch({ director: $event })"
-            /></label>
-          }
-          @if (selected() === "position") {
-            <label class="certificates__field"
-              ><span>Должность</span
-              ><input
-                appField
-                maxlength="250"
-                [ngModel]="d.position"
-                (ngModelChange)="patch({ position: $event })"
-            /></label>
-          }
-          @if (selected() === "signature") {
-            <p class="certificates__filename">
-              {{ assets().signature?.name || "Загрузите прозрачный PNG" }}
-            </p>
-            <input
-              #signatureFile
-              type="file"
-              accept="image/png"
-              hidden
-              (change)="upload($event, 'signature')"
-            />
-            <button type="button" appButton="secondary" (click)="signatureFile.click()">
-              {{ assets().signature ? "Заменить подпись" : "Загрузить подпись" }}
-            </button>
-            <p class="certificates__muted">
-              Перетащите подпись и потяните за угол. Пропорции сохраняются.
-            </p>
-          }
+          <p id="certificate-background-types" class="certificates__muted">PNG или JPG до 10 МБ</p>
         </section>
-      }
-      <ng-container [ngTemplateOutlet]="textControls" />
+        <section class="certificates__layers-section">
+          <div class="certificates__row">
+            <h4>Элементы</h4>
+            @if (visibleElements().length > 1) {
+              <button type="button" appButton="text" (click)="onlyName()">Только имя</button>
+            }
+          </div>
+          <div class="certificates__layers" aria-label="Элементы сертификата">
+            @for (key of visibleElements(); track key) {
+              <div
+                class="certificates__layer"
+                [class.certificates__layer--selected]="selected() === key"
+              >
+                <button
+                  type="button"
+                  class="certificates__layer-select"
+                  [attr.aria-pressed]="selected() === key"
+                  [attr.aria-label]="'Выбрать: ' + elementLabels[key]"
+                  (click)="selected.set(key)"
+                >
+                  {{ elementLabels[key] }}
+                </button>
+                @if (key === "name") {
+                  <span class="certificates__required" title="Обязательный элемент"
+                    ><img src="/assets/icons/svg/lock.svg" alt="" /><span class="sr-only"
+                      >Обязательный элемент</span
+                    ></span
+                  >
+                } @else {
+                  <button
+                    type="button"
+                    appButton="icon"
+                    [attr.aria-label]="'Удалить: ' + elementLabels[key]"
+                    (click)="hideElement(key)"
+                  >
+                    <img src="/assets/icons/svg/basket.svg" alt="" />
+                  </button>
+                }
+              </div>
+            }
+          </div>
+          <details #elementMenu class="certificates__add">
+            <summary class="ui-button ui-button--secondary">Добавить элемент</summary>
+            <div>
+              @for (key of hiddenElements(); track key) {
+                <button type="button" (click)="addElement(key); elementMenu.open = false">
+                  {{ elementLabels[key] }}
+                </button>
+              } @empty {
+                <p class="certificates__muted">Все элементы уже добавлены.</p>
+              }
+            </div>
+          </details>
+        </section>
+      </div>
+      <section
+        class="certificates__card certificates__element-settings"
+        aria-labelledby="certificate-element-settings"
+      >
+        <div class="certificates__element-heading">
+          <h4 id="certificate-element-settings">Настройки элемента</h4>
+          <details class="certificates__element-help">
+            <summary
+              class="ui-button ui-button--icon"
+              aria-label="Как выбрать элемент"
+              title="Как выбрать элемент"
+            >
+              <i appIcon icon="hint" appSquare="16" aria-hidden="true"></i>
+            </summary>
+            <p class="certificates__muted">
+              Выберите элемент в списке выше или на листе, чтобы настроить его.
+            </p>
+          </details>
+        </div>
+        <p class="certificates__element-name">{{ elementLabels[selected()] }}</p>
+        @if (selected() === "title") {
+          <label class="certificates__field">
+            <span>Текст заголовка</span>
+            <input
+              appField
+              type="text"
+              maxlength="250"
+              [ngModel]="d.title ?? defaultTitle"
+              [disabled]="editorPreview()"
+              (ngModelChange)="patch({ title: $event })"
+            />
+          </label>
+        }
+        @if (selected() === "director") {
+          <label class="certificates__field"
+            ><span>Имя директора</span
+            ><input
+              appField
+              maxlength="250"
+              [ngModel]="d.director"
+              (ngModelChange)="patch({ director: $event })"
+          /></label>
+        }
+        @if (selected() === "position") {
+          <label class="certificates__field"
+            ><span>Должность</span
+            ><input
+              appField
+              maxlength="250"
+              [ngModel]="d.position"
+              (ngModelChange)="patch({ position: $event })"
+          /></label>
+        }
+        @if (selected() === "signature") {
+          <p class="certificates__filename">
+            {{ assets().signature?.name || "Загрузите прозрачный PNG" }}
+          </p>
+          <input
+            #signatureFile
+            type="file"
+            accept="image/png"
+            hidden
+            (change)="upload($event, 'signature')"
+          />
+          <button type="button" appButton="secondary" (click)="signatureFile.click()">
+            {{ assets().signature ? "Заменить подпись" : "Загрузить подпись" }}
+          </button>
+          <p class="certificates__muted">
+            Перетащите подпись и потяните за угол. Пропорции сохраняются.
+          </p>
+        }
+        <ng-container [ngTemplateOutlet]="textControls" />
+      </section>
     </aside>
   </ng-template>
   @if (step() === 2) {
@@ -305,7 +364,11 @@
                 [ngModel]="d.timing"
                 (ngModelChange)="patch({ timing: $event })"
               />
-              <span>Вручную<small>После подтверждения запуска</small></span>
+              <span
+                >По кнопке «Выдать сертификаты»<small
+                  >После подтверждения начнется подготовка PDF.</small
+                ></span
+              >
             </label>
             <label class="certificates__option">
               <input
@@ -359,7 +422,11 @@
                 [ngModel]="d.sendEmail"
                 (ngModelChange)="patch({ sendEmail: $event })"
               />
-              <span>На платформе<small>На странице программы</small></span>
+              <span
+                >На странице программы<small
+                  >Участник скачает PDF в блоке «Ваш сертификат готов».</small
+                ></span
+              >
             </label>
             <label class="certificates__option">
               <input
@@ -370,7 +437,11 @@
                 [ngModel]="d.sendEmail"
                 (ngModelChange)="patch({ sendEmail: $event })"
               />
-              <span>На платформе и по почте<small>Ссылка на PDF придет в письме</small></span>
+              <span
+                >На странице программы и по почте<small
+                  >Участник также получит письмо со ссылкой на PDF.</small
+                ></span
+              >
             </label>
           </div>
           @if (d.sendEmail) {
@@ -776,25 +847,6 @@
         }
       </div>
       <div class="certificates__actions">
-        @if (step() === 1 && (undoStack().length || redoStack().length)) {
-          <button
-            type="button"
-            appButton="text"
-            aria-label="Отменить действие"
-            [disabled]="busy() || !undoStack().length"
-            (click)="undo()"
-          >
-            Отменить
-          </button>
-          <button
-            type="button"
-            appButton="text"
-            [disabled]="busy() || !redoStack().length"
-            (click)="redo()"
-          >
-            Повторить
-          </button>
-        }
         @if (dirty()) {
           <button type="button" appButton="text" [disabled]="busy()" (click)="discard()">
             Сбросить изменения

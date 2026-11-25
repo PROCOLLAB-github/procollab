@@ -3,12 +3,6 @@
 @use "styles/ui-foundation";
 @use "styles/program-management-controls";
 
-.project-form__preview-heading {
-  display: grid;
-  gap: var(--ui-space-sm);
-  justify-items: start;
-}
-
 .project-form__panel-title {
   width: 100%;
   padding-bottom: 16px;
@@ -45,9 +39,22 @@
   p { margin: 3px 0 0; }
 }
 
-.project-form__field-row,
-.project-form__row {
-  button[aria-pressed="true"] { background: var(--accent-light); }
+.project-form__boolean {
+  display: flex;
+  gap: var(--ui-space-xs);
+  align-items: center;
+  min-height: 32px;
+  cursor: pointer;
+
+  .ui-choice {
+    flex: 0 0 auto;
+    margin: 0;
+  }
+}
+
+.project-form__link {
+  color: var(--accent-text);
+  text-underline-offset: 2px;
 }
 
 .project-form__field-actions {
@@ -328,6 +335,24 @@
   border-top: 1px solid var(--medium-grey-for-outline);
 }
 
+.project-form__dialog--preview {
+  gap: 14px;
+
+  > app-dialog-header {
+    --ui-dialog-header-margin-bottom: 0px;
+  }
+
+  > p,
+  footer p {
+    margin: 0;
+  }
+
+  footer {
+    gap: 8px;
+    padding-top: 12px;
+  }
+}
+
 .project-form .project-form__error {
   color: var(--red-dark);
 }
@@ -354,6 +379,15 @@
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
+  }
+
+  .project-form__row--visibility {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .project-form__boolean {
+    min-height: 44px;
   }
 
   .project-form__card {

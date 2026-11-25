@@ -44,6 +44,7 @@ import {
   CertificateElement,
   CertificateSelection,
   CERTIFICATE_ELEMENTS,
+  CERTIFICATE_DEFAULT_TITLE,
   CERTIFICATE_LABELS,
 } from "@domain/program/program-certificates.model";
 import {
@@ -94,6 +95,7 @@ interface CertificateEditState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementCertificatesComponent {
+  readonly defaultTitle = CERTIFICATE_DEFAULT_TITLE;
   readonly programId = input.required<number>();
   readonly programName = input.required<string>();
   readonly finishedAt = input<string | null>(null);

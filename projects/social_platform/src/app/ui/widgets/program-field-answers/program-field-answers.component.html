@@ -8,7 +8,7 @@
           <dt>{{ field.label }}</dt>
           <dd>
             @if (field.fieldType === "checkbox") {
-              {{ checkboxAnswer(field.value) }}
+              <span class="answer-value">{{ checkboxAnswer(field.value) }}</span>
             } @else if (field.fieldType === "file" || field.fieldType === "url") {
               @if (href(field.value); as url) {
                 <a
@@ -21,10 +21,10 @@
                   >{{ field.fieldType === "file" ? "Открыть файл" : field.value }}</a
                 >
               } @else {
-                {{ field.value }}
+                <span class="answer-value">{{ field.value }}</span>
               }
             } @else {
-              {{ field.value }}
+              <span class="answer-value">{{ field.value }}</span>
             }
           </dd>
         </div>

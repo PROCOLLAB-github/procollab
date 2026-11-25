@@ -22,6 +22,7 @@ import {
   AlertDirective,
   DialogHeaderComponent,
   IconComponent,
+  SectionHeaderComponent,
 } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProgramRegistrationUseCase } from "@api/program/use-cases/program-registration.use-case";
@@ -48,6 +49,7 @@ import { SnackbarService } from "@domain/shared/snackbar.service";
     AlertDirective,
     DialogHeaderComponent,
     IconComponent,
+    SectionHeaderComponent,
     ModalComponent,
     RegistrationPreviewContentComponent,
   ],

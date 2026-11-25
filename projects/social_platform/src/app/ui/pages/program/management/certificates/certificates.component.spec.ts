@@ -414,6 +414,44 @@ describe("Program certificates", () => {
     expect(component.draft()!.layout.name.fontFamily).toBe("lobster");
     fixture.destroy();
   });
+  it("edits the title and preserves element rotation through undo, redo and save", async () => {
+    const { fixture, component, repository } = await setup();
+    component.addElement("title");
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const editor: HTMLElement = fixture.nativeElement;
+    const title = editor.querySelector<HTMLInputElement>(
+      ".certificates__element-settings input[type=text]",
+    )!;
+    title.value = "Диплом финалиста";
+    title.dispatchEvent(new Event("input"));
+    fixture.detectChanges();
+    const angle = editor.querySelector<HTMLInputElement>(".canvas__angle input")!;
+    angle.value = "-35";
+    angle.dispatchEvent(new Event("change"));
+    fixture.detectChanges();
+    expect(component.draft()!.title).toBe("Диплом финалиста");
+    expect(component.draft()!.layout.title.rotation).toBe(-35);
+    expect(editor.querySelector<HTMLElement>(".canvas__element--selected")?.style.transform).toBe(
+      "rotate(-35deg)",
+    );
+    editor.querySelector<HTMLButtonElement>('button[aria-label="Отменить действие"]')!.click();
+    fixture.detectChanges();
+    expect(component.draft()!.layout.title.rotation ?? 0).toBe(0);
+    editor.querySelector<HTMLButtonElement>('button[aria-label="Повторить действие"]')!.click();
+    fixture.detectChanges();
+    expect(component.draft()!.layout.title.rotation).toBe(-35);
+    await component.save();
+    expect(repository.save).toHaveBeenCalledWith(
+      9,
+      1,
+      expect.objectContaining({
+        title: "Диплом финалиста",
+        layout: expect.objectContaining({ title: expect.objectContaining({ rotation: -35 }) }),
+      }),
+    );
+    fixture.destroy();
+  });
   it("defaults legacy templates to landscape and saves portrait with undo and redo", async () => {
     const { fixture, component, repository } = await setup();
     expect(component.draft()!.orientation).toBe("landscape");

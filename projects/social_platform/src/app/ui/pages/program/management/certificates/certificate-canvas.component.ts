@@ -13,11 +13,12 @@ import {
   signal,
   viewChild,
 } from "@angular/core";
-import { ButtonDirective, ChoiceDirective, FieldDirective } from "@uilib";
+import { ButtonDirective, ChoiceDirective, FieldDirective, IconComponent } from "@uilib";
 import { FormsModule } from "@angular/forms";
 import { NgTemplateOutlet } from "@angular/common";
 import {
   CERTIFICATE_ELEMENTS,
+  CERTIFICATE_DEFAULT_TITLE,
   CERTIFICATE_LABELS,
   CERTIFICATE_FONTS,
   certificateFont,
@@ -27,6 +28,7 @@ import {
 } from "@domain/program/program-certificates.model";
 import {
   certificatePage,
+  certificateRotation,
   fitCertificateText,
   hiddenCertificateElements,
   moveCertificateBox,
@@ -36,7 +38,14 @@ import {
 
 @Component({
   selector: "app-certificate-canvas",
-  imports: [FormsModule, NgTemplateOutlet, ButtonDirective, ChoiceDirective, FieldDirective],
+  imports: [
+    FormsModule,
+    NgTemplateOutlet,
+    ButtonDirective,
+    ChoiceDirective,
+    FieldDirective,
+    IconComponent,
+  ],
   templateUrl: "./certificate-canvas.component.html",
   styleUrl: "./certificate-canvas.component.scss",
   host: { "[class.canvas-editor--expanded]": "expanded()" },
@@ -134,7 +143,7 @@ export class CertificateCanvasComponent {
     x: number;
     y: number;
     rect: DOMRect;
-    resize: boolean;
+    mode: "move" | "resize" | "rotate";
     pointer: number;
   } | null = null;
 
@@ -226,7 +235,7 @@ export class CertificateCanvasComponent {
   text(key: CertificateElement): string {
     switch (key) {
       case "title":
-        return "СЕРТИФИКАТ";
+        return this.draft().title ?? CERTIFICATE_DEFAULT_TITLE;
       case "subtitle":
         return "подтверждает участие";
       case "name":
@@ -248,7 +257,11 @@ export class CertificateCanvasComponent {
   select(key: CertificateElement): void {
     if (this.selected() !== key) this.selectedChange.emit(key);
   }
-  start(event: PointerEvent, key: CertificateElement, resize = false): void {
+  start(
+    event: PointerEvent,
+    key: CertificateElement,
+    mode: "move" | "resize" | "rotate" = "move",
+  ): void {
     if (this.preview() || this.disabled() || event.button !== 0) return;
     event.preventDefault();
     event.stopPropagation();
@@ -264,7 +277,7 @@ export class CertificateCanvasComponent {
       x: event.clientX,
       y: event.clientY,
       rect: canvas.getBoundingClientRect(),
-      resize,
+      mode,
       pointer: event.pointerId,
     };
     this.dragging.set(true);
@@ -272,24 +285,59 @@ export class CertificateCanvasComponent {
   move(event: PointerEvent): void {
     const drag = this.drag;
     if (!drag || drag.pointer !== event.pointerId) return;
-    const dx = ((event.clientX - drag.x) / drag.rect.width) * 100,
-      dy = ((event.clientY - drag.y) / drag.rect.height) * 100;
+    const { box, rect } = drag;
+    if (drag.mode === "rotate") {
+      const centerX = rect.left + ((box.x + box.width / 2) * rect.width) / 100;
+      const centerY = rect.top + ((box.y + box.height / 2) * rect.height) / 100;
+      const start = Math.atan2(drag.y - centerY, drag.x - centerX);
+      const current = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+      const angle = (box.rotation ?? 0) + ((current - start) * 180) / Math.PI;
+      const rotation = certificateRotation(event.shiftKey ? Math.round(angle / 15) * 15 : angle);
+      if (rotation !== (this.draft().layout[drag.key].rotation ?? 0)) {
+        this.update(drag.key, { ...box, rotation });
+      }
+      return;
+    }
+
+    const dx = event.clientX - drag.x;
+    const dy = event.clientY - drag.y;
+    // The resize handle follows the rotated axes, while movement follows the page.
+    const angle = ((box.rotation ?? 0) * Math.PI) / 180;
+    const dw = dx * Math.cos(angle) + dy * Math.sin(angle);
+    const dh = -dx * Math.sin(angle) + dy * Math.cos(angle);
     this.update(
       drag.key,
-      drag.resize
+      drag.mode === "resize"
         ? resizeCertificateBox(
-            drag.box,
-            dx,
-            dy,
+            box,
+            (dw * 100) / rect.width,
+            (dh * 100) / rect.height,
             drag.key === "signature" ? this.signatureRatio() : undefined,
             this.draft().orientation,
           )
-        : moveCertificateBox(drag.box, dx, dy),
+        : moveCertificateBox(box, (dx * 100) / rect.width, (dy * 100) / rect.height),
     );
   }
   end(): void {
     this.drag = null;
     this.dragging.set(false);
+  }
+  rotationChanged(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const value = target.valueAsNumber;
+    if (!Number.isInteger(value) || value < -180 || value > 180) {
+      target.value = String(this.box().rotation ?? 0);
+      return;
+    }
+    this.setRotation(this.selected(), value);
+  }
+
+  rotationKeydown(event: KeyboardEvent, key: CertificateElement): void {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    event.stopPropagation();
+    const step = (event.shiftKey ? 15 : 1) * (event.key === "ArrowLeft" ? -1 : 1);
+    this.setRotation(key, certificateRotation((this.draft().layout[key].rotation ?? 0) + step));
   }
   keydown(event: KeyboardEvent, key: CertificateElement, resize = false): void {
     if (this.preview() || this.disabled()) return;
@@ -375,5 +423,12 @@ export class CertificateCanvasComponent {
   }
   private update(key: CertificateElement, box: CertificateBox): void {
     this.layoutChange.emit({ ...this.draft().layout, [key]: box });
+  }
+
+  private setRotation(key: CertificateElement, rotation: number): void {
+    const box = this.draft().layout[key];
+    if (this.disabled() || this.preview() || rotation === (box.rotation ?? 0)) return;
+    this.interactionStart.emit();
+    this.update(key, { ...box, rotation });
   }
 }

@@ -48,6 +48,11 @@
             [style.top.%]="draft().layout[key].y"
             [style.width.%]="draft().layout[key].width"
             [style.height.%]="draft().layout[key].height"
+            [style.transform]="
+              draft().layout[key].rotation
+                ? 'rotate(' + draft().layout[key].rotation + 'deg)'
+                : null
+            "
             [style.font-size]="fits()[key].fontSize / (page().widthPx / 100) + 'cqw'"
             (focus)="select(key)"
             (keydown)="keydown($event, key)"
@@ -65,9 +70,20 @@
             @if (selected() === key && !preview()) {
               <button
                 type="button"
+                class="canvas__rotate"
+                [attr.aria-label]="'Повернуть элемент: ' + labels[key]"
+                [disabled]="disabled()"
+                title="Повернуть элемент"
+                (pointerdown)="start($event, key, 'rotate')"
+                (keydown)="rotationKeydown($event, key)"
+              >
+                <i appIcon icon="reload" appSquare="18" aria-hidden="true"></i>
+              </button>
+              <button
+                type="button"
                 class="canvas__resize"
                 [attr.aria-label]="'Изменить размер: ' + labels[key]"
-                (pointerdown)="start($event, key, true)"
+                (pointerdown)="start($event, key, 'resize')"
                 (keydown)="keydown($event, key, true)"
               ></button>
             }
@@ -105,7 +121,7 @@
   @if (selected() !== "signature") {
     <section class="canvas__selection-tools">
       <label class="canvas__family">
-        <span>Шрифт элемента</span>
+        <span>Шрифт</span>
         <select
           appField
           [ngModel]="font(selected()).key"
@@ -134,13 +150,11 @@
       }
     </section>
   }
-  <section class="canvas__selection-tools">
+  <section class="canvas__selection-tools" aria-label="Размер и положение элемента">
     @if (selected() !== "signature") {
-      <h4>Текст элемента</h4>
-      <p class="canvas__text-sample">{{ text(selected()) }}</p>
       <div class="canvas__type-size">
         <label class="canvas__font">
-          Размер
+          Размер шрифта
           <input
             appField
             type="number"
@@ -174,23 +188,60 @@
         </button>
       </div>
     }
-    <div class="canvas__alignment" role="group" aria-label="Выравнивание элемента">
-      <button
-        type="button"
-        appButton="secondary"
-        [disabled]="preview() || disabled()"
-        (click)="center()"
-      >
-        По центру
-      </button>
-      <button
-        type="button"
-        appButton="secondary"
-        [disabled]="preview() || disabled()"
-        (click)="center(true)"
-      >
-        По середине
-      </button>
+    <div class="canvas__position">
+      <label class="canvas__angle">
+        <span>Поворот</span>
+        <input
+          appField
+          type="number"
+          min="-180"
+          max="180"
+          step="1"
+          aria-label="Угол поворота, градусы"
+          [value]="box().rotation ?? 0"
+          [disabled]="preview() || disabled()"
+          (change)="rotationChanged($event)"
+        />
+        <span aria-hidden="true">°</span>
+      </label>
+      <div class="canvas__alignment" role="group" aria-label="Выравнивание на листе">
+        <button
+          type="button"
+          appButton="icon"
+          [disabled]="preview() || disabled()"
+          aria-label="По центру листа по горизонтали"
+          title="По центру листа по горизонтали"
+          (click)="center()"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M12 3v3m0 12v3M5 8h14v8H5z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <button
+          type="button"
+          appButton="icon"
+          [disabled]="preview() || disabled()"
+          aria-label="По центру листа по вертикали"
+          title="По центру листа по вертикали"
+          (click)="center(true)"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M3 12h3m12 0h3M8 5h8v14H8z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
   </section>
 </ng-template>

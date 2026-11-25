@@ -20,10 +20,11 @@
     }
     @if (snapshot()) {
       <section class="project-form__card" aria-labelledby="application-heading">
-        <header class="project-form__preview-heading">
-          <h2 id="application-heading" class="project-form__panel-title">Заявка проекта</h2>
-          <button type="button" appButton="secondary" (click)="openPreview()">Вид участника</button>
-        </header>
+        <app-section-header title="Заявка проекта" titleId="application-heading">
+          <button sectionHeaderAction type="button" appButton="secondary" (click)="openPreview()">
+            Вид участника
+          </button>
+        </app-section-header>
         <dl class="project-form__basics">
           <dt>Название проекта</dt>
           <dd>Обязательно для любого проекта</dd>
@@ -57,23 +58,24 @@
       </section>
       <section class="project-form__card" aria-labelledby="sections-heading">
         <h3 id="sections-heading" class="project-form__panel-title">Разделы проекта</h3>
-        <div class="project-form__row">
+        <div class="project-form__row project-form__row--visibility">
           <span>Основные данные</span>
           <span class="project-form__muted">Всегда есть</span>
         </div>
         @for (section of sectionRows; track section.key) {
-          <div class="project-form__row">
+          <div class="project-form__row project-form__row--visibility">
             <span>{{ section.label }}</span>
-            <button
-              type="button"
-              appButton="secondary"
-              [attr.aria-pressed]="sections()[section.key]"
-              [attr.aria-label]="'Показывать раздел «' + section.label + '»'"
-              [disabled]="saving()"
-              (click)="toggleSection(section.key)"
-            >
-              {{ sections()[section.key] ? "Показывать" : "Не показывать" }}
-            </button>
+            <label class="project-form__boolean">
+              <input
+                type="checkbox"
+                appChoice
+                [checked]="sections()[section.key]"
+                [attr.aria-label]="'Показывать раздел «' + section.label + '»'"
+                [disabled]="saving()"
+                (change)="toggleSection(section.key)"
+              />
+              <span>Показывать</span>
+            </label>
           </div>
         }
         <p class="project-form__muted">Скрытые данные сохраняются.</p>
@@ -100,27 +102,29 @@
                   <p class="project-form__muted">Есть ответы</p>
                 }
               </div>
-              <button
-                type="button"
-                appButton="secondary"
-                [disabled]="saving()"
-                [attr.aria-label]="'Показывать поле «' + field.label + '»'"
-                [attr.aria-pressed]="field.isVisible !== false"
-                (click)="toggleField(field, 'isVisible')"
-              >
-                {{ field.isVisible === false ? "Не показывать" : "Показывать" }}
-              </button>
-              @if (field.isVisible !== false) {
-                <button
-                  type="button"
-                  appButton="secondary"
+              <label class="project-form__boolean">
+                <input
+                  type="checkbox"
+                  appChoice
                   [disabled]="saving()"
-                  [attr.aria-pressed]="field.isRequired"
-                  [attr.aria-label]="'Обязательное поле «' + field.label + '»'"
-                  (click)="toggleField(field, 'isRequired')"
-                >
-                  {{ field.isRequired ? "Обязательно" : "Необязательно" }}
-                </button>
+                  [attr.aria-label]="'Показывать поле «' + field.label + '»'"
+                  [checked]="field.isVisible !== false"
+                  (change)="toggleField(field, 'isVisible')"
+                />
+                <span>В форме</span>
+              </label>
+              @if (field.isVisible !== false) {
+                <label class="project-form__boolean">
+                  <input
+                    type="checkbox"
+                    appChoice
+                    [disabled]="saving()"
+                    [checked]="field.isRequired"
+                    [attr.aria-label]="'Обязательное поле «' + field.label + '»'"
+                    (change)="toggleField(field, 'isRequired')"
+                  />
+                  <span>Обязательно</span>
+                </label>
               } @else {
                 <span class="project-form__muted" aria-label="Поле скрыто">—</span>
               }
@@ -181,8 +185,12 @@
               <h3 id="cases-heading">Кейсы программы</h3>
               <p>
                 У кейса только название. Задания и описание разместите в
-                <button type="button" appButton="text" (click)="materials.emit()">
-                  материалах программы</button
+                <a
+                  class="project-form__link"
+                  [href]="materialsUrl()"
+                  (click)="openMaterials($event)"
+                >
+                  материалах программы</a
                 >.
               </p>
             </div>
@@ -400,22 +408,15 @@
   (openChange)="previewOpen.set(false)"
   labelledBy="project-form-preview-title"
 >
-  <div class="project-form__dialog">
-    <header class="project-form__dialog-heading">
-      <h2 id="project-form-preview-title">Предпросмотр формы команды</h2>
-      <button
-        type="button"
-        appButton="icon"
-        aria-label="Закрыть предпросмотр"
-        (click)="previewOpen.set(false)"
-      >
-        <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
-      </button>
-    </header>
-    <div class="project-form__note">
-      Так будут выглядеть дополнительные поля проекта. Это предпросмотр: ответы и файлы не
-      отправляются. Здесь показаны и еще не сохраненные настройки.
-    </div>
+  <div class="project-form__dialog project-form__dialog--preview">
+    <app-dialog-header
+      title="Предпросмотр формы команды"
+      titleId="project-form-preview-title"
+      (closed)="previewOpen.set(false)"
+    />
+    <p class="project-form__muted">
+      Видны текущие настройки формы. Ответы и файлы в предпросмотре не отправляются.
+    </p>
     @if (previewMessage(); as message) {
       <p [appAlert]="previewInvalid() ? 'error' : 'success'">{{ message }}</p>
     }
@@ -435,7 +436,7 @@
           Сохранить черновик</button
         ><button type="button" appButton="primary" (click)="previewSubmit()">Сдать решение</button>
       </div>
-      <p>Пустой черновик можно сохранить. Обязательные поля проверяются перед сдачей.</p>
+      <p>Обязательные поля проверяются перед сдачей.</p>
     </footer>
   </div>
 </app-modal>

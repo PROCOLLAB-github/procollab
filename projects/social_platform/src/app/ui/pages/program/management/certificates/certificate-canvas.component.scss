@@ -179,6 +179,33 @@
     }
   }
 
+  &__rotate {
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    display: grid;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    place-items: center;
+    color: var(--accent-text);
+    touch-action: none;
+    cursor: grab;
+    background: var(--ui-surface);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    transform: translateX(-50%);
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 2px;
+    }
+  }
+
   &__guide {
     position: absolute;
     z-index: 1;
@@ -209,13 +236,17 @@
     outline-color: transparent;
   }
 
+  &--preview {
+    overflow: clip;
+  }
+
   &__selection-tools {
     display: grid;
     gap: 8px;
     min-width: 0;
 
     > .ui-button {
-      width: 100%;
+      justify-self: start;
     }
 
     h4 {
@@ -223,13 +254,6 @@
       font-size: 12px;
       font-weight: 600;
     }
-  }
-
-  &__text-sample {
-    margin: 0;
-    font-size: 12px;
-    color: var(--grey-for-text);
-    overflow-wrap: anywhere;
   }
 
   &__type-size {
@@ -244,7 +268,8 @@
     }
   }
 
-  &__font {
+  &__font,
+  &__angle {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(36px, 48px) auto;
     gap: 4px;
@@ -289,12 +314,23 @@
   }
 
   &__alignment {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    display: flex;
+    gap: 4px;
+  }
 
-    .ui-button {
-      padding-inline: 4px;
+  &__position {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__angle {
+    grid-template-columns: auto minmax(48px, 64px) auto;
+
+    span:first-child {
+      color: inherit;
     }
   }
 
@@ -322,6 +358,7 @@
   .canvas {
     &__check,
     &__font .ui-field,
+    &__angle .ui-field,
     &__family .ui-field {
       min-height: 44px;
     }
@@ -352,6 +389,11 @@
       bottom: -10px;
       width: 20px;
       height: 20px;
+    }
+
+    &__rotate {
+      width: 32px;
+      height: 32px;
     }
   }
 }

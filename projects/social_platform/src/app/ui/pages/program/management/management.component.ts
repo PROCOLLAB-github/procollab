@@ -334,6 +334,7 @@ export class ProgramManagementComponent implements OnInit {
   readonly editingMaterial = signal<ManagementMaterial | "new" | null>(null);
   readonly materialDragActive = signal(false);
   readonly materialFileName = signal("");
+  readonly materialUploadingFileName = signal("");
   private materialDragDepth = 0;
   readonly confirmation = signal<{
     title: string;
@@ -1479,6 +1480,7 @@ export class ProgramManagementComponent implements OnInit {
     if (target === "material") {
       if (!this.editingMaterial() || this.materialForm.controls.mode.value !== "file") return;
       this.materialForm.controls.mode.markAsDirty();
+      this.materialUploadingFileName.set(file.name);
     }
     if (target !== "material" && !file.type.startsWith("image/")) {
       this.formError.set("Выберите изображение.");
@@ -1490,6 +1492,7 @@ export class ProgramManagementComponent implements OnInit {
       .uploadFile(file)
       .pipe(
         finalize(() => {
+          if (target === "material") this.materialUploadingFileName.set("");
           this.uploading.set(null);
         }),
         takeUntilDestroyed(this.destroyRef),
@@ -1731,7 +1734,8 @@ export class ProgramManagementComponent implements OnInit {
   }
   editMaterial(material: ManagementMaterial | "new"): void {
     this.resetMaterialDrag();
-    this.materialFileName.set(material === "new" ? "" : (material.file?.name ?? ""));
+    const file = material === "new" ? null : material.file;
+    this.materialFileName.set(file ? file.name + (file.extension ? "." + file.extension : "") : "");
     this.editingMaterial.set(material);
     this.formError.set(null);
     this.materialForm.reset(

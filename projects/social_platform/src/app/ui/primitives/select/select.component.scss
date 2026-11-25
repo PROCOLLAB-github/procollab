@@ -4,6 +4,18 @@
 @use "styles/typography";
 @use "styles/responsive";
 
+.field__label-truncated {
+  min-width: 0;
+  margin-inline-end: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  ~ i {
+    flex-shrink: 0;
+  }
+}
+
 @media screen and (max-width: 999px) {
   .field {
     position: relative;

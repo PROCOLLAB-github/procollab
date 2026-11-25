@@ -91,10 +91,15 @@ h4 {
     border: 0;
   }
 
+  &__sidebar,
+  &__element-settings,
   &__settings {
     display: grid;
     gap: 12px;
+    min-width: 0;
+  }
 
+  &__settings {
     > section + section {
       padding-top: 12px;
       border-top: 1px solid var(--medium-grey-for-outline);
@@ -120,6 +125,54 @@ h4 {
       grid-column: 1 / -1;
       margin: 0;
     }
+  }
+
+  &__canvas-actions,
+  &__element-heading {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  &__element-heading {
+    justify-content: space-between;
+  }
+
+  &__redo-icon {
+    transform: scaleX(-1);
+  }
+
+  &__element-help {
+    position: relative;
+
+    summary {
+      display: inline-flex;
+      list-style: none;
+      cursor: pointer;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+    }
+
+    p {
+      position: absolute;
+      z-index: 5;
+      top: 100%;
+      right: 0;
+      width: 200px;
+      padding: 8px 12px;
+      margin: 4px 0 0;
+      background: var(--ui-surface);
+      border: 1px solid var(--gray);
+      border-radius: 8px;
+      box-shadow: var(--ui-panel-shadow);
+    }
+  }
+
+  &__element-name {
+    margin: 0;
+    color: var(--ui-text-muted);
   }
 
   &__download.ui-button.ui-button {
