@@ -67,13 +67,13 @@
     </p>
   }
   @if (loading()) {
-    <p role="status">Загружаем заявки…</p>
+    <p role="status" data-program-guide="projects-list-loading">Загружаем заявки…</p>
   } @else if (error()) {
     <p appAlert="error" role="alert">{{ error() }}</p>
     <button appButton="secondary" type="button" (click)="load()">Повторить</button>
   } @else if (!rows().length) {
     @if (count() && offset()) {
-      <app-state title="На этой странице нет заявок">
+      <app-state title="На этой странице нет заявок" data-program-guide="projects-page-empty">
         <button type="button" appButton="secondary" (click)="navigate({ offset: null })">
           На первую страницу
         </button>
@@ -81,11 +81,13 @@
     } @else if (hasListFilters()) {
       <app-state
         icon="search"
+        data-program-guide="projects-filtered-empty"
         title="Заявки не найдены"
         description="Попробуйте изменить поиск или фильтры."
       />
     } @else {
       <app-state
+        [attr.data-program-guide]="archived() ? 'projects-archive-empty' : 'projects-empty'"
         [title]="archived() ? 'В архиве пока нет заявок' : 'В программе пока нет заявок'"
       />
     }

@@ -23,6 +23,20 @@ const programId = 12;
       [draft]="draft()"
       [active]="active()"
     />
+    @switch (projectList()) {
+      @case ("loading") {
+        <p data-program-guide="projects-list-loading">Обновляем список…</p>
+      }
+      @case ("empty") {
+        <p data-program-guide="projects-empty">В программе пока нет проектов</p>
+      }
+      @case ("filtered") {
+        <p data-program-guide="projects-filtered-empty">Ничего не найдено</p>
+      }
+      @default {
+        <input data-program-guide="projects-search" aria-label="Поиск проекта" />
+      }
+    }
     @if (emptyParticipants()) {
       <div data-program-guide="participants-empty">Пока нет участников.</div>
     }
@@ -49,6 +63,7 @@ class HeaderPage {
   readonly showContext = signal(false);
   readonly showRemoval = signal(false);
   readonly emptyParticipants = signal(false);
+  readonly projectList = signal<"loading" | "empty" | "filtered" | "ready">("ready");
   readonly canLeave = vi.fn(() => true);
 }
 
@@ -431,6 +446,34 @@ describe(ProgramManagementHeaderComponent.name, () => {
     click("Закрыть подсказку");
     expect(router.url).toBe(router.serializeUrl(router.parseUrl(filtered)));
     expect(activeHost.canLeave).not.toHaveBeenCalled();
+  });
+
+  it("ждет загрузки проектов и показывает одну подсказку у пустого списка", async () => {
+    const host = await harness.navigateByUrl(program.management(programId, "projects"), HeaderPage);
+    host.projectList.set("loading");
+    harness.detectChanges();
+    click("Открыть обучение «Проекты»", await openHelp());
+    await vi.waitFor(() =>
+      expect(document.querySelector('[aria-labelledby="program-help"]')).toBeNull(),
+    );
+    expect(harness.routeNativeElement!.querySelector("app-program-guide-overlay")).toBeNull();
+
+    host.projectList.set("empty");
+    await vi.waitFor(() => expectCoach("Первые проекты и заявки", "1 из 1"));
+    click("Готово");
+    expect(harness.routeNativeElement!.querySelector("app-program-guide-overlay")).toBeNull();
+  });
+
+  it("возвращает инструкцию по проектам, когда фильтры снова дают результаты", async () => {
+    const host = await harness.navigateByUrl(program.management(programId, "projects"), HeaderPage);
+    host.projectList.set("filtered");
+    harness.detectChanges();
+    click("Открыть обучение «Проекты»", await openHelp());
+    await vi.waitFor(() => expectCoach("По текущему запросу ничего не найдено", "1 из 1"));
+
+    host.projectList.set("ready");
+    const guide = PROGRAM_GUIDES.find(topic => topic.id === "projects-v1")!;
+    await vi.waitFor(() => expectCoach(guide.steps[0].title, "1 из " + guide.steps.length));
   });
 
   it("обучает аналитике опубликованной программы без переходов и закрывается при уходе", async () => {
