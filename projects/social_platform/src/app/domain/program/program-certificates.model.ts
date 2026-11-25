@@ -96,7 +96,16 @@ export interface CertificateSettings {
   eligibleCounts: { all: number; submitted: number };
   batch: { id: number; active: boolean; issueAt: string; initializedAt: string | null } | null;
 }
-export type CertificateFilter = "all" | "sent" | "failed" | "unsent";
+export type CertificateFilter =
+  | "all"
+  | "sent"
+  | "failed"
+  | "unsent"
+  | "attention"
+  | "pdf_failed"
+  | "email_failed";
+export type CertificatePdfStatus = "pending" | "ready" | "failed";
+export type CertificateEmailStatus = "not_planned" | "pending" | "sending" | "sent" | "failed";
 export interface CertificateSelection {
   ids?: string[];
   allMatching?: boolean;
@@ -111,6 +120,8 @@ export interface CertificateDelivery {
   status: "pending" | "generating" | "sending" | "sent" | "failed" | "ready";
   pdfReady: boolean;
   pdfError?: boolean;
+  pdfStatus?: CertificatePdfStatus;
+  emailStatus?: CertificateEmailStatus;
   error: string;
   sentAt: string | null;
   outdated?: boolean;
@@ -123,6 +134,8 @@ export interface CertificateJournal {
     ready: number;
     sent: number;
     failed: number;
+    pdfFailed?: number;
+    emailFailed?: number;
     unsent?: number;
     outdated?: number;
   };

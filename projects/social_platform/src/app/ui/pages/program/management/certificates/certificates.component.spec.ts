@@ -319,9 +319,9 @@ describe("Program certificates", () => {
     fixture.destroy();
   });
   it.each([
-    { pdfReady: false, label: "PDF не создан", sentAt: null },
-    { pdfReady: true, label: "PDF не обновлен", sentAt: null },
-    { pdfReady: true, label: "PDF не обновлен", sentAt: "2026-10-24T10:00:00Z" },
+    { pdfReady: false, label: "Ошибка создания PDF", sentAt: null },
+    { pdfReady: true, label: "Ошибка обновления PDF", sentAt: null },
+    { pdfReady: true, label: "Ошибка обновления PDF", sentAt: "2026-10-24T10:00:00Z" },
   ])(
     "distinguishes a failed PDF generation/update from a mail failure ($pdfReady)",
     async ({ pdfReady, label, sentAt }) => {
@@ -345,7 +345,7 @@ describe("Program certificates", () => {
       });
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelector('td[data-label="Письмо"]').textContent).toContain(
-        sentAt ? "Отправлено" : "Не отправлено",
+        sentAt ? "Отправлено" : "Ожидает PDF",
       );
       const pdf = fixture.nativeElement.querySelector('td[data-label="Сертификат"]').textContent;
       expect(pdf).toContain(label);
@@ -353,6 +353,35 @@ describe("Program certificates", () => {
       fixture.destroy();
     },
   );
+  it("shows unplanned mail and failed delivery separately from PDF readiness", async () => {
+    const { fixture, component } = await setup();
+    component.step.set(3);
+    component.journal.set({
+      count: 2,
+      summary: { total: 2, ready: 2, sent: 0, failed: 1, pdfFailed: 0, emailFailed: 1 },
+      results: [
+        { ...certificate, pdfStatus: "ready", emailStatus: "not_planned" },
+        {
+          ...certificate,
+          id: "mail-failed",
+          status: "failed",
+          pdfStatus: "ready",
+          emailStatus: "failed",
+          error: "Отправка прервана.",
+        },
+      ],
+    });
+    fixture.detectChanges();
+    const rows = fixture.nativeElement.querySelectorAll("tbody tr");
+    expect(rows[0].querySelector('td[data-label="Письмо"]').textContent).toContain(
+      "Не запланировано",
+    );
+    expect(rows[1].querySelector('td[data-label="Письмо"]').textContent).toContain(
+      "Ошибка отправки",
+    );
+    expect(rows[1].querySelector('td[data-label="Сертификат"]').textContent).toContain("PDF готов");
+    fixture.destroy();
+  });
   it("changes only the selected element font with history, saves it and keeps geometry", async () => {
     const { fixture, component, repository } = await setup();
     const initial = structuredClone(component.draft()!.layout);
@@ -688,13 +717,36 @@ describe("Program certificates", () => {
     expect(component.dirty()).toBe(false);
     fixture.destroy();
   });
-  it("requests only failed deliveries and resets page when switching filters", async () => {
+  it.each(["attention", "pdf_failed", "email_failed"] as const)(
+    "resets the page and requests %s",
+    async filter => {
+      const { fixture, component, repository } = await setup();
+      component.offset.set(40);
+      component.search.set("Крылова");
+      await component.setFilter(filter);
+      await fixture.whenStable();
+      expect(repository.journal).toHaveBeenLastCalledWith(9, filter, "Крылова", 0);
+      fixture.destroy();
+    },
+  );
+  it("retries only the selected kind of error across pages", async () => {
     const { fixture, component, repository } = await setup();
-    component.offset.set(40);
+    component.filter.set("pdf_failed");
     component.search.set("Крылова");
-    component.setFilter("failed");
-    await fixture.whenStable();
-    expect(repository.journal).toHaveBeenLastCalledWith(9, "failed", "Крылова", 0);
+    component.journal.set({
+      count: 2,
+      results: [],
+      summary: { total: 5, ready: 3, sent: 1, failed: 4 },
+    });
+    expect(component.retryCount()).toBe(2);
+    await component.selectFailed();
+    await component.performSelection();
+    expect(repository.selection).toHaveBeenCalledWith(9, 1, "retry", {
+      allMatching: true,
+      excludedIds: [],
+      status: "pdf_failed",
+      search: "Крылова",
+    });
     fixture.destroy();
   });
   it("ignores a slower response from a previously selected filter", async () => {
