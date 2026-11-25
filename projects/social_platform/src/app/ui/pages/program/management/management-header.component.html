@@ -44,17 +44,19 @@
 </nav>
 @if (activeStep(); as current) {
   @if (step(); as activeGuideStep) {
-    <app-program-guide-overlay
-      [step]="activeGuideStep"
-      [target]="target()"
-      [index]="current.index"
-      [total]="current.tour.steps.length"
-      [busy]="navigating()"
-      [automatic]="isAutomatic()"
-      (previous)="advance(-1)"
-      (next)="advance()"
-      (closed)="finishTour()"
-    />
+    @if (target() || (!activeGuideStep.optional && !hasProjectListGuide())) {
+      <app-program-guide-overlay
+        [step]="activeGuideStep"
+        [target]="target()"
+        [index]="current.index"
+        [total]="current.tour.steps.length"
+        [busy]="navigating()"
+        [automatic]="isAutomatic()"
+        (previous)="advance(-1)"
+        (next)="advance()"
+        (closed)="finishTour()"
+      />
+    }
   }
 }
 <app-modal [open]="helpOpen()" (openChange)="helpOpen.set($event)" labelledBy="program-help">

@@ -27,6 +27,61 @@ const rowMenu = (rowLabel: string) => `[role="menu"][aria-label^="${rowLabel}"]`
 const rowAction = (rowLabel: string, label: string) =>
   `${rowMenu(rowLabel)} [role="menuitem"][aria-label="${label}"]`;
 
+export const PROJECT_LIST_GUIDES: readonly ProgramGuide[] = [
+  {
+    id: "projects-empty",
+    title: "Проекты",
+    description: "Пустой список",
+    steps: [
+      {
+        section: "projects",
+        title: "Первые проекты и заявки",
+        text: "Когда в программе появятся проекты или заявки, здесь можно будет открыть их карточки, посмотреть команды и выгрузить список.",
+        target: anchor("projects-empty"),
+      },
+    ],
+  },
+  {
+    id: "projects-filtered-empty",
+    title: "Проекты",
+    description: "Поиск без результатов",
+    steps: [
+      {
+        section: "projects",
+        title: "По текущему запросу ничего не найдено",
+        text: "Измените запрос или сбросьте фильтры. Если появятся результаты, можно продолжить инструкцию по списку.",
+        target: anchor("projects-filtered-empty"),
+      },
+    ],
+  },
+  {
+    id: "projects-page-empty",
+    title: "Проекты",
+    description: "Пустая страница",
+    steps: [
+      {
+        section: "projects",
+        title: "На этой странице нет заявок",
+        text: "Перейдите на первую страницу. Когда заявки загрузятся, инструкция продолжится.",
+        target: anchor("projects-page-empty"),
+      },
+    ],
+  },
+  {
+    id: "projects-archive-empty",
+    title: "Проекты",
+    description: "Пустой архив",
+    steps: [
+      {
+        section: "projects",
+        title: "Архив пока пуст",
+        text: "Здесь будут видны заявки, перенесенные в архив. Чтобы посмотреть текущие заявки, вернитесь к списку.",
+        target: anchor("projects-archive-empty"),
+      },
+    ],
+  },
+];
+
 export const PROGRAM_GUIDES: readonly ProgramGuide[] = [
   {
     id: "launch-v1",
