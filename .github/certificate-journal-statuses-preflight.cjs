@@ -107,6 +107,7 @@ const summary = { total: 5, ready: 4, sent: 1, failed: 3, pdfFailed: 2, emailFai
 
 async function verify(width, colorScheme) {
   const { browser, page, base, context, errors } = await launch(width, { colorScheme });
+  await page.addInitScript(scheme => localStorage.setItem("procollab-theme", scheme), colorScheme);
   page.setDefaultTimeout(12000);
   const headers = { "Access-Control-Allow-Origin": "*" };
   const mock = (path, json) =>
@@ -155,6 +156,7 @@ async function verify(width, colorScheme) {
       },
     );
     await page.goto(base + "/office/program/1/management/certificates");
+    assert.equal(await page.locator("html").getAttribute("data-theme"), colorScheme);
     await button("Журнал").click();
     await rowCount(5);
     assert.match(await cell("Ирина Петрова", "Письмо").innerText(), /Не запланировано/);
