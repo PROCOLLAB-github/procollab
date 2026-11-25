@@ -81,7 +81,21 @@ async function verify(width, colorScheme) {
   try {
     await mock(root, manager);
     await mock("/solution-invitations/", { count: 0, results: [] });
-    await mock(root + "certificates/", certificate);
+    let savedCertificate;
+    await context.route(
+      url => url.pathname === root + "certificates/",
+      route => {
+        if (route.request().method() === "PUT") {
+          const { draft } = route.request().postDataJSON();
+          savedCertificate = {
+            ...certificate,
+            revision: 2,
+            draft: { ...certificate.draft, ...draft },
+          };
+        }
+        return route.fulfill({ headers, json: savedCertificate ?? certificate });
+      },
+    );
     await open("certificates");
     await page.getByRole("button", { name: "Выбрать: Заголовок" }).click();
     await page.getByLabel("Текст заголовка").fill("Диплом финалиста");
@@ -100,6 +114,10 @@ async function verify(width, colorScheme) {
     await page.locator(".certificates__element-help summary").click();
     await page.locator(".certificates__canvas-heading").scrollIntoViewIfNeeded();
     await shot("certificate-editor");
+    await page.getByRole("button", { name: "Сохранить шаблон" }).click();
+    await page.getByText("Изменения сохранены", { exact: true }).waitFor();
+    assert.equal(savedCertificate.draft.title, "Диплом финалиста");
+    assert.equal(savedCertificate.draft.layout.title.rotation, -35);
     await page.getByRole("button", { name: "Выдача", exact: true }).click();
     await page.getByText("По кнопке «Выдать сертификаты»", { exact: false }).waitFor();
     await page.getByText("Участник скачает PDF в блоке", { exact: false }).waitFor();
@@ -149,6 +167,9 @@ async function verify(width, colorScheme) {
     await material.getByRole("button", { name: "Заменить файл", exact: true }).waitFor();
     assert.equal(await material.locator(".ui-alert--success").count(), 0);
     await shot("material-upload");
+    await material.getByRole("button", { name: "Отмена", exact: true }).click();
+    await page.getByRole("button", { name: "Закрыть без сохранения", exact: true }).click();
+    await material.waitFor({ state: "hidden" });
 
     await mock(root + "organizers/", {
       revision: "fixture",
