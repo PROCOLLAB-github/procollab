@@ -64,6 +64,8 @@ async function verify(width, colorScheme) {
     await page.goto(base + "/office/program/1/management/certificates");
     await page.getByRole("button", { name: "Журнал", exact: true }).click();
     const search = page.getByRole("searchbox", { name: "Поиск по имени или почте" });
+    await search.focus();
+    await page.keyboard.press("Shift+Tab");
     await page.keyboard.press("Tab");
     assert.equal(await search.evaluate(input => input === document.activeElement), true);
     await page.waitForFunction(() => getComputedStyle(document.activeElement).boxShadow !== "none");
