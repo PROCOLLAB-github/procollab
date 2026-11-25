@@ -8,9 +8,12 @@ export type ThemePreference = "system" | ThemeScheme;
 
 // Also read in index.html, before the stylesheet is rendered.
 const STORAGE_KEY = "procollab-theme";
+const DEFAULT_PREFERENCE = "light";
 
 function parsePreference(value: string | null | undefined): ThemePreference {
-  return value === "light" || value === "dark" || value === "dark-special" ? value : "system";
+  return value === "system" || value === "light" || value === "dark" || value === "dark-special"
+    ? value
+    : DEFAULT_PREFERENCE;
 }
 
 @Injectable({ providedIn: "root" })
@@ -19,8 +22,8 @@ export class ThemeService {
   private readonly browser = this.document.defaultView;
   private readonly systemTheme = this.browser?.matchMedia?.("(prefers-color-scheme: dark)");
   private readonly storage = this.getStorage();
-  private readonly selected = signal<ThemePreference>("system");
-  private readonly resolved = signal<ThemeScheme>("light");
+  private readonly selected = signal<ThemePreference>(DEFAULT_PREFERENCE);
+  private readonly resolved = signal<ThemeScheme>(DEFAULT_PREFERENCE);
 
   readonly preference = this.selected.asReadonly();
   readonly colorScheme = this.resolved.asReadonly();
@@ -28,7 +31,9 @@ export class ThemeService {
   constructor() {
     this.apply(this.readPreference());
 
-    const onSystemChange = () => this.apply(this.preference());
+    const onSystemChange = () => {
+      if (this.preference() === "system") this.apply("system");
+    };
     const onStorage = (event: StorageEvent) => {
       if (event.storageArea === this.storage && (event.key === STORAGE_KEY || event.key === null)) {
         this.apply(parsePreference(event.newValue));
@@ -71,7 +76,7 @@ export class ThemeService {
     try {
       return parsePreference(this.storage?.getItem(STORAGE_KEY));
     } catch {
-      return "system";
+      return DEFAULT_PREFERENCE;
     }
   }
 }
