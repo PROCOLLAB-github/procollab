@@ -51,6 +51,8 @@ const projectForm = {
   cases: [{ name: "Пилот", projectsCount: 1 }],
   caseRequired: true,
   caseLabel: "Кейс",
+  teamMinSize: null,
+  teamMaxSize: null,
   supportedTypes: ["text", "textarea"],
   sections: { partners: false, achievements: false, vacancies: false, programData: true },
   fields: ["Описание проекта", "Описание решения"].map((label, index) => ({
@@ -231,6 +233,10 @@ async function verify(width, colorScheme) {
     await page.goto(base + "/office/evaluation?program=1");
     const selectedLabel = page.locator(".cabinet__program .field__label-truncated");
     await selectedLabel.waitFor();
+    await page.waitForFunction(
+      name => document.querySelector(".cabinet__program .field__label-truncated")?.title === name,
+      longName,
+    );
     assert.equal(await selectedLabel.getAttribute("title"), longName);
     assert.equal(
       await selectedLabel.evaluate(element => getComputedStyle(element).whiteSpace),
