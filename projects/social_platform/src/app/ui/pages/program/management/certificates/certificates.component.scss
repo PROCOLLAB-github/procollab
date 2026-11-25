@@ -440,27 +440,24 @@ h4 {
   }
 
   &__search {
-    display: flex;
+    position: relative;
     flex: 1;
-    gap: 8px;
-    align-items: center;
     min-width: 0;
-    border-bottom: 1px solid var(--gray);
-
-    &:focus-within {
-      border-color: var(--accent);
-    }
 
     .ui-field {
+      display: block;
       width: 100%;
-      min-width: 0;
-      min-height: 32px;
-      padding: 4px 0;
-      font-size: 12px;
-      background: transparent;
-      border: 0;
-      border-radius: 0;
+      padding-inline-start: 40px;
     }
+  }
+
+  &__search-icon {
+    position: absolute;
+    top: 50%;
+    inset-inline-start: 16px;
+    color: var(--ui-text-muted);
+    pointer-events: none;
+    transform: translateY(-50%);
   }
 
   &__filters {
@@ -656,7 +653,6 @@ h4 {
   .certificates {
     &__layer-select,
     &__add button,
-    &__search .ui-field,
     &__check,
     &__option {
       min-height: 44px;
