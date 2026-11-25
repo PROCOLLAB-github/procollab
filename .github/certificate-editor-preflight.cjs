@@ -67,7 +67,7 @@ const projectForm = {
 };
 
 async function verify(width, colorScheme) {
-  const { page, browser, base, context } = await launch(width, { colorScheme });
+  const { page, browser, base, context, errors } = await launch(width, { colorScheme });
   page.setDefaultTimeout(12000);
   const headers = { "Access-Control-Allow-Origin": "*" };
   const mock = (path, json) =>
@@ -106,8 +106,12 @@ async function verify(width, colorScheme) {
     assert.equal(await selected.evaluate(element => element.style.transform), "rotate(-35deg)");
     assert.match(await selected.innerText(), /Диплом финалиста/);
     await page.getByRole("button", { name: "Отменить действие" }).click();
+    await page.waitForFunction(() => document.querySelector(".canvas__angle input")?.value === "0");
     assert.equal(await rotation.inputValue(), "0");
     await page.getByRole("button", { name: "Повторить действие" }).click();
+    await page.waitForFunction(
+      () => document.querySelector(".canvas__angle input")?.value === "-35",
+    );
     assert.equal(await rotation.inputValue(), "-35");
     await page.locator(".certificates__element-help summary").click();
     await page.getByText("Выберите элемент в списке выше", { exact: false }).waitFor();
@@ -239,6 +243,10 @@ async function verify(width, colorScheme) {
     });
     assert.ok(iconCenter <= 1, "Search icon stays centered on the input");
     await shot("expert-search");
+  } catch (error) {
+    console.error({ url: page.url(), errors });
+    await shot("failure");
+    throw error;
   } finally {
     await browser.close();
   }
