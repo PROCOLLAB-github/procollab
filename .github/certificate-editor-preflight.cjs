@@ -128,6 +128,61 @@ async function verify(width, colorScheme) {
     const material = page.getByRole("dialog", { name: "Добавить материал", exact: true });
     await material.waitFor();
     await shot("material-dialog");
+    await material.getByRole("radio", { name: "Файл", exact: true }).check();
+    let completeUpload;
+    const uploadGate = new Promise(resolve => (completeUpload = resolve));
+    await context.route(
+      url => url.pathname === "/files/",
+      async request => {
+        await uploadGate;
+        return request.fulfill({ headers, json: { url: "https://example.test/guide.pdf" } });
+      },
+    );
+    await material.locator("input[type=file]").setInputFiles({
+      name: "Материалы проекта.pdf",
+      mimeType: "application/pdf",
+      buffer: Buffer.from("%PDF"),
+    });
+    await material.locator("progress").waitFor();
+    assert.equal(await material.locator(".ui-alert--warning").count(), 0);
+    completeUpload();
+    await material.getByRole("button", { name: "Заменить файл", exact: true }).waitFor();
+    assert.equal(await material.locator(".ui-alert--success").count(), 0);
+    await shot("material-upload");
+
+    await mock(root + "organizers/", {
+      revision: "fixture",
+      organizers: [],
+      organizerCount: 2,
+      activeOrganizerCount: 2,
+      invitationCount: 1,
+    });
+    await open("settings?tab=organizers");
+    const organizers = page.locator("app-management-organizers app-section-header");
+    await organizers.getByRole("button", { name: "Пригласить", exact: true }).waitFor();
+    assert.equal(await page.getByText("Приглашений: 1", { exact: true }).count(), 0);
+    await shot("organizers");
+
+    await mock(root + "registration/", {
+      draft: { mode: "native", fields: [] },
+      published: null,
+      revision: 1,
+      publishedVersion: 0,
+      publishedAt: null,
+      link: null,
+      externalStatus: "not_connected",
+      externalUrl: "",
+      connectionComment: "",
+      connectionWebsiteUrl: "",
+      connectionContact: "",
+      answeredFieldIds: [],
+    });
+    await open("settings?tab=registration");
+    await page
+      .locator("app-section-header")
+      .getByRole("heading", { name: "Способ регистрации", exact: true })
+      .waitFor();
+    await shot("registration");
 
     await mock("/evaluation/programs/", {
       hasAccess: true,
