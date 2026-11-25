@@ -6,9 +6,9 @@
     </div>
   }
   <section class="organizers__card" [attr.aria-busy]="loading()">
-    <app-section-header [title]="sectionTitle()" />
-    <div class="organizers__toolbar">
+    <app-section-header [title]="sectionTitle()">
       <button
+        sectionHeaderAction
         type="button"
         appButton="primary"
         [disabled]="busy() || !snapshot()"
@@ -17,12 +17,7 @@
       >
         Пригласить
       </button>
-      @if (snapshot()?.invitationCount) {
-        <p>
-          <span class="organizers__count">Приглашений: {{ snapshot()?.invitationCount }}</span>
-        </p>
-      }
-    </div>
+    </app-section-header>
     <div class="organizers__filters">
       <label
         >Поиск по имени или почте<input

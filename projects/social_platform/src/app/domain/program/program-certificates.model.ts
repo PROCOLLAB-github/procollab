@@ -31,12 +31,14 @@ export const CERTIFICATE_LABELS: Record<CertificateElement, string> = {
   position: "Должность",
   signature: "Подпись",
 };
+export const CERTIFICATE_DEFAULT_TITLE = "СЕРТИФИКАТ";
 export interface CertificateBox {
   x: number;
   y: number;
   width: number;
   height: number;
   fontSize: number;
+  rotation?: number;
   fontFamily?:
     | "mont"
     | "mont-regular"
@@ -71,6 +73,7 @@ export interface CertificateAsset {
 }
 export interface CertificateDraft {
   orientation?: "landscape" | "portrait";
+  title?: string;
   backgroundId: number | null;
   signatureId: number | null;
   director: string;

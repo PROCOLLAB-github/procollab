@@ -360,6 +360,41 @@
   }
 }
 
+.management__material-form {
+  --ui-dialog-header-margin-bottom: 0;
+
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ui-space-md);
+
+  .management__material-source {
+    column-gap: var(--ui-space-md);
+
+    legend {
+      margin-bottom: 0;
+    }
+  }
+
+  .management__dropzone {
+    gap: var(--ui-space-sm);
+    padding: var(--ui-space-md);
+
+    > [role="status"] {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .management__dropzone-title:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.management__material-progress {
+  width: min(160px, 100%);
+  height: 6px;
+  accent-color: var(--ui-text-muted);
+}
+
 .management__dropzone {
   display: grid;
   gap: 16px;

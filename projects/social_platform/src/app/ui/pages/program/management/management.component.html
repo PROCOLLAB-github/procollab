@@ -1481,7 +1481,7 @@
       <form
         [formGroup]="materialForm"
         (ngSubmit)="saveMaterial()"
-        class="management__form"
+        class="management__form management__material-form"
         (dragenter)="onMaterialDragEnter($event)"
         (dragover)="onMaterialDragOver($event)"
         (dragleave)="onMaterialDragLeave()"
@@ -1496,7 +1496,10 @@
         <label for="material-title"
           >Название *<input appField id="material-title" formControlName="title" maxlength="255"
         /></label>
-        <fieldset class="management__inline" [disabled]="saving() || !!uploading()">
+        <fieldset
+          class="management__inline management__material-source"
+          [disabled]="saving() || !!uploading()"
+        >
           <legend>Источник материала</legend>
           <label><input type="radio" appChoice formControlName="mode" value="link" /> Ссылка</label
           ><label><input type="radio" appChoice formControlName="mode" value="file" /> Файл</label>
@@ -1506,22 +1509,21 @@
             >Ссылка *<input type="url" appField id="material-url" formControlName="url"
           /></label>
         } @else {
+          @let uploadingMaterial = uploading() === "material";
+          @let hasFile = !!materialForm.controls.file.value;
           <div
             class="management__dropzone"
             [class.management__dropzone--active]="materialDragActive()"
-            [attr.aria-busy]="uploading() === 'material'"
           >
-            <div aria-live="polite" role="status">
-              @if (uploading() === "material") {
-                <p class="management__dropzone-title">Загружаем файл…</p>
-                <p appAlert="warning">Дождитесь окончания загрузки.</p>
-              } @else if (
-                materialForm.controls.mode.value === "file" && materialForm.controls.file.value
-              ) {
+            <div role="status">
+              @if (uploadingMaterial) {
+                <p class="management__muted">Загружаем файл…</p>
+                <p class="management__dropzone-title">{{ materialUploadingFileName() }}</p>
+                <progress class="management__material-progress" aria-hidden="true"></progress>
+              } @else if (hasFile) {
                 <p class="management__dropzone-title">
                   {{ materialFileName() || "Файл загружен" }}
                 </p>
-                <p appAlert="success">Можно сохранить материал или заменить файл.</p>
               } @else {
                 <p class="management__dropzone-title">Перетащите файл сюда</p>
                 <p class="management__muted">
@@ -1542,16 +1544,12 @@
               [disabled]="saving() || !!uploading()"
               (click)="materialFile.click()"
             >
-              {{
-                materialForm.controls.mode.value === "file" && materialForm.controls.file.value
-                  ? "Заменить файл"
-                  : "Выбрать файл"
-              }}
+              {{ hasFile ? "Заменить файл" : "Выбрать файл" }}
             </button>
           </div>
         }
         @if (formError()) {
-          <p appAlert="error">{{ formError() }}</p>
+          <p appAlert="error" role="alert">{{ formError() }}</p>
         }
         <div class="management__inline management__dialog-actions">
           <button appButton="primary" [appButtonLoading]="saving()" [disabled]="!!uploading()">

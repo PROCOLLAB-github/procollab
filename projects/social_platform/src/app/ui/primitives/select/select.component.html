@@ -1,6 +1,12 @@
 <!-- @format -->
 
 <div class="field" (clickOutside)="onClickOutside()">
+  @let label =
+    selectedId === -1
+      ? "Ничего"
+      : selectedId || selectedId === 0
+        ? getLabel(selectedId) || placeholder()
+        : placeholder();
   <div
     class="text-body-12 field__input"
     [class.field__input--error]="error()"
@@ -19,13 +25,11 @@
     (click)="!disabled && (isOpen = !isOpen); highlightedIndex = -1"
     (keydown)="onTriggerKeyDown($event)"
   >
-    {{
-      selectedId === -1
-        ? "Ничего"
-        : selectedId || selectedId === 0
-          ? getLabel(selectedId) || placeholder()
-          : placeholder()
-    }}
+    @if (truncateLabel()) {
+      <span class="field__label-truncated" [attr.title]="label">{{ label }}</span>
+    } @else {
+      {{ label }}
+    }
     @if (error()) {
       <i class="field__error-icon field__error-icon--bare" appIcon icon="error" appSquare="20"></i>
     } @else {

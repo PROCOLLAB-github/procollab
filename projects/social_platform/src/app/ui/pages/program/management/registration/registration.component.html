@@ -14,43 +14,65 @@
   }
   @if (snapshot(); as data) {
     <section class="registration__card">
-      <h2 data-program-guide="settings-registration">Способ регистрации</h2>
-      <label class="registration__choice"
-        ><input
-          appChoice
-          type="radio"
-          name="registration-mode"
-          [checked]="draft().mode === 'native'"
-          [disabled]="busy()"
-          (change)="setMode('native')"
-        />Через PROCOLLAB</label
-      >
-      <p>Анкета, аккаунт и участие в одном месте.</p>
-      <label class="registration__choice"
-        ><input
-          appChoice
-          type="radio"
-          name="registration-mode"
-          [checked]="draft().mode === 'external'"
-          [disabled]="busy()"
-          (change)="setMode('external')"
-        />Через внешний сайт</label
-      >
-      <p>Подключение формы выполняет администратор.</p>
+      <app-section-header
+        title="Способ регистрации"
+        titleId="registration-mode-title"
+        data-program-guide="settings-registration"
+      />
+      <div class="registration__modes" role="radiogroup" aria-labelledby="registration-mode-title">
+        <label class="registration__choice">
+          <input
+            appChoice
+            type="radio"
+            name="registration-mode"
+            aria-labelledby="registration-mode-native-label"
+            aria-describedby="registration-mode-native-description"
+            [checked]="draft().mode === 'native'"
+            [disabled]="busy()"
+            (change)="setMode('native')"
+          />
+          <span class="registration__mode-copy">
+            <span id="registration-mode-native-label">Через PROCOLLAB</span>
+            <small id="registration-mode-native-description">
+              Анкета, аккаунт и участие в одном месте.
+            </small>
+          </span>
+        </label>
+        <label class="registration__choice">
+          <input
+            appChoice
+            type="radio"
+            name="registration-mode"
+            aria-labelledby="registration-mode-external-label"
+            aria-describedby="registration-mode-external-description"
+            [checked]="draft().mode === 'external'"
+            [disabled]="busy()"
+            (change)="setMode('external')"
+          />
+          <span class="registration__mode-copy">
+            <span id="registration-mode-external-label">Через внешний сайт</span>
+            <small id="registration-mode-external-description">
+              Подключение формы выполняет администратор.
+            </small>
+          </span>
+        </label>
+      </div>
     </section>
     @if (draft().mode === "native") {
       <section class="registration__card">
-        <h2>Аккаунт PROCOLLAB</h2>
-        <div>Имя, фамилия, email, дата рождения, пароль и согласия.</div>
-        <p>
-          Эти поля обязательны для нового пользователя. У вошедшего участника повторно их не
-          запрашиваем.
-        </p>
+        <app-section-header title="Аккаунт PROCOLLAB" />
+        <div class="registration__account">
+          <div>Имя, фамилия, email, дата рождения, пароль и согласия.</div>
+          <p>
+            Эти поля обязательны для нового пользователя. У вошедшего участника повторно их не
+            запрашиваем.
+          </p>
+        </div>
       </section>
       <section class="registration__card">
-        <header>
-          <h2>Анкета участника</h2>
+        <app-section-header title="Анкета участника">
           <button
+            sectionHeaderAction
             appButton="primary"
             type="button"
             [disabled]="busy()"
@@ -58,7 +80,7 @@
           >
             Добавить поле
           </button>
-        </header>
+        </app-section-header>
         @for (field of draft().fields; track field.id) {
           <article class="registration__row">
             <div>
@@ -102,7 +124,7 @@
       </section>
     } @else {
       <section class="registration__card">
-        <h2>Внешняя форма регистрации</h2>
+        <app-section-header title="Внешняя форма регистрации" />
         @if (data.externalStatus === "connected") {
           <div appAlert="success">
             <strong>Форма подключена</strong>
@@ -133,6 +155,7 @@
           <button
             appButton="secondary"
             type="button"
+            class="registration__request"
             [disabled]="busy()"
             (click)="open('connection', $event)"
           >
@@ -142,7 +165,7 @@
       </section>
     }
     <section class="registration__card">
-      <h2>Страница регистрации</h2>
+      <app-section-header title="Страница регистрации" />
       @if (data.programDraft) {
         <div appAlert="info">
           <strong>Регистрация откроется вместе с программой</strong>
@@ -186,7 +209,7 @@
           }}
         </p>
       }
-      <div class="registration__actions">
+      <div class="registration__actions registration__page-actions">
         <button
           appButton="secondary"
           type="button"

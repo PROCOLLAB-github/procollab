@@ -11,6 +11,10 @@ export function certificatePage(orientation: CertificateDraft["orientation"] = "
     ? { widthMm: 210, heightMm: 297, widthPx: 793.7, heightPx: 1122 }
     : { widthMm: 297, heightMm: 210, widthPx: 1122, heightPx: 793.7 };
 }
+
+export function certificateRotation(degrees: number): number {
+  return ((((Math.round(degrees) + 180) % 360) + 360) % 360) - 180;
+}
 export function moveCertificateBox(
   box: CertificateBox,
   dx: number,

@@ -56,6 +56,7 @@ import { IconComponent } from "../icon/icon.component";
 export class SelectComponent implements ControlValueAccessor {
   /** Текст подсказки */
   placeholder = input("");
+  readonly truncateLabel = input(false);
 
   /** Accessible name belongs to the focusable combobox, not its component host. */
   readonly ariaLabel = input<string | null>(null, { alias: "aria-label" });

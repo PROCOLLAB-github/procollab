@@ -32,7 +32,9 @@ import {
   DialogHeaderComponent,
   FieldDirective,
   IconComponent,
+  SectionHeaderComponent,
 } from "@uilib";
+import { AppRoutes } from "@api/paths/app-routes";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import {
   ManagementCase,
@@ -61,6 +63,7 @@ import { SnackbarService } from "@domain/shared/snackbar.service";
     IconComponent,
     ModalComponent,
     ProgramFieldsComponent,
+    SectionHeaderComponent,
     CdkMenuModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -71,10 +74,19 @@ export class ManagementProjectFormComponent {
   readonly statusChange = output<{ dirty: boolean; busy: boolean }>();
   readonly savedAt = output<string>();
   readonly materials = output<void>();
+  readonly materialsUrl = computed(
+    () => AppRoutes.program.management(this.programId(), "settings") + "?tab=materials",
+  );
   private readonly api = inject(ProgramManagementUseCase);
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly destroyRef = inject(DestroyRef);
   private readonly snackbar = inject(SnackbarService);
+
+  openMaterials(event: MouseEvent): void {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    this.materials.emit();
+  }
   readonly snapshot = signal<ManagementProjectForm | null>(null);
   readonly cases = signal<ManagementCase[]>([]);
   readonly fields = signal<ManagementFormField[]>([]);

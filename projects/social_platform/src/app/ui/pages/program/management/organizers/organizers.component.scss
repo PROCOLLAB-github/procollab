@@ -48,13 +48,6 @@
   border-radius: 15px;
 }
 
-.organizers__toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-}
-
 .organizers h2,
 .organizers__dialog h2 {
   margin: 0;
@@ -87,10 +80,6 @@
 
 .organizers__heading > button {
   flex-shrink: 0;
-}
-
-.organizers__count {
-  white-space: nowrap;
 }
 
 .organizers__filters {
@@ -239,10 +228,6 @@
 }
 
 @media (max-width: 999px) {
-  .organizers__toolbar button {
-    width: 100%;
-  }
-
   .organizers__filters {
     grid-template-columns: 1fr;
   }

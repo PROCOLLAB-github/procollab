@@ -65,13 +65,16 @@ function setup() {
   return { fixture, component: fixture.componentInstance, api };
 }
 describe("Организаторы программы", () => {
-  it("показывает счетчик в общем заголовке, приглашения отдельно и диапазон текущей страницы", () => {
+  it("показывает счетчик и приглашение в общем заголовке, а диапазон — в пагинации", () => {
     const { fixture, component } = setup();
     const title = fixture.nativeElement.querySelector("app-section-header h2") as HTMLElement;
     expect(title.textContent).toContain("Организаторы · 2");
-    expect(fixture.nativeElement.querySelector(".organizers__toolbar").textContent).toContain(
-      "Приглашений: 1",
-    );
+    const invite = fixture.nativeElement.querySelector(
+      "app-section-header button[sectionHeaderAction]",
+    ) as HTMLButtonElement;
+    expect(invite.textContent?.trim()).toBe("Пригласить");
+    expect(fixture.nativeElement.textContent).not.toContain("Приглашений:");
+    expect(fixture.nativeElement.querySelector('[data-organizer-id="invite:3"]')).toBeTruthy();
     component.snapshot.set({
       ...snapshot,
       organizerCount: 25,

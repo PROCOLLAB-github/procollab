@@ -31,6 +31,7 @@
         size="big"
         placeholder="Все программы"
         aria-label="Программа"
+        [truncateLabel]="true"
         [options]="programOptions()"
         [selectedId]="selectedProgramId() ?? 0"
         [formControl]="program"

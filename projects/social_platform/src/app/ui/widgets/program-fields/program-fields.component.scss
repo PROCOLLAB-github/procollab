@@ -23,7 +23,7 @@
 
 .program-fields {
   display: grid;
-  gap: 24px;
+  gap: 16px;
   font-size: 12px;
   line-height: 1.5;
 }
@@ -39,7 +39,8 @@
 }
 
 .program-fields textarea {
-  min-height: 100px;
+  min-height: 88px;
+  border-radius: var(--ui-radius-card);
   resize: vertical;
 }
 
