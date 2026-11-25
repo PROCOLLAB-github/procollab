@@ -1,0 +1,38 @@
+# @format
+name: Program frontend audit preflight
+on:
+  push:
+    branches: [fix/dev-program-frontend-audit-20261126]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_MODULE: /tmp/procollab-browser-tools/node_modules/playwright-core
+      CHROME_PATH: /usr/bin/google-chrome
+      REVIEW_OUTPUT: /tmp/program-frontend-audit-preview
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npx vitest run --maxWorkers=2 solution-evaluation-list.component.spec.ts evaluation-programs.component.spec.ts office.component.spec.ts management-header.component.spec.ts management.component.spec.ts criteria.component.spec.ts certificates.component.spec.ts project-actions.component.spec.ts analytics.component.spec.ts analytics-attention.component.spec.ts dialog-header.component.spec.ts
+      - run: npm run build:pr
+      - run: npm install --prefix /tmp/procollab-browser-tools --no-audit --no-fund playwright-core
+      - name: Verify program layout in Chromium
+        run: |
+          node docs/responsive/serve.cjs &
+          for attempt in {1..30}; do
+            curl --silent --fail http://127.0.0.1:4360/ -o /dev/null && break
+            sleep 1
+          done
+          node .github/program-frontend-audit-preflight.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: program-frontend-audit-preview
+          path: /tmp/program-frontend-audit-preview
+          if-no-files-found: ignore
