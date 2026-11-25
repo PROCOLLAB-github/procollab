@@ -138,31 +138,27 @@
   (openChange)="filtersOpen.set(false)"
   labelledBy="solution-rating-filters-title"
   bodyClass="modal__body--no-flex"
-  ><div class="rating-dialog">
-    <header>
-      <h2 id="solution-rating-filters-title">Фильтры</h2>
-      <button
-        type="button"
-        class="rating-dialog__close"
-        aria-label="Закрыть"
-        (click)="filtersOpen.set(false)"
-      >
-        ×
-      </button>
-    </header>
-    <div class="rating-dialog__body">
-      <label
-        >Кейс или задача<select appField [formControl]="caseValue">
-          <option value="">Все кейсы</option>
-          @for (name of caseOptions(); track name) {
-            <option [value]="name">{{ name }}</option>
-          }
-        </select></label
-      >
-    </div>
+  size="small"
+>
+  <div class="rating-dialog solution-rating-filters">
+    <app-dialog-header
+      title="Фильтры"
+      titleId="solution-rating-filters-title"
+      [initialFocus]="true"
+      (closed)="filtersOpen.set(false)"
+    />
+    <label class="solution-rating-filters__field">
+      Кейс или задача
+      <select appField [formControl]="caseValue">
+        <option value="">Все кейсы</option>
+        @for (name of caseOptions(); track name) {
+          <option [value]="name">{{ name }}</option>
+        }
+      </select>
+    </label>
     <footer>
       <button appButton="secondary" type="button" (click)="caseValue.setValue('')">Сбросить</button
       ><button appButton="primary" type="button" (click)="applyFilters()">Применить</button>
     </footer>
-  </div></app-modal
->
+  </div>
+</app-modal>

@@ -20,53 +20,47 @@
   >
     <!-- Trap anchors остаются внутри проецируемого section при каждом portal attachment. -->
     <div [cdkTrapFocus]="attached()" [cdkTrapFocusAutoCapture]="false">
-      <header class="analytics-drilldown__header">
-        <div>
-          @if (state.view() === "scores" || state.view() === "backlog") {
-            <button
-              appButton="secondary"
-              type="button"
-              class="analytics-drilldown__action"
-              (click)="state.back()"
-            >
-              ← Назад к списку
-            </button>
-          }
-          <h2 #heading tabindex="-1" [id]="'analytics-dialog-' + state.view()">{{ title() }}</h2>
-          @if (state.view() === "case" && cases.selection()?.scope === "without_case") {
-            <p class="analytics-drilldown__secondary">
-              Проекты, для которых кейс не выбран или больше недоступен.
-            </p>
-          }
-          @if (state.view() === "backlog") {
-            <p>Ожидающие назначения</p>
-          }
-          @if (state.view() === "projects-not-submitted") {
-            @if (state.notSubmittedPage(); as page) {
-              @if (page.applicable) {
-                <p class="analytics-drilldown__metadata" data-testid="submission-deadline">
-                  @if (page.submissionDeadline) {
-                    {{ page.submissionOpen ? "Сдача открыта до" : "Срок сдачи завершен" }}
-                    {{ page.submissionDeadline | date: "dd.MM.yyyy, HH:mm" }}
-                  } @else {
-                    Срок сдачи не указан
-                  }
-                </p>
-              }
+      <div class="analytics-drilldown__header">
+        @if (state.view() === "scores" || state.view() === "backlog") {
+          <button
+            appButton="secondary"
+            type="button"
+            class="analytics-drilldown__action"
+            (click)="state.back()"
+          >
+            ← Назад к списку
+          </button>
+        }
+        <app-dialog-header
+          [title]="title()"
+          [titleId]="'analytics-dialog-' + state.view()"
+          closeLabel="Закрыть детализацию аналитики"
+          [initialFocusOnTitle]="true"
+          (closed)="closeAnalyticsModal()"
+        />
+        @if (state.view() === "case" && cases.selection()?.scope === "without_case") {
+          <p class="analytics-drilldown__secondary">
+            Проекты, для которых кейс не выбран или больше недоступен.
+          </p>
+        }
+        @if (state.view() === "backlog") {
+          <p>Ожидающие назначения</p>
+        }
+        @if (state.view() === "projects-not-submitted") {
+          @if (state.notSubmittedPage(); as page) {
+            @if (page.applicable) {
+              <p class="analytics-drilldown__metadata" data-testid="submission-deadline">
+                @if (page.submissionDeadline) {
+                  {{ page.submissionOpen ? "Сдача открыта до" : "Срок сдачи завершен" }}
+                  {{ page.submissionDeadline | date: "dd.MM.yyyy, HH:mm" }}
+                } @else {
+                  Срок сдачи не указан
+                }
+              </p>
             }
           }
-        </div>
-        <button
-          appButton="icon"
-          #closeButton
-          type="button"
-          class="analytics-drilldown__close"
-          aria-label="Закрыть детализацию аналитики"
-          (click)="closeAnalyticsModal()"
-        >
-          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-        </button>
-      </header>
+        }
+      </div>
 
       @if (state.view() === "case") {
         <div class="analytics-case" data-testid="case-drilldown">

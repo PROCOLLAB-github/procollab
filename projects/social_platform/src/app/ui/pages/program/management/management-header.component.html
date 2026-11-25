@@ -61,17 +61,12 @@
 }
 <app-modal [open]="helpOpen()" (openChange)="helpOpen.set($event)" labelledBy="program-help">
   <section class="program-heading__help">
-    <div class="program-heading__help-title">
-      <h2 id="program-help">Помощь по программе</h2>
-      <button
-        type="button"
-        appButton="icon"
-        aria-label="Закрыть помощь"
-        (click)="helpOpen.set(false)"
-      >
-        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-      </button>
-    </div>
+    <app-dialog-header
+      title="Помощь по программе"
+      titleId="program-help"
+      closeLabel="Закрыть помощь"
+      (closed)="helpOpen.set(false)"
+    />
     @for (topic of topics(); track topic.title) {
       <article class="program-heading__topic">
         <div>

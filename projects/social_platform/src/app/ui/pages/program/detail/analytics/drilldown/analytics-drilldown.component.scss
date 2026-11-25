@@ -127,6 +127,24 @@
 }
 
 .analytics-drilldown {
+  &__header {
+    display: grid;
+    gap: var(--ui-space-sm);
+    margin-bottom: var(--ui-space-md);
+
+    > app-dialog-header {
+      --ui-dialog-header-margin-bottom: 0;
+    }
+
+    > .analytics-drilldown__action {
+      justify-self: start;
+    }
+
+    > p {
+      margin: 0;
+    }
+  }
+
   &__action {
     padding: 6px 0;
     color: var(--accent-dark);
@@ -185,7 +203,6 @@
   }
 
   &__metadata {
-    margin-top: 8px;
     font-weight: 600;
   }
 
@@ -245,7 +262,7 @@
   }
 }
 
-.analytics-drilldown .ui-button.ui-button {
+.analytics-drilldown .ui-button.ui-button:not(:where(app-dialog-header button)) {
   @include program-management-controls.compact-action($mobile-padding: 12px);
 }
 

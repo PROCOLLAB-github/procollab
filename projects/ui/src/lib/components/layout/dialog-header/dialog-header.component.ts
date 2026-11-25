@@ -1,6 +1,13 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, input, output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  input,
+  output,
+  viewChild,
+} from "@angular/core";
 import { IconComponent } from "../../primitives/icon/icon.component";
 import { ButtonDirective } from "../../primitives/button/button.directive";
 
@@ -9,6 +16,7 @@ import { ButtonDirective } from "../../primitives/button/button.directive";
   imports: [IconComponent, ButtonDirective],
   template: `<header class="dialog-header">
     <h2
+      #heading
       [id]="titleId()"
       [attr.tabindex]="initialFocusOnTitle() ? -1 : null"
       [attr.cdkFocusInitial]="initialFocusOnTitle() ? '' : null"
@@ -17,6 +25,7 @@ import { ButtonDirective } from "../../primitives/button/button.directive";
     </h2>
     @if (closable()) {
       <button
+        #closeButton
         class="dialog-header__close"
         appButton="icon"
         type="button"
@@ -92,4 +101,15 @@ export class DialogHeaderComponent {
   readonly initialFocus = input(false);
   readonly initialFocusOnTitle = input(false);
   readonly closed = output<void>();
+
+  private readonly heading = viewChild.required<ElementRef<HTMLHeadingElement>>("heading");
+  private readonly closeButton = viewChild<ElementRef<HTMLButtonElement>>("closeButton");
+
+  focusTitle(): void {
+    this.heading().nativeElement.focus();
+  }
+
+  focusClose(): void {
+    this.closeButton()?.nativeElement.focus();
+  }
 }

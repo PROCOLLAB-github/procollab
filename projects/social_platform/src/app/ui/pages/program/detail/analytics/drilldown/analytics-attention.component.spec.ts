@@ -490,7 +490,7 @@ describe("Attention views: real overlay", () => {
         .injector.get(CdkTrapFocus);
       trap ??= currentTrap;
       expect(currentTrap).toBe(trap);
-      expect(document.activeElement).toBe(dialog().querySelector(".analytics-drilldown__close"));
+      expect(document.activeElement).toBe(closeButton());
       expect(document.querySelectorAll('[role="dialog"]')).toHaveLength(1);
       expect(trap.enabled).toBe(true);
       expect(dialog().querySelectorAll('.cdk-focus-trap-anchor[tabindex="0"]')).toHaveLength(2);

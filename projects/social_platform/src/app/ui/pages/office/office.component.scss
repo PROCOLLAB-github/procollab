@@ -2,11 +2,22 @@
 
 @use "styles/responsive";
 
+@media (max-width: 999px) {
+  :host {
+    display: block;
+    height: 100%;
+  }
+}
+
 .office {
   position: relative;
   display: flex;
   height: 100%;
   background-color: var(--white);
+
+  @media (max-width: 999px) {
+    overflow: clip;
+  }
 
   &__background-image {
     display: none;

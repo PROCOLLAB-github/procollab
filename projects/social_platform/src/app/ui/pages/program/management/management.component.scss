@@ -582,11 +582,15 @@
 
 .management__filter-dialog {
   display: grid;
-  gap: 20px;
+  gap: var(--ui-space-md);
   width: 432px;
   min-width: 0;
   max-width: 100%;
   font-size: 12px;
+
+  > app-dialog-header {
+    --ui-dialog-header-margin-bottom: 0;
+  }
 
   > label {
     display: grid;
@@ -601,20 +605,6 @@
   }
 
   .ui-alert { @include program-management-controls.status-notice; }
-}
-
-.management__filter-heading {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-
-  h2 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
-  }
 }
 
 .management__filter-period {

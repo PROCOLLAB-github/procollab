@@ -122,7 +122,11 @@
   (openChange)="!$event && closeEditor()"
   labelledBy="criterion-editor-title"
 >
-  <form class="criteria__dialog" [formGroup]="editor" (ngSubmit)="apply()">
+  <form
+    class="criteria__dialog criteria__dialog--compact-header"
+    [formGroup]="editor"
+    (ngSubmit)="apply()"
+  >
     <app-dialog-header
       [title]="editing() === 'new' ? 'Добавить критерий' : 'Изменить критерий'"
       titleId="criterion-editor-title"
@@ -222,7 +226,7 @@
   (openChange)="!$event && deleting.set(null)"
   labelledBy="criterion-delete-title"
 >
-  <div class="criteria__dialog">
+  <div class="criteria__dialog criteria__dialog--compact-header">
     <app-dialog-header
       title="Удалить критерий?"
       titleId="criterion-delete-title"

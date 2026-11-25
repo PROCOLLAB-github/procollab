@@ -12,10 +12,6 @@
   color: var(--black);
   overflow-wrap: anywhere;
 
-  h2 {
-    @include program-management-controls.section-title;
-  }
-
   h3 {
     font-size: var(--ui-font-h3);
     font-weight: 600;
@@ -42,25 +38,4 @@
   app-avatar {
     flex-shrink: 0;
   }
-
-  &__header {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-}
-
-.analytics-drilldown .ui-button.ui-button.analytics-drilldown__close {
-  @include program-management-controls.compact-action($mobile-padding: 12px);
-
-  flex-shrink: 0;
-  padding: 0;
-  color: var(--dark-grey);
-  background: transparent;
-  border: 0;
-  border-radius: 8px;
-
-  &:hover { background: var(--light-gray); }
 }

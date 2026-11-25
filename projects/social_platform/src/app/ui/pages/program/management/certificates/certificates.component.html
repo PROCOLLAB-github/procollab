@@ -894,17 +894,12 @@
   >
     @if (editorOpen()) {
       <div class="certificates__editor">
-        <header class="certificates__heading">
-          <h2 id="certificate-editor-heading">Предпросмотр сертификата</h2>
-          <button
-            type="button"
-            appButton="icon"
-            aria-label="Закрыть предпросмотр"
-            (click)="editorOpen.set(false)"
-          >
-            <i appIcon icon="cross" appSquare="12" aria-hidden="true"></i>
-          </button>
-        </header>
+        <app-dialog-header
+          title="Предпросмотр сертификата"
+          titleId="certificate-editor-heading"
+          closeLabel="Закрыть предпросмотр"
+          (closed)="editorOpen.set(false)"
+        />
         <app-certificate-canvas
           [draft]="d"
           [fontRevision]="fontRevision()"

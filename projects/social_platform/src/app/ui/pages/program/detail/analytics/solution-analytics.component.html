@@ -478,20 +478,13 @@
   (openChange)="!$event && close()"
 >
   <div class="solution-analytics__dialog analytics-drilldown">
-    <header class="analytics-drilldown__header">
-      <h2 id="solution-analytics-dialog-title">{{ title() }}</h2>
-      <button
-        appButton="icon"
-        class="analytics-drilldown__close"
-        aria-label="Закрыть"
-        cdkFocusInitial
-        type="button"
-        [disabled]="actionPending()"
-        (click)="close()"
-      >
-        <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-      </button>
-    </header>
+    <app-dialog-header
+      [title]="title()"
+      titleId="solution-analytics-dialog-title"
+      [initialFocus]="true"
+      [closeDisabled]="actionPending()"
+      (closed)="close()"
+    />
     @if (actionError()) {
       <p appAlert="error" role="alert">{{ actionError() }}</p>
     }

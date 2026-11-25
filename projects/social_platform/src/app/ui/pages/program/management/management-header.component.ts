@@ -20,7 +20,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { NavigationEnd, Router, RouterLink, UrlTree } from "@angular/router";
 import { ApiService } from "@corelib";
 import { AppRoutes } from "@api/paths/app-routes";
-import { ButtonDirective, IconComponent } from "@uilib";
+import { ButtonDirective, DialogHeaderComponent, IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { filter, firstValueFrom } from "rxjs";
 import { ProgramGuideOverlayComponent } from "./program-guide-overlay.component";
@@ -85,6 +85,7 @@ class ProgramManagementTourState {
   selector: "app-program-management-header",
   imports: [
     ButtonDirective,
+    DialogHeaderComponent,
     IconComponent,
     ModalComponent,
     ProgramGuideOverlayComponent,

@@ -608,9 +608,8 @@ h4 {
       sans-serif;
     color: var(--black);
 
-    .certificates__heading {
-      flex-wrap: nowrap;
-      margin-bottom: 8px;
+    > app-dialog-header {
+      --ui-dialog-header-margin-bottom: var(--ui-space-sm);
     }
   }
 

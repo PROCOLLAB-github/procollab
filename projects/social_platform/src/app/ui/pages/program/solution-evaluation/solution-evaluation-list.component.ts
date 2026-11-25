@@ -17,7 +17,7 @@ import { GetSolutionRatingsUseCase } from "@api/solution/use-cases/solution-eval
 import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { EvaluationNavigationService } from "@api/program/evaluation-navigation.service";
 import { SolutionApiError, SolutionRatingPage } from "@domain/solution/solution-contract.model";
-import { ButtonDirective, FieldDirective, IconComponent } from "@uilib";
+import { ButtonDirective, DialogHeaderComponent, FieldDirective, IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
 @Component({
@@ -26,6 +26,7 @@ import { ModalComponent } from "@ui/primitives/modal/modal.component";
     RouterLink,
     ReactiveFormsModule,
     ButtonDirective,
+    DialogHeaderComponent,
     FieldDirective,
     IconComponent,
     ModalComponent,
