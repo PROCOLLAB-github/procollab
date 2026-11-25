@@ -263,17 +263,31 @@
           </div>
         </ng-template>
         @if (state.pending()) {
-          <p class="management__list-loading" role="status">Обновляем список…</p>
+          <p
+            class="management__list-loading"
+            role="status"
+            [attr.data-program-guide]="section() === 'projects' ? 'projects-list-loading' : null"
+          >
+            Обновляем список…
+          </p>
         } @else if (!count()) {
           @if (hasListFilters()) {
-            <app-state icon="search" title="Ничего не найдено">
+            <app-state
+              icon="search"
+              title="Ничего не найдено"
+              [attr.data-program-guide]="
+                section() === 'projects' ? 'projects-filtered-empty' : null
+              "
+            >
               <button type="button" appButton="secondary" (click)="resetListFilters()">
                 Сбросить поиск и фильтры
               </button>
             </app-state>
           } @else {
             <app-state
-              [attr.data-program-guide]="section() === 'participants' ? 'participants-empty' : null"
+              [attr.data-program-guide]="
+                section() === 'participants' ? 'participants-empty' : 'projects-empty'
+              "
               [title]="
                 section() === 'participants'
                   ? 'В программе пока нет участников'
