@@ -57,7 +57,7 @@ describe("Case drilldown в существующем Overlay", () => {
 
   it("selected: четыре колонки, реальные поля, null presentation и только один modal", async () => {
     await open();
-    expect(dialog().querySelector("h2")?.textContent).toBe("Кейс: Цифровая трансформация");
+    expect(dialog().querySelector("h2")?.textContent?.trim()).toBe("Кейс: Цифровая трансформация");
     expect(
       [...dialog().querySelectorAll(".analytics-case__metrics dt")].map(el => el.textContent),
     ).toEqual(["Проекты", "Участники", "Сдано"]);
@@ -137,7 +137,7 @@ describe("Case drilldown в существующем Overlay", () => {
       ),
     );
     await open({ scope: "without_case" });
-    expect(dialog().querySelector("h2")?.textContent).toBe("Без выбранного кейса");
+    expect(dialog().querySelector("h2")?.textContent?.trim()).toBe("Без выбранного кейса");
     expect(dialog().textContent).toContain("больше недоступен");
     expect(button("Выгрузить найденные").disabled).toBe(false);
     expect(repo.getCaseProjects.mock.lastCall?.[1].selection).toEqual({ scope: "without_case" });
