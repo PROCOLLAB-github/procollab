@@ -115,8 +115,8 @@
     width: 472px;
     min-width: 0;
 
-    h2 {
-      @include program-management-controls.section-title;
+    > app-dialog-header {
+      --ui-dialog-header-margin-bottom: 12px;
     }
 
     h3,
@@ -135,27 +135,12 @@
     }
   }
 
-  &__help-title,
   &__topic {
     display: flex;
     gap: 12px;
     align-items: center;
     justify-content: space-between;
-  }
 
-  &__help-title {
-    margin-bottom: 12px;
-
-    .ui-button--icon {
-      color: var(--grey-for-text);
-
-      &:focus-visible {
-        outline: none;
-      }
-    }
-  }
-
-  &__topic {
     min-width: 0;
 
     button {

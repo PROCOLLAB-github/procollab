@@ -59,6 +59,11 @@
 .solution-analytics__dialog {
   display: grid;
   gap: 16px;
+
+  > app-dialog-header {
+    --ui-dialog-header-margin-bottom: 0;
+  }
+
   p { margin: 0; }
 }
 

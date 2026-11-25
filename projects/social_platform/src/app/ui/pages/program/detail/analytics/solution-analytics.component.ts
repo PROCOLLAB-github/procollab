@@ -21,7 +21,6 @@ import { AnalyticsActivityChartComponent } from "./activity-chart/activity-chart
 import { Result } from "@domain/shared/result.type";
 import { saveAs } from "file-saver";
 import { SnackbarService } from "@domain/shared/snackbar.service";
-import { A11yModule } from "@angular/cdk/a11y";
 import { EvaluationProgressSummaryComponent } from "./evaluation-progress/evaluation-progress-summary.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import {
@@ -29,6 +28,7 @@ import {
   AvatarComponent,
   ButtonDirective,
   ChoiceDirective,
+  DialogHeaderComponent,
   FieldDirective,
   SectionHeaderComponent,
   TableDirective,
@@ -89,9 +89,9 @@ type AttentionRow = {
     MatProgressBarModule,
     EvaluationProgressSummaryComponent,
     RouterLink,
-    A11yModule,
     ButtonDirective,
     ChoiceDirective,
+    DialogHeaderComponent,
     FieldDirective,
     SectionHeaderComponent,
     TableDirective,

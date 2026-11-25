@@ -35,7 +35,7 @@
     gap: var(--ui-space-md);
     align-items: center;
     justify-content: space-between;
-    margin-bottom: var(--ui-space-lg);
+    margin-bottom: var(--ui-page-header-margin-bottom, var(--ui-space-lg));
 
     &__heading {
       min-width: 0;

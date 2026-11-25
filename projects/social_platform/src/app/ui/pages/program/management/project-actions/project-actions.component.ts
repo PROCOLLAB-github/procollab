@@ -16,7 +16,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Subject, finalize, takeUntil } from "rxjs";
-import { AlertDirective, ButtonDirective, FieldDirective, IconComponent } from "@uilib";
+import { AlertDirective, ButtonDirective, DialogHeaderComponent, FieldDirective } from "@uilib";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import {
@@ -46,8 +46,8 @@ export interface ProjectActionDone extends ManagementProjectActionResult {
     ModalComponent,
     AlertDirective,
     ButtonDirective,
+    DialogHeaderComponent,
     FieldDirective,
-    IconComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

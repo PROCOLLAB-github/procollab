@@ -8,18 +8,13 @@
 >
   @if (request(); as action) {
     <section class="project-action" [attr.aria-busy]="loading() || applying()">
-      <header>
-        <h2 id="project-action-title">{{ title() }}</h2>
-        <button
-          appButton="icon"
-          type="button"
-          aria-label="Закрыть действие"
-          [disabled]="applying()"
-          (click)="close()"
-        >
-          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-        </button>
-      </header>
+      <app-dialog-header
+        [title]="title()"
+        titleId="project-action-title"
+        closeLabel="Закрыть действие"
+        [closeDisabled]="applying()"
+        (closed)="close()"
+      />
       <p class="project-action__name">
         {{ action.projectName || "Выбрано проектов: " + action.ids.length }}
       </p>

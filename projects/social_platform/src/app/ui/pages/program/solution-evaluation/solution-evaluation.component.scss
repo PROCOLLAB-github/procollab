@@ -1,5 +1,7 @@
 @use "../rating/rating-workspace.component";
 @use "../detail/list/rating-card/rating-card.component";
+@use "styles/program-management-controls";
+@use "styles/ui-foundation";
 
 [hidden] {
   display: none !important;
@@ -17,6 +19,31 @@
 
 .scoring-dialog {
   --ui-dialog-header-margin-bottom: 0;
+}
+
+.solution-rating-filters {
+  --ui-dialog-header-margin-bottom: 0;
+
+  &__field {
+    display: grid;
+    gap: var(--ui-space-sm);
+    min-width: 0;
+  }
+
+  .ui-field {
+    @include ui-foundation.control;
+    @include program-management-controls.field-text;
+
+    width: 100%;
+  }
+
+  @media (max-width: 999px) {
+    width: 100%;
+
+    footer > .ui-button {
+      min-height: 44px;
+    }
+  }
 }
 
 .rating-list__rows li.rating-list__empty {

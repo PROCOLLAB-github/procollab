@@ -724,6 +724,13 @@
   }
 }
 
+@media (max-width: 999px) {
+  .experts__dialog--preview .experts__scroll--allocation {
+    max-height: none;
+    overflow: visible;
+  }
+}
+
 @media (max-width: 599px) {
   .experts__allocation-heading {
     grid-template-columns: minmax(0, 1fr) auto;

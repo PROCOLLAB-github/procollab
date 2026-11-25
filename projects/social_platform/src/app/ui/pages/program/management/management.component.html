@@ -161,9 +161,7 @@
               appField
               [formControl]="search"
               maxlength="200"
-              [placeholder]="
-                section() === 'participants' ? 'Поиск: имя или почта' : 'Название проекта'
-              "
+              [placeholder]="section() === 'participants' ? 'Имя или почта' : 'Название проекта'"
             />
           </form>
           @if (section() === "participants") {
@@ -1149,17 +1147,12 @@
       [formGroup]="projectFiltersForm"
       (ngSubmit)="applyProjectFilters()"
     >
-      <header class="management__filter-heading">
-        <h2 id="project-filters-title">Фильтры проектов</h2>
-        <button
-          type="button"
-          appButton="icon"
-          aria-label="Закрыть фильтры"
-          (click)="closeProjectFilters()"
-        >
-          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-        </button>
-      </header>
+      <app-dialog-header
+        title="Фильтры проектов"
+        titleId="project-filters-title"
+        closeLabel="Закрыть фильтры"
+        (closed)="closeProjectFilters()"
+      />
       <label
         >Кейс<select appField aria-label="Кейс" formControlName="case">
           <option value="all">Все кейсы</option>
@@ -1206,17 +1199,12 @@
       [formGroup]="participantFiltersForm"
       (ngSubmit)="applyParticipantFilters()"
     >
-      <header class="management__filter-heading">
-        <h2 id="participant-filters-title">Фильтры участников</h2>
-        <button
-          type="button"
-          appButton="icon"
-          aria-label="Закрыть фильтры"
-          (click)="closeParticipantFilters()"
-        >
-          <i appIcon icon="cross" appSquare="16" aria-hidden="true"></i>
-        </button>
-      </header>
+      <app-dialog-header
+        title="Фильтры участников"
+        titleId="participant-filters-title"
+        closeLabel="Закрыть фильтры"
+        (closed)="closeParticipantFilters()"
+      />
       <div class="management__filters management__participant-filters">
         <label
           >Регионы участников<select

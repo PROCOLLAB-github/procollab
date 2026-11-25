@@ -33,6 +33,13 @@
   max-width: 863px;
   margin: var(--ui-space-lg) auto calc(2 * var(--ui-space-lg));
 
+  > app-page-header {
+    --ui-back-margin-block: 20px 0;
+    --ui-page-header-margin-bottom: 0px;
+
+    display: block;
+  }
+
   > .ui-card {
     @include ui-foundation.card;
   }

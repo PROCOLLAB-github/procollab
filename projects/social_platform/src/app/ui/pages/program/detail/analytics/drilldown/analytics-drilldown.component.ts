@@ -2,6 +2,7 @@
 
 import {
   ButtonDirective,
+  DialogHeaderComponent,
   FieldDirective,
   TableDirective,
   FormLayoutDirective,
@@ -25,7 +26,6 @@ import {
   computed,
   DestroyRef,
   effect,
-  ElementRef,
   inject,
   input,
   signal,
@@ -67,6 +67,7 @@ import {
     StateComponent,
     PaginationComponent,
     ButtonDirective,
+    DialogHeaderComponent,
     FieldDirective,
     TableDirective,
     FormLayoutDirective,
@@ -105,8 +106,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
   @ViewChild(ModalComponent) private modal!: ModalComponent;
   @ViewChild(ModalComponent, { read: ViewContainerRef }) private modalContainer!: ViewContainerRef;
   @ViewChild(CdkTrapFocus) private trap!: CdkTrapFocus;
-  @ViewChild("closeButton") private closeButton!: ElementRef<HTMLButtonElement>;
-  @ViewChild("heading") private heading!: ElementRef<HTMLHeadingElement>;
+  @ViewChild(DialogHeaderComponent) private dialogHeader!: DialogHeaderComponent;
 
   protected readonly statusLabel = (status: ProgramAnalyticsAssignmentStatus): string =>
     assignmentStatusLabels[status];
@@ -192,11 +192,11 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
       const preview = !!this.state.preview();
       if (this.attached() && this.state.open() && preview !== this.focusedPreview) {
         this.focusedPreview = preview;
-        this.heading.nativeElement.focus();
+        this.dialogHeader.focusTitle();
       }
       if (this.attached() && this.state.open() && view !== this.focusedView) {
         this.focusedView = view;
-        this.heading.nativeElement.focus();
+        this.dialogHeader.focusTitle();
       }
     });
     this.destroyRef.onDestroy(() => {
@@ -222,7 +222,7 @@ export class AnalyticsDrilldownComponent implements AfterViewInit {
         // Portal уже в DOM. AutoCapture выключен, чтобы CDK не восстанавливал disconnected focus.
         this.trap.focusTrap.attachAnchors();
         this.trap.enabled = true;
-        this.closeButton.nativeElement.focus();
+        this.dialogHeader.focusClose();
       });
     overlay
       .detachments()
