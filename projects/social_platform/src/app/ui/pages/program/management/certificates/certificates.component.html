@@ -524,8 +524,12 @@
           ><span>Письма отправлены</span>
         </div>
         <div>
-          <strong>{{ journal()?.summary?.failed ?? 0 }}</strong
-          ><span>Ошибки</span>
+          <strong>{{ journal()?.summary?.pdfFailed ?? "—" }}</strong
+          ><span>Ошибки PDF</span>
+        </div>
+        <div>
+          <strong>{{ journal()?.summary?.emailFailed ?? "—" }}</strong
+          ><span>Ошибки писем</span>
         </div>
       </div>
       @if (snapshot()?.batch; as batch) {
@@ -569,7 +573,7 @@
           <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>
         </button>
       </div>
-      <div class="certificates__filters" role="group" aria-label="Статус отправки">
+      <div class="certificates__filters" role="group" aria-label="Фильтр сертификатов">
         <button
           type="button"
           [appButton]="filter() === 'all' ? 'primary' : 'secondary'"
@@ -577,6 +581,14 @@
           (click)="setFilter('all')"
         >
           Все
+        </button>
+        <button
+          type="button"
+          [appButton]="attentionFilter() ? 'primary' : 'secondary'"
+          [attr.aria-pressed]="attentionFilter()"
+          (click)="setFilter('attention')"
+        >
+          Требуют внимания
         </button>
         <button
           type="button"
@@ -594,15 +606,41 @@
         >
           Отправлено
         </button>
-        <button
-          type="button"
-          [appButton]="filter() === 'failed' ? 'primary' : 'secondary'"
-          [attr.aria-pressed]="filter() === 'failed'"
-          (click)="setFilter('failed')"
-        >
-          Ошибки
-        </button>
       </div>
+      @if (attentionFilter()) {
+        <div
+          class="certificates__filters certificates__filters--types"
+          role="group"
+          aria-label="Тип ошибки"
+        >
+          <button
+            type="button"
+            [appButton]="
+              filter() === 'attention' || filter() === 'failed' ? 'primary' : 'secondary'
+            "
+            [attr.aria-pressed]="filter() === 'attention' || filter() === 'failed'"
+            (click)="setFilter('attention')"
+          >
+            Все ошибки
+          </button>
+          <button
+            type="button"
+            [appButton]="filter() === 'pdf_failed' ? 'primary' : 'secondary'"
+            [attr.aria-pressed]="filter() === 'pdf_failed'"
+            (click)="setFilter('pdf_failed')"
+          >
+            Ошибки PDF
+          </button>
+          <button
+            type="button"
+            [appButton]="filter() === 'email_failed' ? 'primary' : 'secondary'"
+            [attr.aria-pressed]="filter() === 'email_failed'"
+            (click)="setFilter('email_failed')"
+          >
+            Ошибки писем
+          </button>
+        </div>
+      }
       @if (journalError()) {
         <p appAlert="error" role="alert">
           {{ journalError() }}
@@ -636,6 +674,8 @@
             </thead>
             <tbody>
               @for (row of journal()?.results; track row.id) {
+                @let pdfState = pdfStatus(row);
+                @let emailState = emailStatus(row);
                 <tr>
                   <td class="certificates__select-cell">
                     <input
@@ -652,41 +692,32 @@
                     ><small>{{ row.email }}</small>
                   </td>
                   <td data-label="Письмо">
-                    <span
-                      [class.certificates__error]="
-                        !row.sentAt && row.status === 'failed' && row.pdfReady && !row.pdfError
-                      "
-                      >{{
-                        row.sentAt
-                          ? "Отправлено"
-                          : row.status === "failed" && (!row.pdfReady || row.pdfError)
-                            ? "Не отправлено"
-                            : labels[row.status]
-                      }}</span
-                    >
-                    @if (row.sentAt || (row.pdfReady && !row.pdfError && row.error)) {
-                      <small>{{
-                        row.sentAt ? (row.sentAt | date: "dd.MM.yyyy, HH:mm" : "+0300") : row.error
-                      }}</small>
+                    <span [class.certificates__error]="emailState === 'failed'">{{
+                      emailState === "pending" && pdfState !== "ready"
+                        ? "Ожидает PDF"
+                        : emailLabels[emailState]
+                    }}</span>
+                    @if (emailState === "sent" && row.sentAt) {
+                      <small>{{ row.sentAt | date: "dd.MM.yyyy, HH:mm" : "+0300" }}</small>
+                    } @else if (emailState === "failed" && row.error) {
+                      <small>{{ row.error }}</small>
                     }
                   </td>
                   <td data-label="Сертификат">
-                    <span
-                      [class.certificates__error]="
-                        row.status === 'failed' && (!row.pdfReady || row.pdfError)
-                      "
-                      >{{
-                        row.status === "failed" && (!row.pdfReady || row.pdfError)
-                          ? row.pdfReady
-                            ? "PDF не обновлен"
-                            : "PDF не создан"
-                          : row.outdated
-                            ? "Шаблон изменен"
-                            : row.pdfReady
-                              ? "PDF готов"
-                              : "Готовится"
-                      }}</span
-                    >
+                    <span [class.certificates__error]="pdfState === 'failed'">{{
+                      pdfState === "failed"
+                        ? row.pdfReady
+                          ? "Ошибка обновления PDF"
+                          : "Ошибка создания PDF"
+                        : pdfState === "ready"
+                          ? "PDF готов"
+                          : "Готовится"
+                    }}</span>
+                    @if (pdfState === "failed" && row.error) {
+                      <small>{{ row.error }}</small>
+                    } @else if (row.outdated && pdfState === "ready") {
+                      <small>Шаблон изменен</small>
+                    }
                   </td>
                   <td data-label="Действие">
                     @if (row.status === "failed") {
@@ -733,18 +764,9 @@
       } @else if (journalLoading()) {
         <p role="status">Загружаем сертификаты…</p>
       } @else if (!journalError()) {
-        <app-state
-          [icon]="search() ? 'search' : 'empty-chat'"
-          [title]="
-            filter() === 'failed'
-              ? 'Ошибок отправки не найдено.'
-              : search()
-                ? 'Никого не нашли. Измените запрос.'
-                : 'Сертификаты появятся после выдачи.'
-          "
-        />
+        <app-state [icon]="search() ? 'search' : 'empty-chat'" [title]="journalEmptyTitle()" />
       }
-      @if ((journal()?.count ?? 0) > 20 || journal()?.summary?.failed) {
+      @if ((journal()?.count ?? 0) > 20 || retryCount()) {
         <footer class="certificates__footer">
           @if ((journal()?.count ?? 0) > 20) {
             <div class="certificates__pages">
@@ -772,11 +794,11 @@
               </button>
             </div>
           }
-          @if (journal()?.summary?.failed; as failed) {
+          @if (retryCount(); as failed) {
             <button
               type="button"
               appButton="secondary"
-              [disabled]="busy()"
+              [disabled]="busy() || journalLoading()"
               (click)="selectFailed()"
             >
               Повторить ошибки ({{ failed }})
@@ -926,7 +948,12 @@
         >
           Отмена
         </button>
-        <button type="button" appButton="primary" [disabled]="busy()" (click)="performSelection()">
+        <button
+          type="button"
+          appButton="primary"
+          [disabled]="busy() || journalLoading() || !selectedCount()"
+          (click)="performSelection()"
+        >
           {{ selectionCopy().button }}
         </button>
       </div>

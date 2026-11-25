@@ -38,7 +38,9 @@ import {
   CertificateAsset,
   CertificateDraft,
   CertificateDelivery,
+  CertificateEmailStatus,
   CertificateFilter,
+  CertificatePdfStatus,
   CertificateJournal,
   CertificateSettings,
   CertificateElement,
@@ -172,6 +174,30 @@ export class ManagementCertificatesComponent {
   readonly journalLoading = signal(false);
   readonly journalError = signal<string | null>(null);
   readonly filter = signal<CertificateFilter>("all");
+  readonly attentionFilter = computed(() =>
+    ["attention", "pdf_failed", "email_failed", "failed"].includes(this.filter()),
+  );
+  readonly retryCount = computed(() =>
+    this.attentionFilter() ? (this.journal()?.count ?? 0) : (this.journal()?.summary.failed ?? 0),
+  );
+  readonly journalEmptyTitle = computed(() => {
+    if (this.search().trim()) return "Никого не нашли. Измените запрос.";
+    switch (this.filter()) {
+      case "attention":
+      case "failed":
+        return "Нет сертификатов, требующих внимания.";
+      case "pdf_failed":
+        return "Ошибок PDF нет.";
+      case "email_failed":
+        return "Ошибок отправки писем нет.";
+      case "sent":
+        return "Отправленных писем пока нет.";
+      case "unsent":
+        return "Писем, ожидающих отправки, нет.";
+      default:
+        return "Сертификаты появятся после выдачи.";
+    }
+  });
   readonly search = signal("");
   readonly offset = signal(0);
   readonly dirty = computed(
@@ -193,13 +219,12 @@ export class ManagementCertificatesComponent {
   );
   readonly steps = ["Шаблон", "Выдача", "Журнал"];
   readonly placeholders = "{name}, {program}, {date}, {number}";
-  readonly labels = {
-    pending: "В очереди",
-    generating: "Создаем PDF",
-    sending: "Отправляем",
+  readonly emailLabels: Record<CertificateEmailStatus, string> = {
+    not_planned: "Не запланировано",
+    pending: "Ожидает отправки",
+    sending: "Отправляется",
     sent: "Отправлено",
-    failed: "Ошибка",
-    ready: "Не отправлено",
+    failed: "Ошибка отправки",
   };
   readonly selectedIds = signal<string[]>([]);
   readonly excludedIds = signal<string[]>([]);
@@ -647,11 +672,25 @@ export class ManagementCertificatesComponent {
     this.offset.set(0);
     this.setStep(3);
   }
-  setFilter(filter: CertificateFilter): void {
+  setFilter(filter: CertificateFilter): Promise<void> {
     this.clearSelection();
     this.filter.set(filter);
     this.offset.set(0);
-    void this.loadJournal();
+    return this.loadJournal();
+  }
+
+  pdfStatus(row: CertificateDelivery): CertificatePdfStatus {
+    if (row.pdfStatus) return row.pdfStatus;
+    if (row.status === "failed" && (!row.pdfReady || row.pdfError)) return "failed";
+    return row.pdfReady ? "ready" : "pending";
+  }
+
+  emailStatus(row: CertificateDelivery): CertificateEmailStatus {
+    if (row.emailStatus) return row.emailStatus;
+    if (row.sentAt || row.status === "sent") return "sent";
+    if (row.status === "ready") return "not_planned";
+    if (row.status === "failed" && this.pdfStatus(row) !== "failed") return "failed";
+    return row.status === "sending" ? "sending" : "pending";
   }
   searchChanged(value: string): void {
     this.clearSelection();
@@ -751,11 +790,21 @@ export class ManagementCertificatesComponent {
       },
     );
   }
-  selectFailed(id?: string): void {
+  async selectFailed(id?: string): Promise<void> {
     this.clearSelection();
     if (id) this.selectedIds.set([id]);
     else {
-      this.setFilter("failed");
+      const filter = this.attentionFilter() ? this.filter() : "attention";
+      const search = this.search();
+      if (this.filter() !== filter) await this.setFilter(filter);
+      if (
+        this.filter() !== filter ||
+        this.search() !== search ||
+        this.journalLoading() ||
+        this.journalError() ||
+        !this.journal()?.count
+      )
+        return;
       this.allMatching.set(true);
     }
     this.selectionAction.set("retry");

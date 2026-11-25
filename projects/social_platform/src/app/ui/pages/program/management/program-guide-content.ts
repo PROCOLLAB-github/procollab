@@ -465,7 +465,7 @@ export const PROGRAM_GUIDES: readonly ProgramGuide[] = [
       {
         section: "certificates",
         title: "Результаты выдачи",
-        text: "Посмотрите, сколько PDF готово, сколько писем отправлено и где возникли ошибки. Найдите получателя по имени или почте.",
+        text: "В «Требуют внимания» видны ошибки создания PDF и отправки писем. Получателя можно найти по имени или почте.",
         target: anchor("certificate-journal"),
       },
     ],
