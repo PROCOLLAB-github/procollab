@@ -531,7 +531,7 @@ describe("Attention views: real overlay", () => {
     ).toEqual(["Отмена", "Отправить"]);
     expect(document.querySelectorAll('[role="dialog"]')).toHaveLength(1);
     expect(document.activeElement).toBe(dialog().querySelector("h2"));
-    expect(dialog().querySelector("h2")?.textContent).toBe("Отправить напоминание");
+    expect(dialog().querySelector("h2")?.textContent?.trim()).toBe("Отправить напоминание");
     expect(actions.send).not.toHaveBeenCalled();
     button("Отмена").click();
     await fixture.whenStable();
