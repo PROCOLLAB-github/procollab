@@ -61,6 +61,15 @@ export class ProgramManagementUseCase {
   exportSelectedParticipants(id: number, ids: number[]) {
     return this.repository.exportSelectedParticipants(id, ids);
   }
+  latestParticipantExport(id: number) {
+    return this.repository.latestParticipantExport(id);
+  }
+  participantExportStatus(id: number, jobId: string) {
+    return this.repository.participantExportStatus(id, jobId);
+  }
+  downloadParticipantExport(id: number, jobId: string) {
+    return this.repository.downloadParticipantExport(id, jobId);
+  }
   previewParticipantRemoval(id: number, ids: number[]) {
     return this.repository.previewParticipantRemoval(id, ids);
   }

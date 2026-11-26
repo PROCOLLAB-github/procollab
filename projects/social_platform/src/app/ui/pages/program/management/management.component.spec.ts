@@ -6,6 +6,7 @@ import { ActivatedRoute, Router, provideRouter } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Observable, of, Subject, throwError } from "rxjs";
+import { saveAs } from "file-saver";
 import { ApiService, FileService } from "@corelib";
 import {
   ManagementContext,
@@ -16,6 +17,7 @@ import {
   ManagementProjectsPage,
   ProgramManagement,
   ParticipantRemovalPreview,
+  ParticipantExportJob,
   ManagementTeam,
   ManagementEvaluation,
 } from "@domain/program/program-management.model";
@@ -25,6 +27,8 @@ import { ProgramProjectAssignmentSelection } from "@api/program/facades/detail/p
 import { ProgramManagementUseCase } from "@api/program/use-cases/program-management.use-case";
 import { EvaluationUseCase } from "@api/program/use-cases/evaluation.use-case";
 import { ExpertWorkspace } from "@domain/program/evaluation-workspace.model";
+
+vi.mock("file-saver", () => ({ saveAs: vi.fn() }));
 
 @Component({ template: "<h1>Профиль участника</h1>" })
 class ProfileNavigationTarget {}
@@ -306,7 +310,14 @@ describe("Сохранение настроек организатора", () =>
 });
 
 describe("Списки управления программой в DOM", () => {
-  async function setup(section = "participants", query = "") {
+  const queuedExport: ParticipantExportJob = { id: "participant-export", status: "queued" };
+  const readyExport: ParticipantExportJob = { ...queuedExport, status: "ready" };
+
+  async function setup(
+    section = "participants",
+    query = "",
+    lastExport: ParticipantExportJob | null = null,
+  ) {
     const uploaded = new Subject<{ url: string }>();
     const uploadFile = vi.fn<(file: File) => Observable<{ url: string }>>(() => uploaded);
     const project: ManagementProject = {
@@ -371,6 +382,11 @@ describe("Списки управления программой в DOM", () => 
         ),
         applyProjectAction: vi.fn(() => of({ changedCount: 1, alreadySubmittedCount: 0 })),
         exportProjects: vi.fn<() => Observable<Blob>>(() => new Subject<Blob>()),
+        exportParticipants: vi.fn(() => of(queuedExport)),
+        exportSelectedParticipants: vi.fn(() => of(queuedExport)),
+        latestParticipantExport: vi.fn(() => of({ job: lastExport })),
+        participantExportStatus: vi.fn(() => of(readyExport)),
+        downloadParticipantExport: vi.fn(() => of(new Blob(["xlsx"]))),
         selection: vi.fn(() => of({ ids: Array.from({ length: 41 }, (_, i) => i + 1) })),
         previewParticipantRemoval: vi.fn<() => Observable<ParticipantRemovalPreview>>(() =>
           of({
@@ -428,6 +444,165 @@ describe("Списки управления программой в DOM", () => 
     const element = () => harness.routeNativeElement!;
     return { harness, component, state, project, element, uploadFile, uploaded };
   }
+
+  it("ставит выгрузку по фильтрам в очередь и скачивает готовый Excel один раз", async () => {
+    const { harness, component, state, element } = await setup(
+      "participants",
+      "?search=Анна&region_scope=selected&region=Москва",
+    );
+    const notify = vi.spyOn(TestBed.inject(SnackbarService), "info");
+    vi.mocked(saveAs).mockClear();
+    const pendingStatus = new Subject<ParticipantExportJob>();
+    state.api.participantExportStatus.mockReturnValueOnce(pendingStatus);
+
+    vi.useFakeTimers({ toFake: ["setInterval", "clearInterval"] });
+    try {
+      const exportButton = element().querySelector<HTMLButtonElement>(
+        'button[data-program-guide="participants-export"]',
+      )!;
+      exportButton.click();
+      harness.detectChanges();
+      expect(state.api.exportParticipants).toHaveBeenCalledWith(
+        1,
+        expect.objectContaining({ search: "Анна", regionScope: "selected", region: "Москва" }),
+      );
+      expect(notify).toHaveBeenCalledWith("Выгрузка поставлена в очередь");
+      expect(exportButton.disabled).toBe(true);
+      expect(element().textContent).toContain("Готовим Excel с участниками");
+      component.exportParticipants();
+      expect(state.api.exportParticipants).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(9000);
+      expect(state.api.participantExportStatus).toHaveBeenCalledExactlyOnceWith(1, queuedExport.id);
+      expect(saveAs).not.toHaveBeenCalled();
+      pendingStatus.next(readyExport);
+      pendingStatus.complete();
+      harness.detectChanges();
+      expect(state.api.downloadParticipantExport).toHaveBeenCalledExactlyOnceWith(
+        1,
+        readyExport.id,
+      );
+      expect(saveAs).toHaveBeenCalledExactlyOnceWith(
+        expect.any(Blob),
+        "program-1-participants.xlsx",
+      );
+      expect(element().textContent).toContain("Excel с участниками готов.");
+      vi.advanceTimersByTime(9000);
+      expect(state.api.participantExportStatus).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("останавливает проверку статуса при выходе с вкладки участников", async () => {
+    const { harness, component, state } = await setup();
+    const pendingStatus = new Subject<ParticipantExportJob>();
+    state.api.participantExportStatus.mockReturnValueOnce(pendingStatus);
+
+    vi.useFakeTimers({ toFake: ["setInterval", "clearInterval"] });
+    try {
+      component.exportSelectedParticipants();
+      expect(state.api.exportSelectedParticipants).not.toHaveBeenCalled();
+      component.selectedRows.set(new Set([1, 7]));
+      component.exportSelectedParticipants();
+      expect(state.api.exportSelectedParticipants).toHaveBeenCalledExactlyOnceWith(1, [1, 7]);
+      vi.advanceTimersByTime(3000);
+      expect(pendingStatus.observed).toBe(true);
+
+      await harness.navigateByUrl("/office/program/1/management/projects");
+      expect(pendingStatus.observed).toBe(false);
+      pendingStatus.next(readyExport);
+      vi.advanceTimersByTime(9000);
+      expect(state.api.downloadParticipantExport).not.toHaveBeenCalled();
+      expect(state.api.participantExportStatus).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("при повторном открытии предлагает скачать готовый Excel после клика", async () => {
+    vi.mocked(saveAs).mockClear();
+    const { state, element } = await setup("participants", "", readyExport);
+    expect(state.api.latestParticipantExport).toHaveBeenCalledExactlyOnceWith(1);
+    expect(state.api.downloadParticipantExport).not.toHaveBeenCalled();
+    expect(saveAs).not.toHaveBeenCalled();
+    const download = [...element().querySelectorAll("button")].find(
+      button => button.textContent?.trim() === "Скачать Excel",
+    )!;
+    download.click();
+    expect(state.api.downloadParticipantExport).toHaveBeenCalledExactlyOnceWith(1, readyExport.id);
+    expect(saveAs).toHaveBeenCalledExactlyOnceWith(expect.any(Blob), "program-1-participants.xlsx");
+  });
+
+  it("отменяет следующее обновление статуса при уничтожении компонента", async () => {
+    const { harness, component, state } = await setup();
+    vi.useFakeTimers({ toFake: ["setInterval", "clearInterval"] });
+    try {
+      component.exportParticipants();
+      harness.fixture.destroy();
+      vi.advanceTimersByTime(9000);
+      expect(state.api.participantExportStatus).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("показывает ошибку подготовки и снова разрешает выгрузку", async () => {
+    const { harness, component, state, element } = await setup();
+    const detail = "Не удалось подготовить Excel. Повторите попытку.";
+    state.api.latestParticipantExport.mockReturnValueOnce(of({ job: queuedExport }));
+    state.api.participantExportStatus.mockReturnValueOnce(
+      of({ ...queuedExport, status: "failed", detail }),
+    );
+
+    vi.useFakeTimers({ toFake: ["setInterval", "clearInterval"] });
+    try {
+      component.refreshParticipantExport();
+      vi.advanceTimersByTime(3000);
+      harness.detectChanges();
+      expect(element().textContent).toContain(detail);
+      expect(component.participantExportBusy()).toBe(false);
+      expect(state.api.downloadParticipantExport).not.toHaveBeenCalled();
+      vi.advanceTimersByTime(3000);
+      expect(state.api.participantExportStatus).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("при конфликте показывает актуальную задачу без автоскачивания", async () => {
+    const { harness, component, state, element } = await setup();
+    const notify = vi.spyOn(TestBed.inject(SnackbarService), "info");
+    state.api.exportParticipants.mockReturnValueOnce(
+      throwError(
+        () => new HttpErrorResponse({ status: 409, error: { code: "export_in_progress" } }),
+      ),
+    );
+    state.api.latestParticipantExport.mockReturnValueOnce(of({ job: readyExport }));
+    component.exportParticipants();
+    harness.detectChanges();
+    expect(notify).toHaveBeenCalledWith("Уже запущена выгрузка. Дождитесь ее завершения.");
+    expect(state.api.latestParticipantExport).toHaveBeenCalledTimes(2);
+    expect(element().textContent).toContain("Excel с участниками готов.");
+    expect(state.api.downloadParticipantExport).not.toHaveBeenCalled();
+  });
+
+  it("при изменившемся составе сохраняет выбор и показывает ошибку вместо статуса очереди", async () => {
+    const { component, state } = await setup();
+    const notify = vi.spyOn(TestBed.inject(SnackbarService), "error");
+    const detail = "Состав участников изменился. Обновите выбор.";
+    state.api.exportSelectedParticipants.mockReturnValueOnce(
+      throwError(
+        () => new HttpErrorResponse({ status: 409, error: { code: "selection_changed", detail } }),
+      ),
+    );
+    component.selectedRows.set(new Set([1, 7]));
+    component.exportSelectedParticipants();
+    expect(notify).toHaveBeenCalledWith(detail);
+    expect(component.selectedRowIds()).toEqual([1, 7]);
+    expect(state.api.latestParticipantExport).toHaveBeenCalledTimes(1);
+    expect(component.participantExportBusy()).toBe(false);
+  });
 
   it("показывает ответы участника и закрывает просмотр общим крестиком", async () => {
     const { component, harness } = await setup();

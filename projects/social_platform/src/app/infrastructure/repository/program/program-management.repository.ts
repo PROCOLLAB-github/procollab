@@ -66,6 +66,15 @@ export class ProgramManagementRepository implements ProgramManagementRepositoryP
   exportSelectedParticipants(id: number, ids: number[]) {
     return this.adapter.exportSelectedParticipants(id, ids);
   }
+  latestParticipantExport(id: number) {
+    return this.adapter.latestParticipantExport(id);
+  }
+  participantExportStatus(id: number, jobId: string) {
+    return this.adapter.participantExportStatus(id, jobId);
+  }
+  downloadParticipantExport(id: number, jobId: string) {
+    return this.adapter.downloadParticipantExport(id, jobId);
+  }
   previewParticipantRemoval(id: number, ids: number[]) {
     return this.adapter.previewParticipantRemoval(id, ids);
   }

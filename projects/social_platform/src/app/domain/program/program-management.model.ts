@@ -104,6 +104,11 @@ export interface ManagementParticipantsPage extends ManagementPage<ManagementPar
   totalCount?: number;
   regionOptions?: string[];
 }
+export interface ParticipantExportJob {
+  id: string;
+  status: "queued" | "ready" | "failed" | "expired";
+  detail?: string;
+}
 export interface ManagementTeam {
   projectId: number;
   programLinkId: number;

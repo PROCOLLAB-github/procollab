@@ -512,6 +512,21 @@
   @include program-management-controls.status-notice;
 }
 
+.management__participant-export-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+
+  &:has(p:not(:empty)) {
+    margin-top: 12px;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
 // Row actions and bulk selection.
 
 .management__sort-trigger[aria-expanded="true"] .management__sort-chevron {
