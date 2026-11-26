@@ -117,7 +117,7 @@ describe("Контракт HTTP панели организатора", () => {
     expect(request.request.params.get("evaluation")).toBe("not_evaluated");
     request.flush({ count: 0, results: [], case_options: ["Экология"], is_competitive: true });
   });
-  it("выгрузка участников передаёт те же фильтры региона и периода, что и список", () => {
+  it("выгрузка участников передает в POST те же параметры, что и список", () => {
     const query = {
       search: "Анна",
       offset: 25,
@@ -134,14 +134,34 @@ describe("Контракт HTTP панели организатора", () => {
     adapter.participants(4, query).subscribe(page => expect(page.totalCount).toBe(100));
     const list = http.expectOne(r => r.url.endsWith("/participants/"));
     list.flush({ count: 30, total_count: 100, region_options: ["Москва"], results: [] });
-    adapter.exportParticipants(4, query).subscribe();
-    const file = http.expectOne(r => r.url.endsWith("/participants/export/"));
-    expect(file.request.params.toString()).toBe(list.request.params.toString());
-    expect(file.request.params.get("activity_from")).toBe("2026-10-01");
-    expect(file.request.params.get("region")).toBe("Москва");
-    expect(file.request.params.get("order")).toBe("activity_desc");
-    expect(file.request.responseType).toBe("blob");
-    file.flush(new Blob(["xlsx"]));
+    const queued = vi.fn();
+    const job = { id: "e45a2ad4-3a33-4a1f-b195-7d4e7252504f", status: "queued" };
+    adapter.exportParticipants(4, query).subscribe(queued);
+    const request = http.expectOne(
+      "https://local.test/programs/4/management/participants/export-jobs/",
+    );
+    expect(request.request.method).toBe("POST");
+    expect(request.request.responseType).toBe("json");
+    expect(request.request.body).toEqual({
+      query: {
+        search: "Анна",
+        offset: "25",
+        limit: "25",
+        region_scope: "selected",
+        region: "Москва",
+        activity: "period",
+        order: "activity_desc",
+        activity_from: "2026-10-01",
+        activity_to: "2026-10-19",
+      },
+    });
+    expect(request.request.body.query).toEqual(
+      Object.fromEntries(
+        list.request.params.keys().map(key => [key, list.request.params.get(key)]),
+      ),
+    );
+    request.flush(job, { status: 202, statusText: "Accepted" });
+    expect(queued).toHaveBeenCalledWith(job);
   });
   it("одни параметры наличия активности и сортировки передаются списку и выбору всех", () => {
     const query = {
@@ -174,9 +194,9 @@ describe("Контракт HTTP панели организатора", () => {
     expect(selection.request.params.get("order")).toBe("activity_desc");
     selection.flush({ ids: [] });
     adapter.exportParticipants(4, query).subscribe();
-    const file = http.expectOne(r => r.url.endsWith("/participants/export/"));
-    expect(file.request.params.get("order")).toBe("activity_desc");
-    file.flush(new Blob(["xlsx"]));
+    const request = http.expectOne(r => r.url.endsWith("/participants/export-jobs/"));
+    expect(request.request.body.query.order).toBe("activity_desc");
+    request.flush({ id: "e45a2ad4-3a33-4a1f-b195-7d4e7252504f", status: "queued" });
   });
 
   it("выгрузка проектов передает ровно те же фильтры, что список", () => {
@@ -234,13 +254,41 @@ describe("Контракт HTTP панели организатора", () => {
     expect(request.request.params.get("case_name")).toBe("Экология");
     request.flush({ ids: [11], projects: [{ id: 11, project_id: 91 }] });
   });
-  it("выбранная выгрузка использует POST Blob, удаление передает подписанное подтверждение без retry", () => {
+  it("выгрузка выбранных участников передает только ID записей", () => {
     adapter.exportSelectedParticipants(4, [1, 21]).subscribe();
-    const file = http.expectOne(r => r.url.endsWith("/participants/export/"));
-    expect(file.request.method).toBe("POST");
-    expect(file.request.body).toEqual({ ids: [1, 21] });
-    expect(file.request.responseType).toBe("blob");
-    file.flush(new Blob(["xlsx"]));
+    const request = http.expectOne(r => r.url.endsWith("/participants/export-jobs/"));
+    expect(request.request.method).toBe("POST");
+    expect(request.request.body).toEqual({ ids: [1, 21] });
+    expect(request.request.responseType).toBe("json");
+    request.flush(
+      { id: "e45a2ad4-3a33-4a1f-b195-7d4e7252504f", status: "queued" },
+      { status: 202, statusText: "Accepted" },
+    );
+  });
+  it("получает последнюю выгрузку, статус по ID и готовый Excel", () => {
+    const root = "https://local.test/programs/4/management/participants/export-jobs/";
+    const id = "e45a2ad4-3a33-4a1f-b195-7d4e7252504f";
+    const job = { id, status: "ready" };
+    const latest = vi.fn();
+    adapter.latestParticipantExport(4).subscribe(latest);
+    const lookup = http.expectOne({ method: "GET", url: root });
+    lookup.flush({ job: null });
+    expect(latest).toHaveBeenCalledWith({ job: null });
+
+    const status = vi.fn();
+    adapter.participantExportStatus(4, id).subscribe(status);
+    http.expectOne({ method: "GET", url: `${root}${id}/` }).flush(job);
+    expect(status).toHaveBeenCalledWith(job);
+
+    const download = vi.fn();
+    const file = new Blob(["xlsx"]);
+    adapter.downloadParticipantExport(4, id).subscribe(download);
+    const request = http.expectOne({ method: "GET", url: `${root}${id}/download/` });
+    expect(request.request.responseType).toBe("blob");
+    request.flush(file);
+    expect(download).toHaveBeenCalledWith(file);
+  });
+  it("удаление передает подписанное подтверждение без retry", () => {
     adapter
       .previewParticipantRemoval(4, [1, 21])
       .subscribe(result => expect(result.previewToken).toBe("proof"));

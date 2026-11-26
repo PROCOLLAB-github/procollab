@@ -16,6 +16,7 @@ import {
   ProgramManagement,
   ManagementSelection,
   ParticipantRemovalPreview,
+  ParticipantExportJob,
   ManagementProjectActionWrite,
   ManagementProjectActionPreview,
   ManagementProjectActionResult,
@@ -52,13 +53,27 @@ export abstract class ProgramManagementRepositoryPort {
     query: ManagementQuery,
   ): Observable<ManagementParticipantsPage>;
   abstract exportProjects(programId: number, query: ManagementQuery): Observable<Blob>;
-  abstract exportParticipants(programId: number, query: ManagementQuery): Observable<Blob>;
+  abstract exportParticipants(
+    programId: number,
+    query: ManagementQuery,
+  ): Observable<ParticipantExportJob>;
   abstract selection(
     programId: number,
     kind: "participants" | "projects",
     query: ManagementQuery,
   ): Observable<ManagementSelection>;
-  abstract exportSelectedParticipants(programId: number, ids: number[]): Observable<Blob>;
+  abstract exportSelectedParticipants(
+    programId: number,
+    ids: number[],
+  ): Observable<ParticipantExportJob>;
+  abstract latestParticipantExport(
+    programId: number,
+  ): Observable<{ job: ParticipantExportJob | null }>;
+  abstract participantExportStatus(
+    programId: number,
+    jobId: string,
+  ): Observable<ParticipantExportJob>;
+  abstract downloadParticipantExport(programId: number, jobId: string): Observable<Blob>;
   abstract previewParticipantRemoval(
     programId: number,
     ids: number[],

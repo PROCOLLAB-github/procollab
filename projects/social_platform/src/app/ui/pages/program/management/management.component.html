@@ -118,7 +118,7 @@
                 [appButtonLoading]="exportingParticipants()"
                 [disabled]="
                   state.pending() ||
-                  exportingParticipants() ||
+                  participantExportBusy() ||
                   !!participantFilterError() ||
                   !count()
                 "
@@ -143,6 +143,26 @@
             </button>
           }
         </header>
+        @if (section() === "participants") {
+          <div class="management__participant-export-status">
+            <p class="management__muted" role="status">{{ participantExportMessage() }}</p>
+            @if (participantExportStatusError()) {
+              <button appButton="secondary" type="button" (click)="refreshParticipantExport()">
+                Обновить статус
+              </button>
+            } @else if (participantExportJob()?.status === "ready") {
+              <button
+                appButton="secondary"
+                type="button"
+                [appButtonLoading]="downloadingParticipantExport()"
+                [disabled]="downloadingParticipantExport() || exportingParticipants()"
+                (click)="downloadParticipantExport()"
+              >
+                Скачать Excel
+              </button>
+            }
+          </div>
+        }
         <div
           class="management__toolbar"
           [class.management__toolbar--participants]="section() === 'participants'"
@@ -573,7 +593,7 @@
                 aria-label="Выгрузить выбранных участников в Excel"
                 title="Выгрузить выбранных участников в Excel"
                 [appButtonLoading]="exportingParticipants()"
-                [disabled]="exportingParticipants() || removingParticipants()"
+                [disabled]="participantExportBusy() || removingParticipants()"
                 (click)="exportSelectedParticipants()"
               >
                 <i appIcon icon="download" appSquare="18" aria-hidden="true"></i>

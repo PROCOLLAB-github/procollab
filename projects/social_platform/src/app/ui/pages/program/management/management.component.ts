@@ -24,13 +24,22 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { userErrorMessage } from "@core/lib/models/error/user-error-message";
 import { authLoginUrl } from "@core/lib/models/auth/auth-return-url";
 import {
+  EMPTY,
+  Observable,
+  Subject,
+  catchError,
   debounceTime,
   distinctUntilChanged,
+  expand,
   filter,
   finalize,
+  map,
   of,
   startWith,
   switchMap,
+  takeUntil,
+  tap,
+  timer,
 } from "rxjs";
 import { saveAs } from "file-saver";
 import { A11yModule } from "@angular/cdk/a11y";
@@ -61,6 +70,7 @@ import {
   SettingsSection,
   ManagementSelectionProject,
   ParticipantRemovalPreview,
+  ParticipantExportJob,
   ManagementProjectAction,
 } from "@domain/program/program-management.model";
 import { ProgramManagementHttpAdapter } from "@infrastructure/adapters/program/program-management-http.adapter";
@@ -110,6 +120,7 @@ import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 
 const PROGRAM_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const PROGRAM_IMAGE_EXTENSIONS = /\.(?:jpe?g|png|webp|gif)$/i;
+const PARTICIPANT_EXPORT_POLL_INTERVAL = 3000;
 
 const IMAGE_FRAME_KEYS = {
   imageAddress: "logo",
@@ -246,6 +257,35 @@ export class ProgramManagementComponent implements OnInit {
   ];
   readonly participantFilterError = signal<string | null>(null);
   readonly exportingParticipants = signal(false);
+  readonly downloadingParticipantExport = signal(false);
+  private readonly loadingParticipantExport = signal(false);
+  readonly participantExportJob = signal<ParticipantExportJob | null>(null);
+  readonly participantExportStatusError = signal(false);
+  readonly participantExportBusy = computed(
+    () =>
+      this.exportingParticipants() ||
+      this.loadingParticipantExport() ||
+      this.downloadingParticipantExport() ||
+      this.participantExportJob()?.status === "queued",
+  );
+  readonly participantExportMessage = computed(() => {
+    if (this.participantExportStatusError()) return "Не удалось обновить статус выгрузки.";
+    const job = this.participantExportJob();
+    switch (job?.status) {
+      case "queued":
+        return "Готовим Excel с участниками…";
+      case "ready":
+        return "Excel с участниками готов.";
+      case "failed":
+        return userErrorMessage(job.detail, "Не удалось подготовить Excel. Повторите выгрузку.");
+      case "expired":
+        return "Срок хранения Excel истек. Повторите выгрузку.";
+      default:
+        return "";
+    }
+  });
+  private participantExportProgramId: number | null = null;
+  private readonly participantExportScopeChanged = new Subject<void>();
   readonly participantAnswers = signal<ManagementParticipant | null>(null);
   readonly selectedRows = signal(new Set<number>());
   readonly selectedRowIds = computed(() => [...this.selectedRows()]);
@@ -620,6 +660,9 @@ export class ProgramManagementComponent implements OnInit {
         this.formError.set(null);
         const offset = Number(q.get("offset") ?? 0),
           id = Number(this.route.parent?.snapshot.paramMap.get("programId"));
+        this.setParticipantExportScope(
+          section === "participants" && Number.isSafeInteger(id) && id > 0 ? id : null,
+        );
         if (!Number.isSafeInteger(id) || id < 1) return;
         const routeSearch = q.get("search") ?? "";
         const previous = this.state.context;
@@ -867,20 +910,135 @@ export class ProgramManagementComponent implements OnInit {
   }
   exportParticipants(): void {
     const ctx = this.state.context;
-    if (!ctx || this.exportingParticipants() || this.participantFilterError()) return;
+    if (
+      !ctx ||
+      ctx.programId !== this.participantExportProgramId ||
+      this.participantExportBusy() ||
+      this.participantFilterError()
+    )
+      return;
+    this.createParticipantExport(
+      ctx.programId,
+      this.state.api.exportParticipants(ctx.programId, {
+        ...ctx.query,
+        search: this.search.value.trim(),
+      }),
+    );
+  }
+  private setParticipantExportScope(programId: number | null): void {
+    if (this.participantExportProgramId === programId) return;
+    this.participantExportScopeChanged.next();
+    this.participantExportProgramId = programId;
+    this.participantExportJob.set(null);
+    this.participantExportStatusError.set(false);
+    this.refreshParticipantExport();
+  }
+  refreshParticipantExport(): void {
+    const programId = this.participantExportProgramId;
+    if (
+      programId === null ||
+      this.loadingParticipantExport() ||
+      this.exportingParticipants() ||
+      (this.participantExportJob()?.status === "queued" && !this.participantExportStatusError())
+    )
+      return;
+    this.loadingParticipantExport.set(true);
+    this.participantExportStatusError.set(false);
+    this.trackParticipantExport(
+      programId,
+      this.latestParticipantExport(programId).pipe(
+        finalize(() => this.loadingParticipantExport.set(false)),
+      ),
+    );
+  }
+  private latestParticipantExport(programId: number): Observable<ParticipantExportJob | null> {
+    return this.state.api.latestParticipantExport(programId).pipe(map(response => response.job));
+  }
+  private createParticipantExport(
+    programId: number,
+    request: Observable<ParticipantExportJob>,
+  ): void {
     this.exportingParticipants.set(true);
-    this.state.api
-      .exportParticipants(ctx.programId, { ...ctx.query, search: this.search.value.trim() })
+    this.participantExportStatusError.set(false);
+    let requestedJobId: string | null = null;
+    const start = request.pipe(
+      tap(job => {
+        requestedJobId = job.id;
+        if (job.status === "queued") this.snackbar.info("Выгрузка поставлена в очередь");
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 409 && error.error?.code === "export_in_progress") {
+          this.snackbar.info("Уже запущена выгрузка. Дождитесь ее завершения.");
+          return this.latestParticipantExport(programId);
+        }
+        this.snackbar.error(
+          userErrorMessage(
+            error.error?.detail,
+            "Не удалось выгрузить участников. Повторите попытку.",
+          ),
+        );
+        return EMPTY;
+      }),
+      finalize(() => this.exportingParticipants.set(false)),
+    );
+    this.trackParticipantExport(programId, start, job => {
+      if (job.status === "ready" && job.id === requestedJobId) {
+        this.snackbar.success("Excel с участниками готов.");
+        this.downloadParticipantExport();
+      }
+    });
+  }
+  private trackParticipantExport(
+    programId: number,
+    start: Observable<ParticipantExportJob | null>,
+    onJob?: (job: ParticipantExportJob) => void,
+  ): void {
+    start
       .pipe(
+        expand(job =>
+          job?.status === "queued"
+            ? timer(PARTICIPANT_EXPORT_POLL_INTERVAL).pipe(
+                switchMap(() => this.state.api.participantExportStatus(programId, job.id)),
+              )
+            : EMPTY,
+        ),
+        takeUntil(this.participantExportScopeChanged),
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.exportingParticipants.set(false)),
       )
       .subscribe({
-        next: file => {
-          saveAs(file, `program-${ctx.programId}-participants.xlsx`);
-          this.snackbar.success("Excel с участниками по текущим фильтрам готов.");
+        next: job => {
+          this.participantExportJob.set(job);
+          if (job) onJob?.(job);
         },
-        error: () => this.snackbar.error("Не удалось выгрузить участников. Повторите попытку."),
+        error: () => this.participantExportStatusError.set(true),
+      });
+  }
+  downloadParticipantExport(): void {
+    const programId = this.participantExportProgramId;
+    const job = this.participantExportJob();
+    if (programId === null || job?.status !== "ready" || this.downloadingParticipantExport())
+      return;
+    this.downloadingParticipantExport.set(true);
+    this.state.api
+      .downloadParticipantExport(programId, job.id)
+      .pipe(
+        takeUntil(this.participantExportScopeChanged),
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.downloadingParticipantExport.set(false)),
+      )
+      .subscribe({
+        next: file => saveAs(file, `program-${programId}-participants.xlsx`),
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 410) {
+            this.participantExportJob.set({ ...job, status: "expired" });
+            return;
+          }
+          if (error.status === 404 || error.status === 409) {
+            this.participantExportJob.set(null);
+            this.refreshParticipantExport();
+          }
+          this.snackbar.error("Не удалось скачать Excel. Повторите попытку.");
+        },
       });
   }
   clearRows(): void {
@@ -966,22 +1124,19 @@ export class ProgramManagementComponent implements OnInit {
   }
   exportSelectedParticipants(): void {
     const ctx = this.state.context;
-    if (!ctx || !this.selectedRows().size || this.exportingParticipants()) return;
-    this.exportingParticipants.set(true);
+    const ids = this.selectedRowIds();
+    if (
+      !ctx ||
+      ctx.programId !== this.participantExportProgramId ||
+      !ids.length ||
+      this.participantExportBusy()
+    )
+      return;
     this.tableError.set(null);
-    this.state.api
-      .exportSelectedParticipants(ctx.programId, [...this.selectedRows()])
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.exportingParticipants.set(false)),
-      )
-      .subscribe({
-        next: file => saveAs(file, `program-${ctx.programId}-participants.xlsx`),
-        error: () =>
-          this.tableError.set(
-            "Не удалось выгрузить выбранных участников. Обновите список и повторите попытку.",
-          ),
-      });
+    this.createParticipantExport(
+      ctx.programId,
+      this.state.api.exportSelectedParticipants(ctx.programId, ids),
+    );
   }
   previewParticipantRemoval(ids: number[]): void {
     const ctx = this.state.context;

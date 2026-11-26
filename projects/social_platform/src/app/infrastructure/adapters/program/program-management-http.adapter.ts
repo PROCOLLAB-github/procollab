@@ -28,6 +28,7 @@ import {
   ManagementProjectActionPreview,
   ManagementProjectActionResult,
   ParticipantRemovalPreview,
+  ParticipantExportJob,
 } from "@domain/program/program-management.model";
 
 @Injectable()
@@ -89,7 +90,9 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
     return this.api.getFile(`${this.root(id)}/projects/export/`, this.projectParams(q));
   }
   exportParticipants(id: number, q: ManagementQuery) {
-    return this.api.getFile(`${this.root(id)}/participants/export/`, this.participantParams(q));
+    const params = this.participantParams(q);
+    const query = Object.fromEntries(params.keys().map(key => [key, params.get(key)]));
+    return this.api.post<ParticipantExportJob>(this.participantExportJobsUrl(id), { query });
   }
   selection(id: number, kind: "participants" | "projects", q: ManagementQuery) {
     return this.api.get<ManagementSelection>(
@@ -98,7 +101,19 @@ export class ProgramManagementHttpAdapter implements ProgramManagementRepository
     );
   }
   exportSelectedParticipants(id: number, ids: number[]) {
-    return this.api.postFile(`${this.root(id)}/participants/export/`, { ids });
+    return this.api.post<ParticipantExportJob>(this.participantExportJobsUrl(id), { ids });
+  }
+  latestParticipantExport(id: number) {
+    return this.api.get<{ job: ParticipantExportJob | null }>(this.participantExportJobsUrl(id));
+  }
+  participantExportStatus(id: number, jobId: string) {
+    return this.api.get<ParticipantExportJob>(`${this.participantExportJobsUrl(id)}${jobId}/`);
+  }
+  downloadParticipantExport(id: number, jobId: string) {
+    return this.api.getFile(`${this.participantExportJobsUrl(id)}${jobId}/download/`);
+  }
+  private participantExportJobsUrl(id: number): string {
+    return `${this.root(id)}/participants/export-jobs/`;
   }
   previewParticipantRemoval(id: number, ids: number[]) {
     return this.api.post<ParticipantRemovalPreview>(
