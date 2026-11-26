@@ -883,18 +883,6 @@ export class ProgramManagementComponent implements OnInit {
         error: () => this.snackbar.error("Не удалось выгрузить участников. Повторите попытку."),
       });
   }
-  changeCase(value: string): void {
-    void this.changeQuery({
-      case_scope: value === "all" || value === "without_case" ? value : "selected",
-      case_name: value.startsWith("case:") ? value.slice(5) : null,
-      offset: 0,
-    });
-  }
-  select(project: ManagementProject): void {
-    if (this.state.pending()) return;
-    if (this.state.selected()?.id === project.id) this.state.clearSelection();
-    else this.state.select(project);
-  }
   clearRows(): void {
     ++this.selectionSequence;
     this.selectingRows.set(false);
@@ -1057,9 +1045,6 @@ export class ProgramManagementComponent implements OnInit {
     if (error.status >= 400 && error.status < 500) this.tableError.set(message);
     else this.snackbar.error(message);
   }
-  selectFromRow(event: MouseEvent, project: ManagementProject): void {
-    if (!(event.target as HTMLElement).closest("a,button,input,label")) this.select(project);
-  }
   solutionRegistrationsRemoved(count: number): void {
     this.solutionRemovalRequest.set(null);
     this.clearRows();
@@ -1068,19 +1053,6 @@ export class ProgramManagementComponent implements OnInit {
       Math.max(0, Math.ceil((this.count() - count) / this.pageSize) - 1) * this.pageSize;
     if (this.offset() > lastOffset) void this.changeQuery({ offset: lastOffset });
     else this.state.retry();
-  }
-  clearProjectSelection(): void {
-    const selectedId = this.state.selected()?.id;
-    this.state.clearSelection();
-    afterNextRender(
-      () =>
-        this.managementLayout()
-          ?.nativeElement.querySelector<HTMLInputElement>(
-            `input[name="management-project"][value="${selectedId}"]`,
-          )
-          ?.focus({ preventScroll: true }),
-      { injector: this.injector },
-    );
   }
   projectActions(project: ManagementProject): RowAction[] {
     const competitive = this.state.program()?.isCompetitive;

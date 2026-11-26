@@ -591,9 +591,6 @@ export class ManagementCertificatesComponent {
     this.patch(kind === "background" ? { backgroundId: null } : { signatureId: null }, false);
     void this.loadAssets();
   }
-  resetLayout(): void {
-    if (this.snapshot()) this.patch({ layout: structuredClone(this.snapshot()!.draft.layout) });
-  }
   async preview(): Promise<void> {
     const id = this.programId();
     if (!(await this.save()) || id !== this.programId()) return;

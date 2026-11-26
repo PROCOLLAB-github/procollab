@@ -107,9 +107,6 @@ export class ManagementResultsComponent {
     value == null
       ? "—"
       : value.toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  readonly numericCriteria = computed(
-    () => this.snapshot()?.criteria.filter(c => c.type === "int" || c.type === "float") ?? [],
-  );
   readonly matchingGroups = computed(() => {
     const key = this.caseValue(),
       query = this.searchValue().trim().toLocaleLowerCase("ru");

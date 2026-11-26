@@ -14,11 +14,9 @@ import {
 } from "./expert-presentation";
 import {
   ChangeDetectionStrategy,
-  afterNextRender,
   Component,
   DestroyRef,
   ElementRef,
-  Injector,
   computed,
   effect,
   inject,
@@ -123,7 +121,6 @@ export class ManagementExpertsComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly injector = inject(Injector);
   readonly snapshot = signal<ExpertWorkspace | null>(null);
   readonly loading = signal(false);
   readonly busy = signal(false);
@@ -267,12 +264,6 @@ export class ManagementExpertsComponent {
           p.experts.some(e => "expert:" + e.expertId === status))
       );
     }),
-  );
-  readonly filteredMissing = computed(
-    () =>
-      this.filteredDistribution().filter(
-        p => p.experts.length < (this.snapshot()?.requiredEvaluators ?? 1),
-      ).length,
   );
   readonly distributionPage = computed(() =>
     this.filteredDistribution().slice(
@@ -723,17 +714,6 @@ export class ManagementExpertsComponent {
               : "Выбранные приглашения отозваны.",
         );
       },
-    );
-  }
-  clearExpertSelection(): void {
-    const id = this.selected()?.id;
-    this.selected.set(null);
-    afterNextRender(
-      () =>
-        Array.from(this.element.nativeElement.querySelectorAll<HTMLElement>("tr[data-expert-id]"))
-          .find(row => row.dataset["expertId"] === String(id))
-          ?.focus({ preventScroll: true }),
-      { injector: this.injector },
     );
   }
   readonly label = expertStatusLabel;
@@ -1189,13 +1169,6 @@ export class ManagementExpertsComponent {
   poolExperts(name: string | null) {
     const ids = this.casePools().find(p => p.caseName === name)?.expertIds ?? [];
     return this.automaticExpertsFor(name).filter(e => ids.includes(e.id));
-  }
-  poolNames(name: string | null): string {
-    return (
-      this.poolExperts(name)
-        .map(e => e.name || e.email)
-        .join(" · ") || "Эксперты не выбраны"
-    );
   }
   openPool(name: string | null): void {
     if (this.busy()) return;

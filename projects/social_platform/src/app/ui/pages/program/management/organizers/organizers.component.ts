@@ -126,14 +126,6 @@ export class ManagementOrganizersComponent {
         .toUpperCase() || "@"
     );
   }
-  organizerCountLabel(): string {
-    const n = this.snapshot()?.organizerCount ?? 0;
-    return n % 10 === 1 && n % 100 !== 11
-      ? "организатор"
-      : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)
-        ? "организатора"
-        : "организаторов";
-  }
   private sequence = 0;
   private queuedSince: number | null = null;
   private trigger: HTMLElement | null = null;
