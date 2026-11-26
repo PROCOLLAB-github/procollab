@@ -166,6 +166,12 @@ export default ts.config(
     },
   },
   {
+    files: ["projects/social_platform/src/app/ui/pages/program/management/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": "error",
+    },
+  },
+  {
     files: ["**/*.spec.ts"],
     rules: {
       "boundaries/dependencies": "off",

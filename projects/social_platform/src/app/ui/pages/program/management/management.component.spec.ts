@@ -1073,7 +1073,7 @@ describe("Списки управления программой в DOM", () => 
   });
 
   it("сохраняет выбранный кейс после появления вариантов и восстановления URL", async () => {
-    const { harness, component, state, element } = await setup("projects");
+    const { harness, component, state } = await setup("projects");
     state.projects.set(null);
     await harness.navigateByUrl(
       "/office/program/1/management/projects?case_scope=selected&case_name=Кейс%20№1",
